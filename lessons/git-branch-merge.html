@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Branch va birlashtirish (merge) — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Branch (shox) nima va nega kerak, git branch, git checkout, zamonaviy git switch, git checkout -b bilan yangi branch yaratish, branch'larni git merge bilan birlashtirish, merge konflikti va uni hal qilish, keraksiz branch'ni git branch -d bilan o'chirish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details open>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a class="active" href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Git va GitHub</div>
+<h1>Branch va birlashtirish (merge)</h1>
+<p class="lead">Branch (o'zbekcha: <em>shox</em> yoki <em>tarmoq</em>) — Git'ning eng kuchli imkoniyatlaridan biri. U sizga asosiy kodga tegmasdan, alohida yo'nalishda ishlashga imkon beradi. Yangi funksiya yozmoqchimisiz, yoki xatoni tuzatmoqchimisiz — buni alohida branch'da qilib, tayyor bo'lgach asosiy kodga birlashtirasiz. Ushbu darsda branch yaratish, ular orasida o'tish, birlashtirish (merge) va merge konfliktini hal qilishni chuqur o'rganamiz.</p>
+<div class="note">Bu darsdagi barcha buyruqlar terminalda (buyruq qatorida) ishga tushiriladi. Ular Git o'rnatilgan mahalliy kompyuteringizda ishlaydi. Kurs sahifasidagi playground'da terminal buyruqlari ishlamaydi — shuning uchun quyidagi bloklar <strong>statik misol</strong> sifatida keltiriladi. Ularni o'z kompyuteringizdagi haqiqiy Git omborida sinab ko'ring.</div>
+<h2>Branch nima va nega kerak?</h2>
+<p>Har bir Git ombori (repository) kamida bitta branch'ga ega. An'anaviy nomi <code>master</code> edi, hozirgi zamonaviy loyihalarda esa ko'pincha <code>main</code> deb ataladi. Bu — asosiy, ishonchli kod turadigan yo'nalish.</p>
+<p>Branch — bu commitlar (o'zgarishlar tarixi) ustidagi <strong>siljib boruvchi ko'rsatkich</strong> (pointer). Har safar yangi commit qilganingizda, joriy branch avtomatik ravishda oxirgi commit'ga siljiydi. Yangi branch ochsangiz, siz shu paytdagi commit'dan yangi mustaqil yo'nalish boshlaysiz.</p>
+<p>Branch nima uchun kerak? Bir nechta amaliy sabab:</p>
+<ul><li><strong>Xavfsiz eksperiment.</strong> Yangi g'oyani asosiy kodga zarar bermasdan sinab ko'rasiz. Ishlamasa — branch'ni o'chirasiz, asosiy kod toza qoladi.</li><li><strong>Parallel ishlash.</strong> Bir vaqtning o'zida bir necha funksiya (masalan, bittasi <code>login</code>, boshqasi <code>profil</code>) alohida branch'larda mustaqil rivojlanadi.</li><li><strong>Jamoaviy tartib.</strong> Har bir dasturchi o'z branch'ida ishlaydi, bir-birining kodini buzmaydi. Tayyor bo'lgach hamma o'zinikini <code>main</code>ga birlashtiradi.</li><li><strong>Barqaror asosiy kod.</strong> <code>main</code> branch doim ishlaydigan, chiqarishga tayyor holatda saqlanadi. Yarim tayyor kod alohida branch'larda turadi.</li></ul>
+<h2>Mavjud branch'larni ko'rish: git branch</h2>
+<p>Omborda qanday branch'lar borligini va hozir qaysi biridasiz — buni <code>git branch</code> buyrug'i ko'rsatadi. Joriy branch oldida yulduzcha (<code>*</code>) turadi:</p>
+<pre class="code"><code>$ git branch
+* main</code></pre>
+<p>Bu omborda hozircha bitta <code>main</code> branch bor va biz aynan undamiz. Barcha branch'larni (masofaviylarni ham) batafsil ko'rish uchun:</p>
+<pre class="code"><code>$ git branch -a
+* main
+  feature-login
+  remotes/origin/main</code></pre>
+<p>Bu yerda mahalliy <code>main</code> va <code>feature-login</code>, hamda masofaviy (GitHub'dagi) <code>origin/main</code> ko'rinadi.</p>
+<h2>Yangi branch yaratish: git branch nomi</h2>
+<p>Yangi branch yaratish uchun uning nomini beramiz. Masalan, <code>feature-login</code> nomli branch ochamiz:</p>
+<pre class="code"><code>$ git branch feature-login</code></pre>
+<p>Diqqat: bu buyruq branch'ni faqat <strong>yaratadi</strong>, lekin sizni unga <em>o'tkazmaydi</em>. Siz hali ham eski branch'dasiz. Buni <code>git branch</code> bilan tekshiring:</p>
+<pre class="code"><code>$ git branch
+  feature-login
+* main</code></pre>
+<p>Ko'rib turganingizdek, <code>feature-login</code> yaratildi, lekin yulduzcha hali <code>main</code>da.</p>
+<div class="tip">Branch nomlarida bo'sh joy ishlatmang. Ko'p so'zlarni chiziqcha bilan bog'lang: <code>feature-login</code>, <code>fix-header-bug</code>, <code>update-readme</code>. Ko'plab jamoalar nomlarda prefiks ishlatadi: <code>feature/</code>, <code>fix/</code>, <code>hotfix/</code> — masalan <code>feature/user-profile</code>.</div>
+<h2>Branch'lar orasida o'tish: git checkout va git switch</h2>
+<p>Yaratilgan branch'ga o'tish uchun ikki xil yo'l bor. Eskiroq va universal usul — <code>git checkout</code>:</p>
+<pre class="code"><code>$ git checkout feature-login
+Switched to branch 'feature-login'</code></pre>
+<p>Endi <code>git branch</code> yulduzchani <code>feature-login</code>da ko'rsatadi. Bu branch'da qilgan har bir commit faqat shu branch tarixiga tushadi.</p>
+<p>Zamonaviy Git (2.23-versiyadan boshlab) yanada tushunarli buyruq taqdim etdi — <code>git switch</code>. U <em>faqat</em> branch almashtirish uchun mo'ljallangan (chalkashlik kamroq):</p>
+<pre class="code"><code>$ git switch feature-login
+Switched to branch 'feature-login'</code></pre>
+<div class="note"><code>git checkout</code> juda ko'p vazifani bajaradi: branch almashtirish, fayllarni tiklash, ma'lum commit'ni ko'rish. Bu chalkashlikka olib kelardi. Shuning uchun Git jamoasi uni ikkiga bo'ldi: branch almashtirish uchun <code>git switch</code>, fayllarni tiklash uchun esa <code>git restore</code>. Yangi loyihalarda <code>switch</code> va <code>restore</code>ni afzal ko'ring, lekin <code>checkout</code> ham hamma joyda ishlaydi.</div>
+<h2>Yaratish va o'tishni bir buyruqda: -b va -c</h2>
+<p>Ko'pincha branch'ni yaratib, darhol unga o'tmoqchi bo'lasiz. Har safar ikki buyruq yozish shart emas — buni bitta buyruqda qilish mumkin. <code>checkout</code> uchun <code>-b</code> bayrog'i:</p>
+<pre class="code"><code>$ git checkout -b feature-login
+Switched to a new branch 'feature-login'</code></pre>
+<p>Zamonaviy <code>switch</code>da xuddi shu narsa <code>-c</code> (create) bayrog'i bilan qilinadi:</p>
+<pre class="code"><code>$ git switch -c feature-login
+Switched to a new branch 'feature-login'</code></pre>
+<p>Ikkalasi ham: yangi <code>feature-login</code> branch'ini yaratadi va sizni darhol unga o'tkazadi. Bu — amaliyotda eng ko'p ishlatiladigan usul.</p>
+<h2>Branch'da ishlash: to'liq amaliy misol</h2>
+<p>Keling, to'liq oqimni ko'rib chiqamiz. <code>main</code>da turibmiz, yangi funksiya uchun branch ochamiz, o'zgartiramiz va commit qilamiz:</p>
+<pre class="code"><code># 1. Yangi branch yaratib, unga o'tamiz
+$ git switch -c feature-login
+Switched to a new branch 'feature-login'
+
+# 2. Fayllarni tahrirlaymiz (masalan, login.js yaratamiz)
+# ... kod yozamiz ...
+
+# 3. O'zgarishni saqlaymiz
+$ git add login.js
+$ git commit -m 'Login sahifasini qoshdim'
+[feature-login 1a2b3c4] Login sahifasini qoshdim
+ 1 file changed, 40 insertions(+)</code></pre>
+<p>Endi <code>login.js</code> faqat <code>feature-login</code> branch'ida mavjud. Agar <code>main</code>ga qaytsangiz, u fayl u yerda ko'rinmaydi (chunki commit boshqa branch'da):</p>
+<pre class="code"><code>$ git switch main
+Switched to branch 'main'
+
+$ ls
+index.html   style.css
+# login.js bu yerda yoq — u feature-login branchida qoldi</code></pre>
+<div class="warn">Branch almashtirishdan oldin joriy o'zgarishlaringizni commit qiling (yoki <code>git stash</code> bilan vaqtincha yashiring). Aks holda saqlanmagan o'zgarishlar bilan branch almashtirmoqchi bo'lsangiz, Git ogohlantirish beradi va ba'zan almashtirishga yo'l qo'ymaydi. <code>git stash</code>ni keyingi darsda ko'ramiz.</div>
+<h2>Branch'larni birlashtirish: git merge</h2>
+<p>Branch'da ish tugagach, uni asosiy kodga qo'shish kerak. Bu jarayon <strong>merge</strong> (birlashtirish) deb ataladi. Muhim qoida: siz <em>qaysi branch'ga birlashtirmoqchi bo'lsangiz, avval o'sha branch'ga o'tasiz</em>, keyin kerakli branch'ni unga tortasiz.</p>
+<p>Masalan, <code>feature-login</code>ni <code>main</code>ga birlashtiramiz. Avval <code>main</code>ga o'tamiz, keyin <code>feature-login</code>ni birlashtiramiz:</p>
+<pre class="code"><code># 1. Maqsad branchiga (main) otamiz
+$ git switch main
+Switched to branch 'main'
+
+# 2. feature-login ni main ga birlashtiramiz
+$ git merge feature-login
+Updating a1b2c3d..1a2b3c4
+Fast-forward
+ login.js | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)</code></pre>
+<p>Endi <code>login.js</code> va uning barcha o'zgarishlari <code>main</code>ga qo'shildi. Merge muvaffaqiyatli tugadi.</p>
+<div class="note">Yuqoridagi natijada <strong>Fast-forward</strong> yozuvini ko'rdingiz. Bu — merge'ning eng oddiy turi. U shunda sodir bo'ladiki, <code>main</code> branch <code>feature-login</code> ajralib chiqqandan beri o'zgarmagan bo'lsa. Bu holda Git shunchaki <code>main</code> ko'rsatkichini oldinga suradi — yangi commit yaratmaydi.</div>
+<p>Agar ikkala branch ham parallel o'zgargan bo'lsa, Git <strong>merge commit</strong> deb ataladigan maxsus commit yaratadi. Bu ikki tarixni bittaga bog'laydigan tugun. Bunda tahrirlagich ochilib, sizdan birlashtirish xabarini so'raydi (yoki <code>-m</code> bilan berasiz):</p>
+<pre class="code"><code>$ git merge feature-login
+Merge made by the 'ort' strategy.
+ login.js | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)</code></pre>
+<h2>Merge konflikti nima?</h2>
+<p>Merge har doim ham silliq o'tmaydi. <strong>Merge konflikti</strong> — bu ikkala branch'da <em>bir xil faylning bir xil qatori</em> turli xil tarzda o'zgartirilganda yuz beradi. Git qaysi versiyani tanlashni bilmaydi va sizdan qo'lda hal qilishni so'raydi.</p>
+<p>Masalan, <code>main</code>da kimdir <code>index.html</code>ning 1-qatorini o'zgartirdi, siz esa <code>feature-login</code>da xuddi shu qatorni boshqacha o'zgartirdingiz. Merge qilganda:</p>
+<pre class="code"><code>$ git merge feature-login
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+<p>Git to'xtaydi va aytadi: konfliktni o'zingiz hal qiling. Hozirgi holatni <code>git status</code> ham ko'rsatadi:</p>
+<pre class="code"><code>$ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run 'git commit')
+
+Unmerged paths:
+  (use 'git add &lt;file&gt;...' to mark resolution)
+        both modified:   index.html</code></pre>
+<h2>Merge konfliktini hal qilish</h2>
+<p>Konfliktli faylni matn tahrirlagichda ochsangiz, Git maxsus belgilar qo'yganini ko'rasiz. Ular ikkala versiyani ko'rsatadi:</p>
+<pre class="code"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;Bosh sahifa&lt;/h1&gt;
+=======
+&lt;h1&gt;Xush kelibsiz!&lt;/h1&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-login</code></pre>
+<p>Bu belgilarni tushunamiz:</p>
+<ul><li><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> — joriy branch (siz turgan, ya'ni <code>main</code>) versiyasining boshi;</li><li><code>=======</code> — ikki versiyani ajratuvchi chiziq;</li><li><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-login</code> — birlashtirilayotgan branch versiyasining oxiri.</li></ul>
+<p>Konfliktni hal qilish — bu shu belgilarni o'chirib, faylni <strong>to'g'ri yakuniy holatga</strong> keltirish demakdir. Siz bir versiyani tanlashingiz, yoki ikkalasini birlashtirishingiz mumkin. Masalan, quyidagi variantni qoldiramiz:</p>
+<pre class="code"><code>&lt;h1&gt;Xush kelibsiz!&lt;/h1&gt;</code></pre>
+<p>Barcha <code>&lt;&lt;&lt;</code>, <code>===</code>, <code>&gt;&gt;&gt;</code> belgilarini butunlay olib tashlaganingizga ishonch hosil qiling. Keyin faylni saqlab, hal qilinganini Git'ga bildiramiz:</p>
+<pre class="code"><code># konflikt hal qilingan faylni belgilaymiz
+$ git add index.html
+
+# birlashtirishni yakunlaymiz
+$ git commit -m 'index.html dagi merge konfliktini hal qildim'
+[main 5f6g7h8] index.html dagi merge konfliktini hal qildim</code></pre>
+<div class="tip">Konfliktlarni qo'rqmang — ular normal holat, ayniqsa jamoada ishlaganda. Zamonaviy tahrirlagichlar (masalan, VS Code) konfliktli faylni chiroyli ko'rsatadi va "Accept Current", "Accept Incoming", "Accept Both" tugmalarini taqdim etadi. Bu qo'lda belgilar bilan ishlashdan ancha qulay.</div>
+<div class="note">Agar merge o'rtasida hamma narsani bekor qilib, boshlang'ich holatga qaytmoqchi bo'lsangiz: <code>git merge --abort</code>. Bu birlashtirishni to'liq to'xtatadi va omborni merge boshlanishidan oldingi holatga qaytaradi.</div>
+<h2>Keraksiz branch'ni o'chirish: git branch -d</h2>
+<p>Branch birlashtirilib, endi kerak bo'lmasa, uni o'chirib tozalik saqlash yaxshi odat. Muvaffaqiyatli birlashtirilgan branch'ni <code>-d</code> (delete) bilan o'chiramiz:</p>
+<pre class="code"><code>$ git branch -d feature-login
+Deleted branch feature-login (was 1a2b3c4).</code></pre>
+<p>Agar branch hali <strong>hech qayerga birlashtirilmagan</strong> bo'lsa, <code>-d</code> uni o'chirmaydi — Git ish yo'qolib qolishidan ogohlantiradi:</p>
+<pre class="code"><code>$ git branch -d feature-test
+error: The branch 'feature-test' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D feature-test'.</code></pre>
+<p>Agar rostdan ham keraksiz bo'lsa va birlashtirilmagan ishni yo'qotishga rozimisiz — katta <code>-D</code> (majburiy o'chirish) ishlatiladi:</p>
+<pre class="code"><code>$ git branch -D feature-test
+Deleted branch feature-test (was 9z8y7x6).</code></pre>
+<div class="warn"><code>-D</code> (katta harf) branch'ni birlashtirilmagan bo'lsa ham majburan o'chiradi. Undagi commitlar boshqa branch'da bo'lmasa — <strong>butunlay yo'qoladi</strong>. Shuning uchun <code>-D</code>ni faqat o'zgarishlar kerak emasligiga to'liq ishonganingizda ishlating.</div>
+<h2>Xulosa</h2>
+<p>Ushbu darsda branch bilan ishlashning to'liq davrini o'rgandik:</p>
+<ul><li><strong>Branch</strong> — commitlar ustidagi siljib boruvchi ko'rsatkich; alohida, xavfsiz yo'nalishda ishlash imkoni;</li><li><code>git branch</code> — branch'larni ko'rish, <code>git branch nomi</code> — yaratish;</li><li><code>git checkout nomi</code> yoki zamonaviy <code>git switch nomi</code> — branch'ga o'tish;</li><li><code>git checkout -b nomi</code> yoki <code>git switch -c nomi</code> — yaratib, darhol o'tish;</li><li><code>git merge nomi</code> — branch'ni joriy branch'ga birlashtirish (avval maqsad branch'ga o'tib olasiz);</li><li><strong>merge konflikti</strong> — bir xil qator ikki xil o'zgarganda yuzaga keladi; belgilarni qo'lda hal qilib, <code>git add</code> + <code>git commit</code> bilan yakunlanadi;</li><li><code>git branch -d nomi</code> — birlashtirilgan branch'ni o'chirish, <code>-D</code> — majburiy o'chirish.</li></ul>
+<p>Branch'lar Git ish oqimining yuragidir. Keyingi darsda mahalliy omborni GitHub bilan bog'lab, kodni internetga yuborishni o'rganamiz.</p>
+<nav class="lesson-nav">
+  <a href="git-asoslar.html"><span class="dir">← Oldingi</span><span class="ttl">Git asosiy buyruqlari</span></a>
+  <a class="next" href="github-remote.html"><span class="dir">Keyingi →</span><span class="ttl">GitHub bilan ishlash: clone, push, pull</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

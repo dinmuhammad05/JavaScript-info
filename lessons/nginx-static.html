@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statik saytga xizmat ko'rsatish — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Statik HTML/CSS/JS saytni Nginx orqali chiqarish: root va index, location bilan yo'llar, try_files, 404 sahifasi, gzip yoqish va kesh sarlavhalari. To'liq server bloki namunasi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a class="active" href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Nginx</div>
+<h1>Statik saytga xizmat ko'rsatish</h1>
+<p class="lead">Nginx'ning eng asosiy va eng ko'p ishlatiladigan vazifasi — <strong>statik saytga xizmat ko'rsatish</strong>. Ya'ni disk'da yotgan HTML, CSS, JavaScript fayllar va rasmlarni brauzerga uzatish. Ushbu darsda oddiy statik saytni to'liq sozlashni, <code>try_files</code>, 404 sahifasi, gzip siqish va keshlashni batafsil o'rganamiz.</p>
+<h2>Oddiy statik sayt uchun config</h2>
+<p>Faraz qilaylik, saytimiz fayllari <code>/var/www/mysite</code> papkasida (ichida <code>index.html</code>, <code>style.css</code> va h.k.). Eng sodda config quyidagicha:</p>
+<pre class="code"><code>server {
+    listen 80;
+    server_name mysite.com www.mysite.com;
+
+    root /var/www/mysite;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}</code></pre>
+<p>Bu config'ni <code>/etc/nginx/sites-available/mysite</code> fayliga saqlab, keyin uni faollashtiramiz:</p>
+<pre class="code"><code>sudo ln -s /etc/nginx/sites-available/mysite /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo nginx -s reload</code></pre>
+<h2>root va index'ni tushunish</h2>
+<p><code>root</code> — bu saytning "ildiz" papkasi. Brauzerdan kelgan yo'l shu papkaga qo'shiladi:</p>
+<ul><li>So'rov <code>/</code> &rarr; Nginx <code>/var/www/mysite/</code> papkasiga qaraydi;</li><li>So'rov <code>/style.css</code> &rarr; Nginx <code>/var/www/mysite/style.css</code> faylini beradi;</li><li>So'rov <code>/blog/post.html</code> &rarr; Nginx <code>/var/www/mysite/blog/post.html</code> faylini beradi.</li></ul>
+<p><code>index</code> esa papka so'ralganda (fayl nomi ko'rsatilmaganda) qaysi faylni ochishni bildiradi. <code>index index.html;</code> bo'lsa, <code>/</code> so'ralganda <code>/var/www/mysite/index.html</code> qaytariladi.</p>
+<div class="note"><code>root</code> va <code>index</code> ni <code>server</code> darajasida bir marta yozsangiz, ular ichdagi barcha <code>location</code> bloklariga ta'sir qiladi. Bu takrorlashning oldini oladi.</div>
+<h2>try_files direktivasi</h2>
+<p><code>try_files</code> — statik sayt uchun eng muhim direktivalardan biri. U Nginx'ga bir nechta variantni <strong>navbat bilan</strong> sinab ko'rishni buyuradi. Birinchi topilgan faylni qaytaradi:</p>
+<pre class="code"><code>try_files $uri $uri/ =404;</code></pre>
+<p>Bu qatordagi har bir bo'lak alohida ma'noga ega:</p>
+<ul><li><code>$uri</code> — avval so'ralgan yo'lga aniq mos fayl bor-yo'qligini tekshiradi (masalan, <code>/about.html</code>);</li><li><code>$uri/</code> — agar fayl topilmasa, o'sha nomdagi <strong>papka</strong> bormi tekshiradi (va ichidagi <code>index</code> faylni beradi);</li><li><code>=404</code> — agar ikkalasi ham topilmasa, 404 (topilmadi) xatoligini qaytaradi.</li></ul>
+<p><code>$uri</code> — bu Nginx'ning <strong>ichki o'zgaruvchisi</strong>: u joriy so'rov yo'lini bildiradi. Nginx'da bunday o'zgaruvchilar <code>$</code> belgisi bilan boshlanadi (masalan, <code>$host</code>, <code>$remote_addr</code>).</p>
+<div class="tip">Agar bu bir sahifali ilova (SPA — React/Vue) bo'lsa, marshrutlashni ilovaning o'zi boshqaradi. Bunda <code>try_files $uri $uri/ /index.html;</code> yoziladi — topilmagan har qanday yo'l uchun <code>index.html</code> qaytariladi, ilova esa sahifani o'zi ko'rsatadi.</div>
+<h2>location bilan yo'llarni boshqarish</h2>
+<p>Turli fayl turlariga turli qoidalar berish uchun <code>location</code> ishlatamiz. Masalan, rasm va statik resurslarni alohida ajratish:</p>
+<pre class="code"><code>server {
+    listen 80;
+    server_name mysite.com;
+    root /var/www/mysite;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # rasm, css, js kabi statik fayllar uchun alohida qoida
+    location ~* \.(jpg|jpeg|png|gif|css|js|ico|svg)$ {
+        expires 30d;
+        access_log off;
+    }
+}</code></pre>
+<p>Bu yerda <code>~*</code> — registrga sezgir bo'lmagan regulyar ifoda mosligi. Ya'ni <code>.jpg</code> ham, <code>.JPG</code> ham mos keladi.</p>
+<h2>Maxsus 404 sahifasi</h2>
+<p>Foydalanuvchi mavjud bo'lmagan sahifani so'raganda standart, quruq 404 o'rniga o'zingizning chiroyli sahifangizni ko'rsatishingiz mumkin. Buning uchun <code>error_page</code> direktivasidan foydalanamiz:</p>
+<pre class="code"><code>server {
+    listen 80;
+    server_name mysite.com;
+    root /var/www/mysite;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # 404 xatoligida maxsus sahifani ko'rsatish
+    error_page 404 /404.html;
+
+    location = /404.html {
+        internal;
+    }
+}</code></pre>
+<p>Bu yerda <code>error_page 404 /404.html;</code> — 404 xatolik yuz berganda <code>/404.html</code> faylini ko'rsatishni buyuradi. <code>location = /404.html { internal; }</code> esa bu sahifaga faqat Nginx ichidan (foydalanuvchi to'g'ridan-to'g'ri emas) kirilishini ta'minlaydi.</p>
+<div class="note">Xuddi shu tarzda server xatoliklari (500, 502, 503, 504) uchun ham maxsus sahifa berish mumkin: <code>error_page 500 502 503 504 /50x.html;</code></div>
+<h2>gzip siqishni yoqish</h2>
+<p><strong>gzip</strong> — matnli fayllarni (HTML, CSS, JS, JSON) brauzerga uzatishdan oldin siqib, hajmini kichraytiradigan mexanizm. Bu sahifa yuklanishini sezilarli tezlashtiradi, chunki tarmoq orqali kamroq ma'lumot yuboriladi. Odatda <code>http</code> kontekstida yoqiladi:</p>
+<pre class="code"><code>http {
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
+    gzip_min_length 1000;
+    gzip_comp_level 5;
+}</code></pre>
+<ul><li><code>gzip on;</code> — siqishni yoqadi;</li><li><code>gzip_types</code> — qaysi fayl turlarini siqish kerakligini belgilaydi (rasmlar allaqachon siqilgan, ularni qayta siqish shart emas);</li><li><code>gzip_min_length 1000;</code> — faqat 1000 baytdan katta fayllar siqiladi (kichik fayllarni siqishning foydasi yo'q);</li><li><code>gzip_comp_level 5;</code> — siqish darajasi (1 dan 9 gacha; balandroq — kuchliroq siqish, lekin ko'proq CPU sarfi).</li></ul>
+<div class="tip">gzip'ni yoqish saytning tezligiga eng sodda va samarali ta'sir qiluvchi optimizatsiyalardan biri. Odatda HTML/CSS/JS fayllar hajmini 60-80% ga kamaytiradi.</div>
+<h2>Kesh sarlavhalari</h2>
+<p>Rasm, CSS va JS kabi <strong>kamdan-kam o'zgaradigan</strong> fayllarni brauzer o'z xotirasida (keshda) saqlab, keyingi tashriflarda serverdan qayta so'ramasligi mumkin. Buni <code>expires</code> direktivasi orqali sozlaymiz:</p>
+<pre class="code"><code>location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff2)$ {
+    expires 30d;
+    add_header Cache-Control "public, no-transform";
+}</code></pre>
+<ul><li><code>expires 30d;</code> — brauzerga bu faylni 30 kun davomida keshda saqlashni aytadi (mos <code>Expires</code> va <code>Cache-Control</code> sarlavhalarini avtomatik qo'shadi);</li><li><code>add_header Cache-Control "public";</code> — faylni har qanday kesh (brauzer, proxy) saqlashi mumkinligini bildiradi.</li></ul>
+<div class="warn">Uzoq muddatli keshlashning bir muammosi bor: agar CSS/JS faylni yangilasangiz, brauzer eski nusxani ko'rsatishda davom etishi mumkin. Buning yechimi — fayl nomiga versiya qo'shish (masalan, <code>style.v2.css</code> yoki <code>style.css?v=2</code>). Zamonaviy qurish vositalari (build tools) buni avtomatik bajaradi.</div>
+<h2>To'liq namuna</h2>
+<p>Yuqoridagi barcha elementlarni birlashtirgan to'liq, ishlatishga tayyor <code>server</code> bloki:</p>
+<pre class="code"><code>server {
+    listen 80;
+    server_name mysite.com www.mysite.com;
+
+    root /var/www/mysite;
+    index index.html;
+
+    # asosiy marshrutlash
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # statik resurslarni uzoq muddat keshlash
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff2)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+        access_log off;
+    }
+
+    # maxsus xato sahifalari
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+
+    # gzip (agar http blokida yoqilmagan bo'lsa)
+    gzip on;
+    gzip_types text/css application/javascript application/json;
+}</code></pre>
+<h2>Xulosa</h2>
+<ul><li>Statik sayt uchun asosiy sozlamalar: <code>root</code>, <code>index</code> va <code>location /</code>;</li><li><code>try_files $uri $uri/ =404;</code> faylni, so'ng papkani sinab ko'radi, topmasa 404 beradi;</li><li>SPA uchun <code>try_files $uri $uri/ /index.html;</code> ishlatiladi;</li><li><code>error_page</code> maxsus 404 va boshqa xato sahifalarini beradi;</li><li><code>gzip on;</code> matnli fayllarni siqib, saytni tezlashtiradi;</li><li><code>expires</code> va <code>Cache-Control</code> statik resurslarni brauzer keshida saqlaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="nginx-config.html"><span class="dir">← Oldingi</span><span class="ttl">Konfiguratsiya asoslari</span></a>
+  <a class="next" href="nginx-reverse-proxy.html"><span class="dir">Keyingi →</span><span class="ttl">Reverse proxy va load balancing</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
