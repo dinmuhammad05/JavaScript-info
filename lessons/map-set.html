@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map va Set — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Map — istalgan kalitli assotsiativ to'plam; Set — unikal qiymatlar to'plami. Obyektdan farqi va iteratsiya.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a class="active" href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Map va Set</h1>
+<p class="lead">Endi biz murakkabroq ma'lumot tuzilmalari bilan tanishamiz: <strong>Map</strong> (kalit-qiymat juftliklari to'plami, kalit istalgan tur bo'lishi mumkin) va <strong>Set</strong> (faqat unikal qiymatlar to'plami).</p>
+<h2>Map — nima uchun kerak?</h2>
+<p><code>Map</code> — xuddi <code>Object</code> kabi kalit-qiymat juftliklarini saqlaydi. Ammo <code>Object</code> dan farqli o'laroq, <code>Map</code> da kalit <strong>istalgan turdagi</strong> qiymat — hatto obyekt yoki funksiya — bo'lishi mumkin.</p>
+<p>Asosiy metodlar va xususiyatlar:</p>
+<ul><li><code>new Map()</code> — yangi Map yaratadi;</li><li><code>map.set(kalit, qiymat)</code> — qiymat qo'shadi (map ning o'zini qaytaradi, zanjir qilish mumkin);</li><li><code>map.get(kalit)</code> — kalit bo'yicha qiymatni oladi (yo'q bo'lsa <code>undefined</code>);</li><li><code>map.has(kalit)</code> — kalit mavjudligini <code>true/false</code> bilan qaytaradi;</li><li><code>map.delete(kalit)</code> — kalit bo'yicha o'chiradi;</li><li><code>map.clear()</code> — hamma narsani tozalaydi;</li><li><code>map.size</code> — elementlar soni (bu xususiyat, funksiya emas!).</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-basic.js</span></div><textarea spellcheck="false">let map = new Map();
+
+map.set('1', 'satr 1');   // satr kalit
+map.set(1, 'son 1');       // son kalit
+map.set(true, 'mantiqiy');  // boolean kalit
+
+// Object bo'lganda 1 va '1' bir xil ('1') bo'lardi, Map da EMAS:
+console.log(map.get(1));   // 'son 1'
+console.log(map.get('1')); // 'satr 1'
+console.log(map.size);     // 3
+console.log(map.has(true)); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn"><code>map[kalit]</code> shaklida foydalanmang! Bu <code>Map</code> ni oddiy obyektdek ishlatadi va uning barcha afzalliklarini yo'qotadi. Har doim <code>map.set</code> va <code>map.get</code> dan foydalaning.</div>
+<h2>Obyektni kalit sifatida ishlatish</h2>
+<p><code>Map</code> ning eng foydali xususiyatlaridan biri — obyektlarni kalit sifatida ishlatish. Bu oddiy obyektda mumkin emas (obyekt kaliti satrga aylanib qoladi).</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-object-key.js</span></div><textarea spellcheck="false">let ali = { name: 'Ali' };
+
+// har bir foydalanuvchi uchun tashriflar sonini saqlaymiz
+let tashriflar = new Map();
+tashriflar.set(ali, 123);
+
+console.log(tashriflar.get(ali)); // 123
+
+// oddiy obyektda esa kalit '[object Object]' ga aylanardi
+let obj = {};
+obj[ali] = 123;
+console.log(Object.keys(obj)); // ['[object Object]'] — yomon!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>Map</code> kalitlarni <code>SameValueZero</code> algoritmi bo'yicha taqqoslaydi. U <code>===</code> ga o'xshaydi, ammo bitta farq bilan: <code>NaN</code> ning o'ziga tengligini tan oladi, ya'ni <code>NaN</code> ham kalit bo'la oladi.</div>
+<h2>Zanjir va iteratsiya</h2>
+<p><code>map.set</code> map ning o'zini qaytargani uchun chaqiruvlarni zanjir qilish mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-chain.js</span></div><textarea spellcheck="false">let map = new Map();
+
+map.set('1', 'a')
+   .set('2', 'b')
+   .set('3', 'c');
+
+console.log(map.size); // 3</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Map bo'yicha aylanish uchun uch xil usul bor:</p>
+<ul><li><code>map.keys()</code> — kalitlar bo'yicha iterable qaytaradi;</li><li><code>map.values()</code> — qiymatlar bo'yicha iterable;</li><li><code>map.entries()</code> — <code>[kalit, qiymat]</code> juftliklari bo'yicha iterable (<code>for..of</code> uchun standart).</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-iterate.js</span></div><textarea spellcheck="false">let ovqat = new Map([
+  ['osh', 500],
+  ['manti', 300],
+  ['somsa', 100]
+]);
+
+// kalitlar
+for (let nom of ovqat.keys()) {
+  console.log(nom); // osh, manti, somsa
+}
+
+// qiymatlar
+for (let narx of ovqat.values()) {
+  console.log(narx); // 500, 300, 100
+}
+
+// [kalit, qiymat] juftliklari
+for (let [nom, narx] of ovqat) {
+  console.log(nom + ': ' + narx);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>Map</code> qo'shish tartibini <strong>saqlaydi</strong>! Oddiy obyektdan farqli o'laroq (unda son kalitlar avtomatik saralanadi), Map elementlar qanday tartibda qo'shilgan bo'lsa, o'sha tartibda aylanadi.</div>
+<p>Map da ham <code>forEach</code> mavjud, xuddi massivdagidek:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-foreach.js</span></div><textarea spellcheck="false">let ovqat = new Map([['osh', 500], ['manti', 300]]);
+
+ovqat.forEach(function(qiymat, kalit, map) {
+  console.log(kalit + ' =&gt; ' + qiymat);
+});
+// osh =&gt; 500
+// manti =&gt; 300</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Object bilan bog'liqlik: Object.entries va Object.fromEntries</h2>
+<p>Map yaratishda uni ikki elementli massivlar massivi bilan to'ldirish mumkin. Aynan shu format <code>Object.entries(obj)</code> tomonidan qaytariladi. Shu tufayli oddiy obyektdan Map yasash oson:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-from-obj.js</span></div><textarea spellcheck="false">let obj = {
+  name: 'Ali',
+  age: 30
+};
+
+// obyektdan Map
+let map = new Map(Object.entries(obj));
+console.log(map.get('name')); // Ali
+console.log(map.size);        // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Aksincha yo'nalish — <code>Object.fromEntries</code> — kalit/qiymat juftliklaridan oddiy obyekt yasaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map-to-obj.js</span></div><textarea spellcheck="false">let map = new Map();
+map.set('banan', 1);
+map.set('olma', 2);
+map.set('apelsin', 4);
+
+// Map -&gt; oddiy obyekt
+let obj = Object.fromEntries(map.entries());
+// .entries() ni tushirib ham qoldirsa bo'ladi, chunki Map iterable:
+// let obj = Object.fromEntries(map);
+
+console.log(JSON.stringify(obj)); // {"banan":1,"olma":2,"apelsin":4}
+console.log(obj.olma);            // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Set — unikal qiymatlar to'plami</h2>
+<p><code>Set</code> — qiymatlarning maxsus turdagi to'plami bo'lib, unda har bir qiymat faqat <strong>bir marta</strong> uchraydi. Kalit yo'q — faqat qiymatlar.</p>
+<ul><li><code>new Set(iterable)</code> — Set yaratadi (ixtiyoriy iterable bilan to'ldiradi);</li><li><code>set.add(qiymat)</code> — qiymat qo'shadi (set ni qaytaradi);</li><li><code>set.delete(qiymat)</code> — o'chiradi;</li><li><code>set.has(qiymat)</code> — mavjudligini tekshiradi;</li><li><code>set.clear()</code> — tozalaydi;</li><li><code>set.size</code> — elementlar soni.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>set-basic.js</span></div><textarea spellcheck="false">let set = new Set();
+
+let ali = { name: 'Ali' };
+let vali = { name: 'Vali' };
+
+// ali ikki marta tashrif buyurdi
+set.add(ali);
+set.add(vali);
+set.add(ali);
+set.add(vali);
+
+// Set faqat unikal qiymatlarni saqlaydi
+console.log(set.size); // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Set ning eng ko'p uchraydigan qo'llanilishi — massivdan takrorlarni olib tashlash:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>set-unique.js</span></div><textarea spellcheck="false">let arr = [1, 2, 2, 3, 3, 3, 4];
+
+// Set unikal qiladi, so'ng qaytadan massivga aylantiramiz
+let unikal = Array.from(new Set(arr));
+console.log(JSON.stringify(unikal)); // [1, 2, 3, 4]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Set ham iterable — <code>for..of</code> yoki <code>forEach</code> bilan aylanish mumkin. U ham qo'shish tartibini saqlaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>set-iterate.js</span></div><textarea spellcheck="false">let set = new Set(['olma', 'anor', 'uzum']);
+
+for (let meva of set) {
+  console.log(meva); // olma, anor, uzum
+}
+
+set.forEach(function(qiymat) {
+  console.log(qiymat.toUpperCase());
+});</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Moslik uchun Set da ham <code>keys()</code>, <code>values()</code>, <code>entries()</code> mavjud. Set da kalit yo'qligi sababli <code>keys()</code> va <code>values()</code> bir xil natija beradi, <code>entries()</code> esa <code>[qiymat, qiymat]</code> juftliklarini qaytaradi.</div>
+<h2>Map/Set ni Object/Array bilan qachon ishlatish kerak?</h2>
+<ul><li>Kalit istalgan tur (obyekt, son) bo'lsa yoki qo'shish tartibi muhim bo'lsa — <code>Map</code>;</li><li>Tez-tez qo'shish/o'chirish va <code>size</code> ni bilish kerak bo'lsa — <code>Map</code> qulayroq;</li><li>Faqat unikal qiymatlar to'plami kerak bo'lsa yoki mavjudlikni tez tekshirish kerak bo'lsa — <code>Set</code>;</li><li>Oddiy, JSON ga oson aylanadigan tuzilma yetarli bo'lsa — <code>Object/Array</code>.</li></ul>
+<h2>Xulosa</h2>
+<ul><li><code>Map</code> — istalgan turdagi kalitli kalit-qiymat to'plami; <code>set/get/has/delete/size</code>;</li><li><code>Map</code> qo'shish tartibini saqlaydi va obyekt kalitlarni qo'llab-quvvatlaydi;</li><li>Iteratsiya: <code>keys()</code>, <code>values()</code>, <code>entries()</code>, <code>forEach</code>;</li><li><code>Object.entries</code> obyektdan Map, <code>Object.fromEntries</code> Map dan obyekt yasashga yordam beradi;</li><li><code>Set</code> — faqat unikal qiymatlar to'plami; takrorlarni olib tashlash uchun ideal;</li><li>Ikkalasi ham iterable — <code>for..of</code> bilan ishlaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="iterable.html"><span class="dir">← Oldingi</span><span class="ttl">Iteratsiyalanuvchi obyektlar (iterable)</span></a>
+  <a class="next" href="weakmap-weakset.html"><span class="dir">Keyingi →</span><span class="ttl">WeakMap va WeakSet</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

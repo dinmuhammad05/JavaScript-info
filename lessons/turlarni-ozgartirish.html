@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turlarni o'zgartirish — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="String, Number va Boolean konvertatsiyasi hamda qanday qiymatlar 0, false yoki NaN bo'lishi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a class="active" href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Turlarni o'zgartirish</h1>
+<p class="lead">Ko'pincha operator va funksiyalar bergan qiymatimizni avtomatik ravishda kerakli turga o'giradi. Masalan, <code>alert</code> istalgan qiymatni matnga aylantirib ko'rsatadi. Ba'zan esa biz o'zimiz qiymatni aniq turga o'girishimiz kerak bo'ladi. Bu darsda uchta asosiy konvertatsiyani — matnga, songa va mantiqiy turga o'girishni ko'rib chiqamiz.</p>
+<div class="note">Bu darsda obyektlar (objects) haqida gapirmaymiz — obyektlarni o'girishni keyinroq, obyektlar mavzusidan so'ng alohida o'rganamiz. Hozircha faqat oddiy (primitiv) qiymatlar bilan ishlaymiz.</div>
+<h2>String konvertatsiyasi (matnga o'girish)</h2>
+<p>String konvertatsiyasi biror qiymatning matn ko'rinishi kerak bo'lganda ro'y beradi. Masalan, <code>alert(qiymat)</code> qiymatni ko'rsatish uchun uni matnga o'giradi.</p>
+<p>Aniq o'girish uchun <code>String(qiymat)</code> funksiyasini chaqiramiz. U qiymatni matnga (string turiga) aylantiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>string-konvertatsiya.js</span></div><textarea spellcheck="false">let qiymat = true;
+console.log(typeof qiymat); // boolean
+
+qiymat = String(qiymat); // endi qiymat = "true" matni
+console.log(typeof qiymat); // string
+console.log(qiymat); // true (lekin bu endi matn)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>String konvertatsiyasi juda oddiy va oldindan aytsa bo'ladi. <code>false</code> matn sifatida <code>"false"</code> bo'ladi, <code>null</code> — <code>"null"</code> bo'ladi, va hokazo:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>string-misollar.js</span></div><textarea spellcheck="false">console.log( String(false) );     // "false"
+console.log( String(null) );      // "null"
+console.log( String(undefined) ); // "undefined"
+console.log( String(123) );       // "123"
+console.log( String(3.14) );      // "3.14"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Sonni tez matnga o'girishning yana bir yo'li — bo'sh matnni qo'shish: <code>123 + ""</code> natijasi <code>"123"</code> bo'ladi. Buni operatorlar darsida batafsil ko'ramiz.</div>
+<h2>Number konvertatsiyasi (songa o'girish)</h2>
+<p>Songa o'girish matematik amallar va ifodalarda avtomatik sodir bo'ladi. Masalan, matnga bo'lish amalini qo'llaganda:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>auto-number.js</span></div><textarea spellcheck="false">console.log( "6" / "2" ); // 3 — matnlar songa o'giriladi va bo'linadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Aniq o'girish uchun <code>Number(qiymat)</code> funksiyasidan foydalanamiz. Bu ayniqsa matn shaklidagi qiymatlarni (masalan, forma maydonlaridan olingan) son bilan ishlashdan oldin o'girishda kerak bo'ladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>number-konvertatsiya.js</span></div><textarea spellcheck="false">let matn = "123";
+console.log(typeof matn); // string
+
+let son = Number(matn); // "123" -&gt; 123
+console.log(typeof son); // number
+console.log(son + 1);    // 124 — endi haqiqiy son</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Agar matn son sifatida o'qib bo'lmaydigan bo'lsa, natija <strong>NaN</strong> (Not a Number — "son emas") bo'ladi. Bu qiymat qandaydir xatolik ro'y berganini bildiradi.</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nan-misol.js</span></div><textarea spellcheck="false">let notaSon = Number("salom123");
+console.log(notaSon); // NaN — matnni songa o'girib bo'lmadi
+
+console.log( Number("123abc") ); // NaN
+console.log( Number("12.5") );   // 12.5 — bu ishlaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h3>Number() konvertatsiya qoidalari</h3>
+<p>Turli qiymatlar songa qanday o'girilishini quyidagi qoidalar aniqlaydi:</p>
+<ul><li><code>undefined</code> &rarr; <code>NaN</code> bo'ladi;</li><li><code>null</code> &rarr; <code>0</code> bo'ladi;</li><li><code>true</code> &rarr; <code>1</code>, <code>false</code> &rarr; <code>0</code> bo'ladi;</li><li><strong>Matn</strong>: boshi va oxiridagi bo'shliqlar (probel, tab, yangi qator) olib tashlanadi. Agar qolgan matn bo'sh bo'lsa &mdash; natija <code>0</code>. Aks holda son "o'qiladi"; xatolik bo'lsa &mdash; <code>NaN</code>.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>number-qoidalar.js</span></div><textarea spellcheck="false">console.log( Number("   42   ") ); // 42 — bo'shliqlar tashlanadi
+console.log( Number("") );        // 0 — bo'sh matn
+console.log( Number(true) );      // 1
+console.log( Number(false) );     // 0
+console.log( Number(null) );      // 0
+console.log( Number(undefined) ); // NaN</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">E'tibor bering: <code>null</code> songa o'girilganda <code>0</code> bo'ladi, ammo <code>undefined</code> esa <code>NaN</code> bo'ladi. Bu ikki qiymat o'xshash ko'rinsa-da, konvertatsiyada boshqacha ishlaydi.</div>
+<h2>Boolean konvertatsiyasi (mantiqiy turga o'girish)</h2>
+<p>Mantiqiy konvertatsiya eng oddiy. U mantiqiy amallarda (masalan, <code>if</code> shartida) avtomatik sodir bo'ladi, lekin aniq holda <code>Boolean(qiymat)</code> orqali ham chaqirsa bo'ladi.</p>
+<p>Qoida sodda:</p>
+<ul><li>Intuitiv ravishda "bo'sh" bo'lgan qiymatlar &mdash; <code>0</code>, bo'sh matn <code>""</code>, <code>null</code>, <code>undefined</code> va <code>NaN</code> &mdash; <strong>false</strong> bo'ladi;</li><li>Boshqa barcha qiymatlar &mdash; <strong>true</strong> bo'ladi.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>boolean-konvertatsiya.js</span></div><textarea spellcheck="false">console.log( Boolean(1) );    // true
+console.log( Boolean(0) );    // false
+console.log( Boolean("salom") ); // true
+console.log( Boolean("") );   // false — bo'sh matn
+console.log( Boolean(null) ); // false
+console.log( Boolean(undefined) ); // false
+console.log( Boolean(NaN) );  // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Ko'p tillarda ichi bo'sh bo'lmagan matn <code>"0"</code> yolg'on (false) hisoblanadi. JavaScript'da esa <strong>ichida biror belgi bo'lgan har qanday matn true</strong> bo'ladi. Shu jumladan probeldan iborat matn ham!</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>boolean-tuzoq.js</span></div><textarea spellcheck="false">console.log( Boolean("0") );  // true — bu bo'sh emas, ichida "0" belgi bor!
+console.log( Boolean(" ") );  // true — probel ham belgi, demak bo'sh emas
+console.log( Boolean("false") ); // true — "false" matni bo'sh emas</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Songa o'girishdagi <code>Number(" ")</code> (probel) natijasi <code>0</code>, ammo <code>Boolean(" ")</code> natijasi <code>true</code>. Ikkalasi turli qoidalarga bo'ysunadi — buni chalkashtirmang.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>String()</strong> — qiymatni matnga o'giradi; deyarli har doim tushunarli natija beradi;</li><li><strong>Number()</strong> — songa o'giradi: <code>undefined</code>&rarr;NaN, <code>null</code>&rarr;0, <code>true/false</code>&rarr;1/0, bo'sh matn&rarr;0, noto'g'ri matn&rarr;NaN;</li><li><strong>Boolean()</strong> — mantiqiy turga: <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code> &rarr; false, qolganlari &rarr; true;</li><li>Diqqat: <code>"0"</code> va probel <code>" "</code> — Boolean sifatida <strong>true</strong>.</li></ul>
+<nav class="lesson-nav">
+  <a href="malumot-turlari.html"><span class="dir">← Oldingi</span><span class="ttl">Ma'lumot turlari</span></a>
+  <a class="next" href="operatorlar.html"><span class="dir">Keyingi →</span><span class="ttl">Asosiy operatorlar, matematika</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nullish birlashtiruvchi operator ?? — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="?? operatori nima, uning || dan farqi (0 va bo'sh matn holatlari) va ustuvorligi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a class="active" href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Nullish birlashtiruvchi operator ??</h1>
+<p class="lead"><code>??</code> — nisbatan yangi operator (2020-yilda qo'shilgan). U "aniqlangan" birinchi qiymatni topish uchun ishlatiladi va <code>||</code> ning ba'zi kamchiliklarini bartaraf etadi.</p>
+<h2>?? operatori nima?</h2>
+<p><code>a ?? b</code> ifodasining natijasi:</p>
+<ul><li>Agar <code>a</code> <strong>aniqlangan</strong> bo'lsa (ya'ni <code>null</code> ham, <code>undefined</code> ham bo'lmasa) &mdash; <code>a</code> qaytariladi;</li><li>Aks holda &mdash; <code>b</code> qaytariladi.</li></ul>
+<p>Boshqacha aytganda, <code>??</code> qiymat <code>null</code> yoki <code>undefined</code> ekanini tekshiradi. Buni oddiy <code>if</code> bilan ham yozsa bo'lardi:</p>
+<pre class="code"><code>// a ?? b quyidagiga teng:
+let natija = (a !== null &amp;&amp; a !== undefined) ? a : b;</code></pre>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nullish-oddiy.js</span></div><textarea spellcheck="false">let ism = null;
+console.log( ism ?? "Anonim" ); // "Anonim" — ism null edi
+
+let familiya = "Valiyev";
+console.log( familiya ?? "Noma'lum" ); // "Valiyev" — aniqlangan qiymat</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Amaliy qo'llanishi — o'zgaruvchi "belgilanmagan" bo'lsa, standart qiymat ko'rsatish:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nullish-default.js</span></div><textarea spellcheck="false">let foydalanuvchi;
+console.log( foydalanuvchi ?? "Mehmon" ); // "Mehmon"
+
+foydalanuvchi = "Ali";
+console.log( foydalanuvchi ?? "Mehmon" ); // "Ali"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>?? va || farqi — eng muhim qism</h2>
+<p>Bir qarashda <code>??</code> va <code>||</code> bir xil ko'rinadi. Haqiqatan ham, ko'p holatlarda ular bir xil natija beradi. Ammo muhim farq bor:</p>
+<ul><li><code>||</code> birinchi <strong>truthy</strong> qiymatni qaytaradi;</li><li><code>??</code> birinchi <strong>aniqlangan</strong> (null/undefined bo'lmagan) qiymatni qaytaradi.</li></ul>
+<p>Bu farq ayniqsa <code>0</code> va bo'sh matn <code>""</code> uchun juda muhim. Bu qiymatlar falsy, lekin ular aniqlangan (mavjud) qiymatlar!</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nol-farq.js</span></div><textarea spellcheck="false">let soni = 0;
+
+console.log( soni || 100 ); // 100 — 0 falsy, shuning uchun 100 tanlandi
+console.log( soni ?? 100 ); // 0 — 0 aniqlangan qiymat, uni qaytardi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Farqni yaxshi anglang: agar <code>0</code> yoki <code>""</code> to'g'ri va kutilgan qiymat bo'lsa, <code>||</code> ishlatish xatoga olib keladi — u ularni "yo'q" deb hisoblab, standart qiymatga almashtiradi. <code>??</code> esa faqat <code>null/undefined</code> ni almashtiradi.</div>
+<p>Yana bir aniq misol — balandlikni saqlash. Foydalanuvchi <code>0</code> ni tanlagan bo'lishi mumkin, va bu haqiqiy qiymat:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>balandlik.js</span></div><textarea spellcheck="false">let balandlik = 0;
+
+console.log( balandlik || 100 ); // 100 — noto'g'ri! foydalanuvchi 0 ni xohlagan edi
+console.log( balandlik ?? 100 ); // 0 — to'g'ri, foydalanuvchi tanlovi saqlandi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bosh-matn-farq.js</span></div><textarea spellcheck="false">let xabar = ""; // foydalanuvchi ataylab bo'sh qoldirgan
+
+console.log( xabar || "standart matn" ); // "standart matn" — bo'sh matn falsy
+console.log( xabar ?? "standart matn" ); // "" — bo'sh matn saqlandi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Umumiy tavsiya: agar <code>0</code>, <code>""</code> yoki <code>false</code> qiymatlari ham to'g'ri, mavjud qiymat bo'lishi mumkin bo'lsa — <code>??</code> ishlating. Agar faqat "bo'sh emas" qiymatni istasangiz — <code>||</code> ishlating.</div>
+<h2>?? ning ustuvorligi</h2>
+<p><code>??</code> ning ustuvorligi past — <code>||</code> va <code>&amp;&amp;</code> bilan bir xil darajada (aniqrog'i, <code>||</code> bilan bir xil). Shuning uchun murakkab ifodalarda uni matematik amallardan keyin ishlashiga e'tibor bering. Odatda qavs qo'yish tavsiya etiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ustuvorlik-nullish.js</span></div><textarea spellcheck="false">let balandlik = null;
+let eni = null;
+
+// Qavs bilan aniq va xatosiz:
+let maydon = (balandlik ?? 100) * (eni ?? 50);
+console.log(maydon); // 5000  (100 * 50)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Xavfsizlik uchun JavaScript <code>??</code> ni <code>||</code> yoki <code>&amp;&amp;</code> bilan <strong>qavssiz</strong> birga ishlatishni taqiqlaydi — bu sintaksis xatosi (SyntaxError) beradi. Masalan, <code>a ?? b || c</code> xato. To'g'ri yozish uchun qavs kerak: <code>(a ?? b) || c</code>.</div>
+<pre class="code"><code>// Bu XATO — SyntaxError beradi:
+// let x = 1 &amp;&amp; 2 ?? 3;
+
+// To'g'ri — qavs bilan:
+let x = (1 &amp;&amp; 2) ?? 3;
+console.log(x); // 2</code></pre>
+<div class="note">Bu cheklov ataylab qo'yilgan. <code>??</code> va <code>||</code> ning natijalari inson uchun oson chalkashadi, shuning uchun til dizaynerlari qavsni majburiy qildi — bu xatolarning oldini oladi.</div>
+<h2>?? bilan zanjir</h2>
+<p>Bir nechta <code>??</code> ni ketma-ket ishlatib, birinchi aniqlangan qiymatni tanlash mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nullish-zanjir.js</span></div><textarea spellcheck="false">let birinchi = null;
+let ikkinchi = undefined;
+let uchinchi = "Topildi!";
+
+console.log( birinchi ?? ikkinchi ?? uchinchi ?? "standart" );
+// Chiqadi: Topildi! — birinchi null/undefined bo'lmagan qiymat</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Xulosa</h2>
+<ul><li><code>??</code> birinchi <strong>aniqlangan</strong> (null/undefined bo'lmagan) qiymatni qaytaradi;</li><li><code>||</code> dan farqi: <code>||</code> falsy qiymatlarni (<code>0</code>, <code>""</code>, <code>false</code>) ham o'tkazib yuboradi, <code>??</code> esa faqat <code>null</code> va <code>undefined</code> ni;</li><li><code>0</code> yoki bo'sh matn haqiqiy qiymat bo'lishi mumkin bo'lsa — <code>??</code> ishlating;</li><li><code>??</code> ni <code>||</code> yoki <code>&amp;&amp;</code> bilan qavssiz ishlatib bo'lmaydi — SyntaxError beradi;</li><li>Ketma-ket <code>??</code> zanjiri birinchi aniqlangan qiymatni topadi.</li></ul>
+<nav class="lesson-nav">
+  <a href="mantiqiy-operatorlar.html"><span class="dir">← Oldingi</span><span class="ttl">Mantiqiy operatorlar</span></a>
+  <a class="next" href="sikllar.html"><span class="dir">Keyingi →</span><span class="ttl">Sikllar: while va for</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

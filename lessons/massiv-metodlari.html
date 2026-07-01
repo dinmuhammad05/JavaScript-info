@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Massiv metodlari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Massivlarni boshqarish uchun eng muhim metodlar: qo'shish/o'chirish, qidirish, saralash, transformatsiya va reduce.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a class="active" href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Massiv metodlari</h1>
+<p class="lead">Massivlar ko'plab metodlarga ega. O'rganishni osonlashtirish uchun ularni guruhlarga ajratamiz: elementlarni qo'shish/o'chirish, qismini olish, qidirish, aylanib chiqish, saralash va massivni bitta qiymatga yig'ish (reduce).</p>
+<h2>Elementlarni qo'shish va o'chirish</h2>
+<p>Massiv oxiri va boshi bilan ishlash uchun bir nechta metodni allaqachon bilamiz:</p>
+<ul><li><code>arr.push(...items)</code> — oxiriga element qo'shadi;</li><li><code>arr.pop()</code> — oxirgi elementni olib tashlaydi va qaytaradi;</li><li><code>arr.shift()</code> — birinchi elementni olib tashlaydi va qaytaradi;</li><li><code>arr.unshift(...items)</code> — boshiga element qo'shadi.</li></ul>
+<p>Endi eng kuchli metod — <code>splice</code> bilan tanishamiz. U massivning istalgan joyidan element o'chira oladi, qo'sha oladi va almashtira oladi.</p>
+<p>Sintaksis: <code>arr.splice(start, deleteCount, elem1, ..., elemN)</code>. U <code>start</code> indeksidan boshlab <code>deleteCount</code> ta elementni o'chiradi va o'rniga <code>elem1..elemN</code> larni qo'yadi. O'chirilgan elementlardan iborat massivni qaytaradi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice1.js</span></div><textarea spellcheck="false">let arr = ['men', 'buni', 'o\'rganaman'];
+
+// indeks 1 dan boshlab 1 ta elementni o'chiramiz
+let olib = arr.splice(1, 1);
+
+console.log(JSON.stringify(arr));  // ['men', 'o\'rganaman']
+console.log(JSON.stringify(olib)); // ['buni'] — o'chirilganlar qaytadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>splice</code> ham o'chirib, ham o'rniga qo'ya oladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice2.js</span></div><textarea spellcheck="false">let arr = ['men', 'hozir', 'o\'rganaman'];
+
+// 2 ta elementni o'chirib, 3 tasini qo'yamiz
+arr.splice(0, 2, 'Keling', 'birga', 'biz');
+
+console.log(JSON.stringify(arr));
+// ['Keling', 'birga', 'biz', 'o\'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Agar <code>deleteCount</code> ni 0 qilsak, hech narsa o'chirilmaydi — faqat qo'shiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice3.js</span></div><textarea spellcheck="false">let arr = ['men', 'o\'rganaman'];
+
+// indeks 1 ga hech narsa o'chirmasdan qo'shamiz
+arr.splice(1, 0, 'hozir', 'darhol');
+
+console.log(JSON.stringify(arr));
+// ['men', 'hozir', 'darhol', 'o\'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>start</code> manfiy bo'lishi mumkin. Bu holda u oxiridan sanaladi: <code>-1</code> — oxirgi element, <code>-2</code> — oxiridan bittasi va hokazo.</div>
+<h2>slice — qismini nusxalash</h2>
+<p>Metod <code>arr.slice(start, end)</code> massivning <code>start</code> dan <code>end</code> gacha (<code>end</code> o'z ichiga olmaydi) bo'lgan qismini <strong>yangi massiv</strong> qilib qaytaradi. Asl massivni o'zgartirmaydi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>slice.js</span></div><textarea spellcheck="false">let arr = ['a', 'b', 'c', 'd', 'e'];
+
+console.log(JSON.stringify(arr.slice(1, 3))); // ['b', 'c']
+console.log(JSON.stringify(arr.slice(-2)));   // ['d', 'e']
+console.log(JSON.stringify(arr.slice()));     // butun nusxa
+console.log(JSON.stringify(arr));             // asl massiv o'zgarmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Argumentsiz <code>arr.slice()</code> massivning to'liq (sayoz) nusxasini yaratishning eng qulay usuli hisoblanadi.</div>
+<h2>concat — massivlarni birlashtirish</h2>
+<p>Metod <code>arr.concat(...args)</code> asl massiv elementlarini va argument sifatida berilgan qiymatlarni birlashtirib, <strong>yangi</strong> massiv qaytaradi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>concat.js</span></div><textarea spellcheck="false">let arr = [1, 2];
+
+console.log(JSON.stringify(arr.concat([3, 4])));       // [1, 2, 3, 4]
+console.log(JSON.stringify(arr.concat([3, 4], [5]))); // [1, 2, 3, 4, 5]
+console.log(JSON.stringify(arr.concat(3, 4)));        // [1, 2, 3, 4]
+console.log(JSON.stringify(arr));                     // asl o'zgarmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Agar argument massiv bo'lsa, uning elementlari alohida-alohida qo'shiladi. Agar oddiy qiymat bo'lsa, o'zi qo'shiladi.</div>
+<h2>forEach — har bir element bo'yicha yurish</h2>
+<p>Metod <code>arr.forEach(funksiya)</code> massivning har bir elementi uchun berilgan funksiyani chaqiradi. U hech narsa qaytarmaydi (<code>undefined</code>).</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>foreach.js</span></div><textarea spellcheck="false">['Olma', 'Anor', 'Uzum'].forEach(function(item, index, array) {
+  console.log(index + ': ' + item + ' (uzunlik: ' + array.length + ')');
+});
+// 0: Olma (uzunlik: 3)
+// 1: Anor (uzunlik: 3)
+// 2: Uzum (uzunlik: 3)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Funksiya uch argument oladi: <code>(item, index, array)</code> — element qiymati, uning indeksi va massivning o'zi. Ko'pincha faqat birinchi ikkisi kerak bo'ladi.</p>
+<h2>Massivda qidirish: indexOf, includes, find, findIndex</h2>
+<p>Metod <code>arr.indexOf(item)</code> elementni boshidan qidiradi va topilsa indeksini, topilmasa <code>-1</code> ni qaytaradi. <code>arr.lastIndexOf(item)</code> esa oxiridan qidiradi.</p>
+<p>Metod <code>arr.includes(item)</code> element mavjud bo'lsa <code>true</code>, aks holda <code>false</code> qaytaradi — mavjudlikni tekshirish uchun qulay.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indexof.js</span></div><textarea spellcheck="false">let arr = [1, 0, false, NaN];
+
+console.log(arr.indexOf(0));       // 1
+console.log(arr.indexOf(false));   // 2
+console.log(arr.indexOf(null));    // -1 (yo'q)
+console.log(arr.includes(1));      // true
+
+// muhim farq: indexOf NaN ni topa olmaydi, includes topadi
+console.log(arr.indexOf(NaN));     // -1
+console.log(arr.includes(NaN));    // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn"><code>indexOf</code> tenglikni <code>===</code> orqali tekshiradi, shuning uchun <code>NaN</code> ni hech qachon topa olmaydi. Bunday holatda <code>includes</code> ishlatiladi.</div>
+<p>Ba'zan shart bo'yicha (masalan, ma'lum xususiyatga ega obyektni) qidirish kerak bo'ladi. Bunda <code>arr.find(funksiya)</code> yordam beradi — u funksiya birinchi marta <code>true</code> qaytargan elementni beradi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>find.js</span></div><textarea spellcheck="false">let users = [
+  { id: 1, name: 'Ali' },
+  { id: 2, name: 'Vali' },
+  { id: 3, name: 'Guli' }
+];
+
+let user = users.find(function(item) {
+  return item.id === 2;
+});
+
+console.log(user.name);  // Vali
+
+// findIndex esa elementning o'zini emas, indeksini qaytaradi
+let idx = users.findIndex(function(item) {
+  return item.id === 3;
+});
+console.log(idx);  // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>find</code> mos element topilmasa <code>undefined</code>, <code>findIndex</code> esa <code>-1</code> qaytaradi. <code>findLastIndex</code> oxiridan qidiradi.</div>
+<h2>filter — shartga mos elementlarni saralash</h2>
+<p><code>find</code> bitta element qaytaradi. Agar shartga mos <strong>barcha</strong> elementlar kerak bo'lsa, <code>arr.filter(funksiya)</code> ishlatiladi. U funksiya <code>true</code> qaytargan barcha elementlardan yangi massiv tuzadi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>filter.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3, 4, 5, 6];
+
+let juftlar = sonlar.filter(function(son) {
+  return son % 2 === 0;
+});
+
+console.log(JSON.stringify(juftlar)); // [2, 4, 6]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>map — har bir elementni o'zgartirish</h2>
+<p>Metod <code>arr.map(funksiya)</code> — massivlar bilan ishlashda eng ko'p ishlatiladigan metodlardan biri. U har bir elementga funksiyani qo'llaydi va natijalardan <strong>yangi</strong> massiv qaytaradi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map.js</span></div><textarea spellcheck="false">let sozlar = ['Olma', 'Anor', 'Uzum'];
+
+let uzunliklar = sozlar.map(function(soz) {
+  return soz.length;
+});
+console.log(JSON.stringify(uzunliklar)); // [4, 4, 4]
+
+let katta = sozlar.map(function(soz) {
+  return soz.toUpperCase();
+});
+console.log(JSON.stringify(katta)); // ['OLMA', 'ANOR', 'UZUM']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>sort — saralash (taqqoslash funksiyasi bilan!)</h2>
+<p>Metod <code>arr.sort()</code> massivni <strong>o'z joyida</strong> (asl massivni o'zgartirib) saralaydi va o'zini qaytaradi. Ammo muhim tuzoq bor:</p>
+<div class="warn">Standart holatda <code>sort</code> elementlarni <strong>satr (string)</strong> sifatida saralaydi! Shuning uchun <code>[1, 2, 15]</code> emas, balki <code>[1, 15, 2]</code> chiqadi — chunki <code>'15' &lt; '2'</code> (lug'aviy taqqoslash).</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sort-bad.js</span></div><textarea spellcheck="false">let arr = [1, 2, 15];
+
+arr.sort();
+console.log(JSON.stringify(arr)); // [1, 15, 2] — NOTO'G'RI kutilsa</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>To'g'ri saralash uchun <code>sort</code> ga <strong>taqqoslash funksiyasi</strong> beriladi. U ikki argument <code>(a, b)</code> oladi va: <code>a</code> avval kelishi kerak bo'lsa manfiy son, <code>b</code> avval kelishi kerak bo'lsa musbat son, teng bo'lsa 0 qaytarishi kerak.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sort-good.js</span></div><textarea spellcheck="false">let arr = [1, 2, 15];
+
+arr.sort(function(a, b) {
+  if (a &gt; b) return 1;
+  if (a &lt; b) return -1;
+  return 0;
+});
+console.log(JSON.stringify(arr)); // [1, 2, 15] — to'g'ri!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Sonlar uchun qisqartirilgan usul — shunchaki ayirmani qaytarish. Kamayish tartibi uchun argumentlarni almashtiring:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sort-num.js</span></div><textarea spellcheck="false">let arr = [3, 1, 15, 2, 10];
+
+// o'sish tartibi
+arr.sort(function(a, b) { return a - b; });
+console.log(JSON.stringify(arr)); // [1, 2, 3, 10, 15]
+
+// kamayish tartibi
+arr.sort(function(a, b) { return b - a; });
+console.log(JSON.stringify(arr)); // [15, 10, 3, 2, 1]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Satrlarni tilga mos (masalan, o'zbekcha yoki lotincha harflar) tartibda saralash uchun <code>str.localeCompare</code> dan foydalaning: <code>arr.sort((a, b) =&gt; a.localeCompare(b))</code>.</div>
+<h2>reverse, split va join</h2>
+<p>Metod <code>arr.reverse()</code> massiv elementlarini teskari tartibda qo'yadi (o'z joyida).</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reverse.js</span></div><textarea spellcheck="false">let arr = [1, 2, 3, 4, 5];
+arr.reverse();
+console.log(JSON.stringify(arr)); // [5, 4, 3, 2, 1]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Metod <code>str.split(delim)</code> satrni berilgan ajratuvchi bo'yicha massivga bo'ladi. Aksincha, <code>arr.join(glue)</code> massiv elementlarini yopishtirib satr hosil qiladi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>split-join.js</span></div><textarea spellcheck="false">let str = 'Ali, Vali, Guli';
+
+let arr = str.split(', ');
+console.log(JSON.stringify(arr)); // ['Ali', 'Vali', 'Guli']
+console.log(arr.length);          // 3
+
+let yana = arr.join(' - ');
+console.log(yana); // Ali - Vali - Guli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>str.split('')</code> (bo'sh satr bilan) satrni harflarga ajratadi. <code>split</code> ga ikkinchi argument sifatida limit berish mumkin — natija massivi uzunligini cheklaydi.</div>
+<h2>reduce va reduceRight — massivni bitta qiymatga yig'ish</h2>
+<p>Ba'zan massiv asosida bitta qiymat hisoblash kerak: yig'indi, eng katta element, obyekt va hokazo. Buning uchun <code>arr.reduce</code> ishlatiladi.</p>
+<p>Sintaksis: <code>arr.reduce(function(akkumulyator, item, index, array) { ... }, boshlang'ich)</code>. Funksiya har bir element uchun chaqiriladi va uning natijasi keyingi chaqiruvga <code>akkumulyator</code> bo'lib uzatiladi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reduce1.js</span></div><textarea spellcheck="false">let arr = [1, 2, 3, 4, 5];
+
+let yigindi = arr.reduce(function(sum, current) {
+  return sum + current;
+}, 0); // boshlang'ich qiymat 0
+
+console.log(yigindi); // 15</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ishlash bosqichma-bosqich (boshlang'ich = 0): 0+1=1, 1+2=3, 3+3=6, 6+4=10, 10+5=15.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reduce2.js</span></div><textarea spellcheck="false">// eng katta elementni topamiz
+let arr = [5, 12, 8, 130, 44];
+
+let max = arr.reduce(function(a, b) {
+  return a &gt; b ? a : b;
+});
+console.log(max); // 130</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Agar boshlang'ich qiymat berilmasa, <code>reduce</code> birinchi elementni boshlang'ich sifatida oladi va ikkinchidan boshlaydi. <strong>Bo'sh massivda</strong> boshlang'ichsiz <code>reduce</code> xatolik beradi! Shuning uchun ko'p hollarda boshlang'ich qiymatni berish tavsiya etiladi.</div>
+<p><code>arr.reduceRight</code> xuddi shunday ishlaydi, lekin massivni <strong>o'ngdan chapga</strong> aylanib chiqadi.</p>
+<h2>Array.isArray — massivmi yoki yo'q?</h2>
+<p>Massivlar alohida tur emas, ular <code>object</code> turiga asoslangan. Shuning uchun <code>typeof</code> massivni obyektdan ajrata olmaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>isarray.js</span></div><textarea spellcheck="false">console.log(typeof {});        // object
+console.log(typeof []);        // object (ham!)
+
+// to'g'ri tekshirish:
+console.log(Array.isArray({})); // false
+console.log(Array.isArray([])); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Ko'p metodlar (masalan <code>sort</code>, <code>find</code>, <code>filter</code>) funksiyaga qo'shimcha <code>thisArg</code> argumentini qabul qiladi — u funksiya ichidagi <code>this</code> ni belgilaydi. Amalda arrow funksiyalar bilan bu deyarli kerak bo'lmaydi.</div>
+<h2>Xulosa</h2>
+<ul><li>Qo'shish/o'chirish: <code>push/pop</code>, <code>shift/unshift</code>, universal <code>splice</code>;</li><li>Qismini olish: <code>slice</code>; birlashtirish: <code>concat</code>;</li><li>Aylanib chiqish: <code>forEach</code>;</li><li>Qidirish: <code>indexOf/lastIndexOf</code>, <code>includes</code>, <code>find/findIndex</code>;</li><li>Transformatsiya: <code>filter</code> (saralab olish), <code>map</code> (o'zgartirish), <code>sort</code> (albatta taqqoslash funksiyasi bilan!), <code>reverse</code>;</li><li>Satr bilan bog'liq: <code>split</code> va <code>join</code>;</li><li>Yig'ish: <code>reduce/reduceRight</code>;</li><li>Tekshirish: <code>Array.isArray</code>.</li></ul>
+<nav class="lesson-nav">
+  <a href="obyekt-primitiv.html"><span class="dir">← Oldingi</span><span class="ttl">Obyektni primitivga o'girish</span></a>
+  <a class="next" href="iterable.html"><span class="dir">Keyingi →</span><span class="ttl">Iteratsiyalanuvchi obyektlar (iterable)</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

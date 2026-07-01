@@ -38,6 +38,12 @@
       <li><a href="lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
       <li><a href="lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
       <li><a href="lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
       <li><a href="lessons/sikllar.html">Sikllar: while va for</a></li>
       <li><a href="lessons/switch.html">switch konstruksiyasi</a></li>
       <li><a href="lessons/funksiyalar.html">Funksiyalar</a></li>
@@ -58,17 +64,41 @@
   <details>
     <summary>Obyektlar: asoslar</summary>
     <ol>
+      <li><a href="lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
       <li><a href="lessons/new-operator.html">Konstruktor, new operatori</a></li>
       <li><a href="lessons/optional-chaining.html">Optional chaining ?.</a></li>
       <li><a href="lessons/symbol.html">Symbol turi</a></li>
       <li><a href="lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="lessons/map-set.html">Map va Set</a></li>
+      <li><a href="lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
 </aside>
 <main class="content">
 <section class="hero">
   <h1>JavaScript'ni noldan chuqur o'rganing</h1>
-  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 23 ta dars.</p>
+  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 43 ta dars.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
 <h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
@@ -88,26 +118,52 @@
   <a class="card" href="lessons/use-strict.html"><div class="num">07</div><h3>Zamonaviy rejim, "use strict"</h3><p>"use strict" direktivasi nima, u nimani o'zgartiradi va zamonaviy kodda uning avtomatikligi.</p></a>
   <a class="card" href="lessons/ozgaruvchilar.html"><div class="num">08</div><h3>O'zgaruvchilar</h3><p>let, const va var; o'zgaruvchi yaratish, nomlash qoidalari, camelCase va const ma'nosi.</p></a>
   <a class="card" href="lessons/malumot-turlari.html"><div class="num">09</div><h3>Ma'lumot turlari</h3><p>JavaScript'ning 8 ta ma'lumot turi va typeof operatori.</p></a>
-  <a class="card" href="lessons/sikllar.html"><div class="num">10</div><h3>Sikllar: while va for</h3><p>Bir xil amallarni ko'p marta takrorlash uchun sikllar — while, do..while va for.</p></a>
-  <a class="card" href="lessons/switch.html"><div class="num">11</div><h3>switch konstruksiyasi</h3><p>Bir o'zgaruvchini bir nechta qiymat bilan solishtirish uchun switch/case/default.</p></a>
-  <a class="card" href="lessons/funksiyalar.html"><div class="num">12</div><h3>Funksiyalar</h3><p>Kodni takrorlamaslik uchun asosiy vosita — funksiya e'loni, parametrlar, return.</p></a>
-  <a class="card" href="lessons/funksiya-ifodalari.html"><div class="num">13</div><h3>Funksiya ifodalari</h3><p>Funksiya — bu qiymat. Function Expression, Function Declaration va callback funksiyalar.</p></a>
-  <a class="card" href="lessons/strelka-funksiyalar.html"><div class="num">14</div><h3>Strelka funksiyalari, asoslari</h3><p>() =&gt; sintaksisi — funksiyalarni yozishning qisqa va qulay usuli.</p></a>
+  <a class="card" href="lessons/turlarni-ozgartirish.html"><div class="num">10</div><h3>Turlarni o'zgartirish</h3><p>String, Number va Boolean konvertatsiyasi hamda qanday qiymatlar 0, false yoki NaN bo'lishi.</p></a>
+  <a class="card" href="lessons/operatorlar.html"><div class="num">11</div><h3>Asosiy operatorlar, matematika</h3><p>Matematik amallar, unar operatorlar, ustuvorlik, += kabi qisqartmalar va string+son xatti-harakati.</p></a>
+  <a class="card" href="lessons/taqqoslashlar.html"><div class="num">12</div><h3>Taqqoslashlar</h3><p>Taqqoslash operatorlari, == va === farqi, matnlarni leksikografik taqqoslash, null/undefined tuzoqlari.</p></a>
+  <a class="card" href="lessons/if-else.html"><div class="num">13</div><h3>Shartli operatorlar: if, ?</h3><p>if/else if/else konstruksiyasi, shartning boolean'ga o'girilishi va ternar operator ? :.</p></a>
+  <a class="card" href="lessons/mantiqiy-operatorlar.html"><div class="num">14</div><h3>Mantiqiy operatorlar</h3><p>|| &amp;&amp; ! operatorlari, qisqa tutashuv (short-circuit) va ularning qiymat qaytarish xususiyati.</p></a>
+  <a class="card" href="lessons/nullish.html"><div class="num">15</div><h3>Nullish birlashtiruvchi operator ??</h3><p>?? operatori nima, uning || dan farqi (0 va bo'sh matn holatlari) va ustuvorligi.</p></a>
+  <a class="card" href="lessons/sikllar.html"><div class="num">16</div><h3>Sikllar: while va for</h3><p>Bir xil amallarni ko'p marta takrorlash uchun sikllar — while, do..while va for.</p></a>
+  <a class="card" href="lessons/switch.html"><div class="num">17</div><h3>switch konstruksiyasi</h3><p>Bir o'zgaruvchini bir nechta qiymat bilan solishtirish uchun switch/case/default.</p></a>
+  <a class="card" href="lessons/funksiyalar.html"><div class="num">18</div><h3>Funksiyalar</h3><p>Kodni takrorlamaslik uchun asosiy vosita — funksiya e'loni, parametrlar, return.</p></a>
+  <a class="card" href="lessons/funksiya-ifodalari.html"><div class="num">19</div><h3>Funksiya ifodalari</h3><p>Funksiya — bu qiymat. Function Expression, Function Declaration va callback funksiyalar.</p></a>
+  <a class="card" href="lessons/strelka-funksiyalar.html"><div class="num">20</div><h3>Strelka funksiyalari, asoslari</h3><p>() =&gt; sintaksisi — funksiyalarni yozishning qisqa va qulay usuli.</p></a>
 </div>
 <h3 class="chapter-head">Kod sifati</h3>
 <div class="cards">
-  <a class="card" href="lessons/debugging.html"><div class="num">15</div><h3>Brauzerda debugging</h3><p>Sources paneli, breakpoint'lar, kodni qadamma-qadam bajarish va debugger buyrug'i.</p></a>
-  <a class="card" href="lessons/kod-uslubi.html"><div class="num">16</div><h3>Kod uslubi</h3><p>Qavslar, chekinish, qator uzunligi, nomlash va linterlar (ESLint).</p></a>
-  <a class="card" href="lessons/izohlar.html"><div class="num">17</div><h3>Izohlar</h3><p>Yaxshi va yomon izohlar; nima uchun (nima emas, nega) izoh kerak.</p></a>
-  <a class="card" href="lessons/testlash.html"><div class="num">18</div><h3>Avtomatlashtirilgan testlar (Mocha)</h3><p>Nega test kerak; BDD; describe/it/assert; TDD jarayoni.</p></a>
-  <a class="card" href="lessons/polyfill.html"><div class="num">19</div><h3>Polyfill va transpilyatorlar</h3><p>Babel, transpiler nima, polyfill nima, core-js va eski brauzerlar mosligi.</p></a>
+  <a class="card" href="lessons/debugging.html"><div class="num">21</div><h3>Brauzerda debugging</h3><p>Sources paneli, breakpoint'lar, kodni qadamma-qadam bajarish va debugger buyrug'i.</p></a>
+  <a class="card" href="lessons/kod-uslubi.html"><div class="num">22</div><h3>Kod uslubi</h3><p>Qavslar, chekinish, qator uzunligi, nomlash va linterlar (ESLint).</p></a>
+  <a class="card" href="lessons/izohlar.html"><div class="num">23</div><h3>Izohlar</h3><p>Yaxshi va yomon izohlar; nima uchun (nima emas, nega) izoh kerak.</p></a>
+  <a class="card" href="lessons/testlash.html"><div class="num">24</div><h3>Avtomatlashtirilgan testlar (Mocha)</h3><p>Nega test kerak; BDD; describe/it/assert; TDD jarayoni.</p></a>
+  <a class="card" href="lessons/polyfill.html"><div class="num">25</div><h3>Polyfill va transpilyatorlar</h3><p>Babel, transpiler nima, polyfill nima, core-js va eski brauzerlar mosligi.</p></a>
 </div>
 <h3 class="chapter-head">Obyektlar: asoslar</h3>
 <div class="cards">
-  <a class="card" href="lessons/new-operator.html"><div class="num">20</div><h3>Konstruktor, new operatori</h3><p>Konstruktor funksiyalar va new operatori yordamida bir turdagi ko'plab obyektlarni yaratish.</p></a>
-  <a class="card" href="lessons/optional-chaining.html"><div class="num">21</div><h3>Optional chaining ?.</h3><p>?. operatori — zanjirdagi oraliq xossalar mavjud bo'lmasa ham xatosiz ishlaydigan xavfsiz kirish usuli.</p></a>
-  <a class="card" href="lessons/symbol.html"><div class="num">22</div><h3>Symbol turi</h3><p>Symbol — noyob identifikatorlar yaratuvchi primitiv tur, yashirin xossalar va tizimli simvollar.</p></a>
-  <a class="card" href="lessons/obyekt-primitiv.html"><div class="num">23</div><h3>Obyektni primitivga o'girish</h3><p>Obyekt matematik yoki satr operatsiyalarida qanday primitivga aylantiriladi: hint, Symbol.toPrimitive, toString va valueOf.</p></a>
+  <a class="card" href="lessons/obyektlar.html"><div class="num">26</div><h3>Obyektlar</h3><p>Obyekt yaratish, xossalar bilan ishlash, nuqta va kvadrat qavslar, delete, hisoblangan xossalar, "in" operatori va for..in sikli.</p></a>
+  <a class="card" href="lessons/obyekt-nusxalash.html"><div class="num">27</div><h3>Obyekt havolalari va nusxalash</h3><p>Obyektlar havola (reference) orqali saqlanadi va ko'chiriladi. = obyektni nusxalamaydi. Object.assign, sayoz nusxa va structuredClone.</p></a>
+  <a class="card" href="lessons/garbage-collection.html"><div class="num">28</div><h3>Axlat yig'ish (Garbage collection)</h3><p>Xotira boshqaruvi, erishuvchanlik (reachability), root, ishlatilmaydigan obyektlarni tozalash va mark-and-sweep algoritmi g'oyasi.</p></a>
+  <a class="card" href="lessons/obyekt-metodlari.html"><div class="num">29</div><h3>Obyekt metodlari, this</h3><p>Obyektga metod qo'shish, this kalit so'zi, this'ning chaqiruvga bog'liqligi va strelka funksiyalarda this yo'qligi.</p></a>
+  <a class="card" href="lessons/new-operator.html"><div class="num">30</div><h3>Konstruktor, new operatori</h3><p>Konstruktor funksiyalar va new operatori yordamida bir turdagi ko'plab obyektlarni yaratish.</p></a>
+  <a class="card" href="lessons/optional-chaining.html"><div class="num">31</div><h3>Optional chaining ?.</h3><p>?. operatori — zanjirdagi oraliq xossalar mavjud bo'lmasa ham xatosiz ishlaydigan xavfsiz kirish usuli.</p></a>
+  <a class="card" href="lessons/symbol.html"><div class="num">32</div><h3>Symbol turi</h3><p>Symbol — noyob identifikatorlar yaratuvchi primitiv tur, yashirin xossalar va tizimli simvollar.</p></a>
+  <a class="card" href="lessons/obyekt-primitiv.html"><div class="num">33</div><h3>Obyektni primitivga o'girish</h3><p>Obyekt matematik yoki satr operatsiyalarida qanday primitivga aylantiriladi: hint, Symbol.toPrimitive, toString va valueOf.</p></a>
+</div>
+<h3 class="chapter-head">Ma'lumot turlari</h3>
+<div class="cards">
+  <a class="card" href="lessons/massiv-metodlari.html"><div class="num">34</div><h3>Massiv metodlari</h3><p>Massivlarni boshqarish uchun eng muhim metodlar: qo'shish/o'chirish, qidirish, saralash, transformatsiya va reduce.</p></a>
+  <a class="card" href="lessons/iterable.html"><div class="num">35</div><h3>Iteratsiyalanuvchi obyektlar (iterable)</h3><p>for..of qanday ishlaydi, Symbol.iterator, o'z iterable obyektingni yaratish, Array.from.</p></a>
+  <a class="card" href="lessons/map-set.html"><div class="num">36</div><h3>Map va Set</h3><p>Map — istalgan kalitli assotsiativ to'plam; Set — unikal qiymatlar to'plami. Obyektdan farqi va iteratsiya.</p></a>
+  <a class="card" href="lessons/weakmap-weakset.html"><div class="num">37</div><h3>WeakMap va WeakSet</h3><p>Kuchsiz havolalar, faqat obyekt kalitlar, iteratsiya yo'qligi va amaliy qo'llanishi (kesh, qo'shimcha ma'lumot).</p></a>
+  <a class="card" href="lessons/object-keys.html"><div class="num">38</div><h3>Object.keys, values, entries</h3><p>Obyekt kalitlari, qiymatlari va juftliklarini massiv sifatida olish; ular ustida aylanish va qayta yig'ish.</p></a>
+  <a class="card" href="lessons/destructuring.html"><div class="num">39</div><h3>Destrukturizatsiya</h3><p>Massiv va obyektlarni alohida o'zgaruvchilarga qulay tarzda ajratib olish.</p></a>
+  <a class="card" href="lessons/sana-vaqt.html"><div class="num">40</div><h3>Sana va vaqt (Date)</h3><p>Date obyekti bilan sana yasash, komponentlarini olish, timestamp va sanalar ayirmasini hisoblash.</p></a>
+  <a class="card" href="lessons/json-metodlari.html"><div class="num">41</div><h3>JSON metodlari, toJSON</h3><p>Obyektni JSON satriga aylantirish (stringify) va qayta o'qish (parse); replacer, bo'shliq, reviver va toJSON.</p></a>
+</div>
+<h3 class="chapter-head">Obyekt xossalari konfiguratsiyasi</h3>
+<div class="cards">
+  <a class="card" href="lessons/property-flags.html"><div class="num">42</div><h3>Xossa bayroqlari va deskriptorlari</h3><p>Obyekt xossalari faqat qiymatdan iborat emas — ular writable, enumerable va configurable bayroqlariga ega. Ularni qanday o'qish va o'zgartirish mumkin.</p></a>
+  <a class="card" href="lessons/getter-setter.html"><div class="num">43</div><h3>Getter va setterlar</h3><p>Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.</p></a>
 </div>
 </main>
 </div>

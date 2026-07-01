@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axlat yig'ish (Garbage collection) — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Xotira boshqaruvi, erishuvchanlik (reachability), root, ishlatilmaydigan obyektlarni tozalash va mark-and-sweep algoritmi g'oyasi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a class="active" href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Obyektlar: asoslar</div>
+<h1>Axlat yig'ish (Garbage collection)</h1>
+<p class="lead">JavaScript'da xotira boshqaruvi avtomatik va ko'zga ko'rinmas tarzda amalga oshiriladi. Biz o'zgaruvchilar, obyektlar, funksiyalar yaratamiz — bularning hammasi xotira egallaydi. Endi savol: kerak bo'lmay qolgan narsalar bilan nima bo'ladi? Buni <strong>axlat yig'uvchi</strong> (garbage collector) hal qiladi.</p>
+<h2>Erishuvchanlik (Reachability)</h2>
+<p>JavaScript'dagi xotira boshqaruvining asosiy tushunchasi — <strong>erishuvchanlik</strong> (reachability). Sodda qilib aytganda, "erishsa bo'ladigan" qiymatlar — bu qandaydir yo'l bilan ishlatilishi mumkin bo'lgan qiymatlar. Ular xotirada saqlanib qoladi.</p>
+<p>Erishsa bo'ladigan qiymatlar to'plami mavjud. Ba'zi qiymatlar <em>ta'rifga ko'ra</em> erishsa bo'ladigan hisoblanadi. Bularni <strong>root</strong> (ildiz) deb ataymiz:</p>
+<ul><li>Hozir bajarilayotgan funksiyaning lokal o'zgaruvchilari va parametrlari;</li><li>Ichma-ich chaqiruvlar zanjiridagi boshqa funksiyalarning o'zgaruvchi va parametrlari;</li><li>Global o'zgaruvchilar;</li><li>(va yana bir nechta ichki, tizim darajasidagilar).</li></ul>
+<p>Asosiy qoida shunday: agar biror qiymatga <strong>root</strong>dan havola yoki havolalar zanjiri orqali yetib borilsa — u erishsa bo'ladigan (kerakli) hisoblanadi va saqlanadi. Aks holda — u "axlat" va tozalanadi.</p>
+<div class="note">Fonda uzluksiz ishlaydigan maxsus jarayon — <strong>garbage collector</strong> (axlat yig'uvchi) — barcha obyektlarni kuzatib turadi, erishib bo'lmaydiganlarini topadi va o'chiradi.</div>
+<h2>Oddiy misol</h2>
+<p>Global o'zgaruvchida obyektga havola bor:</p>
+<pre class="code"><code>// user global o'zgaruvchisi obyektga havola qiladi
+let user = {
+  name: "Jaloliddin"
+};</code></pre>
+<p>Bu yerda <code>user</code> obyektga ("strelka") havola qiladi. Obyektning <code>name</code> xossasi primitivni saqlaydi. Agar <code>user</code> qiymatini boshqasiga o'zgartirsak, havola yo'qoladi:</p>
+<pre class="code"><code>user = null;
+
+// Endi "Jaloliddin" obyektiga hech qanday havola yo'q.
+// Unga erishib bo'lmaydi — garbage collector uni o'chiradi,
+// xotira bo'shatiladi.</code></pre>
+<h2>Ikkita havola</h2>
+<p>Endi bir obyektga ikkita havola bo'lsa, vaziyat o'zgaradi:</p>
+<pre class="code"><code>let user = {
+  name: "Jaloliddin"
+};
+
+let admin = user; // ikkinchi havola</code></pre>
+<p>Agar endi <code>user</code>ni <code>null</code> qilsak:</p>
+<pre class="code"><code>user = null;</code></pre>
+<p>Obyekt hamon erishsa bo'ladigan bo'lib qoladi, chunki unga <code>admin</code> orqali yetib borilyapti. U xotirada saqlanadi. Faqat <code>admin = null</code> ham qilsak, obyekt erishib bo'lmaydigan bo'ladi va o'chiriladi.</p>
+<h2>O'zaro bog'langan obyektlar</h2>
+<p>Endi murakkabroq misol — bir-biriga havola qiluvchi obyektlar. Bir oila obyektini tasavvur qiling:</p>
+<pre class="code"><code>function marry(man, woman) {
+  woman.husband = man;
+  man.wife = woman;
+
+  return {
+    father: man,
+    mother: woman
+  };
+}
+
+let family = marry(
+  { name: "Sardor" },
+  { name: "Nilufar" }
+);</code></pre>
+<p>Natijada obyektlar bir-biriga havola qiladi: <code>family</code> ikkalasiga, <code>father</code> va <code>mother</code> esa <code>husband</code>/<code>wife</code> orqali o'zaro bog'langan. Barcha obyektlarga <code>family</code> (root)dan yetib boriladi — hammasi erishsa bo'ladigan.</p>
+<p>Endi ikkita havolani olib tashlaymiz:</p>
+<pre class="code"><code>delete family.father;
+delete family.mother.husband;</code></pre>
+<p>"Sardor" (father) obyektiga endi hech qanday <em>kiruvchi</em> havola qolmadi: <code>family.father</code> o'chirildi, <code>woman.husband</code> ham. Uning ichidan tashqariga havolalar bo'lishi (masalan, u <code>wife</code>ga havola qilishi) ahamiyatsiz — muhimi unga <em>tashqaridan</em> yetib bo'lmasligi. Shu sabab "Sardor" obyekti o'chiriladi.</p>
+<div class="warn">Diqqat: erishuvchanlik faqat <strong>kiruvchi</strong> havolalar bilan aniqlanadi. Obyektning boshqalarga havola qilishi uni saqlab qolmaydi — unga root'dan yetib borish kerak.</div>
+<h2>Yetib bo'lmaydigan orol</h2>
+<p>Bir butun bog'langan obyektlar guruhi ham axlatga aylanishi mumkin — agar butun guruhga tashqaridan yetib bo'lmasa. Agar <code>family = null</code> qilsak, ichkarida obyektlar bir-biriga havola qilib tursa ham, ularga root'dan yo'l yo'q. Shunday "orol" butunligicha o'chiriladi.</p>
+<div class="note">Bu muhim: obyektlarning o'zaro bog'langani ularni saqlab qolmaydi. Agar butun bir tarmoqqa root'dan yetib bo'lmasa, u to'liq tozalanadi.</div>
+<h2>Ichki algoritm: mark-and-sweep</h2>
+<p>Asosiy axlat yig'ish algoritmi <strong>"mark-and-sweep"</strong> (belgila va tozala) deb ataladi. U taxminan quyidagicha ishlaydi:</p>
+<ol><li>Garbage collector root'larni oladi va ularni "belgilaydi" (eslab qoladi);</li><li>So'ng root'lardan havola qilinayotgan barcha obyektlarga tashrif buyurib, ularni belgilaydi;</li><li>So'ng belgilangan obyektlarga tashrif buyuradi va ular havola qilayotganlarni belgilaydi. Barcha yo'llar to'liq ko'rilguncha bu davom etadi;</li><li>Belgilanmagan barcha obyektlar — erishib bo'lmaydigan hisoblanadi va o'chiriladi (xotira bo'shatiladi).</li></ol>
+<p>Buni bo'yoq to'kilishiga o'xshatish mumkin: root'dan boshlab, havolalar bo'ylab "bo'yoq" tarqaladi. Bo'yoq yetib bormagan (belgilanmagan) obyektlar — erishib bo'lmaydigan va o'chiriladi.</p>
+<h2>Optimallashtirishlar</h2>
+<p>Zamonaviy dvigatellar axlat yig'ishni tezlashtirish uchun ilg'or usullar qo'llaydi:</p>
+<ul><li><strong>Avloviy yig'ish (generational collection)</strong> — obyektlar "yangi" va "eski"larga bo'linadi. Ko'p obyekt yaratilib, tez ishlatilib bo'ladi; ularni tez-tez tekshiradi. Uzoq yashaganlarini kamroq tekshiradi;</li><li><strong>Bosqichli yig'ish (incremental collection)</strong> — juda ko'p obyekt bo'lsa, hammasini birdan belgilash kechikish yaratadi. Shuning uchun ish kichik bo'laklarga bo'lib bajariladi;</li><li><strong>Bo'sh vaqtda yig'ish (idle-time collection)</strong> — protsessor bo'sh bo'lganda ishlab, asosiy kodga ta'sirni kamaytirishga harakat qiladi.</li></ul>
+<div class="tip">Bu optimallashtirishlar ichki tafsilotlar — ular vaqt o'tishi bilan o'zgaradi. Kundalik dasturlashda ularni yodda tutish shart emas; dvigatel o'zi hal qiladi.</div>
+<h2>Xulosa</h2>
+<ul><li>Xotira boshqaruvi JavaScript'da <strong>avtomatik</strong> — biz uni qo'lda boshqarmaymiz;</li><li>Asosiy tushuncha — <strong>erishuvchanlik</strong> (reachability): root'dan yetib boriladigan qiymatlar saqlanadi;</li><li><strong>Root</strong>lar — global o'zgaruvchilar, joriy funksiya o'zgaruvchilari va boshqalar;</li><li>Obyektni saqlab qoladigan narsa — unga <strong>kiruvchi</strong> havolalar, chiquvchilari emas;</li><li>Bir-biriga bog'langan, ammo root'dan uzilgan obyektlar guruhi butunligicha o'chiriladi;</li><li>Asosiy algoritm — <strong>mark-and-sweep</strong>; dvigatellar buni turli optimallashtirishlar bilan tezlashtiradi.</li></ul>
+<nav class="lesson-nav">
+  <a href="obyekt-nusxalash.html"><span class="dir">← Oldingi</span><span class="ttl">Obyekt havolalari va nusxalash</span></a>
+  <a class="next" href="obyekt-metodlari.html"><span class="dir">Keyingi →</span><span class="ttl">Obyekt metodlari, this</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

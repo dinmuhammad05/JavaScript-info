@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obyekt havolalari va nusxalash — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Obyektlar havola (reference) orqali saqlanadi va ko'chiriladi. = obyektni nusxalamaydi. Object.assign, sayoz nusxa va structuredClone.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a class="active" href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Obyektlar: asoslar</div>
+<h1>Obyekt havolalari va nusxalash</h1>
+<p class="lead">Obyektlar va primitivlar o'rtasidagi eng muhim farqlardan biri — ular saqlanish va ko'chirilish usulida. Primitivlar to'liq qiymat bilan, obyektlar esa <em>havola</em> (reference) bilan ishlaydi. Bu farqni tushunmaslik ko'plab "g'alati" xatolarga sabab bo'ladi.</p>
+<h2>Primitivlar nusxalanadi</h2>
+<p>Primitiv turdagi o'zgaruvchi (satr, son, boolean) o'z qiymatini to'liq saqlaydi. Uni boshqa o'zgaruvchiga tenglashtirsak, <strong>qiymatning nusxasi</strong> ko'chiriladi — ikki mustaqil qiymat hosil bo'ladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>primitiv.js</span></div><textarea spellcheck="false">let message = "Salom!";
+let phrase = message; // qiymat nusxalandi
+
+phrase = "O'zgardi";  // faqat phrase o'zgardi
+
+console.log(message); // Salom! (o'zgarmadi)
+console.log(phrase);  // O'zgardi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Obyektlar havola orqali saqlanadi</h2>
+<p>Obyekt o'zgaruvchisi obyektning o'zini emas, balki uning xotiradagi <strong>manzilini</strong> — ya'ni "havola"ni saqlaydi. Buni quyidagicha tasavvur qiling: obyekt — bir qutida, o'zgaruvchi esa — o'sha qutiga yopishtirilgan qog'oz (manzil, kalit).</p>
+<pre class="code"><code>let user = {
+  name: "Jaloliddin"
+};
+// user o'zgaruvchisi obyektning "manzilini" saqlaydi,
+// obyektning o'zini emas.</code></pre>
+<p>Xossaga murojaat qilganda (<code>user.name</code>), JavaScript avval havola bo'yicha obyektni topadi, keyin uning ichidagi xossani o'qiydi.</p>
+<h2>Havolani nusxalash</h2>
+<p>Obyekt o'zgaruvchisini nusxalasak, obyekt EMAS, balki <strong>havola nusxalanadi</strong>. Natijada ikkala o'zgaruvchi ham <em>bitta va o'sha</em> obyektga ishora qiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>havola.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin" };
+
+let admin = user; // havola nusxalandi (ikkalasi bir obyektga ishora qiladi)
+
+admin.name = "O'zgardi"; // admin orqali o'zgartirdik
+
+console.log(user.name); // O'zgardi — chunki user ham SHU obyektga ishora qiladi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu "ikkita kaliti bor bitta shkaf"ga o'xshaydi: bittasi bilan ochib narsa qo'ysak, ikkinchi kalit egasi ham o'sha narsani ko'radi. Obyekt bitta, unga ikkita havola bor.</p>
+<div class="warn">Bu — eng ko'p yangi xatoga sabab bo'ladigan nuqtalardan biri. <code>let b = a</code> obyektni nusxalamaydi; u faqat yana bitta havola yaratadi.</div>
+<h2>Havola orqali taqqoslash</h2>
+<p><code>==</code> va <code>===</code> operatorlari ikkita obyekt uchun <strong>bir xil ishlaydi</strong>: ular faqat ikkala havola <em>bitta va o'sha</em> obyektga ishora qilsagina <code>true</code> qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tenglik1.js</span></div><textarea spellcheck="false">let a = {};
+let b = a; // b va a bir obyektga ishora qiladi
+
+console.log(a == b);  // true
+console.log(a === b); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ammo tashqi ko'rinishi bir xil, ammo mustaqil ikkita obyekt HAR DOIM teng emas:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tenglik2.js</span></div><textarea spellcheck="false">let a = {};
+let b = {}; // ikki mustaqil (alohida) obyekt
+
+console.log(a == b);  // false
+console.log(a === b); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Ular ko'rinishi "bo'sh va bir xil" bo'lsa-da, xotirada ikki alohida obyekt — shuning uchun teng emas.</div>
+<h2>Object.assign bilan nusxalash</h2>
+<p>Chinakam nusxa — mustaqil, alohida obyekt — kerak bo'lsa-chi? Buning uchun barcha xossalarni yangi obyektga ko'chirish kerak. Buni qo'lda <code>for..in</code> bilan qilsa bo'ladi, ammo tayyor usul bor: <code>Object.assign</code>.</p>
+<p>Sintaksis: <code>Object.assign(dest, ...sources)</code>. U <code>sources</code>dagi barcha xossalarni <code>dest</code>ga ko'chiradi va <code>dest</code>ni qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>assign.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin", age: 30 };
+
+let clone = Object.assign({}, user); // bo'sh obyektga user xossalarini ko'chirdik
+
+clone.name = "O'zgardi"; // clone'ni o'zgartirdik
+
+console.log(user.name);  // Jaloliddin — asl obyekt tegilmadi!
+console.log(clone.name); // O'zgardi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>Object.assign</code> bir nechta manbani ham birlashtira oladi. Bir xil nomli xossa bo'lsa, oxirgisi ustun keladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>assign-merge.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin" };
+let permissions1 = { canView: true };
+let permissions2 = { canEdit: true };
+
+Object.assign(user, permissions1, permissions2);
+
+console.log(user.name);    // Jaloliddin
+console.log(user.canView); // true
+console.log(user.canEdit); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Nusxa olishning yana bir keng tarqalgan usuli — <em>spread</em> sintaksisi: <code>let clone = {...user};</code>. U ham xuddi shunday sayoz nusxa yaratadi.</div>
+<h2>Sayoz nusxa (shallow copy) muammosi</h2>
+<p><code>Object.assign</code> (va spread) faqat <strong>bir daraja</strong> chuqurlikda nusxalaydi. Agar xossa qiymati o'zi obyekt bo'lsa, u nusxalanmaydi — uning havolasi ko'chiriladi. Bunga <strong>sayoz nusxa</strong> (shallow copy) deyiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sayoz.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  sizes: {       // ichki obyekt
+    height: 182,
+    width: 50
+  }
+};
+
+let clone = Object.assign({}, user);
+
+// sizes ichki obyekt HAVOLA orqali ulashilgan!
+console.log(user.sizes === clone.sizes); // true — bitta obyekt
+
+clone.sizes.width = 60; // clone orqali ichki obyektni o'zgartirdik
+
+console.log(user.sizes.width); // 60 — asl obyekt ham o'zgardi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Sayoz nusxada tashqi obyekt yangi, ammo ichki obyektlar hamon ulashilgan. Bittasini o'zgartirsak, ikkinchisi ham o'zgaradi.</div>
+<h2>Chuqur nusxa: structuredClone</h2>
+<p>Bunday muammoni bartaraf qilish uchun <strong>chuqur nusxa</strong> (deep clone) kerak — barcha darajadagi ichki obyektlar ham nusxalanadi. Zamonaviy JavaScript'da buning uchun ichki <code>structuredClone</code> funksiyasi bor:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>structured.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  sizes: { height: 182, width: 50 }
+};
+
+let clone = structuredClone(user);
+
+// endi ichki obyekt ham mustaqil!
+console.log(user.sizes === clone.sizes); // false
+
+clone.sizes.width = 60;
+
+console.log(user.sizes.width); // 50 — asl obyekt tegilmadi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>structuredClone</code> istalgan chuqurlikdagi obyektlarni, hatto o'z-o'ziga ishora qiluvchi (siklik) obyektlarni ham to'g'ri nusxalay oladi.</p>
+<div class="note"><code>structuredClone</code> funksiya (metod) qiymatlarini nusxalay olmaydi — bunday obyektni uzatsangiz xato beradi. Bunday murakkab hollarda tashqi kutubxonalar (masalan, lodash'ning <code>_.cloneDeep</code>) yordam beradi.</div>
+<h2>Xulosa</h2>
+<ul><li>Primitivlar <strong>qiymat</strong> bilan, obyektlar <strong>havola</strong> bilan saqlanadi;</li><li><code>let b = a</code> obyekt uchun faqat havolani nusxalaydi — obyekt bitta bo'lib qoladi;</li><li><code>==</code> va <code>===</code> obyektlar uchun faqat bir xil havolani teng deb hisoblaydi;</li><li><code>Object.assign({}, obj)</code> yoki <code>{...obj}</code> — <strong>sayoz</strong> nusxa yaratadi;</li><li>Sayoz nusxada ichki obyektlar hamon ulashilgan;</li><li><code>structuredClone(obj)</code> — <strong>chuqur</strong> nusxa yaratadi, barcha darajalarni mustaqil qiladi.</li></ul>
+<nav class="lesson-nav">
+  <a href="obyektlar.html"><span class="dir">← Oldingi</span><span class="ttl">Obyektlar</span></a>
+  <a class="next" href="garbage-collection.html"><span class="dir">Keyingi →</span><span class="ttl">Axlat yig'ish (Garbage collection)</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

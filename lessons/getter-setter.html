@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getter va setterlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a class="active" href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Obyekt xossalari konfiguratsiyasi</div>
+<h1>Getter va setterlar</h1>
+<p class="lead">Obyekt xossalari ikki turga bo'linadi. Birinchisi — biz odatda ishlatadigan <strong>ma'lumot xossalari</strong> (data properties). Ikkinchisi — yangi tur: <strong>aksessor xossalari</strong> (accessor properties). Ular aslida qiymatni o'qish va yozishni boshqaradigan funksiyalardir, lekin tashqaridan oddiy xossaga o'xshaydi.</p>
+<h2>Getter va setter nima?</h2>
+<p>Aksessor xossalari ikkita maxsus metod bilan ifodalanadi:</p>
+<ul><li><strong>getter</strong> — <code>get</code> so'zi bilan belgilanadi; xossani <em>o'qiganimizda</em> ishga tushadi va qiymat qaytaradi;</li><li><strong>setter</strong> — <code>set</code> so'zi bilan belgilanadi; xossaga qiymat <em>yozganimizda</em> ishga tushadi va argument sifatida yangi qiymatni oladi.</li></ul>
+<p>Tashqi kod uchun aksessor xossa oddiy xossaga o'xshaydi: siz <code>obj.propName</code> deb o'qiysiz va <code>obj.propName = value</code> deb yozasiz — qavslar yo'q, xuddi oddiy xossadek. Ammo ostida funksiyalar ishlaydi.</p>
+<h2>Obyekt literalida getter va setter</h2>
+<p>Obyekt literalida ular <code>get</code> va <code>set</code> kalit so'zlari orqali e'lon qilinadi:</p>
+<pre class="code"><code>let obj = {
+  get propName() {
+    // obj.propName o'qilganda ishlaydi
+  },
+
+  set propName(value) {
+    // obj.propName = value bajarilganda ishlaydi
+  }
+};</code></pre>
+<p>Amaliy misol: <code>fullName</code> aksessori <code>name</code> va <code>surname</code>dan to'liq ismni hisoblab beradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>getter-fullname.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jasur",
+  surname: "Karimov",
+
+  get fullName() {
+    return this.name + " " + this.surname;
+  }
+};
+
+console.log(user.fullName); // Jasur Karimov — qavslarsiz o'qildi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>E'tibor bering: <code>user.fullName</code> — bu funksiya chaqiruvi emas (qavslar yo'q), lekin baribir <code>get fullName</code> metodi ishga tushdi. Bu getterning kuchi — u xossaga o'xshab ishlaydi.</p>
+<div class="note">Hozircha <code>fullName</code>da faqat getter bor. Agar unga qiymat yozmoqchi bo'lsak — <code>user.fullName = "..."</code> — xatolik yuzaga keladi (yoki sokin rejimda e'tiborsiz qoladi), chunki setter mavjud emas.</div>
+<h2>Setter qo'shish</h2>
+<p>Endi <code>fullName</code>ga yozishni ham qo'llab-quvvatlash uchun setter qo'shamiz. U kelgan qatorni bo'sh joy bo'yicha ajratib, <code>name</code> va <code>surname</code>ni yangilaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>setter-fullname.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jasur",
+  surname: "Karimov",
+
+  get fullName() {
+    return this.name + " " + this.surname;
+  },
+
+  set fullName(value) {
+    [this.name, this.surname] = value.split(" ");
+  }
+};
+
+// setter ishga tushadi
+user.fullName = "Alisher Navoiy";
+
+console.log(user.name);     // Alisher
+console.log(user.surname);  // Navoiy
+console.log(user.fullName); // Alisher Navoiy</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Natijada bizda <code>fullName</code> "virtual" xossasi bor: uni o'qish ham, yozish ham mumkin, garchi u obyektda alohida saqlanmasa ham. U har safar <code>name</code> va <code>surname</code>dan hisoblanadi.</p>
+<div class="tip">Getter va setter — obyektning tashqi ko'rinishi (interfeysi) bilan ichki tuzilishini ajratishga imkon beradi. Foydalanuvchi <code>fullName</code>ni ishlatadi, ichkarida esa ma'lumot <code>name</code> va <code>surname</code>da saqlanadi.</div>
+<h2>Aksessor deskriptorlari</h2>
+<p>Aksessor xossalarining deskriptori ma'lumot xossalaridan farq qiladi. Unda <code>value</code> va <code>writable</code> o'rniga <code>get</code> va <code>set</code> funksiyalari bo'ladi. Deskriptor kalitlari:</p>
+<ul><li><strong>get</strong> — argumentsiz funksiya, xossa o'qilganda ishlaydi;</li><li><strong>set</strong> — bitta argumentli funksiya, xossaga yozilganda ishlaydi;</li><li><strong>enumerable</strong> — ma'lumot xossalaridagi kabi;</li><li><strong>configurable</strong> — ma'lumot xossalaridagi kabi.</li></ul>
+<div class="warn">Xossa bir vaqtning o'zida <em>ham</em> aksessor (<code>get</code>/<code>set</code>), <em>ham</em> ma'lumot (<code>value</code>/<code>writable</code>) bo'la olmaydi. Agar deskriptorda ham <code>get</code>, ham <code>value</code> ko'rsatsangiz, xatolik yuzaga keladi.</div>
+<h2>Object.defineProperty bilan getter/setter</h2>
+<p>Aksessor xossani <code>Object.defineProperty</code> orqali ham e'lon qilish mumkin. Bu obyekt yaratilgandan keyin xossa qo'shish kerak bo'lganda foydali:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>defineproperty-accessor.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jasur",
+  surname: "Karimov"
+};
+
+Object.defineProperty(user, "fullName", {
+  get() {
+    return this.name + " " + this.surname;
+  },
+  set(value) {
+    [this.name, this.surname] = value.split(" ");
+  },
+  enumerable: true,
+  configurable: true
+});
+
+console.log(user.fullName); // Jasur Karimov
+user.fullName = "Bobur Mirzo";
+console.log(user.name);     // Bobur</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Aksessorlar validatsiya uchun</h2>
+<p>Getter/setterlarning eng foydali qo'llanishlaridan biri — qiymatni <strong>tekshirish</strong> (validatsiya). Setter orqali biz noto'g'ri qiymat yozilishining oldini olamiz.</p>
+<p>Quyidagi misolda <code>age</code> uchun setter salbiy qiymatni rad etadi. Haqiqiy ma'lumot esa "maxfiy" <code>_age</code> xossasida saqlanadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>setter-validation.js</span></div><textarea spellcheck="false">let user = {
+  get age() {
+    return this._age;
+  },
+
+  set age(value) {
+    if (value &lt; 0) {
+      console.log("Xato: yosh manfiy bo'lolmaydi!");
+      return;
+    }
+    this._age = value;
+  }
+};
+
+user.age = 25;
+console.log(user.age);  // 25
+
+user.age = -5;          // Xato: yosh manfiy bo'lolmaydi!
+console.log(user.age);  // 25 — o'zgarmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Bu yerda <code>_age</code> ismidagi ostki chiziq (underscore) — bu shartli kelishuv. U xossa "ichki", to'g'ridan-to'g'ri chetdan tegilmasligi kerak degan ma'noni bildiradi. Bu texnik cheklov emas, balki dasturchilar orasidagi urf-odat.</div>
+<h2>Aksessorlar — moslashuvchanlik uchun</h2>
+<p>Getter/setterlar kodni kelajakda o'zgartirishni osonlashtiradi. Aytaylik, boshida <code>name</code> oddiy ma'lumot xossasi edi. Keyinchalik ismning uzunligini cheklash kerak bo'lib qoldi. Butun kodni o'zgartirish o'rniga, biz shunchaki nomni <code>_name</code>ga o'zgartirib, ustiga tekshiruvchi setter qo'yamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>accessor-flexibility.js</span></div><textarea spellcheck="false">function User(name, age) {
+  this.age = age;
+
+  // ism uzunligini nazorat qiluvchi setter
+  Object.defineProperty(this, "name", {
+    get() {
+      return this._name;
+    },
+    set(value) {
+      if (value.length &lt; 3) {
+        console.log("Ism juda qisqa, kamida 3 harf kerak.");
+        return;
+      }
+      this._name = value;
+    }
+  });
+
+  this.name = name;
+}
+
+let user = new User("Al", 25); // Ism juda qisqa...
+console.log(user.name);        // undefined
+
+user.name = "Alisher";
+console.log(user.name);        // Alisher</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Muhimi: tashqi kod hali ham <code>user.name</code> deb yozadi va o'qiydi — interfeys o'zgarmadi. Faqat ichki mantiq kuchaydi. Bu — getter/setterlarning katta afzalligi.</p>
+<h2>Hisoblangan (computed) xossa</h2>
+<p>Getterlar obyektda saqlanmaydigan, boshqa qiymatlardan <em>hisoblanadigan</em> xossalar yaratish uchun ideal. Masalan, to'rtburchakning yuzasi tomonlaridan har safar hisoblab beriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>computed-getter.js</span></div><textarea spellcheck="false">let rectangle = {
+  width: 4,
+  height: 5,
+
+  get area() {
+    return this.width * this.height;
+  },
+
+  get perimeter() {
+    return 2 * (this.width + this.height);
+  }
+};
+
+console.log("Yuza: " + rectangle.area);        // 20
+console.log("Perimetr: " + rectangle.perimeter); // 18
+
+rectangle.width = 10;
+console.log("Yangi yuza: " + rectangle.area);  // 50 — avtomatik yangilandi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>area</code>ni oddiy xossa qilib qo'ymaganimiz muhim: agar shunday qilsak, <code>width</code> o'zgarganda <code>area</code> eskirib qolardi. Getter esa har safar yangi qiymatni hisoblab beradi — u har doim dolzarb.</div>
+<h2>Xulosa</h2>
+<ul><li>Xossalar ikki turga bo'linadi: <strong>ma'lumot xossalari</strong> va <strong>aksessor xossalari</strong> (getter/setter);</li><li>Getter — <code>get</code> bilan belgilanadi, xossa o'qilganda ishlaydi; setter — <code>set</code> bilan, xossaga yozilganda ishlaydi;</li><li>Tashqaridan ular oddiy xossaga o'xshaydi: <code>obj.prop</code> va <code>obj.prop = value</code>;</li><li>Ularni obyekt literalida (<code>get/set</code> so'zlari) yoki <code>Object.defineProperty</code> orqali e'lon qilish mumkin;</li><li>Asosiy foydasi: <strong>validatsiya</strong> (noto'g'ri qiymatni rad etish), <strong>hisoblangan xossalar</strong> (masalan, <code>fullName</code>, <code>area</code>) va <strong>moslashuvchanlik</strong> (interfeysni buzmasdan mantiqni o'zgartirish).</li></ul>
+<nav class="lesson-nav">
+  <a href="property-flags.html"><span class="dir">← Oldingi</span><span class="ttl">Xossa bayroqlari va deskriptorlari</span></a>
+  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

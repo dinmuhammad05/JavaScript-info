@@ -38,6 +38,12 @@
       <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
       <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
       <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
       <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
       <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
       <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
@@ -58,10 +64,34 @@
   <details open>
     <summary>Obyektlar: asoslar</summary>
     <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
       <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
       <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
       <li><a href="../lessons/symbol.html">Symbol turi</a></li>
       <li><a class="active" href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
     </ol>
   </details>
 </aside>
@@ -142,7 +172,7 @@ console.log(`${obj}`);    // obyekt  (string: toString)</textarea><div class="pg
 <ul><li>Obyekt primitiv kutilgan operatsiyada avtomatik o'giriladi va natija har doim primitiv bo'ladi;</li><li>O'girish <code>hint</code>'ga bog'liq: <code>"string"</code>, <code>"number"</code> yoki <code>"default"</code>;</li><li>JavaScript avval <code>Symbol.toPrimitive</code>'ni, keyin <code>toString</code>/<code>valueOf</code>'ni qidiradi;</li><li><code>Symbol.toPrimitive</code> — hintni oluvchi, barcha holatlarni boshqaruvchi zamonaviy usul;</li><li>Ko'p hollarda faqat <code>toString()</code> metodini yozish yetarli — u universal o'girishni ta'minlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="symbol.html"><span class="dir">← Oldingi</span><span class="ttl">Symbol turi</span></a>
-  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
+  <a class="next" href="massiv-metodlari.html"><span class="dir">Keyingi →</span><span class="ttl">Massiv metodlari</span></a>
 </nav>
 </main>
 </div>

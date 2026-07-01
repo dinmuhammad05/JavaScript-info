@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON metodlari, toJSON — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Obyektni JSON satriga aylantirish (stringify) va qayta o'qish (parse); replacer, bo'shliq, reviver va toJSON.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a class="active" href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>JSON metodlari, toJSON</h1>
+<p class="lead">Obyektni tarmoq orqali yuborish yoki faylda saqlash uchun uni matnga aylantirish kerak. <strong>JSON</strong> (JavaScript Object Notation) — bu ma'lumotni almashish uchun umumiy qabul qilingan format. JavaScript'da <code>JSON.stringify</code> va <code>JSON.parse</code> metodlari mavjud.</p>
+<h2>JSON.stringify</h2>
+<p><code>JSON.stringify(obj)</code> — obyektni JSON <strong>satriga</strong> aylantiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>stringify.js</span></div><textarea spellcheck="false">let user = {
+  ism: "Jasur",
+  yosh: 30,
+  faol: true
+};
+
+let json = JSON.stringify(user);
+
+console.log(typeof json); // string
+console.log(json);
+// {"ism":"Jasur","yosh":30,"faol":true}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Hosil bo'lgan satr <em>JSON-kodlangan</em> (JSON-encoded) deb ataladi. Uning JavaScript obyektidan farqlari:</p>
+<ul><li>Satrlar faqat <strong>ikki tirnoq</strong>da bo'ladi (bitta tirnoq yoki backtick yo'q);</li><li>Obyekt kalitlari ham har doim ikki tirnoqda bo'ladi (<code>"ism"</code>, <code>ism</code> emas);</li><li>Ortiqcha bo'shliqlar olib tashlanadi.</li></ul>
+<h2>Qo'llab-quvvatlanadigan turlar</h2>
+<p><code>JSON.stringify</code> quyidagi turlarni qo'llab-quvvatlaydi: obyektlar, massivlar, satrlar, sonlar, mantiqiy qiymatlar (<code>true/false</code>) va <code>null</code>.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>supported-types.js</span></div><textarea spellcheck="false">console.log( JSON.stringify(42) );          // 42
+console.log( JSON.stringify("salom") );     // "salom"
+console.log( JSON.stringify(true) );        // true
+console.log( JSON.stringify([1, 2, 3]) );   // [1,2,3]
+console.log( JSON.stringify(null) );        // null</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ammo ba'zi turlar <strong>e'tiborsiz qoldiriladi</strong> yoki tashlab ketiladi:</p>
+<ul><li>Funksiyalar (metodlar);</li><li><code>undefined</code> qiymatlar;</li><li>Simvol (Symbol) kalitlari va qiymatlari.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ignored-types.js</span></div><textarea spellcheck="false">let obj = {
+  ism: "Jasur",
+  salom() { return "Salom"; }, // funksiya - tashlab ketiladi
+  yosh: undefined,              // undefined - tashlab ketiladi
+  faol: true
+};
+
+console.log( JSON.stringify(obj) );
+// {"ism":"Jasur","faol":true}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">JSON <strong>halqasimon (circular) havolalarni</strong> qo'llab-quvvatlamaydi. Agar obyekt o'z-o'ziga havola qilsa, <code>JSON.stringify</code> xatolik beradi.</div>
+<h2>Ichma-ich obyektlar</h2>
+<p><code>JSON.stringify</code> ichma-ich obyekt va massivlarni ham to'liq aylantiradi — hech qanday qo'shimcha kod kerak emas:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nested-stringify.js</span></div><textarea spellcheck="false">let kompaniya = {
+  nom: "TechUz",
+  xodimlar: [
+    { ism: "Ali", yosh: 25 },
+    { ism: "Vali", yosh: 28 }
+  ],
+  manzil: {
+    shahar: "Toshkent"
+  }
+};
+
+console.log( JSON.stringify(kompaniya) );</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Bo'shliq (space) argumenti — chiroyli chiqarish</h2>
+<p><code>JSON.stringify</code>ning <strong>uchinchi</strong> argumenti — chiroyli, o'qish oson formatlash uchun. Odatda unga bo'shliqlar soni beriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>pretty.js</span></div><textarea spellcheck="false">let user = {
+  ism: "Jasur",
+  yosh: 30,
+  manzil: {
+    shahar: "Toshkent"
+  }
+};
+
+let json = JSON.stringify(user, null, 2);
+console.log(json);
+// {
+//   "ism": "Jasur",
+//   "yosh": 30,
+//   "manzil": {
+//     "shahar": "Toshkent"
+//   }
+// }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Ikkinchi argument (bu yerda <code>null</code>) — replacer bo'lib, uni keyingi bo'limda tushuntiramiz. Chiroyli chiqarish faqat logga qarash uchun kerak; tarmoq orqali yuborishda odatda bo'shliqsiz (kichikroq) satr ishlatiladi.</div>
+<h2>Replacer — nimalarni saqlashni tanlash</h2>
+<p>Ikkinchi argument <strong>replacer</strong> — u qaysi xossalarni JSON'ga kiritishni boshqaradi. U ikki xil bo'lishi mumkin:</p>
+<p><strong>Massiv</strong> — faqat sanab o'tilgan kalitlar saqlanadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>replacer-array.js</span></div><textarea spellcheck="false">let user = {
+  ism: "Jasur",
+  yosh: 30,
+  parol: "maxfiy123"
+};
+
+// faqat ism va yosh saqlanadi, parol chiqib ketadi
+let json = JSON.stringify(user, ["ism", "yosh"]);
+
+console.log(json);
+// {"ism":"Jasur","yosh":30}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Funksiya</strong> — har bir kalit-qiymat juftligi uchun chaqiriladi. Qaytargan qiymat saqlanadi; <code>undefined</code> qaytarsa, xossa tashlab ketiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>replacer-func.js</span></div><textarea spellcheck="false">let user = {
+  ism: "Jasur",
+  yosh: 30,
+  parol: "maxfiy123"
+};
+
+let json = JSON.stringify(user, function(kalit, qiymat) {
+  if (kalit === "parol") return undefined; // parolni yashiramiz
+  return qiymat;
+});
+
+console.log(json);
+// {"ism":"Jasur","yosh":30}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>JSON.parse</h2>
+<p><code>JSON.parse(str)</code> — JSON satrini yana JavaScript obyektiga aylantiradi (bu <code>stringify</code>ning teskarisi):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>parse.js</span></div><textarea spellcheck="false">let json = '{"ism":"Jasur","yosh":30,"faol":true}';
+
+let user = JSON.parse(json);
+
+console.log(user.ism);  // Jasur
+console.log(user.yosh); // 30
+console.log(user.faol); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Massivlarni ham xuddi shunday o'qiydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>parse-array.js</span></div><textarea spellcheck="false">let json = '[1, 2, 3, [4, 5]]';
+
+let massiv = JSON.parse(json);
+
+console.log(massiv[0]);    // 1
+console.log(massiv[3][0]); // 4</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">JSON juda qat'iy: kalitlar va satrlar <strong>ikki tirnoqda</strong> bo'lishi shart, oxirida ortiqcha vergul bo'lmasligi kerak, izohlar (comment) qo'yib bo'lmaydi. Aks holda <code>JSON.parse</code> xatolik beradi.</div>
+<h2>Reviver — o'qishda qiymatlarni tiklash</h2>
+<p><code>JSON.parse(str, reviver)</code> — ikkinchi argument sifatida funksiya berilsa, u har bir kalit-qiymat juftligini o'qishda chaqiriladi. Bu, masalan, sana satrini yana <code>Date</code> obyektiga aylantirish uchun kerak:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reviver.js</span></div><textarea spellcheck="false">let json = '{"sarlavha":"Uchrashuv","sana":"2026-07-01T10:00:00.000Z"}';
+
+// reviver'siz "sana" oddiy satr bo'lib qoladi
+let oddiy = JSON.parse(json);
+console.log(typeof oddiy.sana); // string
+
+// reviver bilan Date obyektiga aylantiramiz
+let tadbir = JSON.parse(json, function(kalit, qiymat) {
+  if (kalit === "sana") return new Date(qiymat);
+  return qiymat;
+});
+
+console.log(tadbir.sana.getFullYear()); // 2026</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>toJSON metodi</h2>
+<p>Obyektlar <code>toString</code> metodiga o'xshab, <code>toJSON</code> metodiga ega bo'lishi mumkin. Agar u mavjud bo'lsa, <code>JSON.stringify</code> obyektni to'g'ridan-to'g'ri aylantirish o'rniga aynan shu metodni chaqiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tojson.js</span></div><textarea spellcheck="false">let sana = {
+  yil: 2026,
+  oy: 7,
+  kun: 1,
+  // maxsus JSON ko'rinishi
+  toJSON() {
+    return this.yil + "-" + this.oy + "-" + this.kun;
+  }
+};
+
+let tadbir = {
+  nom: "Konferensiya",
+  vaqti: sana
+};
+
+console.log( JSON.stringify(tadbir) );
+// {"nom":"Konferensiya","vaqti":"2026-7-1"}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Aslida o'rnatilgan <code>Date</code> obyektida ham <code>toJSON</code> mavjud. Shuning uchun <code>JSON.stringify</code> sanalarni avtomatik ravishda standart ISO satr formatida saqlaydi.</div>
+<h2>Xulosa</h2>
+<ul><li><code>JSON.stringify(obj)</code> — obyektni JSON satriga aylantiradi;</li><li><code>JSON.parse(str)</code> — JSON satrini yana obyektga o'giradi;</li><li>Qo'llab-quvvatlanadi: obyekt, massiv, satr, son, boolean, <code>null</code>;</li><li>Tashlab ketiladi: funksiya, <code>undefined</code>, simvol;</li><li><strong>3-argument</strong> (bo'shliq) — chiroyli, o'qish oson formatlash uchun;</li><li><strong>Replacer</strong> (2-argument) — qaysi xossalarni saqlashni tanlaydi;</li><li><strong>Reviver</strong> (parse'ning 2-argumenti) — o'qishda qiymatlarni qayta tiklaydi;</li><li><code>toJSON</code> — obyektning maxsus JSON ko'rinishini belgilaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="sana-vaqt.html"><span class="dir">← Oldingi</span><span class="ttl">Sana va vaqt (Date)</span></a>
+  <a class="next" href="property-flags.html"><span class="dir">Keyingi →</span><span class="ttl">Xossa bayroqlari va deskriptorlari</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sana va vaqt (Date) — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Date obyekti bilan sana yasash, komponentlarini olish, timestamp va sanalar ayirmasini hisoblash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a class="active" href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Sana va vaqt (Date)</h1>
+<p class="lead">Sana va vaqt bilan ishlash uchun JavaScript'da o'rnatilgan <code>Date</code> obyekti mavjud. U orqali sanani yasash, uning yil, oy, kunini olish, ikki sana ayirmasini hisoblash mumkin.</p>
+<h2>Date obyektini yaratish</h2>
+<p>Yangi sana <code>new Date()</code> orqali yaratiladi. Argumentga qarab, bir necha xil ishlaydi:</p>
+<p><strong>Argumentsiz</strong> — joriy sana va vaqtni beradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>date-now.js</span></div><textarea spellcheck="false">let hozir = new Date();
+console.log(hozir); // joriy sana va vaqt</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Satr bilan</strong> — matndan sana o'qiladi (parse qilinadi):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>date-string.js</span></div><textarea spellcheck="false">let sana = new Date("2026-07-01");
+console.log(sana); // 2026-yil 1-iyul (00:00 UTC)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Komponentlar bilan</strong> — yil, oy, kun va h.k. alohida beriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>date-components.js</span></div><textarea spellcheck="false">// new Date(yil, oy, kun, soat, minut, sekund, ms)
+let sana = new Date(2026, 6, 1, 14, 30, 0);
+// 2026-yil 1-iyul, 14:30
+
+console.log(sana.getFullYear()); // 2026
+console.log(sana.getDate());     // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Diqqat! Komponentlar bilan yaratganda <strong>oy 0'dan boshlanadi</strong>: 0 = yanvar, 1 = fevral, ..., 6 = iyul, 11 = dekabr. Shuning uchun iyul uchun 6 yozdik, 7 emas! Bu eng ko'p uchraydigan xatolardan biri.</div>
+<h2>Sana komponentlarini olish</h2>
+<p>Yaratilgan sanadan uning qismlarini olish uchun quyidagi metodlar bor:</p>
+<ul><li><code>getFullYear()</code> — yilni beradi (4 xonali, masalan 2026);</li><li><code>getMonth()</code> — oyni beradi (<strong>0'dan 11'gacha</strong>!);</li><li><code>getDate()</code> — oyning kunini beradi (1'dan 31'gacha);</li><li><code>getDay()</code> — hafta kunini beradi (<strong>0 = yakshanba</strong>, 1 = dushanba, ..., 6 = shanba);</li><li><code>getHours()</code>, <code>getMinutes()</code>, <code>getSeconds()</code>, <code>getMilliseconds()</code> — soat, minut, sekund, millisekund.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>get-components.js</span></div><textarea spellcheck="false">let sana = new Date(2026, 6, 1, 14, 30, 45);
+// 2026-yil 1-iyul (chorshanba), 14:30:45
+
+console.log(sana.getFullYear()); // 2026
+console.log(sana.getMonth());    // 6 (iyul, chunki 0'dan sanaladi!)
+console.log(sana.getDate());     // 1
+console.log(sana.getDay());      // 3 (chorshanba: 0=yakshanba)
+console.log(sana.getHours());    // 14
+console.log(sana.getMinutes());  // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>getDay()</code> ham 0'dan boshlanadi va <strong>yakshanba</strong>ga to'g'ri keladi (AQSh an'anasi). Ya'ni 0 = yakshanba, 1 = dushanba, 6 = shanba.</div>
+<div class="tip">Yuqoridagi metodlar mahalliy vaqt zonasida ishlaydi. UTC (Greenwich) vaqti kerak bo'lsa, ularning UTC versiyasi bor: <code>getUTCFullYear()</code>, <code>getUTCHours()</code> va hokazo.</div>
+<h2>Timestamp — getTime()</h2>
+<p>Har bir sana ichida <strong>timestamp</strong> saqlanadi — bu 1970-yil 1-yanvar UTC 00:00:00'dan beri o'tgan <strong>millisekundlar soni</strong>. Bu boshlang'ich nuqta "Unix epoch" deb ataladi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>timestamp.js</span></div><textarea spellcheck="false">let sana = new Date(2026, 6, 1);
+
+console.log(sana.getTime());
+// katta son — 1970'dan beri o'tgan millisekundlar
+
+// timestamp'dan sana yasash ham mumkin:
+let epoch = new Date(0);
+console.log(epoch.getFullYear()); // 1970</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Timestamp bilan ishlash qulay — chunki u oddiy son. Sanalarni solishtirish yoki ular orasidagi ayirmani hisoblashda aynan shu son ishlatiladi.</p>
+<h2>Sanalar ayirmasi</h2>
+<p>Ikki sanani bir-biridan ayirsak, natija <strong>millisekundlardagi</strong> farq bo'ladi (chunki sanalar avtomatik timestamp'ga aylanadi):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>date-diff.js</span></div><textarea spellcheck="false">let boshlanish = new Date(2026, 6, 1);
+let tugash = new Date(2026, 6, 10);
+
+let farqMs = tugash - boshlanish;
+console.log(farqMs); // 777600000 (millisekundlarda)
+
+// kunlarga aylantiramiz:
+let farqKun = farqMs / (1000 * 60 * 60 * 24);
+console.log(farqKun); // 9</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>1000 * 60 * 60 * 24</code> — bir kundagi millisekundlar soni (1000 ms × 60 sek × 60 min × 24 soat).</p>
+<div class="note">Kod tezligini o'lchash uchun ham shu usul ishlatiladi: kod boshida va oxirida vaqtni olib, ayirmasini topamiz.</div>
+<h2>Date.now()</h2>
+<p>Agar bizga faqat joriy timestamp kerak bo'lsa (sana obyektining o'zi emas), <code>Date.now()</code> ishlatgan ma'qul. U to'g'ridan-to'g'ri sonni qaytaradi va ortiqcha <code>Date</code> obyekti yasamaydi — bu tezroq:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>date-now-perf.js</span></div><textarea spellcheck="false">let boshlandi = Date.now(); // joriy timestamp (son)
+
+// biror "og'ir" ish qilamiz
+let yigindi = 0;
+for (let i = 0; i &lt; 1000000; i++) {
+  yigindi += i;
+}
+
+let tugadi = Date.now();
+
+console.log("Ish " + (tugadi - boshlandi) + " ms davom etdi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>Date.now()</code> = <code>new Date().getTime()</code>, lekin oraliq obyekt yaratmaydi. Ko'p marta chaqiriladigan joylarda aynan <code>Date.now()</code> ishlating.</div>
+<h2>Avtomatik tuzatish (autocorrection)</h2>
+<p><code>Date</code> obyektining qiziq xususiyati bor: chegaradan tashqari qiymat bersangiz, u o'zini avtomatik tuzatadi. Masalan, "32-yanvar" beradigan bo'lsangiz, u "1-fevral"ga aylanadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>autocorrect.js</span></div><textarea spellcheck="false">// 2026-yil 32-yanvar (oy=0 yanvar)
+let sana = new Date(2026, 0, 32);
+
+console.log(sana.getDate());  // 1
+console.log(sana.getMonth()); // 1 (fevral)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu xususiyat foydali: "bugundan 90 kun keyin" kabi hisoblarni sodda qiladi — chegaradan chiqib ketishdan qo'rqmasdan istalgan kun sonini qo'shaverasiz.</p>
+<h2>Xulosa</h2>
+<ul><li><code>new Date()</code> — joriy, satr yoki komponentlardan sana yasaydi;</li><li><strong>Oy 0'dan sanaladi</strong> (0 = yanvar, 11 = dekabr) — eng ko'p yo'l qo'yiladigan xato!;</li><li><code>getFullYear</code>, <code>getMonth</code>, <code>getDate</code>, <code>getDay</code> — komponentlarni oladi (<code>getDay</code>: 0 = yakshanba);</li><li><code>getTime()</code> — 1970-yildan beri o'tgan millisekundlar (timestamp);</li><li>Sanalar ayirmasi millisekundlarda bo'ladi;</li><li><code>Date.now()</code> — obyekt yaratmasdan joriy timestamp'ni beradi (tezroq).</li></ul>
+<nav class="lesson-nav">
+  <a href="destructuring.html"><span class="dir">← Oldingi</span><span class="ttl">Destrukturizatsiya</span></a>
+  <a class="next" href="json-metodlari.html"><span class="dir">Keyingi →</span><span class="ttl">JSON metodlari, toJSON</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

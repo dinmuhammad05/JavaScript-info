@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asosiy operatorlar, matematika — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Matematik amallar, unar operatorlar, ustuvorlik, += kabi qisqartmalar va string+son xatti-harakati.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a class="active" href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Asosiy operatorlar, matematika</h1>
+<p class="lead">Ko'pgina operatorlarni maktabdan bilamiz: qo'shish +, ayirish -, ko'paytirish * va hokazo. Bu darsda esa maktabda o'qitilmaydigan tomonlariga — operatorlarning JavaScript'ga xos xususiyatlariga e'tibor beramiz.</p>
+<h2>Atamalar: operand va operator</h2>
+<p>Davom etishdan oldin ba'zi atamalarni aniqlashtiramiz:</p>
+<ul><li><strong>Operand</strong> — operator qo'llaniladigan qiymat. Masalan, <code>5 * 2</code> ifodasida ikkita operand bor: 5 va 2. Ba'zan ularni "argument" ham deyishadi;</li><li><strong>Unar</strong> operator — bitta operandga qo'llaniladi. Masalan, unar minus <code>-x</code> sonning ishorasini teskarisiga o'zgartiradi;</li><li><strong>Binar</strong> operator — ikkita operandga qo'llaniladi. Masalan, <code>5 - 2</code> dagi minus binar.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unar-binar.js</span></div><textarea spellcheck="false">let x = 5;
+
+x = -x; // unar minus — ishorani o'zgartirdi
+console.log(x); // -5
+
+console.log( 8 - 3 ); // 5 — binar minus (ayirish)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Matematik amallar</h2>
+<p>JavaScript quyidagi matematik amallarni qo'llab-quvvatlaydi:</p>
+<ul><li>Qo'shish <code>+</code></li><li>Ayirish <code>-</code></li><li>Ko'paytirish <code>*</code></li><li>Bo'lish <code>/</code></li><li>Qoldiq (modul) <code>%</code></li><li>Darajaga ko'tarish <code>**</code></li></ul>
+<h3>Qoldiq %</h3>
+<p><code>%</code> operatori — bu foiz emas! <code>a % b</code> natijasi <code>a</code> ni <code>b</code> ga bo'lgandagi <strong>qoldiq</strong> bo'ladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>modul.js</span></div><textarea spellcheck="false">console.log( 5 % 2 );  // 1 — 5 ni 2 ga bo'lganda qoldiq 1
+console.log( 8 % 3 );  // 2 — 8 ni 3 ga bo'lganda qoldiq 2
+console.log( 6 % 3 );  // 0 — teng bo'linadi
+
+// Qoldiq juft/toq sonni aniqlashda foydali:
+console.log( 10 % 2 ); // 0 — juft
+console.log( 7 % 2 );  // 1 — toq</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h3>Darajaga ko'tarish **</h3>
+<p><code>a ** b</code> ifodasi <code>a</code> ni <code>b</code>-darajaga ko'taradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>daraja.js</span></div><textarea spellcheck="false">console.log( 2 ** 2 ); // 4  (2 * 2)
+console.log( 2 ** 3 ); // 8  (2 * 2 * 2)
+console.log( 2 ** 4 ); // 16 (2 * 2 * 2 * 2)
+
+// Kasr daraja ham ishlaydi — 1/2 daraja = kvadrat ildiz:
+console.log( 4 ** 0.5 ); // 2 — 4 ning kvadrat ildizi
+console.log( 27 ** (1/3) ); // 3 — kub ildizi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Plyus (+) va matnlar</h2>
+<p>Endi maktab matematikasidan farq qiladigan qismga o'tamiz. Odatda <code>+</code> sonlarni qo'shadi. Ammo agar operandlardan biri <strong>matn</strong> bo'lsa, <code>+</code> ularni songa qo'shmaydi, balki <strong>birlashtiradi</strong> (konkatenatsiya qiladi):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>plyus-matn.js</span></div><textarea spellcheck="false">console.log( "salom" + " dunyo" ); // "salom dunyo"
+console.log( "1" + "2" ); // "12" — ikkalasi matn, birlashdi
+console.log( "1" + 2 );   // "12" — son ham matnga o'girildi
+console.log( 1 + "2" );   // "12" — bir tomoni matn bo'lsa yetarli
+console.log( 2 + 2 + "1" ); // "41" — avval 2+2=4, keyin 4+"1"="41"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Diqqat qiling: operatorlar chapdan o'ngga ishlaydi. <code>2 + 2 + "1"</code> da avval <code>2 + 2 = 4</code> hisoblanadi, so'ng <code>4 + "1" = "41"</code> bo'ladi. Lekin <code>"1" + 2 + 2</code> esa <code>"122"</code> beradi — chunki birinchi qadamdan boshlab matn ishtirok etadi.</div>
+<div class="note">Bu xatti-harakat faqat <code>+</code> operatoriga xos. Boshqa arifmetik operatorlar (<code>-</code>, <code>*</code>, <code>/</code>) matnni doim songa o'giradi:</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>boshqa-operatorlar.js</span></div><textarea spellcheck="false">console.log( "6" - "2" ); // 4 — matnlar songa o'girildi
+console.log( "6" / "2" ); // 3
+console.log( "6" * 2 );   // 12
+console.log( "salom" - 1 ); // NaN — matnni songa o'girib bo'lmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Unar plyus va son konvertatsiyasi</h2>
+<p>Unar plyus <code>+</code> (bitta operandga qo'llanganda) songa hech qanday ta'sir qilmaydi. Ammo agar operand son bo'lmasa, uni <strong>songa o'giradi</strong> — xuddi <code>Number()</code> kabi, lekin qisqaroq:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unar-plyus.js</span></div><textarea spellcheck="false">console.log( +5 );    // 5 — sonda hech nima o'zgarmaydi
+console.log( +"5" );  // 5 — matn songa o'girildi
+console.log( +true ); // 1
+console.log( +"" );   // 0
+
+let a = "10";
+let b = "20";
+console.log( a + b );   // "1020" — matnlar birlashdi
+console.log( +a + +b ); // 30 — avval har birini songa o'girdik</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>+a + +b</code> yozuvi qisqa va ko'p ishlatiladi. Unar plyuslar birinchi ishlaydi (ustuvorligi yuqori), so'ng ikki son binar plyus bilan qo'shiladi.</div>
+<h2>Operatorlar ustuvorligi</h2>
+<p>Agar bir ifodada bir nechta operator bo'lsa, ularning bajarilish tartibi <strong>ustuvorlik</strong> (precedence) bilan aniqlanadi. Maktabdan bilamiz: ko'paytirish qo'shishdan oldin bajariladi. Bu — ko'paytirishning ustuvorligi yuqoriroq degani:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ustuvorlik.js</span></div><textarea spellcheck="false">console.log( 2 + 2 * 2 );   // 6, chunki avval 2*2=4, keyin 2+4
+console.log( (2 + 2) * 2 ); // 8, qavs ustuvorlikni o'zgartiradi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ustuvorlik jadvalidan ba'zi qatorlar (yuqoridagilar avval bajariladi):</p>
+<ul><li>Unar plyus/minus <code>+x</code>, <code>-x</code> — yuqori;</li><li>Darajaga ko'tarish <code>**</code>;</li><li>Ko'paytirish/bo'lish <code>*</code>, <code>/</code>;</li><li>Qo'shish/ayirish <code>+</code>, <code>-</code>;</li><li>Tayinlash (assignment) <code>=</code> — eng past.</li></ul>
+<h2>Tayinlash ham qiymat qaytaradi</h2>
+<p>JavaScript'da <code>=</code> (tayinlash) ham operator hisoblanadi. U o'zgaruvchiga qiymat yozadi va shu qiymatni <strong>qaytaradi</strong>. Shuning uchun quyidagi kod ishlaydi (garchi o'qish qiyin bo'lsa ham):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>assign-qaytaradi.js</span></div><textarea spellcheck="false">let a = 1;
+let b = 2;
+
+let c = 3 - (a = b + 1);
+console.log(a); // 3  (b+1 = 3, a ga yozildi)
+console.log(c); // 0  (3 - 3)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Bunday yozuv (tayinlashni ifoda ichida ishlatish) kodni tushunarsiz qiladi. Bilib qo'ying, lekin amalda bunday yozmang.</div>
+<h2>Qisqartma tayinlash operatorlari</h2>
+<p>Bir o'zgaruvchiga amal qo'llab, natijani o'ziga yozish juda ko'p uchraydi. Buning uchun qisqartma operatorlar bor: <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>**=</code>:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>qisqartma.js</span></div><textarea spellcheck="false">let n = 2;
+n += 5; // n = n + 5 bilan bir xil
+console.log(n); // 7
+
+n *= 2; // n = n * 2
+console.log(n); // 14
+
+let s = "salom";
+s += " dunyo"; // matnlar uchun ham ishlaydi
+console.log(s); // "salom dunyo"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Bu operatorlarning ustuvorligi oddiy tayinlash <code>=</code> bilan bir xil — past. Shuning uchun ular boshqa hisoblardan keyin bajariladi: <code>n *= 3 + 5</code> avval <code>3 + 5 = 8</code> ni hisoblab, so'ng <code>n *= 8</code> qiladi.</div>
+<h2>Xulosa</h2>
+<ul><li>Matematik operatorlar: <code>+ - * / % **</code>;</li><li><code>+</code> operandlardan biri matn bo'lsa — birlashtiradi (konkatenatsiya), boshqa operatorlar esa songa o'giradi;</li><li>Unar plyus <code>+x</code> — qiymatni tez songa o'girish usuli;</li><li>Ustuvorlik amallar tartibini belgilaydi; qavs uni o'zgartiradi;</li><li><code>=</code> ham qiymat qaytaradi;</li><li>Qisqartmalar: <code>+= -= *= /= %= **=</code>.</li></ul>
+<nav class="lesson-nav">
+  <a href="turlarni-ozgartirish.html"><span class="dir">← Oldingi</span><span class="ttl">Turlarni o'zgartirish</span></a>
+  <a class="next" href="taqqoslashlar.html"><span class="dir">Keyingi →</span><span class="ttl">Taqqoslashlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

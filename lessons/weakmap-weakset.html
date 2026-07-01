@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeakMap va WeakSet — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Kuchsiz havolalar, faqat obyekt kalitlar, iteratsiya yo'qligi va amaliy qo'llanishi (kesh, qo'shimcha ma'lumot).">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a class="active" href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>WeakMap va WeakSet</h1>
+<p class="lead"><code>WeakMap</code> va <code>WeakSet</code> — Map va Set ning "kuchsiz" (weak) versiyalari. Ular xotira boshqaruvida muhim rol o'ynaydi va bir necha jiddiy cheklovga ega. Avval JavaScript qanday qilib keraksiz obyektlarni xotiradan tozalashini eslaylik.</p>
+<h2>Erishuvchanlik va axlat yig'uvchi (garbage collector)</h2>
+<p>JavaScript dvigateli xotirani avtomatik boshqaradi. Obyekt xotirada saqlanadi, chunki unga <strong>havola</strong> (reference) bor. Havolasi qolmagan (erishib bo'lmaydigan) obyekt "axlat" hisoblanadi va xotiradan tozalanadi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>gc.js</span></div><textarea spellcheck="false">let ali = { name: 'Ali' };
+
+// hozir ali obyektiga havola bor
+ali = null;
+
+// endi obyektga hech qanday havola qolmadi
+// -&gt; u axlat yig'uvchi tomonidan o'chiriladi
+console.log('obyekt endi erishib bo\'lmaydigan holatda');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Muhim jihat: oddiy <code>Map</code> yoki <code>Set</code> o'z kalit/qiymatlariga havolani <strong>kuchli</strong> saqlaydi. Ya'ni, agar obyekt Map da kalit bo'lsa, boshqa hamma joyda havola yo'qolsa ham, Map uni ushlab turadi va xotiradan tozalanmaydi.</p>
+<h2>WeakMap kuchsiz havola saqlaydi</h2>
+<p><code>WeakMap</code> aynan shu bilan farq qiladi: u kalit-obyektga <strong>kuchsiz</strong> havola saqlaydi. Agar obyektga boshqa havola qolmasa, u WeakMap da kalit bo'lishiga qaramay, xotiradan tozalanadi (va WeakMap dan ham avtomatik yo'qoladi).</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>weakmap-basic.js</span></div><textarea spellcheck="false">let weakMap = new WeakMap();
+
+let obj = { data: 'muhim' };
+weakMap.set(obj, 'qo\'shimcha ma\'lumot');
+
+console.log(weakMap.has(obj)); // true
+console.log(weakMap.get(obj)); // 'qo'shimcha ma'lumot'
+
+obj = null;
+// obj ga havola yo'qoldi -&gt; axlat yig'uvchi kalitni ham,
+// WeakMap dagi yozuvni ham avtomatik tozalaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Jiddiy cheklovlar</h2>
+<p>Kuchsiz havolalar tabiati tufayli <code>WeakMap</code> juda cheklangan:</p>
+<ul><li>Kalit <strong>faqat obyekt</strong> (yoki simvol) bo'lishi mumkin — primitiv (satr, son) kalit qilib bo'lmaydi;</li><li>Metodlari faqat: <code>get</code>, <code>set</code>, <code>has</code>, <code>delete</code>;</li><li><code>size</code> xususiyati <strong>yo'q</strong>;</li><li>Iteratsiya <strong>mumkin emas</strong> — <code>keys()</code>, <code>values()</code>, <code>entries()</code>, <code>forEach</code> yo'q.</li></ul>
+<div class="warn">Nima uchun iteratsiya taqiqlangan? Chunki axlat yig'uvchi qachon ishlashi noaniq — obyekt hozir tozalanganmi yoki yo'qmi, bilib bo'lmaydi. Shuning uchun WeakMap dagi barcha elementlarni ro'yxatlashning aniq usuli yo'q va bunday metodlar berilmaydi.</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>weakmap-limits.js</span></div><textarea spellcheck="false">let weakMap = new WeakMap();
+let obj = {};
+
+weakMap.set(obj, 'ma\'lumot');
+
+// bularning barchasi ishlaydi:
+console.log(weakMap.has(obj)); // true
+console.log(weakMap.get(obj)); // 'ma'lumot'
+
+// bularni ishlatib bo'lmaydi (WeakMap da yo'q):
+console.log(weakMap.size);            // undefined
+console.log(typeof weakMap.forEach);  // undefined
+console.log(typeof weakMap.keys);     // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Primitivni kalit qilishga urinish xatolik beradi: <code>weakMap.set('satr', 1)</code> — TypeError. WeakMap kaliti majburan obyekt bo'lishi kerak.</div>
+<h2>Qo'llanish 1: qo'shimcha ma'lumot saqlash</h2>
+<p>WeakMap ning asosiy foydasi — <strong>begona obyektga tegib ketmasdan</strong> unga qo'shimcha ma'lumot bog'lash. Masalan, tashqi kutubxona bergan obyektlar uchun tashriflar sonini hisoblaymiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>weakmap-usecase.js</span></div><textarea spellcheck="false">let tashriflar = new WeakMap();
+
+function hisobla(user) {
+  let soni = tashriflar.get(user) || 0;
+  tashriflar.set(user, soni + 1);
+}
+
+let ali = { name: 'Ali' };
+hisobla(ali);
+hisobla(ali);
+hisobla(ali);
+
+console.log(tashriflar.get(ali)); // 3
+
+// ali boshqa kerak bo'lmasa (ali = null),
+// hisob ma'lumoti ham avtomatik tozalanadi — xotira sizmaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Agar bu yerda oddiy <code>Map</code> ishlatilsa, foydalanuvchi obyekti dasturda o'chirilganda ham Map undagi yozuvni ushlab turardi. Bu <em>xotira sizishiga</em> (memory leak) olib kelardi. WeakMap bu muammoni hal qiladi.</p>
+<h2>Qo'llanish 2: keshlash (caching)</h2>
+<p>Agar funksiya natijasini obyekt bo'yicha keshlamoqchi bo'lsak, WeakMap ideal: obyekt yashaguncha kesh saqlanadi, obyekt yo'qolganda kesh ham avtomatik tozalanadi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>weakmap-cache.js</span></div><textarea spellcheck="false">let kesh = new WeakMap();
+
+function ogirHisob(obj) {
+  if (!kesh.has(obj)) {
+    // haqiqiy loyihada bu og'ir hisoblash bo'lardi
+    let natija = obj.qiymat * 2;
+    kesh.set(obj, natija);
+    console.log('hisoblandi');
+  } else {
+    console.log('keshdan olindi');
+  }
+  return kesh.get(obj);
+}
+
+let data = { qiymat: 21 };
+console.log(ogirHisob(data)); // hisoblandi -&gt; 42
+console.log(ogirHisob(data)); // keshdan olindi -&gt; 42</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>WeakSet</h2>
+<p><code>WeakSet</code> — <code>Set</code> ning kuchsiz varianti. U ham xuddi shunday cheklovlarga ega:</p>
+<ul><li>Faqat <strong>obyektlarni</strong> saqlaydi (primitivlarni emas);</li><li>Obyekt boshqa joyda erishuvchan bo'lgungacha to'plamda qoladi;</li><li>Metodlari faqat: <code>add</code>, <code>has</code>, <code>delete</code>;</li><li>Iteratsiya va <code>size</code> yo'q.</li></ul>
+<p>WeakSet ko'pincha obyektning "ha/yo'q" holatini belgilash uchun ishlatiladi — masalan, foydalanuvchi saytga tashrif buyurganmi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>weakset.js</span></div><textarea spellcheck="false">let tashrifQilganlar = new WeakSet();
+
+let ali = { name: 'Ali' };
+let vali = { name: 'Vali' };
+
+tashrifQilganlar.add(ali);
+tashrifQilganlar.add(vali);
+tashrifQilganlar.add(ali); // takror — e'tiborsiz
+
+console.log(tashrifQilganlar.has(ali)); // true
+console.log(tashrifQilganlar.has({}));  // false — boshqa obyekt</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Asosiy cheklov va tavsiya</h2>
+<div class="note">WeakMap va WeakSet ning eng katta cheklovi — ular bo'yicha aylanish yoki barcha joriy mazmunini olishning imkoni yo'qligi. Bu noqulaylikdek tuyulishi mumkin, lekin aslida ular bajaradigan vazifa uchun bu to'sqinlik qilmaydi. Ular asosiy ma'lumotni <strong>boshqa joyda</strong> saqlab, faqat qo'shimcha yordamchi ma'lumotni WeakMap/WeakSet da saqlashga mo'ljallangan.</div>
+<div class="tip">Qoida sifatida: agar obyektlarni kalit qilib ishlatayotgan bo'lsangiz va ular obyektning "asosiy" yashash muddatiga bog'lanishi kerak bo'lsa, WeakMap/WeakSet dan foydalaning. Aks holda oddiy Map/Set ni tanlang.</div>
+<h2>Xulosa</h2>
+<ul><li><code>WeakMap</code> va <code>WeakSet</code> kalit/element obyektlarga <strong>kuchsiz</strong> havola saqlaydi;</li><li>Obyektga boshqa havola qolmasa, u (va tegishli yozuv) avtomatik tozalanadi — xotira sizishining oldi olinadi;</li><li>Kalit/element faqat obyekt bo'lishi mumkin, primitiv emas;</li><li>Iteratsiya, <code>size</code>, <code>clear</code>, <code>forEach</code> <strong>yo'q</strong>;</li><li>WeakMap metodlari: <code>get/set/has/delete</code>; WeakSet metodlari: <code>add/has/delete</code>;</li><li>Asosiy qo'llanish: begona obyektlarga qo'shimcha ma'lumot bog'lash va keshlash.</li></ul>
+<nav class="lesson-nav">
+  <a href="map-set.html"><span class="dir">← Oldingi</span><span class="ttl">Map va Set</span></a>
+  <a class="next" href="object-keys.html"><span class="dir">Keyingi →</span><span class="ttl">Object.keys, values, entries</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

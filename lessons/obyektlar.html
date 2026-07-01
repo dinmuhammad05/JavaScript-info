@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obyektlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Obyekt yaratish, xossalar bilan ishlash, nuqta va kvadrat qavslar, delete, hisoblangan xossalar, &quot;in&quot; operatori va for..in sikli.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a class="active" href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Obyektlar: asoslar</div>
+<h1>Obyektlar</h1>
+<p class="lead">JavaScript'da sakkizta ma'lumot turi bor. Ulardan yettitasi "primitiv" (son, satr, boolean va h.k.) deb ataladi, chunki ular bitta qiymatni saqlaydi. Obyekt esa turli xil ma'lumotlar to'plamini va murakkabroq mavjudotlarni saqlash uchun ishlatiladi. Ushbu darsda obyektlar bilan chuqur tanishamiz.</p>
+<h2>Obyekt nima?</h2>
+<p><strong>Obyekt</strong> — bu <code>"kalit: qiymat"</code> ko'rinishidagi juftliklardan tashkil topgan to'plam. Bu yerda kalit — satr (uni <em>xossa nomi</em> yoki <em>property name</em> deb ataymiz), qiymat esa istalgan tur bo'lishi mumkin: son, satr, boolean, hatto boshqa obyekt yoki funksiya.</p>
+<p>Primitiv turlarni bitta qutiga o'xshatsak, obyektni bir nechta bo'lmali javon deb tasavvur qiling: har bir bo'lmaning yorlig'i (kalit) bor, va har bir bo'lmada biror narsa (qiymat) yotadi.</p>
+<p>Bo'sh obyektni ikki xil usulda yaratish mumkin:</p>
+<pre class="code"><code>let user = new Object(); // "obyekt konstruktori" sintaksisi
+let user = {};           // "obyekt literali" sintaksisi</code></pre>
+<p>Ikkinchi usul — jingalak qavslar <code>{}</code> — ancha keng qo'llaniladi va "obyekt literali" deb ataladi. Odatda aynan shuni ishlatamiz.</p>
+<h2>Xossalar (literal va qiymatlar)</h2>
+<p>Obyektni yaratishda uning ichiga darhol xossalarni joylashtirishimiz mumkin. Har bir xossa <code>kalit: qiymat</code> ko'rinishida, juftliklar esa vergul bilan ajratiladi:</p>
+<pre class="code"><code>let user = {          // obyekt
+  name: "Jaloliddin",  // "name" kaliti "Jaloliddin" qiymatini saqlaydi
+  age: 30              // "age" kaliti 30 qiymatini saqlaydi
+};</code></pre>
+<p>Bu yerda <code>user</code> obyektida ikkita xossa bor. Chapda — kalit (nom), o'ngda — qiymat. Buni quyidagicha tasavvur qiling: <code>name</code> yorlig'i ostida <code>"Jaloliddin"</code> saqlanadi, <code>age</code> yorlig'i ostida esa <code>30</code>.</p>
+<h2>Nuqta orqali xossalarga murojaat</h2>
+<p>Xossa qiymatini o'qish uchun <strong>nuqta</strong> (dot notation) belgisidan foydalanamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nuqta.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  age: 30
+};
+
+console.log(user.name); // Jaloliddin
+console.log(user.age);  // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Xossaning qiymatini o'zgartirish yoki yangi xossa qo'shish uchun ham nuqtadan foydalanamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>qoshish.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  age: 30
+};
+
+user.age = 31;             // mavjud xossani o'zgartirdik
+user.isAdmin = true;       // yangi xossa qo'shdik
+
+console.log(user.age);     // 31
+console.log(user.isAdmin); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Qiymat sifatida istalgan tur bo'lishi mumkin. Masalan, boolean (<code>true/false</code>), son, satr yoki boshqa obyekt.</div>
+<h2>Xossani o'chirish: delete</h2>
+<p>Xossani obyektdan butunlay olib tashlash uchun <code>delete</code> operatoridan foydalanamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>delete.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  age: 30
+};
+
+delete user.age;
+
+console.log(user.age); // undefined (xossa endi mavjud emas)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Mavjud bo'lmagan xossaga murojaat qilinsa, xato bermaydi — shunchaki <code>undefined</code> qaytadi. Bu obyektning muhim xususiyati: yo'q xossa qiymati har doim <code>undefined</code>.</p>
+<h2>Ko'p so'zli xossa nomlari</h2>
+<p>Xossa nomi bir necha so'zdan iborat bo'lishi mumkin, ammo bunda uni tirnoq ichiga olish shart:</p>
+<pre class="code"><code>let user = {
+  name: "Jaloliddin",
+  age: 30,
+  'likes birds': true  // ko'p so'zli nom tirnoq ichida bo'lishi shart
+};</code></pre>
+<div class="warn"><code>let</code>, <code>for</code>, <code>return</code> kabi til kalit so'zlari xossa nomlari bo'la oladi — obyekt xossalarida hech qanday cheklov yo'q. Ammo ko'p so'zli yoki maxsus belgili nomlar tirnoqni talab qiladi.</div>
+<h2>Kvadrat qavslar (bracket notation)</h2>
+<p>Ko'p so'zli xossalarda nuqta ishlamaydi, chunki JavaScript nuqtadan keyin to'g'ri identifikatorni kutadi:</p>
+<pre class="code"><code>// Bu XATO beradi:
+// user.likes birds = true;</code></pre>
+<p>Yechim — <strong>kvadrat qavslar</strong>. Ular istalgan satr bilan ishlaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>qavslar.js</span></div><textarea spellcheck="false">let user = {};
+
+user['likes birds'] = true;              // o'rnatish
+console.log(user['likes birds']);        // true (o'qish)
+delete user['likes birds'];              // o'chirish
+
+console.log(user['likes birds']);        // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Kvadrat qavslarning eng kuchli jihati — ular ichiga <em>o'zgaruvchi</em> qo'yish mumkin. Bu nuqta bilan iloji yo'q:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ozgaruvchi.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  age: 30
+};
+
+let key = "name";
+
+// o'zgaruvchi orqali xossaga murojaat
+console.log(user[key]); // Jaloliddin
+
+key = "age";
+console.log(user[key]); // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Diqqat: <code>user[key]</code> va <code>user.key</code> — bir xil emas! <code>user.key</code> aynan "key" nomli xossani qidiradi, <code>user[key]</code> esa <code>key</code> o'zgaruvchining <em>qiymatidagi</em> nomli xossani qidiradi.</div>
+<h2>Hisoblangan xossalar (computed properties)</h2>
+<p>Obyekt literalida kvadrat qavslardan foydalansak, xossa nomini <em>ifoda</em> orqali hisoblab qo'yishimiz mumkin. Bunday xossa <strong>hisoblangan xossa</strong> (computed property) deb ataladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>hisoblangan.js</span></div><textarea spellcheck="false">let fruit = "olma";
+
+let bag = {
+  [fruit]: 5  // xossa nomi fruit o'zgaruvchidan olinadi
+};
+
+console.log(bag.olma); // 5 (fruit === "olma" bo'lgani uchun)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>[fruit]</code> "xossa nomini <code>fruit</code> o'zgaruvchisidan ol" degan ma'noni bildiradi. Qavslar ichida murakkabroq ifoda ham bo'lishi mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>hisoblangan2.js</span></div><textarea spellcheck="false">let fruit = "olma";
+
+let bag = {
+  [fruit + 'Computers']: 5 // bag.olmaComputers = 5
+};
+
+console.log(bag.olmaComputers); // 5</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Xossa qisqartmasi (property shorthand)</h2>
+<p>Amaliyotda ko'pincha xossa qiymatini bir xil nomli o'zgaruvchidan olamiz. Buning uchun maxsus <strong>qisqartma</strong> bor:</p>
+<pre class="code"><code>function makeUser(name, age) {
+  return {
+    name: name, // odatiy yozuv
+    age: age
+  };
+}</code></pre>
+<p><code>name: name</code> o'rniga shunchaki <code>name</code> deb yozish mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>qisqartma.js</span></div><textarea spellcheck="false">function makeUser(name, age) {
+  return {
+    name, // name: name bilan bir xil
+    age   // age: age bilan bir xil
+  };
+}
+
+let user = makeUser("Jaloliddin", 30);
+console.log(user.name); // Jaloliddin
+console.log(user.age);  // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Qisqartma va odatiy yozuvni aralashtirish mumkin: <code>{ name, age: 30 }</code> — mutlaqo to'g'ri.</div>
+<h2>"in" operatori</h2>
+<p>Ko'rdikki, yo'q xossaga murojaat <code>undefined</code> qaytaradi. Bu bilan xossa borligini tekshirsak bo'ladi:</p>
+<pre class="code"><code>let user = { name: "Jaloliddin", age: 30 };
+console.log(user.noSuchProperty === undefined); // true — xossa yo'q</code></pre>
+<p>Ammo aniqroq usul bor — <code>in</code> operatori. Sintaksis: <code>"kalit" in obyekt</code>:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>in.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin", age: 30 };
+
+console.log('age' in user);  // true — user.age mavjud
+console.log('name' in user); // true
+console.log('boyi' in user); // false — bunday xossa yo'q</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>in</code>ning chap tomonida xossa nomi <strong>satr</strong> bo'lishi kerak. Agar tirnoqsiz yozsak, u o'zgaruvchi deb qabul qilinadi: <code>let key = 'age'; console.log(key in user);</code>.</div>
+<p>Nima uchun aynan <code>in</code> kerak, agar <code>undefined</code> bilan tekshirish mumkin bo'lsa? Chunki ba'zan xossa mavjud, lekin uning qiymati aynan <code>undefined</code> bo'ladi. Bunday holatda <code>=== undefined</code> aldaydi, <code>in</code> esa haqiqatni ko'rsatadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>in-undefined.js</span></div><textarea spellcheck="false">let obj = { test: undefined };
+
+console.log(obj.test === undefined); // true — go'yo yo'qday
+console.log('test' in obj);          // true — aslida MAVJUD!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>for..in sikli</h2>
+<p>Obyektning barcha xossalari ustidan aylanish uchun maxsus <code>for..in</code> sikli bor. Bu — biz bilgan <code>for(;;)</code> siklidan tamoman farq qiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>forin.js</span></div><textarea spellcheck="false">let user = {
+  name: "Jaloliddin",
+  age: 30,
+  isAdmin: true
+};
+
+for (let key in user) {
+  // kalitlar
+  console.log(key);        // name, age, isAdmin
+  // kalitlar uchun qiymatlar
+  console.log(user[key]);  // Jaloliddin, 30, true
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>key</code> — har aylanishda xossa nomini oladi. Xossa nomini istalgan boshqacha atash mumkin (<code>let prop in user</code>), <code>key</code> — shunchaki keng tarqalgan tanlov.</p>
+<h2>Butun sonli kalitlar tartibi</h2>
+<p>Xossalar qanday tartibda joylashadi? <code>for..in</code>da ular <strong>maxsus tartiblangan</strong>: butun son ko'rinishidagi kalitlar o'sish tartibida, qolganlari esa yaratilish tartibida chiqadi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tartib.js</span></div><textarea spellcheck="false">let codes = {
+  "49": "Germaniya",
+  "41": "Shveytsariya",
+  "44": "Buyuk Britaniya",
+  "1": "AQSH"
+};
+
+for (let code in codes) {
+  console.log(code); // 1, 41, 44, 49 — o'sish tartibida!
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Agar kalitlar butun son bo'lmasa (masalan, oldiga <code>+</code> qo'shsak yoki harf aralashtirilsa), tartib yaratilish ketma-ketligiga qaytadi. Bu "butun son xossa" (integer property) qoidasi deb ataladi.</p>
+<h2>Xulosa</h2>
+<ul><li>Obyekt — <code>{}</code> ichida <code>kalit: qiymat</code> juftliklari to'plami;</li><li>Xossalarga <strong>nuqta</strong> (<code>obj.prop</code>) yoki <strong>kvadrat qavslar</strong> (<code>obj["prop"]</code>) orqali murojaat qilinadi;</li><li>Kvadrat qavslar o'zgaruvchi va ifodalar bilan ishlaydi, nuqta esa faqat qat'iy nom bilan;</li><li><code>delete</code> — xossani o'chiradi, yo'q xossa <code>undefined</code> qaytaradi;</li><li><code>[ifoda]: qiymat</code> — hisoblangan xossa; <code>{ name }</code> — xossa qisqartmasi;</li><li><code>"kalit" in obj</code> — xossa borligini aniq tekshiradi;</li><li><code>for..in</code> — barcha xossalar ustidan aylanadi.</li></ul>
+<nav class="lesson-nav">
+  <a href="polyfill.html"><span class="dir">← Oldingi</span><span class="ttl">Polyfill va transpilyatorlar</span></a>
+  <a class="next" href="obyekt-nusxalash.html"><span class="dir">Keyingi →</span><span class="ttl">Obyekt havolalari va nusxalash</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

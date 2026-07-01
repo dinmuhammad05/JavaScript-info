@@ -282,8 +282,8 @@ module.exports = {
         { p: "Ya'ni <code>||</code> boolean emas, balki <strong>birinchi truthy qiymatni</strong> yoki barchasi falsy bo'lsa — oxirgisini qaytaradi:" },
         { pg: "console.log( 1 || 0 );       // 1 — birinchi truthy\nconsole.log( null || 1 );    // 1 — birinchi truthy\nconsole.log( null || 0 || 1 ); // 1 — birinchi truthy\nconsole.log( undefined || null || 0 ); // 0 — hammasi falsy, oxirgisi", file: "yoki-qiymat.js" },
         { p: "Bu xususiyatning amaliy qo'llanishi — <strong>ro'yxatdan birinchi \"to'ldirilgan\" qiymatni tanlash</strong>:" },
-        { pg: "let ism = \"\";\nlef familiya = null;\nlet taxallus = \"SuperUser\";\n\n// Birinchi bo'sh bo'lmagan qiymatni tanlaymiz:\nconsole.log( ism || familiya || taxallus || \"Anonim\" );\n// Chiqadi: SuperUser", file: "yoki-default.js" },
-        { note: "Yuqoridagi kodda ataylab xatolik bor (<code>lef</code>) — buni to'g'rilab ko'ring! To'g'ri yozilishi <code>let familiya = null;</code> bo'lishi kerak. Kichik xatolarni topish — foydali mashq." },
+        { pg: "let ism = \"\";\nlet familiya = null;\nlet taxallus = \"SuperUser\";\n\n// Birinchi bo'sh bo'lmagan qiymatni tanlaymiz:\nconsole.log( ism || familiya || taxallus || \"Anonim\" );\n// Chiqadi: SuperUser", file: "yoki-default.js" },
+        { note: "<code>||</code> zanjiri qiymatlarni chapdan o'ngga tekshiradi. Bo'sh matn va <code>null</code> falsy bo'lgani uchun ular o'tkazib yuboriladi, birinchi truthy qiymat — <code>\"SuperUser\"</code> tanlanadi." },
 
         { h2: "Qisqa tutashuv (short-circuit evaluation)" },
         { p: "<code>||</code> ning yana bir xususiyati — <strong>qisqa tutashuv</strong>. Chapdagi operand truthy bo'lsa, o'ngdagisi umuman baholanmaydi. Bu, agar operandda funksiya chaqiruvi yoki qo'shimcha ta'sir (side effect) bo'lsa, muhim:" },
