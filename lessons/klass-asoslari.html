@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Klass asosiy sintaksisi — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="class kalit so'zi, constructor, metodlar, getter/setter, hisoblangan nomlar va class ifodasi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a class="active" href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Klasslar</div>
+<h1>Klass asosiy sintaksisi</h1>
+<p class="lead">Amaliyotda biz ko'pincha bir turdagi ko'plab obyektlarni yaratishga muhtoj bo'lamiz — masalan, foydalanuvchilar, tovarlar yoki hujjatlar. Buni <code>new function</code> orqali ham qilish mumkin, ammo zamonaviy JavaScript'da buning uchun ancha qulay va kuchli <strong>class</strong> (klass) sintaksisi mavjud.</p>
+<h2>"class" sintaksisi</h2>
+<p>Asosiy sintaksis quyidagicha ko'rinadi:</p>
+<pre class="code"><code>class MyClass {
+  // metodlar
+  constructor() { ... }
+  method1() { ... }
+  method2() { ... }
+  method3() { ... }
+}</code></pre>
+<p>So'ng <code>new MyClass()</code> orqali sanab o'tilgan barcha metodlarga ega yangi obyekt yaratamiz. Bunda <code>constructor()</code> metodi avtomatik chaqiriladi — shu sababli obyektni tayyorlash (ya'ni boshlang'ich holatini o'rnatish) mantiqini aynan shu yerga yozamiz.</p>
+<p>Keling, oddiy bir <code>User</code> klassini yozamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-user.js</span></div><textarea spellcheck="false">class User {
+  constructor(name) {
+    this.name = name;
+  }
+
+  sayHi() {
+    return "Salom, " + this.name + "!";
+  }
+}
+
+// foydalanish:
+let user = new User("Ali");
+console.log(user.sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda nima sodir bo'lyapti:</p>
+<ol><li><code>new User("Ali")</code> chaqirilganda yangi obyekt yaratiladi;</li><li><code>constructor</code> ishga tushadi, unga <code>"Ali"</code> argument sifatida uzatiladi va u <code>this.name</code>ni o'rnatadi;</li><li>Endi biz obyekt metodlarini, masalan <code>user.sayHi()</code>ni, chaqira olamiz.</li></ol>
+<div class="note">Klass metodlari orasiga vergul <strong>qo'yilmaydi</strong>. Bu ko'p yangi boshlovchilar yo'l qo'yadigan xato. Klass ichidagi yozuv obyekt literalidan farq qiladi: bu yerda vergul emas, metodlar ketma-ket yoziladi.</div>
+<h2>class — bu funksiya</h2>
+<p>Aslida JavaScript'da <code>class</code> — bu alohida, mutlaqo yangi tushuncha emas. U aslida <strong>funksiya</strong> turining bir ko'rinishi. Keling, tekshirib ko'ramiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-typeof.js</span></div><textarea spellcheck="false">class User {
+  constructor(name) { this.name = name; }
+  sayHi() { return "Salom!"; }
+}
+
+// class — bu funksiya:
+console.log(typeof User);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>class User { ... }</code> konstruksiyasi aslida quyidagilarni bajaradi:</p>
+<ol><li><code>User</code> nomli funksiya yaratadi. Funksiya kodi <code>constructor</code> metodidan olinadi (agar <code>constructor</code> yozilmagan bo'lsa, bo'sh deb hisoblanadi);</li><li>Klass ichidagi metodlarni (masalan <code>sayHi</code>) <code>User.prototype</code>ga saqlaydi.</li></ol>
+<p>Ya'ni <code>new User</code> chaqirilganda va obyekt metodi ishlatilganda, metod prototipdan olinadi — huddi biz o'zimiz <code>User.prototype.sayHi = ...</code> deb yozganimizdek.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-prototype.js</span></div><textarea spellcheck="false">class User {
+  constructor(name) { this.name = name; }
+  sayHi() { return "Salom!"; }
+}
+
+// metodlar prototipda:
+console.log(User.prototype.sayHi);
+// prototip konstruktori — klassning o'zi:
+console.log(User.prototype.constructor === User);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Class shunchaki "shirin sintaksis" emas</h2>
+<p>Ba'zan <code>class</code> — bu "syntactic sugar" (sintaksik shakar), ya'ni faqat yozuvni chiroyli qiladigan bezak deyishadi. Lekin bu to'liq to'g'ri emas, chunki class'ning muhim farqlari bor:</p>
+<ul><li>Class orqali yaratilgan funksiya maxsus ichki <code>[[IsClassConstructor]]: true</code> belgisiga ega. Uni <code>new</code>siz chaqirsangiz, xatolik chiqadi;</li><li>Klass metodlari <em>sanab bo'lmaydigan</em> (non-enumerable) bo'ladi — ya'ni <code>for..in</code> tsikli ularni o'tkazib yuboradi;</li><li>Klasslar har doim <code>"use strict"</code> qat'iy rejimida ishlaydi — klass ichidagi butun kod avtomatik qat'iy rejimda bajariladi.</li></ul>
+<div class="warn">Klassni <code>new</code>siz oddiy funksiya kabi chaqirish mumkin emas. Masalan, <code>User()</code> (yangilamasdan) — <em>"Class constructor User cannot be invoked without 'new'"</em> xatosini beradi.</div>
+<h2>Class ifodasi (Class Expression)</h2>
+<p>Funksiyalar kabi, klasslarni ham boshqa ifoda ichida aniqlash, o'zgaruvchiga berish yoki qaytarish mumkin. Bu <strong>class ifodasi</strong> deyiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-expression.js</span></div><textarea spellcheck="false">let User = class {
+  sayHi() {
+    return "Salom (class ifodasi)!";
+  }
+};
+
+console.log(new User().sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Named Function Expression (NFE) kabi, class ifodasining ham nomi bo'lishi mumkin. Bu nom faqat klass ichida ko'rinadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-nfe.js</span></div><textarea spellcheck="false">let User = class MyClass {
+  sayHi() {
+    // MyClass nomi faqat klass ichida ko'rinadi
+    return MyClass;
+  }
+};
+
+console.log(new User().sayHi());
+// MyClass tashqarida ko'rinmaydi
+try {
+  console.log(MyClass);
+} catch (e) {
+  console.log("Xato: " + e.name);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Klasslarni "talab bo'yicha" (dinamik) yaratish ham mumkin — masalan, funksiyadan qaytarish orqali:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-factory.js</span></div><textarea spellcheck="false">function makeClass(phrase) {
+  // klassni qaytaramiz
+  return class {
+    sayHi() { return phrase; }
+  };
+}
+
+let User = makeClass("Salom!");
+console.log(new User().sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Getter va setter'lar</h2>
+<p>Oddiy obyektlar kabi, klasslar ham <code>get</code>/<code>set</code> orqali hisoblanadigan xossalarni qo'llab-quvvatlaydi. Ular <code>obj.prop</code>ni o'qish yoki yozishda avtomatik chaqiriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-getset.js</span></div><textarea spellcheck="false">class User {
+  constructor(name) {
+    // setter ishga tushadi
+    this.name = name;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(value) {
+    if (value.length &lt; 2) {
+      console.log("Ism juda qisqa!");
+      return;
+    }
+    this._name = value;
+  }
+}
+
+let user = new User("Ali");
+console.log(user.name); // getter chaqiriladi
+
+user = new User(""); // setter: juda qisqa
+console.log(user.name);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Texnik jihatdan bunday getter/setter <code>User.prototype</code>da yaratiladi. <code>_name</code> — bu ichki qiymatni saqlash uchun "maxfiy" xossa (bu haqda keyingi darslarda batafsil to'xtalamiz).</p>
+<h2>Hisoblangan nomlar [...]</h2>
+<p>Metod nomini kvadrat qavslar <code>[...]</code> ichida hisoblab olish mumkin. Bu obyekt literalidagi hisoblangan xossalarga o'xshaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-computed.js</span></div><textarea spellcheck="false">let methodName = "sayHi";
+
+class User {
+  ["say" + "Hi"]() {
+    return "Salom, hisoblangan nom!";
+  }
+}
+
+console.log(new User().sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Class maydonlari (Class fields)</h2>
+<p>Zamonaviy JavaScript'da klassga to'g'ridan-to'g'ri xossa (maydon) qo'shish mumkin. Buning uchun <code>constructor</code> shart emas:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-fields.js</span></div><textarea spellcheck="false">class User {
+  name = "Mehmon";
+  age = 0;
+
+  sayHi() {
+    return this.name + " (" + this.age + " yosh)";
+  }
+}
+
+let user = new User();
+console.log(user.sayHi());
+console.log(user.name);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Muhim farq: klass maydonlari <code>prototype</code>da emas, balki har bir <strong>obyektning o'zida</strong> o'rnatiladi. Ya'ni <code>name</code> — <code>user</code> obyektiga tegishli, <code>User.prototype</code>ga emas.</p>
+<div class="tip">Klass maydonlari <code>this</code>ni bog'lash muammosini hal qilish uchun ham juda foydali — maydon sifatida yozilgan strelka funksiya har doim o'z obyektiga bog'lanib qoladi. Bu haqda funksiyalar bo'limida batafsil to'xtalamiz.</div>
+<h2>Xulosa</h2>
+<ul><li><code>class</code> — bir turdagi obyektlarni yaratish uchun qulay sintaksis;</li><li>Ichki jihatdan <code>class</code> — bu funksiya, metodlar esa <code>prototype</code>da saqlanadi;</li><li><code>constructor</code> — <code>new</code> paytida avtomatik chaqiriladigan metod;</li><li>Metodlar sanab bo'lmaydi (non-enumerable) va kod qat'iy rejimda ishlaydi;</li><li>Klasslar ifoda sifatida ham yoziladi, <code>get</code>/<code>set</code>, hisoblangan nomlar <code>[...]</code> va maydonlarni qo'llab-quvvatlaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="prototip-metodlari.html"><span class="dir">← Oldingi</span><span class="ttl">Prototip metodlari, __proto__siz obyektlar</span></a>
+  <a class="next" href="klass-meros.html"><span class="dir">Keyingi →</span><span class="ttl">Klass merosi</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

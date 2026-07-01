@@ -92,17 +92,89 @@
     </ol>
   </details>
   <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Obyekt xossalari konfiguratsiyasi</summary>
     <ol>
       <li><a href="lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
       <li><a href="lessons/getter-setter.html">Getter va setterlar</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="lessons/promise.html">Promise</a></li>
+      <li><a href="lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="lessons/promise-api.html">Promise API</a></li>
+      <li><a href="lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="lessons/generator.html">Generatorlar</a></li>
+      <li><a href="lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
 </aside>
 <main class="content">
 <section class="hero">
   <h1>JavaScript'ni noldan chuqur o'rganing</h1>
-  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 47 ta dars.</p>
+  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 84 ta dars.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
 <h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
@@ -168,10 +240,68 @@
   <a class="card" href="lessons/sana-vaqt.html"><div class="num">44</div><h3>Sana va vaqt (Date)</h3><p>Date obyekti bilan sana yasash, komponentlarini olish, timestamp va sanalar ayirmasini hisoblash.</p></a>
   <a class="card" href="lessons/json-metodlari.html"><div class="num">45</div><h3>JSON metodlari, toJSON</h3><p>Obyektni JSON satriga aylantirish (stringify) va qayta o'qish (parse); replacer, bo'shliq, reviver va toJSON.</p></a>
 </div>
+<h3 class="chapter-head">Funksiyalar bilan chuqur ishlash</h3>
+<div class="cards">
+  <a class="card" href="lessons/rekursiya.html"><div class="num">46</div><h3>Rekursiya va stek</h3><p>Rekursiya g'oyasi, asos va rekursiv holat, faktorial, daraja, Fibonachchi va ijro steki.</p></a>
+  <a class="card" href="lessons/rest-spread.html"><div class="num">47</div><h3>Rest parametrlar va spread</h3><p>...rest parametrlar, eski arguments obyekti, ...spread bilan yoyish va nusxa olish.</p></a>
+  <a class="card" href="lessons/closure.html"><div class="num">48</div><h3>O'zgaruvchi ko'lami, closure</h3><p>Blok ko'lami (let/const), leksik muhit, closure va hisoblagich (counter) misoli.</p></a>
+  <a class="card" href="lessons/eski-var.html"><div class="num">49</div><h3>Eski "var"</h3><p>var ning o'ziga xosligi, blok ko'lami yo'qligi, hoisting va nega let/const afzal.</p></a>
+  <a class="card" href="lessons/global-obyekt.html"><div class="num">50</div><h3>Global obyekt</h3><p>globalThis, window/global, global funksiyalar va nega global o'zgaruvchidan qochish kerak.</p></a>
+  <a class="card" href="lessons/funksiya-obyekti.html"><div class="num">51</div><h3>Funksiya obyekti, NFE</h3><p>Funksiya ham obyekt ekanligi, uning name va length xossalari, o'z xossalarini qo'shish hamda Named Function Expression (NFE).</p></a>
+  <a class="card" href="lessons/new-function.html"><div class="num">52</div><h3>new Function sintaksisi</h3><p>Satrdan funksiya yaratish: new Function('a', 'b', 'return a + b'), uning qo'llanishi va cheklovlari.</p></a>
+  <a class="card" href="lessons/settimeout.html"><div class="num">53</div><h3>setTimeout va setInterval</h3><p>Kodni kechiktirib yoki takroran bajarish: setTimeout, clearTimeout, setInterval, clearInterval, nolinchi kechikish va ichma-ich setTimeout.</p></a>
+  <a class="card" href="lessons/call-apply.html"><div class="num">54</div><h3>Dekoratorlar va uzatish, call/apply</h3><p>Kontekstni uzatuvchi func.call va func.apply metodlari, keshlovchi dekorator hamda argumentlarni uzatish.</p></a>
+  <a class="card" href="lessons/bind.html"><div class="num">55</div><h3>Funksiya bog'lash (bind)</h3><p>this yo'qolishi muammosi, func.bind orqali kontekstni bog'lash va qisman qo'llash (partial application).</p></a>
+  <a class="card" href="lessons/strelka-qayta.html"><div class="num">56</div><h3>Strelka funksiyalari (qayta ko'rib chiqish)</h3><p>Strelka funksiyalarining chuqur xususiyatlari: o'z this va arguments yo'qligi, new bilan ishlamasligi va qachon foydali ekanligi.</p></a>
+</div>
 <h3 class="chapter-head">Obyekt xossalari konfiguratsiyasi</h3>
 <div class="cards">
-  <a class="card" href="lessons/property-flags.html"><div class="num">46</div><h3>Xossa bayroqlari va deskriptorlari</h3><p>Obyekt xossalari faqat qiymatdan iborat emas — ular writable, enumerable va configurable bayroqlariga ega. Ularni qanday o'qish va o'zgartirish mumkin.</p></a>
-  <a class="card" href="lessons/getter-setter.html"><div class="num">47</div><h3>Getter va setterlar</h3><p>Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.</p></a>
+  <a class="card" href="lessons/property-flags.html"><div class="num">57</div><h3>Xossa bayroqlari va deskriptorlari</h3><p>Obyekt xossalari faqat qiymatdan iborat emas — ular writable, enumerable va configurable bayroqlariga ega. Ularni qanday o'qish va o'zgartirish mumkin.</p></a>
+  <a class="card" href="lessons/getter-setter.html"><div class="num">58</div><h3>Getter va setterlar</h3><p>Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.</p></a>
+</div>
+<h3 class="chapter-head">Prototiplar, meros</h3>
+<div class="cards">
+  <a class="card" href="lessons/prototip-meros.html"><div class="num">59</div><h3>Prototipli meros</h3><p>[[Prototype]] yashirin xossa, __proto__, prototip zanjiri va xossalar qanday qidirilishi.</p></a>
+  <a class="card" href="lessons/f-prototype.html"><div class="num">60</div><h3>F.prototype</h3><p>Konstruktor funksiyaning prototype xossasi, new bilan bog'liqligi, default prototype va constructor.</p></a>
+  <a class="card" href="lessons/native-prototype.html"><div class="num">61</div><h3>Tug'ma prototiplar</h3><p>Object.prototype, Array.prototype, String.prototype va boshqalar, hamda ularni kengaytirish xavfi.</p></a>
+  <a class="card" href="lessons/prototip-metodlari.html"><div class="num">62</div><h3>Prototip metodlari, __proto__siz obyektlar</h3><p>Object.create, Object.getPrototypeOf/setPrototypeOf, __proto__ nima uchun eskirgan va Object.create(null).</p></a>
+</div>
+<h3 class="chapter-head">Klasslar</h3>
+<div class="cards">
+  <a class="card" href="lessons/klass-asoslari.html"><div class="num">63</div><h3>Klass asosiy sintaksisi</h3><p>class kalit so'zi, constructor, metodlar, getter/setter, hisoblangan nomlar va class ifodasi.</p></a>
+  <a class="card" href="lessons/klass-meros.html"><div class="num">64</div><h3>Klass merosi</h3><p>extends kalit so'zi, super() konstruktorda, super.method() va metodlarni qayta aniqlash (override).</p></a>
+  <a class="card" href="lessons/static-metodlar.html"><div class="num">65</div><h3>Statik xossa va metodlar</h3><p>static metodlar, statik xossalar, factory metodlar va statik meros.</p></a>
+  <a class="card" href="lessons/private-protected.html"><div class="num">66</div><h3>Maxfiy va himoyalangan xossalar</h3><p>protected konvensiyasi (_), private #maydonlar, getter/setter bilan himoya va inkapsulyatsiya.</p></a>
+  <a class="card" href="lessons/built-in-extend.html"><div class="num">67</div><h3>Tug'ma klasslarni kengaytirish</h3><p>Array, Error kabi tug'ma klasslarni extends qilish va Symbol.species tushunchasi.</p></a>
+  <a class="card" href="lessons/instanceof.html"><div class="num">68</div><h3>instanceof tekshiruvi</h3><p>instanceof operatori, prototip zanjiri orqali tekshiruv, Symbol.hasInstance va Object.prototype.toString.</p></a>
+  <a class="card" href="lessons/mixin.html"><div class="num">69</div><h3>Mixinlar</h3><p>mixin g'oyasi, Object.assign bilan qo'llash, hodisali mixin misoli va merosdan farqi.</p></a>
+</div>
+<h3 class="chapter-head">Xatoliklarni boshqarish</h3>
+<div class="cards">
+  <a class="card" href="lessons/try-catch.html"><div class="num">70</div><h3>Xatoliklarni boshqarish, try...catch</h3><p>try...catch...finally, Error obyekti, throw operatori va o'z xatoliklaringizni tashlash.</p></a>
+  <a class="card" href="lessons/custom-error.html"><div class="num">71</div><h3>Maxsus xatoliklar, Error'ni kengaytirish</h3><p>Error'dan extends qilish, o'z xato klasslari, instanceof, xatoliklar ierarxiyasi va wrapping.</p></a>
+</div>
+<h3 class="chapter-head">Promise, async/await</h3>
+<div class="cards">
+  <a class="card" href="lessons/callback.html"><div class="num">72</div><h3>Kirish: callback'lar</h3><p>Asinxron harakatlar, callback g'oyasi, xatolik-birinchi (error-first) uslub va "callback jahannami" muammosi.</p></a>
+  <a class="card" href="lessons/promise.html"><div class="num">73</div><h3>Promise</h3><p>new Promise(executor), resolve/reject, holatlar (pending/fulfilled/rejected) va .then/.catch/.finally metodlari.</p></a>
+  <a class="card" href="lessons/promise-chaining.html"><div class="num">74</div><h3>Promise zanjiri</h3><p>.then zanjiri, qiymatni bosqichma-bosqich uzatish, then ichida promise qaytarish va zanjirning tekis bo'lishi.</p></a>
+  <a class="card" href="lessons/promise-error.html"><div class="num">75</div><h3>Promise bilan xatoliklarni boshqarish</h3><p>.catch bilan xatoliklarni ushlash, xatoning zanjir bo'ylab o'tishi, qayta tashlash va unhandledrejection hodisasi.</p></a>
+  <a class="card" href="lessons/promise-api.html"><div class="num">76</div><h3>Promise API</h3><p>Promise klassining statik metodlari: all, allSettled, race, any, resolve va reject.</p></a>
+  <a class="card" href="lessons/promisification.html"><div class="num">77</div><h3>Promisifikatsiya</h3><p>Callback qabul qiluvchi funksiyani promise qaytaradigan funksiyaga aylantirish.</p></a>
+  <a class="card" href="lessons/microtask.html"><div class="num">78</div><h3>Mikrovazifalar (microtasks)</h3><p>Mikrovazifa navbati, .then callback'lari tartibi va setTimeout bilan farqi.</p></a>
+  <a class="card" href="lessons/async-await.html"><div class="num">79</div><h3>Async/await</h3><p>async funksiyalar, await, try/catch bilan xatoliklar va top-level await.</p></a>
+</div>
+<h3 class="chapter-head">Generatorlar, ilg'or iteratsiya</h3>
+<div class="cards">
+  <a class="card" href="lessons/generator.html"><div class="num">80</div><h3>Generatorlar</h3><p>function* va yield yordamida qiymatlarni birma-bir, talab bo'yicha ishlab chiqaruvchi maxsus funksiyalar.</p></a>
+  <a class="card" href="lessons/async-iteration.html"><div class="num">81</div><h3>Asinxron iteratsiya va generatorlar</h3><p>for await..of, Symbol.asyncIterator va async generatorlar — ma'lumot asta-sekin, so'rovlar orqali kelganda ishlatiladi.</p></a>
+</div>
+<h3 class="chapter-head">Modullar</h3>
+<div class="cards">
+  <a class="card" href="lessons/modul-kirish.html"><div class="num">82</div><h3>Modullar, kirish</h3><p>Modul nima, nega u kerak, bitta fayl = bitta modul, script type=module va modullarning o'ziga xos xususiyatlari.</p></a>
+  <a class="card" href="lessons/export-import.html"><div class="num">83</div><h3>Eksport va Import</h3><p>export/import ning barcha ko'rinishlari: nomli eksport, default eksport, import * as, as bilan qayta nomlash va re-export.</p></a>
+  <a class="card" href="lessons/dynamic-import.html"><div class="num">84</div><h3>Dinamik importlar</h3><p>import() ifodasi, uning promise qaytarishi, shartli va kechiktirilgan yuklash hamda statik importlardan farqi.</p></a>
 </div>
 </main>
 </div>

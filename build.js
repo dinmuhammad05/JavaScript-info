@@ -161,6 +161,14 @@ function renderBody(body) {
   return body.map(renderBlock).join("\n");
 }
 
+/* Ba'zi kontent fayllarida o'zbekcha apostrof (') xato ravishda
+   ortiqcha \ bilan yozilgan (masalan "o\'rganaman"). Bu faqat harflar
+   orasidagi \' ni ' ga tuzatadi. "&lt;code&gt;\'&lt;/code&gt;" kabi
+   qonuniy eskeyp misollariga tegmaydi (ular harflar bilan o'ralmagan). */
+function fixOverEscapedApostrophe(s) {
+  return s.replace(/(\p{L})\\'(\p{L})/gu, "$1'$2");
+}
+
 /* ---------- 3. Parts strukturasini qurish ---------- */
 function buildParts(chapters) {
   const parts = [];
@@ -306,7 +314,8 @@ function main() {
     }
     const prev = i > 0 ? flat[i - 1] : null;
     const next = i < flat.length - 1 ? flat[i + 1] : null;
-    const htmlOut = renderLesson(lessonObj, chapterName, parts, prev, next);
+    let htmlOut = renderLesson(lessonObj, chapterName, parts, prev, next);
+    htmlOut = fixOverEscapedApostrophe(htmlOut);
     fs.writeFileSync(path.join(LESSONS_DIR, lessonObj.slug + ".html"), htmlOut);
     count++;
   }

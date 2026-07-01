@@ -92,10 +92,82 @@
     </ol>
   </details>
   <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Obyekt xossalari konfiguratsiyasi</summary>
     <ol>
       <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
       <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
     </ol>
   </details>
 </aside>
@@ -108,29 +180,29 @@
 <ul><li><code>arr.push(...items)</code> — oxiriga element qo'shadi;</li><li><code>arr.pop()</code> — oxirgi elementni olib tashlaydi va qaytaradi;</li><li><code>arr.shift()</code> — birinchi elementni olib tashlaydi va qaytaradi;</li><li><code>arr.unshift(...items)</code> — boshiga element qo'shadi.</li></ul>
 <p>Endi eng kuchli metod — <code>splice</code> bilan tanishamiz. U massivning istalgan joyidan element o'chira oladi, qo'sha oladi va almashtira oladi.</p>
 <p>Sintaksis: <code>arr.splice(start, deleteCount, elem1, ..., elemN)</code>. U <code>start</code> indeksidan boshlab <code>deleteCount</code> ta elementni o'chiradi va o'rniga <code>elem1..elemN</code> larni qo'yadi. O'chirilgan elementlardan iborat massivni qaytaradi.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice1.js</span></div><textarea spellcheck="false">let arr = ['men', 'buni', 'o\'rganaman'];
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice1.js</span></div><textarea spellcheck="false">let arr = ['men', 'buni', 'o'rganaman'];
 
 // indeks 1 dan boshlab 1 ta elementni o'chiramiz
 let olib = arr.splice(1, 1);
 
-console.log(JSON.stringify(arr));  // ['men', 'o\'rganaman']
+console.log(JSON.stringify(arr));  // ['men', 'o'rganaman']
 console.log(JSON.stringify(olib)); // ['buni'] — o'chirilganlar qaytadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>splice</code> ham o'chirib, ham o'rniga qo'ya oladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice2.js</span></div><textarea spellcheck="false">let arr = ['men', 'hozir', 'o\'rganaman'];
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice2.js</span></div><textarea spellcheck="false">let arr = ['men', 'hozir', 'o'rganaman'];
 
 // 2 ta elementni o'chirib, 3 tasini qo'yamiz
 arr.splice(0, 2, 'Keling', 'birga', 'biz');
 
 console.log(JSON.stringify(arr));
-// ['Keling', 'birga', 'biz', 'o\'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+// ['Keling', 'birga', 'biz', 'o'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Agar <code>deleteCount</code> ni 0 qilsak, hech narsa o'chirilmaydi — faqat qo'shiladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice3.js</span></div><textarea spellcheck="false">let arr = ['men', 'o\'rganaman'];
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>splice3.js</span></div><textarea spellcheck="false">let arr = ['men', 'o'rganaman'];
 
 // indeks 1 ga hech narsa o'chirmasdan qo'shamiz
 arr.splice(1, 0, 'hozir', 'darhol');
 
 console.log(JSON.stringify(arr));
-// ['men', 'hozir', 'darhol', 'o\'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+// ['men', 'hozir', 'darhol', 'o'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>start</code> manfiy bo'lishi mumkin. Bu holda u oxiridan sanaladi: <code>-1</code> — oxirgi element, <code>-2</code> — oxiridan bittasi va hokazo.</div>
 <h2>slice — qismini nusxalash</h2>
 <p>Metod <code>arr.slice(start, end)</code> massivning <code>start</code> dan <code>end</code> gacha (<code>end</code> o'z ichiga olmaydi) bo'lgan qismini <strong>yangi massiv</strong> qilib qaytaradi. Asl massivni o'zgartirmaydi.</p>

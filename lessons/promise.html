@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="new Promise(executor), resolve/reject, holatlar (pending/fulfilled/rejected) va .then/.catch/.finally metodlari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a class="active" href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Promise, async/await</div>
+<h1>Promise</h1>
+<p class="lead"><strong>Promise</strong> ("va'da") — asinxron harakat natijasini chiroyli boshqarish uchun maxsus obyekt. U callback jahannamining oldini oladi va kodni tekis, o'qilishi oson qiladi. Ushbu darsda Promise nima ekani, uning holatlari va asosiy metodlari bilan tanishamiz.</p>
+<h2>Analogiya: qo'shiqchi va muxlislar</h2>
+<p>Promise'ni tushunish uchun oddiy analogiya. Faraz qiling, mashhur qo'shiqchi bor. Muxlislar undan yangi qo'shig'i qachon chiqishini so'rab turishadi. Qo'shiqchi ularga <em>va'da</em> beradi: "Qo'shiq chiqqach, hammangizga xabar beraman". Muxlislar esa ro'yxatga yozilib qo'yishadi.</p>
+<p>Bu yerda ikki ishtirokchi bor:</p>
+<ul><li><strong>Ijodkor kod</strong> (qo'shiqchi) — biror vaqt oladigan ishni bajaradi. Bu — <em>"producing code"</em>;</li><li><strong>Iste'mol kod</strong> (muxlislar) — natijani kutadi va u tayyor bo'lganda foydalanadi. Bu — <em>"consuming code"</em>.</li></ul>
+<p><strong>Promise</strong> — ularni bog'lovchi maxsus obyekt (ro'yxat kabi). U ijodkor kod tayyor bo'lganda barcha yozilgan iste'molchilarga natijani yetkazadi.</p>
+<h2>new Promise(executor) sintaksisi</h2>
+<p>Promise obyekti <code>new Promise</code> konstruktori bilan yaratiladi. Unga <em>executor</em> (bajaruvchi) deb ataluvchi funksiya uzatiladi:</p>
+<pre class="code"><code>const promise = new Promise(function (resolve, reject) {
+  // Bu yerda ijodkor (asinxron) kod turadi
+  // ... ish tugaganda:
+  //   resolve(natija)  -&gt; muvaffaqiyat
+  //   reject(xato)     -&gt; xatolik
+});</code></pre>
+<p>Executor funksiya <code>new Promise</code> yaratilishi bilan <strong>darhol va avtomatik</strong> ishga tushadi. Unga JavaScript'ning o'zi ikkita funksiya-argument beradi:</p>
+<ul><li><code>resolve(value)</code> — ish <strong>muvaffaqiyatli</strong> tugaganda chaqiriladi, natija <code>value</code>;</li><li><code>reject(error)</code> — <strong>xatolik</strong> yuz berganda chaqiriladi, xato obyekti <code>error</code>.</li></ul>
+<div class="note"><code>resolve</code> va <code>reject</code> funksiyalarini biz o'zimiz yozmaymiz — ularni JavaScript tayyor holda executor'ga beradi. Bizning vazifamiz — ish natijasiga qarab shulardan birini chaqirish.</div>
+<h2>Promise holatlari</h2>
+<p>Har bir Promise obyekti ichida ikkita muhim ichki xususiyat bor: <code>state</code> (holat) va <code>result</code> (natija). Promise uch holatdan birida bo'ladi:</p>
+<ul><li><strong>pending</strong> (kutilmoqda) — boshlang'ich holat. Ish hali tugamagan, natija yo'q;</li><li><strong>fulfilled</strong> (bajarilgan) — <code>resolve(value)</code> chaqirildi. Ish muvaffaqiyatli tugadi;</li><li><strong>rejected</strong> (rad etilgan) — <code>reject(error)</code> chaqirildi. Xatolik yuz berdi.</li></ul>
+<p>Muhim jihat: Promise dastlab <code>pending</code> holatda bo'ladi, so'ng <strong>bir marta</strong> — yo <code>fulfilled</code>, yo <code>rejected</code> holatiga o'tadi. Bu o'tish <em>qaytmas</em>: bir marta hal bo'lgan Promise'ni o'zgartirib bo'lmaydi.</p>
+<pre class="code"><code>// Muvaffaqiyatli Promise:
+const yaxshi = new Promise(function (resolve, reject) {
+  setTimeout(function () {
+    resolve("Bajarildi!"); // 1 sekunddan keyin fulfilled
+  }, 1000);
+});
+
+// Rad etilgan Promise:
+const yomon = new Promise(function (resolve, reject) {
+  setTimeout(function () {
+    reject(new Error("Nimadir noto'g'ri ketdi")); // 1 sekunddan keyin rejected
+  }, 1000);
+});</code></pre>
+<div class="warn"><code>resolve</code> yoki <code>reject</code>dan faqat <strong>bittasi</strong> hisobga olinadi — birinchi chaqiruv. Keyingi barcha chaqiruvlar e'tiborsiz qoldiriladi. Shuningdek, <code>resolve</code> va <code>reject</code> faqat bitta argument qabul qiladi, qolganlari inobatga olinmaydi.</div>
+<h2>.then — natijani qabul qilish</h2>
+<p>Promise'ni <em>yaratdik</em>, endi uning natijasini <em>qabul qilish</em> kerak (iste'mol kod). Buning eng asosiy metodi — <code>.then</code>. U ikkita callback qabul qiladi:</p>
+<pre class="code"><code>promise.then(
+  function (result) {
+    // Promise fulfilled bo'lsa: bu funksiya natija bilan chaqiriladi
+    console.log(result);
+  },
+  function (error) {
+    // Promise rejected bo'lsa: bu funksiya xato bilan chaqiriladi
+    console.log(error);
+  }
+);</code></pre>
+<p>Ya'ni: birinchi funksiya — muvaffaqiyat uchun, ikkinchisi — xatolik uchun. Amaliy misol:</p>
+<pre class="code"><code>const promise = new Promise(function (resolve, reject) {
+  setTimeout(function () {
+    resolve("Salom, dunyo!");
+  }, 1000);
+});
+
+promise.then(
+  function (result) {
+    console.log("Natija: " + result); // 1 sekunddan keyin: Natija: Salom, dunyo!
+  },
+  function (error) {
+    console.log("Xato: " + error);
+  }
+);</code></pre>
+<p>Agar bizni faqat muvaffaqiyat qiziqtirsa, <code>.then</code>ga faqat bitta funksiya uzatishimiz mumkin:</p>
+<pre class="code"><code>promise.then(function (result) {
+  console.log(result); // faqat muvaffaqiyatni boshqaradi
+});</code></pre>
+<h2>.catch — faqat xatolikni boshqarish</h2>
+<p>Agar bizni faqat xatolik qiziqtirsa, <code>.then(null, funksiya)</code> yozish mumkin. Ammo buning uchun qulayroq va o'qilishi oson metod bor — <code>.catch</code>:</p>
+<pre class="code"><code>const promise = new Promise(function (resolve, reject) {
+  setTimeout(function () {
+    reject(new Error("Voy, xatolik!"));
+  }, 1000);
+});
+
+// .catch(f) — bu .then(null, f) bilan bir xil
+promise.catch(function (error) {
+  console.log("Ushlangan xato: " + error.message); // Ushlangan xato: Voy, xatolik!
+});</code></pre>
+<div class="note"><code>.catch(f)</code> — bu <code>.then(null, f)</code>ning qisqacha yozuvi. Faqat xatolikni boshqarish uchun ishlatiladi va kodni ancha o'qilishi oson qiladi.</div>
+<h2>.finally — yakuniy tozalash</h2>
+<p><code>.finally</code> — Promise <strong>qanday tugashidan qat'i nazar</strong> (muvaffaqiyat yoki xatolik) doim chaqiriladigan metod. U ko'pincha tozalash ishlari uchun ishlatiladi: masalan, yuklanish indikatorini (spinner) o'chirish.</p>
+<pre class="code"><code>new Promise(function (resolve, reject) {
+  setTimeout(function () {
+    resolve("Ma'lumot");
+  }, 1000);
+})
+  .finally(function () {
+    // Doim ishlaydi: indikatorni o'chirish va h.k.
+    console.log("Ish tugadi (muvaffaqiyat yoki xato — farqi yo'q)");
+  })
+  .then(function (result) {
+    console.log("Natija: " + result);
+  });</code></pre>
+<p><code>.finally</code>ning muhim xususiyatlari:</p>
+<ul><li>U <strong>argumentsiz</strong> funksiya qabul qiladi — natija yoki xatoni bilmaydi, chunki uning vazifasi — umumiy tugatish ishlari;</li><li>U natijani <strong>o'zgartirmaydi</strong> — natija yoki xato keyingi <code>.then</code>/<code>.catch</code>ga o'zgarishsiz o'tadi;</li><li>Har ikki holatda ham (fulfilled/rejected) ishlaydi.</li></ul>
+<div class="tip"><code>.finally</code>ni sinf-metodlaridagi <code>try...finally</code> bilan solishtiring: ikkalasi ham "nima bo'lishidan qat'i nazar bu kodni bajar" degan g'oyani ifodalaydi.</div>
+<h2>Promise'ning callback'dan afzalligi</h2>
+<p>Callback bilan solishtirganda Promise nima yutuq beradi?</p>
+<ul><li><strong>Tabiiy tartib</strong> — avval asinxron ishni yozamiz, keyin natija bilan nima qilishni. Callback'da esa avval "keyin nima qilish"ni yozib, keyin ishni chaqirardik;</li><li><strong>Ko'p iste'molchi</strong> — bitta Promise'ga <code>.then</code>ni bir necha marta ulash mumkin;</li><li><strong>Zanjirlash</strong> — <code>.then</code>larni ketma-ket ulab, tekis kod yozish mumkin (keyingi darsda);</li><li><strong>Xatoliklarni yagona joyda</strong> boshqarish — <code>.catch</code> orqali.</li></ul>
+<h2>Xulosa</h2>
+<ul><li><strong>Promise</strong> — asinxron natijani boshqaruvchi obyekt, <code>new Promise(executor)</code> bilan yaratiladi;</li><li>Executor darhol ishga tushadi va <code>resolve(value)</code> yoki <code>reject(error)</code> chaqiradi;</li><li>Holatlar: <strong>pending</strong> &rarr; <strong>fulfilled</strong> yoki <strong>rejected</strong> (qaytmas o'tish);</li><li><code>.then(f1, f2)</code> — natija va xatoni qabul qiladi;</li><li><code>.catch(f)</code> — faqat xatoni boshqaradi (= <code>.then(null, f)</code>);</li><li><code>.finally(f)</code> — natijadan qat'i nazar doim ishlaydigan tozalash.</li></ul>
+<nav class="lesson-nav">
+  <a href="callback.html"><span class="dir">← Oldingi</span><span class="ttl">Kirish: callback'lar</span></a>
+  <a class="next" href="promise-chaining.html"><span class="dir">Keyingi →</span><span class="ttl">Promise zanjiri</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

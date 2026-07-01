@@ -91,11 +91,83 @@
       <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
   <details open>
     <summary>Obyekt xossalari konfiguratsiyasi</summary>
     <ol>
       <li><a class="active" href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
       <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
     </ol>
   </details>
 </aside>
@@ -265,7 +337,7 @@ console.log("Muzlatilgan? " + Object.isFrozen(user)); // true</textarea><div cla
 <h2>Xulosa</h2>
 <ul><li>Har bir ma'lumot xossasi qiymatdan tashqari uchta bayroqqa ega: <strong>writable</strong>, <strong>enumerable</strong>, <strong>configurable</strong>;</li><li>Oddiy usulda yaratilganda ularning hammasi <code>true</code> bo'ladi;</li><li><code>Object.getOwnPropertyDescriptor(obj, prop)</code> — bitta xossa deskriptorini o'qiydi;</li><li><code>Object.defineProperty(obj, prop, descriptor)</code> — xossa va uning bayroqlarini o'rnatadi (ko'rsatilmagan bayroq <code>false</code>);</li><li><code>Object.defineProperties</code> va <code>Object.getOwnPropertyDescriptors</code> — ko'p xossa bilan ishlaydi va to'liq nusxalash uchun ideal;</li><li><code>Object.preventExtensions / seal / freeze</code> — butun obyektni turli darajada himoyalaydi.</li></ul>
 <nav class="lesson-nav">
-  <a href="json-metodlari.html"><span class="dir">← Oldingi</span><span class="ttl">JSON metodlari, toJSON</span></a>
+  <a href="strelka-qayta.html"><span class="dir">← Oldingi</span><span class="ttl">Strelka funksiyalari (qayta ko'rib chiqish)</span></a>
   <a class="next" href="getter-setter.html"><span class="dir">Keyingi →</span><span class="ttl">Getter va setterlar</span></a>
 </nav>
 </main>

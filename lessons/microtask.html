@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mikrovazifalar (microtasks) — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Mikrovazifa navbati, .then callback'lari tartibi va setTimeout bilan farqi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a class="active" href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Promise, async/await</div>
+<h1>Mikrovazifalar (microtasks)</h1>
+<p class="lead">Promise'lar callback'lari (<code>.then</code>, <code>.catch</code>, <code>.finally</code>) doim <strong>asinxron</strong> bajariladi. Lekin qanday tartibda? Buni tushunish uchun <em>mikrovazifa navbati</em> (microtask queue) tushunchasini o'rganamiz.</p>
+<h2>Asinxron bajarilish tartibi</h2>
+<p>Quyidagi kodni ko'rib chiqamiz:</p>
+<pre class="code"><code>let promise = Promise.resolve();
+
+promise.then(() =&gt; console.log('promise tayyor!'));
+
+console.log('kod tugadi');</code></pre>
+<p>Sizningcha, natija qanday tartibda chiqadi? Ko'pchilik "promise tayyor!" birinchi bo'ladi deb o'ylaydi, chunki promise allaqachon resolve qilingan. Ammo natija bunday:</p>
+<pre class="code"><code>kod tugadi
+promise tayyor!</code></pre>
+<p>Nima uchun? Chunki <code>.then</code> callback'i darhol emas, balki hozirgi kod to'liq tugagandan keyin ishga tushadi. Buning sababi — <strong>mikrovazifa navbati</strong>.</p>
+<h2>Mikrovazifa navbati (Microtask Queue)</h2>
+<p>Asinxron vazifalar to'g'ri boshqarilishi kerak. ECMAScript standartida buning uchun ichki <strong>PromiseJobs</strong> navbati mavjud — spetsifikatsiyada u <em>"microtask queue"</em> deb ataladi (V8 termini).</p>
+<p>Navbat haqida asosiy tushunchalar:</p>
+<ul><li>Navbat <strong>FIFO</strong> (First In, First Out) — birinchi qo'shilgan vazifa birinchi bajariladi;</li><li>Vazifalar bajarilishi faqat <strong>hech qanday boshqa kod ishlamayotgan paytda</strong> boshlanadi.</li></ul>
+<p>Oddiy qilib aytganda: promise <em>tayyor</em> (settled) bo'lganda, uning <code>.then/.catch/.finally</code> callback'lari navbatga <strong>qo'shiladi</strong>, lekin darhol bajarilmaydi. JavaScript dvigateli hozirgi kodni tugatib, so'ng navbatdagi vazifalarni birma-bir oladi va bajaradi.</p>
+<div class="note">Shuning uchun yuqoridagi misolda "kod tugadi" birinchi chiqadi: <code>.then</code> callback'i navbatga tushdi, lekin faqat <code>console.log('kod tugadi')</code> bajarilib, asosiy kod tugagandan keyin navbatdan olindi.</div>
+<p>Agar callback'lar zanjiri bo'lsa, ular ham navbat orqali birma-bir bajariladi:</p>
+<pre class="code"><code>Promise.resolve()
+  .then(() =&gt; console.log('birinchi'))
+  .then(() =&gt; console.log('ikkinchi'))
+  .then(() =&gt; console.log('uchinchi'));
+
+console.log('sinxron kod');
+
+// Natija:
+// sinxron kod
+// birinchi
+// ikkinchi
+// uchinchi</code></pre>
+<h2>Makrovazifalar va setTimeout</h2>
+<p>Mikrovazifalardan tashqari <strong>makrovazifalar</strong> (macrotasks) ham bor. <code>setTimeout</code>, tarmoq hodisalari, foydalanuvchi hodisalari — bularning hammasi makrovazifalar navbatiga tushadi.</p>
+<p>Muhim qoida: <strong>har bir makrovazifadan keyin dvigatel avval BARCHA mikrovazifalarni bajaradi</strong>, so'nggina keyingi makrovazifaga o'tadi (yoki qayta render qiladi). Ya'ni mikrovazifalar makrovazifalardan ustunroq.</p>
+<pre class="code"><code>setTimeout(() =&gt; console.log('setTimeout (makrovazifa)'), 0);
+
+Promise.resolve()
+  .then(() =&gt; console.log('promise (mikrovazifa)'));
+
+console.log('sinxron kod');</code></pre>
+<p>Natija quyidagicha bo'ladi:</p>
+<pre class="code"><code>sinxron kod
+promise (mikrovazifa)
+setTimeout (makrovazifa)</code></pre>
+<p>E'tibor bering: <code>setTimeout(..., 0)</code> "0 soniyadan keyin" degani bo'lsa-da, u makrovazifa bo'lgani uchun promise callback'idan <strong>keyin</strong> ishga tushdi. Chunki sinxron kod tugagach, dvigatel avval mikrovazifa navbatini (promise) to'liq bo'shatadi, keyingina makrovazifaga (setTimeout) o'tadi.</p>
+<div class="warn">Ushbu misollar asinxron tartibni ko'rsatadi. Node.js va brauzerda ular kutilgan tartibda ishlaydi. Interaktiv maydonchada esa asinxron kodning natijasi darhol ko'rinmasligi mumkin — shuning uchun bu misollar statik <code>{code}</code> sifatida berilgan.</div>
+<h2>Hodisalar tsikli (Event Loop) qisqacha</h2>
+<p>Yuqoridagilarni birlashtiruvchi mexanizm — <strong>hodisalar tsikli</strong> (event loop). U cheksiz aylanuvchi jarayon bo'lib, quyidagicha ishlaydi:</p>
+<ol><li>Makrovazifa navbatidan eng eski vazifani oladi va bajaradi (masalan, hozirgi skript);</li><li>So'ng <strong>barcha</strong> mikrovazifalarni bajaradi (promise callback'lari);</li><li>Kerak bo'lsa brauzer sahifani qayta render qiladi;</li><li>Agar makrovazifa navbatida yana vazifa bo'lsa — 1-qadamga qaytadi; aks holda yangi hodisani kutadi.</li></ol>
+<p>Ushbu ketma-ketlik nima uchun promise callback'lari <code>setTimeout</code>dan oldin ishlashini tushuntiradi: har bir makrovazifadan keyin mikrovazifa navbati to'liq bo'shatiladi.</p>
+<div class="tip">Amaliy natija: agar biror kodni sinxron ishlar tugaganidan <em>keyin</em>, lekin brauzer render qilishidan <em>oldin</em> bajarmoqchi bo'lsangiz — <code>Promise.resolve().then(...)</code> ishlating (mikrovazifa). Agar renderdan keyin bo'lishini xohlasangiz — <code>setTimeout</code> (makrovazifa).</div>
+<h2>Unhandled rejection</h2>
+<p>Mikrovazifa navbati tushunchasi "ushlanmagan rejection" (unhandled rejection) qachon yuzaga kelishini ham tushuntiradi. Agar promise reject bo'lsa-yu, <strong>mikrovazifa navbati bo'shaganda</strong> unga <code>.catch</code> qo'shilmagan bo'lsa — dvigatel "unhandled rejection" xatosini beradi.</p>
+<pre class="code"><code>let promise = Promise.reject(new Error('Xatolik!'));
+// .catch qo'shilmadi
+
+// Dvigatel navbat bo'shagach 'unhandled rejection' xabarini beradi</code></pre>
+<p>Ammo agar keyinroq (masalan <code>setTimeout</code> ichida) <code>.catch</code> qo'shsak, xato ushlanadi va "unhandled rejection" bo'lmaydi:</p>
+<pre class="code"><code>let promise = Promise.reject(new Error('Xatolik!'));
+
+setTimeout(() =&gt; promise.catch(err =&gt; console.log('ushlandi')), 1000);
+
+// Bu holda:
+// Error: Xatolik! (avval, navbat bo'shagach)
+// ushlandi (1 soniyadan keyin)</code></pre>
+<h2>Xulosa</h2>
+<ul><li>Promise callback'lari (<code>.then/.catch/.finally</code>) doim <strong>asinxron</strong>, mikrovazifa navbati orqali bajariladi;</li><li>Navbat <strong>FIFO</strong> tartibda ishlaydi va faqat hozirgi kod tugagach boshlanadi;</li><li><code>setTimeout</code> — <strong>makrovazifa</strong>, u mikrovazifalardan <em>keyin</em> ishlaydi;</li><li>Har bir makrovazifadan so'ng dvigatel <strong>barcha</strong> mikrovazifalarni bajaradi;</li><li>Bu mexanizm <strong>hodisalar tsikli</strong> (event loop) deb ataladi.</li></ul>
+<nav class="lesson-nav">
+  <a href="promisification.html"><span class="dir">← Oldingi</span><span class="ttl">Promisifikatsiya</span></a>
+  <a class="next" href="async-await.html"><span class="dir">Keyingi →</span><span class="ttl">Async/await</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

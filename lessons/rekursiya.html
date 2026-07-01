@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rekursiya va stek — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Rekursiya g'oyasi, asos va rekursiv holat, faktorial, daraja, Fibonachchi va ijro steki.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a class="active" href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
+<h1>Rekursiya va stek</h1>
+<p class="lead">Rekursiya — bu masalani <em>o'ziga o'xshash, ammo soddaroq</em> qism-masalalarga bo'lib yechish uslubi. Bunda funksiya o'zini o'zi chaqiradi. Bu dasturlashning eng go'zal va kuchli g'oyalaridan biri.</p>
+<h2>Rekursiya g'oyasi</h2>
+<p>Funksiya boshqa funksiyani chaqirishi mumkin. Agar funksiya <strong>o'zini o'zi</strong> chaqirsa — bu <em>rekursiya</em> deb ataladi.</p>
+<p>Rekursiyaning asosiy g'oyasi shunda: katta masalani biroz kichraytiramiz va o'sha kichik masalani <strong>o'sha funksiyaning o'zi</strong> orqali yechamiz. Bu jarayon masala shu qadar kichrayguncha davom etadiki, oxir-oqibat javob to'g'ridan-to'g'ri ma'lum bo'lib qoladi.</p>
+<p>Demak, har qanday rekursiv funksiyada ikkita holat bo'ladi:</p>
+<ul><li><strong>Asos (baza) holati</strong> — masala shu qadar sodda bo'ladiki, javobni darhol qaytaramiz. Bu rekursiyani <em>to'xtatadigan</em> holat;</li><li><strong>Rekursiv holat</strong> — masalani kichraytirib, funksiyaning o'zini yana chaqiramiz.</li></ul>
+<div class="warn">Agar asos holatini unutib qo'ysangiz yoki masala hech qachon kichraymasa, funksiya o'zini cheksiz chaqiraveradi va dastur xatolik bilan to'xtaydi (<code>RangeError: Maximum call stack size exceeded</code>).</div>
+<h2>Birinchi misol: daraja (pow)</h2>
+<p><code>x</code> sonini <code>n</code>-darajaga ko'taruvchi funksiya yozamiz, ya'ni <code>x</code>ni o'zini <code>n</code> marta ko'paytiramiz. Buni ikki xil ko'rish mumkin.</p>
+<p><strong>Iterativ (takroriy) yo'l</strong> — oddiy <code>for</code> sikli bilan:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>pow-iter.js</span></div><textarea spellcheck="false">function pow(x, n) {
+  let result = 1;
+  for (let i = 0; i &lt; n; i++) {
+    result = result * x;
+  }
+  return result;
+}
+
+console.log(pow(2, 2));
+console.log(pow(2, 3));
+console.log(pow(2, 4));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Rekursiv yo'l</strong> — masalani soddalashtiramiz. E'tibor bering: <code>pow(x, n)</code> ni <code>x * pow(x, n-1)</code> shaklida yozish mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>pow-rec.js</span></div><textarea spellcheck="false">function pow(x, n) {
+  if (n == 1) {
+    return x;          // asos holati
+  } else {
+    return x * pow(x, n - 1);  // rekursiv holat
+  }
+}
+
+console.log(pow(2, 3));
+// pow(2, 3) = 2 * pow(2, 2)
+// pow(2, 2) = 2 * pow(2, 1)
+// pow(2, 1) = 2   (asos)
+// Natija: 2 * 2 * 2 = 8</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>pow(2, 3)</code> chaqirilganda ijro quyidagicha "pastga tushadi" va so'ng "yuqoriga qaytadi":</p>
+<ol><li><code>pow(2, 3)</code> = 2 * <code>pow(2, 2)</code></li><li><code>pow(2, 2)</code> = 2 * <code>pow(2, 1)</code></li><li><code>pow(2, 1)</code> = 2 (asos holati, rekursiya to'xtaydi)</li><li>Endi orqaga qaytamiz: 2 * 2 = 4, so'ng 2 * 4 = 8.</li></ol>
+<div class="note">Rekursiv yechim ko'pincha <strong>qisqaroq va tushunarliroq</strong> bo'ladi. Iterativ yechim esa odatda <em>tezroq</em> va kamroq xotira sarflaydi. Har ikkisini bilish foydali.</div>
+<h2>Ijro steki (execution stack)</h2>
+<p>Har bir funksiya chaqirilganda, uning ichki ma'lumotlari — o'zgaruvchilari, argumentlari va hozir ijro qilinayotgan qatorning o'rni — maxsus ichki tuzilmada saqlanadi. Bu tuzilma <strong>ijro steki</strong> (execution context stack) deb ataladi.</p>
+<p>Har bir chaqiruv uchun alohida <em>ijro konteksti</em> (execution context) yaratiladi va u stekning ustiga qo'yiladi. Funksiya boshqa funksiyani chaqirsa:</p>
+<ol><li>Joriy funksiyaning ijrosi <em>pauza</em> qilinadi;</li><li>Uning konteksti stekda saqlanib turadi;</li><li>Yangi chaqiruv uchun yangi kontekst stek ustiga qo'yiladi;</li><li>Yangi chaqiruv tugagach, uning konteksti stekdan olib tashlanadi va pauza qilingan kontekst davom etadi.</li></ol>
+<p><code>pow(2, 3)</code> uchun stek eng chuqur nuqtada uchta kontekstni saqlaydi: <code>pow(2,3)</code>, <code>pow(2,2)</code> va <code>pow(2,1)</code>. Asos holatiga yetgach, ular birma-bir stekdan tozalanib boradi.</p>
+<div class="warn">Rekursiyaning chuqurligi (bir vaqtning o'zida stekdagi kontekstlar soni) cheklangan. JavaScript dvigatellari odatda o'n minglab chuqurlikni ko'taradi, undan ortiq bo'lsa xatolik chiqadi. Juda chuqur rekursiya kerak bo'lsa, uni sikl (iteratsiya)ga aylantirish afzal.</div>
+<h2>Ikkinchi misol: faktorial</h2>
+<p>Faktorial <code>n!</code> — 1 dan <code>n</code> gacha bo'lgan sonlarning ko'paytmasi: <code>n! = 1 * 2 * 3 * ... * n</code>. Uni rekursiv shaklda juda chiroyli yozish mumkin, chunki <code>n! = n * (n-1)!</code>:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>factorial.js</span></div><textarea spellcheck="false">function factorial(n) {
+  if (n == 0) {
+    return 1;   // 0! = 1, asos holati
+  }
+  return n * factorial(n - 1);
+}
+
+console.log(factorial(0));
+console.log(factorial(1));
+console.log(factorial(5));
+// 5! = 5 * 4 * 3 * 2 * 1 = 120</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda asos holati <code>n == 0</code> bo'lib, <code>1</code> qaytaradi (matematikada <code>0! = 1</code>). Qolgan barcha holatlar rekursiv ravishda soddalashadi.</p>
+<div class="tip">Rekursiv funksiyani yozayotganda avval o'zingizdan so'rang: <strong>"Qachon to'xtayman?"</strong> (asos holati) va <strong>"Masalani qanday kichraytiraman?"</strong> (rekursiv holat). Shu ikki savolga javob topsangiz, funksiya deyarli tayyor.</div>
+<h2>Uchinchi misol: Fibonachchi sonlari</h2>
+<p>Fibonachchi ketma-ketligi 0 va 1 dan boshlanadi, keyingi har bir son avvalgi ikkitasining yig'indisiga teng: <code>0, 1, 1, 2, 3, 5, 8, 13, ...</code>. Ta'rifning o'zi rekursiv: <code>F(n) = F(n-1) + F(n-2)</code>.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fib.js</span></div><textarea spellcheck="false">function fib(n) {
+  if (n &lt;= 1) {
+    return n;   // fib(0)=0, fib(1)=1
+  }
+  return fib(n - 1) + fib(n - 2);
+}
+
+console.log(fib(0));
+console.log(fib(1));
+console.log(fib(7));
+console.log(fib(10));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Bu "sof" rekursiv Fibonachchi juda <strong>sekin</strong>: <code>fib(n)</code> bir xil qiymatlarni ko'p marta qayta hisoblaydi. Masalan <code>fib(35)</code> allaqachon sezilarli sekinlashadi. Amalda buni sikl yoki eslab qolish (memoization) bilan tezlashtiradilar. Ammo o'rganish uchun bu misol rekursiyaning tabiatini juda yaxshi ko'rsatadi.</div>
+<p>Tezroq, iterativ variant esa oddiy siklda ishlaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fib-iter.js</span></div><textarea spellcheck="false">function fib(n) {
+  let a = 0;
+  let b = 1;
+  for (let i = 0; i &lt; n; i++) {
+    let next = a + b;
+    a = b;
+    b = next;
+  }
+  return a;
+}
+
+console.log(fib(10));
+console.log(fib(35));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Rekursiv ma'lumot tuzilmalari</h2>
+<p>Rekursiya faqat funksiyalarga xos emas. Ba'zi <em>ma'lumot tuzilmalari</em> ham rekursiv tabiatga ega — ular o'z ichida o'ziga o'xshash qismlarni saqlaydi.</p>
+<ul><li><strong>Bo'linmaydigan (nested) obyektlar</strong> — masalan kompaniya bo'limlari, ularning ichida yana ichki bo'limlar bor;</li><li><strong>Daraxt (tree)</strong> — HTML hujjatning DOM tuzilmasi, fayl tizimidagi papkalar;</li><li><strong>Bog'langan ro'yxat (linked list)</strong> — har bir element keyingi elementga ishora qiladi.</li></ul>
+<p>Bunday tuzilmalarni <em>rekursiv funksiya</em> bilan qayta ishlash juda tabiiy. Misol uchun, ichma-ich joylashgan bo'limlardagi umumiy maoshni sanaymiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>company.js</span></div><textarea spellcheck="false">let company = {
+  sales: [ { name: 'Ali', salary: 1000 }, { name: 'Vali', salary: 1600 } ],
+  development: {
+    frontend: [ { name: 'Petya', salary: 2000 } ],
+    backend:  [ { name: 'Anna', salary: 1800 } ]
+  }
+};
+
+function sumSalaries(dept) {
+  if (Array.isArray(dept)) {
+    // asos holati: xodimlar massivi
+    let sum = 0;
+    for (let person of dept) sum += person.salary;
+    return sum;
+  } else {
+    // rekursiv holat: ichki bo'limlar obyekti
+    let sum = 0;
+    for (let subdept of Object.values(dept)) {
+      sum += sumSalaries(subdept);
+    }
+    return sum;
+  }
+}
+
+console.log(sumSalaries(company));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">E'tibor bering: funksiya massivga duch kelsa (asos holati) — to'g'ridan-to'g'ri yig'indini qaytaradi. Obyektga duch kelsa (rekursiv holat) — har bir ichki qismi uchun o'zini qayta chaqiradi. Tuzilma qanchalik chuqur bo'lsa ham, kod o'zgarmaydi.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>Rekursiya</strong> — funksiyaning o'zini o'zi chaqirishi orqali masalani soddaroq qism-masalalarga bo'lib yechish;</li><li>Har bir rekursiv funksiyada <strong>asos holati</strong> (to'xtash) va <strong>rekursiv holat</strong> (kichraytirish) bo'lishi shart;</li><li>Har bir chaqiruv <strong>ijro steki</strong> da yangi kontekst yaratadi; chuqurlik cheklangan;</li><li>Rekursiv yechim ko'pincha qisqa va tushunarli, iterativ yechim esa odatda tezroq;</li><li>Daraxt, ichma-ich obyektlar kabi <strong>rekursiv tuzilmalar</strong> rekursiya bilan tabiiy qayta ishlanadi.</li></ul>
+<nav class="lesson-nav">
+  <a href="json-metodlari.html"><span class="dir">← Oldingi</span><span class="ttl">JSON metodlari, toJSON</span></a>
+  <a class="next" href="rest-spread.html"><span class="dir">Keyingi →</span><span class="ttl">Rest parametrlar va spread</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

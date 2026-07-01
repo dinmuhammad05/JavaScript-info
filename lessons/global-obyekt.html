@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global obyekt — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="globalThis, window/global, global funksiyalar va nega global o'zgaruvchidan qochish kerak.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a class="active" href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
+<h1>Global obyekt</h1>
+<p class="lead">Global obyekt — tilning butun dastur bo'ylab mavjud bo'lgan o'zgaruvchi va funksiyalarni saqlaydigan maxsus obyekt. U tarixiy sabablarga ko'ra turli muhitlarda turlicha nomlanadi, endi esa yagona standart nom bor: <code>globalThis</code>.</p>
+<h2>Global obyekt nima?</h2>
+<p>Global obyekt tilning eng "tashqi" muhitini ifodalaydi. Unda beriladigan xususiyatlar dasturning istalgan joyidan ko'rinadi. Uning nomi muhitga bog'liq:</p>
+<ul><li>Brauzerda — <code>window</code>;</li><li>Node.js'da — <code>global</code>;</li><li>Boshqa muhitlarda — yana boshqacha bo'lishi mumkin.</li></ul>
+<p>Bu farqlar kodni bir muhitdan ikkinchisiga ko'chirishni qiyinlashtirardi. Shu sabab standart yagona nom kiritildi.</p>
+<h2>globalThis — yagona standart nom</h2>
+<p><strong><code>globalThis</code></strong> — global obyektga murojaat qilishning zamonaviy, standart usuli. U <em>barcha muhitlarda</em> ishlaydi: brauzer, Node.js va boshqalarda. Endi muhitni tekshirib o'tirish shart emas:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>globalthis.js</span></div><textarea spellcheck="false">// Bu Node.js va brauzerda bir xil ishlaydi:
+console.log(typeof globalThis);   // 'object'
+
+// globalThis ga xususiyat qo'shsak — u global bo'ladi
+globalThis.myAppName = 'Mening ilovam';
+console.log(globalThis.myAppName);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Ilgari kod har bir muhit uchun alohida <code>window</code> yoki <code>global</code> ni tekshirishga majbur edi. <code>globalThis</code> bu muammoni butunlay hal qildi — yangi kodda faqat shu nomni ishlating.</div>
+<div class="tip">Node.js muhitida <code>globalThis</code> aynan <code>global</code> ga, brauzerda esa <code>window</code> ga teng. Ya'ni <code>globalThis === global</code> (Node.js'da) rost qaytaradi.</div>
+<h2>Global funksiya va o'zgaruvchilar</h2>
+<p>Ba'zi funksiyalar til tomonidan har joyda tayyor beriladi — ular ham amalda global obyekt orqali mavjud. Masalan <code>parseInt</code>, <code>setTimeout</code>, <code>isNaN</code> va boshqalar:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>global-funcs.js</span></div><textarea spellcheck="false">console.log(parseInt('42 soat'));   // 42
+console.log(isNaN('salom'));        // true
+console.log(Math.round(3.7));       // 4
+
+// Bular hamma joyda tayyor — global funksiyalar
+console.log(Number.isInteger(10));  // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Muhim tafsilot: brauzerda <code>var</code> orqali eng tashqi (skript) darajasida e'lon qilingan o'zgaruvchi <code>window</code> obyektiga xususiyat sifatida qo'shilib qolardi. <code>let</code>/<code>const</code> esa bunday qilmaydi. Bu ham <code>let</code>/<code>const</code> afzalligining yana bir sababi.</div>
+<h2>Global obyektdan qanday to'g'ri foydalanish</h2>
+<p>Odatda global obyektga qo'lda qiymat qo'shish <strong>tavsiya etilmaydi</strong>. Ammo ba'zan haqiqatan kerak bo'ladi — masalan, butun ilova uchun bitta muhim sozlama yoki o'zgaruvchi kerak bo'lganda. Bunday holda uni ochiq-oydin <code>globalThis</code> orqali qo'shish tavsiya etiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>global-config.js</span></div><textarea spellcheck="false">// Butun ilova uchun bitta sozlama:
+globalThis.appConfig = {
+  version: '1.0',
+  debug: false
+};
+
+// Endi istalgan joydan o'qish mumkin:
+function showVersion() {
+  console.log('Versiya:', globalThis.appConfig.version);
+}
+
+showVersion();</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Bunday holatlar juda kam bo'lishi kerak. Ko'p hollarda ma'lumotni funksiyalarga <em>argument</em> sifatida uzatish yoki modullar orqali ulashish ancha toza yechim.</div>
+<h2>Nega global o'zgaruvchidan qochish kerak?</h2>
+<p>Global o'zgaruvchilar qulay ko'rinadi — ular har joyda mavjud. Lekin aynan shu "har joyda mavjudlik" jiddiy muammolar tug'diradi:</p>
+<ul><li><strong>Nom to'qnashuvi</strong> — ikki turli qism bir xil global nomni ishlatib, bir-birining qiymatini bilmasdan buzib qo'yishi mumkin;</li><li><strong>Yashirin bog'liqlik</strong> — funksiya global o'zgaruvchiga bog'lansa, uni tushunish qiyinlashadi: kirish argumentlaridan uning nimaga bog'liqligi ko'rinmaydi;</li><li><strong>Test qilish qiyinlashadi</strong> — global holatga bog'liq kodni alohida sinash mushkul;</li><li><strong>Kuzatib bo'lmaydigan o'zgarishlar</strong> — dasturning istalgan joyi global qiymatni o'zgartirishi mumkin, xatoni topish qiyinlashadi.</li></ul>
+<p>To'g'ri yondashuv — ma'lumotni <strong>argument orqali uzatish</strong> va <strong>funksiya qiymatini qaytarish</strong>. Solishtiring:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>global-vs-args.js</span></div><textarea spellcheck="false">// YOMON: global o'zgaruvchiga tayanish
+globalThis.total = 0;
+function addBad(x) {
+  globalThis.total += x;  // yashirin ta'sir
+}
+addBad(5);
+addBad(3);
+console.log(globalThis.total);  // 8, lekin qaydan kelgani noaniq
+
+// YAXSHI: argument va return orqali
+function addGood(total, x) {
+  return total + x;
+}
+let sum = 0;
+sum = addGood(sum, 5);
+sum = addGood(sum, 3);
+console.log(sum);  // 8, oqim aniq va tushunarli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Umumiy qoida: <strong>o'zgaruvchini imkon qadar tor ko'lamda saqlang</strong>. Faqat funksiya ichida kerak bo'lsa — lokal qiling; bir necha funksiya ulashsa — modulda; global esa deyarli hech qachon. Bu kodni ishonchli va tushunarli qiladi.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>Global obyekt</strong> — butun dastur bo'ylab mavjud o'zgaruvchi va funksiyalarni saqlaydi;</li><li>Uning nomi muhitga bog'liq: brauzerda <code>window</code>, Node.js'da <code>global</code>;</li><li><strong><code>globalThis</code></strong> — barcha muhitlarda ishlaydigan yagona standart nom, yangi kodda shuni ishlating;</li><li><code>parseInt</code>, <code>setTimeout</code> kabi global funksiyalar hamma joyda tayyor;</li><li><strong>Global o'zgaruvchidan qoching</strong> — ma'lumotni argument va return orqali uzatish ancha xavfsiz va tushunarli.</li></ul>
+<nav class="lesson-nav">
+  <a href="eski-var.html"><span class="dir">← Oldingi</span><span class="ttl">Eski "var"</span></a>
+  <a class="next" href="funksiya-obyekti.html"><span class="dir">Keyingi →</span><span class="ttl">Funksiya obyekti, NFE</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

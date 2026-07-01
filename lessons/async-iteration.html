@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asinxron iteratsiya va generatorlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="for await..of, Symbol.asyncIterator va async generatorlar — ma'lumot asta-sekin, so'rovlar orqali kelganda ishlatiladi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a class="active" href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Generatorlar, ilg'or iteratsiya</div>
+<h1>Asinxron iteratsiya va generatorlar</h1>
+<p class="lead">Asinxron iteratsiya bizga ma'lumot <strong>asinxron ravishda</strong>, ya'ni <code>Promise</code> lar orqali qismlar bo'lib kelganda uni birma-bir qayta ishlashga imkon beradi. Masalan, tarmoqdan sahifama-sahifa yuklanadigan ma'lumot — bu asinxron iteratsiya uchun ideal holat.</p>
+<h2>Oddiy iteratsiyani eslaylik</h2>
+<p>Avval sinxron (oddiy) iteratsiyani eslaymiz. Iterativ obyekt yaratish uchun unga <code>Symbol.iterator</code> metodini qo'shamiz:</p>
+<pre class="code"><code>let range = {
+  from: 1,
+  to: 5,
+
+  [Symbol.iterator]() {
+    return {
+      current: this.from,
+      last: this.to,
+
+      next() {
+        if (this.current &lt;= this.last) {
+          return { done: false, value: this.current++ };
+        } else {
+          return { done: true };
+        }
+      }
+    };
+  }
+};
+
+for (let value of range) {
+  console.log(value); // 1, 2, 3, 4, 5
+}</code></pre>
+<p>Bu yerda barcha qadamlar <strong>sinxron</strong> — <code>next()</code> darhol tayyor <code>{value, done}</code> obyektini qaytaradi. Kutish yo'q. Ammo hayotda ko'p ma'lumotlar <em>vaqt talab qilib</em> keladi: tarmoqdan yuklab olish, fayl o'qish, ma'lumotlar bazasidan so'rov. Bunday holatlar uchun asinxron iteratsiya kerak.</p>
+<h2>Sinxron va asinxron iteratsiya farqi</h2>
+<p>Asinxron iteratsiya sinxronidan uch nuqtada farq qiladi. Farqlarni jadval kabi solishtiramiz:</p>
+<ul><li><strong>Metod nomi:</strong> sinxronda <code>Symbol.iterator</code>, asinxronda <code>Symbol.asyncIterator</code>;</li><li><strong>next() qaytaruvchisi:</strong> sinxronda oddiy <code>{value, done}</code> obyekt, asinxronda <code>{value, done}</code> ga <em>resolve</em> bo'ladigan <code>Promise</code>;</li><li><strong>Sikl:</strong> sinxronda <code>for..of</code>, asinxronda <code>for await..of</code>.</li></ul>
+<div class="note">Asinxron iteratorda <code>next()</code> <code>Promise</code> qaytargani uchun, <code>for await..of</code> har bir qadamda avtomatik ravishda <code>await</code> qiladi — ya'ni <code>Promise</code> bajarilishini kutadi, so'ng keyingi qadamga o'tadi.</div>
+<div class="warn">Asinxron iterativlar bilan spread sintaksisi <code>...</code> <strong>ishlamaydi</strong> — u <code>Symbol.iterator</code> (sinxron) ni kutadi, <code>Symbol.asyncIterator</code> ni emas. Xuddi shunday, oddiy <code>for..of</code> ham asinxron iterativ bilan ishlamaydi.</div>
+<h2>Symbol.asyncIterator</h2>
+<p>Obyektni asinxron iterativ qilish uchun unga <code>Symbol.iterator</code> emas, <code>Symbol.asyncIterator</code> metodini qo'shamiz. Uning <code>next()</code> metodi <code>Promise</code> qaytarishi (yoki <code>async</code> bo'lishi) kerak.</p>
+<p>Quyidagi misolda <code>range</code> obyektini asinxron qilamiz — har qiymat 1 sekundlik kechikish bilan keladi:</p>
+<pre class="code"><code>let range = {
+  from: 1,
+  to: 5,
+
+  // Symbol.iterator O'RNIGA Symbol.asyncIterator
+  [Symbol.asyncIterator]() {
+    return {
+      current: this.from,
+      last: this.to,
+
+      // next() endi async — Promise qaytaradi
+      async next() {
+        // 1 sekund kutamiz (asinxronlikni taqlid qilamiz)
+        await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+
+        if (this.current &lt;= this.last) {
+          return { done: false, value: this.current++ };
+        } else {
+          return { done: true };
+        }
+      }
+    };
+  }
+};
+
+(async () =&gt; {
+  // for..of EMAS, for AWAIT..of
+  for await (let value of range) {
+    console.log(value); // 1, keyin 2, ... har biri 1 sek kechikish bilan
+  }
+})();</code></pre>
+<p>E'tibor bering: <code>next()</code> ichida <code>await</code> ishlatilgani uchun u <code>async</code> deb belgilandi, va sikl <code>for await..of</code> bo'ldi. Har bir iteratsiya <code>Promise</code> bajarilishini kutadi.</p>
+<div class="warn"><code>for await..of</code> faqat <code>async</code> funksiya ichida ishlatilishi mumkin (yoki top-level modul kontekstida). Oddiy sinxron funksiya ichida uni ishlata olmaysiz.</div>
+<h2>Asinxron generatorlar (async function*)</h2>
+<p>Oddiy generatorlar sinxron edi — ular ichida <code>await</code> ishlatib bo'lmaydi va barcha qiymatlar sinxron chiqadi. <strong>Asinxron generator</strong> esa <code>async function*</code> orqali yaratiladi va uning ichida <code>await</code> ishlatish mumkin.</p>
+<pre class="code"><code>async function* generateSequence(start, end) {
+  for (let i = start; i &lt;= end; i++) {
+    // Endi await ishlata olamiz!
+    await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+    yield i;
+  }
+}
+
+(async () =&gt; {
+  let generator = generateSequence(1, 5);
+  for await (let value of generator) {
+    console.log(value); // 1, 2, 3, 4, 5 — har biri 1 sek kechikish bilan
+  }
+})();</code></pre>
+<p>Sinxron va asinxron generatorlar orasidagi asosiy farqlar:</p>
+<ul><li><strong>E'lon:</strong> <code>function*</code> o'rniga <code>async function*</code>;</li><li><strong>next() qaytaruvchisi:</strong> oddiy <code>{value, done}</code> emas, balki unga resolve bo'ladigan <code>Promise</code>;</li><li><strong>Aylanish:</strong> <code>for..of</code> emas, <code>for await..of</code>;</li><li><strong>Ichida:</strong> asinxron generatorda <code>await</code> ishlata olasiz.</li></ul>
+<div class="note">Asinxron generatorda <code>next()</code> ni qo'lda chaqirsangiz, u <code>Promise</code> qaytaradi. Shuning uchun uni <code>await</code> qilish kerak: <code>let res = await generator.next();</code> — bu holda <code>res</code> <code>{value, done}</code> bo'ladi.</div>
+<pre class="code"><code>async function* gen() {
+  yield 1;
+  yield 2;
+}
+
+(async () =&gt; {
+  let g = gen();
+  console.log(await g.next()); // {value: 1, done: false}
+  console.log(await g.next()); // {value: 2, done: false}
+  console.log(await g.next()); // {value: undefined, done: true}
+})();</code></pre>
+<h2>Generator orqali asinxron iterativ obyekt</h2>
+<p>Sinxron dunyodagidek, asinxron obyektlarni ham generator yordamida ancha soddalashtirish mumkin. <code>Symbol.asyncIterator</code> ni asinxron generator qilib e'lon qilamiz:</p>
+<pre class="code"><code>let range = {
+  from: 1,
+  to: 5,
+
+  // async generator sifatida qisqa yozuv
+  async *[Symbol.asyncIterator]() {
+    for (let value = this.from; value &lt;= this.to; value++) {
+      await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+      yield value;
+    }
+  }
+};
+
+(async () =&gt; {
+  for await (let value of range) {
+    console.log(value); // 1, 2, 3, 4, 5 (kechikish bilan)
+  }
+})();</code></pre>
+<p>Bu variant qo'lda <code>next()</code>, <code>current</code>, <code>last</code> yozishdan ancha qisqa va o'qishga oson. Generator holatni (joriy qiymat, sikl joyi) o'zida avtomatik saqlaydi.</p>
+<div class="tip">Umumiy qoida: agar iteratsiya mantig'i murakkab bo'lsa yoki holatni qo'lda boshqarish zerikarli bo'lsa — generator (sinxron yoki asinxron) yozing. U kodni sezilarli darajada soddalashtiradi.</div>
+<h2>Amaliy misol: sahifama-sahifa ma'lumot yuklash</h2>
+<p>Asinxron generatorlar eng ko'p <strong>sahifalash</strong> (pagination) uchun ishlatiladi. Ko'p API'lar ma'lumotni bo'laklarga (sahifalarga) bo'lib beradi: har so'rov bir sahifa qaytaradi, unda keyingi sahifa manzili (URL) bo'ladi. Asinxron generator bu jarayonni chiroyli inkapsulyatsiya qiladi:</p>
+<pre class="code"><code>// Tasavvur qiling: bu funksiya URL bo'yicha bir sahifani yuklaydi
+// va { items: [...], next: 'keyingi-url yoki null' } qaytaradi.
+async function* fetchCommits(url) {
+  while (url) {
+    const response = await fetch(url); // sahifani so'raymiz
+    const body = await response.json();
+
+    // keyingi sahifa manzilini olamiz
+    url = body.next || null;
+
+    // sahifadagi har bir elementni birma-bir yield qilamiz
+    for (let item of body.items) {
+      yield item;
+    }
+  }
+}
+
+(async () =&gt; {
+  let count = 0;
+  for await (let commit of fetchCommits('https://api.example.com/commits')) {
+    console.log(commit);
+    if (++count &gt;= 100) break; // faqat dastlabki 100 ta kerak
+  }
+})();</code></pre>
+<p>Bu kodning go'zalligi shundaki — foydalanuvchi (<code>for await..of</code> yozgan kod) sahifalash haqida umuman o'ylamaydi. Generator sahifalarni orqa fonda, kerak bo'lganda yuklaydi. <code>break</code> qilinsa, keyingi sahifalar umuman so'ralmaydi — bu tarmoq trafigini tejaydi.</p>
+<div class="note">Bu — <em>dangasa (lazy) yuklash</em>ning kuchli namunasi: ma'lumot faqat <code>for await..of</code> keyingi qiymat so'raganda yuklanadi. Foydalanuvchi 100 elementdan keyin to'xtasa, million elementli manba ham to'liq yuklanmaydi.</div>
+<h2>Qachon asinxron iteratsiya kerak?</h2>
+<p>Asinxron iteratsiyani qachon tanlash kerakligini aniq belgilaymiz:</p>
+<ul><li><strong>Ma'lumot asta-sekin keladi:</strong> tarmoq so'rovlari, fayllarni oqim (stream) sifatida o'qish, ma'lumotlar bazasidan katta natijalarni kursor orqali olish;</li><li><strong>Cheksiz yoki noma'lum uzunlikdagi oqim:</strong> real vaqt hodisalari, WebSocket xabarlari;</li><li><strong>Sahifalash:</strong> API'dan sahifama-sahifa yuklash (yuqoridagi misol);</li><li><strong>Resurslarni tejash:</strong> hamma ma'lumotni bir vaqtda xotiraga yuklash o'rniga, kerakli qismini dangasa olish.</li></ul>
+<p>Agar ma'lumotingiz allaqachon xotirada tayyor bo'lsa (oddiy massiv, string, <code>Map</code>) — asinxron iteratsiya <strong>kerak emas</strong>, oddiy <code>for..of</code> yetarli va tezroq.</p>
+<div class="tip">Qoidani sodda eslang: agar iteratsiyaning <em>har bir qadami</em> kutishni (<code>Promise</code>) talab qilsa — asinxron iteratsiya (<code>for await..of</code>, <code>async function*</code>) ishlating. Aks holda — oddiy iteratsiya.</div>
+<h2>Muhim nozikliklar va tuzoqlar</h2>
+<ul><li><code>for await..of</code> ni sinxron funksiya ichida ishlatib bo'lmaydi — faqat <code>async</code> funksiya ichida yoki top-level modulda;</li><li>Spread <code>...</code> va oddiy <code>for..of</code> asinxron iterativ bilan <strong>ishlamaydi</strong> — ular sinxron <code>Symbol.iterator</code> ni kutadi;</li><li>Asinxron generatorning <code>next()</code> i <code>Promise</code> qaytaradi — qo'lda chaqirsangiz <code>await</code> qiling;</li><li><code>Symbol.asyncIterator</code> va <code>Symbol.iterator</code> ni bir obyektga birga qo'yish mumkin — kontekstga qarab keraklisi tanlanadi.</li></ul>
+<div class="warn">Katta xatolik: asinxron generator ichida <code>await</code> ishlatishni unutmang. Agar asinxronlik kerak bo'lmasa, umuman oddiy (sinxron) generator yozing — <code>async</code> ortiqcha yuk qo'shadi.</div>
+<h2>Xulosa</h2>
+<ul><li>Asinxron iteratsiya ma'lumot <code>Promise</code> lar orqali asta-sekin kelganda ishlatiladi;</li><li>Asinxron iterativ obyektda <code>Symbol.asyncIterator</code> metodi bo'ladi, uning <code>next()</code> i <code>Promise</code> qaytaradi;</li><li>Bunday obyektlarni <code>for await..of</code> sikli bilan aylanamiz (faqat <code>async</code> funksiya ichida);</li><li><code>async function*</code> — asinxron generator; ichida <code>await</code> ishlatish mumkin;</li><li>Asinxron generatorlar sahifalash, oqimlar, cheksiz asinxron ketma-ketliklar uchun ideal;</li><li>Spread <code>...</code> va oddiy <code>for..of</code> asinxron iterativlar bilan ishlamaydi;</li><li>Ma'lumot allaqachon xotirada bo'lsa — oddiy iteratsiya yetarli, asinxroni shart emas.</li></ul>
+<nav class="lesson-nav">
+  <a href="generator.html"><span class="dir">← Oldingi</span><span class="ttl">Generatorlar</span></a>
+  <a class="next" href="modul-kirish.html"><span class="dir">Keyingi →</span><span class="ttl">Modullar, kirish</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

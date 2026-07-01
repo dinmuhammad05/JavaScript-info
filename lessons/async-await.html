@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Async/await — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="async funksiyalar, await, try/catch bilan xatoliklar va top-level await.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a class="active" href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Promise, async/await</div>
+<h1>Async/await</h1>
+<p class="lead"><code>async/await</code> — promise'lar bilan ishlashning eng qulay va zamonaviy usuli. U asinxron kodni <strong>sinxronga o'xshab</strong>, o'qishga oson ko'rinishda yozishga imkon beradi.</p>
+<h2>async funksiyalar</h2>
+<p><code>async</code> so'zini funksiya oldiga qo'yish mumkin. Bu bitta narsani anglatadi: funksiya <strong>doim promise qaytaradi</strong>. Agar funksiya oddiy qiymat qaytarsa, JavaScript uni avtomatik ravishda <em>resolved</em> promise'ga o'raydi.</p>
+<pre class="code"><code>async function f() {
+  return 1;
+}
+
+f().then(console.log); // 1  (1 avtomatik resolved promise'ga o'raldi)</code></pre>
+<p>Ya'ni <code>async function f() { return 1; }</code> aslida <code>return Promise.resolve(1)</code> bilan bir xil. Biz albatta promise'ni ham to'g'ridan-to'g'ri qaytarishimiz mumkin — natija bir xil.</p>
+<p>Sodda misolda buni tekshirib ko'ramiz — async funksiyaning ichidagi <code>console.log</code> sinxron ishlaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>async.js</span></div><textarea spellcheck="false">async function salom() {
+  console.log("Async funksiya ishga tushdi");
+  return "Salom!";
+}
+
+salom(); // funksiya ichidagi log darhol chiqadi
+console.log("Funksiya chaqirildi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Yuqoridagi maydonchada faqat <strong>sinxron</strong> <code>console.log</code>'lar ko'rinadi. <code>return "Salom!"</code> promise'ni resolve qiladi, lekin uni <code>.then</code> bilan olmasak, natija konsolda ko'rinmaydi.</div>
+<h2>await</h2>
+<p><code>await</code> — bu haqiqiy sehr. Uning sintaksisi:</p>
+<pre class="code"><code>// await faqat async funksiya ichida ishlaydi
+let value = await promise;</code></pre>
+<p><code>await</code> so'zi JavaScript'ni promise <strong>yakunlanguncha kutishga</strong> majbur qiladi. Promise resolve bo'lgach, uning natijasini qaytaradi va kod davom etadi.</p>
+<pre class="code"><code>async function f() {
+  let promise = new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve('Tayyor!'), 1000);
+  });
+
+  let result = await promise; // promise yakunlanguncha kutadi (*)
+
+  console.log(result); // 'Tayyor!'
+}
+
+f();</code></pre>
+<p>(*) belgisidagi qatorda funksiya bajarilishi <strong>to'xtaydi</strong> va promise yakunlanishini kutadi. Muhimi — bu kutish paytida JavaScript dvigateli boshqa ishlarni bajaraveradi (boshqa skriptlar, hodisalar). Ya'ni protsessor "band" bo'lmaydi, bu shunchaki chiroyli kutish usuli.</p>
+<p><code>.then</code> bilan solishtirsak, <code>await</code> ancha o'qishga oson. Quyidagi ikki kod bir xil ishni bajaradi:</p>
+<pre class="code"><code>// .then bilan
+function loadUser() {
+  return fetch('/user.json')
+    .then(response =&gt; response.json())
+    .then(user =&gt; user.name);
+}
+
+// async/await bilan (ancha tozaroq)
+async function loadUser() {
+  let response = await fetch('/user.json');
+  let user = await response.json();
+  return user.name;
+}</code></pre>
+<h2>await faqat async ichida</h2>
+<div class="warn"><code>await</code>'ni oddiy (async bo'lmagan) funksiya ichida ishlatib bo'lmaydi — bu <strong>sintaksis xatosi</strong> beradi.</div>
+<pre class="code"><code>function f() {
+  let promise = Promise.resolve(1);
+  let result = await promise; // Syntax error!
+}</code></pre>
+<p>Sabab: <code>await</code> faqat <code>async</code> funksiyaning ichida ma'noga ega, chunki funksiyani "to'xtatib turish" mexanizmi shu yerda mavjud.</p>
+<h2>Top-level await</h2>
+<p>Zamonaviy JavaScript'da (ES modullarida) <code>await</code>'ni funksiyadan tashqarida, modul darajasida ham ishlatish mumkin — buni <strong>top-level await</strong> deyiladi:</p>
+<pre class="code"><code>// modul darajasida (ES module ichida)
+let response = await fetch('/user.json');
+let user = await response.json();
+
+console.log(user);</code></pre>
+<p>Agar top-level await mavjud bo'lmagan muhitda (yoki eski kodda) ishlatmoqchi bo'lsak, odatda kodni anonim async funksiyaga o'raymiz:</p>
+<pre class="code"><code>(async () =&gt; {
+  let response = await fetch('/user.json');
+  let user = await response.json();
+  console.log(user);
+})();</code></pre>
+<h2>Xatoliklar: try/catch</h2>
+<p>Agar promise reject bo'lsa, <code>await</code> o'sha joyda <strong>xato tashlaydi</strong> (throw) — xuddi <code>throw</code> operatori kabi. Shuning uchun uni oddiy <code>try/catch</code> bilan ushlash mumkin:</p>
+<pre class="code"><code>async function f() {
+  try {
+    let response = await fetch('http://no-such-url');
+  } catch (err) {
+    console.log(err); // TypeError: failed to fetch
+  }
+}
+
+f();</code></pre>
+<p>Bir <code>try/catch</code> bir nechta <code>await</code>'ni o'rab, ularning har biridagi xatoni ushlashi mumkin:</p>
+<pre class="code"><code>async function f() {
+  try {
+    let response = await fetch('/no-user-here');
+    let user = await response.json();
+  } catch (err) {
+    // fetch va response.json() xatolarini ushlaydi
+    console.log('Xato ushlandi: ' + err.message);
+  }
+}</code></pre>
+<div class="note">Bu <code>.catch</code>ga qaraganda tabiiyroq: sinxron kod xatolarini qanday ushlasak, asinxron kod xatolarini ham xuddi shunday <code>try/catch</code> bilan ushlaymiz.</div>
+<p>Agar <code>try/catch</code> ishlatmasak, async funksiya qaytargan promise reject bo'ladi. Uni tashqarida <code>.catch</code> bilan ushlashimiz mumkin:</p>
+<pre class="code"><code>async function f() {
+  let response = await fetch('http://no-such-url');
+}
+
+// f() reject qilingan promise qaytaradi
+f().catch(console.log); // TypeError: failed to fetch</code></pre>
+<h2>Promise bilan birga ishlash</h2>
+<p><code>async/await</code> promise'lar bilan yaxshi ishlaydi. Masalan, bir nechta ishni parallel kutish uchun <code>await Promise.all(...)</code> ishlatamiz:</p>
+<pre class="code"><code>async function f() {
+  // ikkala fetch parallel boshlanadi, ikkalasini kutamiz
+  let results = await Promise.all([
+    fetch(url1),
+    fetch(url2),
+    fetch(url3)
+  ]);
+
+  // results — barcha javoblar massivi
+  return results;
+}</code></pre>
+<div class="tip">Agar bir nechta mustaqil so'rovni ketma-ket <code>await</code> qilsangiz, ular <strong>navbatma-navbat</strong> bajariladi (sekin). Ularni <strong>parallel</strong> ishga tushirish uchun <code>Promise.all</code> ichiga joylang — bu ancha tezroq.</div>
+<p><code>await</code> nafaqat promise, balki <em>"thenable"</em> obyektlar (ya'ni <code>.then</code> metodiga ega obyektlar) bilan ham ishlaydi — xuddi <code>promise.then</code> kabi.</p>
+<h2>Xulosa</h2>
+<ul><li><code>async</code> funksiya <strong>doim promise qaytaradi</strong>; oddiy qiymat avtomatik resolved promise'ga o'raladi;</li><li><code>await</code> promise yakunlanguncha kutadi va natijasini qaytaradi;</li><li><code>await</code> faqat <code>async</code> funksiya ichida (yoki ES modul darajasida — top-level await) ishlaydi;</li><li>Xatolarni oddiy <code>try/catch</code> bilan, yoki tashqarida <code>.catch</code> bilan ushlash mumkin;</li><li>Parallel ishlar uchun <code>await Promise.all(...)</code> ishlatiladi;</li><li><code>async/await</code> — <code>.then/.catch</code> zanjirlariga qaraganda ancha o'qishga oson va toza usul.</li></ul>
+<nav class="lesson-nav">
+  <a href="microtask.html"><span class="dir">← Oldingi</span><span class="ttl">Mikrovazifalar (microtasks)</span></a>
+  <a class="next" href="generator.html"><span class="dir">Keyingi →</span><span class="ttl">Generatorlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

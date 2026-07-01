@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinamik importlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="import() ifodasi, uning promise qaytarishi, shartli va kechiktirilgan yuklash hamda statik importlardan farqi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a class="active" href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Modullar</div>
+<h1>Dinamik importlar</h1>
+<p class="lead">Oldingi darslarda ko'rgan <code>import/export</code> — bu <strong>statik</strong> importlar. Ular kuchli, lekin bir necha cheklovlari bor. Ushbu darsda <strong>dinamik</strong> import — <code>import()</code> ifodasini o'rganamiz, u shu cheklovlardan xoli.</p>
+<h2>Statik importlarning cheklovlari</h2>
+<p>Hozirgacha ko'rgan sintaksisga <strong>statik</strong> import deyiladi. Uning quyidagi cheklovlari bor:</p>
+<p><strong>Birinchidan</strong>, modul yo'li dinamik bo'la olmaydi. <code>from</code> dan keyin faqat oddiy string turishi kerak — o'zgaruvchi yoki funksiya chaqiruvi emas:</p>
+<pre class="code"><code>import ... from getModuleName(); // Xatolik! Faqat "string" bo'lishi kerak</code></pre>
+<p><strong>Ikkinchidan</strong>, modulni shart asosida yoki ish vaqtida (runtime) yuklab bo'lmaydi:</p>
+<pre class="code"><code>if (condition) {
+  import ...; // Xatolik! Ruxsat yo'q
+}
+
+{
+  import ...; // Xatolik! Import blok ichida bo'lmasligi kerak
+}</code></pre>
+<p>Buning sababi shundaki, <code>import/export</code> kodning <em>tuzilishini</em> (arxitekturasini) belgilashga mo'ljallangan. Bu juda yaxshi tomon — kod tuzilmasini tahlil qilish, modullarni yig'ish (bundling), ishlatilmaganlarini olib tashlash (tree-shaking) mumkin bo'ladi. Lekin ba'zan bizga moslashuvchanlik kerak bo'ladi.</p>
+<h2>import() ifodasi</h2>
+<p><code>import(module)</code> ifodasi modulni yuklab, uning barcha eksportlarini o'z ichiga olgan modul obyektiga <strong>hal bo'ladigan (resolve) promise</strong> qaytaradi. Uni kodning istalgan joyida chaqirish mumkin:</p>
+<pre class="code"><code>let modulePath = prompt('Qaysi modulni yuklaymiz?');
+
+import(modulePath)
+  .then(obj =&gt; {
+    // &lt;obj&gt; — modul obyekti, uning barcha eksportlari
+  })
+  .catch(err =&gt; {
+    // yuklashda xatolik bo'lsa, masalan modul topilmasa
+  });</code></pre>
+<p><code>import()</code> promise qaytargani uchun uni <code>await</code> bilan ham ishlatish mumkin (async funksiya ichida yoki modulning yuqori darajasida):</p>
+<pre class="code"><code>let module = await import(modulePath);</code></pre>
+<div class="note"><code>import(...)</code> funksiyaga o'xshab ko'rinsa-da, u <strong>oddiy funksiya emas</strong> — bu maxsus sintaksis (huddi <code>super()</code> kabi). Shuning uchun uni o'zgaruvchiga nusxalab bo'lmaydi (<code>let x = import</code> ishlamaydi) yoki <code>call</code>/<code>apply</code> bilan chaqirib bo'lmaydi.</div>
+<h2>Amaliy misol: nomli eksportlarni olish</h2>
+<p>Faraz qilaylik, quyidagi eksportlarga ega modul bor:</p>
+<pre class="code"><code>// 📁 say.js
+export function hi() {
+  alert('Salom!');
+}
+
+export function bye() {
+  alert('Xayr!');
+}</code></pre>
+<p>Dinamik import quyidagicha bo'ladi:</p>
+<pre class="code"><code>let { hi, bye } = await import('./say.js');
+
+hi();  // Salom!
+bye(); // Xayr!</code></pre>
+<p>Yoki modul obyektini butunlayicha olib:</p>
+<pre class="code"><code>let say = await import('./say.js');
+
+say.hi();  // Salom!
+say.bye(); // Xayr!</code></pre>
+<h2>Default eksportni dinamik import qilish</h2>
+<p>Modulda default eksport bo'lsa, u qaytarilgan obyektning <code>default</code> xossasi orqali olinadi:</p>
+<pre class="code"><code>// 📁 say.js
+export default function() {
+  alert('Default eksportdan salom!');
+}</code></pre>
+<pre class="code"><code>// olish:
+let obj = await import('./say.js');
+let say = obj.default;
+// yoki bir qatorda:
+let { default: say } = await import('./say.js');
+
+say(); // Default eksportdan salom!</code></pre>
+<h2>Shartli va kechiktirilgan yuklash</h2>
+<p>Dinamik importning eng katta afzalligi — modulni <strong>faqat kerak bo'lganda</strong> yuklash imkoni. Bu boshlang'ich yuklash hajmini kamaytiradi va sahifani tezroq ochiladi.</p>
+<p>Masalan, foydalanuvchi tugmani bosgandagina og'ir modulni yuklaymiz:</p>
+<pre class="code"><code>button.addEventListener('click', async () =&gt; {
+  // modul faqat bosilganda yuklanadi
+  let { renderChart } = await import('./chart.js');
+  renderChart(data);
+});</code></pre>
+<p>Yoki shart asosida turli modullarni yuklash:</p>
+<pre class="code"><code>async function loadLocale(lang) {
+  let messages;
+  if (lang === 'uz') {
+    messages = await import('./locales/uz.js');
+  } else {
+    messages = await import('./locales/en.js');
+  }
+  return messages.default;
+}</code></pre>
+<div class="tip">Bu naqsh ("lazy loading" — kechiktirilgan yuklash) katta veb-ilovalarda juda foydali. Foydalanuvchi ko'rmaydigan sahifa qismlari (masalan, admin panel yoki kamdan-kam ochiladigan modal oyna) kodi faqat kerak bo'lganda yuklanadi — bu boshlang'ich sahifa yuklanishini sezilarli tezlashtiradi.</div>
+<h2>Dinamik import qaerda ishlaydi?</h2>
+<p>Muhim jihat: <code>import()</code> ifodasi oddiy skriptlarda ham ishlaydi — undan foydalanish uchun <code>type="module"</code> shart emas:</p>
+<pre class="code"><code>&amp;lt;!-- type="module" bo'lmasa ham import() ishlaydi --&amp;gt;
+&amp;lt;script&amp;gt;
+  import('./say.js').then(module =&amp;gt; module.hi());
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="note">Bu statik <code>import</code>dan yana bir farq: statik <code>import</code> faqat modul ichida (<code>type="module"</code>) ishlaydi, dinamik <code>import()</code> esa har qanday joyda ishlaydi.</div>
+<h2>Statik va dinamik import: solishtirma</h2>
+<ul><li><strong>Statik import</strong> (<code>import ... from</code>): faqat fayl yuqori darajasida, blok/shart ichida ishlamaydi, yo'l — doim string konstanta. Modul boshqa hamma narsadan oldin yuklanadi. Kod tuzilmasini aniqlaydi, tahlil qilinadi, tree-shaking'ga qulay;</li><li><strong>Dinamik import</strong> (<code>import()</code>): istalgan joyda, shart va sikllar ichida, yo'l dinamik bo'lishi mumkin. Promise qaytaradi, <code>await</code>/<code>then</code> bilan ishlatiladi. Kechiktirilgan va shartli yuklash uchun ishlatiladi.</li></ul>
+<div class="warn">Dinamik importni oddiy import o'rniga <em>hamma joyda</em> ishlatishga shoshilmang. Statik importlar kod tuzilmasini ravshan qiladi va vositalar tomonidan yaxshiroq optimallashtiriladi. Dinamik importni faqat unga haqiqiy ehtiyoj bo'lganda — dinamik yo'l yoki kechiktirilgan/shartli yuklash kerak bo'lganda ishlating.</div>
+<h2>Xulosa</h2>
+<ul><li><code>import(module)</code> — modulni yuklab, eksportlar obyektiga hal bo'ladigan <strong>promise</strong> qaytaruvchi ifoda;</li><li>Uni kodning istalgan joyida chaqirish mumkin (shart, blok, funksiya ichida);</li><li><code>await import(...)</code> yoki <code>.then(...)</code> bilan natijani olamiz;</li><li>Default eksport <code>obj.default</code> orqali olinadi;</li><li>Statik <code>import</code>dan farqi: yo'l dinamik bo'lishi mumkin, <code>type="module"</code> talab qilmaydi, kod tuzilmasini emas — ish vaqtidagi (runtime) yuklashni belgilaydi;</li><li>Asosiy foyda — modullarni <strong>faqat kerak bo'lganda</strong> yuklab, ilovani tezlashtirish (lazy loading).</li></ul>
+<nav class="lesson-nav">
+  <a href="export-import.html"><span class="dir">← Oldingi</span><span class="ttl">Eksport va Import</span></a>
+  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

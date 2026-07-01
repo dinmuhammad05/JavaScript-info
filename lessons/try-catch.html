@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xatoliklarni boshqarish, try...catch — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="try...catch...finally, Error obyekti, throw operatori va o'z xatoliklaringizni tashlash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a class="active" href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Xatoliklarni boshqarish</div>
+<h1>Xatoliklarni boshqarish, try...catch</h1>
+<p class="lead">Kod qanchalik yaxshi yozilmasin, xatolar muqarrar. Sababi ko'p: bizning xatomiz, kutilmagan foydalanuvchi kiritmasi, noto'g'ri server javobi va yana minglab holatlar. Odatda xato bo'lganda skript "o'ladi" (to'xtaydi) va konsolga xato chiqadi. Ammo <code>try...catch</code> sintaksisi bunday xatolarni "ushlab olib", skriptni to'xtatmasdan, oqilona harakat qilishga imkon beradi.</p>
+<h2>try...catch sintaksisi</h2>
+<p><code>try...catch</code> konstruksiyasi ikki asosiy blokdan iborat: <code>try</code> va so'ng <code>catch</code>:</p>
+<pre class="code"><code>try {
+
+  // kod...
+
+} catch (err) {
+
+  // xatoni qayta ishlash
+
+}</code></pre>
+<p>U quyidagicha ishlaydi:</p>
+<ol><li>Avval <code>try {...}</code> ichidagi kod bajariladi;</li><li>Agar xato bo'lmasa, <code>catch(err)</code> bloki e'tiborsiz qoldiriladi: bajarilish <code>try</code> oxiriga yetadi va <code>catch</code>dan sakrab o'tadi;</li><li>Agar xato yuz bersa, <code>try</code> bajarilishi <em>o'sha joyda</em> to'xtaydi va boshqaruv <code>catch(err)</code> blokining boshiga o'tadi. <code>err</code> o'zgaruvchisi (istalgan nom bo'lishi mumkin) nima yuz berganini tavsiflovchi <em>xato obyektini</em> saqlaydi.</li></ol>
+<p>Shunday qilib, <code>try {...}</code> ichidagi xato skriptni o'ldirmaydi — bizda uni <code>catch</code> ichida qayta ishlash imkoni bor.</p>
+<p>Xatosiz misol — <code>catch</code> umuman ishlamaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>xatosiz.js</span></div><textarea spellcheck="false">try {
+  console.log("try blokining boshi");    // (1)
+  // ... bu yerda xato yo'q ...
+  console.log("try blokining oxiri");     // (2)
+} catch (err) {
+  console.log("catch e'tiborsiz qoldirildi, chunki xato yo'q"); // (3)
+}
+console.log("...so'ng kod davom etadi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Endi xatoli misol:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>xatoli.js</span></div><textarea spellcheck="false">try {
+  console.log("try blokining boshi");         // (1)
+  qandaydirYoqNarsa;  // XATO: o'zgaruvchi aniqlanmagan!
+  console.log("try blokining oxiri (bajarilmaydi)"); // (2)
+} catch (err) {
+  console.log("catch ishga tushdi, xatoni ushladik"); // (3)
+}
+console.log("...so'ng skript o'lmasdan davom etadi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>E'tibor bering: xatodan keyingi <code>(2)</code> qatori umuman bajarilmadi. JavaScript darhol <code>catch</code>ga sakradi, skriptni butunlay to'xtatmadi.</p>
+<h2>try...catch faqat runtime xatolar uchun ishlaydi</h2>
+<p><code>try...catch</code> ishlashi uchun kod bajarilayotgan ("runnable") bo'lishi shart. Ya'ni u to'g'ri JavaScript bo'lishi kerak.</p>
+<div class="warn">Agar kod sintaktik jihatdan noto'g'ri bo'lsa (masalan, yopilmagan qavs — <code>{{{{</code>), <code>try...catch</code> yordam bermaydi. JavaScript dvigateli avval kodni o'qiydi (parse qiladi), so'ng ishga tushiradi. Parse bosqichida topilgan xatolar "parse-time" xatolari deb ataladi va ular <code>try...catch</code> ichida ushlanmaydi — chunki dvigatel bu kodni tushunmaydi.</div>
+<p>Demak, <code>try...catch</code> faqat to'g'ri kodda yuz beradigan xatolarni ushlaydi. Bunday xatolar <em>"runtime errors"</em> (ishga tushish paytidagi xatolar) yoki ba'zan <em>"exceptions"</em> (istisnolar) deb ataladi.</p>
+<h2>try...catch sinxron ishlaydi</h2>
+<p>Agar xato "rejalashtirilgan" kodda (masalan, <code>setTimeout</code> ichida) yuz bersa, uni <code>try...catch</code> ushlay olmaydi:</p>
+<pre class="code"><code>try {
+  setTimeout(function() {
+    noSuchVariable; // skript bu yerda to'xtaydi
+  }, 1000);
+} catch (err) {
+  console.log("ushlanmaydi!");
+}</code></pre>
+<p>Chunki <code>setTimeout</code> ichidagi funksiya keyinroq, dvigatel <code>try...catch</code> konstruksiyasidan allaqachon chiqib ketgandan so'ng bajariladi. Xatoni ushlash uchun <code>try...catch</code> aynan o'sha funksiya ichida bo'lishi kerak:</p>
+<pre class="code"><code>setTimeout(function() {
+  try {
+    noSuchVariable; // endi try...catch xatoni ushlaydi!
+  } catch (err) {
+    console.log("xato bu yerda ushlandi");
+  }
+}, 1000);</code></pre>
+<div class="note">Asinxron kod (<code>async/await</code>) bilan ishlaganda ham xuddi shu qoida amal qiladi, u haqda keyingi boblarda batafsil to'xtalamiz.</div>
+<h2>Error obyekti</h2>
+<p>Xato yuz berganda, JavaScript uni tavsiflovchi <em>obyekt</em> yaratadi. So'ng bu obyekt <code>catch</code>ga argument sifatida uzatiladi:</p>
+<pre class="code"><code>try {
+  // ...
+} catch (err) { // &lt;-- "xato obyekti", boshqa nom ham berilsa bo'ladi
+  // ...
+}</code></pre>
+<p>O'rnatilgan xatolar uchun error obyekti ikkita asosiy xususiyatga ega:</p>
+<ul><li><code>name</code> — xato nomi. Masalan, aniqlanmagan o'zgaruvchi uchun bu <code>"ReferenceError"</code> bo'ladi;</li><li><code>message</code> — xato tafsiloti haqidagi matnli xabar.</li></ul>
+<p>Ko'p muhitlarda yana bir standart bo'lmagan, lekin keng qo'llab-quvvatlanadigan xususiyat bor:</p>
+<ul><li><code>stack</code> — xatoga olib kelgan chaqiruvlar ketma-ketligi (call stack). Debugging uchun juda foydali.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>error-obyekti.js</span></div><textarea spellcheck="false">try {
+  noSuchVariable; // aniqlanmagan o'zgaruvchi
+} catch (err) {
+  console.log("name:", err.name);       // ReferenceError
+  console.log("message:", err.message); // noSuchVariable is not defined
+  // stack — chaqiruvlar zanjiri (uzun matn):
+  console.log("stack (birinchi qator):", String(err.stack).split("\n")[0]);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Xato obyektini butunicha ham chiqarish mumkin: <code>console.log(err)</code> yoki matn sifatida <code>console.log(err + "")</code> — u <code>name: message</code> ko'rinishida chiqadi.</div>
+<h2>Amaliy misol: JSON.parse xatosi</h2>
+<p>Amalda <code>try...catch</code> eng ko'p ma'lumotni o'qiyotganda kerak bo'ladi. Masalan, serverdan yoki foydalanuvchidan kelgan JSON matnini <code>JSON.parse</code> bilan tahlil qilamiz. Agar matn buzuq bo'lsa, <code>JSON.parse</code> xato tashlaydi va skript to'xtaydi. Buni oldini olamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>json-parse.js</span></div><textarea spellcheck="false">let json = "{ buzuq json }"; // noto'g'ri JSON
+
+try {
+  let user = JSON.parse(json); // &lt;-- bu yerda xato
+  console.log(user.name);      // bajarilmaydi
+} catch (err) {
+  console.log("Ma'lumotlarda xatolik bor, qayta urinib ko'ramiz.");
+  console.log("Xato turi:", err.name);
+  console.log("Tafsilot:", err.message);
+}
+console.log("Skript o'lmadi — davom etyapmiz.");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Endi to'g'ri JSON bilan solishtiring — <code>catch</code> ishlamaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>json-togri.js</span></div><textarea spellcheck="false">let json = '{"name": "Ali", "age": 30}'; // to'g'ri JSON
+
+try {
+  let user = JSON.parse(json);
+  console.log("Ism:", user.name);
+  console.log("Yosh:", user.age);
+} catch (err) {
+  console.log("Bu blok bajarilmaydi");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>throw operatori — o'z xatolaringizni tashlash</h2>
+<p>Yuqoridagi JSON misolida qiziq holat bor: JSON matni to'g'ri bo'lishi mumkin, lekin unda kerakli maydon (masalan, <code>name</code>) yo'q bo'lishi mumkin. Bunda <code>JSON.parse</code> xato tashlamaydi — chunki JSON o'zi haqiqiy. Lekin biz uchun bu <em>xato</em>. Bunday holatlarni o'zimiz aniqlab, <em>o'z xatomizni</em> tashlashimiz kerak. Buning uchun <code>throw</code> operatori ishlatiladi.</p>
+<pre class="code"><code>throw &amp;lt;xato obyekti&amp;gt;</code></pre>
+<p>Texnik jihatdan istalgan qiymatni <code>throw</code> bilan tashlash mumkin (son, satr), lekin eng yaxshi amaliyot — <code>Error</code> yoki uning avlodlaridan foydalanish. JavaScriptda standart o'rnatilgan xato konstruktorlari bor:</p>
+<ul><li><code>Error</code> — umumiy xato;</li><li><code>SyntaxError</code> — sintaktik xato (masalan, buzuq JSON);</li><li><code>ReferenceError</code> — aniqlanmagan o'zgaruvchiga murojaat;</li><li><code>TypeError</code> — noto'g'ri turdagi qiymat bilan amal;</li><li><code>RangeError</code> — ruxsat etilgan diapazondan chiqib ketish.</li></ul>
+<p>Ularning barchasi bir xil chaqiriladi — argument sifatida <code>message</code> beriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>error-yaratish.js</span></div><textarea spellcheck="false">let error = new Error("Nimadir noto'g'ri ketdi o_O");
+
+console.log(error.name);    // Error
+console.log(error.message); // Nimadir noto'g'ri ketdi o_O
+
+let te = new TypeError("noto'g'ri tur");
+console.log(te.name);       // TypeError
+console.log(te.message);    // noto'g'ri tur</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Endi <code>throw</code> yordamida to'liq misolni ko'ramiz — JSON to'g'ri, lekin <code>name</code> maydoni yo'q:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>throw-misol.js</span></div><textarea spellcheck="false">let json = '{"age": 30}'; // JSON to'g'ri, lekin "name" yo'q
+
+try {
+  let user = JSON.parse(json); // xato yo'q — JSON haqiqiy
+
+  if (!user.name) {
+    throw new SyntaxError("Ma'lumot to'liq emas: name maydoni yo'q"); // &lt;-- o'zimiz tashlaymiz
+  }
+
+  console.log(user.name); // bajarilmaydi
+} catch (err) {
+  console.log("JSON Xato: " + err.message);
+  // JSON Xato: Ma'lumot to'liq emas: name maydoni yo'q
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Diqqat qiling: <code>catch</code> bloki ikkala turdagi xatoni ham ushlaydi — <code>JSON.parse</code> tashlaganini ham, biz <code>throw</code> qilganimizni ham. Bu juda qulay: bitta joyda barcha xatolar bilan ishlaymiz.</p>
+<h2>Qayta tashlash (rethrowing)</h2>
+<p>Yuqoridagi <code>catch</code> hamma xatolarni ushlaydi. Lekin bu muammo tug'diradi: <code>catch(err)</code> <em>faqat</em> biz kutgan xatoni (to'liq emas ma'lumot) qayta ishlashi kerak edi. Agar u yerda kutilmagan boshqa xato bo'lsa-chi? Masalan, biz kod yozishda xato qilib, aniqlanmagan o'zgaruvchini chaqirsak — bu <code>ReferenceError</code>ni ham "JSON Xato" deb ko'rsatib qo'yamiz, bu esa debugging'ni qiyinlashtiradi.</p>
+<p>Yechim <em>"qayta tashlash"</em> (rethrowing) texnikasi: <code>catch</code> faqat o'zi biladigan xatolarni qayta ishlaydi, qolganlarini esa <code>throw err</code> orqali "yuqoriga" uzatadi.</p>
+<ol><li><code>catch</code> hamma xatoni oladi;</li><li><code>catch (err) {...}</code> blokida biz <code>err</code>ni tekshiramiz — bu qanday xato?;</li><li>Agar biz uni qanday qayta ishlashni bilmasak — <code>throw err</code> qilamiz.</li></ol>
+<p>Odatda tur <code>instanceof</code> operatori bilan tekshiriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>rethrow.js</span></div><textarea spellcheck="false">let json = '{"age": 30}';
+
+try {
+  let user = JSON.parse(json);
+
+  if (!user.name) {
+    throw new SyntaxError("Ma'lumot to'liq emas");
+  }
+
+  blabla(); // kutilmagan xato (funksiya yo'q -&gt; ReferenceError)
+
+  console.log(user.name);
+} catch (err) {
+  if (err instanceof SyntaxError) {
+    console.log("JSON Xato: " + err.message);
+  } else {
+    console.log("Bu men kutmagan xato, uni qayta tashlayman.");
+    throw err; // &lt;-- xatoni yuqoriga uzatamiz
+  }
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Yuqorida <code>blabla()</code> mavjud emas, shuning uchun <code>ReferenceError</code> yuz beradi. U <code>SyntaxError</code> emas, shuning uchun <code>throw err</code> ishga tushadi va xato "yuqoriga" tashlanadi. Agar bu <code>try...catch</code> tashqarisida yana bir <code>try...catch</code> bo'lsa, xatoni o'sha ushlaydi. Aks holda skript to'xtaydi.</p>
+<div class="tip">Rethrowing qoidasi: <code>catch</code> faqat o'zi tushunadigan xatolar bilan ishlashi, boshqalarini esa qayta tashlashi kerak. Bu "begona" xatolarni yashirib qo'yishning oldini oladi.</div>
+<h2>try...catch...finally</h2>
+<p><code>try...catch</code>ning to'liq shakli yana bir ixtiyoriy blokka ega — <code>finally</code>. Agar u mavjud bo'lsa, u <em>har doim</em> bajariladi:</p>
+<ul><li><code>try</code> muvaffaqiyatli tugaganda — <code>finally</code> ishlaydi;</li><li><code>try</code>da xato bo'lganda va <code>catch</code> ishlaganda ham — <code>finally</code> ishlaydi.</li></ul>
+<pre class="code"><code>try {
+  // ... kodni bajarishga urinamiz ...
+} catch (err) {
+  // ... xatolarni qayta ishlaymiz ...
+} finally {
+  // ... har doim bajariladi ...
+}</code></pre>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>finally.js</span></div><textarea spellcheck="false">try {
+  console.log("try boshlandi");
+  throw new Error("biror xato");
+} catch (err) {
+  console.log("catch: xato ushlandi -&gt; " + err.message);
+} finally {
+  console.log("finally: bu HAR DOIM ishlaydi");
+}
+// Tartib: try boshlandi -&gt; catch -&gt; finally</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>finally</code> odatda biror ishni boshlaganimizda va uni xato bo'ladimi-yo'qmi, baribir yakunlashimiz kerak bo'lganda ishlatiladi — masalan, o'lchashni to'xtatish, ulanishni yopish, yuklanish indikatorini o'chirish.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>finally-vaqt.js</span></div><textarea spellcheck="false">let start = Date.now();
+
+function hisobla(n) {
+  if (n &lt; 0) {
+    throw new RangeError("n manfiy bo'lmasligi kerak");
+  }
+  let natija = 1;
+  for (let i = 1; i &lt;= n; i++) natija *= i;
+  return natija;
+}
+
+try {
+  console.log("Natija:", hisobla(-5)); // xato tashlaydi
+} catch (err) {
+  console.log("Xato:", err.message);
+} finally {
+  let end = Date.now();
+  console.log("O'lchash yakunlandi. Ish vaqti (ms):", end - start);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>finally</code> hatto <code>try</code> yoki <code>catch</code> ichida <code>return</code> bo'lsa ham ishlaydi! <code>return</code> qiymatni tayyorlaydi, lekin funksiya haqiqatan chiqishidan oldin <code>finally</code> bajariladi.</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>finally-return.js</span></div><textarea spellcheck="false">function test() {
+  try {
+    console.log("try ichida");
+    return "try natijasi";
+  } finally {
+    console.log("finally: return dan OLDIN ishladi");
+  }
+}
+
+console.log("Qaytgan qiymat:", test());
+// try ichida
+// finally: return dan OLDIN ishladi
+// Qaytgan qiymat: try natijasi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>catch</code> blokini tushirib qoldirsa ham bo'ladi: <code>try...finally</code> shaklida. Bunda xatolar ushlanmaydi (yuqoriga tashlanadi), lekin <code>finally</code> baribir ishlaydi — masalan, tozalash uchun.</div>
+<h2>Global catch (qisqacha)</h2>
+<p>Agar <code>try...catch</code> tashqarisida o'lik xato yuz bersa, skript "o'ladi". Ba'zan bunday <em>ushlanmagan</em> xatolarni bir joyda umumiy tarzda ushlash foydali — masalan, jurnalga yozish (log) yoki foydalanuvchiga xabar berish uchun.</p>
+<p>Muhitga qarab mexanizm boshqacha:</p>
+<ul><li><strong>Brauzer</strong>: <code>window.onerror = function(message, url, line, col, error) {...}</code> — global xato ishlovchisi;</li><li><strong>Node.js</strong>: <code>process.on("uncaughtException", function(err) {...})</code> — ushlanmagan istisnolar uchun.</li></ul>
+<div class="warn">Global ushlagich — <em>oxirgi chora</em>. U skriptni to'liq "tuzatmaydi": xato allaqachon yuz bergan, dastur holati buzuq bo'lishi mumkin. Uni asosan xatolarni qayd qilish (logging) va monitoring xizmatlariga (masalan, Sentry) yuborish uchun ishlating, dasturning oddiy oqimi uchun emas.</div>
+<h2>Xulosa</h2>
+<ul><li><code>try...catch</code> <em>runtime</em> xatolarni ushlaydi: <code>try</code>da xato bo'lsa, boshqaruv <code>catch</code>ga o'tadi va skript to'xtamaydi;</li><li>U <em>sinxron</em> ishlaydi va <em>parse-time</em> (sintaktik) xatolarni ushlamaydi;</li><li><strong>Error obyekti</strong>ning asosiy xususiyatlari: <code>name</code>, <code>message</code>, <code>stack</code>;</li><li><code>throw</code> operatori bilan o'z xatolarimizni tashlaymiz — eng yaxshisi <code>new Error(...)</code> yoki uning turlari;</li><li><strong>Rethrowing</strong>: <code>catch</code> faqat o'zi biladigan xatolarni ishlatadi, boshqalarini <code>throw err</code> orqali qayta tashlaydi;</li><li><code>finally</code> bloki har doim (return bo'lsa ham) ishlaydi — tozalash uchun ideal;</li><li>Ushlanmagan xatolar uchun <em>global</em> ishlovchi (brauzerda <code>window.onerror</code>, Node.js'da <code>uncaughtException</code>) mavjud.</li></ul>
+<nav class="lesson-nav">
+  <a href="mixin.html"><span class="dir">← Oldingi</span><span class="ttl">Mixinlar</span></a>
+  <a class="next" href="custom-error.html"><span class="dir">Keyingi →</span><span class="ttl">Maxsus xatoliklar, Error'ni kengaytirish</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

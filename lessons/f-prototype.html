@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F.prototype — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Konstruktor funksiyaning prototype xossasi, new bilan bog'liqligi, default prototype va constructor.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a class="active" href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Prototiplar, meros</div>
+<h1>F.prototype</h1>
+<p class="lead">Yangi obyektlarni <code>new F()</code> ko'rinishidagi konstruktor funksiya orqali yaratishimiz mumkinligini eslaysiz. Agar konstruktor funksiyaning <code>prototype</code> xossasi obyektga teng bo'lsa, <code>new</code> operatori undan yangi obyektlarning <code>[[Prototype]]</code> sini o'rnatish uchun foydalanadi.</p>
+<div class="warn">Bu yerda ikkita turli tushunchani chalkashtirmang: <code>F.prototype</code> — bu oddiy funksiyaning oddiy xossasi (nomi shunchaki "prototype"). U obyektning yashirin <code>[[Prototype]]</code> xossasi bilan bir xil narsa EMAS, lekin ular o'zaro bog'liq.</div>
+<h2>F.prototype qanday ishlaydi?</h2>
+<p>Ideya sodda: agar <code>new F()</code> orqali obyekt yaratilsa va <code>F.prototype</code> obyekt bo'lsa, unda <code>new</code> operatori yangi obyektning <code>[[Prototype]]</code> sini <code>F.prototype</code> ga tenglashtiradi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-basic.js</span></div><textarea spellcheck="false">let animal = {
+  eats: true
+};
+
+function Rabbit(name) {
+  this.name = name;
+}
+
+Rabbit.prototype = animal;
+
+let rabbit = new Rabbit("Oq quyon");
+
+console.log(rabbit.name);  // Oq quyon (o'zidan)
+console.log(rabbit.eats);  // true (prototipdan = animal)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>Rabbit.prototype = animal</code> qatori shuni bildiradi: "<code>new Rabbit</code> orqali yasalgan har bir obyektning prototipi <code>animal</code> bo'lsin". Shuning uchun <code>rabbit.eats</code> zanjir orqali <code>animal</code> obyektidan topiladi.</p>
+<div class="note"><code>F.prototype</code> faqat <code>new F()</code> chaqirilgan PAYTDA ishlatiladi. Undan keyin uning qiymatini o'zgartirsangiz, avval yaratilgan obyektlar eski prototipini saqlab qoladi, faqat yangi obyektlar yangisini oladi.</div>
+<h2>Default F.prototype va constructor</h2>
+<p>Har bir funksiyada standart (default) <code>prototype</code> xossasi mavjud — biz uni belgilamasak ham. Bu default <code>prototype</code> — faqat bitta <code>constructor</code> xossasidan iborat obyekt bo'lib, <code>constructor</code> funksiyaning o'ziga qaytib ishora qiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-constructor.js</span></div><textarea spellcheck="false">function Rabbit() {}
+// default: Rabbit.prototype = { constructor: Rabbit }
+
+console.log(Rabbit.prototype.constructor === Rabbit); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu <code>constructor</code> xossasi obyektlarga meros orqali o'tadi. Shuning uchun yaratilgan obyektdan ham <code>constructor</code> ga murojaat qilib, uni yaratgan funksiyani topish mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-obj-constructor.js</span></div><textarea spellcheck="false">function Rabbit() {}
+
+let rabbit = new Rabbit();
+
+// rabbit'da constructor yo'q, u prototipdan (Rabbit.prototype) keladi:
+console.log(rabbit.constructor === Rabbit); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>constructor</code> yordamida mavjud obyekt turini bilmasak ham, xuddi shunday yangi obyekt yaratishimiz mumkin: <code>let rabbit2 = new rabbit.constructor("...");</code>. Bu ba'zan obyektni yasagan funksiya noma'lum bo'lgan holatlarda foydali bo'ladi.</div>
+<h2>constructor'ni yo'qotib qo'yish xavfi</h2>
+<p>JavaScript <code>constructor</code> ning to'g'ri qiymatini kafolatlamaydi. Agar biz default <code>prototype</code> ni to'liq yangi obyekt bilan ALMASHTIRSAK, undagi <code>constructor</code> yo'qoladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-lost.js</span></div><textarea spellcheck="false">function Rabbit() {}
+
+Rabbit.prototype = {
+  jumps: true
+};
+
+let rabbit = new Rabbit();
+
+// endi constructor Rabbit'ga ishora qilmaydi!
+console.log(rabbit.constructor === Rabbit); // false
+// u Object'ga ishora qiladi (chunki {jumps:true} oddiy obyekt):
+console.log(rabbit.constructor === Object); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bunday xatoning oldini olishning ikki yo'li bor. Birinchisi — butun obyektni almashtirmasdan, xossalarni birma-bir qo'shish; ikkinchisi — obyektni almashtirganda <code>constructor</code> ni qo'lda tiklab qo'yish:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-fix.js</span></div><textarea spellcheck="false">function Rabbit() {}
+
+// 1-usul: xossani qo'shamiz, almashtirmaymiz
+Rabbit.prototype.jumps = true;
+// bu holda default constructor saqlanadi
+
+function Hare() {}
+// 2-usul: almashtiramiz, lekin constructor'ni tiklaymiz
+Hare.prototype = {
+  jumps: true,
+  constructor: Hare
+};
+
+console.log(new Rabbit().constructor === Rabbit); // true
+console.log(new Hare().constructor === Hare);     // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Amalda <code>constructor</code> xossasiga ko'p tayanmaslik ma'qul, chunki uni buzib qo'yish oson. Lekin uning qanday ishlashini bilish, ayniqsa boshqa kishilarning kodini o'qiganda, muhim.</div>
+<h2>F.prototype — faqat new paytida</h2>
+<p>Yana bir bor ta'kidlaymiz: <code>F.prototype</code> xossasi obyekt yaratilayotgan aniq bir onda ishlatiladi. Agar keyin <code>F.prototype</code> boshqa obyektga o'zgartirilsa, bu allaqachon mavjud obyektlarga ta'sir qilmaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-timing.js</span></div><textarea spellcheck="false">function Rabbit() {}
+Rabbit.prototype = { eats: true };
+
+let oldRabbit = new Rabbit(); // prototipi = {eats:true}
+
+// endi prototipni o'zgartiramiz:
+Rabbit.prototype = { eats: false };
+
+let newRabbit = new Rabbit(); // prototipi = {eats:false}
+
+console.log(oldRabbit.eats); // true (eski prototip)
+console.log(newRabbit.eats); // false (yangi prototip)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Xulosa</h2>
+<ul><li><code>F.prototype</code> — funksiyaning oddiy xossasi (yashirin <code>[[Prototype]]</code> emas);</li><li><code>new F()</code> yangi obyekt yaratganda uning <code>[[Prototype]]</code> sini <code>F.prototype</code> ga tenglashtiradi;</li><li><code>F.prototype</code> obyekt bo'lishi kerak, aks holda <code>new</code> uni e'tiborsiz qoldiradi;</li><li>Har bir funksiyaning default <code>prototype</code> si <code>{ constructor: F }</code> ko'rinishida bo'ladi;</li><li><code>constructor</code> obyektlarga meros orqali o'tadi va ularni yaratgan funksiyaga ishora qiladi;</li><li>Default <code>prototype</code> ni to'liq almashtirsangiz, <code>constructor</code> yo'qoladi — uni qo'lda tiklang.</li></ul>
+<nav class="lesson-nav">
+  <a href="prototip-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Prototipli meros</span></a>
+  <a class="next" href="native-prototype.html"><span class="dir">Keyingi →</span><span class="ttl">Tug'ma prototiplar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

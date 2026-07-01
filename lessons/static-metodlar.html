@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statik xossa va metodlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="static metodlar, statik xossalar, factory metodlar va statik meros.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a class="active" href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Klasslar</div>
+<h1>Statik xossa va metodlar</h1>
+<p class="lead">Metodni obyektning emas, balki klassning o'ziga (funksiyasiga) biriktirish mumkin. Bunday metodlar <strong>statik</strong> (static) deb ataladi.</p>
+<h2>Statik metodlar</h2>
+<p>Statik metod <code>static</code> kalit so'zi bilan e'lon qilinadi. U klass obyektlariga emas, balki <strong>klassning o'ziga</strong> tegishli bo'ladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-basic.js</span></div><textarea spellcheck="false">class User {
+  static staticMethod() {
+    return "Statik metod. this === " + this.name;
+  }
+}
+
+// klassning o'zida chaqiriladi, obyektda emas:
+console.log(User.staticMethod());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu aslida quyidagini yozishga teng:</p>
+<pre class="code"><code>class User {}
+User.staticMethod = function() {
+  return "...";
+};</code></pre>
+<p>Statik metod ichidagi <code>this</code> — bu klassning o'zi (konstruktor funksiya). Odatda statik metodlar obyektlar ustida emas, balki butun klass darajasida ishlaydigan mantiq uchun ishlatiladi.</p>
+<div class="warn">Statik metodni obyekt orqali chaqira olmaysiz. Masalan, <code>new User().staticMethod()</code> xato beradi (<em>is not a function</em>), chunki statik metod obyektda emas, klassdadir.</div>
+<h2>Amaliy misol: taqqoslash</h2>
+<p>Statik metodlar ko'pincha obyektlarni taqqoslash yoki ular ustida umumiy amallar bajarish uchun ishlatiladi. Masalan, maqolalarni sanasi bo'yicha saralaymiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-compare.js</span></div><textarea spellcheck="false">class Article {
+  constructor(title, date) {
+    this.title = title;
+    this.date = date;
+  }
+
+  static compare(a, b) {
+    return a.date - b.date;
+  }
+}
+
+let articles = [
+  new Article("HTML", new Date(2019, 1, 1)),
+  new Article("CSS", new Date(2019, 0, 1)),
+  new Article("JS", new Date(2019, 11, 1))
+];
+
+// klass metodi orqali saralaymiz:
+articles.sort(Article.compare);
+
+console.log(articles[0].title); // eng erta sana</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>Article.compare</code> maqolalar "ustidagi" umumiy vosita — bir maqolaga tegishli emas, shuning uchun uni statik qilish mantiqiy.</p>
+<h2>Factory (fabrika) metodlar</h2>
+<p>Yana bir keng tarqalgan qo'llanish — obyekt yaratishning turli usullarini beruvchi <strong>factory metod</strong>. Masalan, maqolani bugungi sana bilan yaratuvchi metod:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-factory.js</span></div><textarea spellcheck="false">class Article {
+  constructor(title, date) {
+    this.title = title;
+    this.date = date;
+  }
+
+  // factory metod: bugungi maqola
+  static createTodays() {
+    // this === Article
+    return new this("Bugungi yangilik", new Date());
+  }
+}
+
+let article = Article.createTodays();
+console.log(article.title);
+console.log(article.date instanceof Date);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Endi "bugungi maqola" kerak bo'lganda, har safar sana yaratish o'rniga <code>Article.createTodays()</code>ni chaqirsak yetarli. Bu yerda <code>this</code> — <code>Article</code> klassi, shuning uchun <code>new this(...)</code> to'g'ri klassni yaratadi.</p>
+<h2>Statik xossalar</h2>
+<p>Statik xossalar ham mavjud — ular oddiy klass xossalariga o'xshaydi, faqat oldiga <code>static</code> qo'yiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-property.js</span></div><textarea spellcheck="false">class Article {
+  static publisher = "Ilim Nashriyoti";
+}
+
+console.log(Article.publisher);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu quyidagini yozishga teng: <code>Article.publisher = "Ilim Nashriyoti"</code>. Statik xossa butun klassga tegishli bo'lgan qiymatlarni (masalan, umumiy sozlamalar yoki hisoblagichlar) saqlash uchun qulay.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-counter.js</span></div><textarea spellcheck="false">class Counter {
+  static count = 0;
+  constructor() {
+    Counter.count++;
+  }
+}
+
+new Counter();
+new Counter();
+new Counter();
+console.log("Yaratilgan obyektlar soni: " + Counter.count);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Statik xossa va metodlar merosi</h2>
+<p>Statik xossa va metodlar ham meros olinadi! Bu <code>extends</code>ning muhim xususiyati. Ya'ni <code>Rabbit extends Animal</code> qilinganda, <code>Rabbit</code> nafaqat oddiy metodlarni, balki statik metodlarni ham oladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit.js</span></div><textarea spellcheck="false">class Animal {
+  static planet = "Yer";
+  constructor(name) { this.name = name; }
+  static compare(a, b) { return a.name.localeCompare(b.name); }
+}
+
+class Rabbit extends Animal {}
+
+// statik metod meros olindi:
+let r1 = new Rabbit("Bobi");
+let r2 = new Rabbit("Alfa");
+console.log(Rabbit.compare(r1, r2));
+
+// statik xossa ham meros olindi:
+console.log(Rabbit.planet);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu qanday ishlaydi? <code>extends</code> ikkita prototip bog'lanishini o'rnatadi:</p>
+<ul><li><code>Rabbit.prototype.[[Prototype]]</code> — <code>Animal.prototype</code>ga (oddiy metodlar uchun);</li><li><code>Rabbit.[[Prototype]]</code> — <code>Animal</code>ga (statik metodlar uchun).</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit-proto.js</span></div><textarea spellcheck="false">class Animal {}
+class Rabbit extends Animal {}
+
+// Rabbit'ning [[Prototype]]si Animal:
+console.log(Object.getPrototypeOf(Rabbit) === Animal);
+// Rabbit.prototype'ning [[Prototype]]si Animal.prototype:
+console.log(Object.getPrototypeOf(Rabbit.prototype) === Animal.prototype);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Statik metodlar butun klass bilan bog'liq bo'lgan, aniq bir obyektga bog'lanmagan funksiyalar uchun ishlatiladi. Masalan, <code>Object.keys(...)</code>, <code>Array.from(...)</code> — bular ham statik metodlardir.</div>
+<h2>Xulosa</h2>
+<ul><li>Statik metodlar <code>static</code> bilan e'lon qilinadi va klassning o'zida chaqiriladi (obyektda emas);</li><li>Ular ichidagi <code>this</code> — klassning o'zi;</li><li>Statik metodlar taqqoslash va factory (obyekt yaratish) mantiqi uchun qulay;</li><li>Statik xossalar butun klassga tegishli qiymatlarni saqlaydi;</li><li>Statik xossa va metodlar ham <code>extends</code> orqali meros olinadi.</li></ul>
+<nav class="lesson-nav">
+  <a href="klass-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Klass merosi</span></a>
+  <a class="next" href="private-protected.html"><span class="dir">Keyingi →</span><span class="ttl">Maxfiy va himoyalangan xossalar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
