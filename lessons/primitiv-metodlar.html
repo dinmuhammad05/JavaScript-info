@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primitivlar metodlari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Primitiv qiymatlar (satr, son, mantiqiy) ustida ham metod chaqirish mumkin. Bu qanday ishlaydi va &quot;obyekt o'ramchasi&quot; nima?">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a class="active" href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Primitivlar metodlari</h1>
+<p class="lead">JavaScript primitivlar (satrlar, sonlar) bilan xuddi ular obyektdek ishlashga imkon beradi: ularda metodlar chaqirish mumkin. Ushbu darsda buning sirini — "obyekt o'ramchasi" (wrapper) g'oyasini o'rganamiz.</p>
+<h2>Primitiv va obyekt farqi</h2>
+<p>Avval ikki tushunchani aniq ajratamiz. <strong>Primitiv</strong> — bu bitta oddiy qiymat. JavaScript'da 7 ta primitiv tur bor: <code>string</code>, <code>number</code>, <code>bigint</code>, <code>boolean</code>, <code>symbol</code>, <code>null</code> va <code>undefined</code>.</p>
+<p><strong>Obyekt</strong> — bu bir nechta qiymatni xususiyatlar (properties) sifatida saqlay oladigan murakkab tuzilma. U jingalak qavslar <code>{...}</code> yordamida yaratiladi va ichida metodlar (funksiya bo'lgan xususiyatlar) saqlashi mumkin.</p>
+<pre class="code"><code>// obyekt — ichida ma'lumot va metod bor
+let foydalanuvchi = {
+  ism: "Ali",
+  salom: function() {
+    return "Salom!";
+  }
+};
+
+// obyektning metodini chaqiramiz
+foydalanuvchi.salom();  // "Salom!"</code></pre>
+<p>Obyektlar primitivlarga qaraganda "og'irroq" — ular xotirada ko'proq joy egallaydi va ularni boshqarish uchun ichki mexanizmlar kerak bo'ladi.</p>
+<h2>Muammo: primitivda ham metod kerak</h2>
+<p>Til yaratuvchilari qiyin masalaga duch kelishgan. Bir tomondan, satrlar yoki sonlar bilan ko'p foydali amallar bajarish qulay bo'lardi. Masalan, satrni katta harflarga o'girish yoki uning uzunligini bilish. Bu amallar metodlar orqali ifodalansa juda qulay.</p>
+<p>Ikkinchi tomondan, primitivlar imkon qadar tez va yengil bo'lishi kerak. Agar har bir son yoki satr og'ir obyekt bo'lsa, dastur juda sekinlashib qolardi.</p>
+<p>Yechim ancha nafis. Mana uning mohiyati:</p>
+<ol><li>Primitivlar oddiy va yengil qiymatlar bo'lib qolaveradi;</li><li>Til esa satr, son, mantiqiy qiymat va symbol'lar uchun metod hamda xususiyatlarga kirishga ruxsat beradi;</li><li>Buning ishlashi uchun primitivda metod chaqirilganida, maxsus "obyekt o'ramchasi" (wrapper) yaratiladi. U kerakli funksionallikni beradi va shundan keyin yo'q qilinadi.</li></ol>
+<h2>Obyekt o'ramchasi (wrapper) qanday ishlaydi?</h2>
+<p>"O'ramchi obyektlar" har bir primitiv tur uchun mavjud va ular quyidagicha nomlanadi: <code>String</code>, <code>Number</code>, <code>Boolean</code>, <code>BigInt</code> va <code>Symbol</code>. Ular turli xil metodlar to'plamini taqdim etadi.</p>
+<p>Masalan, satr uchun <code>str.toUpperCase()</code> metodi mavjud — u satrni katta harflarga o'giradi. Uni chaqirganingizda nima ro'y beradi:</p>
+<ol><li><code>str</code> — bu primitiv satr. Unga murojaat qilingan payt maxsus obyekt yaratiladi, u satr qiymatini va <code>toUpperCase()</code> kabi foydali metodlarni biladi;</li><li>Metod bajariladi va yangi satr qaytaradi (buni konsol ko'rsatadi);</li><li>Maxsus obyekt yo'q qilinadi, primitiv <code>str</code> esa o'zgarmasdan qoladi.</li></ol>
+<p>Ya'ni primitivlar metod bera oladi, lekin o'zi baribir yengil bo'lib qolaveradi. JavaScript dvigateli bu jarayonni juda samarali optimallashtiradi, hatto ko'pincha hech qanday qo'shimcha obyekt yaratmaydi.</p>
+<p>Quyidagi misolni ishga tushiring — satr metodlari qanday natija berishini ko'ring:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>primitiv-satr.js</span></div><textarea spellcheck="false">let matn = "Salom Dunyo";
+
+// katta harflarga o'girish
+console.log(matn.toUpperCase());  // SALOM DUNYO
+
+// kichik harflarga o'girish
+console.log(matn.toLowerCase());  // salom dunyo
+
+// asl satr o'zgarmagan!
+console.log(matn);  // Salom Dunyo</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Diqqat qiling: <code>toUpperCase()</code> asl satrni o'zgartirmaydi, balki <strong>yangi</strong> satr qaytaradi. Primitivlar o'zgarmas (immutable) — ularni tahrirlab bo'lmaydi, faqat yangi qiymat yaratish mumkin.</div>
+<h2>Sonlarda ham metodlar bor</h2>
+<p>Sonlar ham primitiv, lekin ularda ham metodlar mavjud. Masalan, <code>toFixed(n)</code> — sonni kasr qismidagi belgilar sonini <code>n</code> ga qadar yaxlitlaydi va satr qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>primitiv-son.js</span></div><textarea spellcheck="false">let narx = 12.34567;
+
+// 2 ta kasr belgisiga yaxlitlash
+console.log(narx.toFixed(2));  // 12.35
+
+// mantiqiy qiymatning metodi
+let rost = true;
+console.log(rost.toString());  // "true"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Butun sonda to'g'ridan-to'g'ri metod chaqirmoqchi bo'lsangiz, ikki nuqta qo'ying yoki qavsdan foydalaning. Masalan, <code>123456..toString()</code> yoki <code>(123456).toString()</code>. Chunki bitta nuqta <code>123456.toString()</code>'da JavaScript nuqtani o'nlik kasr deb o'ylab, xatoga yo'l qo'yishi mumkin.</div>
+<h2>null va undefined'da metod yo'q</h2>
+<p>Ikkita alohida primitiv — <code>null</code> va <code>undefined</code> — bu qoidadan istisno. Ular o'ramchi obyektga ega emas va hech qanday metod bermaydi. Ular "eng bo'sh" primitivlar hisoblanadi.</p>
+<pre class="code"><code>// bu XATO beradi!
+null.test;       // TypeError
+undefined.test;  // TypeError</code></pre>
+<p>Agar <code>null</code> yoki <code>undefined</code>'da metod yoki xususiyatga murojaat qilsangiz, dastur <code>TypeError</code> xatosi bilan to'xtaydi. Shu sabab qiymat bilan ishlashdan oldin uning <code>null</code>/<code>undefined</code> emasligiga ishonch hosil qilish muhim.</p>
+<div class="tip">Amalda ko'p xatolar aynan <code>null</code> yoki <code>undefined</code>'da metod chaqirishdan kelib chiqadi. Masalan, mavjud bo'lmagan obyekt xususiyatidan qiymat olmoqchi bo'lganda. Bunga e'tibor bering.</div>
+<h2>O'ramchi obyektni qo'lda yaratmang</h2>
+<p>Nazariy jihatdan <code>new Number(5)</code> yoki <code>new String("salom")</code> orqali o'ramchi obyektni qo'lda yaratish mumkin, lekin buni <strong>hech qachon qilmang</strong>. Bu chalkashlik va kutilmagan xatolarga olib keladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>wrapper-xato.js</span></div><textarea spellcheck="false">// new bilan yaratilgan "son" aslida OBYEKT
+let son = new Number(0);
+
+if (son) {
+  // obyekt har doim "rost", shuning uchun bu bajariladi!
+  console.log("Bu satr bajarildi, chunki obyekt har doim true");
+}
+
+console.log(typeof son);  // "object", "number" emas!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn"><code>new String</code>, <code>new Number</code>, <code>new Boolean</code>'ni <strong>hech qachon</strong> ishlatmang. Lekin <code>new</code>siz oddiy funksiya sifatida chaqirish (masalan <code>Number("123")</code>) — bu boshqa narsa va foydali, u qiymatni tegishli turga o'giradi.</div>
+<h2>Xulosa</h2>
+<ul><li>Primitivlar (<code>null</code> va <code>undefined</code>dan tashqari) metodlarga ega bo'la oladi;</li><li>Metod chaqirilganda vaqtinchalik <strong>o'ramchi obyekt</strong> (wrapper) yaratiladi, ish tugagach yo'q qilinadi;</li><li>Primitivlar <strong>o'zgarmas</strong> (immutable) — metodlar yangi qiymat qaytaradi, aslini o'zgartirmaydi;</li><li><code>null</code> va <code>undefined</code>'da metod yo'q — ularda murojaat <code>TypeError</code> beradi;</li><li><code>new String</code>, <code>new Number</code>, <code>new Boolean</code>'ni ishlatmang — bu obyekt yaratadi va chalkashlik keltiradi.</li></ul>
+<nav class="lesson-nav">
+  <a href="obyekt-primitiv.html"><span class="dir">← Oldingi</span><span class="ttl">Obyektni primitivga o'girish</span></a>
+  <a class="next" href="sonlar.html"><span class="dir">Keyingi →</span><span class="ttl">Sonlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

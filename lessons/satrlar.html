@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Satrlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Matn ma'lumotlari: tirnoq turlari, shablon satrlar, maxsus belgilar, uzunlik, belgilarga murojaat va satr metodlari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a class="active" href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Satrlar</h1>
+<p class="lead">Matnli ma'lumot JavaScript'da <strong>satr</strong> (string) sifatida saqlanadi. Bitta belgi uchun alohida tur yo'q — hamma matn satrdir. Ushbu darsda satrlar bilan ishlashni chuqur o'rganamiz.</p>
+<h2>Tirnoq turlari</h2>
+<p>JavaScript'da satrni uch xil tirnoq bilan yozish mumkin:</p>
+<ul><li>Qo'shtirnoq: <code>"Salom"</code>;</li><li>Bir tirnoq (apostrof): <code>'Salom'</code>;</li><li>Teskari tirnoq (backtick): shablon satrlar uchun.</li></ul>
+<p>Qo'shtirnoq va bir tirnoq amalda bir xil ishlaydi. Teskari tirnoq esa qo'shimcha imkoniyat beradi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tirnoqlar.js</span></div><textarea spellcheck="false">let a = "qo'shtirnoq";
+let b = 'bir tirnoq';
+console.log(a);
+console.log(b);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Shablon satrlar (template literals)</h2>
+<p>Teskari tirnoq (backtick) bilan yozilgan satrlar <strong>shablon satrlar</strong> deyiladi. Ular ichiga <code>${...}</code> orqali istalgan ifoda joylashtirish mumkin — o'zgaruvchilar va hisob-kitoblar.</p>
+<p>Quyida shablon satr sintaksisi ko'rsatilgan (teskari tirnoq belgisi \` bilan ifodalangan):</p>
+<pre class="code"><code>let ism = "Ali";
+let yosh = 25;
+
+// ${...} ichida o'zgaruvchi va ifoda ishlaydi
+let xabar = \`Salom, ${ism}! Sizga ${yosh} yosh.\`;
+// natija: "Salom, Ali! Sizga 25 yosh."
+
+let natija = \`2 + 2 = ${2 + 2}\`;
+// natija: "2 + 2 = 4"</code></pre>
+<p>Shablon satrlarning yana bir foydasi — ular <strong>ko'p qatorli</strong> bo'la oladi. Oddiy tirnoqlarda satrni bir necha qatorga bo'lish mumkin emas, teskari tirnoqda esa mumkin. Quyidagi interaktiv misolda oddiy birlashtirish orqali xuddi shu natijani ko'ramiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>birlashtirish.js</span></div><textarea spellcheck="false">let ism = "Vali";
+let yosh = 30;
+
+// oddiy birlashtirish (+) orqali
+let xabar = "Salom, " + ism + "! Yoshingiz: " + yosh;
+console.log(xabar);
+
+// arifmetik ifoda ham mumkin
+console.log("Kelasi yil: " + (yosh + 1));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Amalda satr yaratganda deyarli har doim shablon satrlar (backtick) ishlatiladi, chunki <code>${...}</code> bilan yozish <code>+</code> bilan birlashtirishdan ancha o'qilishi oson.</div>
+<h2>Maxsus belgilar</h2>
+<p>Ba'zi belgilarni to'g'ridan-to'g'ri yozib bo'lmaydi, ular uchun <strong>maxsus belgilar</strong> (escape ketma-ketligi) bor. Ular teskari chiziq <code>\</code> bilan boshlanadi:</p>
+<ul><li><code>\n</code> — yangi qatorga o'tish;</li><li><code>\t</code> — tabulyatsiya (bo'sh joy);</li><li><code>\\</code> — teskari chiziqning o'zi;</li><li><code>\'</code> va <code>\"</code> — tirnoqning o'zi (satr ichida).</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>maxsus-belgi.js</span></div><textarea spellcheck="false">// \n yangi qator qo'shadi
+console.log("Birinchi qator\nIkkinchi qator");
+
+// \t tabulyatsiya
+console.log("Ism:\tAli");
+
+// tirnoqni satr ichida ko'rsatish
+console.log("U \"kitob\" dedi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Agar satr bir tirnoqda bo'lsa, ichidagi qo'shtirnoqni eskeyplashga hojat yo'q: <code>'U "salom" dedi'</code>. Va aksincha. Bu ko'pincha kodni tozaroq qiladi.</div>
+<h2>Uzunlik va belgilarga murojaat</h2>
+<p>Satr uzunligini <code>length</code> xususiyati beradi. Diqqat: bu metod emas, xususiyat — qavs qo'yilmaydi (<code>str.length</code>, <code>str.length()</code> emas).</p>
+<p>Alohida belgiga ikki yo'l bilan murojaat qilinadi: to'rtburchak qavs <code>[...]</code> yoki <code>at(...)</code> metodi orqali. Indekslar 0 dan boshlanadi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>uzunlik.js</span></div><textarea spellcheck="false">let matn = "JavaScript";
+
+console.log(matn.length);   // 10 (belgilar soni)
+
+console.log(matn[0]);       // "J" (birinchi belgi)
+console.log(matn[4]);       // "S"
+
+// at() manfiy indeksni ham qo'llaydi!
+console.log(matn.at(-1));   // "t" (oxirgi belgi)
+console.log(matn.at(-2));   // "p"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>at()</code> ning ustunligi — manfiy indeks bilan oxiridan sanash. <code>[]</code> bilan bu ishlamaydi: <code>matn[-1]</code> → <code>undefined</code>, <code>matn.at(-1)</code> esa oxirgi belgini beradi.</p>
+<h2>Katta va kichik harflar</h2>
+<p>Satrni butunlay katta yoki kichik harflarga o'girish uchun ikki metod bor. Ular yangi satr qaytaradi, aslini o'zgartirmaydi (satrlar o'zgarmas):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>harflar.js</span></div><textarea spellcheck="false">let matn = "Salom Dunyo";
+
+console.log(matn.toUpperCase());  // "SALOM DUNYO"
+console.log(matn.toLowerCase());  // "salom dunyo"
+
+// bitta belgini ham o'girish mumkin
+console.log("salom"[0].toUpperCase());  // "S"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Qism satr izlash: indexOf, includes</h2>
+<p>Satr ichida boshqa satrni izlash uchun bir nechta metod bor. <code>indexOf(qism)</code> — qism satr birinchi uchragan indeksni qaytaradi, topilmasa <code>-1</code> qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indexof.js</span></div><textarea spellcheck="false">let matn = "Men JavaScript'ni yaxshi ko'raman";
+
+console.log(matn.indexOf("JavaScript"));  // 4
+console.log(matn.indexOf("Python"));      // -1 (yo'q)
+
+// indexOf'ni shartda ishlatish
+if (matn.indexOf("yaxshi") !== -1) {
+  console.log("'yaxshi' so'zi bor");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ko'pincha shunchaki "bormi yoki yo'q" degan javob kerak bo'ladi. Buning uchun qulayroq metodlar bor:</p>
+<ul><li><code>includes(qism)</code> — qism satr bor bo'lsa <code>true</code>, aks holda <code>false</code>;</li><li><code>startsWith(qism)</code> — satr shu bilan boshlanadimi;</li><li><code>endsWith(qism)</code> — satr shu bilan tugaydimi.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>includes.js</span></div><textarea spellcheck="false">let fayl = "rasm.png";
+
+console.log(fayl.includes("png"));      // true
+console.log(fayl.startsWith("rasm"));   // true
+console.log(fayl.endsWith(".png"));     // true
+console.log(fayl.endsWith(".jpg"));     // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>includes</code>, <code>startsWith</code>, <code>endsWith</code> to'g'ridan-to'g'ri <code>true</code>/<code>false</code> qaytargani uchun shartlarda <code>indexOf</code>dan qulayroq. Zamonaviy kodda ularni afzal ko'ring.</div>
+<h2>Qism satrni ajratish: slice, substring</h2>
+<p>Satrdan bir qismini ajratib olish uchun asosan uch metod bor. Eng ko'p ishlatiladigani va tavsiya etilgani — <code>slice(boshi, oxiri)</code>. U <code>boshi</code>dan <code>oxiri</code>gacha (oxiri kirmaydi) qismni qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>slice.js</span></div><textarea spellcheck="false">let matn = "JavaScript";
+
+console.log(matn.slice(0, 4));   // "Java" (0,1,2,3)
+console.log(matn.slice(4));      // "Script" (4-dan oxirigacha)
+
+// manfiy indeks — oxiridan sanaydi
+console.log(matn.slice(-6));     // "Script"
+console.log(matn.slice(-6, -3)); // "Scr"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>substring(start, end)</code> ham o'xshash, lekin manfiy indekslarni <code>0</code> deb qabul qiladi va argumentlar tartibi teskari bo'lsa ularni almashtiradi. <code>substr(start, uzunlik)</code> esa eskirgan (deprecated) — ikkinchi argument uzunlik, imkon boricha ishlatmang.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>substring.js</span></div><textarea spellcheck="false">let matn = "JavaScript";
+
+// substring argumentlarni almashtira oladi
+console.log(matn.substring(4, 0));  // "Java" (slice'da bo'sh chiqardi)
+console.log(matn.slice(4, 0));      // "" (bo'sh)
+
+// substr: boshi va UZUNLIK
+console.log(matn.substr(4, 6));     // "Script"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Uchtasidan <strong>slice</strong>ni yodda saqlash yetarli — u eng moslashuvchan (manfiy indekslar bilan) va massivlarda ham xuddi shunday ishlaydi.</div>
+<h2>Satrlarni taqqoslash</h2>
+<p>Satrlar belgilarning ichki raqamli kodlari (Unicode) bo'yicha taqqoslanadi. Shuning uchun taqqoslash ba'zan kutilmagan natija beradi — masalan, barcha katta harflar kichik harflardan "kichik" hisoblanadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>taqqoslash.js</span></div><textarea spellcheck="false">// harflar Unicode kodi bo'yicha taqqoslanadi
+console.log("a" &gt; "Z");   // true (kichik harf kodi kattaroq)
+console.log("a" &lt; "b");   // true
+
+// belgining kodini olish
+console.log("A".codePointAt(0));  // 65
+console.log("a".codePointAt(0));  // 97</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Turli tildagi harflarni to'g'ri (til qoidalari bo'yicha) taqqoslash uchun <code>str.localeCompare(str2)</code> ishlatiladi. U <code>-1</code>, <code>0</code> yoki <code>1</code> qaytaradi va milliy alifbolarni to'g'ri tartiblaydi.</div>
+<h2>Xulosa</h2>
+<ul><li>Satrlar uch tirnoqda yoziladi; teskari tirnoq (backtick) shablon satr va <code>${...}</code> beradi;</li><li>Maxsus belgilar: <code>\n</code> (yangi qator), <code>\t</code> (tab), <code>\\</code>;</li><li><code>length</code> — uzunlik; <code>[i]</code> va <code>at(i)</code> — belgiga murojaat (<code>at</code> manfiy indeksni qo'llaydi);</li><li><code>toUpperCase</code>/<code>toLowerCase</code> — harf o'lchamini o'zgartiradi;</li><li>Izlash: <code>indexOf</code>, va qulay <code>includes</code>/<code>startsWith</code>/<code>endsWith</code>;</li><li>Ajratish: <code>slice</code> (tavsiya etiladi), <code>substring</code>, eskirgan <code>substr</code>;</li><li>Satrlar Unicode kodi bo'yicha taqqoslanadi; milliy tartiblash uchun <code>localeCompare</code>.</li></ul>
+<nav class="lesson-nav">
+  <a href="sonlar.html"><span class="dir">← Oldingi</span><span class="ttl">Sonlar</span></a>
+  <a class="next" href="massivlar.html"><span class="dir">Keyingi →</span><span class="ttl">Massivlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

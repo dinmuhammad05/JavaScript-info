@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Massivlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Tartiblangan ma'lumotlar to'plami: yaratish, indekslar, uzunlik, qo'shish/o'chirish metodlari va aylanish (loop).">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a class="active" href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Massivlar</h1>
+<p class="lead">Obyektlar ma'lumotni nomlar bilan saqlaydi. Ammo ko'pincha bizga <strong>tartiblangan</strong> to'plam kerak bo'ladi: ro'yxat, navbat, elementlar ketma-ketligi. Buning uchun <strong>massiv</strong> (array) maxsus tur mavjud.</p>
+<h2>Massiv yaratish</h2>
+<p>Massiv yaratishning ikki sintaksisi bor, lekin amalda deyarli har doim to'rtburchak qavs <code>[...]</code> ishlatiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>massiv-yaratish.js</span></div><textarea spellcheck="false">// bo'sh massiv
+let bosh = [];
+
+// elementlar bilan
+let mevalar = ["olma", "nok", "uzum"];
+console.log(mevalar);
+
+// massivda turli turdagi qiymatlar bo'la oladi
+let aralash = ["matn", 42, true, null];
+console.log(aralash);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Indekslar orqali murojaat</h2>
+<p>Massiv elementlari <strong>0 dan boshlab</strong> raqamlanadi. Bu raqam <strong>indeks</strong> deyiladi. Elementga to'rtburchak qavs orqali murojaat qilinadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indeks.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
+
+console.log(mevalar[0]);  // "olma" (birinchi)
+console.log(mevalar[1]);  // "nok"
+console.log(mevalar[2]);  // "uzum" (oxirgi)
+
+// elementni o'zgartirish
+mevalar[1] = "banan";
+console.log(mevalar);  // [ 'olma', 'banan', 'uzum' ]
+
+// yangi element qo'shish
+mevalar[3] = "anor";
+console.log(mevalar);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Satrlardagi kabi, oxiridan sanash uchun <code>at()</code> metodini ishlatish mumkin — u manfiy indeksni qo'llaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>massiv-at.js</span></div><textarea spellcheck="false">let sonlar = [10, 20, 30, 40];
+
+console.log(sonlar.at(-1));  // 40 (oxirgi)
+console.log(sonlar.at(-2));  // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>length — uzunlik</h2>
+<p><code>length</code> xususiyati massivdagi elementlar sonini beradi. Aniqrog'i, u eng katta indeksdan bittaga ko'p qiymatni qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>length.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
+console.log(mevalar.length);  // 3
+
+// length'ni o'zgartirsak massiv qisqaradi!
+mevalar.length = 2;
+console.log(mevalar);  // [ 'olma', 'nok' ] — "uzum" yo'qoldi
+
+// 0 qilsak — butunlay tozalanadi
+mevalar.length = 0;
+console.log(mevalar);  // []</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>length</code>ga qiymat berish orqali massivni qisqartirish mumkin. Uni <code>0</code> qilish — massivni tozalashning eng oson yo'llaridan biri.</div>
+<h2>Qo'shish va o'chirish metodlari</h2>
+<p>Massiv "navbat" yoki "stek" sifatida ishlashi mumkin. Buning uchun to'rtta asosiy metod bor. Oxiri bilan ishlash tez, boshi bilan ishlash sekinroq.</p>
+<ul><li><code>push(el)</code> — <strong>oxiriga</strong> element qo'shadi;</li><li><code>pop()</code> — <strong>oxirgi</strong> elementni oladi va o'chiradi;</li><li><code>unshift(el)</code> — <strong>boshiga</strong> element qo'shadi;</li><li><code>shift()</code> — <strong>birinchi</strong> elementni oladi va o'chiradi.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>push-pop.js</span></div><textarea spellcheck="false">let navbat = ["a", "b", "c"];
+
+// oxiriga qo'shish va olish
+navbat.push("d");
+console.log(navbat);       // [ 'a', 'b', 'c', 'd' ]
+console.log(navbat.pop()); // "d" (olindi va o'chdi)
+console.log(navbat);       // [ 'a', 'b', 'c' ]
+
+// boshiga qo'shish va olish
+navbat.unshift("x");
+console.log(navbat);         // [ 'x', 'a', 'b', 'c' ]
+console.log(navbat.shift()); // "x"
+console.log(navbat);         // [ 'a', 'b', 'c' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>push</code> va <code>pop</code> tez ishlaydi, chunki ular boshqa elementlarga tegmaydi. <code>shift</code> va <code>unshift</code> esa sekinroq, chunki qolgan barcha elementlarni surib chiqishga to'g'ri keladi.</div>
+<h2>Massivning ichki tuzilishi</h2>
+<p>Massiv aslida — bu maxsus turdagi <strong>obyekt</strong>. To'rtburchak qavs <code>arr[0]</code> obyekt sintaksisining qisqartmasidir. Massivni obyektdan ajratib turadigan narsa — tartiblangan sonli indekslar va <code>length</code> hamda maxsus metodlar.</p>
+<p>Aynan shu "obyekt" tabiati tufayli massivni noto'g'ri ishlatib "buzish" mumkin. Massiv bilan faqat tartibli, sonli indekslar orqali ishlash kerak:</p>
+<pre class="code"><code>let arr = [1, 2, 3];
+
+// bunday qilmang — massiv "optimallashtirishini" buzasiz:
+arr.name = "salom";     // xususiyat qo'shish
+arr[99] = "uzoq";        // katta bo'shliq ("teshik")
+// bunday hollarda dvigatel massivni oddiy obyektdek sekin ishlaydi</code></pre>
+<div class="warn">Massivni qo'lda "nosonli" indeks yoki katta bo'sh oraliqlar bilan ishlatmang. Aks holda JavaScript dvigateli uni maxsus tez massiv sifatida emas, oddiy sekin obyekt sifatida ishlaydi.</div>
+<h2>Massiv bo'ylab aylanish (loop)</h2>
+<p>Massiv elementlarini birma-bir ko'rib chiqishning ikki asosiy usuli bor. Birinchisi — klassik <code>for</code> sikli, unda indeks orqali murojaat qilamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
+
+// klassik for — indeks orqali
+for (let i = 0; i &lt; mevalar.length; i++) {
+  console.log(i + ": " + mevalar[i]);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ikkinchisi va qulayrog'i — <code>for..of</code> sikli. U to'g'ridan-to'g'ri elementlarning o'zini beradi, indeks bilan ovora bo'lmaysiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for-of.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
+
+// for..of — to'g'ridan-to'g'ri element
+for (let meva of mevalar) {
+  console.log(meva);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Massivda <code>for..in</code> siklini <strong>ishlatmang</strong>. U obyektlar uchun mo'ljallangan va massivda sekinroq hamda ba'zan keraksiz xususiyatlarni ham aylanib chiqadi. Massiv uchun <code>for</code> yoki <code>for..of</code> ishlating.</div>
+<h2>Ko'p o'lchamli massivlar</h2>
+<p>Massiv elementlari ham massiv bo'lishi mumkin. Bunday tuzilma <strong>ko'p o'lchamli massiv</strong> deyiladi va, masalan, jadval yoki matritsani ifodalash uchun ishlatiladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>matritsa.js</span></div><textarea spellcheck="false">// 3x3 matritsa
+let matritsa = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+
+// ikkita indeks: [qator][ustun]
+console.log(matritsa[0][0]);  // 1 (birinchi qator, birinchi ustun)
+console.log(matritsa[1][2]);  // 6
+console.log(matritsa[2][1]);  // 8</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>toString — matnga o'girish</h2>
+<p>Massivda <code>toString</code> metodi bor — u elementlarni vergul bilan birlashtirib satr qaytaradi. Massiv satr bilan birlashtirilganda ham xuddi shu ro'y beradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tostring.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3];
+
+console.log(sonlar.toString());   // "1,2,3"
+console.log(String(sonlar));      // "1,2,3"
+
+// satr bilan birlashtirish avtomatik toString chaqiradi
+console.log("Ro'yxat: " + sonlar);  // "Ro'yxat: 1,2,3"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Elementlarni boshqa ajratuvchi bilan birlashtirish uchun <code>join</code> metodini ishlatishingiz mumkin: <code>[1,2,3].join(" - ")</code> → <code>"1 - 2 - 3"</code>.</div>
+<h2>Xulosa</h2>
+<ul><li>Massiv — <strong>tartiblangan</strong> to'plam, <code>[...]</code> bilan yaratiladi;</li><li>Elementlar <strong>0 dan</strong> indekslanadi; murojaat <code>arr[i]</code> yoki <code>arr.at(-1)</code> (oxiridan);</li><li><code>length</code> — uzunlik; unga qiymat berib massivni qisqartirish/tozalash mumkin;</li><li><code>push/pop</code> — oxiri bilan (tez); <code>shift/unshift</code> — boshi bilan (sekinroq);</li><li>Massiv — aslida maxsus obyekt; uni faqat sonli indekslar bilan ishlating;</li><li>Aylanish uchun <code>for</code> yoki <code>for..of</code> (lekin <code>for..in</code> emas);</li><li>Element massiv bo'lsa — ko'p o'lchamli massiv; <code>toString</code>/<code>join</code> matnga o'giradi.</li></ul>
+<nav class="lesson-nav">
+  <a href="satrlar.html"><span class="dir">← Oldingi</span><span class="ttl">Satrlar</span></a>
+  <a class="next" href="massiv-metodlari.html"><span class="dir">Keyingi →</span><span class="ttl">Massiv metodlari</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

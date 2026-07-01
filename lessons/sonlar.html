@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Sonlarni yozish usullari, sanoq tizimlari, yaxlitlash, aniqlik muammolari va Math obyekti bilan ishlash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a class="active" href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumot turlari</div>
+<h1>Sonlar</h1>
+<p class="lead">Zamonaviy JavaScript'da sonlarning ikki turi bor: oddiy sonlar (<code>number</code>) va juda katta butun sonlar (<code>bigint</code>). Ushbu darsda asosan oddiy sonlar bilan ishlashni chuqur o'rganamiz.</p>
+<h2>Sonlarni yozishning ko'p usullari</h2>
+<p>Katta sonni yozganda uni o'qish qiyin bo'ladi. Masalan, million: <code>1000000</code>. Nollarni sanashga to'g'ri keladi. Buning uchun bir nechta qulay usul bor.</p>
+<p>Birinchisi — nollar o'rniga <code>e</code> harfidan foydalanish. <code>e</code> undan keyingi nol sonini bildiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>son-yozuv.js</span></div><textarea spellcheck="false">// 1e6 = 1 va 6 ta nol = million
+console.log(1e6);     // 1000000
+console.log(1e9);     // 1000000000 (milliard)
+console.log(7.3e3);   // 7300  (7.3 * 1000)
+
+// manfiy daraja — kichik sonlar uchun
+console.log(1e-6);    // 0.000001 (millionда bir)
+console.log(2.5e-3);  // 0.0025</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ikkinchisi — o'rinlar orasiga ajratuvchi ostki chiziq <code>_</code> qo'yish. U shunchaki bezak, JavaScript uni e'tiborsiz qoldiradi, lekin sonni o'qishni osonlashtiradi:</p>
+<pre class="code"><code>let million = 1_000_000;  // 1000000 bilan bir xil
+console.log(million);</code></pre>
+<h2>Boshqa sanoq tizimlari</h2>
+<p>Sonlarni turli sanoq tizimlarida yozish mumkin, buning uchun maxsus prefikslar bor:</p>
+<ul><li><code>0x</code> — o'n oltilik (hexadecimal), masalan ranglar uchun ishlatiladi;</li><li><code>0b</code> — ikkilik (binary);</li><li><code>0o</code> — sakkizlik (octal).</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sanoq-tizimi.js</span></div><textarea spellcheck="false">// o'n oltilik son (0x prefiksi bilan)
+console.log(0xff);    // 255
+console.log(0xFF);    // 255 (katta-kichik harf farq qilmaydi)
+
+// ikkilik son (0b)
+console.log(0b1111);  // 15
+
+// sakkizlik son (0o)
+console.log(0o377);   // 255</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>toString(base) — sonni matnga o'girish</h2>
+<p><code>num.toString(base)</code> metodi sonni berilgan sanoq tizimidagi <code>base</code> asosidagi satr ko'rinishida qaytaradi. <code>base</code> 2 dan 36 gacha bo'lishi mumkin, standart qiymat 10.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tostring-base.js</span></div><textarea spellcheck="false">let son = 255;
+
+console.log(son.toString(2));   // "11111111" (ikkilik)
+console.log(son.toString(16));  // "ff" (o'n oltilik)
+console.log(son.toString(8));   // "377" (sakkizlik)
+
+let katta = 123456;
+console.log(katta.toString(36)); // "2n9c"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">36-asos maksimal — bunda 0-9 raqamlar va a-z lotin harflari ishlatiladi. Uni uzun raqamli identifikatorni qisqartirish uchun ishlatish mumkin.</div>
+<h2>Yaxlitlash</h2>
+<p>Sonlar bilan ishlashda eng ko'p kerak bo'ladigan amallardan biri — yaxlitlash. Bir necha usul bor:</p>
+<ul><li><code>Math.floor</code> — pastga yaxlitlaydi: <code>3.9</code> → <code>3</code>;</li><li><code>Math.ceil</code> — yuqoriga yaxlitlaydi: <code>3.1</code> → <code>4</code>;</li><li><code>Math.round</code> — eng yaqiniga yaxlitlaydi: <code>3.5</code> → <code>4</code>;</li><li><code>Math.trunc</code> — kasr qismini shunchaki tashlaydi (yaxlitlamaydi): <code>3.9</code> → <code>3</code>.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yaxlitlash.js</span></div><textarea spellcheck="false">console.log(Math.floor(3.9));  // 3
+console.log(Math.ceil(3.1));   // 4
+console.log(Math.round(3.5));  // 4
+console.log(Math.trunc(3.9));  // 3
+
+// manfiy sonlarda farqni ko'ring:
+console.log(Math.floor(-1.1)); // -2 (pastga, ya'ni kichikroqqa)
+console.log(Math.trunc(-1.1)); // -1 (faqat kasrni tashlaydi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Sonni kasrdan keyingi ma'lum belgigacha yaxlitlash uchun ikki asosiy yo'l bor. Birinchisi — <code>toFixed(n)</code> metodi. U sonni <code>n</code> ta kasr belgisiga yaxlitlaydi va <strong>satr</strong> qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tofixed.js</span></div><textarea spellcheck="false">let pi = 3.14159;
+
+console.log(pi.toFixed(2));  // "3.14"
+console.log(pi.toFixed(0));  // "3"
+
+// natija SATR ekanini unutmang
+console.log(typeof pi.toFixed(2));  // "string"
+
+// yetishmagan joyni nol bilan to'ldiradi
+console.log((5.1).toFixed(3));  // "5.100"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Agar <code>toFixed</code> natijasini yana son sifatida ishlatmoqchi bo'lsangiz, uni <code>Number(...)</code> yoki oldiga <code>+</code> qo'yib songa qaytaring: <code>+pi.toFixed(2)</code>.</div>
+<h2>Aniqlik muammosi: 0.1 + 0.2</h2>
+<p>JavaScript'dagi eng mashhur "g'alati" hodisalardan biri — bu quyidagi natija:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>aniqlik.js</span></div><textarea spellcheck="false">console.log(0.1 + 0.2);          // 0.30000000000000004
+console.log(0.1 + 0.2 === 0.3);  // false (!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu JavaScript'ning xatosi emas! Sabab shundaki, sonlar xotirada ikkilik (binary) formatda saqlanadi. <code>0.1</code>, <code>0.2</code> kabi kasrlar ikkilik tizimda cheksiz davriy kasrga aylanadi — xuddi biz o'nlik tizimda <code>1/3</code>ni <code>0.333...</code> deb aniq yoza olmasligimizdek. Shuning uchun ozgina yaxlitlash xatosi paydo bo'ladi.</p>
+<div class="note">Bu muammo faqat JavaScript'da emas — Python, Java, C va boshqa deyarli barcha tillarda ham bor, chunki ular bir xil (IEEE-754) standart formatdan foydalanadi.</div>
+<p>Yechim: taqqoslashda yoki natijani ko'rsatishda <code>toFixed</code> ishlatish yoki natijani yaxlitlash:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>aniqlik-yechim.js</span></div><textarea spellcheck="false">let yigindi = 0.1 + 0.2;
+
+// ko'rsatishda yaxlitlaymiz
+console.log(yigindi.toFixed(2));       // "0.30"
+console.log(+yigindi.toFixed(2));      // 0.3 (son)
+
+// taqqoslash to'g'ri ishlaydi
+console.log(+yigindi.toFixed(10) === 0.3);  // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Pul bilan ishlaganda bu muammo jiddiy bo'ladi. Ko'pincha summani eng kichik birlikda (masalan, tiyin/sent) butun son sifatida saqlash va faqat ko'rsatishda bo'lish tavsiya etiladi.</div>
+<h2>isNaN va isFinite</h2>
+<p>Sonlar bilan ishlashda ikki maxsus qiymat bor: <code>NaN</code> (Not a Number — "son emas") va <code>Infinity</code> (cheksizlik). Ularni tekshirish uchun maxsus funksiyalar mavjud.</p>
+<p><code>isNaN(qiymat)</code> — qiymatni songa o'giradi va u <code>NaN</code> emasligini tekshiradi. Nega alohida funksiya kerak? Chunki <code>NaN</code> o'z-o'ziga ham teng emas:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>isnan.js</span></div><textarea spellcheck="false">console.log(NaN === NaN);      // false (!) — o'z-o'ziga teng emas
+console.log(isNaN(NaN));       // true
+console.log(isNaN("matn"));    // true (songa o'gira olmaydi)
+console.log(isNaN("123"));     // false ("123" son bo'la oladi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>isFinite(qiymat)</code> — qiymat oddiy chekli son ekanini tekshiradi. Ya'ni u <code>NaN</code> ham, <code>Infinity</code> ham, <code>-Infinity</code> ham emasligini bildiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>isfinite.js</span></div><textarea spellcheck="false">console.log(isFinite(123));        // true
+console.log(isFinite(Infinity));   // false
+console.log(isFinite(NaN));        // false
+console.log(isFinite("15"));       // true ("15" son bo'ladi)
+console.log(isFinite("matn"));     // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Aniqroq tekshirish uchun <code>Number.isNaN</code> va <code>Number.isFinite</code> ham bor. Ular qiymatni songa o'girmaydi, faqat u haqiqatan son turida ekanini tekshiradi. Masalan, <code>Number.isNaN("matn")</code> → <code>false</code>, chunki <code>"matn"</code> satr, <code>NaN</code> emas.</div>
+<h2>parseInt va parseFloat</h2>
+<p><code>Number(qiymat)</code> orqali o'girish qat'iy: agar satr toza son bo'lmasa, natija <code>NaN</code> bo'ladi. Masalan, <code>"100px"</code>ni songa o'gira olmaydi.</p>
+<p><code>parseInt</code> va <code>parseFloat</code> esa "yumshoqroq": ular satrni boshidan o'qib, imkoni boricha ko'proq sonni ajratib oladi va son bo'lmagan belgida to'xtaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>parseint.js</span></div><textarea spellcheck="false">console.log(Number("100px"));     // NaN — o'gira olmadi
+
+console.log(parseInt("100px"));   // 100 — sonni ajratdi
+console.log(parseFloat("12.5em")); // 12.5
+console.log(parseInt("12.9"));    // 12 — parseInt faqat butun qism
+console.log(parseFloat("12.3.4")); // 12.3 — ikkinchi nuqtada to'xtadi
+
+// boshi son bo'lmasa NaN
+console.log(parseInt("a123"));    // NaN</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>parseInt</code>ning ikkinchi argumenti — sanoq tizimi asosi. Masalan, <code>parseInt("ff", 16)</code> → <code>255</code>. O'n oltilik satrlarni o'qishda juda foydali.</div>
+<h2>Math obyekti</h2>
+<p><code>Math</code> — matematik funksiyalar va konstantalar to'plami bo'lgan o'rnatilgan obyekt. Eng ko'p ishlatiladiganlari:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>math.js</span></div><textarea spellcheck="false">// kvadrat ildiz
+console.log(Math.sqrt(16));    // 4
+
+// daraja: 2 ning 10-darajasi
+console.log(Math.pow(2, 10));  // 1024
+
+// eng katta va eng kichik
+console.log(Math.max(3, 5, 1, 9, 2));  // 9
+console.log(Math.min(3, 5, 1, 9, 2));  // 1
+
+// mutlaq qiymat
+console.log(Math.abs(-7));     // 7
+
+// Pi soni
+console.log(Math.PI);          // 3.141592653589793</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>Math.random()</code> — 0 (kiritiladi) dan 1 (kiritilmaydi) gacha tasodifiy son qaytaradi. Undan foydalanib kerakli oraliqda tasodifiy son olish mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>random.js</span></div><textarea spellcheck="false">// 0 dan 1 gacha tasodifiy son (har safar boshqacha)
+console.log(Math.random());
+
+// 1 dan 6 gacha tasodifiy butun son (zar tashlash)
+let zar = Math.floor(Math.random() * 6) + 1;
+console.log("Zar:", zar);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Xulosa</h2>
+<ul><li>Sonlarni <code>1e6</code>, <code>0x</code>, <code>0b</code>, <code>0o</code> va <code>_</code> bilan qulay yozish mumkin;</li><li><code>toString(base)</code> — sonni boshqa sanoq tizimidagi satrga o'giradi;</li><li>Yaxlitlash: <code>Math.floor/ceil/round/trunc</code> va <code>toFixed(n)</code> (satr qaytaradi);</li><li><code>0.1 + 0.2 !== 0.3</code> — bu ikkilik saqlash natijasi, JavaScript xatosi emas;</li><li><code>isNaN</code>, <code>isFinite</code> — maxsus son qiymatlarini tekshiradi;</li><li><code>parseInt</code>/<code>parseFloat</code> — satr boshidan sonni ajratib oladi;</li><li><code>Math</code> — matematik funksiyalar (<code>sqrt</code>, <code>pow</code>, <code>max</code>, <code>random</code>).</li></ul>
+<nav class="lesson-nav">
+  <a href="primitiv-metodlar.html"><span class="dir">← Oldingi</span><span class="ttl">Primitivlar metodlari</span></a>
+  <a class="next" href="satrlar.html"><span class="dir">Keyingi →</span><span class="ttl">Satrlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
