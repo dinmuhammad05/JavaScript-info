@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funksiyalar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Funksiyalar yordamida kodni qayta ishlatiladigan bloklarga bo'lish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="inner">
+      <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+      <nav class="site-nav">
+        <a href="../index.html">Bosh sahifa</a>
+        <a href="kirish.html">Darslar</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Menyu">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Darslar</h3>
+      <ol>
+        <li><a href="kirish.html">Kirish</a></li>
+        <li><a href="ozgaruvchilar.html">O'zgaruvchilar</a></li>
+        <li><a href="malumot-turlari.html">Ma'lumot turlari</a></li>
+        <li><a href="operatorlar.html">Operatorlar</a></li>
+        <li><a href="shartlar.html">Shart operatorlari</a></li>
+        <li><a href="sikllar.html">Sikllar</a></li>
+        <li><a href="funksiyalar.html">Funksiyalar</a></li>
+        <li><a href="massivlar.html">Massivlar</a></li>
+      </ol>
+    </aside>
+
+    <main class="content article">
+      <h1>Funksiyalar</h1>
+      <p class="lead">Funksiya — bu ma'lum bir vazifani bajaradigan, qayta ishlatish mumkin bo'lgan kod bloki. Bir marta yozib, istalgancha chaqirasiz.</p>
+
+      <h2>Funksiya yaratish</h2>
+      <p>Funksiya <code>function</code> kalit so'zi, nomi va qavslar bilan e'lon qilinadi:</p>
+
+      <pre class="code"><code>function salomBer() {
+  console.log("Assalomu alaykum!");
+}
+
+salomBer();  // funksiyani chaqiramiz
+salomBer();  // yana chaqiramiz</code></pre>
+
+      <p>Funksiyani <em>chaqirmaguningizcha</em> u ishlamaydi. Chaqirish uchun nomidan keyin qavs <code>()</code> qo'yiladi.</p>
+
+      <h2>Parametrlar</h2>
+      <p>Funksiyaga tashqaridan ma'lumot berish uchun <strong>parametrlar</strong> ishlatiladi:</p>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>parametrlar.js</span>
+        </div>
+        <textarea spellcheck="false">function salomla(ism) {
+  console.log("Salom, " + ism + "!");
+}
+
+salomla("Ali");
+salomla("Vali");
+salomla("Guli");</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <h2>Qiymat qaytarish (return)</h2>
+      <p><code>return</code> yordamida funksiya natija qaytaradi. Bu natijani o'zgaruvchiga saqlash mumkin:</p>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>return.js</span>
+        </div>
+        <textarea spellcheck="false">function qoshish(a, b) {
+  return a + b;
+}
+
+let natija = qoshish(5, 3);
+console.log("Yig'indi:", natija);   // 8
+console.log(qoshish(10, 20));        // 30</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <div class="note">
+        <code>return</code> bajarilgach, funksiya darhol to'xtaydi — undan keyingi kod ishlamaydi.
+      </div>
+
+      <h2>Strelka funksiyalari (arrow functions)</h2>
+      <p>Zamonaviy JavaScript'da funksiyalarni qisqaroq yozish mumkin. Bu "strelka funksiyalari" deb ataladi:</p>
+
+      <pre class="code"><code>// Oddiy funksiya
+function kvadrat(x) {
+  return x * x;
+}
+
+// Xuddi shu funksiya — strelka ko'rinishida
+const kvadrat2 = (x) => x * x;
+
+console.log(kvadrat2(4));  // 16</code></pre>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>arrow.js</span>
+        </div>
+        <textarea spellcheck="false">const kopaytir = (a, b) => a * b;
+const salom = (ism) => `Xush kelibsiz, ${ism}!`;
+
+console.log(kopaytir(6, 7));   // 42
+console.log(salom("Dilnoza"));</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <h2>Nima uchun funksiyalar kerak?</h2>
+      <ul>
+        <li><strong>Takrorlanmaslik</strong> — bir kodni ko'p joyda ishlatish uchun qayta yozish shart emas;</li>
+        <li><strong>Tushunarlilik</strong> — kod kichik, mazmunli bo'laklarga bo'linadi;</li>
+        <li><strong>Oson tuzatish</strong> — xatoni bir joyda tuzatsangiz, hamma joyda tuzaladi.</li>
+      </ul>
+
+      <h2>Amaliy misol</h2>
+      <p>Sonning juft yoki toqligini aniqlaydigan funksiya:</p>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>juft-toq.js</span>
+        </div>
+        <textarea spellcheck="false">function juftmi(son) {
+  if (son % 2 === 0) {
+    return "juft";
+  } else {
+    return "toq";
+  }
+}
+
+console.log(4, "→", juftmi(4));
+console.log(7, "→", juftmi(7));
+console.log(10, "→", juftmi(10));</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <h2>Xulosa</h2>
+      <ul>
+        <li>Funksiya — qayta ishlatiladigan kod bloki;</li>
+        <li>Parametrlar orqali funksiyaga ma'lumot beriladi;</li>
+        <li><code>return</code> natijani qaytaradi;</li>
+        <li>Strelka funksiyalari (<code>=&gt;</code>) — qisqa yozuv usuli;</li>
+        <li>Funksiyalar kodni tartibli va tushunarli qiladi.</li>
+      </ul>
+
+      <nav class="lesson-nav">
+        <a href="sikllar.html"><span class="dir">← Ortga</span><span class="ttl">Sikllar</span></a>
+        <a class="next" href="massivlar.html"><span class="dir">Keyingi →</span><span class="ttl">Massivlar</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <span>© 2026 JavaScript.info — O'zbekcha variant.</span>
+      <span><a href="../index.html">Bosh sahifa</a></span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

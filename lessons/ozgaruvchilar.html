@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O'zgaruvchilar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="let, const va var yordamida JavaScript'da ma'lumotlarni saqlashni o'rganing.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="inner">
+      <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+      <nav class="site-nav">
+        <a href="../index.html">Bosh sahifa</a>
+        <a href="kirish.html">Darslar</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Menyu">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Darslar</h3>
+      <ol>
+        <li><a href="kirish.html">Kirish</a></li>
+        <li><a href="ozgaruvchilar.html">O'zgaruvchilar</a></li>
+        <li><a href="malumot-turlari.html">Ma'lumot turlari</a></li>
+        <li><a href="operatorlar.html">Operatorlar</a></li>
+        <li><a href="shartlar.html">Shart operatorlari</a></li>
+        <li><a href="sikllar.html">Sikllar</a></li>
+        <li><a href="funksiyalar.html">Funksiyalar</a></li>
+        <li><a href="massivlar.html">Massivlar</a></li>
+      </ol>
+    </aside>
+
+    <main class="content article">
+      <h1>O'zgaruvchilar</h1>
+      <p class="lead">O'zgaruvchi (variable) — bu ma'lumotni saqlash uchun "nomlangan qutil​cha". Dasturlarda ma'lumotlar aynan o'zgaruvchilarda saqlanadi.</p>
+
+      <h2>O'zgaruvchi yaratish</h2>
+      <p>JavaScript'da o'zgaruvchi yaratish uchun <code>let</code> kalit so'zidan foydalanamiz:</p>
+
+      <pre class="code"><code>let ism = "Ali";
+let yosh = 25;</code></pre>
+
+      <p>Bu yerda <code>ism</code> o'zgaruvchisiga <code>"Ali"</code> qiymati, <code>yosh</code> o'zgaruvchisiga esa <code>25</code> qiymati berildi. Endi bu qiymatlarni istalgan joyda ishlatishimiz mumkin:</p>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>ozgaruvchilar.js</span>
+        </div>
+        <textarea spellcheck="false">let ism = "Ali";
+let yosh = 25;
+
+console.log(ism);
+console.log(yosh);
+
+// Qiymatni o'zgartiramiz
+yosh = 26;
+console.log("Yangi yosh:", yosh);</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <h2>let, const va var</h2>
+      <p>JavaScript'da o'zgaruvchi e'lon qilishning uch usuli bor:</p>
+
+      <h3><code>let</code> — o'zgaruvchan qiymat</h3>
+      <p>Qiymati keyinchalik o'zgarishi mumkin bo'lgan o'zgaruvchilar uchun <code>let</code> ishlatiladi.</p>
+
+      <h3><code>const</code> — o'zgarmas qiymat (konstanta)</h3>
+      <p>Qiymati o'zgarmaydigan o'zgaruvchilar uchun <code>const</code> ishlatiladi. Uni qayta belgilashga urinsangiz, xatolik yuz beradi:</p>
+
+      <pre class="code"><code>const pi = 3.14;
+pi = 3.15; // ❌ Xatolik: const qiymatini o'zgartirib bo'lmaydi</code></pre>
+
+      <div class="tip">
+        Amaliyotda: qiymat o'zgarmasligini bilsangiz, <code>const</code> ishlating. Faqat o'zgarishi kerak bo'lganda <code>let</code> ga o'ting. Bu kodni xavfsizroq qiladi.
+      </div>
+
+      <h3><code>var</code> — eski usul</h3>
+      <p><code>var</code> — JavaScript'ning eski o'zgaruvchi e'lon qilish usuli. Zamonaviy kodda uni ishlatmaslik tavsiya etiladi. Uni <code>let</code> va <code>const</code> almashtirgan.</p>
+
+      <h2>O'zgaruvchiga nom berish qoidalari</h2>
+      <ul>
+        <li>Nom faqat harflar, raqamlar, <code>$</code> va <code>_</code> belgilaridan iborat bo'lishi mumkin;</li>
+        <li>Nom raqam bilan boshlana olmaydi (<code>2ism</code> ❌, <code>ism2</code> ✅);</li>
+        <li>JavaScript katta-kichik harflarni farqlaydi: <code>yosh</code> va <code>Yosh</code> — bu ikki xil o'zgaruvchi;</li>
+        <li>Nom mazmunli bo'lishi kerak: <code>x</code> emas, <code>foydalanuvchiYoshi</code> yaxshiroq.</li>
+      </ul>
+
+      <div class="note">
+        JavaScript'da odatda o'zgaruvchi nomlari <strong>camelCase</strong> uslubida yoziladi: birinchi so'z kichik harf bilan, keyingilari katta harf bilan boshlanadi. Masalan: <code>foydalanuvchiIsmi</code>.
+      </div>
+
+      <h2>Amaliy misol</h2>
+      <p>Ikki o'zgaruvchini qo'shib, natijani chiqaramiz:</p>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>hisob.js</span>
+        </div>
+        <textarea spellcheck="false">const narx = 15000;
+const soni = 3;
+
+const jami = narx * soni;
+console.log("Jami summa:", jami, "so'm");</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <h2>Xulosa</h2>
+      <ul>
+        <li>O'zgaruvchi — ma'lumot saqlaydigan nomlangan joy;</li>
+        <li><code>let</code> — o'zgaruvchan qiymat uchun;</li>
+        <li><code>const</code> — o'zgarmas qiymat (konstanta) uchun;</li>
+        <li><code>var</code> — eskirgan, ishlatmang;</li>
+        <li>O'zgaruvchi nomlari mazmunli va camelCase uslubida bo'lsin.</li>
+      </ul>
+
+      <nav class="lesson-nav">
+        <a href="kirish.html"><span class="dir">← Ortga</span><span class="ttl">Kirish</span></a>
+        <a class="next" href="malumot-turlari.html"><span class="dir">Keyingi →</span><span class="ttl">Ma'lumot turlari</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <span>© 2026 JavaScript.info — O'zbekcha variant.</span>
+      <span><a href="../index.html">Bosh sahifa</a></span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

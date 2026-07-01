@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operatorlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Arifmetik, taqqoslash va mantiqiy operatorlar bilan ishlash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="inner">
+      <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+      <nav class="site-nav">
+        <a href="../index.html">Bosh sahifa</a>
+        <a href="kirish.html">Darslar</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Menyu">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Darslar</h3>
+      <ol>
+        <li><a href="kirish.html">Kirish</a></li>
+        <li><a href="ozgaruvchilar.html">O'zgaruvchilar</a></li>
+        <li><a href="malumot-turlari.html">Ma'lumot turlari</a></li>
+        <li><a href="operatorlar.html">Operatorlar</a></li>
+        <li><a href="shartlar.html">Shart operatorlari</a></li>
+        <li><a href="sikllar.html">Sikllar</a></li>
+        <li><a href="funksiyalar.html">Funksiyalar</a></li>
+        <li><a href="massivlar.html">Massivlar</a></li>
+      </ol>
+    </aside>
+
+    <main class="content article">
+      <h1>Operatorlar</h1>
+      <p class="lead">Operatorlar — bu qiymatlar ustida amal bajaradigan belgilar. Ular yordamida hisoblash, taqqoslash va mantiqiy amallarni bajaramiz.</p>
+
+      <h2>Arifmetik operatorlar</h2>
+      <p>Matematik amallar uchun quyidagi operatorlardan foydalanamiz:</p>
+      <ul>
+        <li><code>+</code> — qo'shish;</li>
+        <li><code>-</code> — ayirish;</li>
+        <li><code>*</code> — ko'paytirish;</li>
+        <li><code>/</code> — bo'lish;</li>
+        <li><code>%</code> — qoldiq (bo'lishdan qolgan qoldiq);</li>
+        <li><code>**</code> — daraja.</li>
+      </ul>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>arifmetika.js</span>
+        </div>
+        <textarea spellcheck="false">console.log(10 + 3);   // 13
+console.log(10 - 3);   // 7
+console.log(10 * 3);   // 30
+console.log(10 / 3);   // 3.333...
+console.log(10 % 3);   // 1  (qoldiq)
+console.log(2 ** 5);   // 32 (2 ning 5-darajasi)</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <div class="tip">
+        <code>%</code> (qoldiq) operatori juda foydali! Masalan, son juftmi yoki toqmi tekshirish uchun: agar <code>son % 2 === 0</code> bo'lsa, son juft.
+      </div>
+
+      <h2>Belgilash operatorlari</h2>
+      <p>Qiymat berish va uni qisqacha o'zgartirish uchun:</p>
+      <pre class="code"><code>let x = 5;
+x += 3;   // x = x + 3  →  8
+x -= 2;   // x = x - 2  →  6
+x *= 2;   // x = x * 2  →  12</code></pre>
+
+      <h2>Taqqoslash operatorlari</h2>
+      <p>Ikki qiymatni solishtiradi va natijada <code>true</code> yoki <code>false</code> qaytaradi:</p>
+      <ul>
+        <li><code>&gt;</code> katta, <code>&lt;</code> kichik;</li>
+        <li><code>&gt;=</code> katta yoki teng, <code>&lt;=</code> kichik yoki teng;</li>
+        <li><code>===</code> qat'iy teng, <code>!==</code> qat'iy teng emas.</li>
+      </ul>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>taqqoslash.js</span>
+        </div>
+        <textarea spellcheck="false">console.log(5 > 3);      // true
+console.log(5 === 5);    // true
+console.log(5 === "5");  // false (tur ham muhim!)
+console.log(5 !== 3);    // true</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <div class="warn">
+        Har doim <code>===</code> (uch teng belgi) ishlating, <code>==</code> emas! <code>===</code> ham qiymatni, ham turini tekshiradi. <code>==</code> esa turlarni avtomatik o'zgartiradi va kutilmagan natijalar berishi mumkin (masalan, <code>0 == ""</code> → <code>true</code>).
+      </div>
+
+      <h2>Mantiqiy operatorlar</h2>
+      <p>Bir nechta shartni birlashtirish uchun:</p>
+      <ul>
+        <li><code>&amp;&amp;</code> — VA (ikkalasi ham rost bo'lsa);</li>
+        <li><code>||</code> — YOKI (kamida bittasi rost bo'lsa);</li>
+        <li><code>!</code> — EMAS (qiymatni teskarisiga o'giradi).</li>
+      </ul>
+
+      <div class="playground">
+        <div class="pg-bar">
+          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+          <span>mantiq.js</span>
+        </div>
+        <textarea spellcheck="false">let yosh = 20;
+let talaba = true;
+
+console.log(yosh >= 18 && talaba);  // true (ikkalasi ham rost)
+console.log(yosh > 30 || talaba);   // true (biri rost)
+console.log(!talaba);               // false (teskari)</textarea>
+        <div class="pg-actions">
+          <button class="pg-run">▶ Ishga tushirish</button>
+          <button class="pg-clear">Tozalash</button>
+        </div>
+        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
+      </div>
+
+      <h2>Xulosa</h2>
+      <ul>
+        <li>Arifmetik: <code>+ - * / % **</code>;</li>
+        <li>Belgilash: <code>= += -= *=</code>;</li>
+        <li>Taqqoslash: <code>&gt; &lt; &gt;= &lt;= === !==</code> — natija <code>true</code>/<code>false</code>;</li>
+        <li>Mantiqiy: <code>&amp;&amp;</code> (VA), <code>||</code> (YOKI), <code>!</code> (EMAS);</li>
+        <li>Har doim <code>===</code> ni <code>==</code> dan afzal ko'ring.</li>
+      </ul>
+
+      <nav class="lesson-nav">
+        <a href="malumot-turlari.html"><span class="dir">← Ortga</span><span class="ttl">Ma'lumot turlari</span></a>
+        <a class="next" href="shartlar.html"><span class="dir">Keyingi →</span><span class="ttl">Shart operatorlari</span></a>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <span>© 2026 JavaScript.info — O'zbekcha variant.</span>
+      <span><a href="../index.html">Bosh sahifa</a></span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
