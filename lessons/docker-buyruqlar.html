@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asosiy Docker buyruqlari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Kundalik ishda kerak bo'ladigan buyruqlar: ps, images, pull, run bayroqlari (-d -p -e -v --name), stop/start/rm, rmi, exec -it va logs.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a class="active" href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Docker</div>
+<h1>Asosiy Docker buyruqlari</h1>
+<p class="lead">Docker bilan samarali ishlash uchun bir nechta asosiy buyruqni bilish kifoya. Ushbu darsda konteyner va image'larni ko'rish, ishga tushirish, to'xtatish va o'chirish uchun kerak bo'ladigan barcha buyruqlarni misollar bilan o'rganamiz. Bu darsni ko'proq amaliyot bilan mustahkamlang.</p>
+<h2>docker ps — ishlab turgan konteynerlar</h2>
+<p><code>docker ps</code> buyrug'i ayni paytda <strong>ishlab turgan</strong> konteynerlar ro'yxatini ko'rsatadi:</p>
+<pre class="code"><code>docker ps</code></pre>
+<pre class="code"><code>CONTAINER ID   IMAGE   COMMAND                  STATUS         PORTS                  NAMES
+a1b2c3d4e5f6   nginx   "/docker-entrypoint."   Up 5 minutes   0.0.0.0:8080-&gt;80/tcp   mening-serverim</code></pre>
+<p>Har bir konteyner haqida ID, image nomi, holati, portlari va nomi ko'rsatiladi. Ammo bu faqat ishlab turgan konteynerlarni beradi. To'xtatilganlarini ham ko'rish uchun <code>-a</code> (all) bayrog'ini qo'shamiz:</p>
+<pre class="code"><code>docker ps -a</code></pre>
+<p><code>-a</code> bilan barcha konteynerlar ko'rinadi — ishlab turganlari ham, to'xtaganlari ham. Bu ayniqsa xatoliklarni topishda foydali: konteyner darhol to'xtab qolган bo'lsa, uni faqat <code>-a</code> bilan ko'rasiz.</p>
+<h2>docker images — mavjud image'lar</h2>
+<p>Kompyuteringizga yuklab olingan image'lar ro'yxatini ko'rish uchun:</p>
+<pre class="code"><code>docker images</code></pre>
+<pre class="code"><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+nginx        latest    a1b2c3d4e5f6   2 weeks ago    187MB
+node         20        f6e5d4c3b2a1   3 weeks ago    1.1GB
+ubuntu       latest    1a2b3c4d5e6f   1 month ago    77.9MB</code></pre>
+<p>Bu yerda image nomi (REPOSITORY), versiyasi (TAG), noyob ID'si, yaratilgan vaqti va hajmi ko'rinadi. <code>TAG</code> — bu versiya belgisi. Agar tag ko'rsatilmasa, standart holatda <code>latest</code> ishlatiladi.</p>
+<h2>docker pull — image yuklab olish</h2>
+<p>Image'ni oldindan yuklab olish uchun <code>docker pull</code> ishlatiladi. Odatda <code>docker run</code> buni avtomatik qiladi, ammo ba'zan image'ni oldindan tayyorlab qo'yish qulay:</p>
+<pre class="code"><code># Standart (latest) versiyasini yuklash
+docker pull nginx
+
+# Aniq versiyasini yuklash
+docker pull node:20
+docker pull postgres:16</code></pre>
+<div class="tip">Ishlab chiqarishda (production) doim <strong>aniq versiya</strong> (tag) ko'rsating, masalan <code>node:20</code>, <code>latest</code> emas. Chunki <code>latest</code> vaqt o'tishi bilan o'zgaradi va ilovangiz kutilmaganda buzilishi mumkin.</div>
+<h2>docker run — konteyner ishga tushirish va bayroqlari</h2>
+<p><code>docker run</code> — asosiy buyruq. Uning eng muhim bayroqlari:</p>
+<ul><li><code>-d</code> — fonda (detached) ishga tushirish;</li><li><code>-p host:container</code> — port bog'lash;</li><li><code>-e KALIT=qiymat</code> — muhit o'zgaruvchisi (environment variable) berish;</li><li><code>-v host_yo'l:container_yo'l</code> — papka yoki volume ulash (ma'lumotni saqlash);</li><li><code>--name nom</code> — konteynerga nom berish;</li><li><code>--rm</code> — konteyner to'xtagach, uni avtomatik o'chirish.</li></ul>
+<p>Barcha bayroqlarni birlashtirgan to'liq misol — PostgreSQL ma'lumotlar bazasini ishga tushirish:</p>
+<pre class="code"><code>docker run -d \
+  --name mening-bazam \
+  -e POSTGRES_PASSWORD=maxfiy123 \
+  -e POSTGRES_DB=dukon \
+  -p 5432:5432 \
+  -v baza-malumoti:/var/lib/postgresql/data \
+  postgres:16</code></pre>
+<p>Bu yerda: <code>-e</code> orqali parol va baza nomi beriladi, <code>-p</code> orqali port ochiladi, <code>-v</code> orqali ma'lumot saqlanadigan volume ulanadi. Endi PostgreSQL fonda ishlab turadi.</p>
+<div class="note"><code>-e</code> (environment) juda muhim: ko'plab image'lar o'z sozlamalarini muhit o'zgaruvchilari orqali oladi. Masalan, <code>postgres</code> image'i parolni <code>POSTGRES_PASSWORD</code> orqali kutadi. Har bir image hujjatida qanday o'zgaruvchilar kerakligi yozilgan.</div>
+<h2>docker stop / start / rm — boshqarish</h2>
+<p>Konteynerlarni to'xtatish, qayta ishga tushirish va o'chirish uchun quyidagi buyruqlar ishlatiladi:</p>
+<pre class="code"><code># Konteynerni to'xtatish
+docker stop mening-serverim
+
+# To'xtatilgan konteynerni qayta ishga tushirish
+docker start mening-serverim
+
+# Konteynerni butunlay o'chirish (avval to'xtatilgan bo'lishi kerak)
+docker rm mening-serverim
+
+# Ishlab turgan konteynerni majburan o'chirish
+docker rm -f mening-serverim</code></pre>
+<p>Muhim farq: <code>stop</code> konteynerni <em>to'xtatadi</em>, ammo o'chirmaydi — u <code>docker ps -a</code>da qoladi va qayta ishga tushirilishi mumkin. <code>rm</code> esa konteynerni <em>butunlay</em> yo'q qiladi.</p>
+<div class="warn"><code>docker rm</code> bilan o'chirilgan konteyner ichidagi ma'lumotlar (agar volume ishlatilmagan bo'lsa) <strong>butunlay yo'qoladi</strong>. Muhim ma'lumotni doim volume orqali saqlang — bu haqda alohida darsda gaplashamiz.</div>
+<h2>docker rmi — image o'chirish</h2>
+<p>Endi keraksiz image'ni o'chirish. Diqqat: bu <code>rm</code> emas, <code>rmi</code> (remove image):</p>
+<pre class="code"><code># Image'ni nomi bilan o'chirish
+docker rmi nginx
+
+# Image'ni ID orqali o'chirish
+docker rmi a1b2c3d4e5f6</code></pre>
+<div class="warn">Agar image'dan foydalanayotgan konteynerlar mavjud bo'lsa, <code>docker rmi</code> xatolik beradi. Avval o'sha konteynerlarni o'chirishingiz kerak. Keraksiz image'lar diskda ko'p joy egallaydi, shuning uchun vaqti-vaqti bilan tozalab turing.</div>
+<h2>docker exec -it — ishlab turgan konteynerga kirish</h2>
+<p>Ba'zan ishlab turgan konteyner ichiga kirib, buyruq berish kerak bo'ladi (masalan, xatolikni tekshirish yoki fayllarni ko'rish uchun). Buning uchun <code>docker exec</code> ishlatiladi:</p>
+<pre class="code"><code>docker exec -it mening-serverim bash</code></pre>
+<p>Bu buyruq ishlab turgan <code>mening-serverim</code> konteyneri ichida interaktiv <code>bash</code> terminalini ochadi. Endi siz konteyner ichidasiz va uning fayl tizimini ko'rishingiz mumkin. Chiqish uchun <code>exit</code> yozing.</p>
+<p><code>-it</code> ikkita bayroqning birlashmasi: <code>-i</code> (interactive) — kiritishga imkon beradi, <code>-t</code> (tty) — terminal muhitini yaratadi. Ular deyarli doim birga ishlatiladi.</p>
+<div class="tip">Ba'zi yengil image'larda (masalan, <code>alpine</code>) <code>bash</code> bo'lmaydi. Bunday holatda <code>sh</code> ishlatiladi: <code>docker exec -it konteyner sh</code>.</div>
+<h2>docker logs — konteyner jurnallari</h2>
+<p>Fonda ishlab turgan konteyner nima qilayotganini, xatolar bor-yo'qligini ko'rish uchun uning jurnallarini (logs) o'qiymiz:</p>
+<pre class="code"><code># Barcha jurnallarni ko'rsatish
+docker logs mening-serverim
+
+# Jonli kuzatish (yangi loglar chiqishi bilan ko'rsatiladi)
+docker logs -f mening-serverim
+
+# Faqat oxirgi 50 qatorni ko'rsatish
+docker logs --tail 50 mening-serverim</code></pre>
+<p><code>-f</code> (follow) bayrog'i jurnalni jonli kuzatadi — bu ilova ishlashini real vaqtda kuzatish uchun juda foydali. Kuzatishni to'xtatish uchun <code>Ctrl+C</code> bosing (bu konteynerni to'xtatmaydi, faqat kuzatishni tugatadi).</p>
+<div class="note"><code>docker logs</code> — nosozliklarni tuzatishda (debugging) birinchi murojaat qiladigan buyruqingiz bo'lishi kerak. Konteyner darhol to'xtab qolsa, sababini deyarli har doim loglarda topasiz.</div>
+<h2>Xulosa</h2>
+<ul><li><code>docker ps</code> — ishlab turgan, <code>docker ps -a</code> — barcha konteynerlar;</li><li><code>docker images</code> — mavjud image'lar, <code>docker pull</code> — image yuklab olish;</li><li><code>docker run</code> bayroqlari: <code>-d</code> (fon), <code>-p</code> (port), <code>-e</code> (muhit), <code>-v</code> (volume), <code>--name</code> (nom);</li><li><code>docker stop/start</code> — to'xtatish/qayta ishga tushirish, <code>docker rm</code> — konteyner o'chirish, <code>docker rmi</code> — image o'chirish;</li><li><code>docker exec -it konteyner bash</code> — ishlab turgan konteynerga kirish;</li><li><code>docker logs -f</code> — jurnallarni jonli kuzatish, nosozliklarni topishda birinchi vosita.</li></ul>
+<nav class="lesson-nav">
+  <a href="docker-ornatish.html"><span class="dir">← Oldingi</span><span class="ttl">Docker o'rnatish va birinchi konteyner</span></a>
+  <a class="next" href="dockerfile.html"><span class="dir">Keyingi →</span><span class="ttl">Dockerfile va o'z image'ingizni yaratish</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
