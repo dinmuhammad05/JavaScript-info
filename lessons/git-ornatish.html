@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IndexedDB — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="Brauzerdagi kuchli ma'lumotlar bazasi: obyekt ombori, versiyalar, transaksiyalar, qo'shish/o'qish, indekslar, promise o'ramchisi va uni qachon ishlatish.">
+  <title>Git o'rnatish va sozlash — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Git'ni Windows, macOS va Linux'ga o'rnatish; git --version orqali tekshirish; birinchi sozlash — git config bilan ism va elektron pochta; SSH kalit yaratish (ssh-keygen) va GitHub'ga qo'shish; git config --list.">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -274,12 +274,12 @@
       <li><a href="../lessons/websocket.html">WebSocket</a></li>
     </ol>
   </details>
-  <details open>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
       <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
-      <li><a class="active" href="../lessons/indexeddb.html">IndexedDB</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
     </ol>
   </details>
   <details>
@@ -295,207 +295,113 @@
     </ol>
   </details>
   <div class="side-part">4-qism: Amaliy vositalar</div>
-  <details>
+  <details open>
     <summary>Git va GitHub</summary>
     <ol>
       <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
-      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a class="active" href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
       <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
     </ol>
   </details>
 </aside>
 <main class="content article">
-<div class="crumbs">Brauzerda ma'lumot saqlash</div>
-<h1>IndexedDB</h1>
-<p class="lead"><code>IndexedDB</code> — brauzer ichiga o'rnatilgan kuchli ma'lumotlar bazasi. U <code>localStorage</code>dan ancha kuchliroq: katta hajmli ma'lumot saqlaydi, murakkab so'rovlar va indekslarni qo'llab-quvvatlaydi, hamda deyarli har qanday turdagi qiymatni (obyektlar, fayllar, <code>Blob</code>lar) saqlay oladi. U tranzaksiyalar asosida ishlaydi va katta oflayn ilovalar uchun mo'ljallangan.</p>
-<h2>IndexedDB nima uchun kerak</h2>
-<p><code>localStorage</code> oddiy, ammo cheklangan: faqat satr saqlaydi, ~5 MB bilan chegaralangan va sinxron. <code>IndexedDB</code> esa quyidagilarni beradi:</p>
-<ul><li>Katta hajmli saqlash (yuzlab megabayt yoki undan ko'p);</li><li>Deyarli har qanday tur — obyektlar, massivlar, <code>Blob</code>, <code>File</code>, hattoki <code>Date</code>;</li><li>Kalit bo'yicha tez qidiruv va <em>indekslar</em> orqali boshqa maydonlar bo'yicha qidiruv;</li><li>Tranzaksiyalar — ma'lumot izchilligini kafolatlaydi;</li><li>Asinxron API — interfeys qotib qolmaydi.</li></ul>
-<div class="note">IndexedDB <strong>brauzerga xos</strong> va asinxron. Node.js/playground muhitida <code>indexedDB</code> ob'yekti mavjud emas — quyidagi barcha misollar faqat brauzerda ishlaydi.</div>
-<h2>Bazani ochish va versiya</h2>
-<p>Ish <code>indexedDB.open(nom, versiya)</code> bilan boshlanadi. U bazani ochadi (yo'q bo'lsa yaratadi) va so'rov (request) obyektini qaytaradi:</p>
-<pre class="code"><code>// Brauzerda:
-let openRequest = indexedDB.open('shop', 1);
-
-openRequest.onsuccess = function() {
-  let db = openRequest.result;
-  console.log('Baza ochildi:', db.name);
-};
-
-openRequest.onerror = function() {
-  console.error('Xato:', openRequest.error);
-};</code></pre>
-<p>Ikkinchi argument — <strong>versiya raqami</strong> (musbat butun son). Sxema (obyekt omborlari, indekslar) faqat versiya oshirilganda o'zgartiriladi. Versiya oshirilganda <code>upgradeneeded</code> hodisasi ishga tushadi — sxemani aynan shu yerda quramiz:</p>
-<pre class="code"><code>let openRequest = indexedDB.open('shop', 1);
-
-openRequest.onupgradeneeded = function() {
-  let db = openRequest.result;
-  // sxema o'zgarishlari shu yerda:
-  if (!db.objectStoreNames.contains('books')) {
-    db.createObjectStore('books', { keyPath: 'id' });
-  }
-};</code></pre>
-<div class="warn">Sxemani o'zgartirish (obyekt ombori yoki indeks yaratish) <strong>faqat <code>upgradeneeded</code> ichida</strong> mumkin. Oddiy <code>onsuccess</code> ichida buni qilib bo'lmaydi. Sxema o'zgarganda versiya raqamini oshirishingiz kerak.</div>
-<h2>Obyekt ombori (object store)</h2>
-<p><em>Obyekt ombori</em> — IndexedDB'da ma'lumot saqlanadigan asosiy tuzilma, xuddi SQL'dagi "jadval"ga o'xshaydi. U kalit bo'yicha qiymatlarni saqlaydi. Har bir omborda kalit qanday aniqlanishini belgilaymiz:</p>
-<pre class="code"><code>openRequest.onupgradeneeded = function() {
-  let db = openRequest.result;
-
-  // keyPath: obyektning maydoni kalit bo'ladi
-  db.createObjectStore('books', { keyPath: 'id' });
-
-  // yoki avtomatik oshib boruvchi kalit:
-  // db.createObjectStore('logs', { autoIncrement: true });
-};</code></pre>
-<ul><li><code>keyPath</code> — saqlanadigan obyektning qaysi maydoni kalit bo'lishini ko'rsatadi (masalan <code>'id'</code>);</li><li><code>autoIncrement: true</code> — har bir yozuvga avtomatik oshib boradigan raqam kalit sifatida beriladi;</li><li>Ikkalasini ham ko'rsatmasa, kalit har <code>put/add</code>da alohida beriladi.</li></ul>
-<div class="note">Kalit — noyob bo'lishi kerak. Bir xil kalitli obyektni <code>put</code> bilan saqlash mavjudini almashtiradi, <code>add</code> bilan esa xatolik beradi.</div>
-<h2>Tranzaksiya (transaction)</h2>
-<p>IndexedDB'da <strong>har qanday</strong> o'qish yoki yozish tranzaksiya ichida bajariladi. Tranzaksiya — bu bir yoki bir nechta amalni <em>atomar</em> (butun holda muvaffaqiyatli yoki butun holda bekor) bajaruvchi guruh. <code>db.transaction(omborlar, rejim)</code> bilan yaratiladi:</p>
-<pre class="code"><code>// faqat o'qish uchun:
-let tx = db.transaction('books', 'readonly');
-
-// o'qish va yozish uchun:
-let tx = db.transaction('books', 'readwrite');
-
-// omborni olamiz:
-let store = tx.objectStore('books');</code></pre>
-<ul><li><code>'readonly'</code> — faqat o'qish (standart). Bir vaqtda ko'p o'qish tranzaksiyalari parallel ishlashi mumkin;</li><li><code>'readwrite'</code> — o'qish va yozish. Bir ombor uchun bir vaqtda faqat bitta yozish tranzaksiyasi ishlaydi.</li></ul>
-<pre class="code"><code>// tranzaksiya tugashini kuzatish:
-tx.oncomplete = function() {
-  console.log('Tranzaksiya tugadi');
-};
-tx.onabort = function() {
-  console.log('Tranzaksiya bekor qilindi:', tx.error);
-};</code></pre>
-<div class="tip"><code>readwrite</code>ni faqat kerak bo'lganda ishlating. Ortiqcha <code>readwrite</code> tranzaksiyalar boshqa yozishlarni bloklab, ilovani sekinlashtiradi.</div>
-<h2>Qo'shish va o'qish</h2>
-<p>Ombor obyektini olganimizdan so'ng, unga <code>add</code>/<code>put</code> bilan yozamiz va <code>get</code> bilan o'qiymiz. Har bir amal so'rov (request) qaytaradi:</p>
-<pre class="code"><code>let tx = db.transaction('books', 'readwrite');
-let store = tx.objectStore('books');
-
-let book = { id: 1, title: 'JavaScript', price: 100 };
-
-let request = store.add(book);
-
-request.onsuccess = function() {
-  console.log('Qo'shildi, kalit:', request.result);
-};
-request.onerror = function() {
-  console.log('Xato:', request.error);
-};</code></pre>
-<p>O'qish kalit bo'yicha amalga oshiriladi:</p>
-<pre class="code"><code>let tx = db.transaction('books', 'readonly');
-let store = tx.objectStore('books');
-
-let request = store.get(1);
-
-request.onsuccess = function() {
-  let book = request.result;
-  if (book) {
-    console.log(book.title); // "JavaScript"
-  } else {
-    console.log('Topilmadi');
-  }
-};</code></pre>
-<p>Foydali metodlar:</p>
-<ul><li><code>add(value)</code> — qo'shadi (kalit mavjud bo'lsa xatolik);</li><li><code>put(value)</code> — qo'shadi yoki mavjudini almashtiradi;</li><li><code>get(key)</code> — kalit bo'yicha bittasini oladi;</li><li><code>getAll()</code> — barcha yozuvlarni oladi;</li><li><code>delete(key)</code> — kalit bo'yicha o'chiradi;</li><li><code>clear()</code> — omborni butunlay bo'shatadi.</li></ul>
-<h2>Indekslar</h2>
-<p>Standart holatda IndexedDB'da faqat <em>kalit</em> bo'yicha qidirish mumkin. Boshqa maydon bo'yicha qidirish uchun <strong>indeks</strong> yaratamiz. Indeks — bu ma'lum maydon bo'yicha saralangan qo'shimcha "jadval":</p>
-<pre class="code"><code>openRequest.onupgradeneeded = function() {
-  let db = openRequest.result;
-  let store = db.createObjectStore('books', { keyPath: 'id' });
-
-  // 'price' maydoni bo'yicha indeks:
-  store.createIndex('price_idx', 'price', { unique: false });
-};</code></pre>
-<p>Endi indeks orqali narx bo'yicha qidirish mumkin:</p>
-<pre class="code"><code>let tx = db.transaction('books', 'readonly');
-let store = tx.objectStore('books');
-let index = store.index('price_idx');
-
-// narxi aynan 100 bo'lganlarni olish:
-let request = index.getAll(100);
-request.onsuccess = function() {
-  console.log(request.result); // narxi 100 bo'lgan kitoblar
-};</code></pre>
-<ul><li>Ikkinchi argument (<code>'price'</code>) — indekslanadigan maydon (<em>keyPath</em>);</li><li><code>unique: true</code> — bu maydon qiymatlari noyob bo'lishi shart;</li><li>Indeks <code>IDBKeyRange</code> bilan oraliq so'rovlarni ham qo'llab-quvvatlaydi (masalan narxi 50-150 orasida).</li></ul>
-<div class="note">Indekslar ham obyekt omborlari kabi <strong>faqat <code>upgradeneeded</code> ichida</strong> yaratiladi.</div>
-<h2>getAll va IDBKeyRange</h2>
-<p>Ko'p yozuvni bir vaqtda olish uchun <code>getAll</code> juda qulay. Oraliq bo'yicha filtrlash uchun <code>IDBKeyRange</code> ishlatiladi:</p>
-<pre class="code"><code>let index = store.index('price_idx');
-
-// narxi 50 dan 150 gacha (chegaralar bilan):
-let range = IDBKeyRange.bound(50, 150);
-let request = index.getAll(range);
-
-request.onsuccess = function() {
-  console.log(request.result);
-};
-
-// boshqa oraliqlar:
-// IDBKeyRange.lowerBound(100)  -&gt; 100 va undan katta
-// IDBKeyRange.upperBound(100)  -&gt; 100 va undan kichik
-// IDBKeyRange.only(100)        -&gt; aynan 100</code></pre>
-<h2>Promise o'ramchisi</h2>
-<p>IndexedDB'ning tabiiy API'si hodisalarga (<code>onsuccess</code>/<code>onerror</code>) asoslangan bo'lib, bu kodni murakkablashtiradi. Har bir so'rovni <code>Promise</code>ga o'rab, <code>async/await</code> bilan ishlatish ancha qulay. Quyida oddiy o'ramchi:</p>
-<pre class="code"><code>function promisify(request) {
-  return new Promise(function(resolve, reject) {
-    request.onsuccess = function() {
-      resolve(request.result);
-    };
-    request.onerror = function() {
-      reject(request.error);
-    };
-  });
-}
-
-// ishlatish (async funksiya ichida):
-async function getBook(db, id) {
-  let tx = db.transaction('books', 'readonly');
-  let store = tx.objectStore('books');
-  let book = await promisify(store.get(id));
-  return book;
-}</code></pre>
-<p>Bazani ochishni ham Promise'ga o'rash mumkin:</p>
-<pre class="code"><code>function openDB(name, version, onUpgrade) {
-  return new Promise(function(resolve, reject) {
-    let request = indexedDB.open(name, version);
-    request.onupgradeneeded = function() {
-      onUpgrade(request.result);
-    };
-    request.onsuccess = function() {
-      resolve(request.result);
-    };
-    request.onerror = function() {
-      reject(request.error);
-    };
-  });
-}</code></pre>
-<div class="tip">Amalda ko'p loyihalar Jake Archibald'ning <code>idb</code> kutubxonasini ishlatadi — u aynan shunday Promise o'ramchisini tayyor holda beradi va IndexedDB bilan ishlashni sezilarli soddalashtiradi.</div>
-<h2>O'chirish va bazani tozalash</h2>
-<pre class="code"><code>// bitta yozuvni o'chirish:
-let tx = db.transaction('books', 'readwrite');
-tx.objectStore('books').delete(1);
-
-// omborni butunlay bo'shatish:
-tx.objectStore('books').clear();
-
-// butun bazani o'chirish:
-let delReq = indexedDB.deleteDatabase('shop');
-delReq.onsuccess = function() {
-  console.log('Baza o'chirildi');
-};</code></pre>
-<h2>Qachon IndexedDB kerak</h2>
-<p>IndexedDB kuchli, lekin murakkab. Uni tanlashda quyidagilarni hisobga oling:</p>
-<ul><li><strong>Katta hajm</strong> — <code>localStorage</code>ning ~5 MB chegarasidan oshadigan ma'lumot bo'lsa;</li><li><strong>Murakkab qidiruv</strong> — indekslar va oraliq so'rovlar kerak bo'lsa;</li><li><strong>Oflayn ilovalar</strong> — PWA'lar, oflayn ishlaydigan ilovalar, keshlar;</li><li><strong>Turli xil ma'lumot</strong> — fayllar, <code>Blob</code>, katta obyektlar saqlash kerak bo'lsa.</li></ul>
-<p>Aksincha, oddiy holatlar uchun soddaroq vositalar mos:</p>
-<ul><li>Bir nechta sozlama saqlash — <code>localStorage</code>;</li><li>Serverga yuboriladigan sessiya identifikatori — cookie;</li><li>Vaqtinchalik, bitta tab'ga tegishli holat — <code>sessionStorage</code>.</li></ul>
-<div class="note">Katta va murakkab ma'lumot uchun IndexedDB tanlang; oddiy kalit-qiymat uchun <code>localStorage</code> yetarli va ancha sodda.</div>
+<div class="crumbs">Git va GitHub</div>
+<h1>Git o'rnatish va sozlash</h1>
+<p class="lead">Git bilan ishlashni boshlashdan oldin uni kompyuteringizga <strong>o'rnatish</strong> va bir marta <strong>sozlash</strong> kerak. Bu darsda barcha operatsion tizimlar uchun o'rnatish yo'llarini, birinchi sozlamalarni va GitHub'ga xavfsiz ulanish uchun SSH kalitini yaratishni bosqichma-bosqich ko'rib chiqamiz.</p>
+<h2>Git o'rnatilganini tekshirish</h2>
+<p>Ba'zi tizimlarda (ayniqsa macOS va Linux'da) Git avvaldan o'rnatilgan bo'lishi mumkin. Shuning uchun avval tekshirib ko'ramiz. Terminal (buyruqlar qatori) oynasini oching va quyidagini yozing:</p>
+<pre class="code"><code>git --version</code></pre>
+<p>Agar Git o'rnatilgan bo'lsa, quyidagiga o'xshash javob chiqadi (raqamlar farq qilishi mumkin):</p>
+<pre class="code"><code>git version 2.43.0</code></pre>
+<p>Agar <em>"command not found"</em> yoki <em>"buyruq topilmadi"</em> kabi xato chiqsa, demak Git hali o'rnatilmagan — quyidagi bo'limlardan o'z tizimingizga mos yo'riqnomani bajaring.</p>
+<div class="note"><strong>Terminal</strong> — bu buyruqlarni matn ko'rinishida kiritadigan dastur. Windows'da "Command Prompt", "PowerShell" yoki Git bilan keladigan "Git Bash"; macOS'da "Terminal"; Linux'da esa "Terminal" deb ataladi.</div>
+<h2>Windows'ga o'rnatish</h2>
+<p>Windows uchun eng oson yo'l — rasmiy o'rnatuvchini yuklab olish. <a href="https://git-scm.com/download/win">git-scm.com/download/win</a> manziliga kiring, o'rnatuvchi avtomatik yuklab olinadi. Uni ishga tushiring va bosqichlarni bajaring — aksariyat sozlamalarni standart holatida qoldirish mumkin ("Next" tugmasini bosaverib).</p>
+<p>O'rnatish tugagach, birga keladigan <strong>Git Bash</strong> dasturidan foydalanish qulay — u Linux'dagi kabi terminal muhitini beradi. Muqobil sifatida <em>winget</em> paket menejeri orqali ham o'rnatish mumkin:</p>
+<pre class="code"><code>winget install --id Git.Git -e --source winget</code></pre>
+<p>Yoki <em>Chocolatey</em> paket menejeri o'rnatilgan bo'lsa:</p>
+<pre class="code"><code>choco install git</code></pre>
+<div class="tip">O'rnatish jarayonida "Adjusting your PATH environment" bosqichida standart variant ("Git from the command line and also from 3rd-party software") tanlangan bo'lsin — shunda Git'ni istalgan terminaldan chaqira olasiz.</div>
+<h2>macOS'ga o'rnatish</h2>
+<p>macOS'da Git'ni o'rnatishning bir necha yo'li bor. Eng oddiy usul — Xcode buyruqlar qatori vositalarini o'rnatishdir. Terminalda quyidagini yozing:</p>
+<pre class="code"><code>xcode-select --install</code></pre>
+<p>Ochilgan oynada "Install" tugmasini bosing. Bu Git bilan birga boshqa foydali dasturlash vositalarini ham o'rnatadi.</p>
+<p>Agar <strong>Homebrew</strong> paket menejeri o'rnatilgan bo'lsa (ko'pchilik dasturchilar ishlatadi), eng yangi Git versiyasini quyidagicha o'rnatishingiz mumkin:</p>
+<pre class="code"><code>brew install git</code></pre>
+<div class="note">Homebrew orqali o'rnatilgan Git odatda tizimdagidan yangiroq bo'ladi. Agar Homebrew hali o'rnatilmagan bo'lsa, <a href="https://brew.sh">brew.sh</a> saytidagi ko'rsatmalarga amal qiling.</div>
+<h2>Linux'ga o'rnatish</h2>
+<p>Linux'da Git deyarli har doim tizimning paket menejeri orqali o'rnatiladi. Buyruq sizning distributivingizga bog'liq.</p>
+<h3>Ubuntu / Debian oilasi</h3>
+<pre class="code"><code>sudo apt update
+sudo apt install git</code></pre>
+<h3>Fedora</h3>
+<pre class="code"><code>sudo dnf install git</code></pre>
+<h3>Arch Linux / Manjaro</h3>
+<pre class="code"><code>sudo pacman -S git</code></pre>
+<h3>openSUSE</h3>
+<pre class="code"><code>sudo zypper install git</code></pre>
+<p>Bu yerda <code>sudo</code> — buyruqni administrator huquqlari bilan bajarish uchun kerak; tizim sizdan parolingizni so'rashi mumkin.</p>
+<div class="note">O'rnatishdan so'ng barcha tizimlarda <code>git --version</code> buyrug'ini qayta bajarib, o'rnatish muvaffaqiyatli bo'lganiga ishonch hosil qiling.</div>
+<h2>Birinchi sozlash: ism va elektron pochta</h2>
+<p>Git o'rnatilgandan keyin qiladigan birinchi ishingiz — o'zingizni tanishtirish. Har bir commit'ga uni kim yaratganini bildiruvchi <strong>ism</strong> va <strong>elektron pochta</strong> yozib qo'yiladi. Buni bir marta sozlab qo'ysangiz, keyin har bir commit'da avtomatik ishlatiladi.</p>
+<pre class="code"><code>git config --global user.name "Ali Valiyev"
+git config --global user.email "ali@example.com"</code></pre>
+<p>Bu buyruqlarni tahlil qilaylik:</p>
+<ul><li><code>git config</code> — Git sozlamalarini o'zgartiruvchi buyruq;</li><li><code>--global</code> — bu sozlama shu kompyuterdagi <em>barcha</em> repozitoriylar uchun amal qiladi degani;</li><li><code>user.name</code> va <code>user.email</code> — o'rnatilayotgan sozlamalarning nomi;</li><li>Tirnoq ichidagi qism — siz kiritayotgan qiymat.</li></ul>
+<div class="warn">Ismingizni va pochtangizni tirnoq ichida yozing, ayniqsa ismda probel bo'lsa. GitHub'da ro'yxatdan o'tgan pochtangizni ishlatish tavsiya etiladi — shunda commit'lar sizning GitHub profilingizga to'g'ri bog'lanadi.</div>
+<p>Alohida bir loyiha uchun boshqa ism/pochta kerak bo'lsa, <code>--global</code>siz, o'sha repozitoriy ichida ishga tushiring — u faqat shu loyihaga ta'sir qiladi:</p>
+<pre class="code"><code>git config user.email "ish.pochtam@company.com"</code></pre>
+<h2>Foydali qo'shimcha sozlamalar</h2>
+<p>Ba'zi sozlamalar ish qulayligini oshiradi. Ular majburiy emas, lekin tavsiya etiladi.</p>
+<p>Yangi repozitoriylarda asosiy tarmoq nomini <code>main</code> qilib belgilash (ba'zi eski Git versiyalari standart holatda <code>master</code> ishlatadi):</p>
+<pre class="code"><code>git config --global init.defaultBranch main</code></pre>
+<p>Git chiqaradigan matnlarni rangli qilish (o'qishni osonlashtiradi):</p>
+<pre class="code"><code>git config --global color.ui auto</code></pre>
+<p>Matn muharririni sozlash — masalan, VS Code'ni Git uchun standart muharrir qilish:</p>
+<pre class="code"><code>git config --global core.editor "code --wait"</code></pre>
+<div class="tip">Windows va macOS/Linux o'rtasida fayllardagi qator oxiri belgilari (line endings) farq qiladi. Muammolarni oldini olish uchun Windows'da <code>git config --global core.autocrlf true</code>, macOS/Linux'da esa <code>git config --global core.autocrlf input</code> qo'yish tavsiya etiladi.</div>
+<h2>SSH kalit nima va nega kerak?</h2>
+<p>GitHub'ga kod yuborishning ikki asosiy usuli bor: <strong>HTTPS</strong> va <strong>SSH</strong>. HTTPS'da har safar (yoki token orqali) parol so'raladi. <strong>SSH</strong> esa kompyuteringizni GitHub'ga bir marta ishonchli tarzda bog'lab qo'yadi — keyin har safar parol kiritish shart bo'lmaydi.</p>
+<p>SSH kaliti — <em>juftlik</em> ko'rinishida bo'ladi: <strong>maxfiy kalit</strong> (private key, kompyuteringizda qoladi, hech kimga bermaysiz) va <strong>ochiq kalit</strong> (public key, GitHub'ga qo'shasiz). Bular birgalikda sizni xavfsiz tanib olish imkonini beradi.</p>
+<div class="warn">Maxfiy (private) kalitni <strong>hech qachon</strong> hech kimga bermang va internetga joylamang. Faqat ochiq (public, <code>.pub</code> bilan tugaydigan) kalitni GitHub'ga qo'shasiz.</div>
+<h2>SSH kalit yaratish (ssh-keygen)</h2>
+<p>SSH kaliti yaratish uchun quyidagi buyruqdan foydalanamiz. Pochta manzilini o'zingiznikiga o'zgartiring — u shunchaki kalitga izoh (label) sifatida qo'shiladi:</p>
+<pre class="code"><code>ssh-keygen -t ed25519 -C "ali@example.com"</code></pre>
+<p>Buyruq qismlari:</p>
+<ul><li><code>ssh-keygen</code> — SSH kalit juftligini yaratuvchi dastur;</li><li><code>-t ed25519</code> — kalit turi; <em>ed25519</em> — zamonaviy, xavfsiz va tez tur;</li><li><code>-C "..."</code> — kalitga izoh (odatda pochta manzili qo'yiladi).</li></ul>
+<div class="note">Agar tizimingiz eski bo'lib, <em>ed25519</em>ni qo'llab-quvvatlamasa, muqobil sifatida quyidagini ishlating: <code>ssh-keygen -t rsa -b 4096 -C "ali@example.com"</code>.</div>
+<p>Buyruqni ishga tushirgach, u sizdan bir necha savol so'raydi:</p>
+<ul><li><strong>Kalitni saqlash joyi:</strong> shunchaki <em>Enter</em> bosing — standart joy (<code>~/.ssh/id_ed25519</code>) tanlanadi;</li><li><strong>Parol (passphrase):</strong> ixtiyoriy qo'shimcha himoya. Bo'sh qoldirish mumkin (yana <em>Enter</em>) yoki qo'shimcha xavfsizlik uchun parol kiritish mumkin.</li></ul>
+<p>Yaratilgach, ikki fayl paydo bo'ladi: <code>id_ed25519</code> (maxfiy kalit) va <code>id_ed25519.pub</code> (ochiq kalit). Ochiq kalitni ekranga chiqarish uchun:</p>
+<pre class="code"><code>cat ~/.ssh/id_ed25519.pub</code></pre>
+<p>Natija <code>ssh-ed25519</code> bilan boshlanadi va sizning pochtangiz bilan tugaydi. Butun shu satrni (bir qatordagi hammasini) nusxa oling — u GitHub'ga qo'shiladigan ochiq kalitdir.</p>
+<h2>Ochiq kalitni GitHub'ga qo'shish</h2>
+<p>Endi ochiq kalitni GitHub hisobingizga qo'shamiz. Bu bosqich brauzerda bajariladi:</p>
+<ol><li>GitHub'ga kiring va o'ng yuqoridagi profil rasmiga bosing;</li><li><strong>Settings</strong> (Sozlamalar) bo'limiga o'ting;</li><li>Chap menyudan <strong>SSH and GPG keys</strong> ni tanlang;</li><li><strong>New SSH key</strong> tugmasini bosing;</li><li><em>Title</em> maydoniga kalitni tanib oladigan nom yozing (masalan, "Uy kompyuteri");</li><li><em>Key</em> maydoniga yuqorida nusxa olgan ochiq kalitni to'liq joylashtiring;</li><li><strong>Add SSH key</strong> tugmasini bosib saqlang.</li></ol>
+<p>Ulanish to'g'ri sozlanganini tekshirish uchun quyidagi buyruqni ishga tushiring:</p>
+<pre class="code"><code>ssh -T git@github.com</code></pre>
+<p>Birinchi marta u ishonch haqida so'rashi mumkin — <code>yes</code> deb javob bering. So'ng quyidagiga o'xshash muvaffaqiyatli xabar chiqadi (foydalanuvchi nomingiz bilan):</p>
+<pre class="code"><code>Hi aliValiyev! You've successfully authenticated,
+but GitHub does not provide shell access.</code></pre>
+<div class="tip">Bu xabardagi "does not provide shell access" ("terminalga kirish bermaydi") qismi <em>xato emas</em> — bu normal holat. Muhim qismi "successfully authenticated" ("muvaffaqiyatli tasdiqlandi") degan iboradir.</div>
+<h2>Barcha sozlamalarni ko'rish: git config --list</h2>
+<p>Qilingan barcha sozlamalarni bir joyda ko'rish uchun:</p>
+<pre class="code"><code>git config --list</code></pre>
+<p>Bu buyruq barcha faol sozlamalarni <code>kalit=qiymat</code> ko'rinishida chiqaradi:</p>
+<pre class="code"><code>user.name=Ali Valiyev
+user.email=ali@example.com
+init.defaultbranch=main
+color.ui=auto</code></pre>
+<p>Faqat bitta sozlama qiymatini bilmoqchi bo'lsangiz, uning nomini ko'rsating:</p>
+<pre class="code"><code>git config user.name</code></pre>
+<p>Global sozlamalar joylashgan faylni ko'rish uchun:</p>
+<pre class="code"><code>git config --list --show-origin</code></pre>
+<div class="note">Global sozlamalar aslida uy papkangizdagi <code>.gitconfig</code> nomli oddiy matnli faylda saqlanadi. Uni istalgan matn muharririda ochib, qo'lda ham tahrirlash mumkin — ammo yangi boshlovchilar uchun <code>git config</code> buyrug'idan foydalanish xavfsizroq.</div>
 <h2>Xulosa</h2>
-<ul><li>IndexedDB — brauzerdagi kuchli, asinxron, tranzaksiyaga asoslangan ma'lumotlar bazasi;</li><li><code>indexedDB.open(nom, versiya)</code> bilan ochiladi; sxema faqat <code>upgradeneeded</code> ichida quriladi;</li><li>Ma'lumot <em>obyekt omborlari</em>da saqlanadi; kalit <code>keyPath</code> yoki <code>autoIncrement</code> orqali aniqlanadi;</li><li>Har bir amal <em>tranzaksiya</em> ichida bajariladi (<code>readonly</code> yoki <code>readwrite</code>);</li><li><code>add</code>/<code>put</code>/<code>get</code>/<code>getAll</code>/<code>delete</code> asosiy amallar;</li><li><em>Indekslar</em> boshqa maydonlar bo'yicha qidiruvni beradi;</li><li>Hodisali API'ni <code>Promise</code>ga o'rab <code>async/await</code> bilan ishlatish qulay (yoki <code>idb</code> kutubxonasi);</li><li>IndexedDB katta va murakkab ma'lumot uchun; oddiy holatda <code>localStorage</code> yoki cookie yetarli.</li></ul>
+<ul><li>Git o'rnatilganini <code>git --version</code> buyrug'i bilan tekshiriladi;</li><li>Windows'da git-scm.com yoki winget/choco orqali; macOS'da xcode-select yoki brew orqali; Linux'da paket menejeri (apt, dnf, pacman) orqali o'rnatiladi;</li><li>Birinchi ish — <code>git config --global user.name</code> va <code>user.email</code> orqali o'zingizni tanishtirish;</li><li><code>init.defaultBranch main</code> va <code>color.ui auto</code> kabi qo'shimcha sozlamalar ish qulayligini oshiradi;</li><li><strong>SSH kalit</strong> GitHub'ga parolsiz, xavfsiz ulanishni ta'minlaydi; u <code>ssh-keygen -t ed25519</code> bilan yaratiladi;</li><li>Faqat <strong>ochiq</strong> (<code>.pub</code>) kalit GitHub'ga qo'shiladi; maxfiy kalit hech qachon ulashilmaydi;</li><li><code>ssh -T git@github.com</code> ulanishni tekshiradi; <code>git config --list</code> barcha sozlamalarni ko'rsatadi.</li></ul>
 <nav class="lesson-nav">
-  <a href="localstorage.html"><span class="dir">← Oldingi</span><span class="ttl">localStorage va sessionStorage</span></a>
-  <a class="next" href="regexp-kirish.html"><span class="dir">Keyingi →</span><span class="ttl">Muntazam ifodalar: kirish</span></a>
+  <a href="git-github-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Git va GitHub nima?</span></a>
+  <a class="next" href="git-asoslar.html"><span class="dir">Keyingi →</span><span class="ttl">Git asosiy buyruqlari</span></a>
 </nav>
 </main>
 </div>
