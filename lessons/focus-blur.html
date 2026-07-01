@@ -193,6 +193,27 @@
       <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
   <details open>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -263,15 +295,15 @@
 <p class="lead">Element foydalanuvchi u bilan ishlashga tayyorlanganda "fokus" oladi — masalan, matn kiritish maydoniga bosilganda. Fokuslash va uni yo'qotish ("blur") ma'lumot kiritilib bo'lgan payni belgilash, tekshirishlarni ishga tushirish yoki interfeys holatini o'zgartirish uchun ishlatiladi. Ushbu darsda fokus bilan bog'liq metodlar, hodisalar va delegatsiyani chuqur o'rganamiz.</p>
 <h2>focus/blur hodisalari</h2>
 <p><code>focus</code> hodisasi element fokus olganda, <code>blur</code> hodisasi esa uni yo'qotganda (masalan, foydalanuvchi boshqa joyga bosganda) ishga tushadi. Ular yordamida qiymatni tekshirish yoki interfeysni o'zgartirish mumkin. Masalan, email maydonini fokus yo'qolganda tekshiramiz:</p>
-<pre class="code"><code>&amp;lt;style&amp;gt;
+<pre class="code"><code>&lt;style&gt;
   .invalid { border-color: red; }
   #error { color: red }
-&amp;lt;/style&amp;gt;
+&lt;/style&gt;
 
-Email: &amp;lt;input type="email" id="input"&amp;gt;
-&amp;lt;div id="error"&amp;gt;&amp;lt;/div&amp;gt;
+Email: &lt;input type="email" id="input"&gt;
+&lt;div id="error"&gt;&lt;/div&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   input.onblur = function() {
     // manzil noto'g'ri bo'lsa xatolikni ko'rsatamiz
     if (!input.value.includes('@')) {
@@ -287,14 +319,14 @@ Email: &amp;lt;input type="email" id="input"&amp;gt;
       error.innerHTML = '';
     }
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>onblur</code> foydalanuvchi maydonni tark etganda qiymatni tekshiradi, <code>onfocus</code> esa u qaytib kelganda avvalgi xatolik belgisini olib tashlaydi.</p>
 <h2>focus/blur metodlari</h2>
 <p><code>elem.focus()</code> va <code>elem.blur()</code> metodlari elementga fokusni dasturiy ravishda berish yoki undan olib qo'yish imkonini beradi. Masalan, qiymat noto'g'ri bo'lsa, foydalanuvchini maydondan chiqarmaymiz — fokusni qaytaramiz:</p>
-<pre class="code"><code>Email: &amp;lt;input type="email" id="input"&amp;gt;
-&amp;lt;input type="text" style="width:220px" placeholder="noto'g'ri kiriting, keyin bu yerga o'ting"&amp;gt;
+<pre class="code"><code>Email: &lt;input type="email" id="input"&gt;
+&lt;input type="text" style="width:220px" placeholder="noto'g'ri kiriting, keyin bu yerga o'ting"&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   input.onblur = function() {
     if (!this.value.includes('@')) {
       // xatolikni ko'rsatamiz
@@ -305,64 +337,64 @@ Email: &amp;lt;input type="email" id="input"&amp;gt;
       this.classList.remove('error');
     }
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <div class="warn">Fokusni bunday "majburiy ushlab qolish" (foydalanuvchini maydondan chiqarmaslik) UX nuqtai nazaridan yomon amaliyot hisoblanadi. Foydalanuvchi keyinroq to'g'rilashni xohlashi mumkin. Xatolikni ko'rsatish yaxshiroq, lekin foydalanuvchini majburan ushlab turmaslik kerak. Bundan tashqari, JavaScript sabab bo'lgan <code>focus()</code> chaqiruvi ba'zi brauzerlarda <code>blur</code> hodisasi ichida ishlamasligi ham mumkin.</div>
 <div class="note">Ko'p hodisalar odatda JavaScriptdan <code>focus()</code>/<code>blur()</code> chaqirilganda ham ishga tushadi. Lekin qiziq holat bor: agar <code>onblur</code> ishlovchisi ichida yana <code>focus()</code> chaqirsangiz, brauzer ba'zan uni e'tiborsiz qoldirishi mumkin.</div>
 <h2>Istalgan elementga fokus: tabindex</h2>
 <p>Standart holatda ko'p elementlar fokus qabul qilmaydi. Fokus qabul qiladigan elementlar — foydalanuvchi ular bilan ishlashi mumkin bo'lganlar: <code>&lt;input&gt;</code>, <code>&lt;button&gt;</code>, <code>&lt;a href&gt;</code> va boshqalar. Aksincha, <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;table&gt;</code> kabi elementlar standart holatda fokuslanmaydi — ular uchun <code>elem.focus()</code> ishlamaydi va <code>focus</code>/<code>blur</code> hodisalari yuz bermaydi.</p>
 <p>Buni <code>tabindex</code> HTML-atributi o'zgartiradi. <code>tabindex</code> qiymatiga ega istalgan element fokuslanadigan bo'ladi. Bundan tashqari, atribut qiymati foydalanuvchi <kbd>Tab</kbd> bosganda o'tish tartibini ham belgilaydi:</p>
 <ul><li><code>tabindex="1"</code>, <code>"2"</code> va h.k. — bunday elementlar birinchi bo'lib, o'z raqamlari tartibida fokuslanadi (avval 1, keyin 2, ...);</li><li><code>tabindex="0"</code> — element odatiy elementlar bilan bir qatorda, hujjatdagi tartibda fokuslanadi. Bu eng ko'p ishlatiladigan qiymat;</li><li><code>tabindex="-1"</code> — element <kbd>Tab</kbd> orqali fokuslanmaydi, lekin dasturiy <code>focus()</code> orqali fokuslanishi mumkin.</li></ul>
-<pre class="code"><code>&amp;lt;ul&amp;gt;
-  &amp;lt;li tabindex="1"&amp;gt;Bir&amp;lt;/li&amp;gt;
-  &amp;lt;li tabindex="0"&amp;gt;Nol&amp;lt;/li&amp;gt;
-  &amp;lt;li tabindex="2"&amp;gt;Ikki&amp;lt;/li&amp;gt;
-  &amp;lt;li tabindex="-1"&amp;gt;Minus bir&amp;lt;/li&amp;gt;
-&amp;lt;/ul&amp;gt;
+<pre class="code"><code>&lt;ul&gt;
+  &lt;li tabindex="1"&gt;Bir&lt;/li&gt;
+  &lt;li tabindex="0"&gt;Nol&lt;/li&gt;
+  &lt;li tabindex="2"&gt;Ikki&lt;/li&gt;
+  &lt;li tabindex="-1"&gt;Minus bir&lt;/li&gt;
+&lt;/ul&gt;
 
-&amp;lt;!-- Tab bosish tartibi: 1 -&amp;gt; 2 -&amp;gt; 0 (va boshqa odatiy elementlar) --&amp;gt;
-&amp;lt;!-- "Minus bir" Tab bilan olinmaydi, lekin focus() bilan olinadi --&amp;gt;</code></pre>
+&lt;!-- Tab bosish tartibi: 1 -&gt; 2 -&gt; 0 (va boshqa odatiy elementlar) --&gt;
+&lt;!-- "Minus bir" Tab bilan olinmaydi, lekin focus() bilan olinadi --&gt;</code></pre>
 <div class="tip">Amalda <code>tabindex="0"</code> eng foydali qiymatdir: u elementni fokuslanadigan qiladi, lekin tabiiy o'tish tartibini buzmaydi. JavaScriptda ham xuddi shunday: <code>elem.tabIndex = 0</code> yozish mumkin.</div>
 <h2>Delegatsiya: focusin/focusout</h2>
 <p><code>focus</code> va <code>blur</code> hodisalarining muhim xususiyati bor: ular <strong>ko'tarilmaydi (bubble)</strong>. Ya'ni ular ota-elementga tarqalmaydi. Bu delegatsiyani qiyinlashtiradi — masalan, butun forma uchun bitta ishlovchi qo'yib, ichidagi maydonlarni kuzatib bo'lmaydi:</p>
-<pre class="code"><code>&amp;lt;form onfocus="this.className='focused'"&amp;gt;
-  &amp;lt;input type="text" name="name" value="Ismingiz"&amp;gt;
-  &amp;lt;input type="text" name="surname" value="Familiyangiz"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form onfocus="this.className='focused'"&gt;
+  &lt;input type="text" name="name" value="Ismingiz"&gt;
+  &lt;input type="text" name="surname" value="Familiyangiz"&gt;
+&lt;/form&gt;
 
-&amp;lt;!-- Bu ISHLAMAYDI, chunki input fokuslansa,
-     focus hodisasi form'ga ko'tarilmaydi --&amp;gt;</code></pre>
+&lt;!-- Bu ISHLAMAYDI, chunki input fokuslansa,
+     focus hodisasi form'ga ko'tarilmaydi --&gt;</code></pre>
 <p>Buni ikki yo'l bilan hal qilish mumkin.</p>
 <p><strong>Birinchi yo'l</strong> — <code>focus</code>/<code>blur</code> ko'tarilmasa ham, ular <em>tutish fazasida</em> (capturing phase) yuqoridan pastga o'tadi. Shuning uchun <code>addEventListener</code>ni uchinchi argumenti <code>true</code> bilan (capturing) ishlatamiz:</p>
-<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
-  &amp;lt;input type="text" name="name" value="Ismingiz"&amp;gt;
-  &amp;lt;input type="text" name="surname" value="Familiyangiz"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form id="form"&gt;
+  &lt;input type="text" name="name" value="Ismingiz"&gt;
+  &lt;input type="text" name="surname" value="Familiyangiz"&gt;
+&lt;/form&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   // capturing fazasida ushlaymiz (uchinchi argument true)
-  form.addEventListener('focus', () =&amp;gt; form.classList.add('focused'), true);
-  form.addEventListener('blur', () =&amp;gt; form.classList.remove('focused'), true);
-&amp;lt;/script&amp;gt;</code></pre>
+  form.addEventListener('focus', () =&gt; form.classList.add('focused'), true);
+  form.addEventListener('blur', () =&gt; form.classList.remove('focused'), true);
+&lt;/script&gt;</code></pre>
 <p><strong>Ikkinchi yo'l</strong> — <code>focusin</code> va <code>focusout</code> hodisalaridan foydalanish. Ular <code>focus</code>/<code>blur</code> bilan aynan bir xil, lekin farqi shundaki, ular <strong>ko'tariladi (bubble)</strong>:</p>
-<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
-  &amp;lt;input type="text" name="name" value="Ismingiz"&amp;gt;
-  &amp;lt;input type="text" name="surname" value="Familiyangiz"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form id="form"&gt;
+  &lt;input type="text" name="name" value="Ismingiz"&gt;
+  &lt;input type="text" name="surname" value="Familiyangiz"&gt;
+&lt;/form&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   // focusin/focusout ko'tariladi, shuning uchun oddiy delegatsiya
-  form.addEventListener('focusin', () =&amp;gt; form.classList.add('focused'));
-  form.addEventListener('focusout', () =&amp;gt; form.classList.remove('focused'));
-&amp;lt;/script&amp;gt;</code></pre>
+  form.addEventListener('focusin', () =&gt; form.classList.add('focused'));
+  form.addEventListener('focusout', () =&gt; form.classList.remove('focused'));
+&lt;/script&gt;</code></pre>
 <div class="warn">Muhim jihat: <code>focusin</code>/<code>focusout</code>ni faqat <code>addEventListener</code> orqali ulash kerak, <code>on&lt;event&gt;</code> xossasi (masalan, <code>elem.onfocusin</code>) orqali emas — bu ishlamaydi. Aksincha, <code>focus</code>/<code>blur</code>ni capturing orqali ushlash ham, <code>focusin</code>/<code>focusout</code>ni ishlatish ham to'g'ri yechim.</div>
 <h2>Validatsiya misoli</h2>
 <p>Fokus hodisalarining amaliy qo'llanilishi — forma maydonlarini foydalanuvchi ular bilan ishlab bo'lgach tekshirish. Delegatsiya orqali butun forma uchun bir joyda validatsiya yozamiz:</p>
-<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
-  Login: &amp;lt;input name="login"&amp;gt;
-  Parol: &amp;lt;input name="password" type="password"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form id="form"&gt;
+  Login: &lt;input name="login"&gt;
+  Parol: &lt;input name="password" type="password"&gt;
+&lt;/form&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   // focusout ko'tarilgani uchun formada bitta ishlovchi bilan
   // har qanday maydonni tekshira olamiz
   form.addEventListener('focusout', function(event) {
@@ -374,7 +406,7 @@ Email: &amp;lt;input type="email" id="input"&amp;gt;
       input.style.borderColor = '';
     }
   });
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>event.target</code> — fokusni yo'qotgan aynan o'sha maydon. Bitta ishlovchi barcha maydonlar uchun ishlaydi — bu delegatsiyaning kuchi.</p>
 <h2>Xulosa</h2>
 <ul><li><code>focus</code> hodisasi element fokus olganda, <code>blur</code> — uni yo'qotganda ishga tushadi;</li><li><code>elem.focus()</code> va <code>elem.blur()</code> metodlari fokusni dasturiy boshqaradi;</li><li>Standart holatda faqat interaktiv elementlar (<code>input</code>, <code>button</code>, <code>a href</code>) fokuslanadi. Boshqalarga <code>tabindex</code> qo'yish orqali fokus berish mumkin;</li><li><code>tabindex="0"</code> — tabiiy tartibda fokuslash, <code>tabindex="-1"</code> — faqat dasturiy fokus;</li><li><code>focus</code>/<code>blur</code> <strong>ko'tarilmaydi</strong>. Delegatsiya uchun capturing (<code>addEventListener</code>, uchinchi argument <code>true</code>) yoki ko'tariladigan <code>focusin</code>/<code>focusout</code> hodisalaridan foydalaning;</li><li><code>focusin</code>/<code>focusout</code>ni faqat <code>addEventListener</code> orqali ulash mumkin.</li></ul>

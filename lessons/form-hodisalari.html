@@ -193,6 +193,27 @@
       <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
   <details open>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -263,27 +295,27 @@
 <p class="lead">Ma'lumot o'zgarishi va almashish buferi (clipboard) bilan bog'liq hodisalar formalar bilan ishlashda muhim o'rin tutadi. <code>change</code> va <code>input</code> qiymat o'zgarishini kuzatsa, <code>cut</code>/<code>copy</code>/<code>paste</code> nusxalash-joylashtirish amallarini boshqaradi. Ushbu darsda ularni chuqur ko'rib chiqamiz.</p>
 <h2>change hodisasi</h2>
 <p><code>change</code> hodisasi element o'zgartirilib bo'lgach ishga tushadi. Matnli maydonlar uchun bu element fokusni <em>yo'qotganda</em> yuz beradi — ya'ni har bir belgi kiritilganda emas, balki foydalanuvchi kiritishni tugatib, boshqa joyga o'tganda:</p>
-<pre class="code"><code>&amp;lt;input type="text" onchange="alert(this.value)"&amp;gt;
-&amp;lt;input type="button" value="Tugma"&amp;gt;
+<pre class="code"><code>&lt;input type="text" onchange="alert(this.value)"&gt;
+&lt;input type="button" value="Tugma"&gt;
 
-&amp;lt;!-- input'ga matn yozib, tugmaga bossangiz,
-     alert kiritilgan qiymatni ko'rsatadi --&amp;gt;</code></pre>
+&lt;!-- input'ga matn yozib, tugmaga bossangiz,
+     alert kiritilgan qiymatni ko'rsatadi --&gt;</code></pre>
 <p><code>select</code>, <code>input type=checkbox</code> va <code>input type=radio</code> uchun esa <code>change</code> tanlov o'zgarishi bilan darhol ishga tushadi — fokus yo'qolishini kutmaydi:</p>
-<pre class="code"><code>&amp;lt;select onchange="alert(this.value)"&amp;gt;
-  &amp;lt;option value=""&amp;gt;Tanlang&amp;lt;/option&amp;gt;
-  &amp;lt;option value="1"&amp;gt;Bir&amp;lt;/option&amp;gt;
-  &amp;lt;option value="2"&amp;gt;Ikki&amp;lt;/option&amp;gt;
-&amp;lt;/select&amp;gt;</code></pre>
+<pre class="code"><code>&lt;select onchange="alert(this.value)"&gt;
+  &lt;option value=""&gt;Tanlang&lt;/option&gt;
+  &lt;option value="1"&gt;Bir&lt;/option&gt;
+  &lt;option value="2"&gt;Ikki&lt;/option&gt;
+&lt;/select&gt;</code></pre>
 <h2>input hodisasi</h2>
 <p><code>input</code> hodisasi qiymat har qanday yo'l bilan o'zgargan har safar ishga tushadi. <code>change</code>dan farqli, u foydalanuvchi klaviaturadan belgi kiritganda ham, sichqoncha bilan matn joylashtirganda ham, ovoz orqali kiritganda ham darhol yuz beradi:</p>
-<pre class="code"><code>&amp;lt;input type="text" id="input"&amp;gt;
-O'zgardi: &amp;lt;span id="result"&amp;gt;&amp;lt;/span&amp;gt;
+<pre class="code"><code>&lt;input type="text" id="input"&gt;
+O'zgardi: &lt;span id="result"&gt;&lt;/span&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   input.oninput = function() {
     result.innerHTML = input.value;
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <div class="note">Agar biz foydalanuvchi kiritayotgan matnni <strong>real vaqtda</strong> kuzatmoqchi bo'lsak, aynan <code>input</code> — eng to'g'ri tanlov. U foydalanuvchi kiritishni tugatishini kutmaydi.</div>
 <div class="warn"><code>input</code> hodisasi ichida <code>event.preventDefault()</code> ishlamaydi — chunki hodisa qiymat <em>allaqachon o'zgargandan keyin</em> yuz beradi. Kiritishni oldindan to'sish uchun <code>keydown</code> yoki <code>beforeinput</code> kabi boshqa hodisalar kerak bo'ladi.</div>
 <h2>change va input: solishtirma</h2>
@@ -292,9 +324,9 @@ O'zgardi: &amp;lt;span id="result"&amp;gt;&amp;lt;/span&amp;gt;
 <h2>cut, copy, paste hodisalari</h2>
 <p>Bu hodisalar mos ravishda ma'lumotni kesish, nusxalash va joylashtirish (cut/copy/paste) amallarida yuz beradi. Ular <code>ClipboardEvent</code> sinfiga tegishli bo'lib, <code>event.clipboardData</code> xossasi orqali almashish buferi ma'lumotiga kirish imkonini beradi.</p>
 <p>Ushbu amallarni <code>event.preventDefault()</code> bilan <strong>to'sib qo'yish</strong> ham mumkin. Masalan, matn nusxalash yoki joylashtirishni butunlay taqiqlaymiz:</p>
-<pre class="code"><code>&amp;lt;input type="text" id="input"&amp;gt;
+<pre class="code"><code>&lt;input type="text" id="input"&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   input.onpaste = function(event) {
     alert('joylashtirilmoqda: ' + event.clipboardData.getData('text/plain'));
     event.preventDefault(); // joylashtirishni to'saylik
@@ -304,7 +336,7 @@ O'zgardi: &amp;lt;span id="result"&amp;gt;&amp;lt;/span&amp;gt;
     alert(event.type + ' - ' + document.getSelection());
     event.preventDefault(); // amalni to'saylik
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>E'tibor bering: <code>cut</code>/<code>copy</code>da nusxalanayotgan matnni <code>document.getSelection()</code> orqali, <code>paste</code>da esa joylashtirilayotgan matnni <code>event.clipboardData.getData('text/plain')</code> orqali olamiz.</p>
 <h2>ClipboardData: nafaqat matn</h2>
 <p><code>event.clipboardData</code> orqali biz nafaqat matn, balki boshqa formatdagi ma'lumotlarni ham o'qish/yozishimiz mumkin. Almashish buferi bir vaqtning o'zida turli formatlarda ma'lumot saqlashi mumkin:</p>

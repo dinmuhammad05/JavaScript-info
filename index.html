@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="lessons/fetch.html">Fetch</a></li>
+      <li><a href="lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="lessons/formdata.html">FormData</a></li>
+      <li><a href="lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="lessons/cookie.html">Cookie</a></li>
@@ -260,7 +292,7 @@
 <main class="content">
 <section class="hero">
   <h1>JavaScript'ni noldan chuqur o'rganing</h1>
-  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 123 ta dars.</p>
+  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 140 ta dars.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
 <h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
@@ -408,54 +440,80 @@
   <a class="card" href="lessons/oyna-olcham.html"><div class="num">95</div><h3>Oyna o'lchamlari va skroll</h3><p>document.documentElement orqali oyna (viewport) o'lchamini olish, hujjatning to'liq o'lchami, pageYOffset/scrollY joriy skroll, scrollTo/scrollBy va scrollIntoView bilan skroll boshqarish.</p></a>
   <a class="card" href="lessons/koordinatalar.html"><div class="num">96</div><h3>Koordinatalar</h3><p>Ikki koordinata tizimi: oynaga nisbatan (clientX/clientY) va hujjatga nisbatan (pageX/pageY), getBoundingClientRect, elementFromPoint va koordinatalar orqali elementni joylashtirish.</p></a>
 </div>
+<h3 class="chapter-head">Hodisalarga kirish</h3>
+<div class="cards">
+  <a class="card" href="lessons/hodisalar-kirish.html"><div class="num">97</div><h3>Brauzer hodisalariga kirish</h3><p>Hodisa nima, uni tinglashning uch usuli: HTML atribut (onclick), DOM xossa (elem.onclick), addEventListener/removeEventListener; event obyekti, this va handleEvent bilan obyekt-ishlovchi.</p></a>
+  <a class="card" href="lessons/bubbling-capturing.html"><div class="num">98</div><h3>Ko'tarilish va tutish (bubbling va capturing)</h3><p>Bubbling tamoyili, event.target va currentTarget farqi, stopPropagation va stopImmediatePropagation, capturing fazasi va hodisaning uch fazasi.</p></a>
+  <a class="card" href="lessons/event-delegation.html"><div class="num">99</div><h3>Hodisa delegatsiyasi</h3><p>Bubbling va targetdan foydalanib, bitta ishlovchi bilan ko'p elementni boshqarish; data-atributlar bilan delegatsiya; 'behavior' patterni va afzalliklari.</p></a>
+  <a class="card" href="lessons/default-actions.html"><div class="num">100</div><h3>Brauzerning standart harakatlari</h3><p>preventDefault bilan standart harakatni to'xtatish; onclick uchun return false; passive; event.defaultPrevented; havola va forma misollari.</p></a>
+  <a class="card" href="lessons/custom-events.html"><div class="num">101</div><h3>Maxsus hodisalar</h3><p>new Event, CustomEvent (detail bilan), dispatchEvent, bubbles/cancelable, ichma-ich hodisalar va o'z komponentlaringda maxsus hodisalar bilan ishlash.</p></a>
+</div>
+<h3 class="chapter-head">UI hodisalari</h3>
+<div class="cards">
+  <a class="card" href="lessons/sichqoncha-hodisalari.html"><div class="num">102</div><h3>Sichqoncha hodisalari</h3><p>mousedown/up, click, dblclick, contextmenu tartibi; qaysi tugma bosilgani (button), koordinatalar clientX/Y va pageX/Y, hamda shiftKey, ctrlKey, altKey, metaKey modifikator tugmalari.</p></a>
+  <a class="card" href="lessons/mouseover-out.html"><div class="num">103</div><h3>mouseover/out, mouseenter/leave</h3><p>mouseover/mouseout hodisalari va relatedTarget xossasi; kursor bolalar elementlar ustidan o'tganda yuzaga keladigan muammolar; bubbling qilmaydigan mouseenter/mouseleave hodisalari.</p></a>
+  <a class="card" href="lessons/drag-drop.html"><div class="num">104</div><h3>Drag'n'Drop (sichqoncha bilan)</h3><p>mousedown → mousemove → mouseup algoritmi asosida element sudrash; brauzerning standart ondragstart harakatini o'chirish; pointer-events va document.elementFromPoint yordamida nishonlarni (droppable) aniqlash.</p></a>
+  <a class="card" href="lessons/pointer-events.html"><div class="num">105</div><h3>Pointer hodisalari</h3><p>pointerdown/move/up va boshqa Pointer Events; pointerId, pointerType, isPrimary xossalari; setPointerCapture; sichqoncha, sensor va qalam (stylus) hodisalarini yagona API'da birlashtirish.</p></a>
+  <a class="card" href="lessons/klaviatura.html"><div class="num">106</div><h3>Klaviatura: keydown va keyup</h3><p>keydown va keyup hodisalari; event.key (belgi) va event.code (fizik tugma) o'rtasidagi farq; avto-takror (auto-repeat); standart harakatlar va ularni oldini olish; amaliy qiyosiy misollar.</p></a>
+  <a class="card" href="lessons/scroll.html"><div class="num">107</div><h3>Skroll</h3><p>scroll hodisasi; skrollni event bilan to'xtatib bo'lmasligi va uni oldini olishning to'g'ri usullari; "cheksiz sahifa" (infinite scroll) g'oyasi va uni amalga oshirish yondashuvi.</p></a>
+</div>
 <h3 class="chapter-head">Formalar va boshqaruv elementlari</h3>
 <div class="cards">
-  <a class="card" href="lessons/form-xossalari.html"><div class="num">97</div><h3>Forma xossalari va metodlari</h3><p>document.forms, form.elements, input/textarea/select/option bilan ishlash: value, checked, selectedIndex va options orqali qiymatlarni o'qish va yozish.</p></a>
-  <a class="card" href="lessons/focus-blur.html"><div class="num">98</div><h3>Fokuslash: focus/blur</h3><p>focus()/blur() metodlari, focus/blur hodisalari, tabindex bilan fokusni boshqarish, focusin/focusout orqali delegatsiya va validatsiya misoli.</p></a>
-  <a class="card" href="lessons/form-hodisalari.html"><div class="num">99</div><h3>Hodisalar: change, input, cut, copy, paste</h3><p>change va input hodisalarining farqi, matn kiritishni kuzatish, cut/copy/paste va ClipboardEvent bilan almashish buferini boshqarish.</p></a>
-  <a class="card" href="lessons/form-submit.html"><div class="num">100</div><h3>Forma yuborish: submit hodisasi va metod</h3><p>submit hodisasi, Enter bilan yuborish, form.submit() metodi, yuborishdan oldingi validatsiya va preventDefault bilan oldini olish.</p></a>
+  <a class="card" href="lessons/form-xossalari.html"><div class="num">108</div><h3>Forma xossalari va metodlari</h3><p>document.forms, form.elements, input/textarea/select/option bilan ishlash: value, checked, selectedIndex va options orqali qiymatlarni o'qish va yozish.</p></a>
+  <a class="card" href="lessons/focus-blur.html"><div class="num">109</div><h3>Fokuslash: focus/blur</h3><p>focus()/blur() metodlari, focus/blur hodisalari, tabindex bilan fokusni boshqarish, focusin/focusout orqali delegatsiya va validatsiya misoli.</p></a>
+  <a class="card" href="lessons/form-hodisalari.html"><div class="num">110</div><h3>Hodisalar: change, input, cut, copy, paste</h3><p>change va input hodisalarining farqi, matn kiritishni kuzatish, cut/copy/paste va ClipboardEvent bilan almashish buferini boshqarish.</p></a>
+  <a class="card" href="lessons/form-submit.html"><div class="num">111</div><h3>Forma yuborish: submit hodisasi va metod</h3><p>submit hodisasi, Enter bilan yuborish, form.submit() metodi, yuborishdan oldingi validatsiya va preventDefault bilan oldini olish.</p></a>
 </div>
 <h3 class="chapter-head">Hujjat va resurs yuklanishi</h3>
 <div class="cards">
-  <a class="card" href="lessons/page-lifecycle.html"><div class="num">101</div><h3>Sahifa: DOMContentLoaded, load, beforeunload, unload</h3><p>HTML sahifaning hayot sikli: DOMContentLoaded, load, beforeunload va unload hodisalari qachon yuz beradi, readyState, sahifadan chiqishdan oldin ogohlantirish va sendBeacon.</p></a>
-  <a class="card" href="lessons/script-async-defer.html"><div class="num">102</div><h3>Skriptlar: async, defer</h3><p>Skriptlarni yuklashda bloklovchi muammo, defer va async atributlari, ularning farqi, dinamik skriptlar va qaysi birini qachon ishlatish.</p></a>
-  <a class="card" href="lessons/resurs-yuklash.html"><div class="num">103</div><h3>Resurs yuklash: onload va onerror</h3><p>Tashqi resurslarni (skript, rasm, iframe) yuklash holatini kuzatish: onload va onerror hodisalari, crossorigin atributi va resursning tayyor bo'lishini aniqlash.</p></a>
+  <a class="card" href="lessons/page-lifecycle.html"><div class="num">112</div><h3>Sahifa: DOMContentLoaded, load, beforeunload, unload</h3><p>HTML sahifaning hayot sikli: DOMContentLoaded, load, beforeunload va unload hodisalari qachon yuz beradi, readyState, sahifadan chiqishdan oldin ogohlantirish va sendBeacon.</p></a>
+  <a class="card" href="lessons/script-async-defer.html"><div class="num">113</div><h3>Skriptlar: async, defer</h3><p>Skriptlarni yuklashda bloklovchi muammo, defer va async atributlari, ularning farqi, dinamik skriptlar va qaysi birini qachon ishlatish.</p></a>
+  <a class="card" href="lessons/resurs-yuklash.html"><div class="num">114</div><h3>Resurs yuklash: onload va onerror</h3><p>Tashqi resurslarni (skript, rasm, iframe) yuklash holatini kuzatish: onload va onerror hodisalari, crossorigin atributi va resursning tayyor bo'lishini aniqlash.</p></a>
 </div>
 <h3 class="chapter-head">Qo'shimcha brauzer mavzulari</h3>
 <div class="cards">
-  <a class="card" href="lessons/mutation-observer.html"><div class="num">104</div><h3>Mutation observer</h3><p>MutationObserver bilan DOM daraxtidagi o'zgarishlarni — element qo'shilishi, o'chirilishi, atribut va matn o'zgarishlarini — kuzatish.</p></a>
-  <a class="card" href="lessons/selection-range.html"><div class="num">105</div><h3>Tanlash va Range</h3><p>Range obyekti bilan hujjatning bir qismini belgilash, Selection obyekti orqali foydalanuvchi tanlagan matnni o'qish va dastur orqali tanlash o'rnatish.</p></a>
-  <a class="card" href="lessons/event-loop.html"><div class="num">106</div><h3>Hodisalar tsikli: mikro va makrovazifalar</h3><p>Event loop — brauzer va Node.js kodni qanday tartibda bajarishi; makrovazifa va mikrovazifa navbatlari, render, setTimeout(0) va og'ir hisob-kitobni bo'lish.</p></a>
+  <a class="card" href="lessons/mutation-observer.html"><div class="num">115</div><h3>Mutation observer</h3><p>MutationObserver bilan DOM daraxtidagi o'zgarishlarni — element qo'shilishi, o'chirilishi, atribut va matn o'zgarishlarini — kuzatish.</p></a>
+  <a class="card" href="lessons/selection-range.html"><div class="num">116</div><h3>Tanlash va Range</h3><p>Range obyekti bilan hujjatning bir qismini belgilash, Selection obyekti orqali foydalanuvchi tanlagan matnni o'qish va dastur orqali tanlash o'rnatish.</p></a>
+  <a class="card" href="lessons/event-loop.html"><div class="num">117</div><h3>Hodisalar tsikli: mikro va makrovazifalar</h3><p>Event loop — brauzer va Node.js kodni qanday tartibda bajarishi; makrovazifa va mikrovazifa navbatlari, render, setTimeout(0) va og'ir hisob-kitobni bo'lish.</p></a>
 </div>
 <h2 class="part-head" id="3-qism-qo-shimcha-bo-limlar">3-qism: Qo'shimcha bo'limlar</h2>
 <h3 class="chapter-head">Oynalar va freymlar</h3>
 <div class="cards">
-  <a class="card" href="lessons/popup.html"><div class="num">107</div><h3>Popup oynalar va window metodlari</h3><p>window.open bilan yangi oyna ochish, popup bloklovchilar, oyna sozlamalari (width, height, left, top), ochilgan oynaga murojaat qilish, close, focus va blur metodlari.</p></a>
-  <a class="card" href="lessons/cross-window.html"><div class="num">108</div><h3>Oynalararo aloqa</h3><p>Same Origin (bir xil manba) siyosati, iframe va contentWindow, boshqa manbadagi oynalar bilan xavfsiz aloqa: postMessage va message hodisasi, origin tekshirish orqali xavfsizlik.</p></a>
-  <a class="card" href="lessons/clickjacking.html"><div class="num">109</div><h3>Clickjacking hujumi</h3><p>Clickjacking (bosishni o'g'irlash) hujumining g'oyasi, saytni ko'rinmas iframe ustiga qo'yish, va himoya usullari: X-Frame-Options, CSP frame-ancestors, samesite cookie.</p></a>
+  <a class="card" href="lessons/popup.html"><div class="num">118</div><h3>Popup oynalar va window metodlari</h3><p>window.open bilan yangi oyna ochish, popup bloklovchilar, oyna sozlamalari (width, height, left, top), ochilgan oynaga murojaat qilish, close, focus va blur metodlari.</p></a>
+  <a class="card" href="lessons/cross-window.html"><div class="num">119</div><h3>Oynalararo aloqa</h3><p>Same Origin (bir xil manba) siyosati, iframe va contentWindow, boshqa manbadagi oynalar bilan xavfsiz aloqa: postMessage va message hodisasi, origin tekshirish orqali xavfsizlik.</p></a>
+  <a class="card" href="lessons/clickjacking.html"><div class="num">120</div><h3>Clickjacking hujumi</h3><p>Clickjacking (bosishni o'g'irlash) hujumining g'oyasi, saytni ko'rinmas iframe ustiga qo'yish, va himoya usullari: X-Frame-Options, CSP frame-ancestors, samesite cookie.</p></a>
 </div>
 <h3 class="chapter-head">Ikkilik ma'lumot va fayllar</h3>
 <div class="cards">
-  <a class="card" href="lessons/arraybuffer.html"><div class="num">110</div><h3>ArrayBuffer, TypedArray</h3><p>Ikkilik ma'lumotning asosi: ArrayBuffer xotira bloki, uning ustidagi ko'rinishlar (Uint8Array, Int32Array va boshqalar), indeks bilan ishlash, TypedArray metodlari va DataView.</p></a>
-  <a class="card" href="lessons/textdecoder.html"><div class="num">111</div><h3>TextDecoder va TextEncoder</h3><p>Ikkilik ma'lumotni matnga aylantirish: TextDecoder baytlarni satrga o'giradi, TextEncoder esa satrni baytlarga. UTF-8 kodlash bilan amaliy ishlash.</p></a>
-  <a class="card" href="lessons/blob.html"><div class="num">112</div><h3>Blob</h3><p>Blob obyekti — ikkilik katta obyektlar bilan ishlash: konstruktor, type (MIME turi), slice bilan bo'laklash, URL.createObjectURL orqali havola yaratish, fayl yuklab olish va rasmga aylantirish.</p></a>
-  <a class="card" href="lessons/file-filereader.html"><div class="num">113</div><h3>File va FileReader</h3><p>Foydalanuvchi tanlagan fayllar bilan ishlash: File obyekti (input.files), FileReader bilan faylni o'qish (readAsText, readAsDataURL, readAsArrayBuffer) va yuklash jarayonini kuzatish.</p></a>
+  <a class="card" href="lessons/arraybuffer.html"><div class="num">121</div><h3>ArrayBuffer, TypedArray</h3><p>Ikkilik ma'lumotning asosi: ArrayBuffer xotira bloki, uning ustidagi ko'rinishlar (Uint8Array, Int32Array va boshqalar), indeks bilan ishlash, TypedArray metodlari va DataView.</p></a>
+  <a class="card" href="lessons/textdecoder.html"><div class="num">122</div><h3>TextDecoder va TextEncoder</h3><p>Ikkilik ma'lumotni matnga aylantirish: TextDecoder baytlarni satrga o'giradi, TextEncoder esa satrni baytlarga. UTF-8 kodlash bilan amaliy ishlash.</p></a>
+  <a class="card" href="lessons/blob.html"><div class="num">123</div><h3>Blob</h3><p>Blob obyekti — ikkilik katta obyektlar bilan ishlash: konstruktor, type (MIME turi), slice bilan bo'laklash, URL.createObjectURL orqali havola yaratish, fayl yuklab olish va rasmga aylantirish.</p></a>
+  <a class="card" href="lessons/file-filereader.html"><div class="num">124</div><h3>File va FileReader</h3><p>Foydalanuvchi tanlagan fayllar bilan ishlash: File obyekti (input.files), FileReader bilan faylni o'qish (readAsText, readAsDataURL, readAsArrayBuffer) va yuklash jarayonini kuzatish.</p></a>
+</div>
+<h3 class="chapter-head">Tarmoq so'rovlari</h3>
+<div class="cards">
+  <a class="card" href="lessons/fetch.html"><div class="num">125</div><h3>Fetch</h3><p>Zamonaviy fetch() metodi bilan serverga so'rov yuborish: response.status/ok, javobni o'qish (json/text), async/await va xatoliklarni boshqarish.</p></a>
+  <a class="card" href="lessons/fetch-json.html"><div class="num">126</div><h3>Fetch: so'rovlar va JSON</h3><p>POST so'rov yuborish: method, headers, body parametrlari; JSON.stringify bilan ma'lumot yuborish; Content-Type sarlavhasining ahamiyati.</p></a>
+  <a class="card" href="lessons/formdata.html"><div class="num">127</div><h3>FormData</h3><p>FormData obyekti bilan forma ma'lumotlarini yuborish: HTML formadan yaratish, append/set/delete metodlari, fayl yuklash va fetch bilan jo'natish.</p></a>
+  <a class="card" href="lessons/fetch-progress.html"><div class="num">128</div><h3>Fetch: yuklanish jarayoni</h3><p>Katta javoblarni yuklashda jarayonni (progress) kuzatish: response.body va ReadableStream, getReader(), Content-Length va foizni hisoblash.</p></a>
+  <a class="card" href="lessons/xhr.html"><div class="num">129</div><h3>XMLHttpRequest</h3><p>Tarmoq so'rovlarining eski usuli: open/send, onload/onerror/onprogress hodisalari, sinxron va asinxron rejimlar, fetch bilan solishtirish.</p></a>
+  <a class="card" href="lessons/websocket.html"><div class="num">130</div><h3>WebSocket</h3><p>Server bilan real vaqtda ikki tomonlama aloqa: new WebSocket, open/message/close/error hodisalari, send, qayta ulanish va fetch bilan farqi.</p></a>
 </div>
 <h3 class="chapter-head">Brauzerda ma'lumot saqlash</h3>
 <div class="cards">
-  <a class="card" href="lessons/cookie.html"><div class="num">114</div><h3>Cookie</h3><p>document.cookie orqali cookie'larni o'qish va yozish, path/domain/expires/max-age, secure va samesite bayroqlari, httpOnly, cheklovlar va yordamchi funksiyalar.</p></a>
-  <a class="card" href="lessons/localstorage.html"><div class="num">115</div><h3>localStorage va sessionStorage</h3><p>Web Storage: setItem/getItem/removeItem/clear metodlari, kalitlar bo'yicha aylanish, obyektlarni JSON orqali saqlash, storage hodisasi va ikkalasining farqi.</p></a>
-  <a class="card" href="lessons/indexeddb.html"><div class="num">116</div><h3>IndexedDB</h3><p>Brauzerdagi kuchli ma'lumotlar bazasi: obyekt ombori, versiyalar, transaksiyalar, qo'shish/o'qish, indekslar, promise o'ramchisi va uni qachon ishlatish.</p></a>
+  <a class="card" href="lessons/cookie.html"><div class="num">131</div><h3>Cookie</h3><p>document.cookie orqali cookie'larni o'qish va yozish, path/domain/expires/max-age, secure va samesite bayroqlari, httpOnly, cheklovlar va yordamchi funksiyalar.</p></a>
+  <a class="card" href="lessons/localstorage.html"><div class="num">132</div><h3>localStorage va sessionStorage</h3><p>Web Storage: setItem/getItem/removeItem/clear metodlari, kalitlar bo'yicha aylanish, obyektlarni JSON orqali saqlash, storage hodisasi va ikkalasining farqi.</p></a>
+  <a class="card" href="lessons/indexeddb.html"><div class="num">133</div><h3>IndexedDB</h3><p>Brauzerdagi kuchli ma'lumotlar bazasi: obyekt ombori, versiyalar, transaksiyalar, qo'shish/o'qish, indekslar, promise o'ramchisi va uni qachon ishlatish.</p></a>
 </div>
 <h3 class="chapter-head">Muntazam ifodalar (RegExp)</h3>
 <div class="cards">
-  <a class="card" href="lessons/regexp-kirish.html"><div class="num">117</div><h3>Muntazam ifodalar: kirish</h3><p>Muntazam ifoda (RegExp) nima, /pattern/flags sintaksisi, g/i/m/s/u/y flaglari, str.match, str.replace, str.search, regexp.test metodlari va regexp yaratishning ikki usuli.</p></a>
-  <a class="card" href="lessons/regexp-belgilar.html"><div class="num">118</div><h3>Belgilar sinflari</h3><p>Belgi sinflari \d \D \s \S \w \W, ularning teskarilari, nuqta (.) va s flagi, unicode haqida qisqacha hamda telefon raqamini ajratish kabi amaliy misollar.</p></a>
-  <a class="card" href="lessons/regexp-anchor.html"><div class="num">119</div><h3>Langarlar: ^ va $, ko'p qatorli rejim</h3><p>Boshlanish langari ^, tugash langari $, to'liq moslikni tekshirish, ko'p qatorli m rejimi va so'z chegarasi \b.</p></a>
-  <a class="card" href="lessons/regexp-quantifiers.html"><div class="num">120</div><h3>Kvantorlar: +, *, ?, {n,m}</h3><p>Miqdor belgilari bilan belgilar nechta marta takrorlanishini boshqarish; ochko'z (greedy) va dangasa (lazy) rejimlar; raqam va HTML teglarni ajratish misollari.</p></a>
-  <a class="card" href="lessons/regexp-groups.html"><div class="num">121</div><h3>Guruhlash va tutish</h3><p>Qavslar bilan qismlarni guruhlash; guruh natijalari (match) va nomli guruhlar (?&lt;name&gt;); replace da $1 va $&lt;name&gt;; tutmaydigan guruh (?:...).</p></a>
-  <a class="card" href="lessons/regexp-alternation.html"><div class="num">122</div><h3>Alternatsiya (yoki) |</h3><p>Vertikal chiziq | bilan bir necha variantdan birini tanlash; qavs bilan chegaralash; sana va vaqt misollari; tez-tez uchraydigan tuzoqlar.</p></a>
-  <a class="card" href="lessons/regexp-lookahead.html"><div class="num">123</div><h3>Lookahead va lookbehind</h3><p>Oldinga qarash x(?=y), x(?!y) va orqaga qarash (?&lt;=y)x, (?&lt;!y)x; narxni ajratish misoli; bu vositalar qachon kerak bo'ladi.</p></a>
+  <a class="card" href="lessons/regexp-kirish.html"><div class="num">134</div><h3>Muntazam ifodalar: kirish</h3><p>Muntazam ifoda (RegExp) nima, /pattern/flags sintaksisi, g/i/m/s/u/y flaglari, str.match, str.replace, str.search, regexp.test metodlari va regexp yaratishning ikki usuli.</p></a>
+  <a class="card" href="lessons/regexp-belgilar.html"><div class="num">135</div><h3>Belgilar sinflari</h3><p>Belgi sinflari \d \D \s \S \w \W, ularning teskarilari, nuqta (.) va s flagi, unicode haqida qisqacha hamda telefon raqamini ajratish kabi amaliy misollar.</p></a>
+  <a class="card" href="lessons/regexp-anchor.html"><div class="num">136</div><h3>Langarlar: ^ va $, ko'p qatorli rejim</h3><p>Boshlanish langari ^, tugash langari $, to'liq moslikni tekshirish, ko'p qatorli m rejimi va so'z chegarasi \b.</p></a>
+  <a class="card" href="lessons/regexp-quantifiers.html"><div class="num">137</div><h3>Kvantorlar: +, *, ?, {n,m}</h3><p>Miqdor belgilari bilan belgilar nechta marta takrorlanishini boshqarish; ochko'z (greedy) va dangasa (lazy) rejimlar; raqam va HTML teglarni ajratish misollari.</p></a>
+  <a class="card" href="lessons/regexp-groups.html"><div class="num">138</div><h3>Guruhlash va tutish</h3><p>Qavslar bilan qismlarni guruhlash; guruh natijalari (match) va nomli guruhlar (?&lt;name&gt;); replace da $1 va $&lt;name&gt;; tutmaydigan guruh (?:...).</p></a>
+  <a class="card" href="lessons/regexp-alternation.html"><div class="num">139</div><h3>Alternatsiya (yoki) |</h3><p>Vertikal chiziq | bilan bir necha variantdan birini tanlash; qavs bilan chegaralash; sana va vaqt misollari; tez-tez uchraydigan tuzoqlar.</p></a>
+  <a class="card" href="lessons/regexp-lookahead.html"><div class="num">140</div><h3>Lookahead va lookbehind</h3><p>Oldinga qarash x(?=y), x(?!y) va orqaga qarash (?&lt;=y)x, (?&lt;!y)x; narxni ajratish misoli; bu vositalar qachon kerak bo'ladi.</p></a>
 </div>
 </main>
 </div>

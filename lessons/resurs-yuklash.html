@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -234,6 +255,17 @@
       <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
       <li><a href="../lessons/blob.html">Blob</a></li>
       <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
     </ol>
   </details>
   <details>
@@ -309,8 +341,8 @@ img.onerror = function() {
 <pre class="code"><code>let img = document.createElement('img');
 
 // avval hodisa ishlovchilarini tayinlaymiz
-img.onload = () =&amp;gt; alert('Yuklandi');
-img.onerror = () =&amp;gt; alert('Xatolik');
+img.onload = () =&gt; alert('Yuklandi');
+img.onerror = () =&gt; alert('Xatolik');
 
 // keyin src — shu paytda yuklash boshlanadi
 img.src = 'https://js.cx/clipart/train.gif';</code></pre>
@@ -323,7 +355,7 @@ img.src = 'https://js.cx/clipart/train.gif';</code></pre>
 <ol><li>Tashqi skriptda <code>crossorigin</code> atributi bo'lishi;</li><li>Uzoq server esa <code>Access-Control-Allow-Origin</code> HTTP sarlavhasini yuborishi.</li></ol>
 <p><code>crossorigin</code> atributining uch varianti bor:</p>
 <ul><li><code>crossorigin</code> yo'q — kirish taqiqlangan (to'liq xato ma'lumoti berilmaydi);</li><li><code>crossorigin="anonymous"</code> — server <code>Access-Control-Allow-Origin</code> yuborsa, kirishga ruxsat. Cookie va autentifikatsiya ma'lumotlari yuborilmaydi;</li><li><code>crossorigin="use-credentials"</code> — server maxsus sarlavhalar yuborsa, kirishga ruxsat. Cookie va autentifikatsiya ma'lumotlari ham yuboriladi.</li></ul>
-<pre class="code"><code>&amp;lt;script crossorigin="anonymous" src="https://another-site.com/script.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<pre class="code"><code>&lt;script crossorigin="anonymous" src="https://another-site.com/script.js"&gt;&lt;/script&gt;</code></pre>
 <div class="tip">Aksariyat hollarda uchinchi tomon skriptlari uchun <code>crossorigin="anonymous"</code> yetarli. Bu esa <code>window.onerror</code>da to'liq xato tafsilotlarini olish imkonini beradi — bu, ayniqsa, ishlab chiqarishda (production) xatolarni kuzatuvchi tizimlar (Sentry va h.k.) uchun muhim.</div>
 <h2>Resurs holatini kuzatish (amaliy misol)</h2>
 <p>Yuqoridagi bilimlarni birlashtirib, resursni yuklab, uni kuzatuvchi umumiy funksiya yozamiz. Bu funksiya skriptni yuklaydi va <code>callback</code> orqali natijani (xato yoki muvaffaqiyat) qaytaradi:</p>
@@ -332,8 +364,8 @@ img.src = 'https://js.cx/clipart/train.gif';</code></pre>
   script.src = src;
   document.head.append(script);
 
-  script.onload = () =&amp;gt; callback(null, script);
-  script.onerror = () =&amp;gt; callback(new Error('Skript yuklashda xatolik: ' + src));
+  script.onload = () =&gt; callback(null, script);
+  script.onerror = () =&gt; callback(new Error('Skript yuklashda xatolik: ' + src));
 }
 
 // ishlatish:
@@ -348,20 +380,20 @@ loadScript('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js', function
 });</code></pre>
 <p>Bu Node.js uslubidagi (error-first) callback pattern — birinchi argument xato, ikkinchisi natija. Uni Promise'ga o'rab, <code>async/await</code> bilan ishlatish ham mumkin:</p>
 <pre class="code"><code>function loadScriptPromise(src) {
-  return new Promise((resolve, reject) =&amp;gt; {
+  return new Promise((resolve, reject) =&gt; {
     let script = document.createElement('script');
     script.src = src;
     document.head.append(script);
 
-    script.onload = () =&amp;gt; resolve(script);
-    script.onerror = () =&amp;gt; reject(new Error('Xatolik: ' + src));
+    script.onload = () =&gt; resolve(script);
+    script.onerror = () =&gt; reject(new Error('Xatolik: ' + src));
   });
 }
 
 // ishlatish:
 loadScriptPromise('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js')
-  .then(script =&amp;gt; alert('Yuklandi'))
-  .catch(error =&amp;gt; alert(error.message));</code></pre>
+  .then(script =&gt; alert('Yuklandi'))
+  .catch(error =&gt; alert(error.message));</code></pre>
 <div class="tip">Bir necha resursni ketma-ket yoki parallel yuklashda Promise varianti juda qulay: <code>Promise.all</code> bilan hammasini parallel yuklab, hammasi tayyor bo'lishini kutish mumkin.</div>
 <h2>Xulosa</h2>
 <p>Tashqi resurslarni yuklashni kuzatish:</p>

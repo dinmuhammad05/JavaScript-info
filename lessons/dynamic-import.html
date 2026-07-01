@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -234,6 +255,17 @@
       <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
       <li><a href="../lessons/blob.html">Blob</a></li>
       <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
     </ol>
   </details>
   <details>
@@ -342,10 +374,10 @@ say(); // Default eksportdan salom!</code></pre>
 <div class="tip">Bu naqsh ("lazy loading" — kechiktirilgan yuklash) katta veb-ilovalarda juda foydali. Foydalanuvchi ko'rmaydigan sahifa qismlari (masalan, admin panel yoki kamdan-kam ochiladigan modal oyna) kodi faqat kerak bo'lganda yuklanadi — bu boshlang'ich sahifa yuklanishini sezilarli tezlashtiradi.</div>
 <h2>Dinamik import qaerda ishlaydi?</h2>
 <p>Muhim jihat: <code>import()</code> ifodasi oddiy skriptlarda ham ishlaydi — undan foydalanish uchun <code>type="module"</code> shart emas:</p>
-<pre class="code"><code>&amp;lt;!-- type="module" bo'lmasa ham import() ishlaydi --&amp;gt;
-&amp;lt;script&amp;gt;
-  import('./say.js').then(module =&amp;gt; module.hi());
-&amp;lt;/script&amp;gt;</code></pre>
+<pre class="code"><code>&lt;!-- type="module" bo'lmasa ham import() ishlaydi --&gt;
+&lt;script&gt;
+  import('./say.js').then(module =&gt; module.hi());
+&lt;/script&gt;</code></pre>
 <div class="note">Bu statik <code>import</code>dan yana bir farq: statik <code>import</code> faqat modul ichida (<code>type="module"</code>) ishlaydi, dinamik <code>import()</code> esa har qanday joyda ishlaydi.</div>
 <h2>Statik va dinamik import: solishtirma</h2>
 <ul><li><strong>Statik import</strong> (<code>import ... from</code>): faqat fayl yuqori darajasida, blok/shart ichida ishlamaydi, yo'l — doim string konstanta. Modul boshqa hamma narsadan oldin yuklanadi. Kod tuzilmasini aniqlaydi, tahlil qilinadi, tree-shaking'ga qulay;</li><li><strong>Dinamik import</strong> (<code>import()</code>): istalgan joyda, shart va sikllar ichida, yo'l dinamik bo'lishi mumkin. Promise qaytaradi, <code>await</code>/<code>then</code> bilan ishlatiladi. Kechiktirilgan va shartli yuklash uchun ishlatiladi.</li></ul>

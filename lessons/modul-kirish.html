@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -234,6 +255,17 @@
       <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
       <li><a href="../lessons/blob.html">Blob</a></li>
       <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
     </ol>
   </details>
   <details>
@@ -280,12 +312,12 @@ sayHi('Ali'); // Salom, Ali!</code></pre>
 <div class="note">Yo'l (path) odatda nisbiy yozuvda beriladi: <code>'./sayHi.js'</code>. <code>./</code> — joriy papkani bildiradi. Ba'zi build tizimlari kengaytmasiz (<code>'./sayHi'</code>) yozishga ruxsat bersa-da, sof brauzer modullarida <code>.js</code> kengaytmasi zarur.</div>
 <h2>Brauzerda modullar: script type=module</h2>
 <p>Brauzer modullarni oddiy skriptlardan farqli ravishda yuklaydi. Modul ishlatilishi uchun HTML'da <code>&lt;script&gt;</code> tegiga maxsus atribut qo'shiladi: <code>type="module"</code>.</p>
-<pre class="code"><code>&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;script type="module"&amp;gt;
+<pre class="code"><code>&lt;!DOCTYPE html&gt;
+&lt;script type="module"&gt;
   import { sayHi } from './sayHi.js';
 
   document.body.innerHTML = sayHi('Vali');
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Faqat <code>type="module"</code> bilan belgilangan skript ichida <code>import</code> ishlaydi. Oddiy <code>&lt;script&gt;</code>da <code>import</code> yozsangiz, xatolik yuz beradi.</p>
 <div class="warn">Modullar faqat <strong>HTTP(s)</strong> orqali ishlaydi, <strong>local file protokoli</strong> (<code>file://</code>) orqali emas. Ya'ni faylni to'g'ridan-to'g'ri brauzerda ochsangiz, <code>import/export</code> ishlamaydi. Lokal veb-server (masalan, <code>live server</code> yoki VS Code kengaytmasi) ishga tushiring.</div>
 <div class="note">Node.js muhitida esa fayl <code>.mjs</code> kengaytmasiga ega bo'lsa yoki <code>package.json</code>da <code>"type": "module"</code> ko'rsatilgan bo'lsa, ES modullari ishlaydi. Ushbu kurs sahifasidagi interaktiv maydonchada <code>import/export</code> ishlamaydi — shu sabab bu darslarda ular faqat statik misol sifatida keltiriladi.</div>
@@ -293,9 +325,9 @@ sayHi('Ali'); // Salom, Ali!</code></pre>
 <p>Modullar oddiy skriptlardan bir necha muhim jihatlari bilan farq qiladi. Ularni birma-bir ko'rib chiqamiz.</p>
 <h3>1. Har doim "use strict"</h3>
 <p>Modullar <strong>doim qat'iy rejimda</strong> (<code>strict mode</code>) ishlaydi. Buni alohida yozish shart emas — u avtomatik yoqilgan. Masalan, e'lon qilinmagan o'zgaruvchiga qiymat berish xatolik beradi:</p>
-<pre class="code"><code>&amp;lt;script type="module"&amp;gt;
+<pre class="code"><code>&lt;script type="module"&gt;
   a = 5; // ReferenceError: a is not defined
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <h3>2. Har bir modulning o'z ko'lami (scope) bor</h3>
 <p>Har bir modulning o'z yuqori darajali (top-level) ko'lami bo'ladi. Bir modulning yuqori darajali o'zgaruvchi va funksiyalari boshqa modullarda ko'rinmaydi.</p>
 <pre class="code"><code>// 📁 user.js
@@ -305,13 +337,13 @@ let user = 'John';
 alert(user); // xatolik: user is not defined</code></pre>
 <p>Modullar tashqariga chiqarmoqchi bo'lgan narsalarni <code>export</code> qilishi, foydalanmoqchi bo'lganlarini esa <code>import</code> qilishi kerak. Ya'ni har bir modul o'z o'zgaruvchilarini yashiradi (encapsulation).</p>
 <p>Brauzerda ham har bir <code>&lt;script type="module"&gt;</code>ning alohida yuqori darajali ko'lami bo'ladi:</p>
-<pre class="code"><code>&amp;lt;script type="module"&amp;gt;
+<pre class="code"><code>&lt;script type="module"&gt;
   let user = 'John';
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 
-&amp;lt;script type="module"&amp;gt;
+&lt;script type="module"&gt;
   alert(user); // Error: user is not defined
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <div class="tip">Agar biror qiymatni haqiqatan ham global qilmoqchi bo'lsangiz (masalan, uchinchi tomon kutubxonasi uchun), uni ochiqchasiga <code>window</code> obyektiga tayinlashingiz kerak: <code>window.user = user</code>. Lekin bu kamdan-kam holatda tavsiya etiladi.</div>
 <h3>3. Modul kodi faqat bir marta baholanadi</h3>
 <p>Agar bir modul bir necha joyda import qilinsa, uning kodi faqat <strong>birinchi importda bir marta</strong> ishga tushiriladi. Natija esa barcha importer'larga uzatiladi. Bu muhim oqibatlarga ega.</p>
@@ -342,43 +374,43 @@ alert(admin.name); // Pete
 <div class="note">Modul yagona nusxa (singleton) yaratadi. Bu qulay: birinchi importda modulni sozlaysiz (masalan, konfiguratsiya berasiz), keyingi importlarda esa tayyor holatini olasiz.</div>
 <h3>4. import.meta</h3>
 <p><code>import.meta</code> obyekti joriy modul haqidagi ma'lumotni saqlaydi. Uning tarkibi muhitga bog'liq. Brauzerda u odatda skriptning URL manzilini o'z ichiga oladi:</p>
-<pre class="code"><code>&amp;lt;script type="module"&amp;gt;
+<pre class="code"><code>&lt;script type="module"&gt;
   alert(import.meta.url); // skript fayl URL manzili
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <h3>5. "this" — undefined</h3>
 <p>Modulning yuqori darajasida <code>this</code> qiymati <code>undefined</code> bo'ladi (oddiy skriptdagi <code>window</code> emas). Buni qat'iy rejim bilan solishtiring:</p>
-<pre class="code"><code>&amp;lt;script&amp;gt;
+<pre class="code"><code>&lt;script&gt;
   alert(this); // window
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 
-&amp;lt;script type="module"&amp;gt;
+&lt;script type="module"&gt;
   alert(this); // undefined
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <h2>Brauzerga xos xususiyatlar</h2>
 <p>Brauzer muhitida modul skriptlari yana bir necha o'ziga xoslikka ega.</p>
 <h3>Modul skriptlari kechiktirilgan (deferred)</h3>
 <p>Modul skriptlari <strong>har doim deferred</strong> — huddi <code>defer</code> atributi qo'yilgandek ishlaydi. Bu tashqi (<code>src</code> bilan) va ichki (inline) modullar uchun ham amal qiladi. Bundan kelib chiqadigan xususiyatlar:</p>
 <ul><li>Tashqi modul skriptini yuklash HTML'ni qayta ishlashni <em>bloklamaydi</em> — brauzer boshqa resurslarni parallel yuklaydi;</li><li>Modul skriptlari HTML hujjat to'liq tayyor bo'lgunga qadar <em>kutadi</em> (hatto kichik bo'lsa ham) va faqat undan keyin ishga tushadi;</li><li>Skriptlarning nisbiy tartibi saqlanadi: hujjatda oldin turgan skript avval bajariladi.</li></ul>
-<pre class="code"><code>&amp;lt;script type="module"&amp;gt;
+<pre class="code"><code>&lt;script type="module"&gt;
   // button hujjatda pastroqda bo'lsa ham ko'rinadi,
   // chunki modul deferred — u HTML tayyor bo'lgach ishlaydi
   alert(typeof button); // object
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 
-&amp;lt;button id="button"&amp;gt;Button&amp;lt;/button&amp;gt;</code></pre>
+&lt;button id="button"&gt;Button&lt;/button&gt;</code></pre>
 <p>Solishtiring: oddiy (non-module) skript darhol ishga tushardi va <code>typeof button</code> <code>undefined</code> bo'lardi, chunki brauzer hali <code>button</code>ni ko'rmagan bo'lardi.</p>
 <h3>Async atributi inline skriptlarda ishlaydi</h3>
 <p>Oddiy skriptlarda <code>async</code> atributi faqat tashqi skriptlar uchun ishlaydi. Modullarda esa u <em>inline</em> skriptlarda ham ishlaydi. <code>async</code> bilan skript boshqa skriptlar va HTML'ni kutmasdan, tayyor bo'lishi bilanoq ishga tushadi. Bu import'lar yuklangan analitika, reklama kabi mustaqil funksionallik uchun qulay.</p>
-<pre class="code"><code>&amp;lt;script async type="module"&amp;gt;
+<pre class="code"><code>&lt;script async type="module"&gt;
   import { counter } from './analytics.js';
   counter.count();
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <h3>Tashqi skriptlar</h3>
 <p><code>type="module"</code> bilan tashqi skriptlar ikki jihatda farq qiladi:</p>
 <ul><li>Bir xil <code>src</code>ga ega tashqi modullar faqat bir marta bajariladi;</li><li>Boshqa manbadan (origin) yuklangan tashqi skript CORS sarlavhalarini talab qiladi — uzoq server <code>Access-Control-Allow-Origin</code> sarlavhasi bilan ruxsat berishi kerak.</li></ul>
-<pre class="code"><code>&amp;lt;!-- another-site.com CORS ruxsatini berishi kerak,
-     aks holda skript ishlamaydi --&amp;gt;
-&amp;lt;script type="module" src="http://another-site.com/module.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<pre class="code"><code>&lt;!-- another-site.com CORS ruxsatini berishi kerak,
+     aks holda skript ishlamaydi --&gt;
+&lt;script type="module" src="http://another-site.com/module.js"&gt;&lt;/script&gt;</code></pre>
 <h3>"Yalang'och" (bare) modullarga ruxsat yo'q</h3>
 <p>Brauzerda <code>import</code> yo'li nisbiy yoki mutlaq bo'lishi kerak. Yo'lsiz, faqat nom bilan yozilgan ("bare") modullarga ruxsat yo'q:</p>
 <pre class="code"><code>import { sayHi } from 'sayHi'; // Xatolik! "bare" modul

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sichqoncha hodisalari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="mousedown/up, click, dblclick, contextmenu tartibi; qaysi tugma bosilgani (button), koordinatalar clientX/Y va pageX/Y, hamda shiftKey, ctrlKey, altKey, metaKey modifikator tugmalari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a class="active" href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">UI hodisalari</div>
+<h1>Sichqoncha hodisalari</h1>
+<p class="lead">Sichqoncha hodisalari nafaqat haqiqiy sichqoncha (mouse) uchun, balki sensorli ekranlar va planshetlar uchun ham ishlaydi — u yerda ular moslashtirilgan tarzda emulyatsiya qilinadi. Ushbu darsda sichqonchaning asosiy hodisalarini, ular qaysi tartibda yuzaga kelishini va har birida qanday ma'lumot borligini chuqur o'rganamiz.</p>
+<div class="warn">Diqqat: bu bo'limdagi UI/DOM hodisalari kurs sahifasidagi interaktiv maydonchada (playground) ishlamaydi. Sabab: bu yerda haqiqiy DOM va brauzer oynasi yo'q. Shuning uchun quyidagi barcha misollar <strong>statik</strong> — ularni o'zingizning HTML faylingizda sinab ko'rishingiz kerak.</div>
+<h2>Sichqonchaning asosiy hodisalari</h2>
+<p>Sichqoncha bilan bog'liq eng ko'p ishlatiladigan hodisalarni ikki guruhga bo'lish mumkin.</p>
+<h3>Oddiy hodisalar</h3>
+<ul><li><code>mousedown</code> / <code>mouseup</code> — element ustida sichqoncha tugmasi bosildi / qo'yib yuborildi.</li><li><code>mouseover</code> / <code>mouseout</code> — sichqoncha kursori element ustiga keldi / undan chiqib ketdi.</li><li><code>mousemove</code> — element ustida sichqonchaning har bir harakati bu hodisani chaqiradi.</li><li><code>click</code> — bir xil element ustida <code>mousedown</code>, so'ng <code>mouseup</code> chap tugma bilan sodir bo'lgach ishga tushadi.</li><li><code>dblclick</code> — bir element ustida qisqa vaqt ichida ikki marta bosilganda ishga tushadi.</li><li><code>contextmenu</code> — o'ng tugma bosilganda ishga tushadi. Boshqa usullar bilan ham (masalan, klaviaturaning maxsus tugmasi) menyu chaqirilishi mumkin, shuning uchun bu aynan sichqoncha hodisasi emas.</li></ul>
+<p>Bu hodisalar orasida ikkitasi — <code>click</code> va <code>dblclick</code> — <strong>murakkab (composite)</strong> hodisalar, ya'ni ular boshqa oddiy hodisalar ketma-ketligidan tashkil topadi.</p>
+<h2>Hodisalar tartibi</h2>
+<p>Bir amal bir nechta hodisani yuzaga keltirishi mumkin. Masalan, chap tugmani bosish avval <code>mousedown</code>ni (tugma pastga tushganda), so'ng <code>mouseup</code> va <code>click</code>ni (tugma yuqoriga qaytganda) chaqiradi.</p>
+<p>Bitta amaldan bir nechta hodisa kelib chiqsa, ularning tartibi qat'iy belgilangan. Ya'ni ishlov beruvchilar (handler) quyidagi tartibda chaqiriladi: <code>mousedown</code> → <code>mouseup</code> → <code>click</code>.</p>
+<div class="note">Har bir hodisa alohida ishlov beruvchida qayta ishlanadi, lekin ularning ketma-ketligi barqaror. Shu sabab, agar tugmani bosish jarayonini kuzatmoqchi bo'lsangiz, <code>mousedown</code> va <code>mouseup</code>ni ishlating; "bosildi" degan yakuniy amal uchun esa <code>click</code>ni afzal ko'ring.</div>
+<h2>Qaysi tugma bosildi: button</h2>
+<p>Sichqoncha bilan bog'liq hodisalarda qaysi tugma bosilganini bilish uchun <code>event.button</code> xossasi ishlatiladi. Odatda bu bizga <code>click</code> va <code>contextmenu</code> uchun kerak bo'lmaydi — chunki chap tugma <code>click</code>ni, o'ng tugma esa <code>contextmenu</code>ni chaqiradi. Lekin <code>mousedown</code> va <code>mouseup</code> ishlov beruvchilarida bu zarur bo'lishi mumkin.</p>
+<p><code>event.button</code> ning mumkin bo'lgan qiymatlari:</p>
+<ul><li><code>0</code> — chap tugma (asosiy tugma).</li><li><code>1</code> — o'rta tugma (g'ildirak).</li><li><code>2</code> — o'ng tugma (ikkilamchi tugma).</li><li><code>3</code> — X1 tugmasi (odatda "orqaga" tugmasi).</li><li><code>4</code> — X2 tugmasi (odatda "oldinga" tugmasi).</li></ul>
+<p>Aksariyat sichqonchalarda faqat chap, o'ng va o'rta tugmalar mavjud, shuning uchun amalda 0, 1 va 2 qiymatlari eng ko'p ishlatiladi.</p>
+<pre class="code"><code>elem.onmousedown = function(event) {
+  if (event.button === 0) {
+    alert('Chap tugma bosildi');
+  }
+  if (event.button === 2) {
+    alert('O'ng tugma bosildi');
+  }
+};</code></pre>
+<div class="warn">Eski qo'llanmalarda <code>event.which</code> xossasini uchratishingiz mumkin: <code>1</code> — chap, <code>2</code> — o'rta, <code>3</code> — o'ng. <code>event.which</code> eskirgan (deprecated) hisoblanadi va endi ishlatilmasligi kerak. Uning o'rniga <code>event.button</code>dan foydalaning.</div>
+<h3>buttons xossasi</h3>
+<p>Bundan tashqari <code>event.buttons</code> xossasi ham bor — u ayni damda <strong>bosib turilgan barcha tugmalarni</strong> bit-maska (bitmask) sifatida saqlaydi. Chap tugma uchun 1, o'ng uchun 2, o'rta uchun 4. Bir vaqtning o'zida bir nechta tugma bosilsa, ularning yig'indisi qaytadi. Bu kamdan-kam ishlatiladi.</p>
+<h2>Koordinatalar: clientX/Y, pageX/Y</h2>
+<p>Barcha sichqoncha hodisalari ikki xil koordinata to'plamini beradi:</p>
+<ul><li>Oynaga nisbatan (window-relative): <code>clientX</code> va <code>clientY</code>. Bular kursorning brauzer ko'rinadigan sohasi (viewport) yuqori chap burchagiga nisbatan koordinatalari. Sahifa skroll qilinsa ham ular o'zgarmaydi.</li><li>Hujjatga nisbatan (document-relative): <code>pageX</code> va <code>pageY</code>. Bular butun hujjatning yuqori chap burchagiga nisbatan koordinatalar. Sahifa skroll qilinganda ular skroll miqdoriga qo'shiladi.</li></ul>
+<p>Masalan, agar oyna 500x500 o'lchamda bo'lib, kursor chap yuqori burchakda tursa, <code>clientX</code> va <code>clientY</code> ikkalasi ham 0 bo'ladi. Agar kursor markazda bo'lsa, ular 250 ni ko'rsatadi — sahifa qancha skroll qilingan bo'lishidan qat'i nazar.</p>
+<pre class="code"><code>elem.onmousemove = function(event) {
+  console.log('Oynaga nisbatan: ' + event.clientX + ', ' + event.clientY);
+  console.log('Hujjatga nisbatan: ' + event.pageX + ', ' + event.pageY);
+};</code></pre>
+<div class="tip">Odatda "suzib yuruvchi" (fixed) elementni kursor yoniga qo'ymoqchi bo'lsangiz — masalan, maslahat oynasini (tooltip) — <code>clientX/Y</code> va <code>position: fixed</code> ishlating. Agar element sahifa bilan birga skroll qilinishi kerak bo'lsa — <code>pageX/Y</code> va <code>position: absolute</code>.</div>
+<h2>Matn belgilanishini oldini olish</h2>
+<p>Sichqonchani ikki marta bosish ko'pincha matnni belgilaydi, bu esa interfeysga xalaqit berishi mumkin. Masalan, tugmada dblclick bo'lsa, tugma matni belgilanib qolishi mumkin. Buni oldini olish uchun brauzerning standart harakatini bekor qilamiz.</p>
+<p>Muammo shundaki, matn belgilanishi <code>mousedown</code> paytida boshlanadi. Shuning uchun standart harakatni aynan <code>mousedown</code>da bekor qilish kerak:</p>
+<pre class="code"><code>&lt;b ondblclick="alert('dblclick')" onmousedown="return false"&gt;
+  Meni ikki marta bosing
+&lt;/b&gt;</code></pre>
+<p>Endi qalin (bold) matn ikki marta bosilganda belgilanmaydi, o'ng tugmani bosish esa CSS orqali ham nazorat qilinishi mumkin (<code>user-select: none</code>). Lekin ba'zan foydalanuvchi baribir matnni nusxalab olishi kerak bo'ladi, shuning uchun bu texnikadan ehtiyotkorlik bilan foydalaning.</p>
+<div class="warn">Standart harakatni bekor qilish (<code>return false</code> yoki <code>event.preventDefault()</code>) foydalanuvchi tajribasiga ta'sir qilishi mumkin. Faqat haqiqatan zarur bo'lganda ishlating.</div>
+<h2>Modifikator tugmalar: shift, alt, ctrl, meta</h2>
+<p>Barcha sichqoncha hodisalari qaysi "modifikator" (o'zgartiruvchi) tugmalari ushlab turilganini aks ettiruvchi mantiqiy (boolean) xossalarni o'z ichiga oladi:</p>
+<ul><li><code>event.shiftKey</code> — <code>Shift</code> tugmasi bosib turilganmi.</li><li><code>event.altKey</code> — <code>Alt</code> tugmasi (yoki Mac'da <code>Opt</code>).</li><li><code>event.ctrlKey</code> — <code>Ctrl</code> tugmasi.</li><li><code>event.metaKey</code> — <code>Cmd</code> tugmasi (Mac'da) yoki <code>Win</code> tugmasi (Windows'da).</li></ul>
+<p>Masalan, quyidagi tugma faqat <code>Alt</code>+<code>Shift</code>+bosish bilan ishlaydi:</p>
+<pre class="code"><code>button.onclick = function(event) {
+  if (event.altKey &amp;&amp; event.shiftKey) {
+    alert('Yashasin, Alt+Shift+Bosish!');
+  }
+};</code></pre>
+<div class="warn">Mac'da odatda <code>Cmd</code> tugmasi Windows'dagi <code>Ctrl</code> o'rnida ishlatiladi. Windows va Linux foydalanuvchilari <code>Ctrl</code> bosgan joyda, Mac foydalanuvchisi <code>Cmd</code> bosishi tabiiy. Shuning uchun barcha platformalarda qulay bo'lishi uchun ko'pincha <code>ctrlKey || metaKey</code> shartini yozadilar:</div>
+<pre class="code"><code>if (event.ctrlKey || event.metaKey) {
+  // Windows/Linux'da Ctrl, Mac'da Cmd
+}</code></pre>
+<div class="note">Modifikator tugmalarga tayanadigan qulayliklar (shortcut) uchun har doim muqobil yo'l ham qoldiring. Ba'zi foydalanuvchilar sensorli qurilmadan foydalanadi yoki jismoniy imkoniyatlari cheklangan bo'lishi mumkin — ular modifikator+bosishni bajara olmasligi ehtimol.</div>
+<h2>Xulosa</h2>
+<p>Sichqoncha hodisalari quyidagi xossalarga ega:</p>
+<ul><li>Tugma: <code>event.button</code> (0 — chap, 1 — o'rta, 2 — o'ng).</li><li>Modifikator tugmalar: <code>shiftKey</code>, <code>altKey</code>, <code>ctrlKey</code>, <code>metaKey</code>.</li><li>Koordinatalar: oynaga nisbatan <code>clientX/clientY</code>, hujjatga nisbatan <code>pageX/pageY</code>.</li></ul>
+<p>Bir amaldan bir nechta hodisa kelib chiqsa, ular qat'iy tartibda yuzaga keladi: <code>mousedown</code> → <code>mouseup</code> → <code>click</code>. Matn belgilanishini oldini olish uchun <code>mousedown</code>da standart harakatni bekor qiling.</p>
+<nav class="lesson-nav">
+  <a href="custom-events.html"><span class="dir">← Oldingi</span><span class="ttl">Maxsus hodisalar</span></a>
+  <a class="next" href="mouseover-out.html"><span class="dir">Keyingi →</span><span class="ttl">mouseover/out, mouseenter/leave</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

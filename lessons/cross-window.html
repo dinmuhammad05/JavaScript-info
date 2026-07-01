@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -270,9 +302,9 @@
 <p>Same Origin siyosati shuni bildiradi: agar bizda boshqa oyna (masalan, <code>window.open</code> bilan ochilgan yoki <code>iframe</code>dagi) havolasi bo'lsa-yu, u oyna <strong>bir xil manbadan</strong> bo'lsa — biz uning tarkibiga to'liq kira olamiz. Agar u <strong>boshqa manbadan</strong> bo'lsa — biz uning URL'ini o'zgartira olamiz (u yerga o'ta olamiz), lekin ichidagi tarkibni (o'zgaruvchilar, DOM) <strong>o'qiy olmaymiz</strong>.</p>
 <h2>Bir xil manbadagi oynaga to'liq kirish</h2>
 <p>Agar boshqa oyna (masalan, popup yoki iframe) bir xil manbadan bo'lsa, biz uning barcha ichki tarkibiga kira olamiz: DOM'ini o'qish/o'zgartirish, o'zgaruvchilarini olish va h.k. Masalan, iframe bilan:</p>
-<pre class="code"><code>&amp;lt;iframe src="/same-origin.html" id="iframe"&amp;gt;&amp;lt;/iframe&amp;gt;
+<pre class="code"><code>&lt;iframe src="/same-origin.html" id="iframe"&gt;&lt;/iframe&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   iframe.onload = function() {
     // ichki oynaga kirish
     let iframeWindow = iframe.contentWindow;
@@ -283,15 +315,15 @@
 
     doc.body.style.background = 'lightgreen'; // ishlaydi (same origin)
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Bu yerda muhim tushunchalar:</p>
 <ul><li><code>iframe.contentWindow</code> — <code>iframe</code> ichidagi <code>window</code> obyektiga havola;</li><li><code>iframe.contentDocument</code> — <code>iframe</code> ichidagi <code>document</code> (<code>iframe.contentWindow.document</code> bilan bir xil, faqat qisqaroq).</li></ul>
 <div class="note"><code>iframe.onload</code> hodisasi freym ichidagi hujjat to'liq yuklanganda ishga tushadi. Freym yuklanmagan turib uning <code>contentDocument</code>iga kirsak, hali eski (bo'sh) hujjatni ko'rishimiz mumkin. Shuning uchun freym tarkibi bilan ishlashni <code>onload</code> ichida qiling.</div>
 <h2>Boshqa manbadagi oyna: cheklovlar</h2>
 <p>Agar oyna yoki iframe <strong>boshqa manbadan</strong> bo'lsa, uning tarkibiga kira olmaymiz. Quyidagi kod xatolik beradi:</p>
-<pre class="code"><code>&amp;lt;iframe src="https://example.com" id="iframe"&amp;gt;&amp;lt;/iframe&amp;gt;
+<pre class="code"><code>&lt;iframe src="https://example.com" id="iframe"&gt;&lt;/iframe&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   iframe.onload = function() {
     // boshqa manbadagi iframe hujjatiga kirish — XATOLIK
     let doc = iframe.contentDocument; // null yoki xatolik
@@ -299,7 +331,7 @@
     // location o'qishga ham ruxsat yo'q
     let href = iframe.contentWindow.location.href; // Xatolik: SecurityError
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Biroq boshqa manbadagi oynada ham ba'zi narsalarga ruxsat bor:</p>
 <ul><li><code>iframe.contentWindow.location = '...'</code> — boshqa oynaning URL'ini <strong>yozish</strong> (uni boshqa manzilga o'tkazish) mumkin. Ammo <strong>o'qish</strong> mumkin emas;</li><li><code>iframe.contentWindow.postMessage(...)</code> — xabar yuborish mumkin (bu haqda quyida).</li></ul>
 <div class="warn">Same Origin — bu <strong>xavfsizlik chegarasi</strong>. Uni chetlab o'tishga urinmang. Agar boshqa manbadagi sahifa bilan ma'lumot almashish kerak bo'lsa, buni faqat <code>postMessage</code> orqali — ikkala tomon ham <strong>rozi bo'lgan</strong> holda qiling.</div>
@@ -311,9 +343,9 @@ document.domain = 'site.com';</code></pre>
 <div class="warn"><code>document.domain</code> mexanizmi <strong>eskirgan (deprecated)</strong> hisoblanadi va zamonaviy brauzerlarda o'chirilmoqda. Yangi kodlarda bunga tayanmang — subdomenlar orasida aloqa uchun ham <code>postMessage</code> ishlatgan ma'qul.</div>
 <h2>iframe: name va yuklanish nuozansi</h2>
 <p>Yana bir nozik nuqta: yangi <code>iframe</code> yaratilganda, unda darhol bo'sh hujjat paydo bo'ladi (<code>about:blank</code>), keyin esa <code>src</code>dagi hujjat yuklanadi. Ya'ni qisqa vaqt ichida ikkita turli hujjat mavjud bo'ladi. Agar biz <code>src</code>dagi hujjat bilan ishlamoqchi bo'lsak, uning yuklanishini kutishimiz kerak:</p>
-<pre class="code"><code>&amp;lt;iframe src="document.html" id="iframe"&amp;gt;&amp;lt;/iframe&amp;gt;
+<pre class="code"><code>&lt;iframe src="document.html" id="iframe"&gt;&lt;/iframe&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   // xato: bu vaqtda hali eski (bo'sh) hujjat bo'lishi mumkin
   // iframe.contentDocument.body ...
 
@@ -321,7 +353,7 @@ document.domain = 'site.com';</code></pre>
     // to'g'ri: endi src'dagi hujjat yuklandi
     let body = iframe.contentDocument.body; // (same origin bo'lsa)
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <h2>postMessage: manbalararo xavfsiz aloqa</h2>
 <p><code>postMessage</code> interfeysi turli manbalardagi oynalarga bir-biri bilan <strong>xavfsiz</strong> gaplashishga imkon beradi. Bu Same Origin siyosatining maxsus ruxsat berilgan yo'lidir: ikkala oyna ham <em>rozi bo'lgan</em> holda ma'lumot almashadi.</p>
 <p>Aloqa ikki qismdan iborat: xabar <strong>yuboruvchi</strong> va xabar <strong>qabul qiluvchi</strong>.</p>

@@ -111,6 +111,27 @@ function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+/* Ba'zi kontent fayllari kod bloklari ICHIGA ham HTML entity yozgan
+   (masalan {code:"&lt;script&gt;"}). esc() ularni yana eskeyp qilib,
+   ikki karra eskeyp (&amp;lt;) hosil qiladi. Buni oldini olish uchun
+   kodni avval "unescape" qilamiz, so'ng bir marta esc() qilamiz —
+   natija ham xom (&lt;script&gt;), ham oldindan eskeyplangan kirish
+   uchun bir xil to'g'ri chiqadi (idempotent). */
+function unescapeEntities(s) {
+  return String(s)
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&");
+}
+
+/* Kod bloklari uchun bir marta, ishonchli eskeyp */
+function escCode(s) {
+  return esc(unescapeEntities(s));
+}
+
 /* ---------- Blok asosidagi dars tanasini render qilish ----------
    Har bir dars body: [] massiv bo'lib, elementlari quyidagi
    ko'rinishdagi obyektlar:
@@ -130,7 +151,7 @@ function pgHtml(codeText, file) {
     '<div class="pg-bar"><span class="dots"><span class="r"></span>' +
     '<span class="y"></span><span class="g"></span></span>' +
     "<span>" + esc(file) + "</span></div>" +
-    '<textarea spellcheck="false">' + esc(codeText) + "</textarea>" +
+    '<textarea spellcheck="false">' + escCode(codeText) + "</textarea>" +
     '<div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button>' +
     '<button class="pg-clear">Tozalash</button></div>' +
     '<div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>' +
@@ -146,7 +167,7 @@ function renderBlock(b) {
   if (b.h3 != null) return "<h3>" + b.h3 + "</h3>";
   if (b.ul != null) return "<ul>" + b.ul.map((i) => "<li>" + i + "</li>").join("") + "</ul>";
   if (b.ol != null) return "<ol>" + b.ol.map((i) => "<li>" + i + "</li>").join("") + "</ol>";
-  if (b.code != null) return '<pre class="code"><code>' + esc(b.code) + "</code></pre>";
+  if (b.code != null) return '<pre class="code"><code>' + escCode(b.code) + "</code></pre>";
   if (b.pg != null) return pgHtml(b.pg, b.file);
   if (b.note != null) return '<div class="note">' + b.note + "</div>";
   if (b.tip != null) return '<div class="tip">' + b.tip + "</div>";

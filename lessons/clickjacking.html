@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -269,7 +301,7 @@
 <p>Muhim jihat: hujum foydalanuvchi qurbon saytga <strong>tizimga kirgan (login qilingan)</strong> holatidan foydalanadi. Bosish qurbon saytda amalga oshadi, cookie'lar odatdagidek yuboriladi, shuning uchun sayt bosishni qonuniy deb qabul qiladi.</p>
 <h2>Hujumning texnik ko'rinishi</h2>
 <p>Hujumchi sahifasi taxminan quyidagicha tuziladi. Qurbon sahifasi <code>iframe</code>da yuklanadi, lekin u shaffof (<code>opacity</code>) qilinadi va aldov tugma tagida joylashtiriladi:</p>
-<pre class="code"><code>&amp;lt;style&amp;gt;
+<pre class="code"><code>&lt;style&gt;
   iframe { /* qurbon sayt iframe'i */
     width: 400px;
     height: 100px;
@@ -284,13 +316,13 @@
     top: 0; left: 0;
     z-index: 0;       /* iframe ostida */
   }
-&amp;lt;/style&amp;gt;
+&lt;/style&gt;
 
-&amp;lt;div class="decoy"&amp;gt;
-  &amp;lt;button&amp;gt;Bu yerni bosing va sovg'a oling!&amp;lt;/button&amp;gt;
-&amp;lt;/div&amp;gt;
+&lt;div class="decoy"&gt;
+  &lt;button&gt;Bu yerni bosing va sovg'a oling!&lt;/button&gt;
+&lt;/div&gt;
 
-&amp;lt;iframe src="https://victim.com"&amp;gt;&amp;lt;/iframe&amp;gt;</code></pre>
+&lt;iframe src="https://victim.com"&gt;&lt;/iframe&gt;</code></pre>
 <p>Bu yerda hiyla:</p>
 <ul><li><code>opacity: 0.0001</code> — iframe deyarli to'liq ko'rinmas, lekin texnik jihatdan hali ham mavjud va bosishlarni qabul qiladi;</li><li><code>z-index: 1</code> — iframe aldov tugmadan (<code>z-index: 0</code>) ustunroq qatlamdа, shuning uchun bosish iframe'ga tushadi;</li><li>iframe qurbon saytning kerakli tugmasi ustma-ust keladigan qilib joylashtiriladi.</li></ul>
 <div class="warn">Ba'zi murakkab hujumlarda sichqoncha kursorini kuzatib, iframe'ni doim kursor ostida ushlab turadigan variantlar ("cursorjacking") ham mavjud. Umumiy g'oya bir xil: foydalanuvchi ko'rgan narsa va aslida bosgan narsasi bir-biridan farq qiladi.</div>

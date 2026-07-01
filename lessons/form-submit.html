@@ -193,6 +193,27 @@
       <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
   <details open>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -265,24 +297,24 @@
 <p>Forma yuborishning ikki asosiy usuli bor:</p>
 <ol><li><code>&lt;input type="submit"&gt;</code> yoki <code>&lt;input type="image"&gt;</code> tugmasini bosish;</li><li>Matn maydonida <kbd>Enter</kbd> tugmasini bosish.</li></ol>
 <p>Ikkala usul ham formada <code>submit</code> hodisasini keltirib chiqaradi. Ishlovchi ma'lumotni tekshirishi va agar xatolik bo'lsa, <code>event.preventDefault()</code> bilan yuborishni to'xtatishi mumkin:</p>
-<pre class="code"><code>&amp;lt;form onsubmit="alert('yuborildi!'); return false"&amp;gt;
-  Birinchi: &amp;lt;input type="text" name="one"&amp;gt;
-  &amp;lt;input type="submit" value="Yuborish"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form onsubmit="alert('yuborildi!'); return false"&gt;
+  Birinchi: &lt;input type="text" name="one"&gt;
+  &lt;input type="submit" value="Yuborish"&gt;
+&lt;/form&gt;
 
-&amp;lt;!-- Enter yoki tugma bosilsa, alert chiqadi.
-     return false yuborishni to'xtatadi (sahifa yangilanmaydi) --&amp;gt;</code></pre>
+&lt;!-- Enter yoki tugma bosilsa, alert chiqadi.
+     return false yuborishni to'xtatadi (sahifa yangilanmaydi) --&gt;</code></pre>
 <div class="note"><code>on&lt;event&gt;</code> ichida <code>return false</code> yozish — <code>event.preventDefault()</code>ning eski, lekin haligacha ishlaydigan muqobili. Zamonaviy koddagi ravshanlik uchun <code>event.preventDefault()</code>ni afzal ko'ring.</div>
 <h2>Enter bilan yuborish</h2>
 <p>Matn maydonida <kbd>Enter</kbd> bosilishi ham formani yuboradi (agar bir nechta matn maydoni bo'lsa). Bu foydalanuvchilarga tanish qulaylik: qidiruv maydoniga yozib, <kbd>Enter</kbd> bosish odatiy holat.</p>
 <p>Qiziq nozik jihat: <kbd>Enter</kbd> bosilganda avval yuboruvchi tugmada <code>click</code> hodisasi generatsiya qilinadi — hatto foydalanuvchi tugmani bosmagan bo'lsa ham. Ya'ni brauzer tugma bosilgandek imitatsiya qiladi:</p>
-<pre class="code"><code>&amp;lt;form&amp;gt;
-  Matn: &amp;lt;input type="text" name="text"&amp;gt;
-  &amp;lt;input type="submit" value="Yuborish" onclick="alert('click hodisasi ishladi!')"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form&gt;
+  Matn: &lt;input type="text" name="text"&gt;
+  &lt;input type="submit" value="Yuborish" onclick="alert('click hodisasi ishladi!')"&gt;
+&lt;/form&gt;
 
-&amp;lt;!-- Matn maydonida Enter bossangiz, tugmaning
-     onclick ishlovchisi ham ishga tushadi --&amp;gt;</code></pre>
+&lt;!-- Matn maydonida Enter bossangiz, tugmaning
+     onclick ishlovchisi ham ishga tushadi --&gt;</code></pre>
 <h2>submit va click bog'liqligi</h2>
 <p>Formani dasturiy yuborish uchun tugmada <code>button.click()</code> yoki <code>button.dispatchEvent(...)</code>ni chaqirsak, forma yuboriladi. Chunki <code>click</code> tugmada <code>submit</code>ni keltirib chiqaradi:</p>
 <pre class="code"><code>let form = document.getElementById('form');
@@ -297,7 +329,7 @@ form.dispatchEvent(event);</code></pre>
 form.action = 'https://example.com/search';
 form.method = 'GET';
 
-form.innerHTML = '&amp;lt;input name="q" value="salom"&amp;gt;';
+form.innerHTML = '&lt;input name="q" value="salom"&gt;';
 
 // forma DOM'da bo'lishi kerak
 document.body.append(form);
@@ -306,13 +338,13 @@ form.submit();</code></pre>
 <div class="warn">Muhim va ko'pincha unutiladigan jihat: <code>form.submit()</code> metodi chaqirilganda <strong>submit hodisasi generatsiya qilinmaydi</strong>! Ya'ni <code>onsubmit</code> ishlovchisi ishga tushmaydi. Buning mantiqi shuki, dasturchi <code>form.submit()</code>ni ataylab chaqirgan, demak barcha kerakli tekshiruvlarni allaqachon o'zi bajargan deb hisoblanadi. Agar validatsiya kerak bo'lsa, uni <code>submit()</code>ni chaqirishdan oldin qo'lda bajaring.</div>
 <h2>Yuborishdan oldin validatsiya</h2>
 <p>Amaliyotda <code>submit</code> hodisasi eng ko'p validatsiya uchun ishlatiladi. Agar ma'lumot noto'g'ri bo'lsa, <code>event.preventDefault()</code> bilan yuborishni to'xtatib, foydalanuvchiga xatolikni ko'rsatamiz:</p>
-<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
-  Email: &amp;lt;input type="text" name="email" id="email"&amp;gt;
-  &amp;lt;div id="error" style="color:red"&amp;gt;&amp;lt;/div&amp;gt;
-  &amp;lt;input type="submit" value="Yuborish"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form id="form"&gt;
+  Email: &lt;input type="text" name="email" id="email"&gt;
+  &lt;div id="error" style="color:red"&gt;&lt;/div&gt;
+  &lt;input type="submit" value="Yuborish"&gt;
+&lt;/form&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   form.onsubmit = function(event) {
     let email = form.email.value;
 
@@ -326,16 +358,16 @@ form.submit();</code></pre>
     // hammasi joyida bo'lsa, forma yuboriladi
     error.innerHTML = '';
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>event.preventDefault()</code> brauzerning odatiy harakatini — formani serverga yuborib, sahifani yangilashni — to'xtatadi. Xatolik tuzatilib, qaytadan yuborilganda esa forma normal jo'natiladi.</p>
 <h2>AJAX bilan yuborish</h2>
 <p>Ko'p zamonaviy ilovalarda forma umuman odatiy yo'l bilan yuborilmaydi. Aksincha, <code>preventDefault()</code> bilan brauzer yuborishini to'sib, ma'lumot JavaScript orqali (masalan, <code>fetch</code>) jo'natiladi. Bu sahifani yangilamasdan ma'lumot almashish imkonini beradi:</p>
-<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
-  &amp;lt;input name="login"&amp;gt;
-  &amp;lt;input type="submit" value="Yuborish"&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre class="code"><code>&lt;form id="form"&gt;
+  &lt;input name="login"&gt;
+  &lt;input type="submit" value="Yuborish"&gt;
+&lt;/form&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   form.onsubmit = async function(event) {
     event.preventDefault(); // odatiy yuborishni to'saylik
 
@@ -350,7 +382,7 @@ form.submit();</code></pre>
     let result = await response.json();
     alert(result.message);
   };
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <div class="tip"><code>new FormData(form)</code> — formadagi barcha maydonlarni avtomatik yig'ib beruvchi qulay obyekt. Uni to'g'ridan-to'g'ri <code>fetch</code>ning <code>body</code>siga berish mumkin — brauzer ma'lumotni to'g'ri formatlaydi.</div>
 <h2>Xulosa</h2>
 <ul><li>Forma <code>submit</code> hodisasi tugma bosilganda yoki matn maydonida <kbd>Enter</kbd> bosilganda ishga tushadi;</li><li><kbd>Enter</kbd> bosilganda yuboruvchi tugmada <code>click</code> hodisasi ham generatsiya qilinadi;</li><li>Yuborishni to'xtatish uchun <code>event.preventDefault()</code> (yoki <code>on&lt;event&gt;</code>da <code>return false</code>) ishlatiladi;</li><li><code>form.submit()</code> metodi formani dasturiy yuboradi, lekin <strong>submit hodisasini generatsiya qilmaydi</strong>;</li><li><code>submit</code> hodisasi ko'pincha validatsiya uchun ishlatiladi — xato bo'lsa <code>preventDefault()</code> bilan to'xtatiladi;</li><li>Zamonaviy ilovalarda forma ko'pincha <code>preventDefault()</code> + <code>fetch</code> orqali AJAX bilan yuboriladi; <code>new FormData(form)</code> ma'lumotni qulay yig'adi.</li></ul>

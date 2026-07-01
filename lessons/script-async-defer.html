@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -264,63 +296,63 @@
 <div class="warn">Bu darsdagi HTML/DOM misollari brauzer muhitiga tegishli. Kurs sahifasidagi maydoncha Node.js muhitida ishlaydi, shu sabab bu misollar <strong>statik</strong> — faqat o'qish uchun, ishga tushirib bo'lmaydi.</div>
 <h2>Bloklovchi skript muammosi</h2>
 <p>Ikkita muhim muammo bor. Birinchidan, skriptlar undan <strong>keyingi</strong> DOM elementlarini ko'ra olmaydi. Shuning uchun ularga hodisa biriktira olmaydi:</p>
-<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+<pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
-&amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
 
-&amp;lt;!-- bu tugmani skript ko'rmaydi --&amp;gt;
-&amp;lt;p&amp;gt;...skriptdan keyingi kontent...&amp;lt;/p&amp;gt;</code></pre>
+&lt;!-- bu tugmani skript ko'rmaydi --&gt;
+&lt;p&gt;...skriptdan keyingi kontent...&lt;/p&gt;</code></pre>
 <p>Ikkinchidan, agar sahifaning yuqorisida katta skript bo'lsa, u "bloklovchi" — brauzer skriptni yuklab bajarmaguncha, undan pastdagi sahifani ko'rsata olmaydi:</p>
-<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+<pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
-&amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
 
-&amp;lt;!-- bu skript yuklanmaguncha ko'rinmaydi --&amp;gt;
-&amp;lt;p&amp;gt;...skriptdan keyingi kontent...&amp;lt;/p&amp;gt;</code></pre>
+&lt;!-- bu skript yuklanmaguncha ko'rinmaydi --&gt;
+&lt;p&gt;...skriptdan keyingi kontent...&lt;/p&gt;</code></pre>
 <p>Bunga qisman yechim bor — skriptni sahifaning eng oxiriga, <code>&lt;/body&gt;</code> yopilishidan oldin qo'yish. Unda skript o'zidan yuqoridagi barcha elementlarni ko'radi va sahifa ko'rsatilishini bloklamaydi:</p>
-<pre class="code"><code>&amp;lt;body&amp;gt;
+<pre class="code"><code>&lt;body&gt;
   ...barcha kontent skriptdan yuqorida...
 
-  &amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;/body&amp;gt;</code></pre>
+  &lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
 <p>Lekin bu yechim ideal emas: brauzer skriptni faqat butun HTML hujjatni yuklab bo'lgach ko'radi va yuklashni boshlaydi. Katta HTML'larda bu sezilarli kechikish beradi. Bu muammoni <code>defer</code> va <code>async</code> atributlari hal qiladi.</p>
 <h2>defer</h2>
 <p><code>defer</code> atributi brauzerga skriptni "fon rejimida" yuklashni buyuradi: brauzer skriptni yuklab olishda kutmaydi, HTML'ni qurishda davom etadi. Skript esa DOM to'liq tayyor bo'lgach bajariladi:</p>
-<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+<pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
-&amp;lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
 
-&amp;lt;!-- darhol ko'rinadi, skriptni kutmaydi --&amp;gt;
-&amp;lt;p&amp;gt;...skriptdan keyingi kontent...&amp;lt;/p&amp;gt;</code></pre>
+&lt;!-- darhol ko'rinadi, skriptni kutmaydi --&gt;
+&lt;p&gt;...skriptdan keyingi kontent...&lt;/p&gt;</code></pre>
 <p>Boshqacha aytganda:</p>
 <ul><li><code>defer</code>li skriptlar sahifani <strong>hech qachon bloklamaydi</strong>;</li><li><code>defer</code>li skriptlar har doim to'liq DOM tayyor bo'lgach, lekin <code>DOMContentLoaded</code> hodisasidan <strong>oldin</strong> bajariladi.</li></ul>
 <p>Quyidagi misol buni ko'rsatadi. Kontent darhol ko'rinadi, <code>DOMContentLoaded</code> esa skriptni kutadi:</p>
-<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+<pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
-&amp;lt;script&amp;gt;
-  document.addEventListener('DOMContentLoaded', () =&amp;gt; alert('DOM tayyor (skriptdan keyin)'));
-&amp;lt;/script&amp;gt;
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', () =&gt; alert('DOM tayyor (skriptdan keyin)'));
+&lt;/script&gt;
 
-&amp;lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+&lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>DOMContentLoaded</code> <code>defer</code>li skript yuklanib bajarilishini kutadi.</p>
 <h3>defer skriptlar tartibni saqlaydi</h3>
 <p>Bir necha <code>defer</code>li skript bo'lsa, ular <strong>hujjatdagi tartibda</strong> bajariladi — xuddi oddiy skriptlar kabi:</p>
-<pre class="code"><code>&amp;lt;script defer src="long.js"&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script defer src="small.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<pre class="code"><code>&lt;script defer src="long.js"&gt;&lt;/script&gt;
+&lt;script defer src="small.js"&gt;&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>long.js</code> hajmi katta bo'lsa-da, u avval yuklab bo'lingandek kutiladi va <code>small.js</code>dan oldin bajariladi. Brauzer skriptlarni parallel yuklaydi (tezlik uchun), lekin ularni belgilangan tartibda ishga tushiradi.</p>
 <div class="tip"><code>defer</code> — kodning to'g'ri tartibda bajarilishi muhim bo'lganda ajoyib. Masalan, ikkinchi skript birinchisiga bog'liq bo'lsa (kutubxona + uni ishlatuvchi kod), <code>defer</code> tartibni kafolatlaydi.</div>
 <div class="note"><code>defer</code> atributi faqat tashqi skriptlar uchun, ya'ni <code>src</code> ga ega skriptlar uchun ishlaydi. Agar <code>&lt;script&gt;</code>da <code>src</code> bo'lmasa (kodni to'g'ridan-to'g'ri yozgan bo'lsangiz), <code>defer</code> e'tiborga olinmaydi.</div>
 <h2>async</h2>
 <p><code>async</code> atributi ham skriptni fon rejimida yuklaydi, lekin butunlay boshqacha mustaqillik beradi. <code>async</code>li skript to'liq mustaqil:</p>
 <ul><li>Sahifa <code>async</code>li skriptni kutmaydi: kontent ko'rsatiladi, <code>DOMContentLoaded</code> hodisasi ham skriptni kutmasligi mumkin;</li><li><code>async</code>li skriptlar boshqa skriptlarni kutmaydi va ularni ham kutib turmaydi — tartib yo'q. Qaysi biri avval yuklansa, o'sha avval bajariladi ("load-first" tartibi).</li></ul>
-<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+<pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
-&amp;lt;script&amp;gt;
-  document.addEventListener('DOMContentLoaded', () =&amp;gt; alert('DOM tayyor!'));
-&amp;lt;/script&amp;gt;
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', () =&gt; alert('DOM tayyor!'));
+&lt;/script&gt;
 
-&amp;lt;script async src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script async src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+&lt;script async src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
+&lt;script async src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"&gt;&lt;/script&gt;</code></pre>
 <p>Bu yerdagi tartib "belgilanmagan":</p>
 <ul><li>Sahifa kontenti darhol ko'rsatiladi: <code>async</code> bloklamaydi;</li><li><code>DOMContentLoaded</code> va <code>async</code> bir-birini kutmaydi — <code>DOMContentLoaded</code> <code>async</code>dan oldin ham, keyin ham bo'lishi mumkin (yuklanish tezligiga qarab);</li><li><code>async</code> skriptlar bir-birini kutmaydi: qaysi biri oldin yuklansa (kichikroq yoki keshdan olingan), o'sha oldin bajariladi.</li></ul>
 <div class="tip"><code>async</code> boshqa skriptlarga bog'liq bo'lmagan mustaqil skriptlar uchun ideal: hisoblagichlar (counters), reklama, analitika kabi uchinchi tomon skriptlari. Ular sahifangizning boshqa kodiga bog'liq emas va sizning kodingiz ham ularga bog'liq emas.</div>

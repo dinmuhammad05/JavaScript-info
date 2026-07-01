@@ -194,6 +194,27 @@
     </ol>
   </details>
   <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -237,6 +258,17 @@
     </ol>
   </details>
   <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Brauzerda ma'lumot saqlash</summary>
     <ol>
       <li><a href="../lessons/cookie.html">Cookie</a></li>
@@ -267,7 +299,7 @@
 <pre class="code"><code>document.addEventListener('DOMContentLoaded', ready);
 // funksiya sifatida yozamiz, chaqirmaymiz: ready() emas, balki ready</code></pre>
 <p>Masalan:</p>
-<pre class="code"><code>&amp;lt;script&amp;gt;
+<pre class="code"><code>&lt;script&gt;
   function ready() {
     alert('DOM tayyor');
 
@@ -277,35 +309,35 @@
   }
 
   document.addEventListener('DOMContentLoaded', ready);
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 
-&amp;lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;amp;cache=0"&amp;gt;</code></pre>
+&lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;cache=0"&gt;</code></pre>
 <p>Bu misolda <code>DOMContentLoaded</code> ishlaganida hujjat butunlay yuklangan — brauzer barcha HTML elementlarni ko'rgan va ularga qo'l uzata oladi. Lekin rasm (<code>&lt;img&gt;</code>) hali yuklanib ulgurmagan bo'lishi mumkin, shuning uchun uning o'lchami ko'pincha <code>0x0</code> chiqadi.</p>
 <div class="note"><code>DOMContentLoaded</code> — bu <strong>DOM daraxti tayyor</strong> degani, resurslar tayyor emas. Rasm va boshqa tashqi fayllar hali yuklanayotgan bo'lishi mumkin. Agar sizga faqat DOM elementlari kerak bo'lsa (masalan, tugmaga hodisa biriktirish), bu hodisadan foydalanish eng to'g'ri yechim.</div>
 <h2>DOMContentLoaded va skriptlar</h2>
 <p>Brauzer HTML'ni qayta ishlaganda, agar <code>&lt;script&gt;</code> tegiga duch kelsa, DOM qurishni <strong>to'xtatib</strong>, uni bajarishi shart. Buning sababi bor: skript DOM'ni o'zgartirishi yoki hatto <code>document.write</code> orqali yangi HTML qo'shishi mumkin, shuning uchun brauzer skript tugaguncha kutadi.</p>
 <p>Demak, <code>DOMContentLoaded</code> hodisasi <strong>skriptlar bajarilib bo'lgach</strong> sodir bo'ladi:</p>
-<pre class="code"><code>&amp;lt;script&amp;gt;
+<pre class="code"><code>&lt;script&gt;
   document.addEventListener('DOMContentLoaded', () =&gt; {
     alert('DOM tayyor!');
   });
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 
-&amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
   alert('Kutubxona yuklandi, kod ishga tayyor');
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Bu misolda avval "Kutubxona yuklandi", so'ng "DOM tayyor!" ko'rsatiladi. Ya'ni <code>DOMContentLoaded</code> barcha skriptlar bajarilishini kutadi.</p>
 <div class="warn">Yuqoridagi qoidaning ikkita <strong>istisnosi</strong> bor. Bular <code>DOMContentLoaded</code>ni bloklamaydi: <code>async</code> atributiga ega skriptlar va <code>document.createElement('script')</code> orqali dinamik qo'shilgan skriptlar. Ular mustaqil yuklanadi va DOM qurilishini kutmaydi. Bularni keyingi darslarda batafsil ko'rib chiqamiz.</div>
 <h2>DOMContentLoaded va stillar</h2>
 <p>Tashqi stil jadvallari (<code>&lt;link rel="stylesheet"&gt;</code>) DOM'ga ta'sir qilmaydi, shuning uchun <code>DOMContentLoaded</code> ularni kutmaydi.</p>
 <p>Lekin bir nozik holat bor: agar stildan <strong>keyin</strong> skript kelsa, u skript stil yuklanguncha kutadi:</p>
-<pre class="code"><code>&amp;lt;link type="text/css" rel="stylesheet" href="style.css"&amp;gt;
-&amp;lt;script&amp;gt;
+<pre class="code"><code>&lt;link type="text/css" rel="stylesheet" href="style.css"&gt;
+&lt;script&gt;
   // skript style.css yuklanmaguncha bajarilmaydi
   alert(getComputedStyle(document.body).marginTop);
-&amp;lt;/script&amp;gt;</code></pre>
+&lt;/script&gt;</code></pre>
 <p>Sababi shundaki: skript elementlarning haqiqiy koordinatalari va boshqa stilga bog'liq xossalarini o'qishga muhtoj bo'lishi mumkin. Shu sababdan skript oldidagi stil to'liq yuklanishini kutadi. Bu esa o'z navbatida <code>DOMContentLoaded</code>ni ham kechiktiradi.</p>
 <h2>Brauzerning avto-to'ldirishi (autofill)</h2>
 <p>Firefox, Chrome va Opera <code>DOMContentLoaded</code> hodisasida formalarni avtomatik to'ldiradi (autofill). Masalan, agar sahifada login/parol formasi bo'lsa va foydalanuvchi qiymatlarini saqlagan bo'lsa, brauzer <code>DOMContentLoaded</code>da ularni qo'yib chiqadi.</p>
@@ -314,16 +346,16 @@
 <p>Endi qolgan hodisalarni ko'rib chiqamiz.</p>
 <h3>window.onload</h3>
 <p><code>load</code> hodisasi <code>window</code> obyektida yuz beradi va u <strong>barcha resurslar</strong> — rasm, stil, skriptlar — yuklanib bo'lgach ishga tushadi:</p>
-<pre class="code"><code>&amp;lt;script&amp;gt;
+<pre class="code"><code>&lt;script&gt;
   window.onload = function() {
     alert('Sahifa to'liq yuklandi');
 
     // endi rasm haqiqiy o'lchamiga ega
     alert(`Rasm o'lchami: ${img.offsetWidth}x${img.offsetHeight}`);
   };
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 
-&amp;lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;amp;cache=0"&amp;gt;</code></pre>
+&lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;cache=0"&gt;</code></pre>
 <p>Bu yerda <code>DOMContentLoaded</code>dan farqli o'laroq, rasm yuklangan va uning to'g'ri o'lchamlari ko'rsatiladi.</p>
 <h3>window.onunload</h3>
 <p>Foydalanuvchi sahifadan ketganda <code>window</code> obyektida <code>unload</code> hodisasi ishga tushadi. Bu yerda pop-up oynalar ochish kabi kechiktirishga imkon bermaydigan ishlar mumkin emas, lekin analitika ma'lumotlarini yuborish uchun ishlatiladi:</p>
