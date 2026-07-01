@@ -329,11 +329,33 @@
       <li><a href="lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
     </ol>
   </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
 </aside>
 <main class="content">
 <section class="hero">
   <h1>JavaScript'ni noldan chuqur o'rganing</h1>
-  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 165 ta dars.</p>
+  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 176 ta dars.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
 <h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
@@ -590,6 +612,24 @@
   <a class="card" href="lessons/nginx-static.html"><div class="num">163</div><h3>Statik saytga xizmat ko'rsatish</h3><p>Statik HTML/CSS/JS saytni Nginx orqali chiqarish: root va index, location bilan yo'llar, try_files, 404 sahifasi, gzip yoqish va kesh sarlavhalari. To'liq server bloki namunasi.</p></a>
   <a class="card" href="lessons/nginx-reverse-proxy.html"><div class="num">164</div><h3>Reverse proxy va load balancing</h3><p>Reverse proxy tushunchasi, proxy_pass bilan Node.js ilovaga so'rov uzatish, proxy_set_header (Host, X-Real-IP), upstream bloki bilan load balancing va usullar (round-robin, least_conn).</p></a>
   <a class="card" href="lessons/nginx-ssl.html"><div class="num">165</div><h3>SSL/HTTPS sozlash</h3><p>Nega HTTPS kerak, Let's Encrypt / certbot bilan bepul sertifikat, listen 443 ssl, ssl_certificate direktivalari, HTTP dan HTTPS ga yo'naltirish (return 301) va certbot --nginx.</p></a>
+</div>
+<h2 class="part-head" id="5-qism-backend-dasturlash">5-qism: Backend dasturlash</h2>
+<h3 class="chapter-head">Node.js va Express</h3>
+<div class="cards">
+  <a class="card" href="lessons/nodejs-nima.html"><div class="num">166</div><h3>Node.js nima?</h3><p>Server tomonda JavaScript, V8 dvigateli, bir oqimli event loop, bloklamaydigan I/O, Node.js qachon ishlatiladi, o'rnatish va birinchi skript.</p></a>
+  <a class="card" href="lessons/node-modullar.html"><div class="num">167</div><h3>Modullar va npm</h3><p>CommonJS (require/module.exports) va ESM (import/export), o'rnatilgan modullar, npm nima, npm init, package.json, npm install, node_modules, dependencies va npx.</p></a>
+  <a class="card" href="lessons/node-fs-http.html"><div class="num">168</div><h3>Fayl tizimi va HTTP server</h3><p>fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.</p></a>
+  <a class="card" href="lessons/express-kirish.html"><div class="num">169</div><h3>Express asoslari</h3><p>Nega Express, o'rnatish, birinchi ilova (app va app.listen), route (app.get), req va res obyektlari, res.send va res.json.</p></a>
+  <a class="card" href="lessons/express-rest.html"><div class="num">170</div><h3>REST API yaratish</h3><p>REST tamoyillari, GET/POST/PUT/DELETE, route parametrlari (:id), query, JSON tanasi, status kodlar va massivda oddiy CRUD API misoli.</p></a>
+  <a class="card" href="lessons/express-middleware.html"><div class="num">171</div><h3>Middleware va xatoliklar</h3><p>Middleware nima, zanjir, next(), express.json(), express.static(), maxsus logger middleware, xatolarni boshqarish middleware va 404.</p></a>
+</div>
+<h3 class="chapter-head">Ma'lumotlar bazalari</h3>
+<div class="cards">
+  <a class="card" href="lessons/db-nima.html"><div class="num">172</div><h3>Ma'lumotlar bazasi nima?</h3><p>Ma'lumotlar bazasi nima uchun kerak, DBMS (ma'lumotlar bazasini boshqarish tizimi) nima, relatsion (SQL) va NoSQL bazalar farqi, jadval/qator/ustun tushunchalari, mashhur bazalar (PostgreSQL, MySQL, MongoDB) va qachon qaysi birini tanlash.</p></a>
+  <a class="card" href="lessons/sql-asoslar.html"><div class="num">173</div><h3>SQL asoslari</h3><p>SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.</p></a>
+  <a class="card" href="lessons/sql-join.html"><div class="num">174</div><h3>SQL: bog'lanishlar va JOIN</h3><p>Jadvallarni bog'lash: PRIMARY KEY va FOREIGN KEY, munosabatlar (1:N), JOIN turlari (INNER, LEFT, RIGHT), GROUP BY va agregat funksiyalar (COUNT, SUM, AVG), HAVING orqali guruhlarni filtrlash.</p></a>
+  <a class="card" href="lessons/mongodb.html"><div class="num">175</div><h3>MongoDB (NoSQL)</h3><p>MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.</p></a>
+  <a class="card" href="lessons/node-db.html"><div class="num">176</div><h3>Node.js bilan bazaga ulanish</h3><p>Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.</p></a>
 </div>
 </main>
 </div>

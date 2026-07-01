@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fayl tizimi va HTTP server — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details open>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a class="active" href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Node.js va Express</div>
+<h1>Fayl tizimi va HTTP server</h1>
+<p class="lead">Endi Node.js'ning haqiqiy kuchini ko'ramiz: fayllar bilan ishlash va o'z veb-serveringizni yaratish. Bu narsalar brauzerda mumkin emas edi — Node.js'da esa bir necha qator kod bilan amalga oshiriladi. Ushbu darsda <code>fs</code>, <code>path</code> va <code>http</code> modullarini o'rganamiz.</p>
+<h2>fs moduli: fayllarni o'qish va yozish</h2>
+<p><code>fs</code> (file system) — fayl tizimi bilan ishlash moduli. U fayllarni o'qish, yozish, o'chirish, papkalar yaratish va boshqa amallarni bajaradi. Bu o'rnatilgan modul, shuning uchun o'rnatish shart emas:</p>
+<pre class="code"><code>const fs = require('fs');</code></pre>
+<p><code>fs</code> modulining aksariyat funksiyalari ikki ko'rinishga ega: <strong>sinxron</strong> (bloklaydigan) va <strong>asinxron</strong> (bloklamaydigan).</p>
+<h2>Sinxron o'qish/yozish</h2>
+<p>Sinxron funksiyalar nomi <code>Sync</code> bilan tugaydi. Ular fayl operatsiyasi tugaguncha kutadi va natijani darhol qaytaradi:</p>
+<pre class="code"><code>const fs = require('fs');
+
+// Faylga yozish (agar fayl bo'lmasa, yaratiladi):
+fs.writeFileSync('salom.txt', 'Salom, dunyo!');
+
+// Fayldan o'qish:
+const matn = fs.readFileSync('salom.txt', 'utf8');
+console.log(matn); // Salom, dunyo!</code></pre>
+<p>Diqqat: <code>readFileSync</code>ga ikkinchi argument sifatida <code>'utf8'</code> kodlashni berish muhim. Aks holda natija matn emas, xom <code>Buffer</code> (baytlar) bo'ladi.</p>
+<div class="warn">Sinxron funksiyalar kutish davomida butun dasturni <strong>bloklaydi</strong>. Katta fayllar yoki serverda ular yomon tanlov — chunki server bloklanib, boshqa so'rovlarga javob bera olmay qoladi. Ular faqat dastur ishga tushayotgan paytda (konfiguratsiya o'qish) yoki kichik skriptlarda ishlatiladi.</div>
+<h2>Asinxron o'qish/yozish</h2>
+<p>Asinxron funksiyalar bloklamaydi. Ular natija tayyor bo'lganda <strong>callback</strong> chaqiradi. Callback'ning birinchi argumenti — xatolik (bo'lmasa <code>null</code>), ikkinchisi — natija:</p>
+<pre class="code"><code>const fs = require('fs');
+
+fs.writeFile('salom.txt', 'Salom!', (err) =&gt; {
+  if (err) {
+    console.error('Yozishda xato:', err);
+    return;
+  }
+  console.log('Fayl yozildi');
+
+  fs.readFile('salom.txt', 'utf8', (err, data) =&gt; {
+    if (err) {
+      console.error('O'qishda xato:', err);
+      return;
+    }
+    console.log('Fayl mazmuni:', data);
+  });
+});</code></pre>
+<p>Callback'lar ichma-ich joylashganda kod o'qish qiyinlashadi ("callback do'zaxi"). Shuning uchun zamonaviy kodda <strong>Promise</strong> versiyasidan foydalaniladi. U <code>fs.promises</code> orqali mavjud:</p>
+<pre class="code"><code>const fs = require('fs').promises;
+
+async function ishla() {
+  await fs.writeFile('salom.txt', 'Salom!');
+  const data = await fs.readFile('salom.txt', 'utf8');
+  console.log(data);
+}
+
+ishla();</code></pre>
+<div class="tip">Zamonaviy Node.js kodida <code>fs.promises</code> va <code>async/await</code> kombinatsiyasi tavsiya etiladi — u toza, o'qilishi oson va xatoliklarni <code>try/catch</code> bilan boshqarishga imkon beradi.</div>
+<h2>path moduli</h2>
+<p>Fayl yo'llari bilan ishlashda operatsion tizimlar orasida farq bor: Windows <code>\</code>, Linux/Mac esa <code>/</code> ishlatadi. <code>path</code> moduli bu farqlarni avtomatik hal qiladi va yo'llarni xavfsiz birlashtiradi:</p>
+<pre class="code"><code>const path = require('path');
+
+// Yo'llarni to'g'ri birlashtirish:
+const toliqYol = path.join('papka', 'ichki', 'fayl.txt');
+console.log(toliqYol); // papka/ichki/fayl.txt
+
+// Fayl nomini ajratish:
+console.log(path.basename('/uy/user/rasm.png')); // rasm.png
+
+// Kengaytmani olish:
+console.log(path.extname('rasm.png')); // .png
+
+// Papkani olish:
+console.log(path.dirname('/uy/user/rasm.png')); // /uy/user</code></pre>
+<div class="note">Node.js'da <code>__dirname</code> — joriy fayl joylashgan papkaning to'liq yo'lini beruvchi maxsus o'zgaruvchi. Uni <code>path.join</code> bilan birlashtirib, ishonchli mutlaq yo'l hosil qilinadi: <code>path.join(__dirname, 'data', 'users.json')</code>.</div>
+<h2>http moduli: birinchi server</h2>
+<p>Endi eng qiziq qismi — o'z veb-serveringizni yaratamiz! <code>http</code> moduli bu uchun barcha kerakli narsani beradi. <code>http.createServer</code> yangi server yaratadi:</p>
+<pre class="code"><code>const http = require('http');
+
+const server = http.createServer((req, res) =&gt; {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.end('Salom, bu mening serverim!');
+});
+
+server.listen(3000, () =&gt; {
+  console.log('Server ishga tushdi: http://localhost:3000');
+});</code></pre>
+<p>Bu faylni <code>node server.js</code> bilan ishga tushiring va brauzerda <code>http://localhost:3000</code> manzilini oching. "Salom, bu mening serverim!" degan matnni ko'rasiz. Tabriklaymiz — sizda o'z veb-serveringiz bor!</p>
+<h2>req va res obyektlari</h2>
+<p><code>createServer</code>ga berilgan funksiya har bir so'rov kelganda ikkita argument bilan chaqiriladi:</p>
+<ul><li><code>req</code> (request) — <strong>kiruvchi so'rov</strong>: manzil, metod (GET/POST), sarlavhalar (headers), tana (body) haqidagi ma'lumot;</li><li><code>res</code> (response) — <strong>chiquvchi javob</strong>: uni siz to'ldirasiz va brauzerga jo'natasiz.</li></ul>
+<p>Kiruvchi so'rov ma'lumotini ishlatib, turli manzillarga turli javob berish mumkin (oddiy marshrutlash):</p>
+<pre class="code"><code>const http = require('http');
+
+const server = http.createServer((req, res) =&gt; {
+  console.log('So'rov:', req.method, req.url);
+
+  if (req.url === '/') {
+    res.end('Bosh sahifa');
+  } else if (req.url === '/about') {
+    res.end('Biz haqimizda');
+  } else {
+    res.statusCode = 404;
+    res.end('Sahifa topilmadi');
+  }
+});
+
+server.listen(3000);</code></pre>
+<p>JSON javob qaytarish uchun sarlavhani to'g'ri sozlab, obyektni matnga o'giriladi:</p>
+<pre class="code"><code>const server = http.createServer((req, res) =&gt; {
+  res.setHeader('Content-Type', 'application/json');
+  const malumot = { ism: 'Ali', yosh: 25 };
+  res.end(JSON.stringify(malumot));
+});</code></pre>
+<h2>Portni tinglash</h2>
+<p><code>server.listen(port)</code> serverni ma'lum bir <strong>portda</strong> tinglashga majbur qiladi. Port — bu kompyuterdagi "eshik raqami"; turli servislar turli portlarda ishlaydi:</p>
+<ul><li><code>3000</code>, <code>8080</code> — ishlab chiqishda ko'p ishlatiladigan portlar;</li><li><code>80</code> — standart HTTP porti;</li><li><code>443</code> — standart HTTPS porti.</li></ul>
+<pre class="code"><code>// Port va manzilni tinglash, tayyor bo'lganda xabar berish:
+server.listen(3000, () =&gt; {
+  console.log('Server 3000-portda ishlamoqda');
+});</code></pre>
+<div class="warn">Agar port allaqachon band bo'lsa, <code>EADDRINUSE</code> xatosini olasiz. Bunday holatda boshqa portni tanlang yoki o'sha portni band qilib turgan eski jarayonni to'xtating. Serverni to'xtatish uchun terminalda <code>Ctrl+C</code>ni bosing.</div>
+<div class="note">Ko'rib turganingizdek, sof <code>http</code> moduli bilan marshrutlash qo'lda, sertifikatsiz yoziladi — bu tez charchatadi. Aynan shu sabab keyingi darslarda <strong>Express</strong> freymvorkiga o'tamiz: u bu ishlarni ancha soddalashtiradi.</div>
+<h2>Xulosa</h2>
+<ul><li><code>fs</code> moduli fayllarni o'qish/yozish uchun; funksiyalar sinxron (<code>...Sync</code>) va asinxron ko'rinishga ega;</li><li>Sinxron funksiyalar dasturni bloklaydi — serverda ulardan qoching, <code>fs.promises</code> + <code>async/await</code> ishlating;</li><li><code>path</code> moduli fayl yo'llarini xavfsiz va tizimga bog'liqsiz birlashtiradi (<code>path.join</code>, <code>__dirname</code>);</li><li><code>http.createServer</code> veb-server yaratadi; funksiyaga <code>req</code> (so'rov) va <code>res</code> (javob) beriladi;</li><li><code>server.listen(port)</code> serverni portda tinglashga qo'yadi;</li><li>Sof <code>http</code> bilan ishlash mashaqqatli — shuning uchun Express kabi freymvorklar ishlatiladi.</li></ul>
+<nav class="lesson-nav">
+  <a href="node-modullar.html"><span class="dir">← Oldingi</span><span class="ttl">Modullar va npm</span></a>
+  <a class="next" href="express-kirish.html"><span class="dir">Keyingi →</span><span class="ttl">Express asoslari</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

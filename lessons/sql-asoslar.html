@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL asoslari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a class="active" href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ma'lumotlar bazalari</div>
+<h1>SQL asoslari</h1>
+<p class="lead">SQL (Structured Query Language) — relatsion bazalar bilan gaplashish tili. U bilan siz jadval yaratasiz, ma'lumot qo'shasiz, o'qiysiz, o'zgartirasiz va o'chirasiz. Ushbu darsda eng muhim SQL buyruqlarini o'rganamiz. Barcha misollar PostgreSQL/MySQL uslubida yozilgan (ular deyarli bir xil).</p>
+<div class="note">SQL buyruqlari odatda BOSH HARFLAR bilan yoziladi (SELECT, FROM, WHERE), lekin bu majburiy emas — SQL katta-kichik harfga sezgir emas (kalit so'zlar uchun). An'ana bo'yicha kalit so'zlar bosh harfda, jadval va ustun nomlari kichik harfda yoziladi. Har bir buyruq oxirida nuqta-vergul <code>;</code> qo'yiladi.</div>
+<h2>CREATE TABLE — jadval yaratish</h2>
+<p>Har qanday ish jadval yaratishdan boshlanadi. <code>CREATE TABLE</code> buyrug'i jadval nomi va ustunlar ro'yxatini oladi. Har bir ustun uchun <strong>nom</strong> va <strong>tur</strong> ko'rsatiladi:</p>
+<pre class="code"><code>CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) UNIQUE,
+  age INT,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+<p>Bu yerda nima yuz berdi? <code>users</code> nomli jadval yaratildi va unda 6 ta ustun belgilandi. Endi turlarni va cheklovlarni ko'rib chiqamiz.</p>
+<h3>Asosiy ma'lumot turlari</h3>
+<ul><li><code>INT</code> (yoki <code>INTEGER</code>) — butun son (masalan, 25, -3, 1000);</li><li><code>VARCHAR(n)</code> — o'zgaruvchan uzunlikdagi matn, ko'pi bilan <code>n</code> ta belgi (masalan, <code>VARCHAR(100)</code>);</li><li><code>TEXT</code> — uzunligi cheklanmagan matn (uzun izohlar, maqolalar uchun);</li><li><code>BOOLEAN</code> — mantiqiy qiymat: <code>true</code> yoki <code>false</code>;</li><li><code>DECIMAL(p, s)</code> yoki <code>NUMERIC</code> — aniq kasrli son (pul uchun ideal, masalan <code>DECIMAL(10, 2)</code> — 2 kasr xonasi);</li><li><code>DATE</code> — sana (2026-07-01);</li><li><code>TIMESTAMP</code> — sana va vaqt birga;</li><li><code>SERIAL</code> — avtomatik o'suvchi butun son (PostgreSQL'da). Har yangi qatorda o'zi 1, 2, 3... bo'lib ortadi, odatda <code>id</code> uchun ishlatiladi.</li></ul>
+<h3>Cheklovlar (constraints)</h3>
+<ul><li><code>PRIMARY KEY</code> — asosiy kalit: qatorni yagona aniqlaydigan ustun (takrorlanmaydi, bo'sh bo'lmaydi);</li><li><code>NOT NULL</code> — bu ustun bo'sh (NULL) bo'lishi mumkin emas;</li><li><code>UNIQUE</code> — qiymat takrorlanmasligi kerak (masalan, email);</li><li><code>DEFAULT qiymat</code> — agar qiymat berilmasa, shu standart qiymat qo'yiladi.</li></ul>
+<div class="note"><code>NULL</code> — bu "qiymat yo'q", "noma'lum" degani. U 0 yoki bo'sh matndan farq qiladi. Masalan, foydalanuvchi yoshini ko'rsatmasa, <code>age</code> ustuni NULL bo'lishi mumkin.</div>
+<h2>INSERT INTO — ma'lumot qo'shish</h2>
+<p>Jadval tayyor bo'lgach, unga qator qo'shamiz. <code>INSERT INTO</code> buyrug'i jadval nomini, ustunlarni va qiymatlarni oladi:</p>
+<pre class="code"><code>INSERT INTO users (name, email, age)
+VALUES ('Ali', 'ali@mail.com', 25);</code></pre>
+<p>E'tibor bering: matn qiymatlar <strong>bitta tirnoq</strong> (<code>'Ali'</code>) ichida yoziladi, sonlar esa tirnoqsiz (<code>25</code>). Biz <code>id</code>, <code>is_active</code> va <code>created_at</code>ni ko'rsatmadik — ular avtomatik (SERIAL va DEFAULT) to'ldiriladi.</p>
+<p>Bir necha qatorni bir vaqtda qo'shish uchun vergul bilan ajratiladi:</p>
+<pre class="code"><code>INSERT INTO users (name, email, age) VALUES
+  ('Vali', 'vali@mail.com', 30),
+  ('Guli', 'guli@mail.com', 22),
+  ('Hasan', 'hasan@mail.com', 28);</code></pre>
+<h2>SELECT — ma'lumot o'qish</h2>
+<p><code>SELECT</code> — eng ko'p ishlatiladigan buyruq. U jadvaldan ma'lumot o'qiydi. Barcha ustunlarni olish uchun yulduzcha <code>*</code> ishlatiladi:</p>
+<pre class="code"><code>SELECT * FROM users;</code></pre>
+<p>Faqat kerakli ustunlarni olish uchun ularning nomlarini sanab o'tamiz (bu tezroq va toza):</p>
+<pre class="code"><code>SELECT name, email FROM users;</code></pre>
+<div class="tip">Amaliyotda <code>SELECT *</code> emas, balki aniq kerakli ustunlarni sanab o'tish yaxshi odat. Bu tarmoqdan kamroq ma'lumot uzatadi va kod nima olayotgani aniq ko'rinadi.</div>
+<h2>WHERE — shart bo'yicha filtrlash</h2>
+<p>Ko'pincha bizga hamma qator emas, faqat ma'lum shartga mos qatorlar kerak. <code>WHERE</code> shu uchun ishlatiladi:</p>
+<pre class="code"><code>SELECT * FROM users WHERE age &gt; 25;</code></pre>
+<p>Solishtirish operatorlari: <code>=</code> (teng), <code>&lt;&gt;</code> yoki <code>!=</code> (teng emas), <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Matn bilan solishtirish:</p>
+<pre class="code"><code>SELECT * FROM users WHERE name = 'Ali';</code></pre>
+<h3>AND va OR — bir necha shart</h3>
+<p>Bir necha shartni birlashtirish uchun <code>AND</code> (va) hamda <code>OR</code> (yoki) ishlatiladi:</p>
+<pre class="code"><code>-- yoshi 25 dan katta VA faol bo'lganlar
+SELECT * FROM users WHERE age &gt; 25 AND is_active = true;
+
+-- ismi Ali YOKI Vali bo'lganlar
+SELECT * FROM users WHERE name = 'Ali' OR name = 'Vali';</code></pre>
+<h3>LIKE — matn ichida qidirish</h3>
+<p><code>LIKE</code> operatori matn namunasi (pattern) bo'yicha qidiradi. Ikki maxsus belgi ishlatiladi: <code>%</code> — istalgan (nol yoki ko'p) belgilar, <code>_</code> — aniq bitta belgi:</p>
+<pre class="code"><code>-- ismi 'A' harfi bilan boshlanadiganlar
+SELECT * FROM users WHERE name LIKE 'A%';
+
+-- emailida 'mail' so'zi qatnashadiganlar
+SELECT * FROM users WHERE email LIKE '%mail%';
+
+-- ismi aynan 4 harfli va 'A' bilan boshlananuvchi
+SELECT * FROM users WHERE name LIKE 'A___';</code></pre>
+<h3>Boshqa foydali shartlar</h3>
+<pre class="code"><code>-- ma'lum ro'yxatdagi qiymatlar
+SELECT * FROM users WHERE age IN (22, 25, 30);
+
+-- oraliqda (chegaralar kiradi)
+SELECT * FROM users WHERE age BETWEEN 20 AND 30;
+
+-- qiymati yo'q (NULL) bo'lganlar
+SELECT * FROM users WHERE age IS NULL;</code></pre>
+<div class="warn">NULL bilan solishtirishda <code>=</code> ishlatilmaydi! <code>age = NULL</code> hech qachon <code>true</code> bermaydi. To'g'ri usul — <code>IS NULL</code> yoki <code>IS NOT NULL</code>.</div>
+<h2>ORDER BY — saralash</h2>
+<p>Natijani tartiblash uchun <code>ORDER BY</code> ishlatiladi. <code>ASC</code> — o'sish bo'yicha (standart), <code>DESC</code> — kamayish bo'yicha:</p>
+<pre class="code"><code>-- yosh bo'yicha o'sish tartibida
+SELECT * FROM users ORDER BY age ASC;
+
+-- yosh bo'yicha kamayish (kattadan kichikka)
+SELECT * FROM users ORDER BY age DESC;
+
+-- avval yosh bo'yicha, keyin ism bo'yicha
+SELECT * FROM users ORDER BY age DESC, name ASC;</code></pre>
+<h2>LIMIT — natijani cheklash</h2>
+<p><code>LIMIT</code> qaytariladigan qatorlar sonini cheklaydi. Bu "eng katta 5 ta" kabi so'rovlar uchun juda foydali:</p>
+<pre class="code"><code>-- eng yosh 3 ta foydalanuvchi
+SELECT * FROM users ORDER BY age ASC LIMIT 3;
+
+-- 5-qatordan boshlab 10 ta olish (sahifalash uchun)
+SELECT * FROM users ORDER BY id LIMIT 10 OFFSET 5;</code></pre>
+<div class="tip"><code>LIMIT</code> va <code>OFFSET</code> birgalikda "sahifalash" (pagination) uchun ishlatiladi. Masalan, har sahifada 10 ta natija ko'rsatsangiz: 1-sahifa <code>LIMIT 10 OFFSET 0</code>, 2-sahifa <code>LIMIT 10 OFFSET 10</code> va hokazo.</div>
+<h2>UPDATE — ma'lumotni o'zgartirish</h2>
+<p><code>UPDATE</code> mavjud qatorlarni o'zgartiradi. <code>SET</code> qaysi ustunni qanday qiymatga o'zgartirishni, <code>WHERE</code> esa qaysi qatorlarni belgilaydi:</p>
+<pre class="code"><code>-- id = 1 bo'lgan foydalanuvchining yoshini o'zgartirish
+UPDATE users SET age = 26 WHERE id = 1;
+
+-- bir vaqtda bir necha ustun
+UPDATE users SET age = 26, is_active = false WHERE id = 1;</code></pre>
+<div class="warn"><strong>Juda muhim:</strong> <code>UPDATE</code>da <code>WHERE</code>ni unutmang! Agar <code>WHERE</code>siz yozsangiz — <code>UPDATE users SET age = 0;</code> — bu <strong>barcha</strong> qatorlarning yoshini o'zgartiradi. Bu ko'p yangi boshlovchilarning eng katta xatosi.</div>
+<h2>DELETE — ma'lumotni o'chirish</h2>
+<p><code>DELETE</code> qatorlarni o'chiradi. Bu ham <code>WHERE</code> bilan ishlatiladi:</p>
+<pre class="code"><code>-- id = 3 bo'lgan foydalanuvchini o'chirish
+DELETE FROM users WHERE id = 3;
+
+-- 18 yoshdan kichiklarni o'chirish
+DELETE FROM users WHERE age &lt; 18;</code></pre>
+<div class="warn"><code>DELETE FROM users;</code> — <code>WHERE</code>siz yozilsa, jadvaldagi BARCHA qatorlarni o'chiradi! Har doim avval <code>SELECT</code> bilan qaysi qatorlar o'chishini tekshirib ko'ring, keyin xuddi shu <code>WHERE</code> bilan <code>DELETE</code> qiling.</div>
+<h2>Xulosa</h2>
+<ul><li><code>CREATE TABLE</code> — jadval yaratadi, har ustun uchun tur (INT, VARCHAR, BOOLEAN...) va cheklov (PRIMARY KEY, NOT NULL, UNIQUE, DEFAULT) beriladi;</li><li><code>INSERT INTO ... VALUES</code> — yangi qator(lar) qo'shadi; matn bitta tirnoqda;</li><li><code>SELECT ustunlar FROM jadval</code> — ma'lumot o'qiydi; <code>*</code> barcha ustun;</li><li><code>WHERE</code> — shart bo'yicha filtrlaydi; <code>AND</code>, <code>OR</code>, <code>LIKE</code>, <code>IN</code>, <code>BETWEEN</code>, <code>IS NULL</code>;</li><li><code>ORDER BY</code> — saralaydi (ASC/DESC); <code>LIMIT</code>/<code>OFFSET</code> — natijani cheklaydi;</li><li><code>UPDATE ... SET ... WHERE</code> — o'zgartiradi; <code>DELETE FROM ... WHERE</code> — o'chiradi;</li><li><strong>WHERE'ni unutmaslik</strong> — UPDATE va DELETE'da eng muhim ehtiyot chorasi.</li></ul>
+<nav class="lesson-nav">
+  <a href="db-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Ma'lumotlar bazasi nima?</span></a>
+  <a class="next" href="sql-join.html"><span class="dir">Keyingi →</span><span class="ttl">SQL: bog'lanishlar va JOIN</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
