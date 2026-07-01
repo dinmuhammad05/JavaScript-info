@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Strelka funksiyalari (qayta ko'rib chiqish) — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="Strelka funksiyalarining chuqur xususiyatlari: o'z this va arguments yo'qligi, new bilan ishlamasligi va qachon foydali ekanligi.">
+  <title>DOM bo'ylab harakatlanish — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="documentElement, body, head; bolalar (childNodes, firstChild, lastChild), qo'shnilar va ota tugunlar; faqat elementlar bo'yicha navigatsiya va jadvallar bilan ishlash.">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -91,7 +91,7 @@
       <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
     </ol>
   </details>
-  <details open>
+  <details>
     <summary>Funksiyalar bilan chuqur ishlash</summary>
     <ol>
       <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
@@ -104,7 +104,7 @@
       <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
       <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
       <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
-      <li><a class="active" href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
     </ol>
   </details>
   <details>
@@ -183,12 +183,12 @@
     </ol>
   </details>
   <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
-  <details>
+  <details open>
     <summary>Hujjat (DOM)</summary>
     <ol>
       <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
       <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
-      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a class="active" href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
       <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
       <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
       <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
@@ -296,86 +296,128 @@
   </details>
 </aside>
 <main class="content article">
-<div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
-<h1>Strelka funksiyalari (qayta ko'rib chiqish)</h1>
-<p class="lead">Strelka funksiyalari (<code>=&gt;</code>) shunchaki "funksiya yozishning qisqa usuli" emas. Ularning o'ziga xos, muhim xususiyatlari bor. Ushbu darsda ularni chuqur qayta ko'rib chiqamiz.</p>
-<h2>Strelkada o'z this yo'q</h2>
-<p>Eng muhim xususiyat: strelka funksiyasining <strong>o'z <code>this</code>i yo'q</strong>. Uning ichida <code>this</code> ishlatilsa, u <em>tashqi</em> (o'rab turuvchi) funksiyaning <code>this</code>ini oladi.</p>
-<p>Bu obyekt metodi ichida ichki funksiya yozganda juda foydali. Oddiy funksiyada <code>this</code> yo'qolardi, strelkada esa saqlanadi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-this.js</span></div><textarea spellcheck="false">let guruh = {
-  sarlavha: "Bizning guruh",
-  talabalar: ["Ali", "Vali", "Guli"],
+<div class="crumbs">Hujjat (DOM)</div>
+<h1>DOM bo'ylab harakatlanish</h1>
+<p class="lead">DOM bizga har qanday element va uning mazmuni bilan istalgan narsani qilishga imkon beradi. Ammo avval kerakli DOM obyektiga yetib borishimiz kerak. DOM ustidagi barcha amallar <code>document</code> obyektidan boshlanadi — u asosiy "kirish nuqtasi". Undan istalgan tugunga yetib borishimiz mumkin. Ushbu darsda tugunlar orasida qanday harakatlanishni chuqur o'rganamiz.</p>
+<h2>Eng yuqoridagi tugunlar: html, body, head</h2>
+<p>Eng ustki daraxt tugunlari <code>document</code> obyektining maxsus xossalari sifatida to'g'ridan-to'g'ri mavjud:</p>
+<ul><li><code>&lt;html&gt;</code> = <code>document.documentElement</code> — eng ildiz hujjat tuguni;</li><li><code>&lt;body&gt;</code> = <code>document.body</code> — sahifa tanasi;</li><li><code>&lt;head&gt;</code> = <code>document.head</code> — sahifa boshi.</li></ul>
+<pre class="code"><code>// eng yuqori tugunlarga to'g'ridan-to'g'ri murojaat
+alert(document.documentElement); // &lt;html&gt;
+alert(document.body);            // &lt;body&gt;
+alert(document.head);            // &lt;head&gt;</code></pre>
+<div class="warn"><code>document.body</code> <code>null</code> bo'lishi mumkin! Skript <code>&lt;head&gt;</code> ichida turgan bo'lsa, brauzer hali <code>&lt;body&gt;</code>ni o'qimagan bo'ladi, shu sababli u yerda <code>document.body</code> qiymati <code>null</code> bo'ladi. DOM'da mavjud bo'lmagan narsaga murojaat qilib bo'lmaydi. Shuning uchun DOM bilan ishlaydigan skriptlar odatda <code>&lt;/body&gt;</code>dan oldin yoki hujjat yuklangach ishga tushiriladi.</div>
+<pre class="code"><code>&lt;html&gt;
+&lt;head&gt;
+  &lt;script&gt;
+    alert('HEAD ichidan: ' + document.body); // null, hali body yo'q
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script&gt;
+    alert('BODY ichidan: ' + document.body); // &lt;body&gt;, endi mavjud
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2>Bolalar: childNodes, firstChild, lastChild</h2>
+<p>Endi ikkita atamani ajratamiz:</p>
+<ul><li><strong>Bola tugunlar</strong> (child nodes yoki children) — bevosita ichma-ich joylashgan tugunlar. Masalan, <code>&lt;head&gt;</code> va <code>&lt;body&gt;</code> <code>&lt;html&gt;</code>ning bolalaridir;</li><li><strong>Avlodlar</strong> (descendants) — barcha ichma-ich joylashgan tugunlar, jumladan bolalar, ularning bolalari va hokazo — butun daraxt shohobchasi.</li></ul>
+<p><code>childNodes</code> to'plami barcha bola tugunlarni, jumladan matn tugunlarini ro'yxatlaydi:</p>
+<pre class="code"><code>&lt;html&gt;
+&lt;body&gt;
+  &lt;div&gt;Boshi&lt;/div&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Ma'lumot&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div&gt;Oxiri&lt;/div&gt;
 
-  korsat() {
-    // strelka this'ni korsat() dan oladi:
-    this.talabalar.forEach(
-      talaba =&gt; console.log(this.sarlavha + ": " + talaba)
-    );
-  }
-};
+  &lt;script&gt;
+    for (let i = 0; i &lt; document.body.childNodes.length; i++) {
+      alert( document.body.childNodes[i] );
+      // matn, DIV, matn, UL, ..., matn, SCRIPT
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<div class="note">E'tibor bering: yuqoridagi ro'yxatda <code>&lt;script&gt;</code> ham bor. Chunki skript <code>document.body</code> mazmunini o'qiganda, brauzer hali skriptdan keyingi narsalarni ko'rmagan bo'ladi. Shu sababli <code>childNodes</code> ro'yxati faqat skriptgacha bo'lgan tugunlarni oladi.</div>
+<p><code>firstChild</code> va <code>lastChild</code> xossalari birinchi va oxirgi bolalar tuguniga tez kirish beradi:</p>
+<pre class="code"><code>// quyidagilar bir-biriga teng
+elem.childNodes[0] === elem.firstChild;
+elem.childNodes[elem.childNodes.length - 1] === elem.lastChild;</code></pre>
+<p>Bolalar bor-yo'qligini tekshirish uchun maxsus funksiya bor — <code>hasChildNodes()</code>:</p>
+<pre class="code"><code>if (elem.hasChildNodes()) {
+  // elementning bola tugunlari bor
+}</code></pre>
+<h2>DOM to'plamlari (collections)</h2>
+<p><code>childNodes</code> oddiy massiv (array) EMAS, balki maxsus, massivga o'xshash <strong>iteratsiyalanuvchi obyekt</strong> — <code>NodeList</code> deb ataladi. Bundan ikkita muhim natija chiqadi:</p>
+<ol><li>Uni <code>for..of</code> bilan aylantirishimiz mumkin, chunki u iteratsiyalanuvchi;</li><li>Ammo massiv metodlari (<code>filter</code>, <code>map</code> va h.k.) unda mavjud emas, chunki u haqiqiy massiv emas.</li></ol>
+<pre class="code"><code>for (let node of document.body.childNodes) {
+  alert(node); // to'plamdagi barcha tugunlarni ko'rsatadi
+}</code></pre>
+<p>Agar massiv metodlari kerak bo'lsa, uni haqiqiy massivga aylantirishimiz mumkin:</p>
+<pre class="code"><code>alert( Array.from(document.body.childNodes).filter ); // function</code></pre>
+<div class="warn">DOM to'plamlari faqat o'qish uchun (read-only)! Biz <code>childNodes[i] = ...</code> deb tugunni almashtira olmaymiz. Element bolalarini o'zgartirish uchun boshqa maxsus metodlar kerak (ular keyingi darslarda).</div>
+<div class="warn">DOM to'plamlarining aksariyati <strong>jonli</strong> (live). Ya'ni ular hujjatning joriy holatini aks ettiradi. Agar biz havolani (referens) saqlab, keyin DOM'ga yangi element qo'shsak, u avtomatik ravishda to'plamda paydo bo'ladi.</div>
+<div class="warn">To'plamlarni aylantirish uchun <code>for..in</code> siklidan FOYDALANMANG! <code>for..in</code> obyektning barcha sanaladigan (enumerable) xossalarini aylanadi, bu esa to'plamda ortiqcha "texnik" maydonlarni (<code>length</code>, <code>item</code> va h.k.) ham qamrab oladi. Buning o'rniga <code>for..of</code> ishlating.</div>
+<h2>Qo'shnilar va ota (siblings, parent)</h2>
+<p><strong>Qo'shnilar</strong> (siblings) — bir xil otaga ega tugunlar. Masalan, <code>&lt;head&gt;</code> va <code>&lt;body&gt;</code> — qo'shni, chunki ularning otasi <code>&lt;html&gt;</code>.</p>
+<ul><li><code>nextSibling</code> — keyingi qo'shni tugun;</li><li><code>previousSibling</code> — oldingi qo'shni tugun;</li><li><code>parentNode</code> — ota tugun.</li></ul>
+<pre class="code"><code>// &lt;body&gt; uchun "ota" — &lt;html&gt;
+alert( document.body.parentNode === document.documentElement ); // true
 
-guruh.korsat();
-// Bizning guruh: Ali
-// Bizning guruh: Vali
-// Bizning guruh: Guli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Agar bu yerda <code>talaba =&gt; ...</code> o'rniga oddiy <code>function(talaba) { ... }</code> yozilganida, ichki funksiyada <code>this</code> <code>undefined</code> bo'lib, <code>this.sarlavha</code> xatolik bergan bo'lardi.</p>
-<div class="note">Strelkada <code>this</code> "yo'q" degani — u umuman aniqlanmaydi va JavaScript uni tashqi muhitdan qidiradi (xuddi oddiy o'zgaruvchan kabi). Shuning uchun strelka "tashqi <code>this</code>ni oladi" deb aytiladi.</div>
-<h2>bind/call/apply strelkaga ta'sir qilmaydi</h2>
-<p>Strelkaning o'z <code>this</code>i bo'lmagani uchun, unga <code>call</code>, <code>apply</code> yoki <code>bind</code> orqali <code>this</code> berib bo'lmaydi — ular e'tiborsiz qoldiriladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-bind-yoq.js</span></div><textarea spellcheck="false">let f = () =&gt; this;
+// &lt;head&gt;dan keyin — &lt;body&gt;
+alert( document.head.nextSibling ); // HTMLBodyElement
 
-let obyekt = { ism: "test" };
+// &lt;body&gt;dan oldin — &lt;head&gt;
+alert( document.body.previousSibling ); // HTMLHeadElement</code></pre>
+<h2>Faqat elementlar bo'yicha navigatsiya</h2>
+<p>Yuqoridagi <code>childNodes</code>, <code>firstChild</code>, <code>lastChild</code>, <code>nextSibling</code>, <code>previousSibling</code>, <code>parentNode</code> xossalari <strong>barcha</strong> tugunlarni oladi — matn tugunlari, izohlar ham. Ammo ko'p vazifalarda bizga faqat <strong>element</strong> tugunlari — teglar kerak bo'ladi.</p>
+<p>Shuning uchun ularning "faqat elementlar bo'yicha" versiyalari bor:</p>
+<ul><li><code>children</code> — faqat element bola tugunlar;</li><li><code>firstElementChild</code>, <code>lastElementChild</code> — birinchi va oxirgi bola elementlar;</li><li><code>previousElementSibling</code>, <code>nextElementSibling</code> — qo'shni elementlar;</li><li><code>parentElement</code> — ota element.</li></ul>
+<pre class="code"><code>for (let elem of document.body.children) {
+  alert(elem); // DIV, UL, DIV, SCRIPT — faqat elementlar
+  // matn tugunlari e'tiborga olinmaydi
+}</code></pre>
+<p><code>parentNode</code> va <code>parentElement</code> deyarli bir xil, bitta nozik farq bilan. "Ota" element bo'lmasligi mumkin bo'lgan yagona holat — bu <code>document.documentElement</code> (<code>&lt;html&gt;</code>):</p>
+<pre class="code"><code>alert( document.documentElement.parentNode ); // document
+alert( document.documentElement.parentElement ); // null</code></pre>
+<p>Chunki <code>&lt;html&gt;</code>ning otasi — <code>document</code>, lekin <code>document</code> element emas. Shu sababli <code>parentElement</code> bu holda <code>null</code> beradi. Bu farq ba'zan elementdan yuqoriga <code>&lt;html&gt;</code>gacha ko'tarilishda foydali:</p>
+<pre class="code"><code>while (elem = elem.parentElement) {
+  // yuqoriga ko'tarilamiz, &lt;html&gt; dan yuqoriga chiqmaymiz
+  alert( elem );
+}</code></pre>
+<h2>Jadvallar bilan navigatsiya</h2>
+<p>Ba'zi element turlari qo'shimcha, maxsus navigatsiya xossalarini beradi. Jadvallar bunga eng yaxshi misol — ular juda muhim va tez-tez ishlatiladigan qulayliklarni taqdim etadi.</p>
+<p><code>&lt;table&gt;</code> elementi quyidagilarni qo'llab-quvvatlaydi:</p>
+<ul><li><code>table.rows</code> — jadvaldagi barcha <code>&lt;tr&gt;</code>lar to'plami;</li><li><code>table.caption / table.tHead / table.tFoot</code> — mos ravishda <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tfoot&gt;</code> elementlariga havola;</li><li><code>table.tBodies</code> — <code>&lt;tbody&gt;</code>lar to'plami (spetsifikatsiyaga ko'ra kamida bittasi bo'ladi).</li></ul>
+<p><code>&lt;thead&gt;</code>, <code>&lt;tfoot&gt;</code>, <code>&lt;tbody&gt;</code> elementlari <code>rows</code> xossasini beradi:</p>
+<ul><li><code>tbody.rows</code> — ichidagi <code>&lt;tr&gt;</code>lar to'plami.</li></ul>
+<p><code>&lt;tr&gt;</code> (qator) uchun:</p>
+<ul><li><code>tr.cells</code> — berilgan qatordagi <code>&lt;td&gt;</code> va <code>&lt;th&gt;</code> kataklari to'plami;</li><li><code>tr.sectionRowIndex</code> — qatorning o'z <code>&lt;thead&gt;/&lt;tbody&gt;/&lt;tfoot&gt;</code> ichidagi tartib raqami;</li><li><code>tr.rowIndex</code> — qatorning butun <code>&lt;table&gt;</code> ichidagi tartib raqami.</li></ul>
+<p><code>&lt;td&gt;</code> va <code>&lt;th&gt;</code> (katak) uchun:</p>
+<ul><li><code>td.cellIndex</code> — katakning o'z <code>&lt;tr&gt;</code>si ichidagi tartib raqami.</li></ul>
+<p>Misol — jadvalning ikkinchi qatoridagi birinchi katak mazmunini o'qiymiz:</p>
+<pre class="code"><code>&lt;table id="table"&gt;
+  &lt;tr&gt;
+    &lt;td&gt;bir&lt;/td&gt;&lt;td&gt;ikki&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;uch&lt;/td&gt;&lt;td&gt;to'rt&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
 
-// call/bind this'ni O'ZGARTIRMAYDI:
-console.log(f.call(obyekt) === obyekt); // false
-console.log(f.bind(obyekt)() === obyekt); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<div class="tip">Aynan shu sabab strelka funksiyalari React, hodisa ishlovchilari va <code>setTimeout</code> ichida qulay — ular <code>this</code>ni ataylab "o'rab turgan" komponentga bog'lab qoldiradi va tasodifan yo'qolmaydi.</div>
-<h2>Strelkada arguments yo'q</h2>
-<p>Strelka funksiyalarning <strong>o'z <code>arguments</code> obyekti ham yo'q</strong>. Bu dekoratorlarda tashqi funksiyaning argumentlariga murojaat qilishda foydali:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-arguments.js</span></div><textarea spellcheck="false">function ortiqcha(func) {
-  // Strelka o'z arguments'iga ega emas,
-  // shuning uchun tashqi arguments'ni oladi:
-  return () =&gt; func.apply(this, arguments);
-}
-
-function say(a, b) {
-  return a + " va " + b;
-}
-
-let o_ram = ortiqcha(say);
-// o_ram(...) chaqirilganda tashqi arguments ishlatiladi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Zamonaviy kodda ko'pincha <code>arguments</code> o'rniga rest parametri (<code>...args</code>) ishlatiladi. Lekin strelkaning <code>arguments</code>ni tashqaridan olishi ba'zi holatlarda foydali qoladi.</p>
-<div class="warn">Agar strelka ichida <code>arguments</code>ni ishlatsangiz, u <strong>tashqi</strong> oddiy funksiyaning <code>arguments</code>iga ishora qiladi. Agar tashqarida hech qanday oddiy funksiya bo'lmasa, xatolik yuzaga keladi.</div>
-<h2>Strelka new bilan ishlamaydi</h2>
-<p>Strelka funksiyalarni <strong>konstruktor sifatida ishlatib bo'lmaydi</strong> — ular o'z <code>this</code>iga ega emasligi bilan bevosita bog'liq. <code>new</code> bilan chaqirsak, xatolik chiqadi:</p>
-<pre class="code"><code>let Foydalanuvchi = (ism) =&gt; {
-  this.ism = ism;
-};
-
-// let u = new Foydalanuvchi("Ali");
-// TypeError: Foydalanuvchi is not a constructor</code></pre>
-<p>Obyekt yaratuvchi konstruktor kerak bo'lsa — oddiy funksiya yoki <code>class</code> ishlatiladi, strelka emas.</p>
-<h2>Boshqa yo'q xususiyatlar</h2>
-<p>Strelka funksiyalarda quyidagilar ham yo'q:</p>
-<ul><li><strong>O'z <code>this</code>i</strong> — tashqaridan olinadi;</li><li><strong><code>arguments</code> obyekti</strong> — tashqaridan olinadi;</li><li><strong><code>super</code></strong> — sinf metodlarida tashqaridan olinadi;</li><li><strong>Konstruktor sifatida ishlash</strong> (<code>new</code> ishlamaydi);</li><li><strong><code>prototype</code> xossasi</strong> — strelkada yo'q.</li></ul>
-<div class="note">Aslida bu "kamchiliklar" emas — strelka ataylab shunday tarhlangan. U <em>kontekstga ega bo'lmagan, qisqa</em> funksiya sifatida ishlash uchun mo'ljallangan. "O'z konteksti yo'qligi" uning eng katta kuchli tomoni.</div>
-<h2>Qachon foydali?</h2>
-<ul><li>Qisqa <strong>callback</strong>lar: <code>arr.map(x =&gt; x * 2)</code>, <code>arr.filter(x =&gt; x &gt; 0)</code>;</li><li>Metod ichidagi <strong>ichki funksiyalar</strong> — tashqi <code>this</code>ni saqlab qolish uchun;</li><li><code>setTimeout</code>, hodisa ishlovchilarida <code>this</code>ni bog'lab qoldirish uchun.</li></ul>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-callback.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3, 4, 5];
-
-let ikkiBaravar = sonlar.map(x =&gt; x * 2);
-let juftlar = sonlar.filter(x =&gt; x % 2 === 0);
-let yigindi = sonlar.reduce((a, b) =&gt; a + b, 0);
-
-console.log(ikkiBaravar); // [ 2, 4, 6, 8, 10 ]
-console.log(juftlar);     // [ 2, 4 ]
-console.log(yigindi);     // 15</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<div class="tip">Qachon strelkani ISHLATMASLIK kerak? — Obyekt metodini o'zi <code>this</code> orqali obyektga murojaat qilishi kerak bo'lsa. Bunda oddiy metod sintaksisi (<code>korsat() {}</code>) to'g'ri, chunki strelkada <code>this</code> obyektga emas, global muhitga ishora qilib qoladi.</div>
+&lt;script&gt;
+  // 'uch' matnini oladi (2-qator, 1-katak)
+  let td = table.rows[1].cells[0];
+  alert( td.textContent ); // uch
+&lt;/script&gt;</code></pre>
+<div class="tip">Bu maxsus jadval xossalari <code>childNodes</code> orqali qo'lda o'tishdan ancha qulay va ishonchli. Chunki brauzer avtomatik qo'shgan <code>&lt;tbody&gt;</code> kabi nozikliklarni ular o'zi hisobga oladi.</div>
+<div class="note">Boshqa elementlar uchun ham maxsus navigatsiya xossalari bor: masalan, formalar (<code>&lt;form&gt;</code>) va ularning elementlari. Ular bilan formalarga bag'ishlangan bo'limda tanishamiz.</div>
 <h2>Xulosa</h2>
-<ul><li>Strelkaning <strong>o'z <code>this</code>i yo'q</strong> — u tashqi funksiyadan olinadi;</li><li><code>call</code>/<code>apply</code>/<code>bind</code> strelkaning <code>this</code>ini o'zgartirmaydi;</li><li>Strelkada <strong><code>arguments</code> yo'q</strong> — tashqi funksiyadan olinadi;</li><li>Strelkani <strong><code>new</code> bilan ishlatib bo'lmaydi</strong> (u konstruktor emas);</li><li>Strelka qisqa callback'lar va tashqi <code>this</code>ni saqlash uchun ideal;</li><li>Obyektning asosiy metodlari uchun strelka o'rniga oddiy metod sintaksisidan foydalaning.</li></ul>
+<ul><li>Berilgan tugundan biz uning bevosita qo'shnilari va bolalariga o'ta olamiz;</li><li>Ikki xil to'plam bor: <strong>barcha tugunlar uchun</strong> (<code>childNodes</code>, <code>firstChild</code>, <code>lastChild</code>, <code>nextSibling</code>, <code>previousSibling</code>, <code>parentNode</code>) va <strong>faqat elementlar uchun</strong> (<code>children</code>, <code>firstElementChild</code>, <code>lastElementChild</code>, <code>nextElementSibling</code>, <code>previousElementSibling</code>, <code>parentElement</code>);</li><li>DOM to'plamlari massivga o'xshash, iteratsiyalanuvchi (<code>for..of</code>), aksariyati jonli (live) va faqat o'qish uchun;</li><li>Jadvallar kabi ba'zi elementlar qo'shimcha navigatsiya xossalarini beradi (<code>rows</code>, <code>cells</code> va h.k.).</li></ul>
 <nav class="lesson-nav">
-  <a href="bind.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiya bog'lash (bind)</span></a>
-  <a class="next" href="property-flags.html"><span class="dir">Keyingi →</span><span class="ttl">Xossa bayroqlari va deskriptorlari</span></a>
+  <a href="dom-daraxti.html"><span class="dir">← Oldingi</span><span class="ttl">DOM daraxti</span></a>
+  <a class="next" href="dom-qidirish.html"><span class="dir">Keyingi →</span><span class="ttl">Elementlarni qidirish: getElement*, querySelector*</span></a>
 </nav>
 </main>
 </div>

@@ -1,77 +1,87 @@
 # JavaScript.info — O'zbekcha variant
 
-Zamonaviy JavaScript dasturlash tilini **o'zbek tilida** noldan o'rgatuvchi
-interaktiv o'quv sayti. [javascript.info](https://javascript.info) uslubidan
-ilhomlangan, mustaqil (framework va build talab qilmaydigan) statik veb-sayt.
+Zamonaviy JavaScript'ni **o'zbek tilida** noldan, chuqur va batafsil o'rgatuvchi
+interaktiv o'quv sayti. [javascript.info](https://javascript.info) o'quv dasturi
+tuzilishiga asoslangan; mustaqil (framework va build talab qilmaydigan) statik
+veb-sayt bo'lib, oddiy Node.js generatoridan foydalanadi.
 
 ## Xususiyatlari
 
-- 🇺🇿 To'liq o'zbek tilida yozilgan darslar;
-- ▶️ **Interaktiv kod maydonchalari** — misollarni to'g'ridan-to'g'ri brauzerda
-  tahrirlab, ishga tushirish mumkin (`console.log` natijalari ko'rsatiladi);
-- 📱 Moslashuvchan (responsive) dizayn — telefon va kompyuterda ishlaydi;
-- ⚡ Hech qanday tashqi kutubxona yoki o'rnatish talab qilinmaydi — sof
-  HTML, CSS va JavaScript.
+- 🇺🇿 **146 ta dars**, to'liq o'zbek tilida, uch qismga bo'lingan;
+- ▶️ **559 ta interaktiv kod maydonchasi** — misollarni to'g'ridan-to'g'ri
+  brauzerda tahrirlab, ishga tushirish mumkin (`console.log` natijalari
+  ko'rsatiladi);
+- 📱 Moslashuvchan (responsive) dizayn, bob bo'yicha yig'iladigan yon menyu,
+  breadcrumb va oldingi/keyingi dars navigatsiyasi;
+- ⚡ Tashqi kutubxonasiz — sof HTML, CSS va JavaScript;
+- 🛠 **Ma'lumotga asoslangan generator**: darslar `content/` papkasidagi blok
+  formatli fayllarda saqlanadi, `build.js` ulardan bir xil dizaynli sahifalar
+  yasaydi. Yangi mavzu qo'shish oson.
 
-## Darslar
+## O'quv dasturi
 
-| # | Dars | Mavzu |
-|---|------|-------|
-| 1 | [Kirish](lessons/kirish.html) | JavaScript nima, birinchi dastur |
-| 2 | [O'zgaruvchilar](lessons/ozgaruvchilar.html) | `let`, `const`, `var` |
-| 3 | [Ma'lumot turlari](lessons/malumot-turlari.html) | Number, String, Boolean |
-| 4 | [Operatorlar](lessons/operatorlar.html) | Arifmetik, taqqoslash, mantiqiy |
-| 5 | [Shart operatorlari](lessons/shartlar.html) | `if`, `else`, `switch` |
-| 6 | [Sikllar](lessons/sikllar.html) | `for`, `while`, `break`, `continue` |
-| 7 | [Funksiyalar](lessons/funksiyalar.html) | Parametrlar, `return`, strelka funksiyalari |
-| 8 | [Massivlar](lessons/massivlar.html) | Ro'yxatlar, `map`, `filter` |
+### 1-qism: JavaScript tili (14 bob, 91 dars)
+Kirish · JavaScript asoslari · Kod sifati · Obyektlar (asoslar) · Ma'lumot
+turlari · Funksiyalar bilan chuqur ishlash · Obyekt xossalari konfiguratsiyasi ·
+Prototiplar va meros · Klasslar · Xatoliklarni boshqarish · Promise, async/await ·
+Generatorlar · Modullar · Qo'shimcha mavzular (Proxy, BigInt, Unicode...).
+
+### 2-qism: Brauzer — hujjat, hodisalar, interfeyslar (7 bob)
+Hujjat (DOM) · Hodisalarga kirish · UI hodisalari · Formalar · Hujjat va resurs
+yuklanishi · Qo'shimcha (event loop, mutation observer...).
+
+### 3-qism: Qo'shimcha bo'limlar (6 bob)
+Oynalar va freymlar · Ikkilik ma'lumot va fayllar · Tarmoq so'rovlari
+(fetch, WebSocket) · Brauzerda ma'lumot saqlash (cookie, localStorage,
+IndexedDB) · Muntazam ifodalar (RegExp).
 
 ## Ishga tushirish
 
-Loyiha statik sayt bo'lgani uchun uni ishga tushirishning bir necha usuli bor:
-
-**1. Oddiy usul** — `index.html` faylini brauzerda ochish kifoya.
-
-**2. Mahalliy server** (tavsiya etiladi):
+Sayt statik bo'lgani uchun `index.html` ni brauzerda ochish kifoya. Mahalliy
+server orqali (tavsiya etiladi):
 
 ```bash
-# Python bilan
 python3 -m http.server 8000
-
-# yoki Node.js bilan
+# yoki
 npx serve
 ```
 
-So'ngra brauzerda `http://localhost:8000` manzilini oching.
+So'ng brauzerda `http://localhost:8000` manzilini oching.
+
+## Saytni qayta yaratish (build)
+
+Darslar `content/` papkasidagi ma'lumot fayllaridan generatsiya qilinadi:
+
+```bash
+node build.js
+```
+
+Bu `index.html` va `lessons/*.html` sahifalarini qaytadan yasaydi.
 
 ## Loyiha tuzilishi
 
 ```
 JavaScript-info/
-├── index.html          # Bosh sahifa (darslar mundarijasi)
-├── css/
-│   └── style.css       # Umumiy uslublar
-├── js/
-│   └── main.js         # Interaktiv playground va menyu logikasi
-├── lessons/            # Dars sahifalari
-│   ├── kirish.html
-│   ├── ozgaruvchilar.html
-│   ├── malumot-turlari.html
-│   ├── operatorlar.html
-│   ├── shartlar.html
-│   ├── sikllar.html
-│   ├── funksiyalar.html
-│   └── massivlar.html
+├── index.html          # Bosh sahifa (generatsiya qilinadi)
+├── build.js            # Statik sayt generatori
+├── content/            # Dars ma'lumotlari (bob fayllari)
+│   ├── p1-*.js         #   1-qism boblari
+│   ├── p2-*.js         #   2-qism boblari
+│   └── p3-*.js         #   3-qism boblari
+├── lessons/            # Generatsiya qilingan dars sahifalari
+├── css/style.css       # Uslublar
+├── js/main.js          # Playground va menyu logikasi
 └── README.md
 ```
 
-## Interaktiv kod maydonchasi
+## Kontent formati
 
-Har bir darsdagi kod bloklarini tahrirlab, **"Ishga tushirish"** tugmasini
-bosish (yoki `Ctrl+Enter`) orqali natijani darhol ko'rishingiz mumkin.
-Kod izolyatsiya qilingan muhitda ishlaydi va `console.log` chiqishi
-maydoncha ostida ko'rsatiladi.
+Har bir bob fayli — Node.js moduli. Dars tanasi bloklar massivi sifatida
+yoziladi (`{h2}`, `{p}`, `{code}`, `{pg}` interaktiv kod, `{note}`/`{tip}`/
+`{warn}` va h.k.), generator esa ularni HTML'ga aylantiradi. Bu yangi dars yoki
+mavzu qo'shishni ancha soddalashtiradi.
 
 ## Litsenziya
 
-Ta'lim maqsadida yaratilgan ochiq loyiha.
+Ta'lim maqsadida yaratilgan ochiq loyiha. javascript.info o'quv dasturi
+tuzilishidan ilhomlangan.
