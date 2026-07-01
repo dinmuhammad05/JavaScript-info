@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive dizayn — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Sayt barcha ekran o'lchamlariga moslashishi. Birliklar (px, %, em, rem, vw/vh), media query (@media), mobile-first yondashuv, moslashuvchan rasm va matn, breakpointlar.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Linux va terminal</summary>
+    <ol>
+      <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+      <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+      <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+      <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+      <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+      <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Web xavfsizligi va autentifikatsiya</summary>
+    <ol>
+      <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+      <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+      <li><a href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+      <li><a href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+      <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">6-qism: Frontend asoslari</div>
+  <details>
+    <summary>HTML</summary>
+    <ol>
+      <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+      <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+      <li><a href="../lessons/html-form.html">Formalar</a></li>
+      <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>CSS</summary>
+    <ol>
+      <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+      <li><a href="../lessons/css-box.html">Box model</a></li>
+      <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+      <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+      <li><a class="active" href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+      <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>TypeScript</summary>
+    <ol>
+      <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+      <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+      <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+      <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+      <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">CSS</div>
+<h1>Responsive dizayn</h1>
+<p class="lead"><strong>Responsive dizayn</strong> (moslashuvchan dizayn) — saytning telefon, planshet va kompyuterning turli ekran o'lchamlarida bir xil chiroyli va qulay ko'rinishini ta'minlash usuli. Bugungi kunda internet trafikning katta qismi telefonlardan keladi, shuning uchun sayt <strong>har qanday ekranga moslashishi</strong> — majburiy talab. Bu darsda saytni moslashuvchan qilishning barcha asosiy vositalarini o'rganamiz.</p>
+<div class="note">Responsive dizaynning uch ustuni: <strong>moslashuvchan birliklar</strong> (px o'rniga %, rem, vw), <strong>media query'lar</strong> (ekran o'lchamiga qarab uslubni o'zgartirish) va <strong>moslashuvchan rasmlar</strong>. Bularni birga ishlatib, bitta kod bilan barcha qurilmalarga xizmat qilasiz.</div>
+<h2>Nega px yetarli emas?</h2>
+<p><code>px</code> (piksel) — qat'iy (fixed) birlik. Agar butun saytni piksellar bilan qursangiz (masalan, <code>width: 960px</code>), u telefon ekranida (kengligi ~360px) sig'may qoladi va foydalanuvchi gorizontal aylantirishga majbur bo'ladi. Shuning uchun moslashuvchan birliklar kerak.</p>
+<h2>CSS birliklari</h2>
+<p>Bir necha muhim birlik bor. Ularni to'g'ri tanlash — responsive dizaynning yarmini hal qiladi:</p>
+<h3>px — piksel (mutlaq)</h3>
+<p>Qat'iy o'lcham. Chegara qalinligi (<code>border</code>) yoki juda aniq bo'lishi kerak bo'lgan kichik o'lchamlar uchun mos. Katta joylashuvlar uchun tavsiya etilmaydi.</p>
+<h3>% — foiz (nisbiy)</h3>
+<p><strong>Ota elementga nisbatan</strong> o'lcham. <code>width: 50%</code> — ota elementning yarmi kengligi. Ota o'zgarsa, farzand ham moslashadi. Moslashuvchan kengliklar uchun juda foydali.</p>
+<pre class="code"><code>.yon-panel {
+  width: 30%;
+}
+.asosiy {
+  width: 70%;
+}</code></pre>
+<h3>em — ota shriftga nisbatan</h3>
+<p><code>1em</code> = ota elementning shrift o'lchami. Agar ota shrifti 16px bo'lsa, <code>2em</code> = 32px. Muammosi: em'lar bir-birining ichida <strong>ko'payib ketishi</strong> mumkin (ichma-ich elementlarda).</p>
+<h3>rem — ildiz shriftga nisbatan (eng tavsiya etiladigan)</h3>
+<p><code>rem</code> (root em) har doim <strong>ildiz elementga</strong> (<code>&lt;html&gt;</code>) nisbatan hisoblanadi. Standart holatda <code>html</code> shrifti 16px, demak <code>1rem = 16px</code>, <code>1.5rem = 24px</code>. em'ning ko'payib ketish muammosi rem'da yo'q, shuning uchun rem — o'lcham va masofalar uchun eng ishonchli tanlov.</p>
+<pre class="code"><code>html {
+  font-size: 16px;   /* 1rem = 16px */
+}
+
+h1 {
+  font-size: 2rem;   /* 32px */
+}
+.karta {
+  padding: 1.5rem;   /* 24px */
+}</code></pre>
+<div class="tip">Amaliy maslahat: shriftlar va masofalar (padding, margin) uchun <strong>rem</strong>ni asosiy birlik qiling. Foydalanuvchi brauzer sozlamasida shrift o'lchamini kattalashtirsa, butun sayt (rem'ga asoslangani uchun) mutanosib ravishda kattalashadi — bu qulaylik uchun juda muhim.</div>
+<h3>vw va vh — ekran o'lchamiga nisbatan</h3>
+<p><code>vw</code> (viewport width) — ekran kengligining 1%'i; <code>vh</code> (viewport height) — ekran balandligining 1%'i. <code>100vw</code> = butun ekran kengligi, <code>100vh</code> = butun ekran balandligi. To'liq ekranli bo'limlar (hero section) uchun juda qulay:</p>
+<pre class="code"><code>.hero {
+  width: 100vw;
+  height: 100vh;   /* butun ekranni egallaydi */
+}</code></pre>
+<h2>Viewport meta tegi — birinchi qadam</h2>
+<p>Responsive sayt yaratishning <strong>eng birinchi</strong> va majburiy qadami — HTML'ning <code>&lt;head&gt;</code> qismiga viewport meta tegini qo'yish. Usiz media query'lar telefonda to'g'ri ishlamaydi:</p>
+<pre class="code"><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+<div class="warn">Bu qatorni unutmang! U bo'lmasa, telefon saytni kompyuter kengligida ko'rsatib, keyin kichraytiradi — natijada matn juda mayda bo'lib qoladi va media query'lar ishlamaydi. Bu — boshlang'ich dasturchilarning eng ko'p qiladigan xatosi.</div>
+<h2>Media query — @media</h2>
+<p><strong>Media query</strong> — ekran o'lchamiga (yoki boshqa shartga) qarab turli CSS qoidalarini qo'llash imkonini beradi. U <code>@media</code> bilan boshlanadi va ichida shart hamda odatiy CSS qoidalari bo'ladi:</p>
+<pre class="code"><code>/* Ekran kengligi 600px yoki undan kichik bo'lsa */
+@media (max-width: 600px) {
+  .konteyner {
+    flex-direction: column;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}</code></pre>
+<p>Bu shunday ishlaydi: ekran 600px'dan keng bo'lsa, ichkaridagi qoidalar <strong>e'tiborga olinmaydi</strong>; ekran 600px yoki tor bo'lsa, ular qo'llaniladi. Shu tarzda telefonda joylashuvni gorizontaldan vertikalga o'zgartirasiz.</p>
+<ul><li><code>max-width: 600px</code> — ekran shu qiymat yoki undan <strong>tor</strong> bo'lganda;</li><li><code>min-width: 600px</code> — ekran shu qiymat yoki undan <strong>keng</strong> bo'lganda.</li></ul>
+<h2>Mobile-first yondashuv</h2>
+<p>Ikki xil yondashuv bor: <strong>desktop-first</strong> (avval katta ekran, keyin <code>max-width</code> bilan kichraytirish) va <strong>mobile-first</strong> (avval telefon, keyin <code>min-width</code> bilan kattalashtirish). Zamonaviy amaliyot — <strong>mobile-first</strong>.</p>
+<p>Mobile-first'da asosiy CSS'ni eng kichik (telefon) ekran uchun yozasiz, so'ng <code>min-width</code> media query'lari bilan kattaroq ekranlarga qo'shimchalar qo'shasiz:</p>
+<pre class="code"><code>/* Asosiy uslub — telefon uchun (mobile-first) */
+.karta {
+  width: 100%;
+}
+
+/* Planshet: 768px va undan keng */
+@media (min-width: 768px) {
+  .karta {
+    width: 50%;
+  }
+}
+
+/* Kompyuter: 1024px va undan keng */
+@media (min-width: 1024px) {
+  .karta {
+    width: 33.33%;
+  }
+}</code></pre>
+<div class="tip">Mobile-first afzalliklari: telefonlar ko'pchilikda, shuning uchun asosiy kod ular uchun optimallashadi; kod soddaroq va progressiv (kichikdan kattaga) bo'ladi; kam quvvatli qurilmalar keraksiz uslublarni yuklamaydi.</div>
+<h2>Breakpointlar</h2>
+<p><strong>Breakpoint</strong> — joylashuv o'zgaradigan ekran kengligi (media query'dagi qiymat). Universal standart yo'q, lekin keng tarqalgan qiymatlar:</p>
+<ul><li><strong>~480px</strong> — kichik telefonlar;</li><li><strong>~768px</strong> — planshetlar;</li><li><strong>~1024px</strong> — kichik noutbuklar;</li><li><strong>~1280px va undan katta</strong> — katta ekranlar.</li></ul>
+<div class="note">Breakpointlarni qat'iy qurilma o'lchamiga emas, saytingiz <strong>joylashuvi buzilgan</strong> nuqtaga qarab tanlang. Sahifani asta-sekin toraytirib, dizayn qachon "buzila" boshlasa, o'sha yerga breakpoint qo'ying — bu eng amaliy usul.</div>
+<h2>Moslashuvchan rasm va matn</h2>
+<p>Rasmlar ota elementdan chiqib ketmasligi uchun ularga oddiy, lekin muhim qoida beriladi:</p>
+<pre class="code"><code>img {
+  max-width: 100%;
+  height: auto;
+}</code></pre>
+<p><code>max-width: 100%</code> — rasm ota elementdan kengroq bo'lmaydi (kichrayadi, lekin haqiqiy o'lchamidan kattalashmaydi). <code>height: auto</code> — balandlik nisbatini saqlaydi, rasm cho'zilib buzilmaydi.</p>
+<p>Matnni ham moslashuvchan qilish mumkin. Zamonaviy <code>clamp()</code> funksiyasi shrift o'lchamini ekranga qarab avtomatik moslaydi — eng kichik va eng katta chegara orasida:</p>
+<pre class="code"><code>h1 {
+  /* min 1.5rem, ideal 5vw, max 3rem */
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}</code></pre>
+<p>Bu shuni anglatadi: shrift ekran bilan (5vw) o'sadi, lekin hech qachon 1.5rem'dan kichik yoki 3rem'dan katta bo'lmaydi. Media query'siz moslashuvchan sarlavha!</p>
+<h2>Amaliy misol: moslashuvchan karta panjarasi</h2>
+<p>Grid va media query birgalikda — telefonda 1 ustun, planshetda 2, kompyuterda 3 ustunli galereya:</p>
+<pre class="code"><code>/* Mobile-first: 1 ustun */
+.galereya {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .galereya { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .galereya { grid-template-columns: repeat(3, 1fr); }
+}</code></pre>
+<h2>Xulosa</h2>
+<ul><li><strong>Responsive dizayn</strong> — sayt barcha ekranlarga moslashishi;</li><li>Birliklar: <code>px</code> (qat'iy), <code>%</code> (otaga nisbatan), <code>rem</code> (ildizga — tavsiya etiladi), <code>vw</code>/<code>vh</code> (ekranga);</li><li>Majburiy birinchi qadam — <strong>viewport meta tegi</strong>;</li><li><code>@media</code> — ekran o'lchamiga qarab uslubni o'zgartiradi (<code>min-width</code>/<code>max-width</code>);</li><li><strong>Mobile-first</strong> — avval telefon uchun, keyin <code>min-width</code> bilan kattalashtirish;</li><li><strong>Breakpoint</strong>larni dizayn buzilgan nuqtaga qarab tanlang;</li><li><code>img { max-width: 100%; height: auto; }</code> — moslashuvchan rasm;</li><li><code>clamp()</code> — media query'siz moslashuvchan shrift o'lchami.</li></ul>
+<nav class="lesson-nav">
+  <a href="css-grid.html"><span class="dir">← Oldingi</span><span class="ttl">CSS Grid</span></a>
+  <a class="next" href="css-styling.html"><span class="dir">Keyingi →</span><span class="ttl">Ranglar, shrift va bezaklar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

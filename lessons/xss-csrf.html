@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XSS va CSRF — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="XSS nima va undan himoya (kirishni eskeyplash, CSP, textContent va innerHTML), CSRF nima va undan himoya (CSRF token, SameSite cookie). Himoya kodlari bilan.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Linux va terminal</summary>
+    <ol>
+      <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+      <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+      <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+      <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+      <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+      <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Web xavfsizligi va autentifikatsiya</summary>
+    <ol>
+      <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+      <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+      <li><a href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+      <li><a class="active" href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+      <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">6-qism: Frontend asoslari</div>
+  <details>
+    <summary>HTML</summary>
+    <ol>
+      <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+      <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+      <li><a href="../lessons/html-form.html">Formalar</a></li>
+      <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>CSS</summary>
+    <ol>
+      <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+      <li><a href="../lessons/css-box.html">Box model</a></li>
+      <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+      <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+      <li><a href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+      <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>TypeScript</summary>
+    <ol>
+      <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+      <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+      <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+      <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+      <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
+<h1>XSS va CSRF</h1>
+<p class="lead">XSS va CSRF — web ilovalarga eng ko'p tahdid soladigan ikki hujum turi. Ular bir-biriga o'xshab ketadi, lekin butunlay boshqacha ishlaydi. Ushbu darsda biz har birini <strong>faqat himoya nuqtai nazaridan</strong> tushunamiz: zaiflik qanday paydo bo'ladi va undan qanday himoyalanish kerak.</p>
+<h2>XSS nima?</h2>
+<p><strong>XSS (Cross-Site Scripting)</strong> — bu hujumchi sizning sahifangizga <strong>zararli JavaScript kod</strong> "joylashtira" olishi natijasida yuzaga keladigan zaiflik. Bu ko'pincha shunday sodir bo'ladi: ilova foydalanuvchi kiritgan matnni HTML sifatida, uni tozalamasdan sahifaga chiqaradi.</p>
+<p>Masalan, izohlar bo'limi foydalanuvchi yozgan matnni to'g'ridan-to'g'ri HTML'ga qo'ysa va foydalanuvchi matn o'rniga <code>&lt;script&gt;</code> tegi yozsa, brauzer uni oddiy matn emas, <em>bajariladigan kod</em> deb qabul qiladi. Natijada boshqa foydalanuvchilar sahifani ochganda o'sha kod ularning brauzerida ishlaydi.</p>
+<p>Nima uchun bu xavfli? Chunki zararli skript foydalanuvchining brauzerida, sizning saytingiz nomidan ishlaydi:</p>
+<ul><li>U cookie'larni o'qib olishi mumkin (agar ular <code>HttpOnly</code> bo'lmasa);</li><li>U foydalanuvchi nomidan so'rovlar yuborishi mumkin;</li><li>U sahifa mazmunini o'zgartirib, foydalanuvchini aldashi mumkin.</li></ul>
+<div class="note">XSS'ning uch asosiy turi bor: <strong>saqlangan</strong> (zararli matn bazaga saqlanib, keyin boshqalarga ko'rsatiladi), <strong>aks etuvchi</strong> (URL orqali kelib, javobga aks etadi) va <strong>DOM asosidagi</strong> (mijoz tomonidagi JS xavfsiz ishlov bermaganda). Himoya tamoyillari uchalasi uchun ham deyarli bir xil.</div>
+<h2>XSS himoyasi 1: chiqishni eskeyplash</h2>
+<p>Eng asosiy himoya: foydalanuvchi ma'lumotini sahifaga chiqarishda uni HTML sifatida emas, <strong>oddiy matn</strong> sifatida ko'rsatish. Buning uchun maxsus HTML belgilarini "qochirish" (escaping) kerak:</p>
+<pre class="code"><code>// Foydalanuvchi kiritmasidagi xavfli belgilarni eskeyplash
+function htmlEskeyp(matn) {
+  return String(matn)
+    .replace(/&amp;/g, '&amp;')
+    .replace(/&lt;/g, '&lt;')
+    .replace(/&gt;/g, '&gt;')
+    .replace(/"/g, '"')
+    .replace(/'/g, ''');
+}
+
+// Endi foydalanuvchi '&lt;script&gt;...' yozsa ham,
+// u matn sifatida ko'rinadi, kod sifatida BAJARILMAYDI.
+const xavfsiz = htmlEskeyp(foydalanuvchiIzohi);</code></pre>
+<p>Amaliyotda ko'pchilik shablon tizimlari (masalan, <code>EJS</code>, <code>Pug</code>, <code>Handlebars</code>) o'zgaruvchilarni <strong>avtomatik eskeyplaydi</strong>. Muhimi: avtomatik eskeyplashni o'chirmaslik. Masalan, EJS'da <code>&lt;%= x %&gt;</code> eskeyplaydi, <code>&lt;%- x %&gt;</code> esa eskeyplamaydi — ikkinchisi xavfli:</p>
+<pre class="code"><code>// EJS shablonida:
+// XAVFSIZ (avtomatik eskeyplanadi):
+// &lt;%= foydalanuvchi.ismi %&gt;
+//
+// XAVFLI (eskeyplanmaydi, xom HTML chiqadi):
+// &lt;%- foydalanuvchi.ismi %&gt;   &lt;-- foydalanuvchi ma'lumotiga BUNI ishlatmang!</code></pre>
+<div class="warn">Eskeyplashni <strong>chiqish vaqtida</strong> (ma'lumotni ko'rsatayotganda) qiling, kontekstga qarab. HTML matnida, HTML atributida, JavaScript ichida va URL'da eskeyplash qoidalari farq qiladi. Ishonchli shablon tizimiga tayaning va uning avtomatik himoyasini o'chirmang.</div>
+<h2>XSS himoyasi 2: textContent va innerHTML</h2>
+<p>Mijoz tomonidagi JavaScript'da eng ko'p uchraydigan XSS sababi — <code>innerHTML</code> ni foydalanuvchi ma'lumoti bilan ishlatish. <code>innerHTML</code> berilgan matnni <strong>HTML sifatida talqin qiladi</strong>, ya'ni ichidagi teglar ishga tushadi:</p>
+<pre class="code"><code>// XAVFLI: innerHTML foydalanuvchi ma'lumotini HTML deb talqin qiladi
+const izoh = olinganFoydalanuvchiIzohi; // masalan '&lt;img src=x onerror=...&gt;'
+element.innerHTML = izoh; // zararli kod ishga tushishi mumkin!
+
+// XAVFSIZ: textContent hamma narsani ODDIY MATN deb qo'yadi
+element.textContent = izoh; // teglar matn sifatida ko'rinadi, bajarilmaydi</code></pre>
+<p>Qoida oddiy: foydalanuvchi ma'lumotini ko'rsatishda deyarli har doim <code>textContent</code> ishlating, <code>innerHTML</code> emas. Agar HTML tuzilmasi yaratishingiz kerak bo'lsa, elementlarni <code>createElement</code> bilan yarating va matnni <code>textContent</code> orqali qo'ying:</p>
+<pre class="code"><code>// HTML tuzilmasini xavfsiz yaratish
+const div = document.createElement('div');
+div.className = 'izoh';
+
+const nom = document.createElement('strong');
+nom.textContent = foydalanuvchi.ismi; // xavfsiz
+
+const matn = document.createElement('p');
+matn.textContent = foydalanuvchi.izohi; // xavfsiz
+
+div.append(nom, matn);
+konteyner.append(div);</code></pre>
+<div class="tip">Agar foydalanuvchidan cheklangan HTML (masalan, izohlarda qalin matn) qabul qilishingiz <em>shart</em> bo'lsa, uni o'zingiz eskeyplashga urinmang — bu juda xato bo'ladi. <code>DOMPurify</code> kabi sinovdan o'tgan kutubxonadan foydalaning: u xavfli teg va atributlarni olib tashlaydi.</div>
+<h2>XSS himoyasi 3: Content Security Policy (CSP)</h2>
+<p><strong>CSP</strong> — bu qo'shimcha himoya qatlami. U HTTP sarlavhasi orqali brauzerga aytadi: "faqat shu manbalardagi skriptlarni ishga tushir". Agar XSS'ga yo'l qo'yilgan bo'lsa ham, CSP ruxsat bermagan skript ishga tushmaydi.</p>
+<pre class="code"><code>// CSP sarlavhasini o'rnatish (Express, helmet orqali)
+const helmet = require('helmet');
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],              // faqat o'z domenimizdan
+    scriptSrc: ["'self'"],               // inline skript va tashqi skriptlar taqiqlanadi
+    styleSrc: ["'self'"],
+    imgSrc: ["'self'", 'data:'],
+    objectSrc: ["'none'"]                // &lt;object&gt;, &lt;embed&gt; taqiqlanadi
+  }
+}));</code></pre>
+<p>CSP'ning kuchli tomoni: <code>scriptSrc 'self'</code> bo'lsa, HTML ichiga joylashtirilgan (inline) skriptlar ishlamaydi. Bu esa ko'plab XSS hujumlarini avtomatik to'xtatadi, chunki hujumchi joylashtirgan skript aynan inline bo'ladi.</p>
+<div class="note">CSP — bu "chuqurlashtirilgan himoya" misoli: u XSS'ni oldini olmaydi, balki agar XSS bo'lsa, uning ta'sirini keskin kamaytiradi. Eskeyplash birinchi mudofaa chizig'i bo'lsa, CSP — ikkinchi. Ikkalasi ham kerak.</div>
+<h2>CSRF nima?</h2>
+<p><strong>CSRF (Cross-Site Request Forgery)</strong> — bu foydalanuvchining <em>allaqachon login qilgan</em> holatidan foydalanib, uni bilmagan holda biror amalni bajartirishga aldash zaifligi. XSS'dan farqi: bu yerda hujumchi sizning saytingizga kod joylashtirmaydi — u foydalanuvchi brauzerining cookie'ni avtomatik yuborish odatidan foydalanadi.</p>
+<p>Muammoning ildizi: brauzer sizning saytingizga so'rov yuborilganda, u <strong>saytingiz cookie'larini avtomatik qo'shadi</strong> — hattoki so'rov boshqa (zararli) saytdan kelib chiqqan bo'lsa ham. Agar server faqat cookie'ning mavjudligiga ishonsa, u bu so'rovni haqiqiy foydalanuvchining so'rovi deb qabul qiladi.</p>
+<p>Masalan, foydalanuvchi bank saytiga login qilgan, cookie'si bor. So'ng u boshqa zararli sahifani ochsa, o'sha sahifa foydalanuvchi bilmagan holda bank saytiga so'rov jo'natishga urinishi mumkin — va brauzer avtomatik ravishda bank cookie'sini biriktiradi.</p>
+<div class="warn">CSRF asosan <strong>holatni o'zgartiruvchi</strong> so'rovlarga (pul o'tkazish, parol o'zgartirish, o'chirish) tahdid soladi. Shuning uchun bunday amallar hech qachon oddiy <code>GET</code> so'rov bilan bajarilmasligi kerak — ular <code>POST</code>/<code>PUT</code>/<code>DELETE</code> bo'lishi va CSRF himoyasiga ega bo'lishi lozim.</div>
+<h2>CSRF himoyasi 1: SameSite cookie</h2>
+<p>Eng oddiy va samarali zamonaviy himoya — cookie'ga <code>SameSite</code> atributini qo'yish. Bu brauzerga aytadi: bu cookie'ni boshqa saytdan kelgan so'rovlarda yuborma. Shu bilan CSRF hujumining asosiy mexanizmi (cookie'ning avtomatik yuborilishi) buziladi:</p>
+<pre class="code"><code>// SameSite bilan cookie: boshqa saytdan kelgan so'rovlarda
+// cookie yuborilmaydi -&gt; CSRF ning asosiy yo'li yopiladi
+res.cookie('sessionId', sessionId, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax'  // yoki 'strict' — undan ham qattiqroq
+});</code></pre>
+<p><code>SameSite=Lax</code> ko'pchilik holatlar uchun yaxshi standart: u oddiy navigatsiyani buzmaydi, lekin xavfli o'zaro-sayt so'rovlarida cookie'ni yubormaydi. <code>SameSite=Strict</code> yanada qattiqroq, lekin ba'zan foydalanuvchi tajribasiga ta'sir qilishi mumkin.</p>
+<h2>CSRF himoyasi 2: CSRF token</h2>
+<p>An'anaviy va ishonchli himoya — <strong>CSRF token</strong> (yoki "anti-forgery token"). G'oya shunday: server har bir forma uchun tasodifiy, taxmin qilib bo'lmaydigan token yaratadi. Bu token formaga yashirin maydon sifatida qo'yiladi. So'rov kelganda, server tokenning to'g'riligini tekshiradi.</p>
+<p>Nima uchun bu ishlaydi? Chunki boshqa (zararli) sayt bu tokenni <em>bila olmaydi</em> — u faqat sizning saytingizdagi haqiqiy formada mavjud. Cookie avtomatik yuborilsa ham, to'g'ri CSRF token yuborilmasa, so'rov rad etiladi.</p>
+<pre class="code"><code>// Kontseptual CSRF himoya oqimi (Express)
+const crypto = require('crypto');
+
+// 1. Forma sahifasini berishda token yaratamiz
+app.get('/parol-ozgartirish', (req, res) =&gt; {
+  const csrfToken = crypto.randomBytes(32).toString('hex');
+  req.session.csrfToken = csrfToken; // serverda saqlaymiz
+  res.render('parol-forma', { csrfToken });
+});
+
+// Formada yashirin maydon:
+// &lt;input type="hidden" name="_csrf" value="...token..."&gt;
+
+// 2. So'rov kelganda tokenni tekshiruvchi middleware
+function csrfTekshir(req, res, next) {
+  const yuborilgan = req.body._csrf;
+  const saqlangan = req.session.csrfToken;
+  if (!yuborilgan || yuborilgan !== saqlangan) {
+    return res.status(403).json({ xato: 'CSRF token yaroqsiz' });
+  }
+  next();
+}
+
+app.post('/parol-ozgartirish', csrfTekshir, (req, res) =&gt; {
+  // Bu yerga faqat to'g'ri CSRF token bilan yetib kelinadi
+  // ... parolni o'zgartiramiz
+});</code></pre>
+<div class="note">Amaliyotda bularni o'zingiz yozish o'rniga sinovdan o'tgan middleware'lardan (masalan, <code>csurf</code> yoki freymvorkning o'z himoyasidan) foydalaning. Yuqoridagi kod tamoyilni ko'rsatish uchun soddalashtirilgan.</div>
+<div class="tip">Eng yaxshi amaliyot — bir necha qatlamni birlashtirish: <code>SameSite</code> cookie (birinchi mudofaa) + CSRF token (ishonchli ikkinchi qatlam). API'lar uchun, agar autentifikatsiya cookie'da emas, <code>Authorization</code> sarlavhasidagi tokenda bo'lsa, CSRF tabiiy ravishda kamroq muammo bo'ladi (chunki sarlavha avtomatik yuborilmaydi).</div>
+<h2>XSS va CSRF: farqni eslab qolish</h2>
+<ul><li><strong>XSS</strong> — hujumchi sizning saytingizda <em>kod ishga tushiradi</em>; himoya: kirishni eskeyplash, <code>textContent</code>, CSP;</li><li><strong>CSRF</strong> — hujumchi foydalanuvchining <em>login holatidan foydalanib so'rov yuboradi</em>; himoya: <code>SameSite</code> cookie, CSRF token;</li><li>XSS aslida CSRF himoyasini ham buzishi mumkin (chunki u sahifada CSRF tokenni o'qiy oladi) — shuning uchun XSS'ni oldini olish birlamchi.</li></ul>
+<h2>Xulosa</h2>
+<ul><li><strong>XSS</strong> — foydalanuvchi ma'lumoti kod sifatida bajarilishi; birlamchi himoya — chiqishni eskeyplash va <code>textContent</code> ishlatish;</li><li><code>innerHTML</code> ni foydalanuvchi ma'lumoti bilan ishlatmang; kerak bo'lsa <code>DOMPurify</code>dan foydalaning;</li><li><strong>CSP</strong> — qo'shimcha qatlam: inline skriptlarni bloklab, XSS ta'sirini kamaytiradi;</li><li><strong>CSRF</strong> — foydalanuvchining login holatidan noqonuniy foydalanish; himoya — <code>SameSite</code> cookie va CSRF token;</li><li>Holatni o'zgartiruvchi amallar hech qachon <code>GET</code> bilan bo'lmasin;</li><li>Eng yaxshi yondashuv — bir necha himoya qatlamini birlashtirish (defense in depth).</li></ul>
+<nav class="lesson-nav">
+  <a href="jwt.html"><span class="dir">← Oldingi</span><span class="ttl">JWT (JSON Web Token)</span></a>
+  <a class="next" href="sql-injection.html"><span class="dir">Keyingi →</span><span class="ttl">SQL injection va boshqa himoyalar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

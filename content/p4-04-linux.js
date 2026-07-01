@@ -578,7 +578,7 @@ module.exports = {
 
         { h2: "for va while — sikllar" },
         { p: "<code>for</code> sikli ro'yxat ustidan yuradi — har bir element uchun blokni takrorlaydi:" },
-        { code: "#!/bin/bash\nfor mevа in olma nok uzum; do\n  echo \"Meva: $mevа\"\ndone" },
+        { code: "#!/bin/bash\nfor meva in olma nok uzum; do\n  echo \"Meva: $meva\"\ndone" },
         { p: "Sonlar oralig'i bo'yicha yurish (1 dan 5 gacha):" },
         { code: "#!/bin/bash\nfor i in $(seq 1 5); do\n  echo \"Raqam: $i\"\ndone" },
         { p: "Papkadagi barcha fayllar ustidan yurish — juda amaliy:" },

@@ -362,6 +362,16 @@
       <li><a href="lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Web xavfsizligi va autentifikatsiya</summary>
+    <ol>
+      <li><a href="lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+      <li><a href="lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+      <li><a href="lessons/jwt.html">JWT (JSON Web Token)</a></li>
+      <li><a href="lessons/xss-csrf.html">XSS va CSRF</a></li>
+      <li><a href="lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+    </ol>
+  </details>
   <div class="side-part">6-qism: Frontend asoslari</div>
   <details>
     <summary>HTML</summary>
@@ -370,6 +380,17 @@
       <li><a href="lessons/html-teglar.html">Asosiy teglar</a></li>
       <li><a href="lessons/html-form.html">Formalar</a></li>
       <li><a href="lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>CSS</summary>
+    <ol>
+      <li><a href="lessons/css-nima.html">CSS nima?</a></li>
+      <li><a href="lessons/css-box.html">Box model</a></li>
+      <li><a href="lessons/css-flexbox.html">Flexbox</a></li>
+      <li><a href="lessons/css-grid.html">CSS Grid</a></li>
+      <li><a href="lessons/css-responsive.html">Responsive dizayn</a></li>
+      <li><a href="lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
     </ol>
   </details>
   <details>
@@ -386,7 +407,7 @@
 <main class="content">
 <section class="hero">
   <h1>JavaScript'ni noldan chuqur o'rganing</h1>
-  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 191 ta dars.</p>
+  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 202 ta dars.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
 <h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
@@ -671,21 +692,38 @@
   <a class="card" href="lessons/mongodb.html"><div class="num">181</div><h3>MongoDB (NoSQL)</h3><p>MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.</p></a>
   <a class="card" href="lessons/node-db.html"><div class="num">182</div><h3>Node.js bilan bazaga ulanish</h3><p>Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.</p></a>
 </div>
+<h3 class="chapter-head">Web xavfsizligi va autentifikatsiya</h3>
+<div class="cards">
+  <a class="card" href="lessons/web-xavfsizlik.html"><div class="num">183</div><h3>Web xavfsizligi asoslari</h3><p>Nega xavfsizlik muhim, CIA triadasi, "foydalanuvchiga hech qachon ishonma" tamoyili, HTTPS va OWASP asosidagi umumiy tahdidlar ro'yxati.</p></a>
+  <a class="card" href="lessons/auth-asoslar.html"><div class="num">184</div><h3>Autentifikatsiya va avtorizatsiya</h3><p>Autentifikatsiya va avtorizatsiya farqi, parolni hech qachon ochiq saqlamaslik, bcrypt bilan hashlash va salt, sessiya (cookie) va token yondashuvlari, xavfsiz cookie.</p></a>
+  <a class="card" href="lessons/jwt.html"><div class="num">185</div><h3>JWT (JSON Web Token)</h3><p>JWT tuzilishi (header.payload.signature), imzolash va tekshirish, Express'da login → token → himoyalangan route middleware, token muddati, afzallik va kamchiliklari.</p></a>
+  <a class="card" href="lessons/xss-csrf.html"><div class="num">186</div><h3>XSS va CSRF</h3><p>XSS nima va undan himoya (kirishni eskeyplash, CSP, textContent va innerHTML), CSRF nima va undan himoya (CSRF token, SameSite cookie). Himoya kodlari bilan.</p></a>
+  <a class="card" href="lessons/sql-injection.html"><div class="num">187</div><h3>SQL injection va boshqa himoyalar</h3><p>SQL injection qanday yuzaga keladi va undan himoya (parametrlangan so'rovlar, ORM), hamda boshqa muhim amaliyotlar: validatsiya, eng kam imtiyoz, sirlarni .env, rate limiting, xatolarni yashirish.</p></a>
+</div>
 <h2 class="part-head" id="6-qism-frontend-asoslari">6-qism: Frontend asoslari</h2>
 <h3 class="chapter-head">HTML</h3>
 <div class="cards">
-  <a class="card" href="lessons/html-nima.html"><div class="num">183</div><h3>HTML nima?</h3><p>HTML — veb-sahifalarni belgilash tili. Teg, element va atribut tushunchalari, HTML hujjatining skeleti (DOCTYPE, html, head, body), title va meta teglari, hamda birinchi sahifani yozish.</p></a>
-  <a class="card" href="lessons/html-teglar.html"><div class="num">184</div><h3>Asosiy teglar</h3><p>Eng ko'p ishlatiladigan HTML teglari: sarlavhalar (h1-h6), paragraflar, qalin va kursiv matn (strong/em), ro'yxatlar (ul/ol/li), havolalar (a), rasmlar (img), div va span konteynerlari, hamda br va hr.</p></a>
-  <a class="card" href="lessons/html-form.html"><div class="num">185</div><h3>Formalar</h3><p>Foydalanuvchidan ma'lumot yig'ish uchun formalar: form tegi (action, method), input turlari (text, password, email, checkbox, radio, number, date), label, select/option, textarea, tugmalar hamda required va boshqa validatsiya atributlari.</p></a>
-  <a class="card" href="lessons/html-semantik.html"><div class="num">186</div><h3>Semantik HTML</h3><p>Nega semantik teglar muhim; sahifa tuzilishi teglari (header, nav, main, section, article, aside, footer); foydalanish qulayligi (a11y) asoslari; SEO uchun foydasi va "div sho'rvasi"dan qochish.</p></a>
+  <a class="card" href="lessons/html-nima.html"><div class="num">188</div><h3>HTML nima?</h3><p>HTML — veb-sahifalarni belgilash tili. Teg, element va atribut tushunchalari, HTML hujjatining skeleti (DOCTYPE, html, head, body), title va meta teglari, hamda birinchi sahifani yozish.</p></a>
+  <a class="card" href="lessons/html-teglar.html"><div class="num">189</div><h3>Asosiy teglar</h3><p>Eng ko'p ishlatiladigan HTML teglari: sarlavhalar (h1-h6), paragraflar, qalin va kursiv matn (strong/em), ro'yxatlar (ul/ol/li), havolalar (a), rasmlar (img), div va span konteynerlari, hamda br va hr.</p></a>
+  <a class="card" href="lessons/html-form.html"><div class="num">190</div><h3>Formalar</h3><p>Foydalanuvchidan ma'lumot yig'ish uchun formalar: form tegi (action, method), input turlari (text, password, email, checkbox, radio, number, date), label, select/option, textarea, tugmalar hamda required va boshqa validatsiya atributlari.</p></a>
+  <a class="card" href="lessons/html-semantik.html"><div class="num">191</div><h3>Semantik HTML</h3><p>Nega semantik teglar muhim; sahifa tuzilishi teglari (header, nav, main, section, article, aside, footer); foydalanish qulayligi (a11y) asoslari; SEO uchun foydasi va "div sho'rvasi"dan qochish.</p></a>
+</div>
+<h3 class="chapter-head">CSS</h3>
+<div class="cards">
+  <a class="card" href="lessons/css-nima.html"><div class="num">192</div><h3>CSS nima?</h3><p>CSS — veb-sahifalarni bezash tili. Sintaksis (selektor { xossa: qiymat; }), CSS'ni HTML'ga ulash usullari (inline, internal, external), asosiy selektorlar (element, class, id), ularni kombinatsiyalash va spetsifiklik tushunchasi.</p></a>
+  <a class="card" href="lessons/css-box.html"><div class="num">193</div><h3>Box model</h3><p>CSS'da har bir element to'rtburchak qutidir. Content, padding, border va margin qatlamlari; width/height; box-sizing: border-box; display xossasi (block, inline, inline-block, none) va overflow.</p></a>
+  <a class="card" href="lessons/css-flexbox.html"><div class="num">194</div><h3>Flexbox</h3><p>display: flex bilan elementlarni bir o'lchamli joylashtirish. Asosiy va ko'ndalang o'q, justify-content, align-items, flex-direction, flex-wrap, gap; flex-grow/shrink/basis va amaliy joylashuvlar.</p></a>
+  <a class="card" href="lessons/css-grid.html"><div class="num">195</div><h3>CSS Grid</h3><p>display: grid bilan ikki o'lchamli joylashuv. grid-template-columns/rows (fr, repeat, minmax), gap, elementlarni joylashtirish (grid-column/row), Flexbox bilan farqi va qachon qaysi birini tanlash.</p></a>
+  <a class="card" href="lessons/css-responsive.html"><div class="num">196</div><h3>Responsive dizayn</h3><p>Sayt barcha ekran o'lchamlariga moslashishi. Birliklar (px, %, em, rem, vw/vh), media query (@media), mobile-first yondashuv, moslashuvchan rasm va matn, breakpointlar.</p></a>
+  <a class="card" href="lessons/css-styling.html"><div class="num">197</div><h3>Ranglar, shrift va bezaklar</h3><p>color/background va rang formatlari (hex, rgb, hsl); shrift (font-family, size, weight, line-height); matn bezaklari (text-align, text-decoration); border-radius, box-shadow va transition asoslari.</p></a>
 </div>
 <h3 class="chapter-head">TypeScript</h3>
 <div class="cards">
-  <a class="card" href="lessons/ts-nima.html"><div class="num">187</div><h3>TypeScript nima?</h3><p>TypeScript — JavaScript ustiga turlarni qo'shadigan til; nega kerak, o'rnatish, tsc bilan kompilyatsiya va .ts fayllari.</p></a>
-  <a class="card" href="lessons/ts-turlar.html"><div class="num">188</div><h3>Asosiy turlar</h3><p>Tur izohlari, string/number/boolean, massiv va tuple, any va unknown, void, null/undefined, tur xulosasi va literal turlar.</p></a>
-  <a class="card" href="lessons/ts-interface.html"><div class="num">189</div><h3>Interfeys va tip aliaslari</h3><p>interface bilan obyekt shaklini tavsiflash, type alias, ixtiyoriy va readonly xossalar, union va intersection, interface vs type.</p></a>
-  <a class="card" href="lessons/ts-funksiya.html"><div class="num">190</div><h3>Funksiyalar va generiklar</h3><p>Parametr va qaytish turlari, ixtiyoriy va standart parametrlar, generiklar, generic interfeys va klass, cheklovlar (extends).</p></a>
-  <a class="card" href="lessons/ts-class.html"><div class="num">191</div><h3>Klasslar va konfiguratsiya</h3><p>TS klasslari, kirish modifikatorlari (public/private/protected/readonly), implements, enum va tsconfig.json asoslari.</p></a>
+  <a class="card" href="lessons/ts-nima.html"><div class="num">198</div><h3>TypeScript nima?</h3><p>TypeScript — JavaScript ustiga turlarni qo'shadigan til; nega kerak, o'rnatish, tsc bilan kompilyatsiya va .ts fayllari.</p></a>
+  <a class="card" href="lessons/ts-turlar.html"><div class="num">199</div><h3>Asosiy turlar</h3><p>Tur izohlari, string/number/boolean, massiv va tuple, any va unknown, void, null/undefined, tur xulosasi va literal turlar.</p></a>
+  <a class="card" href="lessons/ts-interface.html"><div class="num">200</div><h3>Interfeys va tip aliaslari</h3><p>interface bilan obyekt shaklini tavsiflash, type alias, ixtiyoriy va readonly xossalar, union va intersection, interface vs type.</p></a>
+  <a class="card" href="lessons/ts-funksiya.html"><div class="num">201</div><h3>Funksiyalar va generiklar</h3><p>Parametr va qaytish turlari, ixtiyoriy va standart parametrlar, generiklar, generic interfeys va klass, cheklovlar (extends).</p></a>
+  <a class="card" href="lessons/ts-class.html"><div class="num">202</div><h3>Klasslar va konfiguratsiya</h3><p>TS klasslari, kirish modifikatorlari (public/private/protected/readonly), implements, enum va tsconfig.json asoslari.</p></a>
 </div>
 </main>
 </div>

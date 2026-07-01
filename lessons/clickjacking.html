@@ -362,6 +362,16 @@
       <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Web xavfsizligi va autentifikatsiya</summary>
+    <ol>
+      <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+      <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+      <li><a href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+      <li><a href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+      <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+    </ol>
+  </details>
   <div class="side-part">6-qism: Frontend asoslari</div>
   <details>
     <summary>HTML</summary>
@@ -370,6 +380,17 @@
       <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
       <li><a href="../lessons/html-form.html">Formalar</a></li>
       <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>CSS</summary>
+    <ol>
+      <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+      <li><a href="../lessons/css-box.html">Box model</a></li>
+      <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+      <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+      <li><a href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+      <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
     </ol>
   </details>
   <details>
@@ -418,7 +439,7 @@
 
 &lt;iframe src="https://victim.com"&gt;&lt;/iframe&gt;</code></pre>
 <p>Bu yerda hiyla:</p>
-<ul><li><code>opacity: 0.0001</code> — iframe deyarli to'liq ko'rinmas, lekin texnik jihatdan hali ham mavjud va bosishlarni qabul qiladi;</li><li><code>z-index: 1</code> — iframe aldov tugmadan (<code>z-index: 0</code>) ustunroq qatlamdа, shuning uchun bosish iframe'ga tushadi;</li><li>iframe qurbon saytning kerakli tugmasi ustma-ust keladigan qilib joylashtiriladi.</li></ul>
+<ul><li><code>opacity: 0.0001</code> — iframe deyarli to'liq ko'rinmas, lekin texnik jihatdan hali ham mavjud va bosishlarni qabul qiladi;</li><li><code>z-index: 1</code> — iframe aldov tugmadan (<code>z-index: 0</code>) ustunroq qatlamda, shuning uchun bosish iframe'ga tushadi;</li><li>iframe qurbon saytning kerakli tugmasi ustma-ust keladigan qilib joylashtiriladi.</li></ul>
 <div class="warn">Ba'zi murakkab hujumlarda sichqoncha kursorini kuzatib, iframe'ni doim kursor ostida ushlab turadigan variantlar ("cursorjacking") ham mavjud. Umumiy g'oya bir xil: foydalanuvchi ko'rgan narsa va aslida bosgan narsasi bir-biridan farq qiladi.</div>
 <h2>Nega an'anaviy himoya yetarli emas?</h2>
 <p>Ba'zi eski himoya usullari (masalan, JavaScript orqali "agar men iframe ichida bo'lsam, chiqib ketaman" degan busting kod) ishonchsiz. Masalan:</p>
@@ -452,12 +473,12 @@ Content-Security-Policy: frame-ancestors 'self' https://trusted.com https://part
 <ul><li><code>'none'</code> — <code>X-Frame-Options: DENY</code> bilan bir xil: hech qanday iframe'ga ruxsat yo'q;</li><li><code>'self'</code> — <code>SAMEORIGIN</code> bilan bir xil: faqat o'z manbamiz;</li><li>manzillar ro'yxati — bir nechta ishonchli manbaga ruxsat berish mumkin (bu <code>X-Frame-Options</code>da yo'q imkoniyat).</li></ul>
 <div class="tip">Yangi loyihalarda <code>frame-ancestors</code>ni afzal ko'ring, chunki u moslashuvchan va zamonaviy standart. Eski brauzerlar uchun qo'shimcha xavfsizlik sifatida <code>X-Frame-Options</code>ni ham qo'shib qo'yish mumkin — ikkalasini birga ishlatish keng tarqalgan amaliyot.</div>
 <h2>Himoya 3: SameSite cookie</h2>
-<p>Clickjacking hujumi foydalanuvchining <strong>cookie'lari</strong> avtomatik yuborilishiga tayanadi (chunki qurbon saytga tizimга kirgan). Agar autentifikatsiya cookie'lari boshqa saytdagi iframe'dan yuborilmasa, hujum foydasiz bo'ladi — sayt bosishni anonim deb qabul qiladi.</p>
+<p>Clickjacking hujumi foydalanuvchining <strong>cookie'lari</strong> avtomatik yuborilishiga tayanadi (chunki qurbon saytga tizimga kirgan). Agar autentifikatsiya cookie'lari boshqa saytdagi iframe'dan yuborilmasa, hujum foydasiz bo'ladi — sayt bosishni anonim deb qabul qiladi.</p>
 <p>Cookie'ning <code>SameSite</code> atributi aynan shu vaziyatni boshqaradi:</p>
 <ul><li><code>SameSite=Strict</code> — cookie faqat sahifaning <strong>o'z manbasidan</strong> so'rovlarga yuboriladi; boshqa saytdagi iframe yoki havoladan kelgan so'rovlarga <strong>yuborilmaydi</strong>;</li><li><code>SameSite=Lax</code> — cookie odatdagi navigatsiyalarda yuboriladi, lekin ko'plab cross-site kontekstlarda (jumladan iframe'lardagi so'rovlar) yuborilmaydi. Bu zamonaviy brauzerlarda <strong>standart</strong> qiymat;</li><li><code>SameSite=None</code> — cookie barcha kontekstlarda yuboriladi (bunda <code>Secure</code> ham majburiy). Bu clickjacking'ga qarshi himoyani <strong>o'chiradi</strong>.</li></ul>
 <pre class="code"><code>// Server tomonidan cookie o'rnatish (misol):
 Set-Cookie: session=abc123; SameSite=Strict; Secure; HttpOnly</code></pre>
-<div class="note"><code>SameSite=Lax</code> (yoki <code>Strict</code>) tufayli, hujumchi iframe'idagi qurbon saytga so'rovda autentifikatsiya cookie'lari qo'shilmaydi. Shunda bosish tizimга kirmagan (anonim) foydalanuvchi harakati sifatida ko'rinadi va zararli amal bajarilmaydi.</div>
+<div class="note"><code>SameSite=Lax</code> (yoki <code>Strict</code>) tufayli, hujumchi iframe'idagi qurbon saytga so'rovda autentifikatsiya cookie'lari qo'shilmaydi. Shunda bosish tizimga kirmagan (anonim) foydalanuvchi harakati sifatida ko'rinadi va zararli amal bajarilmaydi.</div>
 <div class="warn"><code>SameSite</code> kuchli himoya, lekin u <strong>yagona</strong> yechim emas. Ba'zi holatlar (masalan, <code>GET</code> orqali amalga oshiriladigan xavfsiz bo'lmagan operatsiyalar yoki <code>SameSite=None</code> ishlatilgan cookie'lar) hali ham zaif bo'lishi mumkin. Uni <code>frame-ancestors</code>/<code>X-Frame-Options</code> bilan <strong>birga</strong> ishlating.</div>
 <h2>Ko'p qatlamli himoya</h2>
 <p>Ishonchli xavfsizlik uchun himoya usullarini <strong>birgalikda</strong> qo'llash tavsiya etiladi. To'liq strategiya:</p>

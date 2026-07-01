@@ -220,7 +220,7 @@ module.exports = {
         { p: "JavaScript dvigateli (engine) juda oddiy tamoyil asosida ishlaydi: <em>bajariladigan vazifa bo'lsa — bajaradi, bo'lmasa — kutadi</em>. Bu cheksiz aylanuvchi algoritm quyidagicha ta'riflanadi:" },
         { ol: [
           "Navbatdagi eng eski vazifa bor bo'lsa — uni <strong>to'liq</strong> bajaradi;",
-          "So'ng barcha to'planган <strong>mikrovazifalarni</strong> bajaradi;",
+          "So'ng barcha to'plangan <strong>mikrovazifalarni</strong> bajaradi;",
           "Kerak bo'lsa <strong>render</strong> qiladi (ekranni yangilaydi);",
           "Vazifa yo'q bo'lsa — yangi vazifa kelguncha kutadi;",
           "Yangi vazifa kelsa — 1-qadamdan boshlab qaytaradi."

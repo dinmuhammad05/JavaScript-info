@@ -187,7 +187,9 @@ function renderBody(body) {
    orasidagi \' ni ' ga tuzatadi. "&lt;code&gt;\'&lt;/code&gt;" kabi
    qonuniy eskeyp misollariga tegmaydi (ular harflar bilan o'ralmagan). */
 function fixOverEscapedApostrophe(s) {
-  return s.replace(/(\p{L})\\'(\p{L})/gu, "$1'$2");
+  // Lookaround (letterlar iste'mol qilinmaydi) — shu bois ketma-ket
+  // kelgan \'...\' holatlari ham to'g'ri tuzatiladi (masalan "noto\'g\'ri").
+  return s.replace(/(?<=\p{L})\\'(?=\p{L})/gu, "'");
 }
 
 /* ---------- 3. Parts strukturasini qurish ---------- */

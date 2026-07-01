@@ -41,13 +41,13 @@ module.exports = {
 
         { h2: "Image (obraz) va container (konteyner) farqi" },
         { p: "Docker'da eng chalkash, ammo eng muhim tushunchalar — <strong>image</strong> va <strong>container</strong>. Ular bir-biriga bog'liq, lekin bir xil narsa emas." },
-        { p: "<strong>Image (obraz)</strong> — bu shablon, ya'ni 'qolip'. U ilovaning muzlatilgan holati: kod, kutubxonalar va sozlamalarning o'zgarmas nusxasi. Image'ni disк fayl (masalan, dastur o'rnatuvchisi) deb tasavvur qiling — u shunchaki turadi va o'zi ishlamaydi." },
+        { p: "<strong>Image (obraz)</strong> — bu shablon, ya'ni 'qolip'. U ilovaning muzlatilgan holati: kod, kutubxonalar va sozlamalarning o'zgarmas nusxasi. Image'ni disk fayl (masalan, dastur o'rnatuvchisi) deb tasavvur qiling — u shunchaki turadi va o'zi ishlamaydi." },
         { p: "<strong>Container (konteyner)</strong> — bu image'dan ishga tushirilgan <em>tirik nusxa</em>. Image'ni ishga tushirganingizda undan konteyner tug'iladi. Bitta image'dan bir nechta konteyner yaratish mumkin — xuddi bitta o'rnatuvchi fayldan dasturni bir necha marta o'rnatgandek." },
         { ul: [
           "<strong>Image</strong> — o'zgarmas shablon (retseptga o'xshaydi);",
           "<strong>Container</strong> — ishlab turgan nusxa (retsept bo'yicha pishirilgan taomga o'xshaydi);",
           "Bitta image'dan → ko'p konteyner yaratish mumkin;",
-          "Image diskда saqlanadi, konteyner esa xotirada ishlaydi."
+          "Image diskda saqlanadi, konteyner esa xotirada ishlaydi."
         ] },
         { tip: "Osongina eslash uchun: <strong>image</strong> — bu klass (class), <strong>container</strong> — bu shu klassdan yaratilgan obyekt (instance). JavaScript'dagi <code>class</code> va <code>new</code> bilan yaratilgan obyektga o'xshaydi." },
 
@@ -170,7 +170,7 @@ module.exports = {
         { code: "CONTAINER ID   IMAGE   COMMAND                  STATUS         PORTS                  NAMES\na1b2c3d4e5f6   nginx   \"/docker-entrypoint.\"   Up 5 minutes   0.0.0.0:8080->80/tcp   mening-serverim" },
         { p: "Har bir konteyner haqida ID, image nomi, holati, portlari va nomi ko'rsatiladi. Ammo bu faqat ishlab turgan konteynerlarni beradi. To'xtatilganlarini ham ko'rish uchun <code>-a</code> (all) bayrog'ini qo'shamiz:" },
         { code: "docker ps -a" },
-        { p: "<code>-a</code> bilan barcha konteynerlar ko'rinadi — ishlab turganlari ham, to'xtaganlari ham. Bu ayniqsa xatoliklarni topishda foydali: konteyner darhol to'xtab qolган bo'lsa, uni faqat <code>-a</code> bilan ko'rasiz." },
+        { p: "<code>-a</code> bilan barcha konteynerlar ko'rinadi — ishlab turganlari ham, to'xtaganlari ham. Bu ayniqsa xatoliklarni topishda foydali: konteyner darhol to'xtab qolgan bo'lsa, uni faqat <code>-a</code> bilan ko'rasiz." },
 
         { h2: "docker images — mavjud image'lar" },
         { p: "Kompyuteringizga yuklab olingan image'lar ro'yxatini ko'rish uchun:" },

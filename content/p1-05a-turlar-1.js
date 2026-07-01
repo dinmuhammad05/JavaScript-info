@@ -77,7 +77,7 @@ module.exports = {
         { h2: "Sonlarni yozishning ko'p usullari" },
         { p: "Katta sonni yozganda uni o'qish qiyin bo'ladi. Masalan, million: <code>1000000</code>. Nollarni sanashga to'g'ri keladi. Buning uchun bir nechta qulay usul bor." },
         { p: "Birinchisi — nollar o'rniga <code>e</code> harfidan foydalanish. <code>e</code> undan keyingi nol sonini bildiradi:" },
-        { pg: "// 1e6 = 1 va 6 ta nol = million\nconsole.log(1e6);     // 1000000\nconsole.log(1e9);     // 1000000000 (milliard)\nconsole.log(7.3e3);   // 7300  (7.3 * 1000)\n\n// manfiy daraja — kichik sonlar uchun\nconsole.log(1e-6);    // 0.000001 (millionда bir)\nconsole.log(2.5e-3);  // 0.0025", file: "son-yozuv.js" },
+        { pg: "// 1e6 = 1 va 6 ta nol = million\nconsole.log(1e6);     // 1000000\nconsole.log(1e9);     // 1000000000 (milliard)\nconsole.log(7.3e3);   // 7300  (7.3 * 1000)\n\n// manfiy daraja — kichik sonlar uchun\nconsole.log(1e-6);    // 0.000001 (millionda bir)\nconsole.log(2.5e-3);  // 0.0025", file: "son-yozuv.js" },
         { p: "Ikkinchisi — o'rinlar orasiga ajratuvchi ostki chiziq <code>_</code> qo'yish. U shunchaki bezak, JavaScript uni e'tiborsiz qoldiradi, lekin sonni o'qishni osonlashtiradi:" },
         { code: "let million = 1_000_000;  // 1000000 bilan bir xil\nconsole.log(million);" },
 

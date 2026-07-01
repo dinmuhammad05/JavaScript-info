@@ -426,7 +426,7 @@ module.exports = {
         { warn: "Koordinatalar <strong>oynaga nisbatan</strong> berilishi kerak (clientX/clientY), hujjatga emas. Bundan tashqari, oyna tashqarisidagi koordinatalar (manfiy yoki oyna o'lchamidan katta) uchun <code>elementFromPoint</code> <code>null</code> qaytaradi — bunday holatlarni tekshirmasangiz, <code>null.style</code> kabi xatolikka duch kelasiz." },
 
         { h2: "Koordinatalar orqali joylashtirish: position fixed" },
-        { p: "Biror elementni ma'lum bir joyga (masalan, boshqa element yonига tooltip) qo'yish uchun ko'pincha <code>position: fixed</code> va <code>getBoundingClientRect</code> koordinatalari birga ishlatiladi, chunki <code>fixed</code> ham oynaga nisbatan joylashadi:" },
+        { p: "Biror elementni ma'lum bir joyga (masalan, boshqa element yoniga tooltip) qo'yish uchun ko'pincha <code>position: fixed</code> va <code>getBoundingClientRect</code> koordinatalari birga ishlatiladi, chunki <code>fixed</code> ham oynaga nisbatan joylashadi:" },
         { code: "function createTipUnder(anchor, html) {\n  let tip = document.createElement('div');\n  tip.style.cssText = 'position: fixed; padding: 5px; background: yellow;';\n  tip.innerHTML = html;\n\n  document.body.append(tip);\n\n  // anchor elementning oynaga nisbatan joyi:\n  let coords = anchor.getBoundingClientRect();\n\n  // tooltip'ni anchor ostiga qo'yamiz:\n  tip.style.left = coords.left + 'px';\n  tip.style.top = coords.bottom + 5 + 'px';\n}" },
         { warn: "<code>position: fixed</code> muammosi — sahifa skroll qilinganda tooltip <strong>joyida qotib qoladi</strong> (anchor bilan birga ketmaydi), chunki fixed oynaga bog'langan. Agar tooltip anchor bilan birga skroll qilinishini istasangiz, hujjat koordinatalari va <code>position: absolute</code> kerak bo'ladi." },
 
@@ -449,7 +449,7 @@ module.exports = {
           "<code>document.elementFromPoint(x, y)</code> — oyna koordinatasidagi (client) eng ustki element;",
           "Hujjat koordinatasi = oyna koordinatasi + joriy skroll (<code>pageYOffset</code>/<code>pageXOffset</code>)."
         ] },
-        { p: "Ushbu bilimlar bilan siz endi elementlarni ekranда aniq joylashtirishingiz, tooltip va menyular yaratishingiz mumkin. Bu — interaktiv interfeyslar qurishning poydevoridir." }
+        { p: "Ushbu bilimlar bilan siz endi elementlarni ekranda aniq joylashtirishingiz, tooltip va menyular yaratishingiz mumkin. Bu — interaktiv interfeyslar qurishning poydevoridir." }
       ]
     }
 

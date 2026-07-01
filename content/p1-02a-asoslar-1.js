@@ -197,7 +197,7 @@ module.exports = {
         { p: "Noto'g'ri nomlarga misol (bularni ishlatib bo'lmaydi):" },
         { code: "let 1a;      // raqam bilan boshlanmaydi\nlet my-name; // chiziqcha (-) mumkin emas" },
         { note: "O'zgaruvchi nomi <strong>katta-kichik harflarni ajratadi</strong> (case-sensitive). Ya'ni <code>apple</code> va <code>APPLE</code> — ikki xil o'zgaruvchi." },
-        { note: "JavaScript kirill yoki boshqa alifbolardagi harflarga ham ruxsat beradi (masalan <code>let имя</code>), lekin amalda faqat inglizcha nomlar ishlatiladi." },
+        { note: "JavaScript kirill yoki boshqa alifbolardagi harflarga ham ruxsat beradi (masalan <code>let imya</code>), lekin amalda faqat inglizcha nomlar ishlatiladi." },
 
         { h2: "camelCase uslubi" },
         { p: "Agar nom bir necha so'zdan iborat bo'lsa, odatda <strong>camelCase</strong> uslubi qo'llaniladi: birinchi so'z kichik harf bilan, keyingi har bir so'z esa katta harf bilan boshlanadi." },

@@ -7,7 +7,7 @@ veb-sayt bo'lib, oddiy Node.js generatoridan foydalanadi.
 
 ## Xususiyatlari
 
-- 🇺🇿 **165 ta dars**, to'liq o'zbek tilida, to'rt qismga bo'lingan;
+- 🇺🇿 **202 ta dars**, to'liq o'zbek tilida, olti qismga bo'lingan;
 - ▶️ **559 ta interaktiv kod maydonchasi** — misollarni to'g'ridan-to'g'ri
   brauzerda tahrirlab, ishga tushirish mumkin (`console.log` natijalari
   ko'rsatiladi);
@@ -40,7 +40,19 @@ IndexedDB) · Muntazam ifodalar (RegExp).
 remote/push/pull, jamoa bilan ishlash — fork va Pull Request, .gitignore/stash) ·
 **Docker** (konteynerlar, o'rnatish, buyruqlar, Dockerfile, Docker Compose,
 volume/network) · **Nginx** (veb-server, o'rnatish, konfiguratsiya, statik sayt,
-reverse proxy va load balancing, SSL/HTTPS).
+reverse proxy va load balancing, SSL/HTTPS) · **Linux va terminal** (fayl tizimi,
+buyruqlar, ruxsatlar, jarayonlar, bash skript).
+
+### 5-qism: Backend dasturlash
+**Node.js va Express** (server JS, npm, modullar, fs/http, Express, REST API,
+middleware) · **Ma'lumotlar bazalari** (SQL — CREATE/SELECT/JOIN, MongoDB,
+Node.js bilan ulanish) · **Web xavfsizligi va autentifikatsiya** (bcrypt, JWT,
+XSS, CSRF, SQL injection va himoya).
+
+### 6-qism: Frontend asoslari
+**HTML** (teglar, formalar, semantik HTML) · **CSS** (box model, Flexbox, Grid,
+responsive dizayn, bezaklar) · **TypeScript** (turlar, interfeys, generiklar,
+klasslar).
 
 ## Ishga tushirish
 

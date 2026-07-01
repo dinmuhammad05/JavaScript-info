@@ -236,7 +236,7 @@ module.exports = {
         { p: "Bu yerda hiyla:" },
         { ul: [
           "<code>opacity: 0.0001</code> — iframe deyarli to'liq ko'rinmas, lekin texnik jihatdan hali ham mavjud va bosishlarni qabul qiladi;",
-          "<code>z-index: 1</code> — iframe aldov tugmadan (<code>z-index: 0</code>) ustunroq qatlamdа, shuning uchun bosish iframe'ga tushadi;",
+          "<code>z-index: 1</code> — iframe aldov tugmadan (<code>z-index: 0</code>) ustunroq qatlamda, shuning uchun bosish iframe'ga tushadi;",
           "iframe qurbon saytning kerakli tugmasi ustma-ust keladigan qilib joylashtiriladi."
         ] },
         { warn: "Ba'zi murakkab hujumlarda sichqoncha kursorini kuzatib, iframe'ni doim kursor ostida ushlab turadigan variantlar (\"cursorjacking\") ham mavjud. Umumiy g'oya bir xil: foydalanuvchi ko'rgan narsa va aslida bosgan narsasi bir-biridan farq qiladi." },
@@ -274,7 +274,7 @@ module.exports = {
         { tip: "Yangi loyihalarda <code>frame-ancestors</code>ni afzal ko'ring, chunki u moslashuvchan va zamonaviy standart. Eski brauzerlar uchun qo'shimcha xavfsizlik sifatida <code>X-Frame-Options</code>ni ham qo'shib qo'yish mumkin — ikkalasini birga ishlatish keng tarqalgan amaliyot." },
 
         { h2: "Himoya 3: SameSite cookie" },
-        { p: "Clickjacking hujumi foydalanuvchining <strong>cookie'lari</strong> avtomatik yuborilishiga tayanadi (chunki qurbon saytga tizimга kirgan). Agar autentifikatsiya cookie'lari boshqa saytdagi iframe'dan yuborilmasa, hujum foydasiz bo'ladi — sayt bosishni anonim deb qabul qiladi." },
+        { p: "Clickjacking hujumi foydalanuvchining <strong>cookie'lari</strong> avtomatik yuborilishiga tayanadi (chunki qurbon saytga tizimga kirgan). Agar autentifikatsiya cookie'lari boshqa saytdagi iframe'dan yuborilmasa, hujum foydasiz bo'ladi — sayt bosishni anonim deb qabul qiladi." },
         { p: "Cookie'ning <code>SameSite</code> atributi aynan shu vaziyatni boshqaradi:" },
         { ul: [
           "<code>SameSite=Strict</code> — cookie faqat sahifaning <strong>o'z manbasidan</strong> so'rovlarga yuboriladi; boshqa saytdagi iframe yoki havoladan kelgan so'rovlarga <strong>yuborilmaydi</strong>;",
@@ -282,7 +282,7 @@ module.exports = {
           "<code>SameSite=None</code> — cookie barcha kontekstlarda yuboriladi (bunda <code>Secure</code> ham majburiy). Bu clickjacking'ga qarshi himoyani <strong>o'chiradi</strong>."
         ] },
         { code: "// Server tomonidan cookie o'rnatish (misol):\nSet-Cookie: session=abc123; SameSite=Strict; Secure; HttpOnly" },
-        { note: "<code>SameSite=Lax</code> (yoki <code>Strict</code>) tufayli, hujumchi iframe'idagi qurbon saytga so'rovda autentifikatsiya cookie'lari qo'shilmaydi. Shunda bosish tizimга kirmagan (anonim) foydalanuvchi harakati sifatida ko'rinadi va zararli amal bajarilmaydi." },
+        { note: "<code>SameSite=Lax</code> (yoki <code>Strict</code>) tufayli, hujumchi iframe'idagi qurbon saytga so'rovda autentifikatsiya cookie'lari qo'shilmaydi. Shunda bosish tizimga kirmagan (anonim) foydalanuvchi harakati sifatida ko'rinadi va zararli amal bajarilmaydi." },
         { warn: "<code>SameSite</code> kuchli himoya, lekin u <strong>yagona</strong> yechim emas. Ba'zi holatlar (masalan, <code>GET</code> orqali amalga oshiriladigan xavfsiz bo'lmagan operatsiyalar yoki <code>SameSite=None</code> ishlatilgan cookie'lar) hali ham zaif bo'lishi mumkin. Uni <code>frame-ancestors</code>/<code>X-Frame-Options</code> bilan <strong>birga</strong> ishlating." },
 
         { h2: "Ko'p qatlamli himoya" },

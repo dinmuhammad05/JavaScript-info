@@ -141,7 +141,7 @@ module.exports = {
           '<p>Birinchi qator<br>',
           'Ikkinchi qator</p>'
         ].join("\n") },
-        { tip: "Kodni <strong>chekinishlar (otступ, indentatsiya)</strong> bilan yozing — ichma-ich elementlarni ikki yoki to'rt bo'shliq bilan surib qo'ying. Bu sahifaga ta'sir qilmaydi, lekin kodni o'qishni juda osonlashtiradi va xatolarni kamaytiradi." },
+        { tip: "Kodni <strong>chekinishlar (otstup, indentatsiya)</strong> bilan yozing — ichma-ich elementlarni ikki yoki to'rt bo'shliq bilan surib qo'ying. Bu sahifaga ta'sir qilmaydi, lekin kodni o'qishni juda osonlashtiradi va xatolarni kamaytiradi." },
 
         { h2: "Kommentariylar (izohlar)" },
         { p: "HTML'da kodga <strong>izoh</strong> qoldirish mumkin — bu matn sahifada ko'rinmaydi, faqat kodni o'qiyotgan dasturchi uchun. Izoh <code>&lt;!--</code> bilan boshlanib, <code>--&gt;</code> bilan tugaydi:" },
@@ -354,7 +354,7 @@ module.exports = {
         { ul: [
           "<code>type=\"text\"</code> — maydon turi (oddiy matn);",
           "<code>name</code> — maydon nomi (serverga yuborilganda shu nom bilan boradi, majburiy);",
-          "<code>placeholder</code> — maydon bo'sh turганda ko'rinadigan namuna matn (\"maslahat\")."
+          "<code>placeholder</code> — maydon bo'sh turganda ko'rinadigan namuna matn (\"maslahat\")."
         ] },
 
         { h3: "Parol: password" },

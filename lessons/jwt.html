@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JWT (JSON Web Token) — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="JWT tuzilishi (header.payload.signature), imzolash va tekshirish, Express'da login → token → himoyalangan route middleware, token muddati, afzallik va kamchiliklari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Linux va terminal</summary>
+    <ol>
+      <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+      <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+      <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+      <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+      <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+      <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Web xavfsizligi va autentifikatsiya</summary>
+    <ol>
+      <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+      <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+      <li><a class="active" href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+      <li><a href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+      <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">6-qism: Frontend asoslari</div>
+  <details>
+    <summary>HTML</summary>
+    <ol>
+      <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+      <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+      <li><a href="../lessons/html-form.html">Formalar</a></li>
+      <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>CSS</summary>
+    <ol>
+      <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+      <li><a href="../lessons/css-box.html">Box model</a></li>
+      <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+      <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+      <li><a href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+      <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>TypeScript</summary>
+    <ol>
+      <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+      <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+      <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+      <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+      <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
+<h1>JWT (JSON Web Token)</h1>
+<p class="lead"><strong>JWT</strong> (JSON Web Token) — bu ma'lumotni imzolangan, ixcham va o'zini-o'zi tavsiflaydigan token sifatida uzatish standarti. U zamonaviy API'larda autentifikatsiya uchun keng qo'llaniladi. Ushbu darsda JWT tuzilishini, uning imzo orqali qanday himoyalanishini va Express'da login'dan himoyalangan route'gacha bo'lgan to'liq oqimni ko'rib chiqamiz.</p>
+<h2>JWT nima va u nimani hal qiladi?</h2>
+<p>Oldingi darsda ko'rgan edik: HTTP holatsiz, shuning uchun har so'rovda foydalanuvchini qayta taniymiz. JWT bu muammoni <strong>imzolangan token</strong> orqali hal qiladi. Server login vaqtida foydalanuvchi ma'lumotini o'z ichiga olgan tokenni <em>imzolaydi</em> va mijozga beradi. Mijoz uni har so'rovda qaytaradi. Server imzoni tekshiradi — agar imzo to'g'ri bo'lsa, token ichidagi ma'lumotga ishonadi.</p>
+<p>Muhim jihat: token ichidagi ma'lumot <strong>shifrlanmagan</strong>, lekin <strong>imzolangan</strong>. Ya'ni har kim token ichini o'qiy oladi, ammo <em>uni server sirini bilmasdan o'zgartira olmaydi</em> — o'zgartirilsa, imzo mos kelmaydi.</p>
+<div class="warn">JWT payload'iga <strong>maxfiy ma'lumot</strong> (parol, karta raqami) qo'ymang. Payload oddiy kodlash bilan yozilgan, shifrlanmagan — uni har kim ochib o'qiy oladi. Payload'da faqat identifikator va rol kabi maxfiy bo'lmagan ma'lumot bo'lsin.</div>
+<h2>JWT tuzilishi: uch qism</h2>
+<p>JWT nuqta bilan ajratilgan uchta qismdan iborat: <code>header.payload.signature</code>. Har bir qism alohida kodlangan matndir:</p>
+<pre class="code"><code>// JWT quyidagicha ko'rinadi (uch qism nuqta bilan ajratilgan):
+// xxxxx.yyyyy.zzzzz
+//   |     |     |
+// header payload signature
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJyb2wiOiJ1c2VyIn0.aBcDeFg...</code></pre>
+<h3>1. Header (sarlavha)</h3>
+<p>Qanday algoritm bilan imzolanganini ko'rsatadi:</p>
+<pre class="code"><code>{
+  "alg": "HS256",
+  "typ": "JWT"
+}</code></pre>
+<h3>2. Payload (foydali yuk)</h3>
+<p>Token ichidagi ma'lumot — "claims" deb ataladi. Bu foydalanuvchi identifikatori, roli va muddati kabi maydonlar:</p>
+<pre class="code"><code>{
+  "sub": "123",        // foydalanuvchi ID (subject)
+  "rol": "user",
+  "iat": 1719800000,    // yaratilgan vaqt (issued at)
+  "exp": 1719803600     // amal qilish muddati (expiration)
+}</code></pre>
+<h3>3. Signature (imzo)</h3>
+<p>Header va payload'ni maxfiy kalit bilan birga hashlashdan hosil bo'ladi. Imzo — bu tokenning butunligini kafolatlaydigan qism. Agar biror bayt o'zgartirilsa, imzo mos kelmay qoladi:</p>
+<pre class="code"><code>// Kontseptual tarzda imzo shunday hisoblanadi:
+// HMACSHA256(
+//   base64url(header) + '.' + base64url(payload),
+//   MAXFIY_KALIT
+// )
+//
+// MAXFIY_KALIT faqat serverda bo'ladi. Shuning uchun
+// hech kim to'g'ri imzoni server sirisiz yasay olmaydi.</code></pre>
+<div class="note">"Kodlash" (base64url) — bu shifrlash EMAS. U shunchaki ma'lumotni matn ko'rinishiga o'tkazadi, uni istagan kishi qaytarib o'qiy oladi. Tokenni himoya qiladigan yagona narsa — bu <strong>imzo</strong>, chunki uni yasash uchun maxfiy kalit kerak.</div>
+<h2>Express'da JWT: login → token</h2>
+<p>Endi to'liq oqimni ko'ramiz. Avval foydalanuvchi login qiladi, biz parolni tekshiramiz va muvaffaqiyatli bo'lsa, imzolangan token beramiz. Bu yerda <code>jsonwebtoken</code> kutubxonasi ishlatiladi:</p>
+<pre class="code"><code>const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+// Maxfiy kalit .env faylidan olinadi, kodga yozilmaydi!
+const JWT_SIR = process.env.JWT_SECRET;
+
+app.post('/login', async (req, res) =&gt; {
+  const { email, parol } = req.body;
+
+  const foydalanuvchi = await db.foydalanuvchiTop({ email });
+  // Bir xil mavhum xato (foydalanuvchi mavjudligini fosh qilmaslik)
+  if (!foydalanuvchi || !(await bcrypt.compare(parol, foydalanuvchi.parolHash))) {
+    return res.status(401).json({ xato: 'Email yoki parol xato' });
+  }
+
+  // Tokenni imzolaymiz. Payload'ga MAXFIY ma'lumot qo'ymaymiz.
+  const token = jwt.sign(
+    { sub: foydalanuvchi.id, rol: foydalanuvchi.rol },
+    JWT_SIR,
+    { expiresIn: '1h' } // token 1 soatdan keyin amal qilmaydi
+  );
+
+  res.json({ token });
+});</code></pre>
+<div class="tip"><code>expiresIn</code> ni albatta belgilang. Muddatsiz token o'g'irlansa, u abadiy yaroqli qoladi. Qisqa muddat (masalan, 15 daqiqa - 1 soat) o'g'irlangan tokenning zarar oynasini kichraytiradi.</div>
+<h2>Tokenni tekshirish: himoyalangan route middleware</h2>
+<p>Endi himoyalangan route'larni yaratamiz. Har bir himoyalangan so'rovda mijoz tokenni odatda <code>Authorization</code> sarlavhasida <code>Bearer</code> sxemasi bilan yuboradi. Middleware uni tekshiradi:</p>
+<pre class="code"><code>function tokenTekshir(req, res, next) {
+  const sarlavha = req.headers['authorization'];
+
+  // 'Bearer &lt;token&gt;' formatidan tokenni ajratib olamiz
+  if (!sarlavha || !sarlavha.startsWith('Bearer ')) {
+    return res.status(401).json({ xato: 'Token topilmadi' });
+  }
+  const token = sarlavha.slice(7); // 'Bearer ' dan keyingi qism
+
+  try {
+    // verify imzoni VA muddatni tekshiradi. Xato bo'lsa, exception tashlaydi.
+    const payload = jwt.verify(token, JWT_SIR);
+    req.foydalanuvchi = payload; // { sub, rol, iat, exp }
+    next();
+  } catch (e) {
+    // TokenExpiredError yoki JsonWebTokenError
+    return res.status(401).json({ xato: 'Token yaroqsiz yoki muddati o'tgan' });
+  }
+}</code></pre>
+<pre class="code"><code>// Himoyalangan route: faqat yaroqli token bilan kirish mumkin
+app.get('/api/profil', tokenTekshir, async (req, res) =&gt; {
+  // req.foydalanuvchi.sub — tokendan olingan foydalanuvchi ID
+  const foydalanuvchi = await db.foydalanuvchiTopById(req.foydalanuvchi.sub);
+  res.json({ email: foydalanuvchi.email, rol: foydalanuvchi.rol });
+});
+
+// Avtorizatsiya bilan: faqat admin
+function faqatAdmin(req, res, next) {
+  if (req.foydalanuvchi.rol !== 'admin') {
+    return res.status(403).json({ xato: 'Ruxsat yo'q' });
+  }
+  next();
+}
+app.delete('/api/foydalanuvchi/:id', tokenTekshir, faqatAdmin, async (req, res) =&gt; {
+  await db.foydalanuvchiOchir(req.params.id);
+  res.json({ muvaffaqiyat: true });
+});</code></pre>
+<div class="warn"><code>jwt.verify</code> ni doim <code>try/catch</code> ichida chaqiring. Muddati o'tgan yoki soxta token exception tashlaydi. Agar <code>verify</code> o'rniga <code>decode</code> ishlatsangiz — bu <strong>xato</strong>: <code>decode</code> imzoni <em>tekshirmaydi</em>, shunchaki payload'ni o'qiydi. Har doim <code>verify</code> ishlating.</div>
+<h2>Muddat va tokenni yangilash (refresh)</h2>
+<p>Qisqa muddatli access token xavfsizroq, lekin har soatda foydalanuvchini qayta login qildirish noqulay. Amaliyotda ko'pincha ikki tokenli sxema ishlatiladi:</p>
+<ul><li><strong>Access token:</strong> qisqa muddatli (masalan, 15 daqiqa), har so'rovda ishlatiladi;</li><li><strong>Refresh token:</strong> uzoqroq muddatli, xavfsiz saqlanadi (masalan, <code>HttpOnly</code> cookie'da) va faqat yangi access token olish uchun ishlatiladi.</li></ul>
+<p>Access token muddati tugaganda, mijoz refresh token bilan yangi access token so'raydi. Refresh tokenni serverda kuzatib borish uni bekor qilish (masalan, chiqishda) imkonini beradi.</p>
+<div class="note">Bu bilan JWT'ning "holatsizlik" afzalligining bir qismidan voz kechamiz (refresh tokenlarni bazada kuzatamiz), lekin buning evaziga xavfsizlikni oshiramiz. Xavfsizlik va qulaylik o'rtasidagi bu muvozanat — amaliy loyihalarda odatiy holdir.</div>
+<h2>JWT: afzallik va kamchiliklari</h2>
+<p>JWT sehrli tayoqcha emas. Uni to'g'ri joyda ishlatish uchun kuchli va zaif tomonlarini biling:</p>
+<h3>Afzalliklari</h3>
+<ul><li><strong>Holatsizlik:</strong> server har so'rovda bazaga murojaat qilmasdan tokenni tekshiradi — masshtablash oson;</li><li><strong>Turli mijozlar:</strong> web, mobil ilova va boshqa xizmatlar bir xil token bilan ishlaydi;</li><li><strong>O'zini-o'zi tavsiflaydi:</strong> foydalanuvchi ID va roli tokenning ichida.</li></ul>
+<h3>Kamchiliklari</h3>
+<ul><li><strong>Bekor qilish qiyin:</strong> imzolangan token muddati tugaguncha yaroqli qoladi; uni majburan bekor qilish uchun qo'shimcha mexanizm (qora ro'yxat yoki qisqa muddat) kerak;</li><li><strong>O'g'irlanish xavfi:</strong> token o'g'irlansa, uni ishlatgan har kim foydalanuvchi bo'lib ko'rinadi — shuning uchun HTTPS va xavfsiz saqlash zarur;</li><li><strong>Hajmi:</strong> token cookie yoki sessiya ID'dan kattaroq, har so'rovda yuboriladi.</li></ul>
+<div class="warn">Tokenni <code>localStorage</code>'da saqlash keng tarqalgan, lekin xavfli: XSS bo'lsa, zararli skript <code>localStorage</code>'ni o'qiy oladi va tokenni o'g'irlaydi. Xavfsizroq variant — tokenni <code>HttpOnly</code> cookie'da saqlash (JS o'qiy olmaydi), ammo bu holda CSRF himoyasini (keyingi darsda) qo'shish kerak. Har ikki yondashuvning o'ziga xos xavfi bor.</div>
+<h2>Xulosa</h2>
+<ul><li>JWT — imzolangan, uch qismli (<code>header.payload.signature</code>) token; imzo uning butunligini kafolatlaydi;</li><li>Payload shifrlanmagan — unga maxfiy ma'lumot qo'ymang, faqat identifikator va rol;</li><li>Login'da <code>jwt.sign</code> bilan token yasaymiz, himoyalangan route'da <code>jwt.verify</code> bilan tekshiramiz (hech qachon <code>decode</code> bilan emas);</li><li>Maxfiy kalit <code>.env</code>da saqlanadi, kodga yozilmaydi;</li><li><code>expiresIn</code> ni albatta belgilang; qisqa access + uzoq refresh token sxemasi xavfsizlikni oshiradi;</li><li>Tokenni <code>HttpOnly</code> cookie'da yoki xavfsiz saqlang; <code>localStorage</code> XSS'ga zaif.</li></ul>
+<nav class="lesson-nav">
+  <a href="auth-asoslar.html"><span class="dir">← Oldingi</span><span class="ttl">Autentifikatsiya va avtorizatsiya</span></a>
+  <a class="next" href="xss-csrf.html"><span class="dir">Keyingi →</span><span class="ttl">XSS va CSRF</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

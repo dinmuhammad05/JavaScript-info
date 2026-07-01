@@ -67,7 +67,7 @@ module.exports = {
         { pg: "function* gen() {\n  yield* [1, 2, 3];\n  yield* 'ab';\n}\nconsole.log([...gen()]); // [1, 2, 3, \"a\", \"b\"]", file: "yield-star-iterable.js" },
 
         { h2: "next(qiymat) orqali ma'lumot uzatish" },
-        { p: "Hozirgacha generatorlar ma'lumot manbaiga o'xshardi — ular qiymat <em>chiqarardi</em>. Ammo generatorlar ikki tomonlama aloqa quroli: ularga <strong>ichkariga ham qiymat uzatish</strong> mumkin. Buning uchun <code>generator.next(qiymat)</code> ga argument berilади." },
+        { p: "Hozirgacha generatorlar ma'lumot manbaiga o'xshardi — ular qiymat <em>chiqarardi</em>. Ammo generatorlar ikki tomonlama aloqa quroli: ularga <strong>ichkariga ham qiymat uzatish</strong> mumkin. Buning uchun <code>generator.next(qiymat)</code> ga argument beriladi." },
         { p: "Bu qiymat <code>yield</code> ifodasining <strong>natijasi</strong> bo'lib qaytadi. Ya'ni <code>let result = yield ...</code> yozganda, <code>result</code> ga aynan keyingi <code>next(qiymat)</code> dagi qiymat tushadi." },
         { pg: "function* gen() {\n  // Savol beramiz va javobni kutamiz\n  let javob = yield '2 + 2 nechchi?';\n  console.log('Foydalanuvchi javobi:', javob);\n}\n\nlet generator = gen();\n\n// Birinchi next() birinchi yield gacha yuguradi\nlet savol = generator.next();\nconsole.log(savol.value); // \"2 + 2 nechchi?\"\n\n// Javobni generator ICHIGA uzatamiz\ngenerator.next(4); // \"Foydalanuvchi javobi: 4\"", file: "next-argument.js" },
         { p: "Bu jarayonni bosqichma-bosqich tushunish muhim:" },

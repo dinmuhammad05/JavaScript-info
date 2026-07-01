@@ -130,7 +130,7 @@ module.exports = {
 
         { h2: "clearTimeout — bekor qilish" },
         { p: "<code>setTimeout</code> chaqirilganda \"timer identifikatori\"ni qaytaradi. Uni <code>clearTimeout</code>ga berib, rejalashtirilgan bajarishni <strong>bekor qilish</strong> mumkin:" },
-        { code: "let timerId = setTimeout(function() {\n  console.log(\"Bu hech qachon chiqmaydi\");\n}, 2000);\n\nclearTimeout(timerId); // taймerni bekor qildik\n// funksiya ishga tushmaydi" },
+        { code: "let timerId = setTimeout(function() {\n  console.log(\"Bu hech qachon chiqmaydi\");\n}, 2000);\n\nclearTimeout(timerId); // taymerni bekor qildik\n// funksiya ishga tushmaydi" },
         { note: "Timerni bekor qilgandan keyin ham identifikator qiymati saqlanib qoladi — u \"tozalanmaydi\", lekin qayta ishlatilmaydi. Bekor qilish faqat rejalashtirilgan bajarishni to'xtatadi." },
 
         { h2: "setInterval — takroran bajarish" },
