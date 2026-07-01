@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Statik xossa va metodlar — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="static metodlar, statik xossalar, factory metodlar va statik meros.">
+  <title>BigInt — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="2 in 53 dan katta butun sonlar bilan aniq ishlash uchun BigInt turi: 123n yozuvi, amallar va Number bilan aralashtirmaslik.">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -123,12 +123,12 @@
       <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
     </ol>
   </details>
-  <details open>
+  <details>
     <summary>Klasslar</summary>
     <ol>
       <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
       <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
-      <li><a class="active" href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
       <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
       <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
       <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
@@ -170,134 +170,91 @@
       <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
     </ol>
   </details>
-  <details>
+  <details open>
     <summary>Qo'shimcha mavzular</summary>
     <ol>
       <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
       <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
       <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
       <li><a href="../lessons/reference-type.html">Reference Type</a></li>
-      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a class="active" href="../lessons/bigint.html">BigInt</a></li>
       <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
       <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
     </ol>
   </details>
 </aside>
 <main class="content article">
-<div class="crumbs">Klasslar</div>
-<h1>Statik xossa va metodlar</h1>
-<p class="lead">Metodni obyektning emas, balki klassning o'ziga (funksiyasiga) biriktirish mumkin. Bunday metodlar <strong>statik</strong> (static) deb ataladi.</p>
-<h2>Statik metodlar</h2>
-<p>Statik metod <code>static</code> kalit so'zi bilan e'lon qilinadi. U klass obyektlariga emas, balki <strong>klassning o'ziga</strong> tegishli bo'ladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-basic.js</span></div><textarea spellcheck="false">class User {
-  static staticMethod() {
-    return "Statik metod. this === " + this.name;
-  }
+<div class="crumbs">Qo'shimcha mavzular</div>
+<h1>BigInt</h1>
+<p class="lead">Oddiy <code>Number</code> turi taxminan <code>2**53</code> dan katta butun sonlarni <strong>aniq</strong> saqlay olmaydi. <code>BigInt</code> — bu cheklovsiz uzunlikdagi butun sonlar bilan ishlash uchun maxsus raqamli tur.</p>
+<h2>Muammo: Number chegarasi</h2>
+<p>Oddiy sonlarda xavfsiz butun sonlar chegarasi bor — <code>Number.MAX_SAFE_INTEGER</code>. Undan tashqarida aniqlik yo'qoladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-muammo.js</span></div><textarea spellcheck="false">console.log(Number.MAX_SAFE_INTEGER);  // 9007199254740991
+
+// chegaradan tashqarida aniqlik yo'qoladi
+console.log(9007199254740991 + 1);  // 9007199254740992
+console.log(9007199254740991 + 2);  // 9007199254740992 (xato!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ikkala qo'shish ham bir xil natija berdi — bu aniqlik yo'qolganidan. Aynan shunday hollarda <code>BigInt</code> kerak.</p>
+<h2>BigInt yaratish</h2>
+<p><code>BigInt</code> ikki usulda yoziladi: son oxiriga <code>n</code> qo'shib yoki <code>BigInt()</code> funksiyasi bilan:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-yaratish.js</span></div><textarea spellcheck="false">let katta = 1234567890123456789012345678901234567890n;
+console.log(katta);
+
+let b = BigInt("9007199254740993");
+console.log(b);
+
+let c = BigInt(10);
+console.log(c);  // 10n</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>BigInt bilan qo'shish aniq bo'ladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-aniq.js</span></div><textarea spellcheck="false">let x = 9007199254740991n;
+
+console.log(x + 1n);  // 9007199254740992n
+console.log(x + 2n);  // 9007199254740993n (endi to'g'ri!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Amallar</h2>
+<p>BigInt oddiy arifmetik amallarni qo'llab-quvvatlaydi. Faqat bo'lish natijasi <strong>butunga yaxlitlanadi</strong> (kasr qismi tashlanadi):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-amallar.js</span></div><textarea spellcheck="false">console.log(5n + 3n);   // 8n
+console.log(5n * 3n);   // 15n
+console.log(5n - 8n);   // -3n
+console.log(5n / 2n);   // 2n (kasr tashlanadi!)
+console.log(5n % 2n);   // 1n
+console.log(2n ** 10n); // 1024n</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Unar plyus (<code>+bigint</code>) BigInt bilan <strong>ishlamaydi</strong> — u xatolik beradi. Boshqa arifmetik va taqqoslash amallari esa normal ishlaydi.</div>
+<h2>Number bilan aralashtirmaslik</h2>
+<p>Eng muhim qoida: BigInt va Numberni bir amalda <strong>aralashtira olmaysiz</strong> — bu <code>TypeError</code> beradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-aralash.js</span></div><textarea spellcheck="false">try {
+  console.log(5n + 3);  // xato!
+} catch (e) {
+  console.log("Xato: BigInt va Number aralashtirildi");
 }
 
-// klassning o'zida chaqiriladi, obyektda emas:
-console.log(User.staticMethod());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu aslida quyidagini yozishga teng:</p>
-<pre class="code"><code>class User {}
-User.staticMethod = function() {
-  return "...";
-};</code></pre>
-<p>Statik metod ichidagi <code>this</code> — bu klassning o'zi (konstruktor funksiya). Odatda statik metodlar obyektlar ustida emas, balki butun klass darajasida ishlaydigan mantiq uchun ishlatiladi.</p>
-<div class="warn">Statik metodni obyekt orqali chaqira olmaysiz. Masalan, <code>new User().staticMethod()</code> xato beradi (<em>is not a function</em>), chunki statik metod obyektda emas, klassdadir.</div>
-<h2>Amaliy misol: taqqoslash</h2>
-<p>Statik metodlar ko'pincha obyektlarni taqqoslash yoki ular ustida umumiy amallar bajarish uchun ishlatiladi. Masalan, maqolalarni sanasi bo'yicha saralaymiz:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-compare.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
+// avval bir turga o'tkazish kerak:
+console.log(5n + BigInt(3));   // 8n
+console.log(Number(5n) + 3);   // 8</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn"><code>BigInt</code>ni <code>Number</code>ga o'tkazganda (<code>Number(katta)</code>) katta qiymatlarda aniqlik yo'qolishi mumkin. Faqat qiymat xavfsiz chegarada bo'lsa o'tkazing.</div>
+<h2>Taqqoslash va mantiqiy kontekst</h2>
+<p>Taqqoslashda esa BigInt va Number bemalol aralashadi (qiymatlari solishtiriladi), lekin qat'iy tenglik (<code>===</code>) turni ham tekshiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-taqqoslash.js</span></div><textarea spellcheck="false">console.log(5n &gt; 3);     // true
+console.log(5n == 5);    // true (qiymat teng)
+console.log(5n === 5);   // false (tur boshqa)
 
-  static compare(a, b) {
-    return a.date - b.date;
-  }
-}
-
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JS", new Date(2019, 11, 1))
-];
-
-// klass metodi orqali saralaymiz:
-articles.sort(Article.compare);
-
-console.log(articles[0].title); // eng erta sana</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu yerda <code>Article.compare</code> maqolalar "ustidagi" umumiy vosita — bir maqolaga tegishli emas, shuning uchun uni statik qilish mantiqiy.</p>
-<h2>Factory (fabrika) metodlar</h2>
-<p>Yana bir keng tarqalgan qo'llanish — obyekt yaratishning turli usullarini beruvchi <strong>factory metod</strong>. Masalan, maqolani bugungi sana bilan yaratuvchi metod:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-factory.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
-
-  // factory metod: bugungi maqola
-  static createTodays() {
-    // this === Article
-    return new this("Bugungi yangilik", new Date());
-  }
-}
-
-let article = Article.createTodays();
-console.log(article.title);
-console.log(article.date instanceof Date);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Endi "bugungi maqola" kerak bo'lganda, har safar sana yaratish o'rniga <code>Article.createTodays()</code>ni chaqirsak yetarli. Bu yerda <code>this</code> — <code>Article</code> klassi, shuning uchun <code>new this(...)</code> to'g'ri klassni yaratadi.</p>
-<h2>Statik xossalar</h2>
-<p>Statik xossalar ham mavjud — ular oddiy klass xossalariga o'xshaydi, faqat oldiga <code>static</code> qo'yiladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-property.js</span></div><textarea spellcheck="false">class Article {
-  static publisher = "Ilim Nashriyoti";
-}
-
-console.log(Article.publisher);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu quyidagini yozishga teng: <code>Article.publisher = "Ilim Nashriyoti"</code>. Statik xossa butun klassga tegishli bo'lgan qiymatlarni (masalan, umumiy sozlamalar yoki hisoblagichlar) saqlash uchun qulay.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-counter.js</span></div><textarea spellcheck="false">class Counter {
-  static count = 0;
-  constructor() {
-    Counter.count++;
-  }
-}
-
-new Counter();
-new Counter();
-new Counter();
-console.log("Yaratilgan obyektlar soni: " + Counter.count);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Statik xossa va metodlar merosi</h2>
-<p>Statik xossa va metodlar ham meros olinadi! Bu <code>extends</code>ning muhim xususiyati. Ya'ni <code>Rabbit extends Animal</code> qilinganda, <code>Rabbit</code> nafaqat oddiy metodlarni, balki statik metodlarni ham oladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit.js</span></div><textarea spellcheck="false">class Animal {
-  static planet = "Yer";
-  constructor(name) { this.name = name; }
-  static compare(a, b) { return a.name.localeCompare(b.name); }
-}
-
-class Rabbit extends Animal {}
-
-// statik metod meros olindi:
-let r1 = new Rabbit("Bobi");
-let r2 = new Rabbit("Alfa");
-console.log(Rabbit.compare(r1, r2));
-
-// statik xossa ham meros olindi:
-console.log(Rabbit.planet);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu qanday ishlaydi? <code>extends</code> ikkita prototip bog'lanishini o'rnatadi:</p>
-<ul><li><code>Rabbit.prototype.[[Prototype]]</code> — <code>Animal.prototype</code>ga (oddiy metodlar uchun);</li><li><code>Rabbit.[[Prototype]]</code> — <code>Animal</code>ga (statik metodlar uchun).</li></ul>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit-proto.js</span></div><textarea spellcheck="false">class Animal {}
-class Rabbit extends Animal {}
-
-// Rabbit'ning [[Prototype]]si Animal:
-console.log(Object.getPrototypeOf(Rabbit) === Animal);
-// Rabbit.prototype'ning [[Prototype]]si Animal.prototype:
-console.log(Object.getPrototypeOf(Rabbit.prototype) === Animal.prototype);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<div class="note">Statik metodlar butun klass bilan bog'liq bo'lgan, aniq bir obyektga bog'lanmagan funksiyalar uchun ishlatiladi. Masalan, <code>Object.keys(...)</code>, <code>Array.from(...)</code> — bular ham statik metodlardir.</div>
+// mantiqiy kontekstda 0n - false, qolganlari - true
+if (0n) {
+  console.log("bajarilmaydi");
+} else {
+  console.log("0n - false");  // shu chiqadi
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>typeof</code> BigInt uchun alohida qiymat qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-typeof.js</span></div><textarea spellcheck="false">console.log(typeof 10n);        // bigint
+console.log(typeof BigInt(5));  // bigint</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Qo'llanilishi</h2>
+<p>BigInt qachon kerak bo'ladi?</p>
+<ul><li>Kriptografiya — juda katta sonlar bilan hisoblash;</li><li>Yuqori aniqlikdagi vaqt tamg'alari (nanosekundlar);</li><li>Katta identifikatorlar (masalan, ba'zi tizimlarning 64-bitli ID lari);</li><li>Moliyaviy hisob-kitoblar, o'lchamdan chiqib ketishi mumkin bo'lgan hollar.</li></ul>
+<div class="tip">Agar sonlaringiz <code>2**53</code> chegarasidan oshib ketmasa, oddiy <code>Number</code> yetarli va tezroq. <code>BigInt</code>ni faqat chindan zarur bo'lganda ishlating.</div>
 <h2>Xulosa</h2>
-<ul><li>Statik metodlar <code>static</code> bilan e'lon qilinadi va klassning o'zida chaqiriladi (obyektda emas);</li><li>Ular ichidagi <code>this</code> — klassning o'zi;</li><li>Statik metodlar taqqoslash va factory (obyekt yaratish) mantiqi uchun qulay;</li><li>Statik xossalar butun klassga tegishli qiymatlarni saqlaydi;</li><li>Statik xossa va metodlar ham <code>extends</code> orqali meros olinadi.</li></ul>
+<ul><li><code>BigInt</code> — cheklovsiz uzunlikdagi butun sonlar uchun tur;</li><li>Yozilishi: <code>123n</code> yoki <code>BigInt(123)</code>;</li><li>Bo'lish butunga yaxlitlanadi; unar plyus ishlamaydi;</li><li>BigInt va Numberni arifmetikada aralashtirib bo'lmaydi (<code>TypeError</code>), lekin taqqoslash mumkin;</li><li><code>typeof</code> "bigint" beradi; kriptografiya va katta ID larda foydali.</li></ul>
 <nav class="lesson-nav">
-  <a href="klass-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Klass merosi</span></a>
-  <a class="next" href="private-protected.html"><span class="dir">Keyingi →</span><span class="ttl">Maxfiy va himoyalangan xossalar</span></a>
+  <a href="reference-type.html"><span class="dir">← Oldingi</span><span class="ttl">Reference Type</span></a>
+  <a class="next" href="unicode.html"><span class="dir">Keyingi →</span><span class="ttl">Unicode, satr ichki tuzilishi</span></a>
 </nav>
 </main>
 </div>

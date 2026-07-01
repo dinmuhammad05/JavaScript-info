@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Statik xossa va metodlar — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="static metodlar, statik xossalar, factory metodlar va statik meros.">
+  <title>Reference Type — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Nega obj.method() this'ni to'g'ri oladi-yu, (obj.method)() yoki metodni o'zgaruvchiga ko'chirish this'ni yo'qotadi — ichki Reference Type mexanizmi.">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -123,12 +123,12 @@
       <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
     </ol>
   </details>
-  <details open>
+  <details>
     <summary>Klasslar</summary>
     <ol>
       <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
       <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
-      <li><a class="active" href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
       <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
       <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
       <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
@@ -170,13 +170,13 @@
       <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
     </ol>
   </details>
-  <details>
+  <details open>
     <summary>Qo'shimcha mavzular</summary>
     <ol>
       <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
       <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
       <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
-      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a class="active" href="../lessons/reference-type.html">Reference Type</a></li>
       <li><a href="../lessons/bigint.html">BigInt</a></li>
       <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
       <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
@@ -184,120 +184,74 @@
   </details>
 </aside>
 <main class="content article">
-<div class="crumbs">Klasslar</div>
-<h1>Statik xossa va metodlar</h1>
-<p class="lead">Metodni obyektning emas, balki klassning o'ziga (funksiyasiga) biriktirish mumkin. Bunday metodlar <strong>statik</strong> (static) deb ataladi.</p>
-<h2>Statik metodlar</h2>
-<p>Statik metod <code>static</code> kalit so'zi bilan e'lon qilinadi. U klass obyektlariga emas, balki <strong>klassning o'ziga</strong> tegishli bo'ladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-basic.js</span></div><textarea spellcheck="false">class User {
-  static staticMethod() {
-    return "Statik metod. this === " + this.name;
+<div class="crumbs">Qo'shimcha mavzular</div>
+<h1>Reference Type</h1>
+<p class="lead">Ba'zan metod chaqiruvi kutilmaganda <code>this</code>ni yo'qotadi. Buning sababi — JavaScript ichida yashiringan <em>Reference Type</em> ("ma'lumotnoma turi") deb ataluvchi maxsus qiymat turi. Uni tushunsak, chalkash holatlar aniq bo'ladi.</p>
+<h2>Muammo: yo'qolgan this</h2>
+<p>Quyidagi kodda oddiy chaqiruv ishlaydi, lekin metodni oldin ajratib, keyin chaqirsak — <code>this</code> yo'qoladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ref-muammo.js</span></div><textarea spellcheck="false">let user = {
+  name: "Ali",
+  salom() {
+    return "Salom, " + this.name;
   }
-}
+};
 
-// klassning o'zida chaqiriladi, obyektda emas:
-console.log(User.staticMethod());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu aslida quyidagini yozishga teng:</p>
-<pre class="code"><code>class User {}
-User.staticMethod = function() {
-  return "...";
-};</code></pre>
-<p>Statik metod ichidagi <code>this</code> — bu klassning o'zi (konstruktor funksiya). Odatda statik metodlar obyektlar ustida emas, balki butun klass darajasida ishlaydigan mantiq uchun ishlatiladi.</p>
-<div class="warn">Statik metodni obyekt orqali chaqira olmaysiz. Masalan, <code>new User().staticMethod()</code> xato beradi (<em>is not a function</em>), chunki statik metod obyektda emas, klassdadir.</div>
-<h2>Amaliy misol: taqqoslash</h2>
-<p>Statik metodlar ko'pincha obyektlarni taqqoslash yoki ular ustida umumiy amallar bajarish uchun ishlatiladi. Masalan, maqolalarni sanasi bo'yicha saralaymiz:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-compare.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
+console.log(user.salom());  // Salom, Ali (ishlaydi)
 
-  static compare(a, b) {
-    return a.date - b.date;
-  }
-}
+let f = user.salom;
+try {
+  console.log(f());  // this yo'qoladi -&gt; xato
+} catch (e) {
+  console.log("Xato: this yo'qoldi");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Xuddi shunday, chaqiruvni murakkabroq ifodaga o'rasak ham <code>this</code> yo'qolishi mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ref-murakkab.js</span></div><textarea spellcheck="false">let user = {
+  name: "Ali",
+  salom() { return this.name; }
+};
 
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JS", new Date(2019, 11, 1))
-];
+// oddiy chaqiruv - ishlaydi
+console.log(user.salom());  // Ali
 
-// klass metodi orqali saralaymiz:
-articles.sort(Article.compare);
+// || bilan tanlash - this yo'qoladi
+try {
+  console.log((user.salom || user.salom)());
+} catch (e) {
+  console.log("Xato: bu holatda this yo'qoladi");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Nuqta amali nima qaytaradi?</h2>
+<p>Sir shundaki, <code>user.salom</code> ifodasi oddiy funksiyani emas, balki maxsus <strong>Reference Type</strong> qiymatini qaytaradi. Bu til ichidagi qiymat bo'lib, uch narsani birlashtiradi:</p>
+<ul><li><code>base</code> — obyektning o'zi (<code>user</code>);</li><li><code>name</code> — xususiyat nomi (<code>"salom"</code>);</li><li><code>strict</code> — qat'iy rejim yoqilganmi (bayroq).</li></ul>
+<p>Ya'ni <code>user.salom</code> mantiqan quyidagicha:</p>
+<pre class="code"><code>// (base, name, strict) uchligi
+(user, "salom", true)</code></pre>
+<div class="note">Reference Type — bu tilning <strong>ichki, oraliq</strong> turi. Uni to'g'ridan-to'g'ri o'zgaruvchiga saqlab bo'lmaydi; u faqat nuqta amali natijasi sifatida qisqa vaqt yashaydi.</div>
+<h2>Chaqiruv qanday ishlaydi?</h2>
+<p><code>()</code> chaqiruv operatori o'zidan oldingi qiymatni ko'radi:</p>
+<ul><li>Agar bu <strong>Reference Type</strong> bo'lsa — <code>()</code> uning <code>base</code>ini <code>this</code> qilib oladi. Shu sabab <code>user.salom()</code>da <code>this = user</code>;</li><li>Agar bu <strong>oddiy funksiya</strong> bo'lsa (Reference Type emas) — <code>this = undefined</code> (qat'iy rejimda).</li></ul>
+<p>Endi hamma narsa tushunarli:</p>
+<ul><li><code>user.salom()</code> — <code>user.salom</code> Reference Type qaytaradi, <code>()</code> undan <code>base</code>ni oladi. <code>this = user</code>;</li><li><code>let f = user.salom; f()</code> — o'zgaruvchiga yozishda Reference Type <strong>yo'qoladi</strong>, faqat funksiyaning o'zi ko'chadi. <code>this = undefined</code>;</li><li><code>(user.salom || null)()</code> — <code>||</code> operatori Reference Typeni oddiy funksiyaga aylantiradi. <code>this = undefined</code>.</li></ul>
+<div class="warn">Reference Type faqat <strong>nuqta yoki kvadrat qavsdan bevosita keyin</strong> chaqiruv qilinganda saqlanadi: <code>obj.method()</code> yoki <code>obj["method"]()</code>. Har qanday oraliq amal (o'zgaruvchiga yozish, <code>||</code>, qavsda saqlash) uni yo'qotadi.</div>
+<h2>Yechim: this'ni qotirish</h2>
+<p>Agar metodni ajratib olib, alohida uzatishimiz kerak bo'lsa, <code>this</code>ni <code>bind</code> orqali qotiramiz yoki o'q funksiyaga o'raymiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ref-yechim.js</span></div><textarea spellcheck="false">let user = {
+  name: "Ali",
+  salom() { return "Salom, " + this.name; }
+};
 
-console.log(articles[0].title); // eng erta sana</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu yerda <code>Article.compare</code> maqolalar "ustidagi" umumiy vosita — bir maqolaga tegishli emas, shuning uchun uni statik qilish mantiqiy.</p>
-<h2>Factory (fabrika) metodlar</h2>
-<p>Yana bir keng tarqalgan qo'llanish — obyekt yaratishning turli usullarini beruvchi <strong>factory metod</strong>. Masalan, maqolani bugungi sana bilan yaratuvchi metod:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-factory.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
+// bind bilan this'ni qotiramiz
+let f = user.salom.bind(user);
+console.log(f());  // Salom, Ali
 
-  // factory metod: bugungi maqola
-  static createTodays() {
-    // this === Article
-    return new this("Bugungi yangilik", new Date());
-  }
-}
-
-let article = Article.createTodays();
-console.log(article.title);
-console.log(article.date instanceof Date);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Endi "bugungi maqola" kerak bo'lganda, har safar sana yaratish o'rniga <code>Article.createTodays()</code>ni chaqirsak yetarli. Bu yerda <code>this</code> — <code>Article</code> klassi, shuning uchun <code>new this(...)</code> to'g'ri klassni yaratadi.</p>
-<h2>Statik xossalar</h2>
-<p>Statik xossalar ham mavjud — ular oddiy klass xossalariga o'xshaydi, faqat oldiga <code>static</code> qo'yiladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-property.js</span></div><textarea spellcheck="false">class Article {
-  static publisher = "Ilim Nashriyoti";
-}
-
-console.log(Article.publisher);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu quyidagini yozishga teng: <code>Article.publisher = "Ilim Nashriyoti"</code>. Statik xossa butun klassga tegishli bo'lgan qiymatlarni (masalan, umumiy sozlamalar yoki hisoblagichlar) saqlash uchun qulay.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-counter.js</span></div><textarea spellcheck="false">class Counter {
-  static count = 0;
-  constructor() {
-    Counter.count++;
-  }
-}
-
-new Counter();
-new Counter();
-new Counter();
-console.log("Yaratilgan obyektlar soni: " + Counter.count);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Statik xossa va metodlar merosi</h2>
-<p>Statik xossa va metodlar ham meros olinadi! Bu <code>extends</code>ning muhim xususiyati. Ya'ni <code>Rabbit extends Animal</code> qilinganda, <code>Rabbit</code> nafaqat oddiy metodlarni, balki statik metodlarni ham oladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit.js</span></div><textarea spellcheck="false">class Animal {
-  static planet = "Yer";
-  constructor(name) { this.name = name; }
-  static compare(a, b) { return a.name.localeCompare(b.name); }
-}
-
-class Rabbit extends Animal {}
-
-// statik metod meros olindi:
-let r1 = new Rabbit("Bobi");
-let r2 = new Rabbit("Alfa");
-console.log(Rabbit.compare(r1, r2));
-
-// statik xossa ham meros olindi:
-console.log(Rabbit.planet);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu qanday ishlaydi? <code>extends</code> ikkita prototip bog'lanishini o'rnatadi:</p>
-<ul><li><code>Rabbit.prototype.[[Prototype]]</code> — <code>Animal.prototype</code>ga (oddiy metodlar uchun);</li><li><code>Rabbit.[[Prototype]]</code> — <code>Animal</code>ga (statik metodlar uchun).</li></ul>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit-proto.js</span></div><textarea spellcheck="false">class Animal {}
-class Rabbit extends Animal {}
-
-// Rabbit'ning [[Prototype]]si Animal:
-console.log(Object.getPrototypeOf(Rabbit) === Animal);
-// Rabbit.prototype'ning [[Prototype]]si Animal.prototype:
-console.log(Object.getPrototypeOf(Rabbit.prototype) === Animal.prototype);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<div class="note">Statik metodlar butun klass bilan bog'liq bo'lgan, aniq bir obyektga bog'lanmagan funksiyalar uchun ishlatiladi. Masalan, <code>Object.keys(...)</code>, <code>Array.from(...)</code> — bular ham statik metodlardir.</div>
+// yoki o'q funksiya bilan o'raymiz
+let g = () =&gt; user.salom();
+console.log(g());  // Salom, Ali</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Metodni callback sifatida uzatayotganda (masalan <code>setTimeout(user.salom)</code>) doim <code>this</code>ni <code>bind</code> qiling yoki <code>() =&gt; user.salom()</code> deb o'rang.</div>
 <h2>Xulosa</h2>
-<ul><li>Statik metodlar <code>static</code> bilan e'lon qilinadi va klassning o'zida chaqiriladi (obyektda emas);</li><li>Ular ichidagi <code>this</code> — klassning o'zi;</li><li>Statik metodlar taqqoslash va factory (obyekt yaratish) mantiqi uchun qulay;</li><li>Statik xossalar butun klassga tegishli qiymatlarni saqlaydi;</li><li>Statik xossa va metodlar ham <code>extends</code> orqali meros olinadi.</li></ul>
+<ul><li><code>obj.method</code> ifodasi oddiy funksiya emas, ichki <em>Reference Type</em> qiymatini qaytaradi;</li><li>Reference Type <code>base</code>, <code>name</code> va <code>strict</code>ni birlashtiradi;</li><li><code>()</code> chaqiruvi Reference Typedan <code>base</code>ni olib, <code>this</code> qiladi;</li><li>O'zgaruvchiga yozish, <code>||</code>, qavs kabi oraliq amallar Reference Typeni yo'qotadi -> <code>this</code> yo'qoladi;</li><li>Yechim: <code>bind</code> yoki o'q funksiya bilan o'rash.</li></ul>
 <nav class="lesson-nav">
-  <a href="klass-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Klass merosi</span></a>
-  <a class="next" href="private-protected.html"><span class="dir">Keyingi →</span><span class="ttl">Maxfiy va himoyalangan xossalar</span></a>
+  <a href="currying.html"><span class="dir">← Oldingi</span><span class="ttl">Karrilash (Currying)</span></a>
+  <a class="next" href="bigint.html"><span class="dir">Keyingi →</span><span class="ttl">BigInt</span></a>
 </nav>
 </main>
 </div>

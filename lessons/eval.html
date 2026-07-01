@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Statik xossa va metodlar — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="static metodlar, statik xossalar, factory metodlar va statik meros.">
+  <title>Eval: kod satrini ishga tushirish — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="eval() funksiyasi bilan satr ko'rinishidagi kodni bajarish, uning ko'lami, xavflari va zamonaviy muqobillari.">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -123,12 +123,12 @@
       <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
     </ol>
   </details>
-  <details open>
+  <details>
     <summary>Klasslar</summary>
     <ol>
       <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
       <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
-      <li><a class="active" href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
       <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
       <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
       <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
@@ -170,11 +170,11 @@
       <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
     </ol>
   </details>
-  <details>
+  <details open>
     <summary>Qo'shimcha mavzular</summary>
     <ol>
       <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
-      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a class="active" href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
       <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
       <li><a href="../lessons/reference-type.html">Reference Type</a></li>
       <li><a href="../lessons/bigint.html">BigInt</a></li>
@@ -184,120 +184,54 @@
   </details>
 </aside>
 <main class="content article">
-<div class="crumbs">Klasslar</div>
-<h1>Statik xossa va metodlar</h1>
-<p class="lead">Metodni obyektning emas, balki klassning o'ziga (funksiyasiga) biriktirish mumkin. Bunday metodlar <strong>statik</strong> (static) deb ataladi.</p>
-<h2>Statik metodlar</h2>
-<p>Statik metod <code>static</code> kalit so'zi bilan e'lon qilinadi. U klass obyektlariga emas, balki <strong>klassning o'ziga</strong> tegishli bo'ladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-basic.js</span></div><textarea spellcheck="false">class User {
-  static staticMethod() {
-    return "Statik metod. this === " + this.name;
-  }
-}
+<div class="crumbs">Qo'shimcha mavzular</div>
+<h1>Eval: kod satrini ishga tushirish</h1>
+<p class="lead"><code>eval</code> — o'rnatilgan funksiya bo'lib, satr (string) ko'rinishida berilgan JavaScript kodini ishga tushirib, natijasini qaytaradi. U kuchli, ammo xavfli — shu sabab zamonaviy kodda deyarli ishlatilmaydi.</p>
+<h2>Sintaksis</h2>
+<p><code>eval(code)</code> satrni kod sifatida bajaradi va oxirgi ifodaning qiymatini qaytaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-oddiy.js</span></div><textarea spellcheck="false">let natija = eval("2 + 2 * 3");
+console.log(natija);  // 8
 
-// klassning o'zida chaqiriladi, obyektda emas:
-console.log(User.staticMethod());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu aslida quyidagini yozishga teng:</p>
-<pre class="code"><code>class User {}
-User.staticMethod = function() {
-  return "...";
-};</code></pre>
-<p>Statik metod ichidagi <code>this</code> — bu klassning o'zi (konstruktor funksiya). Odatda statik metodlar obyektlar ustida emas, balki butun klass darajasida ishlaydigan mantiq uchun ishlatiladi.</p>
-<div class="warn">Statik metodni obyekt orqali chaqira olmaysiz. Masalan, <code>new User().staticMethod()</code> xato beradi (<em>is not a function</em>), chunki statik metod obyektda emas, klassdadir.</div>
-<h2>Amaliy misol: taqqoslash</h2>
-<p>Statik metodlar ko'pincha obyektlarni taqqoslash yoki ular ustida umumiy amallar bajarish uchun ishlatiladi. Masalan, maqolalarni sanasi bo'yicha saralaymiz:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-compare.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
+let kod = "let x = 10; x * x";
+console.log(eval(kod));  // 100</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Kod bir nechta ifoda va operatordan iborat bo'lishi mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-kop.js</span></div><textarea spellcheck="false">let kod = "let a = 5; let b = 7; a * b + 1";
+console.log(eval(kod));  // 36</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>eval ko'lami (scope)</h2>
+<p><code>eval</code> ichidagi kod <strong>joriy leksik ko'lamda</strong> ishlaydi, ya'ni atrofdagi o'zgaruvchilarni ko'ra oladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-scope.js</span></div><textarea spellcheck="false">let salom = "Salom";
 
-  static compare(a, b) {
-    return a.date - b.date;
-  }
-}
+eval("console.log(salom + ', dunyo!')");  // Salom, dunyo!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Zamonaviy qat'iy rejimda (<code>"use strict"</code>) <code>eval</code> ichida e'lon qilingan o'zgaruvchilar tashqi ko'lamga <strong>sizib chiqmaydi</strong> — ular faqat <code>eval</code> ichida yashaydi. Bu tashqi kodni ifloslanishdan himoya qiladi.</div>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-strict.js</span></div><textarea spellcheck="false">"use strict";
 
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JS", new Date(2019, 11, 1))
-];
+eval("let mahalliy = 100; console.log(mahalliy)");  // 100
 
-// klass metodi orqali saralaymiz:
-articles.sort(Article.compare);
+// bu yerda 'mahalliy' mavjud emas
+console.log(typeof mahalliy);  // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Nega eval xavfli?</h2>
+<p><code>eval</code> odatda quyidagi sabablarga ko'ra tavsiya etilmaydi:</p>
+<ul><li><strong>Xavfsizlik</strong> — agar satr foydalanuvchidan yoki tashqi manbadan kelsa, unda zararli kod bo'lishi mumkin. <code>eval</code> uni cheklovsiz bajaradi;</li><li><strong>Sekinlik</strong> — dvigatel <code>eval</code> ichidagi kodni oldindan kompilyatsiya va optimallashtira olmaydi;</li><li><strong>Nosozliklarni tuzatishda qiyinchilik</strong> — satr ichidagi kodni tahrirlagichlar tekshirmaydi, xatolarni topish qiyin;</li><li><strong>Minifikatsiya muammosi</strong> — kod qisqartirilganda tashqi o'zgaruvchilar nomi o'zgaradi, <code>eval</code> ichidagi satr esa eskicha qoladi va buziladi.</li></ul>
+<div class="warn">Foydalanuvchi kiritgan matnni <strong>hech qachon</strong> to'g'ridan-to'g'ri <code>eval</code>ga bermang. Bu ilovangizni to'liq egallab olishga imkon beruvchi jiddiy xavfsizlik teshigi.</div>
+<h2>Muqobillar</h2>
+<p>Deyarli har doim <code>eval</code>siz yaxshiroq yechim topiladi:</p>
+<ul><li>Obyekt xususiyatiga dinamik nom bilan murojaat — <code>obj[nomSatr]</code> (kvadrat qavs);</li><li>JSON matnini o'qish — <code>JSON.parse(satr)</code> (<code>eval</code>dan xavfsiz va tez);</li><li>Nomga ko'ra funksiya chaqirish — funksiyalarni obyektga ("lug'atga") joylash;</li><li>Cheklangan, izolyatsiyalangan bajarish kerak bo'lsa — <code>new Function</code> yoki Web Worker.</li></ul>
+<p>Dinamik xususiyat nomi bilan <code>eval</code>siz ishlash:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-muqobil.js</span></div><textarea spellcheck="false">let user = { name: "Ali", yosh: 25 };
+let kalit = "yosh";
 
-console.log(articles[0].title); // eng erta sana</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu yerda <code>Article.compare</code> maqolalar "ustidagi" umumiy vosita — bir maqolaga tegishli emas, shuning uchun uni statik qilish mantiqiy.</p>
-<h2>Factory (fabrika) metodlar</h2>
-<p>Yana bir keng tarqalgan qo'llanish — obyekt yaratishning turli usullarini beruvchi <strong>factory metod</strong>. Masalan, maqolani bugungi sana bilan yaratuvchi metod:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-factory.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
-
-  // factory metod: bugungi maqola
-  static createTodays() {
-    // this === Article
-    return new this("Bugungi yangilik", new Date());
-  }
-}
-
-let article = Article.createTodays();
-console.log(article.title);
-console.log(article.date instanceof Date);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Endi "bugungi maqola" kerak bo'lganda, har safar sana yaratish o'rniga <code>Article.createTodays()</code>ni chaqirsak yetarli. Bu yerda <code>this</code> — <code>Article</code> klassi, shuning uchun <code>new this(...)</code> to'g'ri klassni yaratadi.</p>
-<h2>Statik xossalar</h2>
-<p>Statik xossalar ham mavjud — ular oddiy klass xossalariga o'xshaydi, faqat oldiga <code>static</code> qo'yiladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-property.js</span></div><textarea spellcheck="false">class Article {
-  static publisher = "Ilim Nashriyoti";
-}
-
-console.log(Article.publisher);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu quyidagini yozishga teng: <code>Article.publisher = "Ilim Nashriyoti"</code>. Statik xossa butun klassga tegishli bo'lgan qiymatlarni (masalan, umumiy sozlamalar yoki hisoblagichlar) saqlash uchun qulay.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-counter.js</span></div><textarea spellcheck="false">class Counter {
-  static count = 0;
-  constructor() {
-    Counter.count++;
-  }
-}
-
-new Counter();
-new Counter();
-new Counter();
-console.log("Yaratilgan obyektlar soni: " + Counter.count);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Statik xossa va metodlar merosi</h2>
-<p>Statik xossa va metodlar ham meros olinadi! Bu <code>extends</code>ning muhim xususiyati. Ya'ni <code>Rabbit extends Animal</code> qilinganda, <code>Rabbit</code> nafaqat oddiy metodlarni, balki statik metodlarni ham oladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit.js</span></div><textarea spellcheck="false">class Animal {
-  static planet = "Yer";
-  constructor(name) { this.name = name; }
-  static compare(a, b) { return a.name.localeCompare(b.name); }
-}
-
-class Rabbit extends Animal {}
-
-// statik metod meros olindi:
-let r1 = new Rabbit("Bobi");
-let r2 = new Rabbit("Alfa");
-console.log(Rabbit.compare(r1, r2));
-
-// statik xossa ham meros olindi:
-console.log(Rabbit.planet);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu qanday ishlaydi? <code>extends</code> ikkita prototip bog'lanishini o'rnatadi:</p>
-<ul><li><code>Rabbit.prototype.[[Prototype]]</code> — <code>Animal.prototype</code>ga (oddiy metodlar uchun);</li><li><code>Rabbit.[[Prototype]]</code> — <code>Animal</code>ga (statik metodlar uchun).</li></ul>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit-proto.js</span></div><textarea spellcheck="false">class Animal {}
-class Rabbit extends Animal {}
-
-// Rabbit'ning [[Prototype]]si Animal:
-console.log(Object.getPrototypeOf(Rabbit) === Animal);
-// Rabbit.prototype'ning [[Prototype]]si Animal.prototype:
-console.log(Object.getPrototypeOf(Rabbit.prototype) === Animal.prototype);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<div class="note">Statik metodlar butun klass bilan bog'liq bo'lgan, aniq bir obyektga bog'lanmagan funksiyalar uchun ishlatiladi. Masalan, <code>Object.keys(...)</code>, <code>Array.from(...)</code> — bular ham statik metodlardir.</div>
+// Yomon: eval('user.' + kalit)
+// Yaxshi:
+console.log(user[kalit]);  // 25</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>new Function</code> — <code>eval</code>ga o'xshaydi, lekin kodni <strong>global ko'lamda</strong> ishlatadi, shuning uchun tashqi mahalliy o'zgaruvchilarga tegmaydi (bu esa aksincha xavfsizroq):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>new-function.js</span></div><textarea spellcheck="false">let qoshuv = new Function("a", "b", "return a + b");
+console.log(qoshuv(3, 4));  // 7</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Agar dinamik kod juda zarur bo'lsa, <code>eval</code> o'rniga <code>new Function</code>ni afzal ko'ring — u tashqi ko'lamga kira olmaydi, demak kamroq xavf tug'diradi.</div>
 <h2>Xulosa</h2>
-<ul><li>Statik metodlar <code>static</code> bilan e'lon qilinadi va klassning o'zida chaqiriladi (obyektda emas);</li><li>Ular ichidagi <code>this</code> — klassning o'zi;</li><li>Statik metodlar taqqoslash va factory (obyekt yaratish) mantiqi uchun qulay;</li><li>Statik xossalar butun klassga tegishli qiymatlarni saqlaydi;</li><li>Statik xossa va metodlar ham <code>extends</code> orqali meros olinadi.</li></ul>
+<ul><li><code>eval(code)</code> satr ko'rinishidagi kodni bajaradi va oxirgi ifoda qiymatini qaytaradi;</li><li>U joriy ko'lamni ko'radi; qat'iy rejimda o'zgaruvchilari sizib chiqmaydi;</li><li>Xavfsizlik, sekinlik va nosozlik tuzatish sabablariga ko'ra tavsiya etilmaydi;</li><li>Ko'p hollarda kvadrat qavs, <code>JSON.parse</code> yoki obyekt-lug'at yechadi;</li><li>Chindan kerak bo'lsa — <code>new Function</code> xavfsizroq muqobil.</li></ul>
 <nav class="lesson-nav">
-  <a href="klass-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Klass merosi</span></a>
-  <a class="next" href="private-protected.html"><span class="dir">Keyingi →</span><span class="ttl">Maxfiy va himoyalangan xossalar</span></a>
+  <a href="proxy-reflect.html"><span class="dir">← Oldingi</span><span class="ttl">Proxy va Reflect</span></a>
+  <a class="next" href="currying.html"><span class="dir">Keyingi →</span><span class="ttl">Karrilash (Currying)</span></a>
 </nav>
 </main>
 </div>

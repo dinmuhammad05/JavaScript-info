@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Statik xossa va metodlar — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="static metodlar, statik xossalar, factory metodlar va statik meros.">
+  <title>WeakRef va FinalizationRegistry — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Obyektni axlat yig'ishga to'sqinlik qilmasdan zaif havola saqlash (WeakRef) va u yo'q qilingach xabar olish (FinalizationRegistry).">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -123,12 +123,12 @@
       <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
     </ol>
   </details>
-  <details open>
+  <details>
     <summary>Klasslar</summary>
     <ol>
       <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
       <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
-      <li><a class="active" href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
       <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
       <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
       <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
@@ -170,7 +170,7 @@
       <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
     </ol>
   </details>
-  <details>
+  <details open>
     <summary>Qo'shimcha mavzular</summary>
     <ol>
       <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
@@ -179,125 +179,95 @@
       <li><a href="../lessons/reference-type.html">Reference Type</a></li>
       <li><a href="../lessons/bigint.html">BigInt</a></li>
       <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
-      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+      <li><a class="active" href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
     </ol>
   </details>
 </aside>
 <main class="content article">
-<div class="crumbs">Klasslar</div>
-<h1>Statik xossa va metodlar</h1>
-<p class="lead">Metodni obyektning emas, balki klassning o'ziga (funksiyasiga) biriktirish mumkin. Bunday metodlar <strong>statik</strong> (static) deb ataladi.</p>
-<h2>Statik metodlar</h2>
-<p>Statik metod <code>static</code> kalit so'zi bilan e'lon qilinadi. U klass obyektlariga emas, balki <strong>klassning o'ziga</strong> tegishli bo'ladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-basic.js</span></div><textarea spellcheck="false">class User {
-  static staticMethod() {
-    return "Statik metod. this === " + this.name;
-  }
-}
+<div class="crumbs">Qo'shimcha mavzular</div>
+<h1>WeakRef va FinalizationRegistry</h1>
+<p class="lead">Odatda obyektga havola bo'lsa, u xotirada saqlanadi — axlat yig'uvchi (garbage collector) uni o'chirmaydi. <code>WeakRef</code> esa <em>zaif</em> havola yaratadi: u obyekt yashashini <strong>kafolatlamaydi</strong>, shuning uchun kerak bo'lganda obyekt xotiradan tozalanishi mumkin.</p>
+<h2>Odatiy (kuchli) havola muammosi</h2>
+<p>Oddiy havola obyektni "ushlab turadi". Kesh (cache) yasaganda bu muammo: keshdagi obyekt boshqa hech kimga kerak bo'lmasa ham, kesh uni ushlab turgani uchun xotira bo'shamaydi.</p>
+<p><code>WeakRef</code> shu muammoni yechadi — u obyektga <strong>ushlab turmaydigan</strong> havola beradi.</p>
+<pre class="code"><code>let obyekt = { data: "katta ma'lumot" };
+let zaifHavola = new WeakRef(obyekt);
 
-// klassning o'zida chaqiriladi, obyektda emas:
-console.log(User.staticMethod());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu aslida quyidagini yozishga teng:</p>
-<pre class="code"><code>class User {}
-User.staticMethod = function() {
-  return "...";
-};</code></pre>
-<p>Statik metod ichidagi <code>this</code> — bu klassning o'zi (konstruktor funksiya). Odatda statik metodlar obyektlar ustida emas, balki butun klass darajasida ishlaydigan mantiq uchun ishlatiladi.</p>
-<div class="warn">Statik metodni obyekt orqali chaqira olmaysiz. Masalan, <code>new User().staticMethod()</code> xato beradi (<em>is not a function</em>), chunki statik metod obyektda emas, klassdadir.</div>
-<h2>Amaliy misol: taqqoslash</h2>
-<p>Statik metodlar ko'pincha obyektlarni taqqoslash yoki ular ustida umumiy amallar bajarish uchun ishlatiladi. Masalan, maqolalarni sanasi bo'yicha saralaymiz:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-compare.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
-  }
+// obyektga murojaat qilish uchun deref() ishlatiladi
+let olingan = zaifHavola.deref();</code></pre>
+<div class="note"><code>WeakMap</code>/<code>WeakSet</code>dan farqi: ular <em>butun kolleksiya</em>ni zaiflashtiradi, <code>WeakRef</code> esa <strong>bitta obyektga</strong> nozik nazorat beradi.</div>
+<h2>deref() metodi</h2>
+<p>Zaif havoladan obyektni olish uchun <code>deref()</code> chaqiriladi. Agar obyekt hali xotirada bo'lsa — o'zini qaytaradi; allaqachon tozalangan bo'lsa — <code>undefined</code>:</p>
+<pre class="code"><code>let havola = new WeakRef({ name: "Ali" });
 
-  static compare(a, b) {
-    return a.date - b.date;
-  }
-}
+let obyekt = havola.deref();
+if (obyekt !== undefined) {
+  // obyekt hali mavjud, ishlatsa bo'ladi
+  console.log(obyekt.name);
+} else {
+  // obyekt tozalangan
+  console.log("Obyekt yo'q qilingan");
+}</code></pre>
+<div class="warn">Har safar <code>deref()</code> chaqirganda natijani <strong>albatta tekshiring</strong>. U istalgan vaqtda <code>undefined</code> qaytarishi mumkin — hech qachon obyekt mavjudligiga ishonch bilan yondashmang.</div>
+<h2>Kesh misoli</h2>
+<p><code>WeakRef</code>ning tipik qo'llanishi — xotirani band qilmaydigan kesh. Quyida rasmlarni keshlash misoli: agar keshdagi obyekt hali xotirada bo'lsa, uni qayta ishlatamiz; bo'lmasa qaytadan yaratamiz.</p>
+<pre class="code"><code>let kesh = new Map();
 
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JS", new Date(2019, 11, 1))
-];
+function rasmOlish(nom) {
+  let havola = kesh.get(nom);
+  let rasm = havola ? havola.deref() : undefined;
 
-// klass metodi orqali saralaymiz:
-articles.sort(Article.compare);
-
-console.log(articles[0].title); // eng erta sana</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu yerda <code>Article.compare</code> maqolalar "ustidagi" umumiy vosita — bir maqolaga tegishli emas, shuning uchun uni statik qilish mantiqiy.</p>
-<h2>Factory (fabrika) metodlar</h2>
-<p>Yana bir keng tarqalgan qo'llanish — obyekt yaratishning turli usullarini beruvchi <strong>factory metod</strong>. Masalan, maqolani bugungi sana bilan yaratuvchi metod:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-factory.js</span></div><textarea spellcheck="false">class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
+  if (rasm === undefined) {
+    // yo'q yoki tozalangan - qaytadan yaratamiz
+    rasm = { nom: nom, data: "...og'ir ma'lumot..." };
+    kesh.set(nom, new WeakRef(rasm));
   }
 
-  // factory metod: bugungi maqola
-  static createTodays() {
-    // this === Article
-    return new this("Bugungi yangilik", new Date());
+  return rasm;
+}
+
+let a = rasmOlish("logo.png");
+let b = rasmOlish("logo.png");
+// a va b bir xil obyekt (kesh ishladi)</code></pre>
+<p>Bu keshning afzalligi: agar tizimga xotira kerak bo'lsa, keshdagi ishlatilmayotgan rasmlar avtomatik tozalanadi. Kamchiligi: <code>Map</code> ichida <em>bo'sh</em> <code>WeakRef</code>lar qolib ketishi mumkin — ularni tozalash uchun <code>FinalizationRegistry</code> kerak.</p>
+<h2>FinalizationRegistry</h2>
+<p><code>FinalizationRegistry</code> — obyekt axlat yig'uvchi tomonidan yo'q qilingach, <strong>tozalash funksiyasi</strong>ni (callback) chaqirish imkonini beradi. U shunday yaratiladi:</p>
+<pre class="code"><code>let registry = new FinalizationRegistry((qiymat) =&gt; {
+  // obyekt yo'q qilingach chaqiriladi
+  console.log("Tozalandi: " + qiymat);
+});</code></pre>
+<p>Kuzatiladigan obyektni <code>register</code> orqali ro'yxatga olamiz. Ikkinchi argument — obyekt yo'q qilingach callbackka uzatiladigan qiymat (odatda kalit yoki nom):</p>
+<pre class="code"><code>let obyekt = { name: "Ali" };
+
+registry.register(obyekt, "Ali-obyekti");
+
+// obyektga havola yo'qolgach va u tozalangach,
+// callback "Ali-obyekti" bilan chaqiriladi</code></pre>
+<p>Yuqoridagi kesh misolini <code>FinalizationRegistry</code> bilan to'ldirib, tozalangan obyektning "bo'sh" yozuvini <code>Map</code>dan ham o'chirib tashlaymiz:</p>
+<pre class="code"><code>let kesh = new Map();
+
+let registry = new FinalizationRegistry((nom) =&gt; {
+  // obyekt tozalandi -&gt; Map'dan ham o'chiramiz
+  let havola = kesh.get(nom);
+  if (havola &amp;&amp; havola.deref() === undefined) {
+    kesh.delete(nom);
   }
-}
+});
 
-let article = Article.createTodays();
-console.log(article.title);
-console.log(article.date instanceof Date);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Endi "bugungi maqola" kerak bo'lganda, har safar sana yaratish o'rniga <code>Article.createTodays()</code>ni chaqirsak yetarli. Bu yerda <code>this</code> — <code>Article</code> klassi, shuning uchun <code>new this(...)</code> to'g'ri klassni yaratadi.</p>
-<h2>Statik xossalar</h2>
-<p>Statik xossalar ham mavjud — ular oddiy klass xossalariga o'xshaydi, faqat oldiga <code>static</code> qo'yiladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-property.js</span></div><textarea spellcheck="false">class Article {
-  static publisher = "Ilim Nashriyoti";
-}
-
-console.log(Article.publisher);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu quyidagini yozishga teng: <code>Article.publisher = "Ilim Nashriyoti"</code>. Statik xossa butun klassga tegishli bo'lgan qiymatlarni (masalan, umumiy sozlamalar yoki hisoblagichlar) saqlash uchun qulay.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-counter.js</span></div><textarea spellcheck="false">class Counter {
-  static count = 0;
-  constructor() {
-    Counter.count++;
-  }
-}
-
-new Counter();
-new Counter();
-new Counter();
-console.log("Yaratilgan obyektlar soni: " + Counter.count);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Statik xossa va metodlar merosi</h2>
-<p>Statik xossa va metodlar ham meros olinadi! Bu <code>extends</code>ning muhim xususiyati. Ya'ni <code>Rabbit extends Animal</code> qilinganda, <code>Rabbit</code> nafaqat oddiy metodlarni, balki statik metodlarni ham oladi:</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit.js</span></div><textarea spellcheck="false">class Animal {
-  static planet = "Yer";
-  constructor(name) { this.name = name; }
-  static compare(a, b) { return a.name.localeCompare(b.name); }
-}
-
-class Rabbit extends Animal {}
-
-// statik metod meros olindi:
-let r1 = new Rabbit("Bobi");
-let r2 = new Rabbit("Alfa");
-console.log(Rabbit.compare(r1, r2));
-
-// statik xossa ham meros olindi:
-console.log(Rabbit.planet);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p>Bu qanday ishlaydi? <code>extends</code> ikkita prototip bog'lanishini o'rnatadi:</p>
-<ul><li><code>Rabbit.prototype.[[Prototype]]</code> — <code>Animal.prototype</code>ga (oddiy metodlar uchun);</li><li><code>Rabbit.[[Prototype]]</code> — <code>Animal</code>ga (statik metodlar uchun).</li></ul>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>static-inherit-proto.js</span></div><textarea spellcheck="false">class Animal {}
-class Rabbit extends Animal {}
-
-// Rabbit'ning [[Prototype]]si Animal:
-console.log(Object.getPrototypeOf(Rabbit) === Animal);
-// Rabbit.prototype'ning [[Prototype]]si Animal.prototype:
-console.log(Object.getPrototypeOf(Rabbit.prototype) === Animal.prototype);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<div class="note">Statik metodlar butun klass bilan bog'liq bo'lgan, aniq bir obyektga bog'lanmagan funksiyalar uchun ishlatiladi. Masalan, <code>Object.keys(...)</code>, <code>Array.from(...)</code> — bular ham statik metodlardir.</div>
+function saqlash(nom, obyekt) {
+  kesh.set(nom, new WeakRef(obyekt));
+  registry.register(obyekt, nom);
+}</code></pre>
+<h2>Ehtiyotkorlik</h2>
+<p><code>WeakRef</code> va <code>FinalizationRegistry</code> — kuchli, ammo nozik vositalar. Ularni ehtiyotkorlik bilan ishlating:</p>
+<ul><li>Axlat yig'uvchi <strong>qachon</strong> ishlashini bashorat qilib bo'lmaydi — callback darhol yoki umuman chaqirilmasligi mumkin;</li><li>Tozalash callbackiga <strong>muhim mantiqni</strong> yuklamang — u ishga tushishiga kafolat yo'q;</li><li>Bir necha obyekt bir vaqtda tozalansa, callbacklar tartibi noaniq;</li><li>Bu vositalarni faqat <em>optimallashtirish</em> uchun ishlating, dasturning to'g'riligi ularga bog'liq bo'lmasin.</li></ul>
+<div class="warn">Spetsifikatsiyaga ko'ra, <code>FinalizationRegistry</code> callbacki <strong>umuman chaqirilmasligi ham mumkin</strong> — masalan, dastur tugab qolsa. Shuning uchun unga tayanib fayl yopish yoki tarmoq ulanishini uzish kabi zarur amallarni bajarmang.</div>
+<div class="tip">Ko'p hollarda oddiy <code>WeakMap</code> yoki <code>WeakSet</code> yetarli va xavfsizroq. <code>WeakRef</code>/<code>FinalizationRegistry</code>ga faqat chindan nozik xotira nazorati kerak bo'lgandagina murojaat qiling.</div>
 <h2>Xulosa</h2>
-<ul><li>Statik metodlar <code>static</code> bilan e'lon qilinadi va klassning o'zida chaqiriladi (obyektda emas);</li><li>Ular ichidagi <code>this</code> — klassning o'zi;</li><li>Statik metodlar taqqoslash va factory (obyekt yaratish) mantiqi uchun qulay;</li><li>Statik xossalar butun klassga tegishli qiymatlarni saqlaydi;</li><li>Statik xossa va metodlar ham <code>extends</code> orqali meros olinadi.</li></ul>
+<ul><li><code>WeakRef</code> obyektga <em>zaif</em> havola beradi — u obyekt yashashini kafolatlamaydi;</li><li><code>deref()</code> obyektni yoki (tozalangan bo'lsa) <code>undefined</code> qaytaradi — doim tekshiring;</li><li>Tipik qo'llanishi — xotirani band qilmaydigan kesh;</li><li><code>FinalizationRegistry</code> obyekt tozalangach callback chaqiradi (masalan, keshni tozalash uchun);</li><li>Axlat yig'uvchi xatti-harakati noaniq — bu vositalarga dastur to'g'riligini bog'lamang, faqat optimallashtirish uchun ishlating.</li></ul>
 <nav class="lesson-nav">
-  <a href="klass-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Klass merosi</span></a>
-  <a class="next" href="private-protected.html"><span class="dir">Keyingi →</span><span class="ttl">Maxfiy va himoyalangan xossalar</span></a>
+  <a href="unicode.html"><span class="dir">← Oldingi</span><span class="ttl">Unicode, satr ichki tuzilishi</span></a>
+  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
 </nav>
 </main>
 </div>
