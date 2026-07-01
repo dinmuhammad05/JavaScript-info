@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>localStorage va sessionStorage — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Web Storage: setItem/getItem/removeItem/clear metodlari, kalitlar bo'yicha aylanish, obyektlarni JSON orqali saqlash, storage hodisasi va ikkalasining farqi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a class="active" href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Brauzerda ma'lumot saqlash</div>
+<h1>localStorage va sessionStorage</h1>
+<p class="lead"><code>localStorage</code> va <code>sessionStorage</code> — brauzerda kalit-qiymat (key/value) ko'rinishida ma'lumot saqlash uchun ob'yektlardir. Ular cookie'dan farqli o'laroq serverga yuborilmaydi, ancha katta hajmga (odatda ~5 MB) ega va foydalanish uchun ancha qulay. Ularni birgalikda <em>Web Storage</em> deb ataladi.</p>
+<h2>Web Storage nima</h2>
+<p>Ikkala ob'yekt ham bir xil metod va xususiyatlarga ega. Farqi — <em>ma'lumot qancha vaqt saqlanishida</em> va <em>qaysi oynalar orasida ulashilishida</em>:</p>
+<ul><li><code>localStorage</code> — ma'lumot brauzer yopilib qayta ochilsa ham saqlanadi. Bitta domenning barcha tab va oynalari orasida ulashiladi;</li><li><code>sessionStorage</code> — ma'lumot faqat joriy brauzer tab'i uchun saqlanadi va tab yopilganda o'chadi. Har bir tab o'z alohida <code>sessionStorage</code>iga ega.</li></ul>
+<div class="note">Web Storage <strong>brauzerga xos</strong>. Node.js yoki playground muhitida <code>localStorage</code> mavjud emas, shu sabab bu misollarni brauzer konsolida sinang.</div>
+<h2>Asosiy metodlar</h2>
+<p>Web Storage quyidagi metod va xususiyatlarni beradi (misolda <code>localStorage</code>, lekin <code>sessionStorage</code> aynan bir xil):</p>
+<ul><li><code>setItem(key, value)</code> — kalit/qiymat juftligini saqlaydi;</li><li><code>getItem(key)</code> — kalit bo'yicha qiymatni oladi;</li><li><code>removeItem(key)</code> — kalit bo'yicha juftlikni o'chiradi;</li><li><code>clear()</code> — barcha juftliklarni o'chiradi;</li><li><code>key(index)</code> — indeks bo'yicha kalit nomini beradi;</li><li><code>length</code> — saqlangan juftliklar soni.</li></ul>
+<pre class="code"><code>// Brauzerda:
+localStorage.setItem('user', 'Ali');
+console.log(localStorage.getItem('user')); // "Ali"
+
+localStorage.removeItem('user');
+console.log(localStorage.getItem('user')); // null
+
+localStorage.setItem('a', '1');
+localStorage.setItem('b', '2');
+localStorage.clear();
+console.log(localStorage.length); // 0</code></pre>
+<div class="note">Mavjud bo'lmagan kalit uchun <code>getItem</code> <code>null</code> qaytaradi (cookie'dagi <code>undefined</code>dan farqli).</div>
+<h2>Obyekt kabi murojaat</h2>
+<p>Web Storage'ga oddiy obyekt kabi ham murojaat qilish mumkin — nuqta yoki kvadrat qavs orqali:</p>
+<pre class="code"><code>// bular ishlaydi, lekin tavsiya etilmaydi:
+localStorage.user = 'Ali';
+console.log(localStorage.user); // "Ali"
+delete localStorage.user;</code></pre>
+<div class="warn">Obyekt sintaksisi qulay ko'rinsa-da, <strong>metodlardan foydalanish tavsiya etiladi</strong>. Sabab: agar kalit <code>length</code>, <code>setItem</code> kabi ichki nom bilan to'qnashsa, xatti-harakat buziladi. <code>setItem</code>/<code>getItem</code> esa har doim ishonchli ishlaydi.</div>
+<h2>Faqat satr saqlanadi</h2>
+<p>Web Storage'da <strong>faqat satr (string)</strong> saqlash mumkin. Kalit ham, qiymat ham satr bo'lishi shart. Boshqa turdagi qiymat berilsa, u avtomatik satrga aylantiriladi, bu ko'pincha kutilmagan natija beradi:</p>
+<pre class="code"><code>localStorage.setItem('num', 123);
+console.log(localStorage.getItem('num')); // "123" (satr!)
+console.log(typeof localStorage.getItem('num')); // "string"
+
+localStorage.setItem('obj', { a: 1 });
+console.log(localStorage.getItem('obj')); // "[object Object]" — buzilgan!</code></pre>
+<div class="warn">Obyektni to'g'ridan-to'g'ri saqlashga urinish <code>[object Object]</code> satriga aylantiradi — ma'lumot yo'qoladi. Obyektlarni doim JSON orqali saqlang (keyingi bo'lim).</div>
+<h2>Obyektlarni JSON orqali saqlash</h2>
+<p>Obyekt yoki massiv saqlash uchun ularni <code>JSON.stringify</code> bilan satrga, o'qishda esa <code>JSON.parse</code> bilan qayta obyektga aylantiramiz:</p>
+<pre class="code"><code>let user = { name: 'Ali', age: 25, roles: ['admin', 'user'] };
+
+// saqlash:
+localStorage.setItem('user', JSON.stringify(user));
+
+// o'qish:
+let stored = JSON.parse(localStorage.getItem('user'));
+console.log(stored.name); // "Ali"
+console.log(stored.roles[0]); // "admin"</code></pre>
+<p>Xavfsiz o'qish uchun <code>null</code> holatini hisobga olgan yordamchi funksiya foydali:</p>
+<pre class="code"><code>function saveJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function loadJSON(key) {
+  let raw = localStorage.getItem(key);
+  return raw === null ? null : JSON.parse(raw);
+}
+
+saveJSON('settings', { theme: 'dark', lang: 'uz' });
+let s = loadJSON('settings');
+console.log(s.theme); // "dark"</code></pre>
+<div class="tip"><code>JSON.parse</code> noto'g'ri formatdagi satr uchun xatolik tashlaydi. Ishonchsiz ma'lumotni o'qishda <code>try...catch</code> ishlatish yoki <code>loadJSON</code>ni himoyalash foydali.</div>
+<h2>Kalitlar bo'yicha aylanish</h2>
+<p>Web Storage — <em>iterable emas</em>, ya'ni uni to'g'ridan-to'g'ri <code>for..of</code> bilan aylantirib bo'lmaydi. Barcha kalitlarni ko'rish uchun <code>length</code> va <code>key(i)</code> ishlatiladi:</p>
+<pre class="code"><code>// barcha juftliklarni chiqarish:
+for (let i = 0; i &lt; localStorage.length; i++) {
+  let key = localStorage.key(i);
+  console.log(key + ' = ' + localStorage.getItem(key));
+}</code></pre>
+<p>Yoki barcha kalitlarni bir vaqtda olish uchun <code>Object.keys</code> ishlatish mumkin — bu faqat o'z (own) kalitlarni beradi, ichki metodlarni chetlab o'tadi:</p>
+<pre class="code"><code>let keys = Object.keys(localStorage);
+for (let key of keys) {
+  console.log(key + ' = ' + localStorage.getItem(key));
+}</code></pre>
+<div class="warn"><code>for..in</code> tsiklini ishlatmang — u <code>setItem</code>, <code>length</code> kabi ichki maydonlarni ham aylantirib chiqadi. <code>Object.keys</code> yoki <code>key(i)</code> usuli xavfsizroq.</div>
+<h2>storage hodisasi</h2>
+<p><code>localStorage</code> yoki <code>sessionStorage</code> o'zgarganda <code>storage</code> hodisasi ishga tushadi. Muhim jihat: bu hodisa <strong>o'zgarishni amalga oshirgan oynada emas, boshqa oynalarda</strong> ishlaydi. Bu bir domenning turli tab'lari orasida ma'lumot almashishga imkon beradi:</p>
+<pre class="code"><code>// Brauzerda, bir tab'da:
+window.addEventListener('storage', function(event) {
+  console.log('Kalit: ' + event.key);
+  console.log('Eski qiymat: ' + event.oldValue);
+  console.log('Yangi qiymat: ' + event.newValue);
+  console.log('URL: ' + event.url);
+  console.log('Storage: ', event.storageArea);
+});
+
+// boshqa tab'da:
+// localStorage.setItem('user', 'Vali');
+// yuqoridagi handler birinchi tab'da ishga tushadi</code></pre>
+<p><code>event</code> ob'yektining foydali xususiyatlari:</p>
+<ul><li><code>event.key</code> — o'zgargan kalit (<code>clear()</code> chaqirilsa <code>null</code>);</li><li><code>event.oldValue</code> — eski qiymat;</li><li><code>event.newValue</code> — yangi qiymat (o'chirilsa <code>null</code>);</li><li><code>event.url</code> — yangilanish sodir bo'lgan hujjat URL'i;</li><li><code>event.storageArea</code> — o'zgargan storage obyekti (<code>localStorage</code> yoki <code>sessionStorage</code>).</li></ul>
+<div class="tip"><code>storage</code> hodisasi tab'lar orasida oddiy "xabar almashish" mexanizmi sifatida ishlatilishi mumkin: bir tab <code>localStorage</code>ga yozadi, boshqalari hodisa orqali xabar oladi.</div>
+<h2>localStorage va sessionStorage farqi</h2>
+<p>Ikkalasining amaliy farqlari quyidagicha:</p>
+<ul><li><strong>Umr ko'rish</strong>: <code>localStorage</code> — brauzer yopilib qayta ochilsa ham saqlanadi; <code>sessionStorage</code> — tab yopilganda o'chadi;</li><li><strong>Ulashish ko'lami</strong>: <code>localStorage</code> — bir domenning barcha tab/oynalari orasida ulashiladi; <code>sessionStorage</code> — faqat bitta tab ichida (hatto ayni domenning ikkinchi tab'i alohida <code>sessionStorage</code>iga ega);</li><li><strong>Sahifa yangilanishi</strong>: <code>sessionStorage</code> sahifa yangilanganda (F5) saqlanadi, lekin yangi tab ochilganda yo'q;</li><li><strong>storage hodisasi</strong>: har ikkalasi ham hodisa chiqaradi, lekin <code>sessionStorage</code> alohida tab'ga tegishli bo'lgani uchun uning hodisasi kamroq foyda beradi.</li></ul>
+<div class="note">Doimiy sozlamalar (masalan interfeys mavzusi) uchun <code>localStorage</code>, vaqtinchalik forma holatini bitta tab uchun saqlashda esa <code>sessionStorage</code> mos keladi.</div>
+<h2>Cheklovlar</h2>
+<ul><li>Hajm odatda ~5 MB (brauzerga qarab o'zgaradi) — cookie'dan ancha katta;</li><li>Faqat satr saqlanadi — obyektlar uchun JSON kerak;</li><li>Sinxron API — juda katta ma'lumotni yozish/o'qish interfeysni sekinlashtiradi;</li><li>Ma'lumot serverga yuborilmaydi (bu ko'pincha afzallik);</li><li>Yashirin (private/incognito) rejimda ma'lumot tab yopilganda o'chishi mumkin.</li></ul>
+<h2>Xulosa</h2>
+<ul><li>Web Storage — brauzerda kalit-qiymat saqlashning oddiy va katta hajmli usuli (~5 MB);</li><li><code>setItem</code>/<code>getItem</code>/<code>removeItem</code>/<code>clear</code> asosiy metodlar; <code>key(i)</code> va <code>length</code> aylanish uchun;</li><li>Faqat satr saqlanadi — obyektni <code>JSON.stringify</code>/<code>JSON.parse</code> bilan o'ramoq kerak;</li><li>Aylanish uchun <code>Object.keys</code> yoki <code>key(i)</code> ishlating, <code>for..in</code>dan qoching;</li><li><code>storage</code> hodisasi o'zgarishlarni boshqa tab'larga xabar qiladi;</li><li><code>localStorage</code> — barqaror va tab'lar orasida ulashiladi; <code>sessionStorage</code> — vaqtinchalik va bitta tab uchun.</li></ul>
+<nav class="lesson-nav">
+  <a href="cookie.html"><span class="dir">← Oldingi</span><span class="ttl">Cookie</span></a>
+  <a class="next" href="indexeddb.html"><span class="dir">Keyingi →</span><span class="ttl">IndexedDB</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

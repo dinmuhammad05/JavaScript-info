@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hujjatni o'zgartirish — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Yangi elementlarni yaratish (createElement, createTextNode), ularni sahifaga qo'shish (append/prepend/before/after/replaceWith), insertAdjacentHTML, elementni o'chirish, nusxalash (cloneNode), eski usullar va DocumentFragment.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details open>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a class="active" href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Hujjat (DOM)</div>
+<h1>Hujjatni o'zgartirish</h1>
+<p class="lead">DOM'ni o'zgartirish — bu "jonli" sahifalar yaratishning kalitidir. Ushbu darsda biz sahifaga yangi elementlarni qanday yaratish va joylashtirishni, mavjudlarini o'chirish yoki almashtirishni chuqur o'rganamiz. Barcha zamonaviy va eski usullarni birma-bir ko'rib chiqamiz.</p>
+<div class="note">DOM bilan bog'liq kod faqat haqiqiy brauzerda ishlaydi. Ushbu kursning interaktiv maydonchasi Node.js muhitida ishlaganligi sababli bu bobdagi barcha misollar <strong>statik</strong> — ularni brauzeringizda o'zingiz sinab ko'rishingiz mumkin. Har bir misolni tushunish uchun kod bilan birga izohlarni diqqat bilan o'qing.</div>
+<h2>Misol uchun HTML</h2>
+<p>Ushbu darsdagi ko'p misollar quyidagi oddiy HTML tuzilmasi bilan ishlaydi — bu bizga xabar ("ziravor", ya'ni yordamchi eslatma) ko'rsatuvchi element yaratish vazifasini bajaradi:</p>
+<pre class="code"><code>&lt;style&gt;
+  .alert {
+    padding: 15px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+  }
+&lt;/style&gt;
+
+&lt;div id="div"&gt;
+  &lt;p&gt;Bu sahifada muhim xabar ko'rsatiladi.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+<h2>Element yaratish: createElement va createTextNode</h2>
+<p>Yangi DOM tugunlarini (node) yaratish uchun ikkita asosiy usul mavjud.</p>
+<h3>document.createElement(tag)</h3>
+<p>Berilgan teg bilan yangi <strong>element tugunini</strong> (element node) yaratadi:</p>
+<pre class="code"><code>let div = document.createElement('div');</code></pre>
+<h3>document.createTextNode(text)</h3>
+<p>Berilgan matn bilan yangi <strong>matn tugunini</strong> (text node) yaratadi:</p>
+<pre class="code"><code>let textNode = document.createTextNode('Bu yerda matn.');</code></pre>
+<p>Ko'pincha element yaratib, unga to'g'ridan-to'g'ri HTML yoki matn kiritish qulayroq bo'ladi. Masalan, xabar elementini quyidagicha tayyorlaymiz:</p>
+<pre class="code"><code>let div = document.createElement('div');
+div.className = 'alert';
+div.innerHTML = "&lt;strong&gt;Salom!&lt;/strong&gt; Siz muhim xabarni o'qidingiz.";</code></pre>
+<p>Biz element yaratdik, unga <code>alert</code> klassini berdik va <code>innerHTML</code> orqali ichki HTML'ini to'ldirdik. Ammo bu element hozircha faqat <code>div</code> o'zgaruvchisida turibdi — u hali sahifada emas. Uni sahifaga qo'shishimiz kerak.</p>
+<div class="note">Element yaratish va uni hujjatga qo'shish — bu ikki alohida bosqich. Yaratilgan element sahifada ko'rinishi uchun uni DOM daraxtiga joylashtirish shart.</div>
+<h2>Kiritish usullari: append, prepend, before, after, replaceWith</h2>
+<p>Yaratilgan elementni sahifaga qo'shish uchun zamonaviy usullardan foydalanamiz. Aytaylik, <code>ol</code> ro'yxatimiz bor:</p>
+<pre class="code"><code>&lt;ol id="ol"&gt;
+  &lt;li&gt;0&lt;/li&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+<p>Quyidagi usullar keng qamrovga ega bo'lib, bir vaqtning o'zida bir nechta tugunlarni yoki matn qatorlarini qo'sha oladi:</p>
+<ul><li><code>node.append(...bolalar)</code> — <code>node</code>ning <strong>oxiriga</strong> (ichiga) qo'shadi;</li><li><code>node.prepend(...bolalar)</code> — <code>node</code>ning <strong>boshiga</strong> (ichiga) qo'shadi;</li><li><code>node.before(...bolalar)</code> — <code>node</code>dan <strong>oldin</strong> qo'shadi;</li><li><code>node.after(...bolalar)</code> — <code>node</code>dan <strong>keyin</strong> qo'shadi;</li><li><code>node.replaceWith(...bolalar)</code> — <code>node</code>ni yangilar bilan <strong>almashtiradi</strong>.</li></ul>
+<p>Quyidagi misol bu usullarning barchasini bir joyda ko'rsatadi:</p>
+<pre class="code"><code>let ol = document.getElementById('ol');
+
+ol.before('before');   // ol dan oldin 'before' matnini qo'yadi
+ol.after('after');     // ol dan keyin 'after' matnini qo'yadi
+
+let liFirst = document.createElement('li');
+liFirst.innerHTML = 'prepend';
+ol.prepend(liFirst);   // ol boshiga liFirst qo'yadi
+
+let liLast = document.createElement('li');
+liLast.innerHTML = 'append';
+ol.append(liLast);     // ol oxiriga liLast qo'yadi</code></pre>
+<p>Natijada sahifa quyidagi tuzilmaga ega bo'ladi:</p>
+<pre class="code"><code>before
+&lt;ol id="ol"&gt;
+  &lt;li&gt;prepend&lt;/li&gt;
+  &lt;li&gt;0&lt;/li&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+  &lt;li&gt;append&lt;/li&gt;
+&lt;/ol&gt;
+after</code></pre>
+<p>Bu usullar bir vaqtning o'zida ixtiyoriy sonli tugun va matn qatorlarini qabul qila oladi. Masalan, matn qatori va element birgalikda:</p>
+<pre class="code"><code>let div = document.createElement('div');
+let p = document.createElement('p');
+
+div.append(p, 'salom', document.createElement('hr'));
+// div ichiga: &lt;p&gt;, 'salom' matni va &lt;hr&gt; qo'shildi</code></pre>
+<div class="tip">E'tibor bering: matn qatorlari <strong>matn sifatida</strong> (xavfsiz) kiritiladi, ya'ni <code>&lt;</code> va <code>&gt;</code> belgilar HTML sifatida talqin qilinmaydi, balki ekranga <code>&amp;lt;</code>, <code>&amp;gt;</code> kabi eskeyplangan holda chiqadi. Bu XSS hujumlaridan himoya qiladi.</div>
+<h2>insertAdjacentHTML / Text / Element</h2>
+<p>Yuqoridagi usullar tugun va matnlarni kiritadi, ammo HTML qatorini <strong>xom holda</strong> (teglar bilan) kiritish uchun <code>insertAdjacentHTML</code> ishlatiladi.</p>
+<pre class="code"><code>let div = document.getElementById('div');
+
+div.insertAdjacentHTML('beforebegin', '&lt;p&gt;Salom&lt;/p&gt;');
+div.insertAdjacentHTML('afterend', '&lt;p&gt;Xayr&lt;/p&gt;');</code></pre>
+<p>Birinchi argument — joylashuv (position) qatori bo'lib, quyidagi to'rt qiymatdan biri bo'lishi mumkin:</p>
+<ul><li><code>'beforebegin'</code> — <code>elem</code>dan bevosita <strong>oldin</strong>;</li><li><code>'afterbegin'</code> — <code>elem</code> ichida, <strong>eng boshiga</strong>;</li><li><code>'beforeend'</code> — <code>elem</code> ichida, <strong>eng oxiriga</strong>;</li><li><code>'afterend'</code> — <code>elem</code>dan bevosita <strong>keyin</strong>.</li></ul>
+<p>Ikkinchi argument — kiritiladigan HTML qatori bo'lib, u aynan HTML sifatida talqin qilinadi.</p>
+<p>Metodning ikkita "birodari" ham mavjud:</p>
+<ul><li><code>elem.insertAdjacentText(position, text)</code> — sintaksisi bir xil, lekin argument <strong>matn</strong> bo'lib, xavfsiz (eskeyplab) kiritiladi;</li><li><code>elem.insertAdjacentElement(position, elem)</code> — sintaksisi bir xil, lekin <strong>element tuguni</strong>ni kiritadi.</li></ul>
+<p>Amaliyotda esa deyarli har doim <code>insertAdjacentHTML</code> ishlatiladi. Elementlar va matn uchun yuqorida ko'rilgan <code>append/prepend/before/after</code> qulayroq va o'qilishi osonroq.</p>
+<div class="note"><code>insertAdjacentHTML</code> mavjud elementlarni qayta yaratmaydi — u yangi HTML'ni parslash orqali kiritadi. Bu <code>innerHTML +=</code> dan afzalroq, chunki <code>innerHTML +=</code> butun ichki tarkibni o'chirib qayta yaratadi (obyekt havolalari va hodisalar yo'qoladi).</div>
+<h2>Tugunlarni o'chirish: remove</h2>
+<p>Tugunni o'chirish uchun eng oddiy zamonaviy usul <code>node.remove()</code>:</p>
+<pre class="code"><code>let div = document.getElementById('div');
+div.remove(); // div sahifadan olib tashlanadi</code></pre>
+<p>E'tibor bering — agar elementni <strong>boshqa joyga ko'chirmoqchi</strong> bo'lsak, avval uni o'chirishning hojati yo'q. Kiritish usullari (append, before va h.k.) elementni avtomatik ravishda eski o'rnidan olib, yangi o'ringa qo'yadi:</p>
+<pre class="code"><code>let first = document.getElementById('first');
+let second = document.getElementById('second');
+
+// second ni first dan keyinga ko'chiradi:
+// (avval o'chirish shart emas — u eski o'rnidan avtomatik olinadi)
+first.after(second);</code></pre>
+<p>Bir xil tugun ikki joyda bir vaqtda tura olmaydi, shuning uchun u har doim eski o'rnidan olib ko'chiriladi.</p>
+<h2>Nusxalash: cloneNode</h2>
+<p>Bir xil elementdan yana bir nechtasini yaratmoqchi bo'lsak, uni qo'lda qayta yasash o'rniga <strong>nusxalash</strong> qulayroq.</p>
+<ul><li><code>elem.cloneNode(true)</code> — elementning <strong>"chuqur"</strong> nusxasini yaratadi: barcha atributlari va barcha ichki bolalari bilan birga;</li><li><code>elem.cloneNode(false)</code> — <strong>"sayoz"</strong> nusxa: element o'zi, atributlari bilan, lekin bolalarsiz.</li></ul>
+<pre class="code"><code>let div = document.getElementById('div');
+
+let div2 = div.cloneNode(true); // chuqur nusxa
+div2.querySelector('strong').innerHTML = 'Salom yana!'; // nusxani o'zgartiramiz
+
+div.after(div2); // nusxani asl div'dan keyin ko'rsatamiz</code></pre>
+<div class="note">Chuqur nusxa (<code>true</code>) — bir xil ko'rinishdagi elementlarni tez ko'paytirish uchun juda foydali. Masalan, jadval qatorini bir marta yaratib, uni ko'p marta nusxalab qo'shish mumkin.</div>
+<h2>Eski maktab usullari</h2>
+<p>Tarixiy sabablarga ko'ra DOM'ni o'zgartirishning eski usullari ham mavjud. Ular hozir ham ishlaydi va eski kodlarda tez-tez uchraydi, shuning uchun ularni bilish muhim.</p>
+<ul><li><code>parent.appendChild(node)</code> — <code>node</code>ni <code>parent</code>ning oxirgi bolasi qilib qo'shadi;</li><li><code>parent.insertBefore(node, nextSibling)</code> — <code>node</code>ni <code>parent</code> ichiga, <code>nextSibling</code>dan oldin qo'shadi;</li><li><code>parent.replaceChild(newElem, oldElem)</code> — <code>oldElem</code>ni <code>newElem</code>ga almashtiradi;</li><li><code>parent.removeChild(node)</code> — <code>node</code>ni <code>parent</code>dan o'chiradi (<code>node</code> <code>parent</code>ning bolasi bo'lishi kerak).</li></ul>
+<p>Masalan, yangi <code>li</code>ni ro'yxat oxiriga qo'shish:</p>
+<pre class="code"><code>let ol = document.getElementById('ol');
+
+let newLi = document.createElement('li');
+newLi.innerHTML = 'Salom, dunyo!';
+
+ol.appendChild(newLi); // eski usul
+// zamonaviy ekvivalenti: ol.append(newLi);</code></pre>
+<p><code>insertBefore</code> yordamida ro'yxatning boshiga qo'shish:</p>
+<pre class="code"><code>let ol = document.getElementById('ol');
+let newLi = document.createElement('li');
+newLi.innerHTML = 'Birinchi!';
+
+ol.insertBefore(newLi, ol.firstChild); // eski usul
+// zamonaviy ekvivalenti: ol.prepend(newLi);</code></pre>
+<p>Elementni o'chirish:</p>
+<pre class="code"><code>let div = document.getElementById('div');
+div.parentNode.removeChild(div); // eski usul
+// zamonaviy ekvivalenti: div.remove();</code></pre>
+<div class="warn">Eski usullar biroz noqulay: masalan, <code>removeChild</code> uchun ota-elementga (<code>parentNode</code>) murojaat qilish kerak, garchi biz allaqachon o'chiriladigan elementni bilsak ham. Zamonaviy usullar (<code>remove</code>, <code>append</code> va h.k.) qisqaroq va tushunarliroq. Yangi kodda ularni ishlatishga harakat qiling.</div>
+<h2>DocumentFragment</h2>
+<p><code>DocumentFragment</code> — bu tugunlar ro'yxatini o'z ichiga oluvchi maxsus DOM tugunidir. Uni tugunlar guruhi uchun "idish" (o'rovchi) deb tasavvur qilish mumkin. Uni biror joyga kiritganimizda, uning <strong>o'zi emas</strong>, balki ichidagi <strong>bolalari</strong> kiritiladi.</p>
+<pre class="code"><code>function getListContent() {
+  let fragment = new DocumentFragment();
+
+  for (let i = 1; i &lt;= 3; i++) {
+    let li = document.createElement('li');
+    li.append(i);
+    fragment.append(li);
+  }
+
+  return fragment;
+}
+
+let ul = document.getElementById('ul');
+ul.append(getListContent()); // (*) fragmentning bolalari qo'shiladi</code></pre>
+<p><code>(*)</code> qatorida biz fragmentni qo'shdik, lekin u "eriydi" — natijada <code>ul</code> ichida shunday tuzilma hosil bo'ladi:</p>
+<pre class="code"><code>&lt;ul id="ul"&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+  &lt;li&gt;3&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<div class="note"><code>DocumentFragment</code> kamdan-kam ishlatiladi, chunki uning o'rniga oddiy massiv ham qaytarish mumkin: <code>ul.append(...arrayOfLi)</code>. Biroq fragment ma'lum stsenariylarda, ayniqsa ko'p elementlarni bir marta qo'shishda unumdorlik uchun foydali bo'lishi mumkin.</div>
+<h2>Xulosa</h2>
+<p>Tugunlar yaratish usullari:</p>
+<ul><li><code>document.createElement(tag)</code> — teg bilan element tuguni;</li><li><code>document.createTextNode(text)</code> — matn tuguni;</li><li><code>elem.cloneNode(deep)</code> — elementni nusxalash (<code>deep=true</code> — bolalari bilan).</li></ul>
+<p>Kiritish va o'chirish (zamonaviy):</p>
+<ul><li><code>append</code>, <code>prepend</code>, <code>before</code>, <code>after</code>, <code>replaceWith</code> — tugun va matnlarni kiritish/almashtirish;</li><li><code>remove</code> — tugunni o'chirish;</li><li><code>insertAdjacentHTML/Text/Element</code> — HTML qatori yoki tugunni ma'lum joyga kiritish.</li></ul>
+<p>Eski usullar: <code>appendChild</code>, <code>insertBefore</code>, <code>replaceChild</code>, <code>removeChild</code> — ular hamon ishlaydi, ammo zamonaviy usullar afzalroq. <code>DocumentFragment</code> esa tugunlar guruhini birgalikda kiritish uchun maxsus "o'rovchi" vazifasini bajaradi.</p>
+<nav class="lesson-nav">
+  <a href="weakref.html"><span class="dir">← Oldingi</span><span class="ttl">WeakRef va FinalizationRegistry</span></a>
+  <a class="next" href="style-class.html"><span class="dir">Keyingi →</span><span class="ttl">Uslublar va klasslar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

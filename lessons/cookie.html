@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="document.cookie orqali cookie'larni o'qish va yozish, path/domain/expires/max-age, secure va samesite bayroqlari, httpOnly, cheklovlar va yordamchi funksiyalar.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a class="active" href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Brauzerda ma'lumot saqlash</div>
+<h1>Cookie</h1>
+<p class="lead">Cookie'lar — brauzer tomonidan saqlanadigan kichik matnli ma'lumot bo'laklaridir. Ular HTTP protokolining bir qismi bo'lib, aksar hollarda foydalanuvchini <em>tanib olish</em> (autentifikatsiya) uchun ishlatiladi. Cookie odatda server tomonidan <code>Set-Cookie</code> sarlavhasi orqali o'rnatiladi, keyin brauzer har bir so'rovda ularni <code>Cookie</code> sarlavhasida serverga qaytaradi.</p>
+<h2>Cookie nima va qanday ishlaydi</h2>
+<p>Cookie <code> nom=qiymat</code> ko'rinishidagi juftlik bo'lib, brauzerda saqlanadi. U ma'lum bir domenga bog'langan holda saqlanadi va o'sha domenga yuborilgan har bir HTTP so'rovda avtomatik ravishda serverga qaytariladi. Aynan shu avtomatik qaytish xususiyati cookie'ni sessiyalarni saqlash uchun qulay qiladi.</p>
+<p>Odatiy senariy quyidagicha: foydalanuvchi tizimga kiradi, server autentifikatsiya sessiya identifikatorini <code>Set-Cookie</code> sarlavhasi bilan o'rnatadi, keyin brauzer har bir so'rovda o'sha sessiya cookie'sini yuboradi va server foydalanuvchini tanib oladi.</p>
+<div class="note">Cookie'lar <strong>brauzerga xos</strong> mexanizmdir. Ularni faqat brauzer muhitida ishlaydigan JavaScript koddan o'qish/yozish mumkin. Node.js yoki playground muhitida <code>document</code> obyekti bo'lmaydi, shu sabab quyidagi misollarni faqat brauzer konsolida sinab ko'ring.</div>
+<h2>document.cookie orqali o'qish</h2>
+<p>Brauzer JavaScript koddan cookie'ga <code>document.cookie</code> xususiyati orqali kirish mumkin. Uni o'qishimiz barcha cookie'larni bitta satr ko'rinishida beradi, bunda juftliklar <code>; </code> (nuqta-vergul va probel) bilan ajratiladi:</p>
+<pre class="code"><code>// Brauzerda:
+let all = document.cookie;
+console.log(all);
+// masalan: "user=Ali; theme=dark; sessionId=abc123"</code></pre>
+<p>Ko'rib turganingizdek, <code>document.cookie</code> — bu oddiy obyekt emas, balki maxsus formatdagi satr. Bitta cookie qiymatini olish uchun satrni ajratib olishimiz kerak. Quyida ma'lum nom bo'yicha qiymatni topuvchi funksiya:</p>
+<pre class="code"><code>function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    '(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\/+^])/g, '\\$1') + '=([^;]*)'
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+// ishlatish:
+let user = getCookie('user');
+console.log(user); // "Ali" (agar mavjud bo'lsa)</code></pre>
+<div class="note">Cookie nomi va qiymatida maxsus belgilar (probel, <code>;</code>, kirill harflar va h.k.) bo'lishi mumkin emas. Shu sabab qiymatni yozishda <code>encodeURIComponent</code>, o'qishda esa <code>decodeURIComponent</code> ishlatiladi.</div>
+<h2>document.cookie orqali yozish</h2>
+<p><code>document.cookie</code>ga yozish alohida xususiyatga ega: u <em>o'zgartiruvchi</em> (writable) bo'lsa-da, unga qiymat berish barcha cookie'larni <strong>almashtirmaydi</strong>, balki faqat siz ko'rsatgan bitta cookie'ni o'rnatadi yoki yangilaydi:</p>
+<pre class="code"><code>// Brauzerda:
+document.cookie = 'user=Ali';
+// endi document.cookie ichida user=Ali paydo bo'ladi,
+// boshqa cookie'lar o'chib ketmaydi</code></pre>
+<p>Qiymatda maxsus belgilar bo'lsa, uni kodlash shart:</p>
+<pre class="code"><code>let name = 'user';
+let value = 'Ali Valiyev'; // probel bor
+document.cookie = name + '=' + encodeURIComponent(value);</code></pre>
+<div class="warn"><code>document.cookie = ...</code> texnik jihatdan xususiyat bo'lsa ham, u <em>maxsus aksessor</em> (accessor) sifatida ishlaydi. Har bir yozish faqat bitta cookie'ni ta'sirlaydi — bu odatiy obyekt xususiyatidan farqli xatti-harakat. Butun ro'yxatni bir marta yozib bo'lmaydi.</div>
+<h2>path — cookie'ning yo'l ko'lami</h2>
+<p><code>path=/...</code> parametri cookie ko'rinadigan URL yo'lini belgilaydi. Cookie faqat shu yo'l va uning ostki yo'llari uchun brauzerdan serverga yuboriladi:</p>
+<pre class="code"><code>document.cookie = 'user=Ali; path=/admin';
+// bu cookie faqat /admin, /admin/panel kabi
+// yo'llarda serverga yuboriladi, /shop'da yuborilmaydi</code></pre>
+<p>Odatda <code>path=/</code> ishlatiladi — bu cookie'ni butun sayt bo'ylab ko'rinadigan qiladi. Agar <code>path</code> ko'rsatilmasa, u joriy sahifaning yo'liga sozlanadi, bu ko'pincha kutilmagan cheklovlarga olib keladi.</p>
+<div class="tip">Deyarli har doim <code>path=/</code> qo'ying — shunda cookie saytning barcha sahifalarida ishlaydi.</div>
+<h2>domain — cookie qaysi domenda ko'rinadi</h2>
+<p><code>domain</code> parametri cookie qaysi domenda serverga yuborilishini belgilaydi. Standart holatda cookie faqat o'zi o'rnatilgan aniq domenda ko'rinadi va <strong>subdomen'larda ko'rinmaydi</strong>:</p>
+<pre class="code"><code>// site.com'da o'rnatilgan cookie standart holatda
+// forum.site.com'da KO'RINMAYDI
+document.cookie = 'user=Ali';</code></pre>
+<p>Subdomen'larga ham cookie'ni ulashish uchun asosiy domenni ko'rsatamiz:</p>
+<pre class="code"><code>// site.com'da:
+document.cookie = 'user=Ali; domain=site.com';
+// endi cookie forum.site.com, shop.site.com'da ham ko'rinadi</code></pre>
+<div class="warn">Xavfsizlik sababli cookie'ni <strong>begona domenga</strong> berib bo'lmaydi. Faqat joriy domen yoki uning yuqori (asosiy) domenini ko'rsatishingiz mumkin. Masalan <code>other.com</code>ni <code>site.com</code>dan o'rnatolmaysiz.</div>
+<h2>expires va max-age — amal qilish muddati</h2>
+<p>Standart holatda cookie <em>sessiya cookie'si</em> bo'ladi — brauzer yopilganda o'chib ketadi. Cookie'ni uzoqroq saqlash uchun <code>expires</code> yoki <code>max-age</code> ishlatiladi.</p>
+<h3>expires — aniq sana</h3>
+<p><code>expires</code> cookie tugash sanasini GMT formatida (<code>toUTCString()</code>) belgilaydi:</p>
+<pre class="code"><code>let date = new Date(Date.now() + 86400e3); // +1 kun
+date = date.toUTCString();
+document.cookie = 'user=Ali; expires=' + date + '; path=/';</code></pre>
+<p>O'tmishdagi sanani berish cookie'ni <strong>o'chiradi</strong>:</p>
+<pre class="code"><code>// cookie'ni o'chirish:
+document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';</code></pre>
+<h3>max-age — soniyalardagi muddat</h3>
+<p><code>max-age</code> — hozirgi vaqtdan boshlab soniyalarda ifodalangan muddat. U <code>expires</code>ga qulay muqobil:</p>
+<pre class="code"><code>// 1 soatga:
+document.cookie = 'user=Ali; max-age=3600; path=/';
+
+// darhol o'chirish (0 yoki manfiy qiymat):
+document.cookie = 'user=Ali; max-age=0; path=/';</code></pre>
+<div class="note"><code>max-age=0</code> yoki manfiy qiymat cookie'ni zudlik bilan o'chiradi. Cookie'ni o'chirishning eng ishonchli yo'li — uni bo'sh qiymat va o'tgan muddat bilan qayta o'rnatish, bunda <code>path</code> va <code>domain</code> asl o'rnatishdagidek bo'lishi kerak.</div>
+<h2>secure va samesite — xavfsizlik bayroqlari</h2>
+<p><code>secure</code> bayrog'i cookie'ni faqat HTTPS ulanishida yuborishga majbur qiladi. Bu cookie'ning shifrlanmagan HTTP orqali oshkor bo'lishining oldini oladi:</p>
+<pre class="code"><code>// faqat HTTPS orqali yuboriladi:
+document.cookie = 'user=Ali; secure; path=/';</code></pre>
+<p><code>samesite</code> bayrog'i — CSRF (cross-site request forgery) hujumlaridan himoya qiluvchi muhim mexanizm. U cookie'ning boshqa saytdan kelgan so'rovlarda yuborilishini boshqaradi:</p>
+<ul><li><code>samesite=strict</code> — cookie boshqa saytdan kelgan har qanday so'rovda umuman yuborilmaydi. Hatto foydalanuvchi tashqi havoladan saytga kirsa ham, birinchi so'rovda cookie ketmaydi;</li><li><code>samesite=lax</code> — muvozanatli rejim (aksar brauzerlarda standart). Cookie xavfsiz, yuqori darajali navigatsiya so'rovlarida (masalan havolaga bosishda, GET metodida) yuboriladi, ammo tashqi saytdagi POST forma yoki rasm/iframe kabi ichki so'rovlarda yuborilmaydi;</li><li><code>samesite=none</code> — cookie barcha holatlarda yuboriladi. Bu qiymat faqat <code>secure</code> bilan birga ishlaydi.</li></ul>
+<pre class="code"><code>document.cookie = 'sessionId=abc123; samesite=strict; secure; path=/';</code></pre>
+<div class="tip">Autentifikatsiya cookie'lari uchun <code>samesite=lax</code> yoki <code>strict</code> va <code>secure</code>ni birga qo'llash tavsiya etiladi — bu CSRF hujumlaridan jiddiy himoya beradi.</div>
+<h2>httpOnly — faqat serverdan</h2>
+<p><code>httpOnly</code> bayrog'i — bu <strong>JavaScript orqali emas, faqat server tomonidan</strong> <code>Set-Cookie</code> sarlavhasida o'rnatiladigan xususiyat. U cookie'ga JavaScript koddan (<code>document.cookie</code> orqali) kirishni butunlay taqiqlaydi:</p>
+<pre class="code"><code>// Bu server sarlavhasi (JavaScript emas!):
+// Set-Cookie: sessionId=abc123; HttpOnly; Secure; SameSite=Strict
+
+// Brauzerda:
+console.log(document.cookie);
+// httpOnly cookie bu yerda KO'RINMAYDI</code></pre>
+<div class="warn"><code>httpOnly</code> XSS (cross-site scripting) hujumlariga qarshi muhim himoya. Agar sahifaga zararli skript kirsa ham, u <code>httpOnly</code> cookie'ni o'g'irlay olmaydi, chunki JavaScript uni umuman o'qiy olmaydi. Sessiya token'larini doim <code>httpOnly</code> qilish tavsiya etiladi.</div>
+<h2>Cookie cheklovlari</h2>
+<p>Cookie'lar hajm va son jihatidan qattiq cheklangan:</p>
+<ul><li>Bitta cookie'ning <code>nom=qiymat</code> juftligi taxminan <strong>4 KB</strong>dan oshmasligi kerak;</li><li>Bitta domen uchun cookie'lar soni cheklangan (brauzerga qarab ~20-50 ta atrofida);</li><li>Cookie har bir HTTP so'rovda serverga yuboriladi — ko'p yoki katta cookie'lar tarmoq trafigini oshiradi;</li><li>Cookie faqat matn saqlaydi — obyekt saqlash uchun uni <code>JSON.stringify</code> bilan satrsizlantirish kerak.</li></ul>
+<div class="note">Katta hajmdagi ma'lumotni saqlash uchun cookie mos emas — buning uchun <code>localStorage</code> yoki <code>IndexedDB</code> ancha qulay. Cookie'ning asosiy vazifasi — <em>autentifikatsiya</em>, ya'ni foydalanuvchini serverda tanib olish.</div>
+<h2>To'liq yordamchi funksiyalar</h2>
+<p>Amalda cookie bilan ishlashni osonlashtirish uchun uchta funksiya to'plami odatda yetarli: o'qish, yozish (parametrlar bilan) va o'chirish.</p>
+<pre class="code"><code>// O'qish
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    '(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\/+^])/g, '\\$1') + '=([^;]*)'
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+// Yozish (options bilan)
+function setCookie(name, value, options = {}) {
+  options = {
+    path: '/',
+    ...options
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updated = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+  for (let key in options) {
+    updated += '; ' + key;
+    let val = options[key];
+    if (val !== true) {
+      updated += '=' + val;
+    }
+  }
+
+  document.cookie = updated;
+}
+
+// O'chirish
+function deleteCookie(name) {
+  setCookie(name, '', { 'max-age': -1 });
+}</code></pre>
+<pre class="code"><code>// ishlatish:
+setCookie('user', 'Ali', { 'max-age': 3600, samesite: 'strict' });
+console.log(getCookie('user')); // "Ali"
+deleteCookie('user');</code></pre>
+<div class="tip">Cookie'ni o'chirishda o'sha <code>path</code> va <code>domain</code>ni ko'rsatish muhim — aks holda brauzer boshqa cookie'ni nazarda tutayapti deb hisoblab, o'chirmasligi mumkin.</div>
+<h2>Xulosa</h2>
+<ul><li>Cookie — brauzerda saqlanadigan kichik matnli juftliklar bo'lib, har bir HTTP so'rovda avtomatik serverga yuboriladi;</li><li><code>document.cookie</code> orqali o'qiladi (satr) va yoziladi (bir vaqtda bitta cookie);</li><li><code>path</code> va <code>domain</code> cookie'ning ko'rinish ko'lamini belgilaydi;</li><li><code>expires</code> yoki <code>max-age</code> amal qilish muddatini beradi; bularsiz cookie sessiya bilan o'chadi;</li><li><code>secure</code>, <code>samesite</code> va <code>httpOnly</code> — xavfsizlik uchun kalit bayroqlar (<code>httpOnly</code> faqat serverdan);</li><li>Cookie hajmi ~4 KB, uning asosiy vazifasi — autentifikatsiya, katta ma'lumot uchun <code>localStorage</code> qulayroq.</li></ul>
+<nav class="lesson-nav">
+  <a href="file-filereader.html"><span class="dir">← Oldingi</span><span class="ttl">File va FileReader</span></a>
+  <a class="next" href="localstorage.html"><span class="dir">Keyingi →</span><span class="ttl">localStorage va sessionStorage</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

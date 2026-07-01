@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blob — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Blob obyekti — ikkilik katta obyektlar bilan ishlash: konstruktor, type (MIME turi), slice bilan bo'laklash, URL.createObjectURL orqali havola yaratish, fayl yuklab olish va rasmga aylantirish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a class="active" href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Ikkilik ma'lumot va fayllar</div>
+<h1>Blob</h1>
+<p class="lead"><code>Blob</code> (Binary Large Object — ikkilik katta obyekt) — brauzerdagi ikkilik ma'lumotni tasvirlash uchun mo'ljallangan obyekt. <code>ArrayBuffer</code>dan farqi shundaki, Blob nafaqat baytlarni, balki ularning <strong>turini</strong> (MIME type, masalan <code>image/png</code>) ham saqlaydi. Aynan shu tur Blobni fayl sifatida yuklab olish yoki rasm sifatida ko'rsatishga imkon beradi. Blob — brauzer obyekti, shuning uchun quyidagi misollar brauzer muhitiga oid.</p>
+<h2>Blob konstruktori</h2>
+<p>Blob ikkita argument bilan yaratiladi: bo'laklar (blobParts) massivi va sozlamalar obyekti:</p>
+<pre class="code"><code>let blob = new Blob(blobParts, options);</code></pre>
+<ul><li><code>blobParts</code> — massiv bo'lib, uning elementlari <code>String</code>, <code>ArrayBuffer</code>, <code>TypedArray</code>, <code>DataView</code> yoki boshqa <code>Blob</code> bo'lishi mumkin — barchasi ketma-ket birlashtiriladi;</li><li><code>options</code> — ixtiyoriy obyekt; asosiy xususiyati <code>type</code> — Blob ma'lumotining MIME turi (masalan <code>text/plain</code>, <code>image/png</code>).</li></ul>
+<p>Matndan Blob yaratamiz:</p>
+<pre class="code"><code>// matnli bo'laklardan Blob yasaymiz
+let blob = new Blob(["Salom, ", "dunyo!"], { type: "text/plain" });
+
+console.log(blob.size); // 13  (baytlar soni)
+console.log(blob.type); // text/plain</code></pre>
+<p><code>size</code> — Blobdagi baytlar soni, <code>type</code> — uning MIME turi. E'tibor bering: bo'laklar avtomatik birlashtiriladi, xuddi bitta uzluksiz ma'lumotdek.</p>
+<div class="note">Blob <strong>o'zgarmas</strong> (immutable) obyekt. Uning ichidagi ma'lumotni to'g'ridan-to'g'ri o'zgartira olmaysiz — indeks orqali bayt yozish mumkin emas. Lekin Blobni <em>bo'laklab</em> undan yangi Blob yasash mumkin (<code>slice</code>).</div>
+<h2>ArrayBufferdan Blob</h2>
+<p>Blobni faqat matndan emas, ikkilik ma'lumotdan ham yasash mumkin. Masalan, TypedArray yordamida:</p>
+<pre class="code"><code>// ikkilik baytlardan Blob
+let bytes = new Uint8Array([72, 101, 108, 108, 111]); // Hello
+let blob = new Blob([bytes], { type: "application/octet-stream" });
+
+console.log(blob.size); // 5</code></pre>
+<p>Bu usul rasm, audio yoki boshqa ikkilik ma'lumotni fayl formatida qadoqlashda ishlatiladi.</p>
+<h2>slice bilan bo'laklash</h2>
+<p><code>blob.slice(start, end, contentType)</code> — Blobning bir qismidan yangi Blob qaytaradi. Xuddi massiv <code>slice</code>iga o'xshaydi:</p>
+<ul><li><code>start</code> — boshlang'ich bayt indeksi (standarti 0);</li><li><code>end</code> — tugash bayti (kirmaydi, standarti oxirigacha);</li><li><code>contentType</code> — yangi Blobning MIME turi (standarti bo'sh).</li></ul>
+<pre class="code"><code>let blob = new Blob(["Hello world"], { type: "text/plain" });
+
+let qism = blob.slice(0, 5); // dastlabki 5 bayt
+console.log(qism.size);      // 5
+// qism ichida "Hello" saqlanadi</code></pre>
+<div class="tip"><code>slice</code> katta fayllarni <strong>bo'laklab yuklashda</strong> (chunked upload) juda qo'l keladi. Katta faylni bir necha Blob bo'lakka bo'lib, har birini alohida serverga jo'natish mumkin.</div>
+<h2>URL.createObjectURL: Blobga havola</h2>
+<p>Blobni brauzerda ko'rsatish yoki yuklab olish uchun unga <em>URL</em> kerak. <code>URL.createObjectURL(blob)</code> Blobga ishoruvchi maxsus qisqa havola yaratadi (<code>blob:</code> bilan boshlanadi):</p>
+<pre class="code"><code>let blob = new Blob(["Fayl mazmuni"], { type: "text/plain" });
+
+let url = URL.createObjectURL(blob);
+console.log(url);
+// blob:https://example.com/1e8b4a2c-...
+
+// bu URLni &lt;a href&gt; yoki &lt;img src&gt;da ishlatish mumkin</code></pre>
+<div class="warn">Har bir <code>URL.createObjectURL</code> chaqiruvi brauzer xotirasida Blobga <strong>ishora</strong> saqlaydi. Blob bu ishora tirik ekan, xotiradan tozalanmaydi — bu <em>xotira sizishi</em>ga (memory leak) olib keladi. Ishlatib bo'lgach, albatta <code>URL.revokeObjectURL(url)</code> chaqiring.</div>
+<pre class="code"><code>let url = URL.createObjectURL(blob);
+
+// ... url ishlatildi ...
+
+URL.revokeObjectURL(url); // xotirani bo'shatamiz</code></pre>
+<h2>Faylni yuklab olish</h2>
+<p>Blob va object URL yordamida foydalanuvchiga faylni yuklab olishni taklif qilish mumkin. Buning uchun <code>&lt;a&gt;</code> elementiga <code>download</code> atributini qo'yamiz va uni dasturiy bosamiz:</p>
+<pre class="code"><code>function faylniYuklab(matn, faylNomi) {
+  let blob = new Blob([matn], { type: "text/plain" });
+  let url = URL.createObjectURL(blob);
+
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = faylNomi; // yuklab olinadigan fayl nomi
+
+  document.body.appendChild(a);
+  a.click();               // dasturiy bosamiz
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url); // tozalaymiz
+}
+
+faylniYuklab("Salom, dunyo!", "salom.txt");</code></pre>
+<div class="note"><code>download</code> atributi mavjud bo'lsa, brauzer havolani ochish o'rniga faylni yuklab oladi. Atribut qiymati — taklif qilinadigan fayl nomi. Bu usul serverga murojaat qilmasdan, mijoz tomonda fayl yaratishning eng oddiy yo'li.</div>
+<h2>Blobni rasmga aylantirish</h2>
+<p>Blobning katta ustunligi — undan bevosita rasm ko'rsatish mumkin. Object URLni <code>&lt;img&gt;</code>ga bersangiz kifoya:</p>
+<pre class="code"><code>// masalan, fetch orqali kelgan rasm Blob'i
+let response = await fetch("rasm.png");
+let blob = await response.blob();
+
+let img = document.createElement("img");
+img.src = URL.createObjectURL(blob);
+document.body.appendChild(img);
+
+// rasm yuklangach URLni tozalash
+img.onload = () =&gt; URL.revokeObjectURL(img.src);</code></pre>
+<p>Teskari yo'nalish ham mumkin: <code>&lt;canvas&gt;</code> tarkibini <code>canvas.toBlob(callback, type)</code> orqali Blobga aylantirib, so'ng yuklab olish yoki serverga jo'natish mumkin:</p>
+<pre class="code"><code>canvas.toBlob(function(blob) {
+  let url = URL.createObjectURL(blob);
+
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = "rasm.png";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}, "image/png");</code></pre>
+<div class="tip"><code>canvas.toBlob</code> asinxron (callback bilan), <code>canvas.toDataURL</code> esa sinxron va base64 satr qaytaradi. Katta rasmlar uchun <code>toBlob</code> tejamkorroq, chunki base64 ma'lumotni ~33% ga kattalashtiradi.</div>
+<h2>Blob va ArrayBuffer o'zaro</h2>
+<p>Blob va past darajali <code>ArrayBuffer</code> o'rtasida oson o'tish mumkin. Blobdan baytlarni olish uchun uning metodlari ishlatiladi:</p>
+<ul><li><code>await blob.arrayBuffer()</code> — Blob mazmunini <code>ArrayBuffer</code> ko'rinishida qaytaradi;</li><li><code>await blob.text()</code> — Blob mazmunini matn (UTF-8) sifatida qaytaradi;</li><li><code>blob.stream()</code> — Blobni o'qish oqimi (ReadableStream) sifatida beradi.</li></ul>
+<pre class="code"><code>let blob = new Blob(["Hello"], { type: "text/plain" });
+
+let buffer = await blob.arrayBuffer();
+let bytes = new Uint8Array(buffer);
+console.log(bytes[0]); // 72 (H)
+
+let matn = await blob.text();
+console.log(matn); // Hello</code></pre>
+<h2>Xulosa</h2>
+<ul><li><code>Blob</code> — ikkilik ma'lumot + MIME turini saqlovchi brauzer obyekti;</li><li><code>new Blob(parts, {type})</code> — satr, ArrayBuffer, TypedArray yoki boshqa Bloblardan yasaladi;</li><li><code>blob.size</code> va <code>blob.type</code> — asosiy xususiyatlar; Blob o'zgarmas;</li><li><code>blob.slice(...)</code> — bo'laklash (masalan chunked upload uchun);</li><li><code>URL.createObjectURL(blob)</code> — Blobga <code>blob:</code> havola; <code>revokeObjectURL</code> bilan tozalash <strong>shart</strong>;</li><li><code>download</code> atributi bilan fayl yuklab olish, <code>&lt;img&gt;</code>ga URL berib rasm ko'rsatish mumkin;</li><li><code>blob.arrayBuffer()</code>, <code>blob.text()</code> — Blobdan past darajali ma'lumotga o'tish.</li></ul>
+<nav class="lesson-nav">
+  <a href="textdecoder.html"><span class="dir">← Oldingi</span><span class="ttl">TextDecoder va TextEncoder</span></a>
+  <a class="next" href="file-filereader.html"><span class="dir">Keyingi →</span><span class="ttl">File va FileReader</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

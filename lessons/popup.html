@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup oynalar va window metodlari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="window.open bilan yangi oyna ochish, popup bloklovchilar, oyna sozlamalari (width, height, left, top), ochilgan oynaga murojaat qilish, close, focus va blur metodlari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details open>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a class="active" href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Oynalar va freymlar</div>
+<h1>Popup oynalar va window metodlari</h1>
+<p class="lead">Popup oyna — bu asosiy sahifadan tashqarida ochiladigan yangi brauzer oynasi. Uni <code>window.open</code> metodi bilan ochiladi. Popup'lar internetning eng qadimgi imkoniyatlaridan biri bo'lib, ular ba'zan hozir ham foydali: masalan, autentifikatsiya (OAuth) oynalari, reklama yoki katta rasmni alohida oynada ko'rsatish uchun ishlatiladi. Ushbu darsda popup oynalarni ochish, sozlash va ular bilan ikki tomonlama ishlashni chuqur o'rganamiz.</p>
+<div class="warn">Brauzer/oyna API'lari (<code>window.open</code>, <code>window.close</code>, <code>focus</code>, <code>blur</code> va boshqalar) — bu <strong>brauzer</strong> muhitiga tegishli. Ushbu kurs sahifasidagi interaktiv maydonchada (playground) ular <strong>ishlamaydi</strong>. Shu sababli quyidagi barcha kod bloklari faqat <strong>statik misol</strong> sifatida keltiriladi — ularni haqiqiy brauzer sahifasida sinab ko'ring.</div>
+<h2>Popup'lar haqida qisqacha tarix</h2>
+<p>Popup oynalar hamma vaqt yaxshi tavsiyaga ega bo'lmagan. Ular ko'pincha zararli saytlar tomonidan foydalanuvchini ko'plab reklama oynalari bilan bezovta qilish uchun ishlatilgan. Shu sababli deyarli barcha zamonaviy brauzerlar <strong>popup bloklovchilarga</strong> ega — ular kutilmagan popup'larni bloklaydi.</p>
+<p>Shunga qaramay, popup'lar ba'zi holatlarda hali ham foydali. Masalan, asosiy sahifani boy interfeys bilan qoldirib, foydalanuvchini boshqa saytdagi (masalan, to'lov tizimi yoki ijtimoiy tarmoq) autentifikatsiya oynasiga yo'naltirish kerak bo'lganda popup qulaydir. Bunda asosiy oyna o'z holicha qoladi, popup esa alohida ochiladi.</p>
+<h2>Popup'ni bloklash</h2>
+<p>Ko'p brauzerlar popup'ni <strong>foydalanuvchidan tashqarida</strong> ochilishini bloklaydi. G'oya oddiy: agar popup foydalanuvchi <em>o'zi</em> chaqirgan hodisa (masalan, <code>onclick</code>) natijasida ochilsa — u bloklanmaydi. Ammo popup'ni <code>setTimeout</code> ichida yoki sahifa yuklanishi bilan darhol ochishga urinsangiz — u bloklanadi.</p>
+<p>Masalan, quyidagi kod ishlaydi, chunki popup <code>onclick</code> ichida — foydalanuvchi bosishiga javoban ochiladi:</p>
+<pre class="code"><code>// Bu ishlaydi: bosish (onclick) hodisasi ichida
+button.onclick = () =&gt; {
+  window.open('https://javascript.info');
+};</code></pre>
+<p>Quyidagi kod esa ko'pincha bloklanadi, chunki popup foydalanuvchi bilan bevosita bog'liq bo'lmagan holatda (kechikish bilan) ochilmoqda:</p>
+<pre class="code"><code>// Bu ko'pincha bloklanadi:
+// popup foydalanuvchi bosishiga darhol javob bermaydi
+setTimeout(() =&gt; {
+  window.open('https://javascript.info');
+}, 2000);</code></pre>
+<div class="note">Aniq qoida brauzerdan brauzerga farq qiladi. Masalan, Firefox <code>setTimeout</code>dagi popup'ni ba'zi hollarda ruxsat berishi, boshqalari esa umuman bloklashi mumkin. Umumiy tavsiya: popup'ni <strong>doim foydalanuvchi harakati (bosish)</strong> natijasida oching.</div>
+<h2>window.open sintaksisi</h2>
+<p>Popup'ni ochishning asosiy metodi — <code>window.open(url, name, params)</code>:</p>
+<ul><li><code>url</code> — yangi oynada yuklanadigan URL manzil;</li><li><code>name</code> — yangi oynaning nomi. Har bir oynada <code>window.name</code> bo'ladi. Bu yerda mavjud nom berilsa, oyna qayta ochilmaydi — o'sha nomdagi oyna qayta ishlatiladi (URL'i almashtiriladi);</li><li><code>params</code> — yangi oyna uchun sozlamalar satri (vergul bilan ajratilgan konfiguratsiya, probelsiz).</li></ul>
+<p>Eng oddiy chaqiruv — faqat URL bilan:</p>
+<pre class="code"><code>// eng oddiy popup
+window.open('https://javascript.info');</code></pre>
+<p>Agar ikkinchi va uchinchi argumentlar berilmasa, brauzer standart yangi oyna (yoki ko'pincha yangi tab/vkladka) ochadi.</p>
+<h2>Oyna sozlamalari (params)</h2>
+<p>Uchinchi argument <code>params</code> — bu satr bo'lib, yangi oynaning konfiguratsiyasini belgilaydi. Sozlamalar vergul bilan ajratiladi, ular orasida <strong>probel bo'lmasligi</strong> kerak. Eng muhim sozlamalar:</p>
+<ul><li><code>width</code> va <code>height</code> — oyna ichki maydonining eni va balandligi (piksellarda). Minimal qiymatga cheklovlar bor — juda kichik oyna ochib bo'lmaydi;</li><li><code>left</code> va <code>top</code> — oynaning ekrandagi chapdan va yuqoridan koordinatasi. Manfiy yoki ekrandan tashqari qiymatlar odatda inobatga olinmaydi;</li><li><code>menubar</code> (yes/no) — brauzer menyusini ko'rsatish yoki yashirish;</li><li><code>toolbar</code> (yes/no) — navigatsiya paneli (oldinga/orqaga tugmalari va h.k.);</li><li><code>location</code> (yes/no) — manzil (URL) maydoni;</li><li><code>status</code> (yes/no) — holat qatori (status bar);</li><li><code>resizable</code> (yes/no) — oynani o'lchamini o'zgartirishga ruxsat;</li><li><code>scrollbars</code> (yes/no) — kerak bo'lganda aylantirish (scroll) chiziqlariga ruxsat.</li></ul>
+<p>Masalan, 600x300 o'lchamdagi oynani ekranning markaziga yaqin joyda ochamiz:</p>
+<pre class="code"><code>let params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=300,left=100,top=100';
+
+window.open('https://javascript.info', 'test', params);</code></pre>
+<p>Oynani ekran markazida ochish uchun <code>screen</code> obyektidan foydalanib koordinatalarni hisoblash mumkin:</p>
+<pre class="code"><code>// oyna o'lchami
+let width = 600;
+let height = 300;
+
+// ekran markazida joylashish uchun koordinatalar
+let left = (screen.width - width) / 2;
+let top = (screen.height - height) / 2;
+
+let params = `width=${width},height=${height},left=${left},top=${top}`;
+// diqqat: bu yerda backtick o'rniga oddiy string ham ishlatsa bo'ladi
+window.open('https://javascript.info', 'test', params);</code></pre>
+<div class="note">Sozlamalar bilan bog'liq muhim qoida: agar <code>params</code>da <strong>hech qanday</strong> oyna xususiyati (width/height va h.k.) ko'rsatilmasa, ular standart qiymatda qoladi. Ammo <strong>kamida bitta</strong> xususiyat ko'rsatilsa, ko'rsatilmagan boshqa panellar (toolbar, menubar va h.k.) ko'pincha <code>no</code> deb hisoblanadi. Shuning uchun kerakli panellarni ochiq qoldirmoqchi bo'lsangiz, ularni ochiqcha <code>yes</code> qiling.</div>
+<h2>Ochilgan oynaga murojaat qilish</h2>
+<p><code>open</code> chaqiruvi yangi oynaga havolani (window obyektini) qaytaradi. Bu havola orqali ochilgan oynani boshqarish, uning tarkibini o'zgartirish yoki hodisalarni kuzatish mumkin:</p>
+<pre class="code"><code>let newWindow = window.open('about:blank', 'hello', 'width=200,height=200');
+
+newWindow.document.write('Salom, dunyo!');</code></pre>
+<p>Bu yerda <code>newWindow</code> — yangi oynaning <code>window</code> obyekti. Biz uning <code>document</code>iga yozdik. Lekin bu faqat <strong>bir xil manba (Same Origin)</strong> bo'lganda ishlaydi — ya'ni ikkala oyna ham bir xil protokol, domen va portga ega bo'lganda. Agar oyna boshqa saytdan bo'lsa, xavfsizlik siyosati tufayli uning ichiga kira olmaymiz (bu haqda keyingi darsda batafsil).</p>
+<div class="warn">Boshqa manbadan (origin) yuklangan oynaning tarkibiga kirishga urinish xatolik beradi. Masalan, <code>window.open('https://google.com')</code> qaytargan oynaning <code>document</code>iga yoza olmaysiz — bu Same Origin siyosati tomonidan taqiqlangan.</div>
+<h2>Popup'dan asosiy oynaga kirish: window.opener</h2>
+<p>Popup asosiy (uni ochgan) oynaga <code>window.opener</code> orqali murojaat qila oladi. Boshqa barcha oynalar uchun <code>opener</code> qiymati <code>null</code> bo'ladi.</p>
+<pre class="code"><code>// asosiy oynada
+let newWin = window.open('our.html', 'hello', 'width=300,height=300');
+
+// popup ichida (our.html):
+// window.opener — bu bizni ochgan asosiy oyna
+// window.opener.document.title — asosiy sahifa sarlavhasi</code></pre>
+<p>Shunday qilib, asosiy oyna va popup o'rtasida ikki tomonlama aloqa mavjud: asosiy oyna popup'ga <code>newWin</code> orqali, popup esa asosiy oynaga <code>window.opener</code> orqali murojaat qiladi. Bu — <strong>faqat Same Origin</strong> bo'lganda to'liq ishlaydi.</p>
+<h2>Oynani yopish: close va closed</h2>
+<p>Oynani yopish uchun <code>win.close()</code> metodi ishlatiladi. Oyna yopilgan-yopilmaganini <code>win.closed</code> xossasi bildiradi — u <code>true</code> yoki <code>false</code> qaytaradi.</p>
+<pre class="code"><code>let newWindow = window.open('about:blank', 'hello', 'width=200,height=200');
+
+newWindow.document.write('Yopilishga tayyorman...');
+
+newWindow.close();
+alert(newWindow.closed); // true</code></pre>
+<div class="note"><code>close()</code> metodi faqat <code>window.open</code> orqali (yoki <code>window.opener</code>ga ega bo'lgan holda) ochilgan oynalarda ishonchli ishlaydi. Foydalanuvchi o'zi ochgan asosiy oynani skript orqali yopishga ko'pincha ruxsat berilmaydi — bu xavfsizlik chorasi.</div>
+<p>Popup o'zini ham yopishi mumkin: <code>window.close()</code>. Bu ko'pincha popup asosiy oynaga biror ma'lumot (masalan, avtorizatsiya natijasi) uzatgach ishlatiladi.</p>
+<h2>Oynaga fokus berish va olib qo'yish: focus/blur</h2>
+<p><code>window.focus()</code> oynani fokusga (oldinga) chiqaradi, <code>window.blur()</code> esa fokusni olib qo'yadi. Nazariy jihatdan bu bilan popup'ni oldinga chiqarish yoki uni orqada qoldirish mumkin.</p>
+<pre class="code"><code>let newWindow = window.open('https://javascript.info', 'example', 'width=300,height=300');
+
+// oynani oldinga chiqarish
+newWindow.focus();</code></pre>
+<div class="warn">Amaliyotda <code>focus</code> va <code>blur</code>ga brauzerlar kuchli cheklovlar qo'ygan. Ular ilgari zararli saytlar tomonidan foydalanuvchini bezovta qilish uchun ishlatilgan (masalan, oynani doim oldinga chiqarish yoki uni ataylab orqada yashirish). Shu sababli zamonaviy brauzerlarda bu metodlar ko'pincha e'tiborsiz qoldiriladi yoki faqat foydalanuvchi harakatiga javoban ishlaydi. Ularga ko'p tayanmang.</div>
+<p>Foydali qo'llanish misoli: popup ochilganda unga fokus berish, va foydalanuvchi asosiy oynaga qaytganda popup'ni yopish yoki eslatish:</p>
+<pre class="code"><code>let newWindow = open('/', 'example', 'width=300,height=300');
+
+newWindow.onload = function() {
+  newWindow.focus();
+};</code></pre>
+<h2>Popup'ni to'g'ri va odob bilan ishlatish</h2>
+<p>Popup'lar foydalanuvchini bezovta qilishi mumkin, shuning uchun ularni ehtiyotkorlik bilan qo'llang. Amaliy tavsiyalar:</p>
+<ul><li>Popup'ni faqat <strong>foydalanuvchi harakatiga (bosish)</strong> javoban oching — aks holda u bloklanadi;</li><li>Oyna o'lchami va joylashuvini foydalanuvchi qulayligi uchun oqilona tanlang (masalan, ekran markazi);</li><li>Popup bilan ish tugagach, uni <code>close()</code> bilan yoping (ayniqsa OAuth kabi oqimlarda);</li><li>Boshqa manbadagi oyna tarkibiga kira olmasligingizni yodda tuting — bu holda faqat <code>postMessage</code> (keyingi dars) orqali xabar almashinuvi mumkin;</li><li><code>focus/blur</code>ga ishonch bilan tayanmang — ular brauzerlarda cheklangan.</li></ul>
+<div class="tip">Zamonaviy veb-ilovalarda popup o'rniga ko'pincha <strong>modal oynalar</strong> (sahifa ichidagi <code>&lt;dialog&gt;</code> yoki maxsus <code>div</code> qatlamlar) ishlatiladi. Ular boshqarish osonroq va bloklanmaydi. Popup'lar esa asosan boshqa domendagi sahifa (masalan, to'lov yoki OAuth) kerak bo'lganda foydali qoladi.</div>
+<h2>Xulosa</h2>
+<ul><li>Popup'lar <code>window.open(url, name, params)</code> bilan ochiladi va yangi oynaning <code>window</code> obyektini qaytaradi;</li><li>Brauzerlar popup'ni <strong>foydalanuvchi harakatidan tashqarida</strong> ochishni bloklaydi — doim <code>onclick</code> kabi hodisa ichida oching;</li><li><code>params</code> satri orqali <code>width</code>, <code>height</code>, <code>left</code>, <code>top</code> va panellarni (<code>toolbar</code>, <code>menubar</code> va h.k.) sozlash mumkin;</li><li>Asosiy oyna popup'ga <code>open</code> qaytargan havola orqali, popup esa asosiy oynaga <code>window.opener</code> orqali murojaat qiladi;</li><li>Bu ikki tomonlama aloqa faqat <strong>Same Origin</strong> bo'lganda to'liq ishlaydi;</li><li>Oynani yopish uchun <code>close()</code>, holatini bilish uchun <code>closed</code>, fokus uchun <code>focus()</code>/<code>blur()</code> ishlatiladi (oxirgilari cheklangan).</li></ul>
+<nav class="lesson-nav">
+  <a href="event-loop.html"><span class="dir">← Oldingi</span><span class="ttl">Hodisalar tsikli: mikro va makrovazifalar</span></a>
+  <a class="next" href="cross-window.html"><span class="dir">Keyingi →</span><span class="ttl">Oynalararo aloqa</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

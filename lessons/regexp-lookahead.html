@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lookahead va lookbehind — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Oldinga qarash x(?=y), x(?!y) va orqaga qarash (?<=y)x, (?<!y)x; narxni ajratish misoli; bu vositalar qachon kerak bo'ladi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a class="active" href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Muntazam ifodalar (RegExp)</div>
+<h1>Lookahead va lookbehind</h1>
+<p class="lead">Ba'zan biror belgini <em>faqat undan oldin yoki keyin ma'lum narsa bo'lsa</em> tutmoqchi bo'lamiz — lekin o'sha "kontekst"ni natijaga qo'shmaymiz. Aynan shuning uchun <strong>lookahead</strong> (oldinga qarash) va <strong>lookbehind</strong> (orqaga qarash) mavjud. Ular "nol kenglikdagi" tekshiruvlar: shartni tekshiradi, lekin matnni "yeb qo'ymaydi".</p>
+<h2>Ijobiy lookahead: x(?=y)</h2>
+<p><code>x(?=y)</code> — <code>x</code> ni <strong>faqat undan keyin <code>y</code> kelsa</strong> tutadi. Muhimi: <code>y</code> natijaga <strong>kirmaydi</strong>, u faqat shart sifatida tekshiriladi.</p>
+<p>Masalan, sonni <strong>faqat undan keyin "so'm" so'zi kelsa</strong> tutamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookahead-ijobiy.js</span></div><textarea spellcheck="false">let str = "5 kg, 100 so'm, 3 dona, 250 so'm";
+let regexp = /\d+(?= so'm)/g;
+
+console.log(str.match(regexp));  // [ '100', '250' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Natijada faqat raqamlar bor — " so'm" qismi tutilmadi, u shunchaki shart bo'ldi. Agar oddiy <code>\d+ so'm</code> yozganimizda, natijada "so'm" ham bo'lardi.</p>
+<h2>Salbiy lookahead: x(?!y)</h2>
+<p><code>x(?!y)</code> — <code>x</code> ni <strong>faqat undan keyin <code>y</code> KELMASA</strong> tutadi. Bu ijobiy lookaheadning aksi.</p>
+<p>Endi "so'm" kelmagan raqamlarni tutamiz (masalan, o'lchov birligisiz sonlar):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookahead-salbiy.js</span></div><textarea spellcheck="false">let str = "5 kg, 100 so'm, 3 dona, 250 so'm";
+let regexp = /\d+\b(?! so'm)/g;
+
+console.log(str.match(regexp));  // [ '5', '3' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Yuqorida <code>\b</code> (so'z chegarasi) qo'shildi, aks holda <code>100</code> dan <code>10</code> qismi tutilib qolardi (chunki <code>10</code> dan keyin "0 so'm" keladi, ya'ni " so'm" emas). <code>\b</code> sonni to'liq oxiriga bog'laydi.</div>
+<h2>Ijobiy lookbehind: (?<=y)x</h2>
+<p><code>(?&lt;=y)x</code> — <code>x</code> ni <strong>faqat undan oldin <code>y</code> kelsa</strong> tutadi. Bu lookaheadning "orqaga qaragan" varianti. <code>y</code> yana natijaga kirmaydi.</p>
+<p>Masalan, dollar belgisidan keyingi summani tutamiz — <code>$</code> ni o'zini olmasdan:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookbehind-ijobiy.js</span></div><textarea spellcheck="false">let str = "$30 va 50 EUR va $100";
+let regexp = /(?&lt;=\$)\d+/g;
+
+console.log(str.match(regexp));  // [ '30', '100' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>\$</code> eskeyplangan (dollar RegExp'da "satr oxiri" ma'nosini beradi), va u lookbehind ichida shart bo'lgani uchun natijaga <code>30</code> va <code>100</code> tushdi, <code>$</code> esa tushmadi.</p>
+<h2>Salbiy lookbehind: (?<!y)x</h2>
+<p><code>(?&lt;!y)x</code> — <code>x</code> ni <strong>faqat undan oldin <code>y</code> KELMASA</strong> tutadi. Masalan, dollar belgisi bilan bog'lanmagan sonlarni ajratamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookbehind-salbiy.js</span></div><textarea spellcheck="false">let str = "$30 va 50 EUR va $100";
+let regexp = /(?&lt;!\$)\b\d+/g;
+
+console.log(str.match(regexp));  // [ '50' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">To'rt turni eslab qolish: <code>?=</code> va <code>?!</code> — <strong>oldinga</strong> (keyin nima keladi); <code>?&lt;=</code> va <code>?&lt;!</code> — <strong>orqaga</strong> (oldin nima kelgan). Undov <code>!</code> — inkor, teng <code>=</code> — tasdiq.</div>
+<h2>Amaliy misol: narxni formatlash</h2>
+<p>Kuchli misol — katta sonlarga uch xonadan ajratuvchi bo'sh joy qo'yish (<code>1234567</code> -> <code>1 234 567</code>). Buni lookahead bilan qilish mumkin: har bir raqam <strong>oldiga</strong> bo'sh joy qo'yamiz, agar undan keyin uchtalik guruhlar qolgan bo'lsa:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>narx-format.js</span></div><textarea spellcheck="false">let son = "1234567";
+
+// Har uch raqamdan keyin (lekin son oxirida emas) bo'sh joy
+let regexp = /\d(?=(\d{3})+$)/g;
+let natija = son.replace(regexp, "$&amp; ");
+
+console.log(natija);  // 1 234 567</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu qanday ishlaydi? <code>\d(?=(\d{3})+$)</code> — shunday raqamni tanlaydiki, undan <strong>keyin</strong> to'liq uchtalik guruhlar (bir yoki ko'p) va satr oxiri kelsin. Bunday raqamdan keyin bo'sh joy o'rinli. <code>$&amp;</code> — topilgan raqamning o'zi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>narx-funksiya.js</span></div><textarea spellcheck="false">// Yana bir misol
+function ajrat(n) {
+  return String(n).replace(/\d(?=(\d{3})+$)/g, "$&amp; ");
+}
+
+console.log(ajrat(1000000));  // 1 000 000
+console.log(ajrat(500));      // 500
+console.log(ajrat(12345));    // 12 345</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Lookahead ichida guruhlar</h2>
+<p>Lookahead va lookbehind ichida to'liq ifodalar, jumladan guruhlar va alternatsiya bo'lishi mumkin. Masalan, parol tekshiruvida bir necha shartni birdan qo'yish:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookahead-parol.js</span></div><textarea spellcheck="false">// Kamida bitta raqam VA kamida bitta katta harf borligini tekshirish
+let regexp = /^(?=.*\d)(?=.*[A-Z]).+$/;
+
+console.log(regexp.test("parol"));    // false (raqam yo'q)
+console.log(regexp.test("Parol1"));   // true  (raqam + katta harf)
+console.log(regexp.test("parol1"));   // false (katta harf yo'q)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda ikkita lookahead ketma-ket ishlatilgan. Ular "nol kenglik" bo'lgani uchun ikkalasi ham satr boshidan tekshiradi va bir-biriga xalal bermaydi — bu birdan bir necha shartni qo'yishning klassik usuli.</p>
+<h2>Qachon kerak?</h2>
+<p>Lookahead/lookbehind quyidagi holatlarda juda foydali:</p>
+<ul><li>Biror belgini <strong>kontekst asosida</strong> tutish, lekin kontekstni natijaga qo'shmaslik (masalan, valyutadan oldingi/keyingi son);</li><li><code>replace</code> da faqat kerakli qismni almashtirish, atrofdagilarga tegmasdan;</li><li>Bir necha shartni birdan tekshirish (parol murakkabligi kabi);</li><li>"Bunday emas" mantig'i — masalan, ma'lum so'zdan keyin/oldin kelmagan holatlarni topish.</li></ul>
+<div class="note">Zamonaviy JavaScript dvigatellari (Node.js, brauzerlar) lookbehind'ni to'liq qo'llab-quvvatlaydi. Ilgari u faqat lookahead uchun mavjud edi, endi ikkalasi ham ishlatilaveradi.</div>
+<div class="warn">Lookahead/lookbehind <strong>joy egallamaydi</strong> — ular kursorni oldinga su[u]rmaydi. Shuning uchun natijada faqat asosiy <code>x</code> qismi bo'ladi, shart qismidagi belgilar keyingi mos kelishlarda qayta ishlatilishi mumkin.</div>
+<h2>Xulosa</h2>
+<ul><li><code>x(?=y)</code> — ijobiy lookahead: keyin <code>y</code> bo'lsa, <code>x</code> ni tut;</li><li><code>x(?!y)</code> — salbiy lookahead: keyin <code>y</code> BO'LMASA, <code>x</code> ni tut;</li><li><code>(?&lt;=y)x</code> — ijobiy lookbehind: oldin <code>y</code> bo'lsa, <code>x</code> ni tut;</li><li><code>(?&lt;!y)x</code> — salbiy lookbehind: oldin <code>y</code> BO'LMASA, <code>x</code> ni tut;</li><li>Shart qismi (<code>y</code>) natijaga <strong>kirmaydi</strong> — bu "nol kenglikli" tekshiruv;</li><li>Qo'llanilishi: kontekstga bog'liq tutish, narxni formatlash, parol tekshiruvi, aniq almashtirish.</li></ul>
+<nav class="lesson-nav">
+  <a href="regexp-alternation.html"><span class="dir">← Oldingi</span><span class="ttl">Alternatsiya (yoki) |</span></a>
+  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

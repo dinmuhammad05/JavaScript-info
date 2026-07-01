@@ -184,6 +184,16 @@
   </details>
   <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
   <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
     <summary>Formalar va boshqaruv elementlari</summary>
     <ol>
       <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
@@ -206,6 +216,44 @@
       <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
       <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
       <li><a class="active" href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
     </ol>
   </details>
 </aside>
@@ -308,7 +356,7 @@ hisobla();</code></pre>
 <ul><li>Event loop — vazifalarni birma-bir bajaruvchi cheksiz tsikl; JavaScript bir oqimli;</li><li><strong>Makrovazifalar</strong>: skript, <code>setTimeout</code>/<code>setInterval</code>, hodisalar. Navbatda birma-bir bajariladi;</li><li><strong>Mikrovazifalar</strong>: <code>Promise.then/catch/finally</code>, <code>await</code>dan keyingi kod, <code>queueMicrotask</code>;</li><li>Tartib: bitta makrovazifa → barcha mikrovazifalar → (render) → keyingi makrovazifa. Mikrovazifalar ustunlikka ega;</li><li><code>setTimeout(fn, 0)</code> — "darhol" emas, "navbatning oxirida keyingi makrovazifa sifatida" degani;</li><li>Render vazifa o'rtasida bo'lmaydi — faqat vazifa tugagach ekran yangilanadi;</li><li>Og'ir hisob-kitobni interfeysni bloklamasdan bajarish uchun uni <code>setTimeout</code> orqali makrovazifalarga bo'ling (mikrovazifalarga emas), yoki Web Worker'dan foydalaning.</li></ul>
 <nav class="lesson-nav">
   <a href="selection-range.html"><span class="dir">← Oldingi</span><span class="ttl">Tanlash va Range</span></a>
-  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
+  <a class="next" href="popup.html"><span class="dir">Keyingi →</span><span class="ttl">Popup oynalar va window metodlari</span></a>
 </nav>
 </main>
 </div>
