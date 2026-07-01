@@ -7,7 +7,7 @@ veb-sayt bo'lib, oddiy Node.js generatoridan foydalanadi.
 
 ## Xususiyatlari
 
-- 🇺🇿 **146 ta dars**, to'liq o'zbek tilida, uch qismga bo'lingan;
+- 🇺🇿 **165 ta dars**, to'liq o'zbek tilida, to'rt qismga bo'lingan;
 - ▶️ **559 ta interaktiv kod maydonchasi** — misollarni to'g'ridan-to'g'ri
   brauzerda tahrirlab, ishga tushirish mumkin (`console.log` natijalari
   ko'rsatiladi);
@@ -34,6 +34,13 @@ yuklanishi · Qo'shimcha (event loop, mutation observer...).
 Oynalar va freymlar · Ikkilik ma'lumot va fayllar · Tarmoq so'rovlari
 (fetch, WebSocket) · Brauzerda ma'lumot saqlash (cookie, localStorage,
 IndexedDB) · Muntazam ifodalar (RegExp).
+
+### 4-qism: Amaliy vositalar (DevOps)
+**Git va GitHub** (versiya nazorati, o'rnatish, asosiy buyruqlar, branch/merge,
+remote/push/pull, jamoa bilan ishlash — fork va Pull Request, .gitignore/stash) ·
+**Docker** (konteynerlar, o'rnatish, buyruqlar, Dockerfile, Docker Compose,
+volume/network) · **Nginx** (veb-server, o'rnatish, konfiguratsiya, statik sayt,
+reverse proxy va load balancing, SSL/HTTPS).
 
 ## Ishga tushirish
 
