@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formalar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Foydalanuvchidan ma'lumot yig'ish uchun formalar: form tegi (action, method), input turlari (text, password, email, checkbox, radio, number, date), label, select/option, textarea, tugmalar hamda required va boshqa validatsiya atributlari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Linux va terminal</summary>
+    <ol>
+      <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+      <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+      <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+      <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+      <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+      <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+  <div class="side-part">6-qism: Frontend asoslari</div>
+  <details open>
+    <summary>HTML</summary>
+    <ol>
+      <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+      <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+      <li><a class="active" href="../lessons/html-form.html">Formalar</a></li>
+      <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>TypeScript</summary>
+    <ol>
+      <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+      <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+      <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+      <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+      <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">HTML</div>
+<h1>Formalar</h1>
+<p class="lead"><strong>Formalar</strong> — foydalanuvchidan ma'lumot olishning asosiy usuli. Ro'yxatdan o'tish, tizimga kirish, qidiruv, izoh qoldirish — bularning barchasi formalar orqali amalga oshadi. Ushbu darsda formani qanday qurish, turli maydonlar (input) yaratish va ularni tekshirish (validatsiya)ni o'rganamiz.</p>
+<h2>form tegi</h2>
+<p>Barcha kiritish maydonlari <code>&lt;form&gt;</code> tegi ichiga joylashadi. Bu teg — foydalanuvchi to'ldiradigan ma'lumotlarni birlashtiruvchi "idish". Uning ikkita muhim atributi bor:</p>
+<ul><li><code>action</code> — forma yuborilganda ma'lumotlar <strong>qayerga</strong> jo'natilishini bildiradi (server manzili);</li><li><code>method</code> — ma'lumot <strong>qanday</strong> yuborilishini bildiradi: <code>GET</code> yoki <code>POST</code>.</li></ul>
+<pre class="code"><code>&lt;form action="/royxatdan-otish" method="POST"&gt;
+  &lt;!-- Bu yerga maydonlar joylashadi --&gt;
+&lt;/form&gt;</code></pre>
+<div class="note"><strong>GET</strong> — ma'lumotni URL manzili orqali yuboradi (masalan, qidiruv uchun, ma'lumot maxfiy bo'lmaganda). <strong>POST</strong> — ma'lumotni yashirin (URL'da ko'rinmasdan) yuboradi. Parol yoki shaxsiy ma'lumot uchun har doim <strong>POST</strong> ishlatiladi.</div>
+<h2>input tegi va uning turlari</h2>
+<p><code>&lt;input&gt;</code> — formaning eng ko'p ishlatiladigan tegi. Bu bitta teg <code>type</code> atributiga qarab butunlay boshqacha maydonga aylanadi. <code>input</code> — bo'sh teg (yopuvchisi yo'q).</p>
+<h3>Matn maydoni: text</h3>
+<p>Eng oddiy tur — oddiy matn kiritish maydoni:</p>
+<pre class="code"><code>&lt;input type="text" name="ism" placeholder="Ismingizni kiriting"&gt;</code></pre>
+<ul><li><code>type="text"</code> — maydon turi (oddiy matn);</li><li><code>name</code> — maydon nomi (serverga yuborilganda shu nom bilan boradi, majburiy);</li><li><code>placeholder</code> — maydon bo'sh turганda ko'rinadigan namuna matn ("maslahat").</li></ul>
+<h3>Parol: password</h3>
+<p>Parol maydoni — kiritilgan belgilar nuqta yoki yulduzcha bilan yashiriladi:</p>
+<pre class="code"><code>&lt;input type="password" name="parol" placeholder="Parolingiz"&gt;</code></pre>
+<h3>Elektron pochta: email</h3>
+<p>Bu tur brauzerga "bu maydon email bo'lishi kerak" deb aytadi. Brauzer avtomatik ravishda <code>@</code> belgisi borligini tekshiradi:</p>
+<pre class="code"><code>&lt;input type="email" name="email" placeholder="pochta@example.com"&gt;</code></pre>
+<h3>Raqam: number</h3>
+<p>Faqat raqam kiritish uchun. Ko'pincha eng kichik va eng katta qiymat ham belgilanadi:</p>
+<pre class="code"><code>&lt;input type="number" name="yosh" min="18" max="100"&gt;</code></pre>
+<p><code>min</code> — eng kichik ruxsat etilgan qiymat, <code>max</code> — eng katta qiymat.</p>
+<h3>Sana: date</h3>
+<p>Sana tanlash uchun. Brauzer avtomatik ravishda kalendar ko'rsatadi:</p>
+<pre class="code"><code>&lt;input type="date" name="tugilgan-sana"&gt;</code></pre>
+<h3>Belgilash katakchasi: checkbox</h3>
+<p><code>checkbox</code> — foydalanuvchi bir yoki bir nechta variantni belgilashi mumkin bo'lgan katakcha:</p>
+<pre class="code"><code>&lt;input type="checkbox" name="qoidalar" id="qoidalar"&gt;
+&lt;label for="qoidalar"&gt;Men qoidalarga roziman&lt;/label&gt;</code></pre>
+<h3>Yakka tanlov: radio</h3>
+<p><code>radio</code> — bir nechta variantdan <strong>faqat bittasini</strong> tanlash uchun. Bir guruhga tegishli radiolar bir xil <code>name</code> ga ega bo'lishi kerak:</p>
+<pre class="code"><code>&lt;input type="radio" name="jins" id="erkak" value="erkak"&gt;
+&lt;label for="erkak"&gt;Erkak&lt;/label&gt;
+&lt;input type="radio" name="jins" id="ayol" value="ayol"&gt;
+&lt;label for="ayol"&gt;Ayol&lt;/label&gt;</code></pre>
+<div class="warn">Radiolar bir xil <code>name</code> ga ega bo'lganda, ular <strong>bitta guruh</strong> hisoblanadi — foydalanuvchi ulardan faqat bittasini tanlay oladi. Agar <code>name</code> har xil bo'lsa, har biri alohida tanlanadi va bu xato bo'ladi.</div>
+<h2>label tegi</h2>
+<p><code>&lt;label&gt;</code> — kiritish maydoniga <strong>izoh (yorliq)</strong> qo'shadi. Bu shunchaki matn emas: label maydonga bog'lanadi va uni bosganda maydon avtomatik faollashadi. Bu ayniqsa checkbox va radiolar uchun qulay.</p>
+<p>Bog'lash ikki xil usulda bo'ladi. <strong>Birinchi usul</strong> — <code>label</code>ning <code>for</code> atributini <code>input</code>ning <code>id</code> atributiga tenglashtirish:</p>
+<pre class="code"><code>&lt;label for="ism"&gt;Ismingiz:&lt;/label&gt;
+&lt;input type="text" id="ism" name="ism"&gt;</code></pre>
+<p><strong>Ikkinchi usul</strong> — <code>input</code>ni <code>label</code>ning ichiga joylash:</p>
+<pre class="code"><code>&lt;label&gt;
+  Ismingiz:
+  &lt;input type="text" name="ism"&gt;
+&lt;/label&gt;</code></pre>
+<div class="tip">Har bir kiritish maydoniga <strong>label</strong> qo'shishni odat qiling. Bu foydalanish qulayligi (a11y) uchun juda muhim — ekran o'quvchi dasturlar maydonning nima uchun ekanini aynan label orqali biladi. Bosish sohasi ham kengayadi, bu telefonlarda qulay.</div>
+<h2>Ochiluvchi ro'yxat: select va option</h2>
+<p><code>&lt;select&gt;</code> — bosilganda ochiladigan variantlar ro'yxati (dropdown). Har bir variant <code>&lt;option&gt;</code> tegi bilan yoziladi:</p>
+<pre class="code"><code>&lt;label for="shahar"&gt;Shahringiz:&lt;/label&gt;
+&lt;select name="shahar" id="shahar"&gt;
+  &lt;option value="toshkent"&gt;Toshkent&lt;/option&gt;
+  &lt;option value="samarqand"&gt;Samarqand&lt;/option&gt;
+  &lt;option value="buxoro"&gt;Buxoro&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+<p>Har bir <code>&lt;option&gt;</code>ning <code>value</code> atributi — serverga yuboriladigan qiymat, teglar orasidagi matn esa — foydalanuvchi ko'radigan yozuv. Boshlang'ich (namuna) variant qo'shish uchun birinchi optionni <code>disabled selected</code> qilib qo'yish mumkin:</p>
+<pre class="code"><code>&lt;select name="shahar"&gt;
+  &lt;option value="" disabled selected&gt;Shaharni tanlang&lt;/option&gt;
+  &lt;option value="toshkent"&gt;Toshkent&lt;/option&gt;
+  &lt;option value="samarqand"&gt;Samarqand&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+<h2>Katta matn maydoni: textarea</h2>
+<p><code>&lt;input type="text"&gt;</code> bitta qatorli. Agar foydalanuvchi <strong>uzun matn</strong> (izoh, xabar) yozishi kerak bo'lsa, <code>&lt;textarea&gt;</code> ishlatiladi. Bu — juft teg:</p>
+<pre class="code"><code>&lt;label for="izoh"&gt;Izohingiz:&lt;/label&gt;
+&lt;textarea id="izoh" name="izoh" rows="5" cols="30" placeholder="Fikringizni yozing..."&gt;&lt;/textarea&gt;</code></pre>
+<p><code>rows</code> — ko'rinadigan qatorlar soni (balandlik), <code>cols</code> — ko'rinadigan ustunlar soni (kenglik).</p>
+<div class="warn"><code>textarea</code>da boshlang'ich matn <code>value</code> atributida emas, balki ochuvchi va yopuvchi teg <strong>orasida</strong> yoziladi. Shu sababli ochuvchi va yopuvchi teg orasiga ortiqcha bo'shliq qo'ymang — u ham matn hisoblanadi.</div>
+<h2>Tugmalar: button</h2>
+<p>Formani <strong>yuborish</strong> uchun tugma kerak. Uni ikki xil usulda yasash mumkin:</p>
+<pre class="code"><code>&lt;button type="submit"&gt;Yuborish&lt;/button&gt;
+&lt;input type="submit" value="Yuborish"&gt;</code></pre>
+<p><code>&lt;button&gt;</code> tegining <code>type</code> atributi uch xil bo'ladi:</p>
+<ul><li><code>type="submit"</code> — formani yuboradi (standart qiymat);</li><li><code>type="reset"</code> — barcha maydonlarni tozalaydi (boshlang'ich holatga qaytaradi);</li><li><code>type="button"</code> — hech narsa qilmaydi (JavaScript bilan boshqariladigan oddiy tugma).</li></ul>
+<div class="tip"><code>&lt;button&gt;</code> ni afzal ko'ring, chunki uning ichiga matn, rasm yoki boshqa teglarni joylash mumkin. <code>&lt;input type="submit"&gt;</code> esa faqat oddiy matn qabul qiladi.</div>
+<h2>Validatsiya atributlari</h2>
+<p>HTML formani <strong>o'zi tekshira</strong> oladi — foydalanuvchi noto'g'ri ma'lumot kiritsa yoki majburiy maydonni bo'sh qoldirsa, forma yuborilmaydi. Buning uchun maxsus atributlar bor:</p>
+<ul><li><code>required</code> — maydonni to'ldirish <strong>majburiy</strong>. Bo'sh bo'lsa forma yuborilmaydi;</li><li><code>minlength</code> / <code>maxlength</code> — eng kam / eng ko'p belgilar soni;</li><li><code>min</code> / <code>max</code> — raqam va sana uchun eng kichik / eng katta qiymat;</li><li><code>pattern</code> — matn ma'lum bir namunaga (regexp shabloniga) mos kelishi kerak.</li></ul>
+<pre class="code"><code>&lt;form action="/kirish" method="POST"&gt;
+  &lt;label for="email"&gt;Email:&lt;/label&gt;
+  &lt;input type="email" id="email" name="email" required&gt;
+
+  &lt;label for="parol"&gt;Parol:&lt;/label&gt;
+  &lt;input type="password" id="parol" name="parol" required minlength="8"&gt;
+
+  &lt;button type="submit"&gt;Kirish&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+<p>Bu misolda: email maydoni to'ldirilishi shart va <code>@</code> belgisi bo'lishi kerak; parol maydoni to'ldirilishi shart va kamida 8 ta belgidan iborat bo'lishi kerak. Bu shartlar bajarilmasa, brauzer ogohlantirish ko'rsatadi va formani yubormaydi.</p>
+<div class="warn">HTML validatsiyasi — <strong>birinchi himoya qatlami</strong>, lekin u yetarli emas! Tajribali foydalanuvchi uni chetlab o'tishi mumkin. Shuning uchun serverda ham ma'lumotni <strong>albatta</strong> qayta tekshirish shart. HTML validatsiyasi — bu qulaylik, xavfsizlik emas.</div>
+<h2>To'liq forma misoli</h2>
+<p>Barcha o'rganilganlarni birlashtirgan ro'yxatdan o'tish formasi:</p>
+<pre class="code"><code>&lt;form action="/royxat" method="POST"&gt;
+  &lt;h2&gt;Ro'yxatdan o'tish&lt;/h2&gt;
+
+  &lt;label for="ism"&gt;Ism:&lt;/label&gt;
+  &lt;input type="text" id="ism" name="ism" required&gt;
+
+  &lt;label for="email"&gt;Email:&lt;/label&gt;
+  &lt;input type="email" id="email" name="email" required&gt;
+
+  &lt;label for="yosh"&gt;Yosh:&lt;/label&gt;
+  &lt;input type="number" id="yosh" name="yosh" min="18" max="100"&gt;
+
+  &lt;label for="shahar"&gt;Shahar:&lt;/label&gt;
+  &lt;select id="shahar" name="shahar"&gt;
+    &lt;option value="toshkent"&gt;Toshkent&lt;/option&gt;
+    &lt;option value="samarqand"&gt;Samarqand&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;label&gt;
+    &lt;input type="checkbox" name="rozilik" required&gt;
+    Men shartlarga roziman
+  &lt;/label&gt;
+
+  &lt;button type="submit"&gt;Ro'yxatdan o'tish&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+<h2>Xulosa</h2>
+<ul><li><code>&lt;form&gt;</code> — maydonlarni birlashtiradi; <code>action</code> (qayerga), <code>method</code> (GET/POST) atributlari bilan;</li><li><code>&lt;input&gt;</code> — <code>type</code> ga qarab har xil: <code>text</code>, <code>password</code>, <code>email</code>, <code>number</code>, <code>date</code>, <code>checkbox</code>, <code>radio</code>;</li><li><code>name</code> — serverga yuborishda maydon nomi (majburiy); <code>placeholder</code> — namuna matn;</li><li><code>&lt;label&gt;</code> — maydon yorlig'i, <code>for</code> orqali <code>id</code> ga bog'lanadi (a11y uchun muhim);</li><li><code>&lt;select&gt;</code>/<code>&lt;option&gt;</code> — ochiluvchi ro'yxat; <code>&lt;textarea&gt;</code> — ko'p qatorli matn;</li><li><code>&lt;button type="submit"&gt;</code> — formani yuboradi;</li><li><code>required</code>, <code>minlength</code>, <code>min</code>/<code>max</code>, <code>pattern</code> — brauzer validatsiyasi (lekin serverda ham tekshiring!).</li></ul>
+<nav class="lesson-nav">
+  <a href="html-teglar.html"><span class="dir">← Oldingi</span><span class="ttl">Asosiy teglar</span></a>
+  <a class="next" href="html-semantik.html"><span class="dir">Keyingi →</span><span class="ttl">Semantik HTML</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

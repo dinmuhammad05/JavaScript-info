@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fayl tizimi va navigatsiya — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Linux fayl tizimi tuzilishi (/, /home, /etc), pwd, ls flaglari bilan, cd, mkdir, rmdir; mutlaq va nisbiy yo'llar; ~, . va .. belgilari.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Hujjat (DOM)</summary>
+    <ol>
+      <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+      <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+      <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+      <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+      <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+      <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+      <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+      <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+      <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+      <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hodisalarga kirish</summary>
+    <ol>
+      <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+      <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+      <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+      <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+      <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>UI hodisalari</summary>
+    <ol>
+      <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+      <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+      <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+      <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+      <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+      <li><a href="../lessons/scroll.html">Skroll</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+  <div class="side-part">3-qism: Qo'shimcha bo'limlar</div>
+  <details>
+    <summary>Oynalar va freymlar</summary>
+    <ol>
+      <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+      <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+      <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ikkilik ma'lumot va fayllar</summary>
+    <ol>
+      <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+      <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+      <li><a href="../lessons/blob.html">Blob</a></li>
+      <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Tarmoq so'rovlari</summary>
+    <ol>
+      <li><a href="../lessons/fetch.html">Fetch</a></li>
+      <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+      <li><a href="../lessons/formdata.html">FormData</a></li>
+      <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+      <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+      <li><a href="../lessons/websocket.html">WebSocket</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Brauzerda ma'lumot saqlash</summary>
+    <ol>
+      <li><a href="../lessons/cookie.html">Cookie</a></li>
+      <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+      <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Muntazam ifodalar (RegExp)</summary>
+    <ol>
+      <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+      <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+      <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+      <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+      <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+      <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+      <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+    </ol>
+  </details>
+  <div class="side-part">4-qism: Amaliy vositalar</div>
+  <details>
+    <summary>Git va GitHub</summary>
+    <ol>
+      <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+      <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+      <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+      <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+      <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+      <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+      <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Docker</summary>
+    <ol>
+      <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+      <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+      <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+      <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+      <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+      <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Nginx</summary>
+    <ol>
+      <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+      <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+      <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+      <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+      <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+      <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Linux va terminal</summary>
+    <ol>
+      <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+      <li><a class="active" href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+      <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+      <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+      <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+      <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+    </ol>
+  </details>
+  <div class="side-part">5-qism: Backend dasturlash</div>
+  <details>
+    <summary>Node.js va Express</summary>
+    <ol>
+      <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+      <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+      <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+      <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+      <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+      <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumotlar bazalari</summary>
+    <ol>
+      <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+      <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+      <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+      <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+      <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+    </ol>
+  </details>
+  <div class="side-part">6-qism: Frontend asoslari</div>
+  <details>
+    <summary>HTML</summary>
+    <ol>
+      <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+      <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+      <li><a href="../lessons/html-form.html">Formalar</a></li>
+      <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>TypeScript</summary>
+    <ol>
+      <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+      <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+      <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+      <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+      <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Linux va terminal</div>
+<h1>Fayl tizimi va navigatsiya</h1>
+<p class="lead">Terminalda ishlashning birinchi ko'nikmasi — <strong>navigatsiya</strong>, ya'ni papkalar orasida yurish va nima qayerda joylashganini bilish. Bu darsda Linux fayl tizimining tuzilishini, joriy joyni aniqlash, papkalarni ko'rish, ular ichiga kirish va yangi papka yaratishni o'rganamiz.</p>
+<h2>Linux fayl tizimi tuzilishi</h2>
+<p>Windowsda disklar <code>C:</code>, <code>D:</code> kabi harflar bilan ajratiladi. Linuxda esa <strong>bitta</strong> daraxt bor: eng tepada <code>/</code> (root, ildiz) turadi, qolgan hamma narsa uning ichiga joylashadi. Barcha disklar, papkalar, hatto USB fleshka ham shu yagona daraxtga "ulanadi".</p>
+<p>Ildizdagi asosiy papkalar va ularning vazifasi:</p>
+<ul><li><code>/</code> — ildiz (root), butun tizimning boshi;</li><li><code>/home</code> — foydalanuvchilar papkalari; masalan <code>/home/aziz</code> — Azizning shaxsiy papkasi;</li><li><code>/root</code> — bosh administrator (root) foydalanuvchining uy papkasi;</li><li><code>/etc</code> — tizim va dasturlar sozlamalari (konfiguratsiya fayllari);</li><li><code>/bin</code> va <code>/usr/bin</code> — bajariladigan dasturlar (buyruqlar shu yerda yashaydi);</li><li><code>/var</code> — o'zgaruvchan ma'lumot: log'lar (<code>/var/log</code>), bazalar, kesh;</li><li><code>/tmp</code> — vaqtinchalik fayllar, qayta yuklanganda tozalanadi;</li><li><code>/opt</code> — qo'shimcha (ixtiyoriy) dasturlar;</li><li><code>/dev</code> — qurilmalar (disk, terminal, klaviatura) fayl ko'rinishida;</li><li><code>/mnt</code> va <code>/media</code> — tashqi disklar va fleshkalar ulanadigan joy.</li></ul>
+<div class="note">Linuxda "hamma narsa — fayl" degan falsafa bor. Nafaqat hujjatlar, balki qurilmalar, jarayonlar va hatto tarmoq ulanishlari ham fayl kabi ko'rinishi mumkin. Bu tizimni juda mustahkam va yaxlit qiladi.</div>
+<h2>pwd — joriy joyni aniqlash</h2>
+<p>Terminalda har doim biror papka "ichida" turasiz — bu <strong>joriy ish papkasi</strong> (current working directory). Qayerda ekaningizni bilish uchun <code>pwd</code> (print working directory) buyrug'ini tering:</p>
+<pre class="code"><code>pwd</code></pre>
+<p>Natija sifatida to'liq yo'l chiqadi, masalan:</p>
+<pre class="code"><code>/home/aziz/loyihalar</code></pre>
+<p>Bu — siz hozir <code>loyihalar</code> papkasida turganingizni bildiradi, u esa <code>aziz</code> ichida, u ham <code>home</code> ichida, u esa ildizda.</p>
+<h2>ls — papka mazmunini ko'rish</h2>
+<p><code>ls</code> (list) buyrug'i joriy papkadagi fayl va papkalar ro'yxatini chiqaradi:</p>
+<pre class="code"><code>ls</code></pre>
+<p>Bu qisqacha ro'yxatni beradi. Lekin <code>ls</code> ning <strong>flaglari</strong> (qo'shimcha sozlamalari) bilan ko'proq ma'lumot olish mumkin. Flaglar buyruqdan keyin <code>-</code> bilan yoziladi:</p>
+<pre class="code"><code>ls -l</code></pre>
+<p><code>-l</code> (long) — batafsil ro'yxat: har bir fayl alohida qatorda, ruxsatlari, egasi, hajmi va o'zgartirilgan sanasi bilan chiqadi. Masalan:</p>
+<pre class="code"><code>-rw-r--r-- 1 aziz aziz 2048 Jul  1 10:30 hujjat.txt
+drwxr-xr-x 2 aziz aziz 4096 Jun 28 09:15 rasmlar</code></pre>
+<p>Boshidagi harf turini bildiradi: <code>d</code> — papka (directory), <code>-</code> — oddiy fayl. Ruxsatlar (<code>rw-r--r--</code>) haqida keyingi darsda batafsil gaplashamiz.</p>
+<p>Boshqa foydali flaglar:</p>
+<ul><li><code>-a</code> (all) — <em>yashirin</em> fayllarni ham ko'rsatadi (nomi <code>.</code> bilan boshlanadigan fayllar, masalan <code>.bashrc</code>);</li><li><code>-h</code> (human-readable) — hajmni odam o'qiy oladigan ko'rinishda: <code>2K</code>, <code>5M</code>, <code>1G</code> (odatda <code>-l</code> bilan birga);</li><li><code>-t</code> — o'zgartirilgan vaqti bo'yicha saralaydi (eng yangisi tepada);</li><li><code>-R</code> — ichki papkalarni ham rekursiv ko'rsatadi.</li></ul>
+<p>Flaglarni birlashtirish mumkin. Eng ko'p ishlatiladigan kombinatsiya:</p>
+<pre class="code"><code>ls -lah</code></pre>
+<p>Bu — batafsil (<code>l</code>) + yashirin fayllar bilan (<code>a</code>) + o'qishga qulay hajmda (<code>h</code>). Amalda deyarli har doim shu ko'rinishda ishlatiladi.</p>
+<div class="tip">Buyruq oxiriga papka nomini qo'shsangiz, o'sha papkaning ichini ko'rasiz — kirmasdan turib: <code>ls -l /etc</code>. Bu <code>/etc</code> papkasi mazmunini ko'rsatadi, lekin joriy joyingiz o'zgarmaydi.</div>
+<h2>cd — papkalar orasida yurish</h2>
+<p><code>cd</code> (change directory) buyrug'i joriy papkani o'zgartiradi. Papka nomini yozib, ichiga kirasiz:</p>
+<pre class="code"><code>cd loyihalar</code></pre>
+<p>Bu "loyihalar" papkasiga kiradi. Bir necha muhim maxsus shakllari bor:</p>
+<ul><li><code>cd ..</code> — bitta yuqoriga (ota-papkaga) chiqish;</li><li><code>cd</code> yoki <code>cd ~</code> — uy papkasiga qaytish (istalgan joydan);</li><li><code>cd /</code> — ildizga o'tish;</li><li><code>cd -</code> — oldingi turgan papkaga qaytish ("orqaga" tugmasi kabi).</li></ul>
+<p>Bir necha papkani ketma-ket o'tish uchun yo'lni <code>/</code> bilan yozasiz:</p>
+<pre class="code"><code>cd loyihalar/veb-sayt/src</code></pre>
+<div class="note">Papka yoki fayl nomini to'liq yozmang — bir-ikki harfini yozib <strong>Tab</strong> tugmasini bosing, shell qolganini avtomatik to'ldiradi. Bu <em>avto-to'ldirish</em> (autocomplete) — terminalda tezlikning kaliti. Agar bir necha mos variant bo'lsa, Tabni ikki marta bosing — hammasi ro'yxat bo'lib chiqadi.</div>
+<h2>Mutlaq va nisbiy yo'llar</h2>
+<p>Yo'l (path) ikki xil bo'ladi:</p>
+<ul><li><strong>Mutlaq yo'l</strong> (absolute) — ildizdan (<code>/</code>) boshlanadi, to'liq manzil. Masalan: <code>/home/aziz/loyihalar</code>. U qayerda turishingizdan qat'i nazar bir xil ishlaydi;</li><li><strong>Nisbiy yo'l</strong> (relative) — <code>/</code>siz boshlanadi, <em>joriy papkaga</em> nisbatan hisoblanadi. Masalan, <code>loyihalar/src</code> — joriy papkadagi "loyihalar" ichidagi "src".</li></ul>
+<p>Misol bilan tushunaylik. Aytaylik, siz <code>/home/aziz</code> da turibsiz:</p>
+<pre class="code"><code>cd /home/aziz/loyihalar    # mutlaq yo'l
+cd loyihalar               # nisbiy yo'l (natija bir xil)</code></pre>
+<p>Ikkalasi ham bir xil joyga olib boradi, chunki joriy papka <code>/home/aziz</code> edi.</p>
+<h2>Maxsus belgilar: ~ . ..</h2>
+<p>Yo'llarda uch qisqartma juda tez-tez ishlatiladi:</p>
+<ul><li><code>~</code> (tilda) — <strong>uy papkangiz</strong>, ya'ni <code>/home/aziz</code>. Masalan, <code>cd ~/loyihalar</code> = <code>cd /home/aziz/loyihalar</code>;</li><li><code>.</code> (bitta nuqta) — <strong>joriy papka</strong>. Masalan, <code>./skript.sh</code> — shu papkadagi skriptni ishga tushirish;</li><li><code>..</code> (ikki nuqta) — <strong>ota-papka</strong> (bitta yuqori). <code>cd ..</code> yuqoriga chiqaradi, <code>cd ../..</code> ikki pog'ona yuqoriga.</li></ul>
+<pre class="code"><code>cd ~/loyihalar     # uy papkasidagi loyihalar
+cd ../boshqa       # yuqoriga chiqib, boshqa papkaga kirish
+ls ..              # ota-papka mazmunini ko'rish (o'zi kirmasdan)</code></pre>
+<h2>mkdir — papka yaratish</h2>
+<p><code>mkdir</code> (make directory) yangi papka yaratadi:</p>
+<pre class="code"><code>mkdir yangi-loyiha</code></pre>
+<p>Bir vaqtning o'zida bir necha papka yaratish ham mumkin:</p>
+<pre class="code"><code>mkdir hujjatlar rasmlar videolar</code></pre>
+<p>Agar ichma-ich (bir vaqtning o'zida ota va bola) papkalar yaratmoqchi bo'lsangiz, <code>-p</code> (parents) flagini ishlating:</p>
+<pre class="code"><code>mkdir -p loyiha/src/komponentlar</code></pre>
+<p>Bu "loyiha" bo'lmasa ham, uni va ichidagi barcha papkalarni bir yo'la yaratadi. <code>-p</code> siz esa "ota-papka topilmadi" xatosi chiqardi.</p>
+<h2>rmdir — bo'sh papkani o'chirish</h2>
+<p><code>rmdir</code> (remove directory) papkani o'chiradi, lekin faqat u <strong>bo'sh</strong> bo'lsa:</p>
+<pre class="code"><code>rmdir eski-papka</code></pre>
+<p>Agar papka ichida fayl yoki boshqa papka bo'lsa, <code>rmdir</code> "papka bo'sh emas" degan xatolik beradi va o'chirmaydi.</p>
+<div class="warn">Ichida fayllari bor papkani o'chirish uchun <code>rm -r</code> ishlatiladi, lekin u juda xavfli — hamma narsani so'roqsiz o'chiradi. Buni keyingi darsda ehtiyotkorlik bilan o'rganamiz. Hozircha bo'sh papkalar uchun <code>rmdir</code> — xavfsiz tanlov.</div>
+<h2>Xulosa</h2>
+<ul><li>Linuxda yagona daraxt bor, ildizi — <code>/</code>; muhim papkalar: <code>/home</code>, <code>/etc</code>, <code>/var</code>, <code>/tmp</code>;</li><li><code>pwd</code> — qayerda turganingizni ko'rsatadi;</li><li><code>ls -lah</code> — papka mazmunini batafsil, yashirin fayllar bilan, qulay hajmda ko'rsatadi;</li><li><code>cd</code> — papkalar orasida yuradi; <code>cd ..</code> yuqoriga, <code>cd ~</code> uyga, <code>cd -</code> orqaga;</li><li><strong>Mutlaq yo'l</strong> <code>/</code>dan boshlanadi, <strong>nisbiy yo'l</strong> joriy papkaga nisbatan;</li><li><code>~</code> — uy papkasi, <code>.</code> — joriy, <code>..</code> — ota-papka;</li><li><code>mkdir -p</code> — ichma-ich papka yaratadi, <code>rmdir</code> — faqat bo'sh papkani o'chiradi;</li><li><strong>Tab</strong> tugmasi bilan nomlarni avtomatik to'ldiring.</li></ul>
+<nav class="lesson-nav">
+  <a href="linux-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Linux va terminal nima?</span></a>
+  <a class="next" href="fayl-buyruqlar.html"><span class="dir">Keyingi →</span><span class="ttl">Fayllar bilan ishlash</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

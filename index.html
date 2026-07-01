@@ -329,6 +329,17 @@
       <li><a href="lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
     </ol>
   </details>
+  <details>
+    <summary>Linux va terminal</summary>
+    <ol>
+      <li><a href="lessons/linux-nima.html">Linux va terminal nima?</a></li>
+      <li><a href="lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+      <li><a href="lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+      <li><a href="lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+      <li><a href="lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+      <li><a href="lessons/bash-skript.html">Bash skript asoslari</a></li>
+    </ol>
+  </details>
   <div class="side-part">5-qism: Backend dasturlash</div>
   <details>
     <summary>Node.js va Express</summary>
@@ -351,11 +362,31 @@
       <li><a href="lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
     </ol>
   </details>
+  <div class="side-part">6-qism: Frontend asoslari</div>
+  <details>
+    <summary>HTML</summary>
+    <ol>
+      <li><a href="lessons/html-nima.html">HTML nima?</a></li>
+      <li><a href="lessons/html-teglar.html">Asosiy teglar</a></li>
+      <li><a href="lessons/html-form.html">Formalar</a></li>
+      <li><a href="lessons/html-semantik.html">Semantik HTML</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>TypeScript</summary>
+    <ol>
+      <li><a href="lessons/ts-nima.html">TypeScript nima?</a></li>
+      <li><a href="lessons/ts-turlar.html">Asosiy turlar</a></li>
+      <li><a href="lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+      <li><a href="lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+      <li><a href="lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+    </ol>
+  </details>
 </aside>
 <main class="content">
 <section class="hero">
   <h1>JavaScript'ni noldan chuqur o'rganing</h1>
-  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 176 ta dars.</p>
+  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami 191 ta dars.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
 <h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
@@ -613,23 +644,48 @@
   <a class="card" href="lessons/nginx-reverse-proxy.html"><div class="num">164</div><h3>Reverse proxy va load balancing</h3><p>Reverse proxy tushunchasi, proxy_pass bilan Node.js ilovaga so'rov uzatish, proxy_set_header (Host, X-Real-IP), upstream bloki bilan load balancing va usullar (round-robin, least_conn).</p></a>
   <a class="card" href="lessons/nginx-ssl.html"><div class="num">165</div><h3>SSL/HTTPS sozlash</h3><p>Nega HTTPS kerak, Let's Encrypt / certbot bilan bepul sertifikat, listen 443 ssl, ssl_certificate direktivalari, HTTP dan HTTPS ga yo'naltirish (return 301) va certbot --nginx.</p></a>
 </div>
+<h3 class="chapter-head">Linux va terminal</h3>
+<div class="cards">
+  <a class="card" href="lessons/linux-nima.html"><div class="num">166</div><h3>Linux va terminal nima?</h3><p>Operatsion tizim nima, Linux va uning distributivlari (Ubuntu, Debian, Fedora), shell va bash, terminal, GUI va CLI o'rtasidagi farq hamda nega dasturchiga terminal shart.</p></a>
+  <a class="card" href="lessons/fayl-tizimi.html"><div class="num">167</div><h3>Fayl tizimi va navigatsiya</h3><p>Linux fayl tizimi tuzilishi (/, /home, /etc), pwd, ls flaglari bilan, cd, mkdir, rmdir; mutlaq va nisbiy yo'llar; ~, . va .. belgilari.</p></a>
+  <a class="card" href="lessons/fayl-buyruqlar.html"><div class="num">168</div><h3>Fayllar bilan ishlash</h3><p>touch, cp, mv, rm (ehtiyotkorlik bilan), cat, less, head, tail, nano/vim, find, grep, wc va oqimlarni yo'naltirish (&gt;, &gt;&gt;, |).</p></a>
+  <a class="card" href="lessons/huquqlar.html"><div class="num">169</div><h3>Ruxsatlar va egalik</h3><p>rwx ruxsatlar, chmod (raqamli va belgili), chown, foydalanuvchi va guruh tushunchasi, sudo va root, su buyrug'i.</p></a>
+  <a class="card" href="lessons/jarayon-tarmoq.html"><div class="num">170</div><h3>Jarayonlar va tarmoq</h3><p>ps, top/htop, kill, fon rejimi (&amp;), jobs, systemctl; tarmoq buyruqlari ping, curl, wget; paket menejeri apt (install/update).</p></a>
+  <a class="card" href="lessons/bash-skript.html"><div class="num">171</div><h3>Bash skript asoslari</h3><p>Shebang (#!/bin/bash), chmod +x bilan ishga tushirish, o'zgaruvchilar, echo va read, if/else shartlari, for/while sikllari, funksiyalar va to'liq skript misoli.</p></a>
+</div>
 <h2 class="part-head" id="5-qism-backend-dasturlash">5-qism: Backend dasturlash</h2>
 <h3 class="chapter-head">Node.js va Express</h3>
 <div class="cards">
-  <a class="card" href="lessons/nodejs-nima.html"><div class="num">166</div><h3>Node.js nima?</h3><p>Server tomonda JavaScript, V8 dvigateli, bir oqimli event loop, bloklamaydigan I/O, Node.js qachon ishlatiladi, o'rnatish va birinchi skript.</p></a>
-  <a class="card" href="lessons/node-modullar.html"><div class="num">167</div><h3>Modullar va npm</h3><p>CommonJS (require/module.exports) va ESM (import/export), o'rnatilgan modullar, npm nima, npm init, package.json, npm install, node_modules, dependencies va npx.</p></a>
-  <a class="card" href="lessons/node-fs-http.html"><div class="num">168</div><h3>Fayl tizimi va HTTP server</h3><p>fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.</p></a>
-  <a class="card" href="lessons/express-kirish.html"><div class="num">169</div><h3>Express asoslari</h3><p>Nega Express, o'rnatish, birinchi ilova (app va app.listen), route (app.get), req va res obyektlari, res.send va res.json.</p></a>
-  <a class="card" href="lessons/express-rest.html"><div class="num">170</div><h3>REST API yaratish</h3><p>REST tamoyillari, GET/POST/PUT/DELETE, route parametrlari (:id), query, JSON tanasi, status kodlar va massivda oddiy CRUD API misoli.</p></a>
-  <a class="card" href="lessons/express-middleware.html"><div class="num">171</div><h3>Middleware va xatoliklar</h3><p>Middleware nima, zanjir, next(), express.json(), express.static(), maxsus logger middleware, xatolarni boshqarish middleware va 404.</p></a>
+  <a class="card" href="lessons/nodejs-nima.html"><div class="num">172</div><h3>Node.js nima?</h3><p>Server tomonda JavaScript, V8 dvigateli, bir oqimli event loop, bloklamaydigan I/O, Node.js qachon ishlatiladi, o'rnatish va birinchi skript.</p></a>
+  <a class="card" href="lessons/node-modullar.html"><div class="num">173</div><h3>Modullar va npm</h3><p>CommonJS (require/module.exports) va ESM (import/export), o'rnatilgan modullar, npm nima, npm init, package.json, npm install, node_modules, dependencies va npx.</p></a>
+  <a class="card" href="lessons/node-fs-http.html"><div class="num">174</div><h3>Fayl tizimi va HTTP server</h3><p>fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.</p></a>
+  <a class="card" href="lessons/express-kirish.html"><div class="num">175</div><h3>Express asoslari</h3><p>Nega Express, o'rnatish, birinchi ilova (app va app.listen), route (app.get), req va res obyektlari, res.send va res.json.</p></a>
+  <a class="card" href="lessons/express-rest.html"><div class="num">176</div><h3>REST API yaratish</h3><p>REST tamoyillari, GET/POST/PUT/DELETE, route parametrlari (:id), query, JSON tanasi, status kodlar va massivda oddiy CRUD API misoli.</p></a>
+  <a class="card" href="lessons/express-middleware.html"><div class="num">177</div><h3>Middleware va xatoliklar</h3><p>Middleware nima, zanjir, next(), express.json(), express.static(), maxsus logger middleware, xatolarni boshqarish middleware va 404.</p></a>
 </div>
 <h3 class="chapter-head">Ma'lumotlar bazalari</h3>
 <div class="cards">
-  <a class="card" href="lessons/db-nima.html"><div class="num">172</div><h3>Ma'lumotlar bazasi nima?</h3><p>Ma'lumotlar bazasi nima uchun kerak, DBMS (ma'lumotlar bazasini boshqarish tizimi) nima, relatsion (SQL) va NoSQL bazalar farqi, jadval/qator/ustun tushunchalari, mashhur bazalar (PostgreSQL, MySQL, MongoDB) va qachon qaysi birini tanlash.</p></a>
-  <a class="card" href="lessons/sql-asoslar.html"><div class="num">173</div><h3>SQL asoslari</h3><p>SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.</p></a>
-  <a class="card" href="lessons/sql-join.html"><div class="num">174</div><h3>SQL: bog'lanishlar va JOIN</h3><p>Jadvallarni bog'lash: PRIMARY KEY va FOREIGN KEY, munosabatlar (1:N), JOIN turlari (INNER, LEFT, RIGHT), GROUP BY va agregat funksiyalar (COUNT, SUM, AVG), HAVING orqali guruhlarni filtrlash.</p></a>
-  <a class="card" href="lessons/mongodb.html"><div class="num">175</div><h3>MongoDB (NoSQL)</h3><p>MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.</p></a>
-  <a class="card" href="lessons/node-db.html"><div class="num">176</div><h3>Node.js bilan bazaga ulanish</h3><p>Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.</p></a>
+  <a class="card" href="lessons/db-nima.html"><div class="num">178</div><h3>Ma'lumotlar bazasi nima?</h3><p>Ma'lumotlar bazasi nima uchun kerak, DBMS (ma'lumotlar bazasini boshqarish tizimi) nima, relatsion (SQL) va NoSQL bazalar farqi, jadval/qator/ustun tushunchalari, mashhur bazalar (PostgreSQL, MySQL, MongoDB) va qachon qaysi birini tanlash.</p></a>
+  <a class="card" href="lessons/sql-asoslar.html"><div class="num">179</div><h3>SQL asoslari</h3><p>SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.</p></a>
+  <a class="card" href="lessons/sql-join.html"><div class="num">180</div><h3>SQL: bog'lanishlar va JOIN</h3><p>Jadvallarni bog'lash: PRIMARY KEY va FOREIGN KEY, munosabatlar (1:N), JOIN turlari (INNER, LEFT, RIGHT), GROUP BY va agregat funksiyalar (COUNT, SUM, AVG), HAVING orqali guruhlarni filtrlash.</p></a>
+  <a class="card" href="lessons/mongodb.html"><div class="num">181</div><h3>MongoDB (NoSQL)</h3><p>MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.</p></a>
+  <a class="card" href="lessons/node-db.html"><div class="num">182</div><h3>Node.js bilan bazaga ulanish</h3><p>Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.</p></a>
+</div>
+<h2 class="part-head" id="6-qism-frontend-asoslari">6-qism: Frontend asoslari</h2>
+<h3 class="chapter-head">HTML</h3>
+<div class="cards">
+  <a class="card" href="lessons/html-nima.html"><div class="num">183</div><h3>HTML nima?</h3><p>HTML — veb-sahifalarni belgilash tili. Teg, element va atribut tushunchalari, HTML hujjatining skeleti (DOCTYPE, html, head, body), title va meta teglari, hamda birinchi sahifani yozish.</p></a>
+  <a class="card" href="lessons/html-teglar.html"><div class="num">184</div><h3>Asosiy teglar</h3><p>Eng ko'p ishlatiladigan HTML teglari: sarlavhalar (h1-h6), paragraflar, qalin va kursiv matn (strong/em), ro'yxatlar (ul/ol/li), havolalar (a), rasmlar (img), div va span konteynerlari, hamda br va hr.</p></a>
+  <a class="card" href="lessons/html-form.html"><div class="num">185</div><h3>Formalar</h3><p>Foydalanuvchidan ma'lumot yig'ish uchun formalar: form tegi (action, method), input turlari (text, password, email, checkbox, radio, number, date), label, select/option, textarea, tugmalar hamda required va boshqa validatsiya atributlari.</p></a>
+  <a class="card" href="lessons/html-semantik.html"><div class="num">186</div><h3>Semantik HTML</h3><p>Nega semantik teglar muhim; sahifa tuzilishi teglari (header, nav, main, section, article, aside, footer); foydalanish qulayligi (a11y) asoslari; SEO uchun foydasi va "div sho'rvasi"dan qochish.</p></a>
+</div>
+<h3 class="chapter-head">TypeScript</h3>
+<div class="cards">
+  <a class="card" href="lessons/ts-nima.html"><div class="num">187</div><h3>TypeScript nima?</h3><p>TypeScript — JavaScript ustiga turlarni qo'shadigan til; nega kerak, o'rnatish, tsc bilan kompilyatsiya va .ts fayllari.</p></a>
+  <a class="card" href="lessons/ts-turlar.html"><div class="num">188</div><h3>Asosiy turlar</h3><p>Tur izohlari, string/number/boolean, massiv va tuple, any va unknown, void, null/undefined, tur xulosasi va literal turlar.</p></a>
+  <a class="card" href="lessons/ts-interface.html"><div class="num">189</div><h3>Interfeys va tip aliaslari</h3><p>interface bilan obyekt shaklini tavsiflash, type alias, ixtiyoriy va readonly xossalar, union va intersection, interface vs type.</p></a>
+  <a class="card" href="lessons/ts-funksiya.html"><div class="num">190</div><h3>Funksiyalar va generiklar</h3><p>Parametr va qaytish turlari, ixtiyoriy va standart parametrlar, generiklar, generic interfeys va klass, cheklovlar (extends).</p></a>
+  <a class="card" href="lessons/ts-class.html"><div class="num">191</div><h3>Klasslar va konfiguratsiya</h3><p>TS klasslari, kirish modifikatorlari (public/private/protected/readonly), implements, enum va tsconfig.json asoslari.</p></a>
 </div>
 </main>
 </div>
