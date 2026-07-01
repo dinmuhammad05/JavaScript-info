@@ -130,3 +130,56 @@
       .replace(/>/g, "&gt;");
   }
 })();
+
+/* ===========================================================
+   Yon menyu jonli qidiruvi — darslarni sarlavha bo'yicha filtrlaydi
+   =========================================================== */
+(function () {
+  "use strict";
+  var input = document.getElementById("lessonSearch");
+  var sidebar = document.getElementById("sidebar");
+  if (!input || !sidebar) return;
+
+  var noResult = sidebar.querySelector(".side-noresult");
+  var parts = Array.prototype.slice.call(sidebar.querySelectorAll(".part-group"));
+
+  // Boshlang'ich ochiq/yopiq holatni saqlab qo'yamiz (qidiruv tugagach tiklash uchun)
+  var details = Array.prototype.slice.call(sidebar.querySelectorAll("details"));
+  var origOpen = details.map(function (d) { return d.open; });
+
+  function reset() {
+    sidebar.querySelectorAll(".hidden").forEach(function (el) { el.classList.remove("hidden"); });
+    details.forEach(function (d, i) { d.open = origOpen[i]; });
+    if (noResult) noResult.hidden = true;
+  }
+
+  input.addEventListener("input", function () {
+    var q = input.value.trim().toLowerCase();
+    if (!q) { reset(); return; }
+
+    var anyMatch = false;
+    parts.forEach(function (part) {
+      var partMatch = false;
+      part.querySelectorAll(".chapter-group").forEach(function (ch) {
+        var chMatch = false;
+        ch.querySelectorAll("li").forEach(function (li) {
+          var hit = li.textContent.toLowerCase().indexOf(q) !== -1;
+          li.classList.toggle("hidden", !hit);
+          if (hit) chMatch = true;
+        });
+        ch.classList.toggle("hidden", !chMatch);
+        ch.open = chMatch;
+        if (chMatch) partMatch = true;
+      });
+      part.classList.toggle("hidden", !partMatch);
+      part.open = partMatch;
+      if (partMatch) anyMatch = true;
+    });
+    if (noResult) noResult.hidden = anyMatch;
+  });
+
+  // Esc tugmasi qidiruvni tozalaydi
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { input.value = ""; reset(); }
+  });
+})();

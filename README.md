@@ -1,13 +1,16 @@
-# JavaScript.info — O'zbekcha variant
+# Kodla — Dasturlashni o'zbekcha o'rgan
 
-Zamonaviy JavaScript'ni **o'zbek tilida** noldan, chuqur va batafsil o'rgatuvchi
-interaktiv o'quv sayti. [javascript.info](https://javascript.info) o'quv dasturi
-tuzilishiga asoslangan; mustaqil (framework va build talab qilmaydigan) statik
-veb-sayt bo'lib, oddiy Node.js generatoridan foydalanadi.
+Web dasturlashni **o'zbek tilida** noldan, chuqur va batafsil o'rgatuvchi
+interaktiv o'quv sayti: JavaScript'dan tortib backend, frontend va DevOps'gacha.
+Mustaqil (framework va build talab qilmaydigan) statik veb-sayt bo'lib, oddiy
+Node.js generatoridan foydalanadi. JavaScript qismi [javascript.info](https://javascript.info)
+o'quv dasturi tuzilishidan ilhomlangan.
+
+**Muallif:** dinMuhammad05 · [GitHub](https://github.com/dinmuhammad05) · [Telegram](https://t.me/dinMuhammad05)
 
 ## Xususiyatlari
 
-- 🇺🇿 **202 ta dars**, to'liq o'zbek tilida, olti qismga bo'lingan;
+- 🇺🇿 **226 ta dars**, to'liq o'zbek tilida, yetti qismga bo'lingan;
 - ▶️ **559 ta interaktiv kod maydonchasi** — misollarni to'g'ridan-to'g'ri
   brauzerda tahrirlab, ishga tushirish mumkin (`console.log` natijalari
   ko'rsatiladi);
@@ -52,7 +55,15 @@ XSS, CSRF, SQL injection va himoya).
 ### 6-qism: Frontend asoslari
 **HTML** (teglar, formalar, semantik HTML) · **CSS** (box model, Flexbox, Grid,
 responsive dizayn, bezaklar) · **TypeScript** (turlar, interfeys, generiklar,
-klasslar).
+klasslar) · **React** (JSX, komponentlar, props, useState, useEffect, ro'yxat/forma).
+
+### 7-qism: Testlash va yetkazib berish
+**Testlash (Jest)** (unit/integration, matcherlar, mock, coverage) · **CI/CD
+(GitHub Actions)** (workflow, avtomatik test/build/deploy) · **Loyihani deploy
+qilish** (VPS + PM2 + Nginx, frontend hosting, domen va HTTPS).
+
+> Backend qismida **NestJS** bobi ham qo'shildi (modul, controller, service, DI,
+> TypeORM, Guard/Interceptor).
 
 ## Ishga tushirish
 

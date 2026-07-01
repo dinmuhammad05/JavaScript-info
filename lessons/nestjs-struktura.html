@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyiha tuzilishi: Module, Controller, Service — Kodla</title>
+  <meta name="description" content="NestJS'ning uch asosiy qurilish bloki: @Module modullarni tashkil qiladi, @Controller so'rovlarni qabul qiladi, @Injectable service biznes-logikani saqlaydi. Nest CLI bilan ularni generatsiya qilish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">K</span> Kodla <small style="font-weight:400;color:#9ca3af">dasturlash — o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+      <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="side-search">
+    <input type="search" id="lessonSearch" placeholder="🔍 Dars qidirish..." aria-label="Dars qidirish" autocomplete="off">
+    <div class="side-noresult" hidden>Hech narsa topilmadi</div>
+  </div>
+  <details class="part-group">
+    <summary class="part-summary">1-qism: JavaScript tili</summary>
+    <details class="chapter-group">
+      <summary>Kirish</summary>
+      <ol>
+        <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+        <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+        <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+        <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>JavaScript asoslari</summary>
+      <ol>
+        <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+        <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+        <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+        <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+        <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+        <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+        <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+        <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+        <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+        <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+        <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+        <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+        <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+        <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+        <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+        <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Kod sifati</summary>
+      <ol>
+        <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+        <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+        <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+        <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+        <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Obyektlar: asoslar</summary>
+      <ol>
+        <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+        <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+        <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+        <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+        <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+        <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+        <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+        <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ma'lumot turlari</summary>
+      <ol>
+        <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+        <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+        <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+        <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+        <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+        <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+        <li><a href="../lessons/map-set.html">Map va Set</a></li>
+        <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+        <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+        <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+        <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+        <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Funksiyalar bilan chuqur ishlash</summary>
+      <ol>
+        <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+        <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+        <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+        <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+        <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+        <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+        <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+        <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+        <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+        <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+        <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Obyekt xossalari konfiguratsiyasi</summary>
+      <ol>
+        <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+        <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Prototiplar, meros</summary>
+      <ol>
+        <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+        <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+        <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+        <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Klasslar</summary>
+      <ol>
+        <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+        <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+        <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+        <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+        <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+        <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+        <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Xatoliklarni boshqarish</summary>
+      <ol>
+        <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+        <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Promise, async/await</summary>
+      <ol>
+        <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+        <li><a href="../lessons/promise.html">Promise</a></li>
+        <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+        <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+        <li><a href="../lessons/promise-api.html">Promise API</a></li>
+        <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+        <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+        <li><a href="../lessons/async-await.html">Async/await</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Generatorlar, ilg'or iteratsiya</summary>
+      <ol>
+        <li><a href="../lessons/generator.html">Generatorlar</a></li>
+        <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Modullar</summary>
+      <ol>
+        <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+        <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+        <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Qo'shimcha mavzular</summary>
+      <ol>
+        <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+        <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+        <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+        <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+        <li><a href="../lessons/bigint.html">BigInt</a></li>
+        <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+        <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</summary>
+    <details class="chapter-group">
+      <summary>Hujjat (DOM)</summary>
+      <ol>
+        <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+        <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+        <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+        <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+        <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+        <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+        <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+        <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+        <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+        <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+        <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Hodisalarga kirish</summary>
+      <ol>
+        <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+        <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+        <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+        <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+        <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>UI hodisalari</summary>
+      <ol>
+        <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+        <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+        <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+        <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+        <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+        <li><a href="../lessons/scroll.html">Skroll</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Formalar va boshqaruv elementlari</summary>
+      <ol>
+        <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+        <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+        <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+        <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Hujjat va resurs yuklanishi</summary>
+      <ol>
+        <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+        <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+        <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Qo'shimcha brauzer mavzulari</summary>
+      <ol>
+        <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+        <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+        <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">3-qism: Qo'shimcha bo'limlar</summary>
+    <details class="chapter-group">
+      <summary>Oynalar va freymlar</summary>
+      <ol>
+        <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+        <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+        <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ikkilik ma'lumot va fayllar</summary>
+      <ol>
+        <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+        <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+        <li><a href="../lessons/blob.html">Blob</a></li>
+        <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Tarmoq so'rovlari</summary>
+      <ol>
+        <li><a href="../lessons/fetch.html">Fetch</a></li>
+        <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+        <li><a href="../lessons/formdata.html">FormData</a></li>
+        <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+        <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+        <li><a href="../lessons/websocket.html">WebSocket</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Brauzerda ma'lumot saqlash</summary>
+      <ol>
+        <li><a href="../lessons/cookie.html">Cookie</a></li>
+        <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+        <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Muntazam ifodalar (RegExp)</summary>
+      <ol>
+        <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+        <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+        <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+        <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+        <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+        <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+        <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">4-qism: Amaliy vositalar</summary>
+    <details class="chapter-group">
+      <summary>Git va GitHub</summary>
+      <ol>
+        <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+        <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+        <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+        <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+        <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+        <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+        <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Docker</summary>
+      <ol>
+        <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+        <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+        <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+        <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+        <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+        <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Nginx</summary>
+      <ol>
+        <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+        <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+        <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+        <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+        <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+        <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Linux va terminal</summary>
+      <ol>
+        <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+        <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+        <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+        <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+        <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+        <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group" open>
+    <summary class="part-summary">5-qism: Backend dasturlash</summary>
+    <details class="chapter-group">
+      <summary>Node.js va Express</summary>
+      <ol>
+        <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+        <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+        <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+        <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+        <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+        <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ma'lumotlar bazalari</summary>
+      <ol>
+        <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+        <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+        <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+        <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+        <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Web xavfsizligi va autentifikatsiya</summary>
+      <ol>
+        <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+        <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+        <li><a href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+        <li><a href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+        <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group" open>
+      <summary>NestJS</summary>
+      <ol>
+        <li><a href="../lessons/nestjs-nima.html">NestJS nima?</a></li>
+        <li><a class="active" href="../lessons/nestjs-struktura.html">Loyiha tuzilishi: Module, Controller, Service</a></li>
+        <li><a href="../lessons/nestjs-routing.html">Routing va DTO</a></li>
+        <li><a href="../lessons/nestjs-di.html">Provider va Dependency Injection</a></li>
+        <li><a href="../lessons/nestjs-database.html">Ma'lumotlar bazasi (TypeORM)</a></li>
+        <li><a href="../lessons/nestjs-guard.html">Middleware, Guard, Interceptor, Exception filter</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">6-qism: Frontend asoslari</summary>
+    <details class="chapter-group">
+      <summary>HTML</summary>
+      <ol>
+        <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+        <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+        <li><a href="../lessons/html-form.html">Formalar</a></li>
+        <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>CSS</summary>
+      <ol>
+        <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+        <li><a href="../lessons/css-box.html">Box model</a></li>
+        <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+        <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+        <li><a href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+        <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>TypeScript</summary>
+      <ol>
+        <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+        <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+        <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+        <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+        <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>React</summary>
+      <ol>
+        <li><a href="../lessons/react-nima.html">React nima?</a></li>
+        <li><a href="../lessons/react-jsx.html">JSX va komponentlar</a></li>
+        <li><a href="../lessons/react-props.html">Props</a></li>
+        <li><a href="../lessons/react-state.html">State va useState</a></li>
+        <li><a href="../lessons/react-effect.html">useEffect va yon effektlar</a></li>
+        <li><a href="../lessons/react-list-form.html">Ro'yxatlar va formalar</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">7-qism: Testlash va yetkazib berish</summary>
+    <details class="chapter-group">
+      <summary>Testlash (Jest)</summary>
+      <ol>
+        <li><a href="../lessons/testlash-nima.html">Nega test yozamiz?</a></li>
+        <li><a href="../lessons/jest-boshlash.html">Jest asoslari</a></li>
+        <li><a href="../lessons/jest-async-mock.html">Async testlar va mock</a></li>
+        <li><a href="../lessons/jest-amaliyot.html">Coverage va yaxshi amaliyot</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>CI/CD (GitHub Actions)</summary>
+      <ol>
+        <li><a href="../lessons/cicd-nima.html">CI/CD nima?</a></li>
+        <li><a href="../lessons/actions-asoslar.html">GitHub Actions asoslari</a></li>
+        <li><a href="../lessons/actions-test.html">Avtomatik test va build</a></li>
+        <li><a href="../lessons/actions-deploy.html">Avtomatik deploy</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Loyihani deploy qilish</summary>
+      <ol>
+        <li><a href="../lessons/deploy-nima.html">Deploy nima?</a></li>
+        <li><a href="../lessons/deploy-vps.html">VPS serverga deploy qilish</a></li>
+        <li><a href="../lessons/deploy-frontend.html">Frontend/statik saytni deploy qilish</a></li>
+        <li><a href="../lessons/deploy-domain-ssl.html">Domen ulash va HTTPS</a></li>
+      </ol>
+    </details>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">NestJS</div>
+<h1>Loyiha tuzilishi: Module, Controller, Service</h1>
+<p class="lead">NestJS'da har qanday ilova uch xil qurilish blokidan yig'iladi: <strong>Module</strong> (modul), <strong>Controller</strong> (kontroller) va <strong>Service</strong> (servis). Bu uchlik NestJS falsafasining yuragi. Ularni bir marta yaxshi tushunib olsangiz, butun framework tushunarli bo'lib qoladi. Keling, har birini alohida ko'rib chiqamiz.</p>
+<h2>Mas'uliyatlarni ajratish tamoyili</h2>
+<p>NestJS arxitekturasi <strong>Separation of Concerns</strong> (mas'uliyatlarni ajratish) tamoyiliga tayanadi. Buning ma'nosi: har bir qism faqat bitta ishga javob berishi kerak. Uchlikda vazifalar shunday taqsimlanadi:</p>
+<ul><li><strong>Controller</strong> — HTTP so'rovlarini <em>qabul qiladi</em> va javob <em>qaytaradi</em>. U "qaysi manzilga qaysi funksiya"ni belgilaydi, ammo biznes-logikani o'zi bajarmaydi;</li><li><strong>Service</strong> — asosiy <em>biznes-logika</em> shu yerda. Ma'lumotni hisoblash, bazaga saqlash, tashqi API'ga so'rov — bularning hammasi service'da;</li><li><strong>Module</strong> — controller va service'larni <em>bir joyga bog'laydi</em> va ularni tashkil qiladi.</li></ul>
+<div class="note">Oddiy qoida: Controller <strong>ingichka</strong> (thin) bo'lishi kerak — u faqat so'rovni qabul qiladi va service'ga uzatadi. Barcha "og'ir" ish service ichida bajariladi. Bu kodni testlash va qayta ishlatishni osonlashtiradi.</div>
+<h2>@Module — modul nima?</h2>
+<p>Modul — bu bir-biriga bog'liq kodni birlashtiruvchi konteyner. Masalan, foydalanuvchilar bilan bog'liq barcha kod (controller, service) <code>UsersModule</code> ichida, mahsulotlar esa <code>ProductsModule</code> ichida bo'ladi. Har bir NestJS ilovada kamida bitta modul bo'ladi — bu <strong>ildiz modul</strong> (<code>AppModule</code>).</p>
+<p>Modul <code>@Module</code> dekoratori bilan belgilangan oddiy klass. Dekorator argument sifatida to'rt xossali obyekt qabul qiladi:</p>
+<pre class="code"><code>// src/app.module.ts
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+@Module({
+  imports: [],            // Boshqa modullarni import qilish
+  controllers: [AppController],  // Bu moduldagi controller'lar
+  providers: [AppService],       // Bu moduldagi service'lar (provayderlar)
+  exports: [],           // Boshqa modullar uchun ochiq provayderlar
+})
+export class AppModule {}</code></pre>
+<p>To'rt xossaning ma'nosi:</p>
+<ul><li><code>controllers</code> — shu modulga tegishli controller'lar ro'yxati;</li><li><code>providers</code> — shu modulda ishlaydigan service'lar va boshqa injektsiya qilinadigan obyektlar;</li><li><code>imports</code> — boshqa modullarni ulash (masalan, <code>UsersModule</code> ichida <code>DatabaseModule</code>);</li><li><code>exports</code> — ushbu modul provayderlarining qaysi biri boshqa modullarga ko'rinishi kerakligi.</li></ul>
+<div class="tip">Modulni <strong>dastur bo'limi</strong> deb tasavvur qiling. Har bir bo'lim mustaqil, o'z ichida to'liq. Bu yondashuv katta ilovada har bir xususiyatni (feature) alohida modulda saqlashga imkon beradi — bu <strong>feature module</strong> deb ataladi.</div>
+<h2>@Controller — so'rovlarni qabul qilish</h2>
+<p>Controller HTTP so'rovlarini qabul qiladi va tegishli javobni qaytaradi. U <code>@Controller</code> dekoratori bilan belgilanadi. Dekoratorga berilgan satr — bu <strong>marshrut prefiksi</strong> (route prefix), ya'ni ushbu controller'dagi barcha manzillarning boshi:</p>
+<pre class="code"><code>// src/users/users.controller.ts
+import { Controller, Get } from '@nestjs/common';
+
+@Controller('users')   // Barcha manzillar /users bilan boshlanadi
+export class UsersController {
+
+  @Get()               // GET /users
+  findAll() {
+    return 'Barcha foydalanuvchilar';
+  }
+
+  @Get('active')       // GET /users/active
+  findActive() {
+    return 'Faol foydalanuvchilar';
+  }
+}</code></pre>
+<p>Bu yerda <code>@Get()</code> — HTTP metod dekoratori. U funksiyani ma'lum bir GET manziliga bog'laydi. Express'da biz <code>app.get('/users', handler)</code> yozardik; NestJS'da esa route va uni bajaradigan funksiya dekorator orqali bir-biriga ulanadi. Bu kodni ancha o'qishli qiladi.</p>
+<div class="note">Controller metodidan qaytgan qiymat avtomatik javobga aylanadi. Agar obyekt yoki massiv qaytarsangiz, NestJS uni avtomatik <strong>JSON</strong>'ga o'giradi. Express'dagidek <code>res.json()</code> chaqirish shart emas.</div>
+<h2>@Injectable — service (biznes-logika)</h2>
+<p>Service — bu haqiqiy ish bajariladigan joy. U <code>@Injectable</code> dekoratori bilan belgilangan klass. Bu dekorator NestJS'ga "bu klassni boshqa joylarga injektsiya qilish mumkin" deb aytadi (buni keyingi darsda Dependency Injection mavzusida chuqurroq ko'ramiz):</p>
+<pre class="code"><code>// src/users/users.service.ts
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class UsersService {
+  private users = [
+    { id: 1, ism: 'Ali' },
+    { id: 2, ism: 'Vali' },
+  ];
+
+  findAll() {
+    return this.users;
+  }
+
+  findOne(id: number) {
+    return this.users.find(u =&gt; u.id === id);
+  }
+}</code></pre>
+<p>Endi controller service'ni ishlatishi kerak. Buning uchun service controller'ning <strong>konstruktoriga</strong> qo'shiladi — bu Dependency Injection deb ataladi. NestJS <code>UsersService</code> nusxasini avtomatik yaratadi va controller'ga uzatadi:</p>
+<pre class="code"><code>// src/users/users.controller.ts
+import { Controller, Get, Param } from '@nestjs/common';
+import { UsersService } from './users.service';
+
+@Controller('users')
+export class UsersController {
+  // Service konstruktor orqali injektsiya qilinadi:
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();  // Ishni service'ga topshiramiz
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(Number(id));
+  }
+}</code></pre>
+<p>E'tibor bering: controller <strong>hech qanday biznes-logikani o'zi bajarmaydi</strong>. U faqat so'rovni qabul qiladi va <code>usersService</code>'ga uzatadi. Bu ideal ajratish: controller HTTP bilan, service esa ma'lumot bilan shug'ullanadi.</p>
+<h2>Hamma narsani modulga bog'lash</h2>
+<p>Controller va service yaratganingizdan keyin ularni modulda ro'yxatdan o'tkazishingiz kerak. Aks holda NestJS ularni topolmaydi:</p>
+<pre class="code"><code>// src/users/users.module.ts
+import { Module } from '@nestjs/common';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+
+@Module({
+  controllers: [UsersController],
+  providers: [UsersService],
+})
+export class UsersModule {}</code></pre>
+<p>So'ng ushbu yangi modulni ildiz modulga import qilamiz, aks holda u ilovaning bir qismi bo'lmaydi:</p>
+<pre class="code"><code>// src/app.module.ts
+import { Module } from '@nestjs/common';
+import { UsersModule } from './users/users.module';
+
+@Module({
+  imports: [UsersModule],   // UsersModule'ni ilovaga ulaymiz
+})
+export class AppModule {}</code></pre>
+<div class="warn">Eng ko'p uchraydigan boshlang'ich xato — service'ni <code>providers</code> ro'yxatiga qo'shishni unutish. Bunda NestJS ishga tushganda <em>"Nest can't resolve dependencies"</em> xatosini beradi. Har doim tekshiring: service <code>providers</code>'da, controller <code>controllers</code>'da bo'lishi shart.</div>
+<h2>Nest CLI bilan avtomatik generatsiya</h2>
+<p>Bu qismlarning hammasini qo'lda yozish zerikarli. Nest CLI'ning <code>generate</code> (qisqasi <code>g</code>) buyrug'i barcha fayllarni yaratib, ularni modulga avtomatik bog'lab beradi:</p>
+<pre class="code"><code># To'liq resurs yaratish (modul + controller + service + testlar):
+nest generate resource users
+
+# Yoki alohida:
+nest generate module users       # nest g module users
+nest generate controller users    # nest g controller users
+nest generate service users       # nest g service users</code></pre>
+<p><code>nest g resource users</code> buyrug'i ayniqsa qulay — u CRUD (yaratish, o'qish, yangilash, o'chirish) uchun tayyor shablon bilan to'liq modul yaratadi. CLI hatto REST API yoki GraphQL kabi turni ham so'raydi. Bu bir necha daqiqalik qo'l ishini bir buyruqqa qisqartiradi.</p>
+<div class="tip">CLI generatsiya qilgan fayllar avtomatik ravishda tegishli modulning <code>controllers</code> va <code>providers</code> ro'yxatiga qo'shiladi. Ya'ni yuqoridagi "modulga bog'lash" bosqichini CLI siz uchun bajaradi.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>Controller</strong> — HTTP so'rovlarini qabul qiladi va javob qaytaradi, biznes-logikasiz ingichka bo'lishi kerak;</li><li><strong>Service</strong> (<code>@Injectable</code>) — biznes-logika, hisob-kitob, ma'lumotlar bilan ishlash shu yerda;</li><li><strong>Module</strong> (<code>@Module</code>) — controller va service'larni birlashtiradi, <code>imports</code>/<code>controllers</code>/<code>providers</code>/<code>exports</code> xossalari bilan;</li><li>Service controller'ga <strong>konstruktor orqali injektsiya</strong> qilinadi;</li><li>Har bir yangi modulni <code>AppModule</code>ning <code>imports</code>'iga qo'shish shart;</li><li><code>nest g resource</code> va <code>nest g</code> buyruqlari fayllarni avtomatik yaratib, modulga bog'laydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="nestjs-nima.html"><span class="dir">← Oldingi</span><span class="ttl">NestJS nima?</span></a>
+  <a class="next" href="nestjs-routing.html"><span class="dir">Keyingi →</span><span class="ttl">Routing va DTO</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 Kodla — Ta'lim maqsadida yaratilgan.</span>
+    <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

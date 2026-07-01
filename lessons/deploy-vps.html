@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPS serverga deploy qilish — Kodla</title>
+  <meta name="description" content="VPS olish (DigitalOcean/Hetzner), SSH bilan ulanish, Node.js o'rnatish, kodni git clone qilish, muhit o'zgaruvchilari (.env), PM2 bilan doimiy ishga tushirish va Nginx reverse proxy sozlash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">K</span> Kodla <small style="font-weight:400;color:#9ca3af">dasturlash — o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+      <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="side-search">
+    <input type="search" id="lessonSearch" placeholder="🔍 Dars qidirish..." aria-label="Dars qidirish" autocomplete="off">
+    <div class="side-noresult" hidden>Hech narsa topilmadi</div>
+  </div>
+  <details class="part-group">
+    <summary class="part-summary">1-qism: JavaScript tili</summary>
+    <details class="chapter-group">
+      <summary>Kirish</summary>
+      <ol>
+        <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+        <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+        <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+        <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>JavaScript asoslari</summary>
+      <ol>
+        <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+        <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+        <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+        <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+        <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+        <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+        <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+        <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+        <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+        <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+        <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+        <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+        <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+        <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+        <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+        <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Kod sifati</summary>
+      <ol>
+        <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+        <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+        <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+        <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+        <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Obyektlar: asoslar</summary>
+      <ol>
+        <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+        <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+        <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+        <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+        <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+        <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+        <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+        <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ma'lumot turlari</summary>
+      <ol>
+        <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+        <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+        <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+        <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+        <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+        <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+        <li><a href="../lessons/map-set.html">Map va Set</a></li>
+        <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+        <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+        <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+        <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+        <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Funksiyalar bilan chuqur ishlash</summary>
+      <ol>
+        <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+        <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+        <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+        <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+        <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+        <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+        <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+        <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+        <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+        <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+        <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Obyekt xossalari konfiguratsiyasi</summary>
+      <ol>
+        <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+        <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Prototiplar, meros</summary>
+      <ol>
+        <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+        <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+        <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+        <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Klasslar</summary>
+      <ol>
+        <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+        <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+        <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+        <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+        <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+        <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+        <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Xatoliklarni boshqarish</summary>
+      <ol>
+        <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+        <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Promise, async/await</summary>
+      <ol>
+        <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+        <li><a href="../lessons/promise.html">Promise</a></li>
+        <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+        <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+        <li><a href="../lessons/promise-api.html">Promise API</a></li>
+        <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+        <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+        <li><a href="../lessons/async-await.html">Async/await</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Generatorlar, ilg'or iteratsiya</summary>
+      <ol>
+        <li><a href="../lessons/generator.html">Generatorlar</a></li>
+        <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Modullar</summary>
+      <ol>
+        <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+        <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+        <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Qo'shimcha mavzular</summary>
+      <ol>
+        <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+        <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+        <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+        <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+        <li><a href="../lessons/bigint.html">BigInt</a></li>
+        <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+        <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</summary>
+    <details class="chapter-group">
+      <summary>Hujjat (DOM)</summary>
+      <ol>
+        <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+        <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+        <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+        <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+        <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+        <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+        <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+        <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+        <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+        <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+        <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Hodisalarga kirish</summary>
+      <ol>
+        <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+        <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+        <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+        <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+        <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>UI hodisalari</summary>
+      <ol>
+        <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+        <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+        <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+        <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+        <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+        <li><a href="../lessons/scroll.html">Skroll</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Formalar va boshqaruv elementlari</summary>
+      <ol>
+        <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+        <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+        <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+        <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Hujjat va resurs yuklanishi</summary>
+      <ol>
+        <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+        <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+        <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Qo'shimcha brauzer mavzulari</summary>
+      <ol>
+        <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+        <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+        <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">3-qism: Qo'shimcha bo'limlar</summary>
+    <details class="chapter-group">
+      <summary>Oynalar va freymlar</summary>
+      <ol>
+        <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+        <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+        <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ikkilik ma'lumot va fayllar</summary>
+      <ol>
+        <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+        <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+        <li><a href="../lessons/blob.html">Blob</a></li>
+        <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Tarmoq so'rovlari</summary>
+      <ol>
+        <li><a href="../lessons/fetch.html">Fetch</a></li>
+        <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+        <li><a href="../lessons/formdata.html">FormData</a></li>
+        <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+        <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+        <li><a href="../lessons/websocket.html">WebSocket</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Brauzerda ma'lumot saqlash</summary>
+      <ol>
+        <li><a href="../lessons/cookie.html">Cookie</a></li>
+        <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+        <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Muntazam ifodalar (RegExp)</summary>
+      <ol>
+        <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+        <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+        <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+        <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+        <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+        <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+        <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">4-qism: Amaliy vositalar</summary>
+    <details class="chapter-group">
+      <summary>Git va GitHub</summary>
+      <ol>
+        <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+        <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+        <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+        <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+        <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+        <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+        <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Docker</summary>
+      <ol>
+        <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+        <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+        <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+        <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+        <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+        <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Nginx</summary>
+      <ol>
+        <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+        <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+        <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+        <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+        <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+        <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Linux va terminal</summary>
+      <ol>
+        <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+        <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+        <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+        <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+        <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+        <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">5-qism: Backend dasturlash</summary>
+    <details class="chapter-group">
+      <summary>Node.js va Express</summary>
+      <ol>
+        <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+        <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+        <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+        <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+        <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+        <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ma'lumotlar bazalari</summary>
+      <ol>
+        <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+        <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+        <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+        <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+        <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Web xavfsizligi va autentifikatsiya</summary>
+      <ol>
+        <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+        <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+        <li><a href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+        <li><a href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+        <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>NestJS</summary>
+      <ol>
+        <li><a href="../lessons/nestjs-nima.html">NestJS nima?</a></li>
+        <li><a href="../lessons/nestjs-struktura.html">Loyiha tuzilishi: Module, Controller, Service</a></li>
+        <li><a href="../lessons/nestjs-routing.html">Routing va DTO</a></li>
+        <li><a href="../lessons/nestjs-di.html">Provider va Dependency Injection</a></li>
+        <li><a href="../lessons/nestjs-database.html">Ma'lumotlar bazasi (TypeORM)</a></li>
+        <li><a href="../lessons/nestjs-guard.html">Middleware, Guard, Interceptor, Exception filter</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">6-qism: Frontend asoslari</summary>
+    <details class="chapter-group">
+      <summary>HTML</summary>
+      <ol>
+        <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+        <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+        <li><a href="../lessons/html-form.html">Formalar</a></li>
+        <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>CSS</summary>
+      <ol>
+        <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+        <li><a href="../lessons/css-box.html">Box model</a></li>
+        <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+        <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+        <li><a href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+        <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>TypeScript</summary>
+      <ol>
+        <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+        <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+        <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+        <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+        <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>React</summary>
+      <ol>
+        <li><a href="../lessons/react-nima.html">React nima?</a></li>
+        <li><a href="../lessons/react-jsx.html">JSX va komponentlar</a></li>
+        <li><a href="../lessons/react-props.html">Props</a></li>
+        <li><a href="../lessons/react-state.html">State va useState</a></li>
+        <li><a href="../lessons/react-effect.html">useEffect va yon effektlar</a></li>
+        <li><a href="../lessons/react-list-form.html">Ro'yxatlar va formalar</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group" open>
+    <summary class="part-summary">7-qism: Testlash va yetkazib berish</summary>
+    <details class="chapter-group">
+      <summary>Testlash (Jest)</summary>
+      <ol>
+        <li><a href="../lessons/testlash-nima.html">Nega test yozamiz?</a></li>
+        <li><a href="../lessons/jest-boshlash.html">Jest asoslari</a></li>
+        <li><a href="../lessons/jest-async-mock.html">Async testlar va mock</a></li>
+        <li><a href="../lessons/jest-amaliyot.html">Coverage va yaxshi amaliyot</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>CI/CD (GitHub Actions)</summary>
+      <ol>
+        <li><a href="../lessons/cicd-nima.html">CI/CD nima?</a></li>
+        <li><a href="../lessons/actions-asoslar.html">GitHub Actions asoslari</a></li>
+        <li><a href="../lessons/actions-test.html">Avtomatik test va build</a></li>
+        <li><a href="../lessons/actions-deploy.html">Avtomatik deploy</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group" open>
+      <summary>Loyihani deploy qilish</summary>
+      <ol>
+        <li><a href="../lessons/deploy-nima.html">Deploy nima?</a></li>
+        <li><a class="active" href="../lessons/deploy-vps.html">VPS serverga deploy qilish</a></li>
+        <li><a href="../lessons/deploy-frontend.html">Frontend/statik saytni deploy qilish</a></li>
+        <li><a href="../lessons/deploy-domain-ssl.html">Domen ulash va HTTPS</a></li>
+      </ol>
+    </details>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Loyihani deploy qilish</div>
+<h1>VPS serverga deploy qilish</h1>
+<p class="lead">Endi eng amaliy qismga o'tamiz: Node.js ilovasini haqiqiy <strong>VPS serverga</strong> deploy qilamiz. Bu darsda toza Linux serverdan boshlab, ilovangiz internetda domen orqali ochiladigan holatga qadar barcha bosqichlarni ketma-ket ko'ramiz. Siz SSH, Git va Node.js bilan tanish bo'lganingiz uchun har bir qadam mantiqiy ravishda ulanadi.</p>
+<div class="note">Bu darsdagi barcha buyruqlar <strong>Linux serverida</strong>, terminalda ishlaydi. Ular statik misollar sifatida keltirilgan — siz ularni o'z serveringizda ketma-ket bajarasiz. Serverning IP manzili misollarda <code>203.0.113.10</code>, foydalanuvchi esa <code>deploy</code> deb olinadi.</div>
+<h2>1-bosqich: VPS olish</h2>
+<p>Avvalo VPS provayderdan server ijaraga olasiz. Eng mashhurlari — <strong>DigitalOcean</strong> (u yerda server "Droplet" deb ataladi) va <strong>Hetzner</strong> (arzon narxlari bilan mashhur). Ro'yxatdan o'tib, quyidagi tanlovlarni qilasiz:</p>
+<ul><li><strong>Operatsion tizim:</strong> Ubuntu (masalan, 22.04 LTS yoki 24.04 LTS) — eng keng tarqalgan va hujjatlari ko'p;</li><li><strong>Resurs:</strong> boshlang'ich loyiha uchun 1 GB RAM, 1 CPU yetarli (eng arzon tarif);</li><li><strong>Hudud (region):</strong> foydalanuvchilaringizga eng yaqin joy — masalan, Yevropa (Germaniya) O'zbekiston uchun yaxshi variant;</li><li><strong>Autentifikatsiya:</strong> parol o'rniga <strong>SSH kalit</strong> tanlash tavsiya etiladi (ancha xavfsizroq).</li></ul>
+<p>Server yaratilgach, provayder sizga <strong>ommaviy IP manzil</strong> beradi — masalan <code>203.0.113.10</code>. Ana shu manzil orqali serverga ulanamiz.</p>
+<div class="tip">Agar SSH kalitingiz bo'lmasa, uni lokalxostda yaratasiz: <code>ssh-keygen -t ed25519 -C "email@example.com"</code>. Bu ikki fayl hosil qiladi — maxfiy kalit (<code>~/.ssh/id_ed25519</code>) va ommaviy kalit (<code>~/.ssh/id_ed25519.pub</code>). Ommaviy kalitni provayder paneliga qo'shasiz, maxfiysini esa <strong>hech kimga bermaysiz</strong>.</div>
+<h2>2-bosqich: SSH bilan ulanish</h2>
+<p>Serverga <strong>SSH</strong> (Secure Shell) orqali ulanasiz. Bu — masofadagi serverning terminaliga xavfsiz kirish protokoli. Birinchi ulanish odatda <code>root</code> foydalanuvchi sifatida bo'ladi:</p>
+<pre class="code"><code># Lokalxostdan serverga ulanish:
+$ ssh root@203.0.113.10</code></pre>
+<p>Xavfsizlik uchun <code>root</code> bilan doimiy ishlash tavsiya etilmaydi. Buning o'rniga alohida foydalanuvchi yaratib, unga <code>sudo</code> (administrator) huquqini beramiz:</p>
+<pre class="code"><code># Root sifatida yangi foydalanuvchi yaratish:
+$ adduser deploy
+$ usermod -aG sudo deploy
+
+# Endi shu foydalanuvchi bilan ulanamiz:
+$ ssh deploy@203.0.113.10</code></pre>
+<div class="warn">Serverni olgach, birinchi ishlardan biri — uni yangilash va oddiy xavfsizlik choralari. Kamida <code>sudo apt update && sudo apt upgrade -y</code> bajaring va faqat kerakli portlarni oching (SSH uchun 22, veb uchun 80 va 443). Ochiq qolgan port — xavfsizlik teshigidir.</div>
+<h2>3-bosqich: Node.js o'rnatish</h2>
+<p>Yangi serverda Node.js o'rnatilmagan bo'ladi. Uni o'rnatishning ishonchli usuli — <strong>NodeSource</strong> ombori orqali. Bu sizga kerakli versiyani (masalan, LTS 20 yoki 22) beradi:</p>
+<pre class="code"><code># NodeSource ombori orqali Node.js 20 LTS o'rnatish:
+$ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+$ sudo apt install -y nodejs
+
+# O'rnatilganini tekshirish:
+$ node -v
+v20.11.0
+$ npm -v
+10.2.4</code></pre>
+<div class="note">Bir necha Node.js versiyasini boshqarish kerak bo'lsa, <strong>nvm</strong> (Node Version Manager) yaxshi vosita. U turli versiyalarni o'rnatib, ular orasida almashish imkonini beradi. Bitta ilova uchun esa NodeSource yondashuvi soddaroq.</div>
+<h2>4-bosqich: Kodni git clone qilish</h2>
+<p>Kodni serverga yetkazishning eng qulay yo'li — <strong>Git</strong>. Kodingiz GitHub yoki boshqa Git xostingida bo'lsa, uni serverga <code>git clone</code> bilan tortib olasiz. Avval Git o'rnatilganiga ishonch hosil qiling:</p>
+<pre class="code"><code># Git o'rnatish (ko'pincha oldindan mavjud):
+$ sudo apt install -y git
+
+# Kodni klonlash:
+$ cd ~
+$ git clone https://github.com/foydalanuvchi/mening-loyiham.git
+$ cd mening-loyiham
+
+# Bog'liqliklarni o'rnatish (faqat production uchun):
+$ npm ci --omit=dev</code></pre>
+<p>Bu yerda <code>npm ci</code> — <code>npm install</code>ning ishonchli varianti. U <code>package-lock.json</code> asosida aniq versiyalarni o'rnatadi va serverda oldindan mavjud <code>node_modules</code>ni tozalab, toza o'rnatadi. Serverda deploy uchun aynan shu tavsiya etiladi.</p>
+<div class="tip">Xususiy (private) repozitoriy uchun HTTPS o'rniga <strong>SSH kalit</strong> yoki <strong>deploy token</strong> ishlatiladi. GitHub'da "Deploy keys" bo'limi orqali serverning ommaviy kalitini faqat shu repozitoriyaga o'qish huquqi bilan qo'shish mumkin — bu xavfsiz yechim.</div>
+<h2>5-bosqich: Muhit o'zgaruvchilari (.env)</h2>
+<p>Ilovaning maxfiy ma'lumotlari — ma'lumotlar bazasi paroli, API kalitlari, sessiya siri — <strong>hech qachon</strong> kodga yozilmaydi va Git'ga yuklanmaydi. Ular <strong>muhit o'zgaruvchilari</strong>da saqlanadi. Serverda ular odatda <code>.env</code> faylida bo'ladi:</p>
+<pre class="code"><code># Serverda .env faylini yaratish (loyiha papkasida):
+$ nano .env</code></pre>
+<pre class="code"><code># .env fayli mazmuni (misol):
+NODE_ENV=production
+PORT=3000
+DATABASE_URL=postgres://user:parol@localhost:5432/mydb
+JWT_SECRET=juda-maxfiy-tasodifiy-satr
+API_KEY=sk_live_1234567890</code></pre>
+<p>Node.js'da bu qiymatlarni o'qish uchun <code>dotenv</code> kutubxonasi ishlatiladi. U <code>.env</code> faylini o'qib, qiymatlarni <code>process.env</code>ga joylaydi:</p>
+<pre class="code"><code>// Ilova boshida — eng yuqorida:
+require('dotenv').config();
+
+const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+console.log('Port:', port);</code></pre>
+<div class="warn"><code>.env</code> faylini <strong>doim</strong> <code>.gitignore</code>ga qo'shing! Aks holda maxfiy parollaringiz GitHub'ga ochiq yuklanadi. Bu eng ko'p uchraydigan va xavfli xatolardan biri — bir marta yuklangan sir butun tarixda qoladi va uni darhol almashtirish kerak bo'ladi.</div>
+<div class="note">Repozitoriyaga faqat namuna sifatida <code>.env.example</code> faylini qo'shish odat: unda qiymatlarsiz kalitlar ro'yxati bo'ladi (masalan, <code>DATABASE_URL=</code>). Shunda boshqa dasturchi qaysi o'zgaruvchilar kerakligini biladi, lekin haqiqiy sirlarni ko'rmaydi.</div>
+<h2>6-bosqich: PM2 bilan doimiy ishga tushirish</h2>
+<p>Ilovani shunchaki <code>node server.js</code> bilan ishga tushirsangiz, u faqat SSH sessiyasi ochiq turgunicha ishlaydi — siz terminaldan chiqishingiz bilan to'xtaydi. Bundan tashqari, ilova xato bilan qulasa, o'zi qayta ishga tushmaydi. Buni hal qilish uchun <strong>PM2</strong> — Node.js jarayon menejeridan foydalanamiz.</p>
+<p>PM2 ilovani fonda ishlatadi, qulasa avtomatik qayta ishga tushiradi, loglarni saqlaydi va server qayta yuklanganda ilovani o'zi qayta boshlaydi. Uni global o'rnatamiz:</p>
+<pre class="code"><code># PM2'ni global o'rnatish:
+$ sudo npm install -g pm2
+
+# Ilovani PM2 bilan ishga tushirish (nom berib):
+$ pm2 start server.js --name mening-ilova
+
+# Holatni ko'rish:
+$ pm2 list
+$ pm2 logs mening-ilova</code></pre>
+<p>Server qayta yuklanganda (masalan, tizim yangilanishidan keyin) ilova avtomatik qayta ishga tushishi uchun PM2'ni tizimga bog'laymiz:</p>
+<pre class="code"><code># PM2'ni tizim ishga tushishida avtomatik yoqilishini sozlash:
+$ pm2 startup
+# (chiqqan buyruqni nusxalab bajaring)
+
+# Hozirgi jarayonlar ro'yxatini saqlash:
+$ pm2 save</code></pre>
+<p>Kodni yangilaganda deploy shunday bo'ladi: yangi kodni tortasiz va PM2'ga ilovani qayta yuklashni buyurasiz:</p>
+<pre class="code"><code># Kodni yangilash va qayta yuklash:
+$ cd ~/mening-loyiham
+$ git pull
+$ npm ci --omit=dev
+$ pm2 reload mening-ilova</code></pre>
+<div class="tip"><code>pm2 reload</code> — <code>pm2 restart</code>dan yaxshiroq: u ilovani "nol vaqt uzilishi" (zero-downtime) bilan yangilashga harakat qiladi, ya'ni foydalanuvchilar uchun uzilish sezilmaydi. Katta trafikli loyihalarda bu muhim.</div>
+<div class="note">PM2 ilovani bir necha nusxada (cluster rejimida) ham ishga tushira oladi — bu Node.js'ning bir oqimli tabiatini yengib, serverdagi barcha yadrolardan foydalanish imkonini beradi: <code>pm2 start server.js -i max</code>.</div>
+<h2>7-bosqich: Nginx reverse proxy</h2>
+<p>Hozir ilovangiz <code>localhost:3000</code>da ishlayapti, lekin foydalanuvchilar odatiy <strong>80</strong> (HTTP) va <strong>443</strong> (HTTPS) portlariga kirishadi. Node.js ilovasini to'g'ridan-to'g'ri 80-portga qo'yish yaxshi amaliyot emas. Buning o'rniga <strong>Nginx</strong>ni <em>reverse proxy</em> sifatida oldinga qo'yamiz.</p>
+<p>Nginx darsidan eslasangiz, <strong>reverse proxy</strong> brauzerdan kelgan so'rovni qabul qilib, uni orqadagi ilovaga (bizning holatda <code>localhost:3000</code>ga) uzatadi. Bu bizga statik fayllarni tez uzatish, HTTPS'ni bir joyda boshqarish va ilovani tashqi dunyodan yashirish imkonini beradi.</p>
+<pre class="code"><code># Nginx o'rnatish:
+$ sudo apt install -y nginx
+
+# Sayt uchun config yaratish:
+$ sudo nano /etc/nginx/sites-available/mening-ilova</code></pre>
+<pre class="code"><code># /etc/nginx/sites-available/mening-ilova
+server {
+    listen 80;
+    server_name mening-saytim.uz www.mening-saytim.uz;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}</code></pre>
+<p>Bu config'da <code>proxy_pass</code> — barcha so'rovlarni <code>localhost:3000</code>dagi Node.js ilovasiga uzatadi. <code>proxy_set_header</code> qatorlari esa ilovaga foydalanuvchining haqiqiy IP'si va boshqa muhim ma'lumotlarni yetkazadi (aks holda ilova hamma so'rovni Nginx'dan kelayotgandek ko'radi).</p>
+<p>Config'ni faollashtiramiz va Nginx'ni qayta yuklaymiz:</p>
+<pre class="code"><code># Config'ni yoqish (symbolic link):
+$ sudo ln -s /etc/nginx/sites-available/mening-ilova /etc/nginx/sites-enabled/
+
+# Config sintaksisini tekshirish (MUHIM!):
+$ sudo nginx -t
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+# Nginx'ni qayta yuklash:
+$ sudo systemctl reload nginx</code></pre>
+<div class="warn">Nginx'ni qayta yuklashdan oldin <strong>doimo</strong> <code>sudo nginx -t</code> bilan config'ni tekshiring. Xato config bilan qayta yuklasangiz, Nginx ishga tushmay qolishi va butun saytingiz o'chib qolishi mumkin. <code>nginx -t</code> muvaffaqiyatli bo'lsagina qayta yuklang.</div>
+<p>Endi <code>proxy_pass</code> qatoridagi <code>$http_upgrade</code> va <code>Connection 'upgrade'</code> sarlavhalari <strong>WebSocket</strong> ulanishlarini ham qo'llab-quvvatlaydi — agar ilovangizda real vaqtli aloqa (chat, bildirishnomalar) bo'lsa, bu kerak bo'ladi.</p>
+<div class="note">Hozircha bu HTTP (80-port) orqali ishlaydi. HTTPS (443-port) va domen ulashni oxirgi darsda ko'ramiz — u yerda aynan shu config'ni Let's Encrypt sertifikati bilan kengaytiramiz.</div>
+<h2>To'liq deploy zanjiri</h2>
+<p>Barcha bosqichlarni bir joyga jamlaymiz. Toza Ubuntu serverdan ishlaydigan ilovagacha bo'lgan yo'l:</p>
+<ol><li>VPS olish va SSH kalit sozlash;</li><li><code>ssh deploy@203.0.113.10</code> bilan ulanish, tizimni yangilash;</li><li>Node.js, Git, Nginx o'rnatish;</li><li><code>git clone</code> va <code>npm ci --omit=dev</code>;</li><li><code>.env</code> faylini yaratish (Git'ga qo'shmasdan);</li><li><code>pm2 start</code> va <code>pm2 startup</code> + <code>pm2 save</code>;</li><li>Nginx reverse proxy config'ini yozib, <code>nginx -t</code> va <code>reload</code>;</li><li>(Keyingi dars) domen va HTTPS.</li></ol>
+<div class="tip">Bu bosqichlarni har safar qo'lda takrorlash zerikarli. Ularni bitta <strong>deploy skript</strong>iga (masalan, <code>deploy.sh</code>) yig'ib qo'yish yoki keyinchalik <strong>GitHub Actions</strong> orqali avtomatlashtirish mumkin. Lekin avtomatlashtirishdan oldin har bir bosqichni qo'lda tushunib chiqish shart.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>VPS</strong> olib, unga <strong>SSH</strong> orqali ulaniladi; root o'rniga <code>sudo</code>li alohida foydalanuvchi yaxshi amaliyot;</li><li>Node.js NodeSource orqali, kod esa <code>git clone</code> bilan serverga yetkaziladi; <code>npm ci --omit=dev</code> ishlatiladi;</li><li>Maxfiy sozlamalar <strong><code>.env</code></strong> faylida saqlanadi va <strong>hech qachon Git'ga yuklanmaydi</strong> (<code>.gitignore</code>ga qo'shiladi);</li><li><strong>PM2</strong> ilovani fonda, doimiy va avtomatik qayta ishga tushiriladigan qiladi; <code>pm2 startup</code> + <code>save</code> serverni qayta yuklashda tiklaydi;</li><li><strong>Nginx reverse proxy</strong> 80/443 portidan <code>localhost:3000</code>dagi Node.js ilovasiga trafikni uzatadi;</li><li>Har bir Nginx o'zgarishidan keyin <code>nginx -t</code> bilan tekshirib, keyin <code>reload</code> qilinadi.</li></ul>
+<nav class="lesson-nav">
+  <a href="deploy-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Deploy nima?</span></a>
+  <a class="next" href="deploy-frontend.html"><span class="dir">Keyingi →</span><span class="ttl">Frontend/statik saytni deploy qilish</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 Kodla — Ta'lim maqsadida yaratilgan.</span>
+    <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

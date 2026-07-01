@@ -19,6 +19,19 @@ const ROOT = __dirname;
 const CONTENT_DIR = path.join(ROOT, "content");
 const LESSONS_DIR = path.join(ROOT, "lessons");
 
+/* ---------- Brend va muallif sozlamalari ----------
+   Nomni o'zgartirish uchun faqat shu yerni tahrirlang — butun sayt
+   bo'ylab avtomatik yangilanadi. */
+const BRAND = {
+  name: "Kodla",
+  mark: "K",                                  // logotipdagi harf
+  short: "dasturlash — o'zbekcha",            // logo yonidagi kichik yozuv
+  tagline: "Dasturlashni noldan, o'zbek tilida o'rgan",
+  author: "dinMuhammad05",
+  github: "https://github.com/dinmuhammad05",
+  telegram: "https://t.me/dinMuhammad05",
+};
+
 /* ---------- 1. Bob fayllarini yuklash ---------- */
 function loadChapters() {
   const files = fs
@@ -60,37 +73,53 @@ function header(depth) {
   return (
     '<header class="site-header">\n' +
     '  <div class="inner">\n' +
-    '    <a href="' + base + 'index.html" class="logo"><span class="mark">JS</span> ' +
-    "JavaScript.info <small style=\"font-weight:400;color:#9ca3af\">o'zbekcha</small></a>\n" +
+    '    <a href="' + base + 'index.html" class="logo"><span class="mark">' + esc(BRAND.mark) + "</span> " +
+    esc(BRAND.name) + " <small style=\"font-weight:400;color:#9ca3af\">" + esc(BRAND.short) + "</small></a>\n" +
     '    <nav class="site-nav">\n' +
     '      <a href="' + base + 'index.html">Bosh sahifa</a>\n' +
     '      <a href="' + base + 'index.html#mundarija">Mundarija</a>\n' +
+    '      <a href="' + BRAND.github + '" target="_blank" rel="noopener">Muallif</a>\n' +
     "    </nav>\n" +
     '    <button class="menu-toggle" aria-label="Menyu">☰</button>\n' +
     "  </div>\n</header>\n"
   );
 }
 
-/* Yon menyu: to'liq mundarija, joriy dars ochiq va belgilangan */
+/* Yon menyu: qismlar → boblar → darslar (yig'iladigan), qidiruv bilan.
+   Faqat joriy qism va bob ochiq turadi; bosh sahifada birinchi qism ochiq. */
 function sidebar(parts, currentSlug, depth) {
   const base = depth === 0 ? "" : "../";
-  let html = '<aside class="sidebar">\n';
-  for (const part of parts) {
-    html += '  <div class="side-part">' + esc(part.name) + "</div>\n";
+  let html = '<aside class="sidebar" id="sidebar">\n';
+  // Jonli qidiruv maydoni
+  html +=
+    '  <div class="side-search">\n' +
+    '    <input type="search" id="lessonSearch" placeholder="🔍 Dars qidirish..." ' +
+    'aria-label="Dars qidirish" autocomplete="off">\n' +
+    '    <div class="side-noresult" hidden>Hech narsa topilmadi</div>\n' +
+    "  </div>\n";
+
+  parts.forEach((part, pi) => {
+    const partHasCurrent = part.chapters.some((ch) =>
+      ch.lessons.some((l) => l.slug === currentSlug)
+    );
+    const openPart = partHasCurrent || (currentSlug == null && pi === 0);
+    html += '  <details class="part-group"' + (openPart ? " open" : "") + ">\n";
+    html += '    <summary class="part-summary">' + esc(part.name) + "</summary>\n";
     for (const ch of part.chapters) {
       const isCurrentChapter = ch.lessons.some((l) => l.slug === currentSlug);
-      html += "  <details" + (isCurrentChapter ? " open" : "") + ">\n";
-      html += "    <summary>" + esc(ch.chapter) + "</summary>\n";
-      html += "    <ol>\n";
+      html += '    <details class="chapter-group"' + (isCurrentChapter ? " open" : "") + ">\n";
+      html += "      <summary>" + esc(ch.chapter) + "</summary>\n";
+      html += "      <ol>\n";
       for (const l of ch.lessons) {
         const active = l.slug === currentSlug ? ' class="active"' : "";
         html +=
-          '      <li><a' + active + ' href="' + base + "lessons/" + l.slug + '.html">' +
+          '        <li><a' + active + ' href="' + base + "lessons/" + l.slug + '.html">' +
           esc(l.title) + "</a></li>\n";
       }
-      html += "    </ol>\n  </details>\n";
+      html += "      </ol>\n    </details>\n";
     }
-  }
+    html += "  </details>\n";
+  });
   html += "</aside>\n";
   return html;
 }
@@ -99,8 +128,10 @@ function footer(depth) {
   const base = depth === 0 ? "" : "../";
   return (
     '<footer class="site-footer">\n  <div class="inner">\n' +
-    "    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>\n" +
-    '    <span><a href="' + base + 'index.html">Bosh sahifa</a></span>\n' +
+    "    <span>© 2026 " + esc(BRAND.name) + " — Ta'lim maqsadida yaratilgan.</span>\n" +
+    '    <span class="author">Muallif: <strong>' + esc(BRAND.author) + "</strong> · " +
+    '<a href="' + BRAND.github + '" target="_blank" rel="noopener">GitHub</a> · ' +
+    '<a href="' + BRAND.telegram + '" target="_blank" rel="noopener">Telegram</a></span>\n' +
     "  </div>\n</footer>\n" +
     '<script src="' + base + 'js/main.js"></script>\n' +
     "</body>\n</html>\n"
@@ -247,7 +278,7 @@ function renderLesson(lesson, chapter, parts, prev, next) {
   nav += "</nav>\n";
 
   return (
-    head(esc(lesson.title) + " — JavaScript.info O'zbekcha", lesson.blurb, 1) +
+    head(esc(lesson.title) + " — " + esc(BRAND.name), lesson.blurb, 1) +
     header(1) +
     '<div class="layout">\n' +
     sidebar(parts, lesson.slug, 1) +
@@ -288,22 +319,23 @@ function renderIndex(parts, total) {
     : "index";
 
   return (
-    head("JavaScript.info — O'zbekcha | Noldan JavaScript o'rganish",
-      "JavaScript dasturlash tilini o'zbek tilida noldan, chuqur va batafsil o'rganing.", 0) +
+    head(esc(BRAND.name) + " — " + esc(BRAND.tagline),
+      "Web dasturlashni o'zbek tilida noldan, chuqur va batafsil o'rganing: JavaScript, " +
+      "brauzer, backend, frontend va DevOps.", 0) +
     header(0) +
     '<div class="layout">\n' +
     sidebar(parts, null, 0) +
     '<main class="content">\n' +
     '<section class="hero">\n' +
-    "  <h1>JavaScript'ni noldan chuqur o'rganing</h1>\n" +
-    "  <p>Zamonaviy JavaScript tilining to'liq o'quv dasturi — o'zbek tilida, batafsil " +
-    "tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami " +
-    total + " ta dars.</p>\n" +
+    "  <h1>" + esc(BRAND.tagline) + "</h1>\n" +
+    "  <p>JavaScript'dan tortib backend, frontend va DevOps'gacha — to'liq o'quv dasturi " +
+    "o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar " +
+    "bilan. Jami <strong>" + total + "</strong> ta dars.</p>\n" +
     '  <a href="lessons/' + firstSlug + '.html" class="btn">Birinchi darsdan boshlash →</a>\n' +
     "</section>\n" +
     '<h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To\'liq mundarija</h2>\n' +
-    '<p style="color:var(--muted);margin:0 0 26px">javascript.info tuzilishi asosida. ' +
-    "Har bir dars amaliy, interaktiv misollar bilan.</p>\n" +
+    '<p style="color:var(--muted);margin:0 0 26px">Web dasturlashning to\'liq yo\'l xaritasi. ' +
+    "Har bir dars amaliy misollar bilan.</p>\n" +
     cards +
     "</main>\n</div>\n" +
     footer(0)

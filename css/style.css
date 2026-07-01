@@ -135,16 +135,35 @@ img { max-width: 100%; }
 .content { padding: 30px 0 60px; min-width: 0; }
 
 /* ---------- Nested sidebar (parts → chapters → lessons) ---------- */
-.side-part {
-  font-size: .72rem;
+/* Qidiruv maydoni */
+.side-search { position: sticky; top: 0; background: var(--bg); padding: 4px 4px 10px; z-index: 2; }
+.side-search input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font-size: .9rem;
+  font-family: inherit;
+  background: var(--bg-soft);
+  color: var(--ink);
+}
+.side-search input:focus { outline: 2px solid var(--brand); outline-offset: -1px; background: #fff; }
+.side-noresult { color: var(--muted); font-size: .85rem; padding: 8px 10px; }
+
+/* Qism (part) — birinchi daraja yig'iladigan */
+.sidebar .part-group { margin: 2px 0; }
+.sidebar summary.part-summary {
+  font-size: .74rem;
   text-transform: uppercase;
-  letter-spacing: .08em;
+  letter-spacing: .05em;
   color: var(--brand-dark);
   font-weight: 800;
-  margin: 20px 0 6px;
-  padding: 0 4px;
+  padding: 8px 8px;
+  border-radius: 8px;
 }
-.sidebar details { margin: 0 0 2px; }
+.sidebar summary.part-summary:hover { background: #fffbe6; }
+
+.sidebar details { margin: 0 0 1px; }
 .sidebar summary {
   cursor: pointer;
   padding: 6px 10px;
@@ -166,6 +185,7 @@ img { max-width: 100%; }
 }
 .sidebar details[open] > summary::before { transform: rotate(90deg); }
 .sidebar summary:hover { background: var(--bg-soft); }
+.sidebar .chapter-group { margin-inline-start: 6px; }
 .sidebar details ol {
   list-style: none;
   margin: 2px 0 8px;
@@ -175,6 +195,11 @@ img { max-width: 100%; }
 .sidebar details li { counter-increment: none; }
 .sidebar details li a { font-size: .88rem; padding: 5px 10px; }
 .sidebar details li a::before { content: none; }
+/* Qidiruvda yashirilgan elementlar */
+.sidebar li.hidden, .sidebar .chapter-group.hidden, .sidebar .part-group.hidden { display: none; }
+
+/* Footer muallif havolalari */
+.site-footer .author a { color: var(--accent); font-weight: 600; }
 
 /* Breadcrumb (chapter name above lesson title) */
 .crumbs {
