@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kod tuzilishi — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Instruksiyalar, nuqta-vergul (;) qo'yish qoidalari, avtomatik qo'yilish tuzoqlari va izohlar.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a class="active" href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Kod tuzilishi</h1>
+<p class="lead">Kodni yozishni boshlashdan oldin uning eng asosiy qurilish bloklari — instruksiyalar, nuqta-vergul va izohlar bilan tanishamiz. Bu bilimlar kodni to'g'ri va toza yozishga yordam beradi.</p>
+<h2>Instruksiyalar (statements)</h2>
+<p><strong>Instruksiyalar</strong> — bu biror amalni bajaradigan sintaktik konstruksiyalar va buyruqlar. Biz allaqachon <code>console.log("Salom, dunyo!")</code> instruksiyasini ko'rgan edik — u xabar chiqaradi.</p>
+<p>Instruksiyalarni istalgancha ko'p yozish mumkin. Ularni bir-biridan ajratish uchun nuqta-vergul qo'yamiz. Quyidagi misolda ikkita alohida instruksiya bor:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instruksiyalar.js</span></div><textarea spellcheck="false">console.log("Salom");
+console.log("Dunyo");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Odatda har bir instruksiya alohida qatorga yoziladi — shunda kod o'qishga qulay bo'ladi.</p>
+<h2>Nuqta-vergul (;)</h2>
+<p>Ko'p hollarda qator oxirida nuqta-vergulni tushirib qoldirsak ham, JavaScript uni <strong>o'zi qo'yib oladi</strong>. Bu "avtomatik nuqta-vergul qo'yilishi" (automatic semicolon insertion) deb ataladi. Masalan, quyidagi ikkala variant ham to'g'ri ishlaydi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>avto-semicolon.js</span></div><textarea spellcheck="false">console.log("Salom")
+console.log("Dunyo")</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda JavaScript qator uzilishini (yangi qatorga o'tishni) ko'pincha "yashirin" nuqta-vergul deb qabul qiladi. Buni <em>avtomatik nuqta-vergul qo'yilishi</em> deyiladi.</p>
+<div class="note">Ko'p hollarda yangi qator nuqta-vergulni bildiradi. Lekin "ko'p hollarda" degani "har doim" degani emas!</div>
+<h2>Avtomatik qo'yilish har doim ishlamaydi</h2>
+<p>Bir qancha holatlarda JavaScript yangi qatorni nuqta-vergul deb <strong>hisoblamaydi</strong>, bu esa xatolarga sabab bo'ladi. Klassik misolni ko'ramiz:</p>
+<pre class="code"><code>alert("Xatolik bo'ladi")
+
+[1, 2].forEach(alert)</code></pre>
+<p>Agar ushbu ikki qator orasiga nuqta-vergul qo'ymasak, JavaScript birinchi qator oxirida nuqta-vergul qo'ymaydi, chunki keyingi qator <code>[</code> bilan boshlanmoqda. U ikkala qatorni bitta instruksiya deb o'qishga urinadi va xato yuz beradi.</p>
+<p>To'g'ri variant — nuqta-vergul qo'yish:</p>
+<pre class="code"><code>alert("Endi hammasi joyida");
+
+[1, 2].forEach(alert);</code></pre>
+<div class="warn">Nuqta-vergullarni ataylab tushirib qoldirmang. Zamonaviy dasturchilarning ko'pchiligi har bir instruksiya oxiriga nuqta-vergul qo'yishni tavsiya qiladi. Bu tuzoqlardan himoya qiladi va kodni ishonchli qiladi.</div>
+<div class="tip">Boshida shubhali holatlarda nuqta-vergulni doim qo'ying. Tajriba orttirgach, uni qayerda tushirib qoldirish xavfsizligini bilib olasiz — lekin kod bazasida bir xil uslubga rioya qilgan ma'qul.</div>
+<h2>Izohlar (comments)</h2>
+<p>Vaqt o'tib dasturlar murakkablashadi. Kodning nima qilishini va nima uchun shunday yozilganini tushuntirish uchun <strong>izohlar</strong> qo'shiladi. Izohlar kod ishlashiga ta'sir qilmaydi — JavaScript ularni butunlay e'tiborsiz qoldiradi.</p>
+<h3>Bir qatorli izohlar</h3>
+<p>Bir qatorli izoh ikkita slesh <code>//</code> bilan boshlanadi. Qatorning qolgan qismi izoh hisoblanadi. U alohida qatorda yoki instruksiyadan keyin turishi mumkin:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bir-qatorli-izoh.js</span></div><textarea spellcheck="false">// Bu izoh alohida qatorda
+console.log("Salom");
+
+console.log("Dunyo"); // Bu izoh instruksiyadan keyin</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h3>Ko'p qatorli izohlar</h3>
+<p>Ko'p qatorli izoh <code>/*</code> bilan boshlanib, <code>*/</code> bilan tugaydi. Ular orasidagi hamma narsa e'tiborsiz qoldiriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>kop-qatorli-izoh.js</span></div><textarea spellcheck="false">/*
+  Bu ikki qatorli izoh misoli.
+  Bu yerda kodni tushuntirish mumkin.
+*/
+console.log("Salom");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Izohlar yordamida kodning bir qismini vaqtincha "o'chirib" qo'yish ham mumkin — bu debugging paytida juda foydali:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>izohga-olish.js</span></div><textarea spellcheck="false">console.log("Bu ishlaydi");
+// console.log("Bu qator izohga olingan, ishlamaydi");
+console.log("Bu ham ishlaydi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Ko'pgina muharrirlarda tanlangan kodni izohga olish uchun <code>Ctrl + /</code> (bir qatorli) va <code>Ctrl + Shift + /</code> (ko'p qatorli) tugmalar birikmasidan foydalanish mumkin.</div>
+<div class="warn">Ichma-ich izohlar qo'llab-quvvatlanmaydi! <code>/* ... /* ... */ ... */</code> kabi ichida yana <code>/* */</code> bo'lgan izoh xato beradi.</div>
+<div class="tip">Izohlar kodni uzaytiradi deb ulardan qochmang. Yaxshi izoh — kelajakdagi o'zingizga va boshqa dasturchilarga qo'yilgan hurmat. Lekin "nima" emas, ko'proq "nima uchun" shunday qilinganini tushuntiring.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>Instruksiyalar</strong> — amal bajaradigan buyruqlar, ular nuqta-vergul bilan ajratiladi;</li><li>JavaScript ko'p hollarda nuqta-vergulni avtomatik qo'yadi, lekin bu har doim ishonchli emas;</li><li>Xavfsizlik uchun har bir instruksiya oxiriga nuqta-vergul qo'yish tavsiya etiladi;</li><li>Izohlar <code>//</code> (bir qatorli) va <code>/* */</code> (ko'p qatorli) bilan yoziladi;</li><li>Izohlar kod ishlashiga ta'sir qilmaydi, lekin ichma-ich <code>/* */</code> ishlamaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="salom-dunyo.html"><span class="dir">← Oldingi</span><span class="ttl">Salom, dunyo!</span></a>
+  <a class="next" href="use-strict.html"><span class="dir">Keyingi →</span><span class="ttl">Zamonaviy rejim, "use strict"</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

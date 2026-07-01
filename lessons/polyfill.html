@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polyfill va transpilyatorlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Babel, transpiler nima, polyfill nima, core-js va eski brauzerlar mosligi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a class="active" href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kod sifati</div>
+<h1>Polyfill va transpilyatorlar</h1>
+<p class="lead">JavaScript tili muntazam rivojlanadi — har yili yangi imkoniyatlar qo'shiladi. Ammo bu yangiliklar barcha (ayniqsa eski) brauzerlarda darhol ishlamaydi. Ular bilan ishlash uchun ikki asosiy vosita bor: <strong>transpilyatorlar</strong> va <strong>polyfill'lar</strong>.</p>
+<h2>Muammo: yangi til, eski brauzerlar</h2>
+<p>Aytaylik, biz zamonaviy sintaksisdan foydalanamiz — masalan, "nullish coalescing" operatori <code>??</code>. Yangi brauzerlar buni tushunadi, lekin eskilari xato beradi. Bizga kodni eski brauzerlar ham tushunadigan holatga keltirish kerak.</p>
+<pre class="code"><code>// zamonaviy kod (eski brauzerlar tushunmaydi)
+let balandlik = kirim ?? 100;</code></pre>
+<h2>Transpilyatorlar</h2>
+<p><strong>Transpilyator</strong> (transpiler) — bir kodni o'qib, uni boshqa (odatda eskiroq) sintaksisga qayta yozib beradigan maxsus dastur. Eng mashhur JavaScript transpilyatori — <strong>Babel</strong>.</p>
+<p>Babel yuqoridagi zamonaviy kodni eski brauzerlar tushunadigan shaklga o'giradi:</p>
+<pre class="code"><code>// transpilyatsiyadan OLDIN (zamonaviy)
+let balandlik = kirim ?? 100;
+
+// transpilyatsiyadan KEYIN (eski sintaksis)
+let balandlik = (kirim !== undefined &amp;&amp; kirim !== null) ? kirim : 100;</code></pre>
+<p>Odatda dasturchi Babel'ni <strong>build tizimi</strong> (masalan, webpack) ichida ishlatadi. Har safar kod o'zgarganda, build tizimi avtomatik ravishda transpilyatsiyani ishga tushiradi.</p>
+<div class="note">Transpilyator faqat <em>sintaksis</em>ni o'zgartiradi — masalan, yangi operatorlar va til konstruksiyalarini. Yangi <em>funksiyalar</em> (metodlar) muammosini u hal qilmaydi. Buning uchun polyfill kerak.</div>
+<h2>Polyfill'lar</h2>
+<p>Ba'zi yangiliklar — bu sintaksis emas, balki tilga qo'shilgan yangi <strong>funksiyalar</strong>. Masalan, <code>Math.trunc(x)</code> — sonning kasr qismini olib tashlaydigan funksiya. Eski dvigatellarda bu funksiya umuman mavjud emas.</p>
+<p><strong>Polyfill</strong> — bu yetishmayotgan funksiyaning o'rnini to'ldiradigan ("yamaydigan") kod. U funksiya mavjudligini tekshiradi va bo'lmasa, uni qo'lda qo'shadi:</p>
+<pre class="code"><code>// Math.trunc uchun oddiy polyfill
+if (!Math.trunc) { // agar funksiya yo'q bo'lsa
+  Math.trunc = function(number) {
+    // Math.ceil salbiy, Math.floor musbat sonlar uchun
+    return number &lt; 0 ? Math.ceil(number) : Math.floor(number);
+  };
+}</code></pre>
+<p>Endi kodimizni ishlatishdan oldin bu polyfill yuklansa, eski brauzerda ham <code>Math.trunc</code> ishlaydi. Yangi brauzerlarda esa <code>if</code> sharti <code>false</code> bo'lgani uchun polyfill hech narsa qilmaydi.</p>
+<h2>core-js</h2>
+<p>Har bir funksiya uchun polyfill'ni qo'lda yozish mumkin emas. Shuning uchun tayyor polyfill to'plamlari bor. Eng mashhuri — <strong>core-js</strong>. U yuzlab zamonaviy funksiyalarni eski muhitlar uchun to'ldiradi.</p>
+<ul><li><strong>core-js</strong> — keng qamrovli polyfill kutubxonasi (masalan, <code>Promise</code>, <code>Array.from</code>, <code>Object.entries</code> va h.k.);</li><li>U modullarga bo'lingan — faqat kerakli qismini ulash mumkin, bu esa hajmni kamaytiradi;</li><li>Odatda Babel bilan birgalikda ishlatiladi.</li></ul>
+<div class="tip">Amalda dasturchilar odatda polyfill'larni qo'lda yozmaydi. Babel'ni core-js bilan sozlaydi va u qaysi polyfill'lar kerakligini avtomatik aniqlab, ulaydi.</div>
+<h2>Transpilyator va polyfill — farqi</h2>
+<p>Ikki vositani chalkashtirmaslik uchun:</p>
+<ul><li><strong>Transpilyator</strong> — yangi <em>sintaksis</em>ni eski shaklga o'giradi (masalan, <code>=&gt;</code>, <code>??</code>, <code>let/const</code>);</li><li><strong>Polyfill</strong> — yetishmayotgan <em>funksiya/metod</em>larni qo'shadi (masalan, <code>Promise</code>, <code>Math.trunc</code>).</li></ul>
+<div class="warn">Agar sizning auditoriyangiz faqat zamonaviy brauzerlardan foydalansa, transpilyatsiya va polyfill'lar shart bo'lmasligi mumkin. Ular kod hajmini oshiradi — faqat haqiqatan kerak bo'lganda ishlating.</div>
+<h2>Xulosa</h2>
+<ul><li>Zamonaviy JavaScript hamma brauzerlarda darhol ishlamaydi;</li><li><strong>Transpilyator</strong> (Babel) yangi sintaksisni eski shaklga o'giradi;</li><li><strong>Polyfill</strong> yetishmayotgan funksiyalarni qo'shadi;</li><li><strong>core-js</strong> — tayyor polyfill'lar to'plami, odatda Babel bilan birga ishlatiladi.</li></ul>
+<nav class="lesson-nav">
+  <a href="testlash.html"><span class="dir">← Oldingi</span><span class="ttl">Avtomatlashtirilgan testlar (Mocha)</span></a>
+  <a class="next" href="new-operator.html"><span class="dir">Keyingi →</span><span class="ttl">Konstruktor, new operatori</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

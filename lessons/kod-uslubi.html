@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kod uslubi — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Qavslar, chekinish, qator uzunligi, nomlash va linterlar (ESLint).">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a class="active" href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kod sifati</div>
+<h1>Kod uslubi</h1>
+<p class="lead">Bizning kodimiz iloji boricha toza va o'qish oson bo'lishi kerak. Bu — haqiqiy dasturlash san'ati: murakkab vazifani <em>to'g'ri</em> va ayni paytda <em>o'qilishi oson</em> tarzda hal qilish. Yaxshi kod uslubi shunga xizmat qiladi.</p>
+<div class="note">Bu yerda keltirilgan qoidalarning hech biri qat'iy majburiy emas — bular tavsiyalar. Har bir jamoa o'z uslubiga ega bo'lishi mumkin. Muhimi — tanlangan uslubga izchil amal qilish.</div>
+<h2>Qavslar va chekinish (indent)</h2>
+<p>Ko'pchilik dasturchilar ochuvchi jingalak qavsni <code>{</code> yangi qatorda emas, balki bir xil qatorda, oldida bo'shliq bilan yozishni afzal ko'radi. Bu "egiptcha" (K&amp;R) uslub deb ataladi:</p>
+<pre class="code"><code>// yaxshi
+if (n &lt; 0) {
+  alert("Salbiy son");
+}</code></pre>
+<p><strong>Chekinish (indent)</strong> — ichki kod tashqi kodga nisbatan surib yoziladi. Odatda 2 yoki 4 bo'shliq ishlatiladi. Butun loyihada bir xil miqdorni ishlating.</p>
+<pre class="code"><code>// yaxshi (2 bo'shliq chekinish)
+function salomla(ism) {
+  if (ism) {
+    console.log("Salom, " + ism);
+  } else {
+    console.log("Salom, notanish!");
+  }
+}</code></pre>
+<div class="warn">Chekinishni bo'shliq (space) va tabulyatsiya (tab) aralashtirib yozmang — bu turli muharrirlar va sozlamalarda kodni buzib ko'rsatadi. Bittasini tanlang.</div>
+<h2>Qator uzunligi</h2>
+<p>Hech kim uzun gorizontal qatorni o'qishni yoqtirmaydi. Qatorni bir nechta bo'lakka bo'lish yaxshi amaliyot. Odatda maksimal uzunlik 80 yoki 120 belgi qilib belgilanadi.</p>
+<pre class="code"><code>// uzun shartni bir nechta qatorga bo'lish
+let royxat = elementlar
+  .filter(x =&gt; x.faol)
+  .map(x =&gt; x.nomi)
+  .sort();</code></pre>
+<h2>Nuqta-vergul (;)</h2>
+<p>Har bir buyruq oxiriga nuqta-vergul qo'yish tavsiya etiladi, garchi JavaScript ba'zi hollarda uni avtomatik qo'shsa ham. Buni tashlab ketish nozik xatolarga olib kelishi mumkin.</p>
+<pre class="code"><code>// yaxshi
+let ism = "Ali";
+let yosh = 25;
+console.log(ism, yosh);</code></pre>
+<h2>Nomlash</h2>
+<p>Yaxshi nomlar — o'zini o'zi tushuntiradigan kodning yarmi. Umumiy qoidalar:</p>
+<ul><li>O'zgaruvchi va funksiyalar uchun <strong>camelCase</strong> uslubidan foydalaning: <code>userName</code>, <code>hisobla</code>;</li><li>Nom mazmunni aks ettirsin: <code>i</code>, <code>data</code> emas, balki <code>userIndex</code>, <code>foydalanuvchilar</code>;</li><li>Funksiya nomi odatda fe'ldan boshlanadi: <code>getUser</code>, <code>hisobla</code>, <code>korsat</code>;</li><li>O'zgarmas doimiylar (konstantalar) uchun <strong>UPPER_CASE</strong>: <code>const MAX_SONI = 100;</code>.</li></ul>
+<pre class="code"><code>// yomon nomlash
+let a = 60 * 60;
+let x = a * 24;
+
+// yaxshi nomlash
+let SONIYALAR_SOATDA = 60 * 60;
+let soniyalarKunda = SONIYALAR_SOATDA * 24;</code></pre>
+<h2>Yomon va yaxshi uslub — solishtirma</h2>
+<p>Quyida bir xil vazifani bajaradigan ikki kod. Birinchisi — o'qish qiyin:</p>
+<pre class="code"><code>// yomon uslub
+function f(x){if(x&gt;0){return x*2}else{return 0}}</code></pre>
+<p>Ikkinchisi — bir xil ishni bajaradi, lekin ancha toza:</p>
+<pre class="code"><code>// yaxshi uslub
+function ikkiBaravar(son) {
+  if (son &gt; 0) {
+    return son * 2;
+  }
+  return 0;
+}</code></pre>
+<h2>Linterlar (ESLint)</h2>
+<p><strong>Linter</strong> — kod uslubidagi xatolarni avtomatik topib beradigan vosita. U kodni tekshirib, qoidalarga muvofiq emasligini ogohlantiradi. JavaScript uchun eng mashhuri — <strong>ESLint</strong>.</p>
+<p>ESLint bilan ishlash odatda shunday:</p>
+<ol><li>Node.js va npm o'rnatiladi;</li><li>ESLint o'rnatiladi: <code>npm install -D eslint</code>;</li><li>Loyiha ildizida sozlama fayli yaratiladi (masalan <code>.eslintrc</code> yoki <code>eslint.config.js</code>);</li><li>Muharringizga (VS Code) ESLint kengaytmasi o'rnatiladi — u xatolarni yozayotganingizda ko'rsatadi.</li></ol>
+<div class="note">Ko'pgina jamoalar tayyor uslub qoidalar to'plamidan foydalanadi, masalan <strong>Airbnb</strong> yoki <strong>Standard</strong> uslubi. Bu barcha dasturchilarning bir xil uslubda yozishini ta'minlaydi.</div>
+<div class="tip">Linterni loyihaning boshidanoq sozlang. U nafaqat uslubni saqlaydi, balki ko'plab haqiqiy xatolarni (e'lon qilinmagan o'zgaruvchi, ishlatilmagan funksiya) ham topib beradi.</div>
+<h2>Xulosa</h2>
+<ul><li>Toza kod — o'qish va qo'llab-quvvatlash oson bo'lgan kod;</li><li>Chekinish, qavslar va nuqta-vergullarda izchil bo'ling;</li><li>O'zgaruvchilarni mazmunli nomlang (camelCase, UPPER_CASE);</li><li><strong>ESLint</strong> kabi linter uslub va xatolarni avtomatik nazorat qiladi.</li></ul>
+<nav class="lesson-nav">
+  <a href="debugging.html"><span class="dir">← Oldingi</span><span class="ttl">Brauzerda debugging</span></a>
+  <a class="next" href="izohlar.html"><span class="dir">Keyingi →</span><span class="ttl">Izohlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salom, dunyo! — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="JavaScript kodini HTML sahifaga qanday ulash: script tegi, src atributi va tashqi fayllar.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a class="active" href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Salom, dunyo!</h1>
+<p class="lead">Ushbu darsda birinchi JavaScript kodimizni yozamiz va uni veb-sahifaga qanday ulashni o'rganamiz. Kursning katta qismi brauzerga qaratilgan, shuning uchun kodni HTML ichida ishga tushirishni bilib olish muhim.</p>
+<h2>"script" tegi</h2>
+<p>JavaScript dasturlarini HTML hujjatining deyarli istalgan joyiga <code>&lt;script&gt;</code> tegi yordamida joylashtirish mumkin. Masalan:</p>
+<pre class="code"><code>&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+  &lt;p&gt;Skriptdan oldin...&lt;/p&gt;
+
+  &lt;script&gt;
+    alert("Salom, dunyo!");
+  &lt;/script&gt;
+
+  &lt;p&gt;...Skriptdan keyin.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>Brauzer <code>&lt;script&gt;</code> tegiga yetganda uning ichidagi kodni avtomatik o'qiydi va bajaradi. Bu misolda <code>alert</code> ekranda "Salom, dunyo!" degan modal oyna ko'rsatadi.</p>
+<div class="note">Yuqoridagi misol <code>alert</code> ishlatgani uchun statik ko'rsatilgan. <code>alert</code>, <code>prompt</code> va <code>confirm</code> faqat haqiqiy brauzerda ishlaydi — quyidagi interaktiv maydonchalarda esa <code>console.log</code> ishlatamiz, chunki u natijani darhol chiqaradi.</div>
+<p>Endi haqiqiy ishlaydigan birinchi kodimizni sinab ko'ramiz. Quyidagi tugmani bosing va natijani kuzating:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>salom.js</span></div><textarea spellcheck="false">console.log("Salom, dunyo!");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Zamonaviy va eski belgilash</h2>
+<p>Eski kodlarda <code>&lt;script&gt;</code> tegining bir nechta qo'shimcha atributlarini uchratishingiz mumkin. Ular bugungi kunda kerak emas, lekin nima uchun ishlatilganini bilib qo'yish foydali.</p>
+<ul><li><code>type</code> atributi: eski HTML4 da <code>type="text/javascript"</code> yozish talab qilinardi. Endi bu shart emas — zamonaviy HTML standarti buni butunlay o'zgartirdi va endi u JavaScript modullari uchun ishlatiladi;</li><li><code>language</code> atributi: bu atribut ishlatilayotgan tilni ko'rsatardi. Hozir JavaScript standart til bo'lgani uchun uning hech qanday ma'nosi yo'q.</li></ul>
+<div class="warn">Agar eski loyihalarda <code>&lt;!-- ... --&gt;</code> kabi HTML izohlari script ichida yozilganini ko'rsangiz — bu juda qadimgi brauzerlar uchun edi. Zamonaviy kodda ularni umuman ishlatmaymiz.</div>
+<h2>Tashqi skriptlar (src atributi)</h2>
+<p>Agar sizda ko'p JavaScript kodi bo'lsa, uni alohida faylga chiqarib qo'yish yaxshi amaliyot hisoblanadi. Skript fayllari HTML ga <code>src</code> atributi orqali ulanadi:</p>
+<pre class="code"><code>&lt;script src="/yol/skript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Bu yerda <code>/yol/skript.js</code> — skript faylining saytdagi absolyut yo'li. To'liq URL manzil ham berish mumkin:</p>
+<pre class="code"><code>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"&gt;&lt;/script&gt;</code></pre>
+<p>Bir nechta skriptni ulash uchun bir nechta teg yozamiz:</p>
+<pre class="code"><code>&lt;script src="/js/script1.js"&gt;&lt;/script&gt;
+&lt;script src="/js/script2.js"&gt;&lt;/script&gt;</code></pre>
+<h2>Nima uchun tashqi fayl afzal?</h2>
+<p>Kodni alohida faylga chiqarishning ikkita muhim afzalligi bor:</p>
+<ol><li><strong>Kesh (cache).</strong> Brauzer skriptni yuklab olib, o'z xotirasida (keshda) saqlaydi. Boshqa sahifalar ham xuddi shu faylga murojaat qilsa, brauzer uni qaytadan yuklamaydi — keshdan oladi. Bu trafikni tejaydi va sahifalar tezroq ochiladi;</li><li><strong>Tozalik.</strong> HTML va JavaScript alohida bo'lganda, kodni o'qish va boshqarish osonlashadi.</li></ol>
+<div class="warn">Agar <code>&lt;script&gt;</code> tegida <code>src</code> atributi bo'lsa, tegning ichidagi kod <strong>e'tiborga olinmaydi</strong>. Bitta teg ikkalasini birdan bajara olmaydi.</div>
+<pre class="code"><code>&lt;script src="file.js"&gt;
+  // src bor bo'lsa, bu ichki kod ishlamaydi
+  alert("Salom");
+&lt;/script&gt;</code></pre>
+<p>Buni to'g'rilash uchun ikkita alohida teg ishlatamiz:</p>
+<pre class="code"><code>&lt;script src="file.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  alert("Salom");
+&lt;/script&gt;</code></pre>
+<h2>Xulosa</h2>
+<ul><li>JavaScript kodini sahifaga <code>&lt;script&gt;</code> tegi orqali ulaymiz;</li><li>Kodni to'g'ridan-to'g'ri teg ichiga yozish yoki tashqi faylga chiqarib <code>src</code> orqali ulash mumkin;</li><li>Katta kodlar uchun tashqi fayl afzal — u keshlanadi va HTML ni toza saqlaydi;</li><li>Bitta tegda bir vaqtda <code>src</code> va ichki kod ishlamaydi — alohida teglar kerak.</li></ul>
+<nav class="lesson-nav">
+  <a href="konsol.html"><span class="dir">← Oldingi</span><span class="ttl">Ishlab chiquvchi konsoli</span></a>
+  <a class="next" href="kod-tuzilishi.html"><span class="dir">Keyingi →</span><span class="ttl">Kod tuzilishi</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -3,173 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sikllar — JavaScript.info O'zbekcha</title>
-  <meta name="description" content="for va while sikllari yordamida takrorlanuvchi amallarni bajarish.">
+  <title>Sikllar: while va for — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Bir xil amallarni ko'p marta takrorlash uchun sikllar — while, do..while va for.">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
-  <header class="site-header">
-    <div class="inner">
-      <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
-      <nav class="site-nav">
-        <a href="../index.html">Bosh sahifa</a>
-        <a href="kirish.html">Darslar</a>
-      </nav>
-      <button class="menu-toggle" aria-label="Menyu">☰</button>
-    </div>
-  </header>
-
-  <div class="layout">
-    <aside class="sidebar">
-      <h3>Darslar</h3>
-      <ol>
-        <li><a href="kirish.html">Kirish</a></li>
-        <li><a href="ozgaruvchilar.html">O'zgaruvchilar</a></li>
-        <li><a href="malumot-turlari.html">Ma'lumot turlari</a></li>
-        <li><a href="operatorlar.html">Operatorlar</a></li>
-        <li><a href="shartlar.html">Shart operatorlari</a></li>
-        <li><a href="sikllar.html">Sikllar</a></li>
-        <li><a href="funksiyalar.html">Funksiyalar</a></li>
-        <li><a href="massivlar.html">Massivlar</a></li>
-      </ol>
-    </aside>
-
-    <main class="content article">
-      <h1>Sikllar</h1>
-      <p class="lead">Sikl (loop) — bu kodning bir qismini bir necha marta takrorlash usuli. Masalan, 1 dan 100 gacha sanash uchun 100 marta kod yozish shart emas — sikl bu ishni bajaradi.</p>
-
-      <h2>for sikli</h2>
-      <p><code>for</code> sikli aniq necha marta takrorlash kerakligini bilganda ishlatiladi. Uning uch qismi bor:</p>
-      <pre class="code"><code>for (boshlang'ich; shart; qadam) {
-  // takrorlanadigan kod
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a class="active" href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Sikllar: while va for</h1>
+<p class="lead">Ko'pincha bir xil harakatni bir necha marta takrorlash kerak bo'ladi. Masalan, ro'yxatdagi har bir mahsulotni chiqarish yoki 1 dan 10 gacha bo'lgan sonlarni sanash. <strong>Sikllar</strong> — kod blokini ko'p marta bajarish usuli.</p>
+<h2>"while" sikli</h2>
+<p><code>while</code> sikli quyidagi ko'rinishga ega:</p>
+<pre class="code"><code>while (shart) {
+  // kod (sikl tanasi deb ataladi)
 }</code></pre>
-      <ul>
-        <li><strong>boshlang'ich</strong> — hisoblagichni yaratamiz (masalan <code>let i = 0</code>);</li>
-        <li><strong>shart</strong> — sikl davom etishi uchun rost bo'lishi kerak;</li>
-        <li><strong>qadam</strong> — har takrordan keyin bajariladi (masalan <code>i++</code>).</li>
-      </ul>
-
-      <div class="playground">
-        <div class="pg-bar">
-          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
-          <span>for.js</span>
-        </div>
-        <textarea spellcheck="false">// 1 dan 5 gacha sanaymiz
-for (let i = 1; i <= 5; i++) {
-  console.log("Qadam:", i);
-}</textarea>
-        <div class="pg-actions">
-          <button class="pg-run">▶ Ishga tushirish</button>
-          <button class="pg-clear">Tozalash</button>
-        </div>
-        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
-      </div>
-
-      <div class="note">
-        <code>i++</code> — bu <code>i = i + 1</code> ning qisqa yozuvi. U hisoblagichni har safar 1 ga oshiradi.
-      </div>
-
-      <h2>while sikli</h2>
-      <p><code>while</code> sikli shart rost bo'lguncha takrorlanadi. Necha marta takrorlanishi oldindan noma'lum bo'lganda qulay:</p>
-
-      <div class="playground">
-        <div class="pg-bar">
-          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
-          <span>while.js</span>
-        </div>
-        <textarea spellcheck="false">let son = 1;
-
-while (son <= 3) {
-  console.log("Son:", son);
-  son++;   // hisoblagichni oshirmasak, cheksiz sikl bo'ladi!
-}
-console.log("Sikl tugadi");</textarea>
-        <div class="pg-actions">
-          <button class="pg-run">▶ Ishga tushirish</button>
-          <button class="pg-clear">Tozalash</button>
-        </div>
-        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
-      </div>
-
-      <div class="warn">
-        <strong>Cheksiz sikldan ehtiyot bo'ling!</strong> Agar <code>while</code> shartini hech qachon yolg'on qilmasangiz (masalan <code>son++</code> ni unutsangiz), dastur to'xtamay qoladi va brauzer qotib qolishi mumkin.
-      </div>
-
-      <h2>break va continue</h2>
-      <p>Ikki maxsus buyruq sikl oqimini boshqaradi:</p>
-      <ul>
-        <li><code>break</code> — siklni butunlay to'xtatadi;</li>
-        <li><code>continue</code> — joriy takrorni o'tkazib, keyingisiga o'tadi.</li>
-      </ul>
-
-      <div class="playground">
-        <div class="pg-bar">
-          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
-          <span>break-continue.js</span>
-        </div>
-        <textarea spellcheck="false">// Faqat toq sonlarni chiqaramiz, 7 da to'xtaymiz
-for (let i = 1; i <= 10; i++) {
-  if (i % 2 === 0) {
-    continue;   // juft sonni o'tkazamiz
-  }
-  if (i === 7) {
-    break;      // 7 da to'xtaymiz
-  }
+<p><code>shart</code> rost (<code>true</code>) bo'lgunicha, sikl tanasidagi kod qayta-qayta bajariladi.</p>
+<p>Masalan, quyidagi sikl <code>i &lt; 3</code> shart bajarilguncha <code>i</code> ni chiqaradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>while.js</span></div><textarea spellcheck="false">let i = 0;
+while (i &lt; 3) {
   console.log(i);
-}</textarea>
-        <div class="pg-actions">
-          <button class="pg-run">▶ Ishga tushirish</button>
-          <button class="pg-clear">Tozalash</button>
-        </div>
-        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
-      </div>
-
-      <h2>Amaliy misol: yig'indi</h2>
-      <p>1 dan 100 gacha bo'lgan sonlar yig'indisini hisoblaymiz:</p>
-
-      <div class="playground">
-        <div class="pg-bar">
-          <span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span>
-          <span>yigindi.js</span>
-        </div>
-        <textarea spellcheck="false">let yigindi = 0;
-
-for (let i = 1; i <= 100; i++) {
+  i++;
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Sikl tanasining bir marta bajarilishi <em>iteratsiya</em> deb ataladi. Yuqoridagi sikl 3 ta iteratsiya bajaradi.</p>
+<div class="warn">Agar <code>i++</code> bo'lmaganida, sikl nazariy jihatdan cheksiz takrorlanardi. Amalda brauzer yoki Node.js muzlab qoladi. Har bir <code>while</code> sikli shartni oxir-oqibat <code>false</code> qiladigan o'zgarishga ega bo'lishi shart.</div>
+<p>Sikl shartida istalgan ifoda bo'lishi mumkin — u <code>boolean</code> ga o'giriladi. Masalan, <code>while (i)</code> — bu <code>while (i != 0)</code> ning qisqartmasi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>while-qisqa.js</span></div><textarea spellcheck="false">let i = 3;
+while (i) { // i 0 bo'lganda shart false bo'ladi
+  console.log(i);
+  i--;
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>"do..while" sikli</h2>
+<p>Shartni tekshirishni sikl tanasidan <em>keyinga</em> qo'yish uchun <code>do..while</code> ishlatiladi:</p>
+<pre class="code"><code>do {
+  // sikl tanasi
+} while (shart);</code></pre>
+<p>Sikl avval tanani bajaradi, so'ng shartni tekshiradi va rost bo'lsa yana takrorlaydi. Muhim farqi: <strong>tana kamida bir marta bajariladi</strong>, hatto shart darhol <code>false</code> bo'lsa ham.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>do-while.js</span></div><textarea spellcheck="false">let i = 0;
+do {
+  console.log(i);
+  i++;
+} while (i &lt; 3);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note"><code>do..while</code> nisbatan kam ishlatiladi. Odatda oddiy <code>while</code> yetarli. U faqat tana kamida bir marta bajarilishi shart bo'lgan hollarda qulay.</div>
+<h2>"for" sikli</h2>
+<p><code>for</code> sikli — eng ko'p ishlatiladigan sikl. U uch qismdan iborat:</p>
+<pre class="code"><code>for (boshlanish; shart; qadam) {
+  // sikl tanasi
+}</code></pre>
+<p>1 dan 3 gacha sanaydigan misolni ko'raylik:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for.js</span></div><textarea spellcheck="false">for (let i = 0; i &lt; 3; i++) {
+  console.log(i);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Uch qismning har birini alohida ko'rib chiqaylik:</p>
+<ul><li><strong>boshlanish</strong>: <code>let i = 0</code> — siklga kirishda <em>bir marta</em> bajariladi;</li><li><strong>shart</strong>: <code>i &lt; 3</code> — har iteratsiyadan oldin tekshiriladi; <code>false</code> bo'lsa sikl to'xtaydi;</li><li><strong>tana</strong>: <code>console.log(i)</code> — shart rost bo'lsa qayta-qayta bajariladi;</li><li><strong>qadam</strong>: <code>i++</code> — har iteratsiya tanasidan keyin bajariladi.</li></ul>
+<p>Bajarilish tartibi shunday: <code>boshlanish</code> → (<code>shart</code> → <code>tana</code> → <code>qadam</code>) → (<code>shart</code> → <code>tana</code> → <code>qadam</code>) → ... → shart <code>false</code> bo'lganda to'xtaydi.</p>
+<div class="note"><code>boshlanish</code> qismida e'lon qilingan o'zgaruvchi (<code>let i</code>) faqat sikl ichida ko'rinadi. Bu "inline" (ichki) o'zgaruvchi deyiladi.</div>
+<p>Amaliy misol — 1 dan 5 gacha sonlar yig'indisini hisoblaylik:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yigindi.js</span></div><textarea spellcheck="false">let yigindi = 0;
+for (let i = 1; i &lt;= 5; i++) {
   yigindi += i;
 }
-
-console.log("1 dan 100 gacha yig'indi:", yigindi);</textarea>
-        <div class="pg-actions">
-          <button class="pg-run">▶ Ishga tushirish</button>
-          <button class="pg-clear">Tozalash</button>
-        </div>
-        <div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div>
-      </div>
-
-      <h2>Xulosa</h2>
-      <ul>
-        <li><code>for</code> — takrorlar soni ma'lum bo'lganda;</li>
-        <li><code>while</code> — shart rost bo'lguncha takrorlaydi;</li>
-        <li><code>break</code> — siklni to'xtatadi;</li>
-        <li><code>continue</code> — joriy takrorni o'tkazadi;</li>
-        <li>Hisoblagichni oshirishni unutmang — cheksiz sikldan saqlaning.</li>
-      </ul>
-
-      <nav class="lesson-nav">
-        <a href="shartlar.html"><span class="dir">← Ortga</span><span class="ttl">Shart operatorlari</span></a>
-        <a class="next" href="funksiyalar.html"><span class="dir">Keyingi →</span><span class="ttl">Funksiyalar</span></a>
-      </nav>
-    </main>
+console.log("Yig'indi:", yigindi); // 15</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>for</code> ning ba'zi qismlarini tashlab yuborish ham mumkin. Masalan, <code>boshlanish</code> ni olib tashlash:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for-bosh.js</span></div><textarea spellcheck="false">let i = 0; // o'zgaruvchini oldin e'lon qildik
+for (; i &lt; 3; i++) {
+  console.log(i);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Hatto barcha qismlarni tashlab, cheksiz sikl yozish mumkin: <code>for (;;) { ... }</code>. Ammo bunda ichkarida to'xtatuvchi shart bo'lishi kerak.</p>
+<h2>Siklni to'xtatish: "break"</h2>
+<p>Odatda sikl shart <code>false</code> bo'lganda tugaydi. Lekin istalgan payt <code>break</code> direktivasi bilan uni majburan to'xtatish mumkin.</p>
+<p>Foydalanuvchidan sonlar yig'indisini hisoblaydigan misol — bo'sh kiritish sikldan chiqaradi. Bunday holatda "cheksiz" sikl + <code>break</code> qulay:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>break.js</span></div><textarea spellcheck="false">let sonlar = [3, 7, 0, 4, 9];
+let yigindi = 0;
+for (let i = 0; i &lt; sonlar.length; i++) {
+  if (sonlar[i] === 0) {
+    console.log("0 topildi, to'xtatamiz");
+    break; // sikldan butunlay chiqadi
+  }
+  yigindi += sonlar[i];
+}
+console.log("Yig'indi:", yigindi); // 10 (3 + 7)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip"><code>break</code> nafaqat <code>for</code>, balki <code>while</code> va <code>do..while</code> sikllarida ham ishlaydi. U eng yaqin siklni to'xtatadi.</div>
+<h2>Keyingi iteratsiyaga o'tish: "continue"</h2>
+<p><code>continue</code> — <code>break</code> ning "yengilroq" varianti. U butun siklni to'xtatmaydi, faqat <em>joriy iteratsiyani</em> to'xtatib, keyingisiga o'tadi.</p>
+<p>Faqat toq sonlarni chiqaradigan misol:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>continue.js</span></div><textarea spellcheck="false">for (let i = 0; i &lt; 10; i++) {
+  // agar juft bo'lsa, keyingi iteratsiyaga o'tamiz
+  if (i % 2 === 0) continue;
+  console.log(i); // faqat toq sonlar: 1, 3, 5, 7, 9
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>continue</code> ichma-ich shartlar sonini kamaytirib, kodni toza saqlashga yordam beradi. Yuqoridagi kodni <code>continue</code>siz ham yozish mumkin edi, lekin u ichkariga qo'shimcha <code>{ }</code> qatlamini qo'shardi.</p>
+<div class="warn"><code>break</code> va <code>continue</code> ni <code>?</code> (ternar operator) o'ng tomonida ishlatib bo'lmaydi. Masalan, <code>(i &gt; 5) ? break : ...</code> — bu sintaksis xatosi. Ular alohida direktiva, ifoda emas.</div>
+<h2>Yorliqlar (labels)</h2>
+<p>Ba'zan ichma-ich (bir nechta) sikllardan birdaniga chiqish kerak bo'ladi. Oddiy <code>break</code> faqat ichki siklni to'xtatadi. Bunda <strong>yorliq (label)</strong> yordam beradi.</p>
+<p>Yorliq — sikl oldiga qo'yilgan nom va ikki nuqta: <code>nom:</code></p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>label.js</span></div><textarea spellcheck="false">tashqi: for (let i = 0; i &lt; 3; i++) {
+  for (let j = 0; j &lt; 3; j++) {
+    if (i === 1 &amp;&amp; j === 1) {
+      console.log("To'xtaymiz: i=" + i + ", j=" + j);
+      break tashqi; // ikkala sikldan ham chiqadi
+    }
+    console.log("qiymat: " + i + "," + j);
+  }
+}
+console.log("Tugadi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><code>break tashqi</code> — <code>tashqi:</code> deb belgilangan siklga o'tib, uni butunlay to'xtatadi. <code>continue</code> ni ham yorliq bilan ishlatish mumkin — u tashqi siklning keyingi iteratsiyasiga sakraydi.</p>
+<div class="note">Yorliqlar kamdan-kam ishlatiladi. Ular kod oqimini "sakratadi" va o'qishni qiyinlashtiradi. Ko'pincha ichma-ich sikllarni alohida funksiyaga ajratish va <code>return</code> ishlatish toza yechim bo'ladi.</div>
+<h2>Xulosa</h2>
+<ul><li><strong>while (shart)</strong> — tanadan oldin shartni tekshiradi;</li><li><strong>do..while</strong> — tanani kamida bir marta bajaradi, so'ng shartni tekshiradi;</li><li><strong>for (boshlanish; shart; qadam)</strong> — eng ko'p ishlatiladigan, ixcham sikl;</li><li><strong>break</strong> — siklni butunlay to'xtatadi;</li><li><strong>continue</strong> — joriy iteratsiyani to'xtatib, keyingisiga o'tadi;</li><li><strong>yorliqlar (labels)</strong> — ichma-ich sikllardan birdaniga chiqish uchun (kamdan-kam kerak).</li></ul>
+<nav class="lesson-nav">
+  <a href="malumot-turlari.html"><span class="dir">← Oldingi</span><span class="ttl">Ma'lumot turlari</span></a>
+  <a class="next" href="switch.html"><span class="dir">Keyingi →</span><span class="ttl">switch konstruksiyasi</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
   </div>
-
-  <footer class="site-footer">
-    <div class="inner">
-      <span>© 2026 JavaScript.info — O'zbekcha variant.</span>
-      <span><a href="../index.html">Bosh sahifa</a></span>
-    </div>
-  </footer>
-
-  <script src="../js/main.js"></script>
+</footer>
+<script src="../js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konstruktor, new operatori — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Konstruktor funksiyalar va new operatori yordamida bir turdagi ko'plab obyektlarni yaratish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a class="active" href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Obyektlar: asoslar</div>
+<h1>Konstruktor, new operatori</h1>
+<p class="lead">Oddiy <code>{...}</code> sintaksisi bitta obyekt yaratishga qulay. Ammo bir-biriga o'xshash ko'plab obyektlarni — masalan, ko'p foydalanuvchi, mahsulot yoki menyu bandini — yaratish kerak bo'lganda, <strong>konstruktor funksiyalar</strong> va <strong>new</strong> operatori yordamga keladi.</p>
+<h2>Konstruktor funksiya</h2>
+<p>Konstruktor funksiya — texnik jihatdan oddiy funksiya. Ammo uni boshqalardan ajratib turuvchi ikkita kelishuv (konvensiya) bor:</p>
+<ol><li>Nomi <strong>bosh harf</strong> bilan boshlanadi (masalan, <code>User</code>, <code>Car</code>);</li><li>U faqat <strong>new</strong> operatori bilan chaqirilishi kerak.</li></ol>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>konstruktor.js</span></div><textarea spellcheck="false">function User(name) {
+  this.name = name;
+  this.isAdmin = false;
+}
+
+let user = new User("Jasur");
+
+console.log(user.name);     // Jasur
+console.log(user.isAdmin);  // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>User</code> funksiyasini <code>new User("Jasur")</code> ko'rinishida chaqirdik. Natijada tayyor, xossalari to'ldirilgan yangi obyekt qaytdi.</p>
+<h2>new nima qiladi? (4 qadam)</h2>
+<p>Funksiya <code>new</code> bilan chaqirilganda quyidagi qadamlar sodir bo'ladi:</p>
+<ol><li>Yangi bo'sh obyekt yaratiladi va u <code>this</code>'ga tayinlanadi;</li><li>Funksiya tanasi bajariladi. Odatda u <code>this</code>'ni o'zgartiradi, unga yangi xossalar qo'shadi;</li><li><code>this</code> qiymati qaytariladi (return);</li><li>Ya'ni <code>this</code> avtomatik return qilinadi — buni o'zimiz yozishimiz shart emas.</li></ol>
+<p>Boshqacha aytganda, <code>new User(...)</code> quyidagiga o'xshash ishlaydi:</p>
+<pre class="code"><code>function User(name) {
+  // this = {};  (yashirin tarzda)
+
+  // this'ga xossalar qo'shiladi
+  this.name = name;
+  this.isAdmin = false;
+
+  // return this;  (yashirin tarzda)
+}</code></pre>
+<div class="note">Demak <code>new User("Jasur")</code> natijasi shunday obyekt bilan bir xil:<br><code>let user = { name: "Jasur", isAdmin: false };</code><br>Farqi — konstruktor bilan biz istalgancha <code>new User(...)</code> chaqirib, ko'p obyekt yarata olamiz.</div>
+<h2>this — hozirgi obyekt</h2>
+<p>Konstruktor ichida <code>this</code> — hozir yaratilayotgan yangi obyektga ishora qiladi. Unga xossa va metod qo'shamiz:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>this-metod.js</span></div><textarea spellcheck="false">function User(name) {
+  this.name = name;
+
+  this.salom = function() {
+    return "Salom, men " + this.name;
+  };
+}
+
+let a = new User("Ali");
+let b = new User("Vali");
+
+console.log(a.salom());  // Salom, men Ali
+console.log(b.salom());  // Salom, men Vali</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Har bir <code>new</code> chaqiruvi mustaqil obyekt yaratadi: <code>a</code> va <code>b</code> bir-biridan mutlaqo ajralgan.</p>
+<h2>return konstruktor ichida</h2>
+<p>Odatda konstruktorlarda <code>return</code> yozilmaydi — ular <code>this</code>'ni avtomatik qaytaradi. Ammo agar <code>return</code> mavjud bo'lsa, quyidagi qoida amal qiladi:</p>
+<ul><li><code>return &lt;obyekt&gt;</code> — o'sha obyekt qaytariladi (<code>this</code> o'rniga);</li><li><code>return &lt;primitiv&gt;</code> yoki bo'sh <code>return</code> — e'tiborsiz qoldiriladi, baribir <code>this</code> qaytadi.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>return.js</span></div><textarea spellcheck="false">function BigUser() {
+  this.name = "John";
+  return { name: "Godzilla" };  // obyekt qaytadi
+}
+
+function SmallUser() {
+  this.name = "John";
+  return "salom";  // primitiv — e'tiborsiz
+}
+
+console.log(new BigUser().name);    // Godzilla
+console.log(new SmallUser().name);  // John</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Argumentlarsiz konstruktorni qavssiz ham chaqirish mumkin: <code>new User</code> = <code>new User()</code>. Ammo qavsni yozish yaxshi uslub hisoblanadi — kod aniqroq bo'ladi.</div>
+<h2>Konstruktorda metodlar</h2>
+<p>Konstruktorlar nafaqat xossa, balki butun mantiqni — metodlarni ham o'z ichiga oladi. Bu yagona joyda "o'ramlangan" (encapsulated) obyektlar yaratishga imkon beradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>metodli.js</span></div><textarea spellcheck="false">function Sanoq() {
+  this.qiymat = 0;
+
+  this.oshir = function() {
+    this.qiymat++;
+  };
+  this.kamaytir = function() {
+    this.qiymat--;
+  };
+}
+
+let s = new Sanoq();
+s.oshir();
+s.oshir();
+s.kamaytir();
+console.log(s.qiymat);  // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>new.target</h2>
+<p>Ilg'or va kamdan-kam ishlatiladigan sintaksis <code>new.target</code> funksiya ichida uning <code>new</code> bilan chaqirilgan-chaqirilmaganini tekshirishga imkon beradi:</p>
+<ul><li>Oddiy chaqiruvda <code>new.target</code> — <code>undefined</code>;</li><li><code>new</code> bilan chaqirilsa — funksiyaning o'ziga teng bo'ladi.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>new-target.js</span></div><textarea spellcheck="false">function User() {
+  console.log(new.target);
+}
+
+User();       // undefined
+new User();   // [Function: User]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Amaliyotda <code>new.target</code> deyarli kerak emas. Uni ba'zan funksiyani <code>new</code>siz ham <code>new</code> bilan ham bir xil ishlashiga majburlash uchun ishlatishadi, lekin bu kod o'qilishini murakkablashtiradi.</div>
+<h2>Xulosa</h2>
+<ul><li>Konstruktor funksiya — bosh harf bilan nomlanuvchi va <code>new</code> bilan chaqiriladigan oddiy funksiya;</li><li><code>new</code> yangi bo'sh obyekt yaratadi (<code>this</code>), funksiya tanasini bajaradi va <code>this</code>'ni avtomatik qaytaradi;</li><li>Konstruktor ichida <code>this</code> — yaratilayotgan yangi obyekt;</li><li><code>return &lt;obyekt&gt;</code> yozilsa o'sha obyekt qaytadi; primitiv return e'tiborsiz qoladi;</li><li><code>new.target</code> chaqiruv turini tekshiradi, lekin kamdan-kam kerak.</li></ul>
+<nav class="lesson-nav">
+  <a href="polyfill.html"><span class="dir">← Oldingi</span><span class="ttl">Polyfill va transpilyatorlar</span></a>
+  <a class="next" href="optional-chaining.html"><span class="dir">Keyingi →</span><span class="ttl">Optional chaining ?.</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

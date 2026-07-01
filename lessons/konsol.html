@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ishlab chiquvchi konsoli — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Brauzer developer tools va konsol orqali xatolarni ko'rish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details open>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a class="active" href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kirish</div>
+<h1>Ishlab chiquvchi konsoli</h1>
+<p class="lead">Kodda xatolar bo'lishi muqarrar. Ularni ko'rish va tuzatish uchun brauzerlar <strong>ishlab chiquvchi vositalari</strong> (developer tools) bilan jihozlangan.</p>
+<h2>Developer Tools nima?</h2>
+<p>Har bir zamonaviy brauzer ichida dasturchilar uchun maxsus vositalar to'plami bor. Ular xatolarni ko'rsatadi, kodni bosqichma-bosqich bajarishga va tarmoq so'rovlarini kuzatishga imkon beradi.</p>
+<h2>Konsolni qanday ochish kerak?</h2>
+<ul><li><strong>Chrome / Edge / Firefox</strong>: <code>F12</code> tugmasi;</li><li><strong>Mac</strong>: <code>Cmd + Option + J</code> (Chrome) yoki <code>Cmd + Option + K</code> (Firefox);</li><li>Yoki sahifada o'ng tugma → "Inspect" → "Console" bo'limi.</li></ul>
+<h2>Konsol nima uchun kerak?</h2>
+<p><strong>Console</strong> bo'limi ikki asosiy vazifani bajaradi:</p>
+<ol><li>Kodda yuzaga kelgan xatolarni (qizil rangda) ko'rsatadi;</li><li><code>console.log()</code> orqali chiqarilgan ma'lumotlarni ko'rsatadi.</li></ol>
+<p>Quyidagi misolni ishga tushiring — natija maydonchada, xuddi brauzer konsolidagidek, ko'rinadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>konsol.js</span></div><textarea spellcheck="false">console.log("Salom, dunyo!");
+console.log("Konsol xabarlarni shu yerda ko'rsatadi");
+
+let x = 5;
+let y = 10;
+console.log("Yig'indi:", x + y);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Konsolga to'g'ridan-to'g'ri JavaScript kod yozib, <code>Enter</code> bosish orqali ham uni bajarish mumkin.</div>
+<div class="tip">Debugging — dasturchining asosiy mahoratlaridan biri. Konsol bilan yaxshi tanishib oling.</div>
+<h2>Xulosa</h2>
+<ul><li>Har bir brauzerda <strong>developer tools</strong> mavjud (<code>F12</code>);</li><li><strong>Console</strong> — xatolar va <code>console.log</code> chiqishini ko'rsatadi;</li><li>Konsolda kod yozib, darhol bajarish mumkin.</li></ul>
+<nav class="lesson-nav">
+  <a href="muharrirlar.html"><span class="dir">← Oldingi</span><span class="ttl">Kod muharrirlari</span></a>
+  <a class="next" href="salom-dunyo.html"><span class="dir">Keyingi →</span><span class="ttl">Salom, dunyo!</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zamonaviy rejim, "use strict" — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="&quot;use strict&quot; direktivasi nima, u nimani o'zgartiradi va zamonaviy kodda uning avtomatikligi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a class="active" href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Zamonaviy rejim, "use strict"</h1>
+<p class="lead">Uzoq vaqt davomida JavaScript orqaga moslikni saqlab rivojlanib keldi — eski kod buzilmasligi kerak edi. 2009-yilda ES5 standarti chiqqach, tilga yangi imkoniyatlar va ba'zi eski xatti-harakatlarni o'zgartirish qo'shildi. Ular buzilmasligi uchun maxsus <code>"use strict"</code> direktivasi bilan yoqiladigan qilindi.</p>
+<h2>"use strict" nima?</h2>
+<p>Direktiva oddiy matn ko'rinishida — <code>"use strict"</code> yoki <code>'use strict'</code> deb yoziladi. U skript yoki funksiya <strong>eng boshiga</strong> qo'yilganda, kod "zamonaviy" (strict — qat'iy) rejimda ishlaydi:</p>
+<pre class="code"><code>"use strict";
+
+// bu kod zamonaviy rejimda ishlaydi
+// ...</code></pre>
+<p>Tez orada funksiyalarni o'rganamiz — o'shanda <code>"use strict"</code> ni butun skript o'rniga faqat bitta funksiya ichiga qo'yish mumkinligini ko'ramiz. Odatda esa uni butun skriptga qo'llaymiz.</p>
+<h2>"use strict" qayerga yoziladi?</h2>
+<p>Bu direktiva faqat skript yoki funksiyaning <strong>eng tepasida</strong> turgandagina ishlaydi. Undan oldin faqat izohlar bo'lishi mumkin, boshqa hech narsa emas.</p>
+<div class="warn">Agar <code>"use strict"</code> ni skript o'rtasiga yoki oxiriga qo'ysangiz, u <strong>ishlamaydi</strong>. Direktiva shunchaki e'tiborsiz qoldiriladi, xato ham bermaydi. Shuning uchun har doim eng tepaga yozing.</div>
+<pre class="code"><code>console.log("biror kod");
+"use strict"; // bu joyda kech — ishlamaydi!</code></pre>
+<h2>"use strict" ni bekor qilib bo'lmaydi</h2>
+<p>Diqqat qiling — <code>"use strict"</code> ni yoqib bo'lgach, uni "o'chirib" qo'yadigan hech qanday direktiva yo'q. Kodni oldingi rejimga qaytaradigan <code>"no use strict"</code> kabi buyruq mavjud emas.</p>
+<div class="note">Zamonaviy rejimga bir marta o'tsangiz, orqaga qaytish yo'q. Bu yomon narsa emas — chunki zamonaviy rejim faqat foydali qat'iyliklarni qo'shadi.</div>
+<h2>U nimani o'zgartiradi?</h2>
+<p>Zamonaviy rejim tilning ba'zi "yumshoq" xatti-harakatlarini qat'iyroq va ishonchliroq qiladi. Bir nechta muhim misol:</p>
+<ul><li>E'lon qilinmagan o'zgaruvchiga qiymat berishga urinish endi jimgina o'tib ketmaydi, balki <strong>xato</strong> beradi;</li><li>Ba'zi "jim" xatolar (silent errors) endi ochiq xatolarga aylanadi, bu esa muammolarni erta topishga yordam beradi;</li><li>Til yanada mantiqiy va bashorat qilinadigan bo'ladi.</li></ul>
+<p>Umuman olganda, <code>"use strict"</code> kodni xavfsizroq va toza qiladi. Shu sababli undan foydalanish tavsiya etiladi.</p>
+<div class="tip">Yangi loyiha yozayotgan bo'lsangiz va u alohida skriptlardan iborat bo'lsa, uni <code>"use strict"</code> bilan boshlash yaxshi odat. Ushbu kursdagi barcha misollar zamonaviy rejimni nazarda tutadi.</div>
+<h2>Zamonaviy kodda "use strict" avtomatik</h2>
+<p>Muhim yangilik: agar siz JavaScript <strong>klasslar</strong> (classes) yoki <strong>modullar</strong> (modules) ichida kod yozsangiz, <code>"use strict"</code> ni yozishning hojati yo'q — u u yerda <strong>avtomatik</strong> yoqilgan bo'ladi.</p>
+<p>Zamonaviy ilovalarda kod deyarli har doim modullarda joylashadi, shuning uchun ko'p hollarda direktivani qo'lda yozmaysiz ham. Biroq alohida oddiy skriptlar yozganda, uni yozib qo'ygan ma'qul.</p>
+<div class="note">Klasslar va modullarni keyingi boblarda batafsil o'rganamiz. Hozircha faqat shuni eslab qoling: ular ichida zamonaviy rejim doimo yoqilgan.</div>
+<h2>Xulosa</h2>
+<ul><li><code>"use strict"</code> — kodni zamonaviy (qat'iy) rejimda ishlatadigan direktiva;</li><li>U skript yoki funksiyaning eng tepasiga yoziladi, aks holda ishlamaydi;</li><li>U ba'zi jim xatolarni ochiq xatolarga aylantiradi va kodni ishonchli qiladi;</li><li>Bir marta yoqilsa, uni bekor qilib bo'lmaydi;</li><li>Klasslar va modullarda u avtomatik yoqilgan, qo'lda yozish shart emas.</li></ul>
+<nav class="lesson-nav">
+  <a href="kod-tuzilishi.html"><span class="dir">← Oldingi</span><span class="ttl">Kod tuzilishi</span></a>
+  <a class="next" href="ozgaruvchilar.html"><span class="dir">Keyingi →</span><span class="ttl">O'zgaruvchilar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

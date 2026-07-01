@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brauzerda debugging — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Sources paneli, breakpoint'lar, kodni qadamma-qadam bajarish va debugger buyrug'i.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a class="active" href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kod sifati</div>
+<h1>Brauzerda debugging</h1>
+<p class="lead"><strong>Debugging</strong> (nosozliklarni tuzatish) — bu skriptdagi xatolarni topish va bartaraf etish jarayoni. Zamonaviy brauzerlar va aksariyat boshqa muhitlar buni ancha osonlashtiradigan kuchli <em>debugging vositalarini</em> qo'llab-quvvatlaydi. Ushbu darsda biz brauzer vositalari bilan tanishamiz.</p>
+<div class="note">Bizning maydonchamizda (playground) haqiqiy debugging vositasi yo'q, shuning uchun bu darsda misollar asosan tavsif va statik kod ko'rinishida beriladi. Amaliyotni brauzeringizning haqiqiy vositalarida bajaring.</div>
+<h2>Sources paneli</h2>
+<p>Chrome brauzerida debugging'ning asosiy joyi — <strong>Sources</strong> paneli. Uni ochish uchun <code>F12</code> tugmasini bosing, so'ng <strong>Sources</strong> yorlig'iga o'ting. Bu panel uch qismdan iborat:</p>
+<ol><li><strong>File Navigator</strong> — sahifaga ulangan barcha fayllar (HTML, JavaScript, CSS, rasmlar) ro'yxati;</li><li><strong>Code Editor</strong> — tanlangan faylning matni ko'rsatiladigan muharrir;</li><li><strong>JavaScript Debugging</strong> — debugging uchun barcha boshqaruv elementlari (breakpoint'lar, o'zgaruvchilar va h.k.).</li></ol>
+<div class="tip">File Navigator panelini yashirish yoki ko'rsatish uchun <code>Esc</code> tugmasidan foydalaning — u pastdan konsolni ochadi/yopadi. Shunda kodni va konsolni bir vaqtda ko'rish qulay bo'ladi.</div>
+<h2>Konsol</h2>
+<p>Agar biz kod ichida <code>Esc</code> orqali konsolni ochsak, u yerda istalgan JavaScript ifodasini yozib, <code>Enter</code> bosib bajarishimiz mumkin. Natija darhol ko'rinadi. Bu tezkor tekshiruvlar uchun juda foydali.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>konsol.js</span></div><textarea spellcheck="false">console.log("Debugging boshlandi");
+let natija = 2 * 2;
+console.log("2 * 2 =", natija);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Breakpoint (to'xtash nuqtasi)</h2>
+<p><strong>Breakpoint</strong> — bu JavaScript bajarilishi avtomatik to'xtaydigan kod nuqtasi. Kod to'xtaganda biz o'sha ondagi o'zgaruvchilar qiymatlarini tekshirib, buyruqlarni bir-bir bajara olamiz.</p>
+<p>Sources panelida faylning qator raqamini bosish orqali breakpoint qo'yiladi. Kod o'sha qatorga yetganda "muzlab" qoladi. Bir vaqtning o'zida bir nechta breakpoint qo'yish mumkin.</p>
+<p>Breakpoint'ning yana bir kuchli imkoniyati — <strong>shartli breakpoint</strong>. Qator raqamiga o'ng tugma bosib, shart yozish mumkin. Kod faqat shart <code>true</code> bo'lganda to'xtaydi. Bu, masalan, sikl ichida faqat ma'lum bir qiymatda to'xtash uchun qulay.</p>
+<div class="note">Breakpoint qo'yishning yana bir usuli — kodda to'g'ridan-to'g'ri <code>debugger</code> buyrug'ini yozish. Bu quyida ko'rsatilgan.</div>
+<h2>debugger buyrug'i</h2>
+<p>Biz kodni to'xtatishni bevosita skript ichida ham belgilashimiz mumkin — buning uchun <code>debugger</code> buyrug'idan foydalaniladi:</p>
+<pre class="code"><code>function hisobla(a, b) {
+  let yigindi = a + b;
+
+  debugger; // &lt;-- shu yerda kod to'xtaydi (agar dev tools ochiq bo'lsa)
+
+  return yigindi * 2;
+}
+
+hisobla(3, 4);</code></pre>
+<div class="warn"><code>debugger</code> buyrug'i faqat ishlab chiquvchi vositalari (dev tools) ochiq bo'lganda ishlaydi. Aks holda brauzer uni e'tiborsiz qoldiradi. Ishlab chiqarishga (production) chiqarishdan oldin bunday buyruqlarni albatta olib tashlang.</div>
+<h2>Kodni qadamma-qadam bajarish</h2>
+<p>Kod breakpoint'da to'xtaganda, Sources panelining o'ng yuqorisidagi tugmalar orqali uni boshqaramiz. Asosiy tugmalar:</p>
+<ul><li><strong>Resume (davom ettirish)</strong> — kodni keyingi breakpoint'gacha yoki oxirigacha davom ettiradi (<code>F8</code>);</li><li><strong>Step (keyingi qadam)</strong> — keyingi buyruqni bajaradi (<code>F9</code>);</li><li><strong>Step over</strong> — keyingi buyruqni bajaradi, lekin funksiya <em>ichiga kirmaydi</em> (funksiyani butunlay bajaradi);</li><li><strong>Step into</strong> — funksiya chaqiruviga duch kelsa, uning <em>ichiga kiradi</em>;</li><li><strong>Step out</strong> — joriy funksiyani oxirigacha bajarib, undan <em>chiqadi</em>.</li></ul>
+<p>Bu tugmalar yordamida siz kodning har bir qadamini kuzatib, qayerda va nima uchun kutilmagan qiymat paydo bo'lganini aniqlaysiz.</p>
+<h2>O'zgaruvchilarni kuzatish</h2>
+<p>Kod to'xtaganda, o'ng paneldagi bloklar juda foydali:</p>
+<ul><li><strong>Watch</strong> — istalgan ifodani kiritib, uning joriy qiymatini doimiy kuzatish mumkin;</li><li><strong>Call Stack</strong> — funksiya chaqiruvlarining ichki zanjirini ko'rsatadi (qaysi funksiya qaysinisini chaqirgani);</li><li><strong>Scope</strong> — joriy paytdagi barcha o'zgaruvchilar qiymatlari (lokal va global).</li></ul>
+<div class="tip">Kod ichida <code>console.log</code> yozib "debugging" qilish mumkin, lekin breakpoint'lar ancha kuchli: ular kodni o'zgartirmasdan, istalgan ondagi holatni to'liq tekshirishga imkon beradi.</div>
+<h2>Xulosa</h2>
+<p>Kodni debugging qilishning uch asosiy yo'li bor:</p>
+<ol><li><strong>Konsol</strong> — <code>console.log</code> orqali qiymatlarni chiqarish;</li><li><strong>Breakpoint'lar</strong> — Sources panelida qator raqamini bosib qo'yiladi;</li><li><code>debugger</code> — kod ichiga yozilgan to'xtash buyrug'i.</li></ol>
+<p>To'xtagan kodni <strong>Step</strong> tugmalari bilan qadamma-qadam bajarib, <strong>Watch</strong>, <strong>Call Stack</strong> va <strong>Scope</strong> bloklari orqali holatni kuzatasiz. Bu ko'nikmani egallash dasturchi uchun juda muhim.</p>
+<nav class="lesson-nav">
+  <a href="strelka-funksiyalar.html"><span class="dir">← Oldingi</span><span class="ttl">Strelka funksiyalari, asoslari</span></a>
+  <a class="next" href="kod-uslubi.html"><span class="dir">Keyingi →</span><span class="ttl">Kod uslubi</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

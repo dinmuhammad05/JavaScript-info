@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obyektni primitivga o'girish — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Obyekt matematik yoki satr operatsiyalarida qanday primitivga aylantiriladi: hint, Symbol.toPrimitive, toString va valueOf.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a class="active" href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Obyektlar: asoslar</div>
+<h1>Obyektni primitivga o'girish</h1>
+<p class="lead">Obyektlar arifmetik yoki satr operatsiyalarida ishtirok etganda avtomatik ravishda primitivga o'giriladi. Bu darsda o'girish qanday sodir bo'lishini va uni qanday boshqarishni o'rganamiz.</p>
+<h2>Nima uchun kerak?</h2>
+<p><code>obj1 + obj2</code> yoki <code>obj1 - obj2</code> qilsak nima bo'ladi? Bunday holda JavaScript obyektlarni avtomatik primitivga o'giradi, so'ng operatsiyani bajaradi. Natijada har doim primitiv qiymat (satr yoki son) chiqadi.</p>
+<div class="note">Muhim: obyektni primitivga o'girishda hech qachon boshqa obyekt hosil bo'lmaydi. Natija har doim primitiv (odatda satr yoki son) bo'ladi.</div>
+<h2>Hint ("ishora") tushunchasi</h2>
+<p>O'girish qanday amalga oshishi <strong>hint</strong> — ya'ni kutilayotgan qiymat turiga bog'liq. Uch xil hint bor:</p>
+<ul><li><code>"string"</code> — satr kutilganda (masalan, <code>alert(obj)</code>, kalit sifatida <code>obj[obj2]</code>);</li><li><code>"number"</code> — son kutilganda (arifmetika, taqqoslash, <code>Math</code> funksiyalari);</li><li><code>"default"</code> — tur aniq bo'lmaganda (masalan, ikkilik <code>+</code>, yoki <code>==</code> bilan taqqoslash).</li></ul>
+<div class="warn">Ikkilik <code>+</code> operatori <code>"default"</code> hintni ishlatadi, chunki u ham sonlarni qo'shishi, ham satrlarni birlashtirishi mumkin. Deyarli barcha o'rnatilgan obyektlar (<code>Date</code>dan tashqari) <code>"default"</code>'ni <code>"number"</code> kabi qabul qiladi.</div>
+<h2>O'girish algoritmi</h2>
+<p>O'girishni bajarish uchun JavaScript quyidagi uchta metodni shu tartibda qidiradi va topilganini chaqiradi:</p>
+<ol><li><code>obj[Symbol.toPrimitive](hint)</code> — agar bunday metod mavjud bo'lsa;</li><li>Aks holda, hint <code>"string"</code> bo'lsa — <code>obj.toString()</code>, keyin <code>obj.valueOf()</code>;</li><li>Aks holda (hint <code>"number"</code> yoki <code>"default"</code>) — <code>obj.valueOf()</code>, keyin <code>obj.toString()</code>.</li></ol>
+<p>Bu metodlar primitiv qaytarishi kerak. Agar obyekt qaytarsa — natija e'tiborsiz qoldiriladi (go'yo metod umuman yo'q edi).</p>
+<h2>Symbol.toPrimitive</h2>
+<p>Eng zamonaviy va to'liq usul — obyektda <code>Symbol.toPrimitive</code> nomli tizimli metodni belgilash. U barcha o'girish holatlarini yagona joyda boshqaradi va <code>hint</code>'ni argument sifatida oladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>toprimitive.js</span></div><textarea spellcheck="false">let user = {
+  name: "John",
+  money: 1000,
+
+  [Symbol.toPrimitive](hint) {
+    console.log("hint: " + hint);
+    return hint == "string" ? '{name: "' + this.name + '"}' : this.money;
+  }
+};
+
+console.log(String(user));  // hint: string  =&gt;  {name: "John"}
+console.log(+user);         // hint: number  =&gt;  1000
+console.log(user + 500);    // hint: default =&gt;  1500</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Ko'ryapmizki, bitta metod hintga qarab turli natija qaytardi: <code>String(user)</code> satr oldi, <code>+user</code> son oldi, <code>user + 500</code> esa default hint bilan sonni tanladi.</p>
+<h2>toString va valueOf</h2>
+<p><code>Symbol.toPrimitive</code> bo'lmasa, JavaScript eskiroq — <code>toString</code> va <code>valueOf</code> metodlariga murojaat qiladi. Ular hint olmaydi, lekin turli holatlarda chaqiriladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tostring-valueof.js</span></div><textarea spellcheck="false">let user = {
+  name: "John",
+  money: 1000,
+
+  toString() {
+    return "user " + this.name;
+  },
+  valueOf() {
+    return this.money;
+  }
+};
+
+console.log(String(user));  // user John  (toString)
+console.log(+user);         // 1000       (valueOf)
+console.log(user + 500);    // 1500       (valueOf, default)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Amaliyotda ko'pincha faqat bitta <code>toString()</code> metodini yozish yetarli — u "hammabop" bo'lib, barcha o'girishlarni satr ko'rinishida boshqaradi (agar <code>valueOf</code> bo'lmasa, u ham chaqiriladi):</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>faqat-tostring.js</span></div><textarea spellcheck="false">let user = {
+  name: "John",
+  toString() {
+    return "user " + this.name;
+  }
+};
+
+console.log(String(user));  // user John
+console.log(user + "!");    // user John!
+console.log(`${user}`);     // shablon ichida ham toString</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="note">Sukut bo'yicha oddiy obyektning <code>toString()</code> metodi <code>"[object Object]"</code> qaytaradi, <code>valueOf()</code> esa obyektning o'zini qaytaradi (ya'ni primitiv emas, shuning uchun e'tiborsiz).</div>
+<h2>Operatorlarda o'girish</h2>
+<p>Endi turli operatorlar qaysi hintni chaqirishini ko'raylik:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>operatorlar.js</span></div><textarea spellcheck="false">let obj = {
+  valueOf() { return 2; },
+  toString() { return "obyekt"; }
+};
+
+console.log(obj * 2);     // 4       (number: valueOf)
+console.log(obj + 2);     // 4       (default: valueOf)
+console.log(obj + "x");   // 2x      (default: valueOf, keyin satrga)
+console.log(`${obj}`);    // obyekt  (string: toString)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>E'tibor bering: <code>obj + "x"</code>'da <code>+</code> avval obyektni default hint bilan primitiv (<code>2</code>) qildi, so'ng <code>2 + "x"</code> satr birlashtiruvi <code>"2x"</code>'ga aylandi. Ya'ni o'girish natijasi primitiv bo'lgach, operatorning oddiy qoidalari amal qiladi.</p>
+<div class="tip">Metod istalgan turdagi primitiv qaytarishi mumkin — <code>"string"</code> hint majburan satr qaytishini talab qilmaydi, <code>"number"</code> ham majburan son emas. Faqat bitta qat'iy qoida: metodlar obyekt emas, primitiv qaytarishi shart.</div>
+<h2>Xulosa</h2>
+<ul><li>Obyekt primitiv kutilgan operatsiyada avtomatik o'giriladi va natija har doim primitiv bo'ladi;</li><li>O'girish <code>hint</code>'ga bog'liq: <code>"string"</code>, <code>"number"</code> yoki <code>"default"</code>;</li><li>JavaScript avval <code>Symbol.toPrimitive</code>'ni, keyin <code>toString</code>/<code>valueOf</code>'ni qidiradi;</li><li><code>Symbol.toPrimitive</code> — hintni oluvchi, barcha holatlarni boshqaruvchi zamonaviy usul;</li><li>Ko'p hollarda faqat <code>toString()</code> metodini yozish yetarli — u universal o'girishni ta'minlaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="symbol.html"><span class="dir">← Oldingi</span><span class="ttl">Symbol turi</span></a>
+  <a class="next" href="../index.html"><span class="dir">Yakun →</span><span class="ttl">Bosh sahifa</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

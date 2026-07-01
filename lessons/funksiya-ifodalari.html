@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funksiya ifodalari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Funksiya — bu qiymat. Function Expression, Function Declaration va callback funksiyalar.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a class="active" href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>Funksiya ifodalari</h1>
+<p class="lead">JavaScript'da funksiya alohida "til konstruksiyasi" emas — u maxsus turdagi <strong>qiymat</strong>. Oldingi darsda funksiyani <em>e'lon</em> (declaration) sifatida yaratdik. Endi funksiyani <em>ifoda</em> (expression) sifatida yaratishni ko'ramiz.</p>
+<h2>Function Expression</h2>
+<p>Funksiyani ifoda ko'rinishida yaratish — uni o'zgaruvchiga qiymat sifatida berish demakdir:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>func-expr.js</span></div><textarea spellcheck="false">let salomBer = function() {
+  console.log("Salom!");
+};
+
+salomBer(); // Salom!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda funksiya <em>yaratildi</em> va <code>salomBer</code> o'zgaruvchisiga <em>joylandi</em>. Diqqat qiling: <code>function()</code> dan keyin nom yo'q — bu <strong>anonim</strong> (nomsiz) funksiya. E'londan farqli o'laroq, oxirida <code>;</code> qo'yiladi, chunki bu oddiy o'zgaruvchiga qiymat berish ifodasi.</p>
+<h2>Funksiya — bu qiymat</h2>
+<p>Funksiya — qiymat bo'lgani uchun, uni boshqa qiymatlar kabi ishlatish mumkin. Masalan, bir o'zgaruvchidan ikkinchisiga nusxalash:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>func-qiymat.js</span></div><textarea spellcheck="false">function salom() {
+  console.log("Salom, dunyo!");
+}
+
+let nusxa = salom; // funksiyani nusxalaymiz (qavssiz!)
+
+salom(); // Salom, dunyo!
+nusxa(); // Salom, dunyo! — xuddi shu funksiya</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Muhim! <code>let nusxa = salom;</code> — qavs YO'Q. Agar <code>let nusxa = salom();</code> yozsak, bu funksiyani <em>chaqiradi</em> va uning <em>natijasini</em> (bu holda <code>undefined</code>) nusxaga beradi, funksiyaning o'zini emas. Funksiya nomi qavssiz — bu funksiyaga havola, qavs bilan — bu chaqiruv.</div>
+<p>Funksiyani <code>console.log</code> bilan chiqarsak, uning kodini ko'ramiz — chunki u qiymat:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>func-log.js</span></div><textarea spellcheck="false">function salom() {
+  console.log("Salom!");
+}
+console.log(salom); // funksiyaning o'zi (kodi) chiqadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Callback funksiyalar</h2>
+<p>Funksiya qiymat bo'lgani uchun uni boshqa funksiyaga <em>argument</em> sifatida uzatish mumkin. Bunday funksiyalar <strong>callback</strong> (qayta chaqiriladigan) funksiyalar deyiladi.</p>
+<p>Quyidagi <code>sora</code> funksiyasi savol va ikkita funksiya oladi. Shartga qarab birini chaqiradi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>callback.js</span></div><textarea spellcheck="false">function ha() {
+  console.log("Siz rozilik bildirdingiz");
+}
+
+function yoq() {
+  console.log("Siz rad etdingiz");
+}
+
+function sora(shart, haFunk, yoqFunk) {
+  if (shart) {
+    haFunk(); // callback ni chaqiramiz
+  } else {
+    yoqFunk();
+  }
+}
+
+sora(true, ha, yoq);  // Siz rozilik bildirdingiz
+sora(false, ha, yoq); // Siz rad etdingiz</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>ha</code> va <code>yoq</code> — <code>sora</code> funksiyasiga uzatilgan callback'lar. <code>sora</code> ular ichida qanday kod borligini bilmaydi — u faqat kerak bo'lganda ularni chaqiradi.</p>
+<p>Ko'pincha callback'ni to'g'ridan-to'g'ri chaqiruv ichida, anonim funksiya sifatida yozish qulayroq bo'ladi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>callback-anon.js</span></div><textarea spellcheck="false">function sora(shart, haFunk, yoqFunk) {
+  if (shart) haFunk();
+  else yoqFunk();
+}
+
+sora(
+  true,
+  function() { console.log("Rozilik"); },
+  function() { console.log("Rad etish"); }
+);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="tip">Callback funksiyalar JavaScript'da juda keng qo'llaniladi — massivlar bilan ishlash (<code>forEach</code>, <code>map</code>), hodisalarni tinglash, taymer va tarmoq so'rovlarida. Bu tushunchani yaxshi o'zlashtirish muhim.</div>
+<h2>Function Expression va Function Declaration farqi</h2>
+<p>Ikki usul o'rtasida asosiy farq bor. Avvalo sintaksis:</p>
+<ul><li><strong>Declaration</strong>: alohida ifoda sifatida, asosiy kod oqimida: <code>function summa(a, b) { ... }</code>;</li><li><strong>Expression</strong>: boshqa ifoda ichida, odatda tenglik o'ng tomonida: <code>let summa = function(a, b) { ... };</code></li></ul>
+<p>Muhimroq farq — <strong>qachon yaratilishida</strong>. Bu "hoisting" (ko'tarilish) bilan bog'liq.</p>
+<h3>Function Declaration ko'tariladi (hoisting)</h3>
+<p>Function Declaration <em>e'lon qilinishidan oldin</em> ham chaqirilishi mumkin. JavaScript dvigateli skriptni ishga tushirishdan oldin barcha Function Declaration'larni topib, "ko'taradi":</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>hoisting-decl.js</span></div><textarea spellcheck="false">// e'londan OLDIN chaqiramiz — ishlaydi!
+salom("Ali");
+
+function salom(ism) {
+  console.log("Salom, " + ism);
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h3>Function Expression ko'tarilmaydi</h3>
+<p>Function Expression esa faqat o'zining kod qatoriga yetganda yaratiladi. Undan oldin chaqirib bo'lmaydi:</p>
+<pre class="code"><code>// salom("Ali"); // XATO! salom hali mavjud emas
+
+let salom = function(ism) {
+  console.log("Salom, " + ism);
+};
+
+salom("Ali"); // Endi ishlaydi</code></pre>
+<div class="note">Yuqoridagi kod aynan xato holatni ko'rsatgani uchun {code} bloki sifatida berildi — uni ishga tushirsangiz, izohsiz birinchi qator <code>ReferenceError</code> beradi. Sababi: <code>let salom = function...</code> ifodasi o'z qatoriga yetgandagina bajariladi, undan oldin <code>salom</code> mavjud emas.</div>
+<h2>Qaysi birini tanlash?</h2>
+<p>Umumiy tavsiya: iloji bo'lsa <strong>Function Declaration</strong> ni afzal ko'ring. U kodni tashkil qilishda erkinlik beradi (e'londan oldin ham ishlatish mumkin) va o'qishga qulayroq — <code>function ...</code> so'zini ko'rish bilanoq "bu funksiya" ekanini bilamiz.</p>
+<p>Function Expression esa Declaration mos kelmagan hollarda ishlatiladi — masalan, funksiyani shartga qarab yaratish yoki uni argument (callback) sifatida uzatishda.</p>
+<h2>Xulosa</h2>
+<ul><li>Funksiya — bu <strong>qiymat</strong>; uni nusxalash, uzatish va o'zgaruvchida saqlash mumkin;</li><li><strong>Function Declaration</strong>: <code>function nom() {}</code> — asosiy kod oqimida, alohida;</li><li><strong>Function Expression</strong>: <code>let nom = function() {};</code> — ifoda ichida;</li><li><strong>Callback</strong> — boshqa funksiyaga argument sifatida uzatilgan funksiya;</li><li>Declaration <strong>ko'tariladi</strong> (e'londan oldin chaqirsa bo'ladi), Expression esa <strong>ko'tarilmaydi</strong>;</li><li>Umuman Function Declaration afzalroq, callback va shartli yaratishda Expression qulay.</li></ul>
+<nav class="lesson-nav">
+  <a href="funksiyalar.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiyalar</span></a>
+  <a class="next" href="strelka-funksiyalar.html"><span class="dir">Keyingi →</span><span class="ttl">Strelka funksiyalari, asoslari</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

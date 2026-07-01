@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avtomatlashtirilgan testlar (Mocha) — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Nega test kerak; BDD; describe/it/assert; TDD jarayoni.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a class="active" href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kod sifati</div>
+<h1>Avtomatlashtirilgan testlar (Mocha)</h1>
+<p class="lead">Avtomatlashtirilgan testlar — bu bizning kodimiz to'g'ri ishlashini avtomatik tekshiradigan maxsus kod. Ularsiz har o'zgarishdan keyin kodni qo'lda sinash kerak bo'ladi, bu esa juda ko'p vaqt oladi va xatolarni yo'qotib qo'yadi.</p>
+<div class="note">Mocha va assert kutubxonalari bu maydonchada (playground) ishlamaydi. Shuning uchun bu darsda test kodlari statik ko'rinishda beriladi — ularni haqiqiy Node.js muhitida ishga tushiring.</div>
+<h2>Nega qo'lda sinash yetarli emas?</h2>
+<p>Aytaylik, biz <code>pow(x, n)</code> — darajaga ko'tarish funksiyasini yozdik. Uni yozayotganda, biz konsolda <code>pow(2, 3)</code> ni tekshirib ko'ramiz. Natija <code>8</code> — to'g'ri.</p>
+<p>Ammo keyinroq kodni takomillashtirsak, uni yana qo'lda sinashimiz kerak. Bir nechta holatni har safar qo'lda tekshirish — zerikarli va ishonchsiz. Odam bir holatni tekshirib, boshqasini unutib qo'yadi.</p>
+<div class="warn">Qo'lda sinashning asosiy muammosi: kodni har o'zgartirganda, avval ishlagan qismlar buzilmaganini tekshirish qiyin. Avtomatik testlar aynan shu muammoni hal qiladi.</div>
+<h2>BDD — testlar spetsifikatsiya sifatida</h2>
+<p><strong>BDD</strong> (Behavior Driven Development — xatti-harakatga asoslangan ishlab chiqarish) uchtta narsani birlashtiradi: <em>testlar</em>, <em>hujjat</em> va <em>misollar</em>. BDD'da test kodi bir vaqtning o'zida funksiya nima qilishini ham tavsiflaydi.</p>
+<h2>Test tuzilishi: describe va it</h2>
+<p>Mocha kutubxonasida testlar <code>describe</code> va <code>it</code> funksiyalari yordamida tuziladi:</p>
+<ul><li><code>describe("nom", function() { ... })</code> — biz tavsiflayotgan funksionallik. Testlarni guruhlaydi;</li><li><code>it("holat tavsifi", function() { ... })</code> — aniq bir foydalanish holatining tavsifi va tekshiruvi;</li><li><code>assert.equal(a, b)</code> — <code>a</code> va <code>b</code> teng ekanini tekshiradi. Teng bo'lmasa, test xato beradi.</li></ul>
+<pre class="code"><code>describe("pow", function() {
+
+  it("2 ni 3-darajaga ko'taradi", function() {
+    assert.equal(pow(2, 3), 8);
+  });
+
+  it("3 ni 4-darajaga ko'taradi", function() {
+    assert.equal(pow(3, 4), 81);
+  });
+
+});</code></pre>
+<p>Bu yerda <code>it</code> ichidagi matn — ingliz yoki o'zbek tilida yozilgan tavsif. Test bajarilganda u shu tavsif bilan ko'rsatiladi, shuning uchun natijani o'qish oson bo'ladi.</p>
+<h2>assert modulidan foydalanish</h2>
+<p>Node.js'da <code>assert</code> moduli o'rnatilgan. Uning eng ko'p ishlatiladigan metodlari:</p>
+<ul><li><code>assert.equal(a, b)</code> — <code>a == b</code> ekanini tekshiradi;</li><li><code>assert.strictEqual(a, b)</code> — <code>a === b</code> (qat'iy tenglik);</li><li><code>assert.notEqual(a, b)</code> — teng emasligini tekshiradi;</li><li><code>assert.deepEqual(a, b)</code> — obyekt/massivlarni chuqur solishtiradi.</li></ul>
+<pre class="code"><code>const assert = require('assert');
+
+assert.equal(2 + 2, 4);          // OK, hech narsa chiqarmaydi
+assert.strictEqual(1 + 1, 2);    // OK
+// assert.equal(1, 2);           // xato: AssertionError</code></pre>
+<h2>TDD jarayoni</h2>
+<p><strong>TDD</strong> (Test Driven Development — testga asoslangan ishlab chiqarish) — bu kodni yozishdan <em>oldin</em> test yozish usuli. Jarayon shunday:</p>
+<ol><li>Avval test yoziladi (funksiya hali yo'q — test xato beradi);</li><li>So'ng testni o'tkazadigan minimal kod yoziladi;</li><li>Test o'tsa — keyingi holat uchun yangi test qo'shiladi;</li><li>Kod takomillashtiriladi, testlar esa hech narsa buzilmaganini kafolatlaydi (bu "refactoring" bosqichi).</li></ol>
+<p>Masalan, avval bir necha test yozamiz, keyin ularni o'tkazadigan funksiyani:</p>
+<pre class="code"><code>// 1-qadam: testlar (funksiya hali yo'q)
+describe("pow", function() {
+  it("musbat darajalarni to'g'ri hisoblaydi", function() {
+    assert.equal(pow(2, 3), 8);
+    assert.equal(pow(3, 3), 27);
+  });
+});</code></pre>
+<pre class="code"><code>// 2-qadam: testni o'tkazadigan kod
+function pow(x, n) {
+  let natija = 1;
+  for (let i = 0; i &lt; n; i++) {
+    natija *= x;
+  }
+  return natija;
+}</code></pre>
+<div class="note">TDD'ning kuchi shundaki: har bir yangi holat uchun test yozib, funksiyani asta-sekin mustahkamlaysiz. Testlar to'plami kod ustida ishonchli "himoya to'ri" bo'lib qoladi.</div>
+<div class="tip">Kichik funksiyalarni ham test bilan qoplang. Kod qanchalik ko'p test bilan qoplansa, uni o'zgartirish shunchalik xavfsiz bo'ladi.</div>
+<h2>Xulosa</h2>
+<ul><li>Avtomatik testlar kodni har o'zgartirishda qo'lda sinashdan qutqaradi;</li><li><strong>BDD</strong> — testlar bir vaqtda hujjat va misol vazifasini bajaradi;</li><li>Mocha'da <code>describe</code> guruhlaydi, <code>it</code> holatni tavsiflaydi, <code>assert</code> tekshiradi;</li><li><strong>TDD</strong> — avval test, keyin kod yozish usuli; testlar refactoringni xavfsiz qiladi.</li></ul>
+<nav class="lesson-nav">
+  <a href="izohlar.html"><span class="dir">← Oldingi</span><span class="ttl">Izohlar</span></a>
+  <a class="next" href="polyfill.html"><span class="dir">Keyingi →</span><span class="ttl">Polyfill va transpilyatorlar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

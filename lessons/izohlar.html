@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Izohlar — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Yaxshi va yomon izohlar; nima uchun (nima emas, nega) izoh kerak.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a class="active" href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kod sifati</div>
+<h1>Izohlar</h1>
+<p class="lead">Izohlar (comments) — kodda dvigatel e'tiborsiz qoldiradigan matn. Ular dasturchilar uchun tushuntirish yozadi. Ammo yaxshi izoh yozish — alohida mahorat. Ko'p izoh har doim ham yaxshi emas.</p>
+<h2>Izoh sintaksisi</h2>
+<p>JavaScript'da izohlar ikki xil bo'ladi:</p>
+<pre class="code"><code>// bir qatorli izoh
+
+/*
+  ko'p qatorli
+  izoh
+*/
+
+let x = 5; // qator oxirida ham yozish mumkin</code></pre>
+<h2>Yomon izohlar</h2>
+<p>Ko'plab yangi dasturchilar izohlarni <em>"kod nima qilyapti"</em> ni tushuntirish uchun ishlatadi. Masalan:</p>
+<pre class="code"><code>// yomon: kod nima qilishini takrorlaydi
+let i = 0; // i ni nolga tenglashtiramiz
+i = i + 1; // i ni bittaga oshiramiz</code></pre>
+<p>Bunday izohlar deyarli befoyda — ular kodda allaqachon ko'rinib turgan narsani takrorlaydi. Yaxshi kodning o'zi "o'zini o'zi tushuntiradi" (self-descriptive) bo'lishi kerak.</p>
+<div class="warn">Agar kod shu qadar chalkash bo'lsaki, uni tushuntirish uchun izoh kerak bo'lsa — bu ko'pincha kodni qayta yozish kerakligining belgisi. Izoh o'rniga kodni soddalashtiring.</div>
+<h2>Kodni izoh o'rniga qayta yozish</h2>
+<p>Ba'zan chalkash kod bo'lagini izohlash o'rniga, uni alohida mazmunli nomli funksiyaga ajratish yaxshiroq:</p>
+<pre class="code"><code>// izoh bilan
+// birlamchi son ekanligini tekshiramiz
+for (let i = 2; i &lt; n; i++) {
+  if (n % i === 0) return false;
+}</code></pre>
+<pre class="code"><code>// yaxshiroq: mazmunli nomli funksiya
+function birlamchiSonmi(n) {
+  for (let i = 2; i &lt; n; i++) {
+    if (n % i === 0) return false;
+  }
+  return true;
+}</code></pre>
+<p>Endi funksiya nomining o'zi maqsadni tushuntiradi — izoh kerak emas.</p>
+<h2>Yaxshi izohlar: nima uchun?</h2>
+<p>Foydali izohlar odatda <strong>nima qilinayotganini emas, nega shunday qilinayotganini</strong> tushuntiradi. Bu "yuqori darajadagi" izohlar. Ular quyidagilarni yoritadi:</p>
+<ul><li><strong>Arxitektura</strong> — komponentlar qanday o'zaro ishlashi, ma'lumot oqimi;</li><li><strong>Nega aynan bu yechim?</strong> — nima uchun boshqa, aftidan sodda usul tanlanmagan;</li><li><strong>Nozik jihatlar</strong> — ochiq ko'rinmaydigan, lekin muhim tafsilotlar.</li></ul>
+<pre class="code"><code>// yaxshi: NEGA shunday qilinganini tushuntiradi
+// Bu yerda tsiklni teskari tartibda aylantiramiz,
+// chunki bu massivdan element o'chirishda
+// indekslarning "sirg'anib ketishini" oldini oladi.
+for (let i = arr.length - 1; i &gt;= 0; i--) {
+  if (arr[i] === null) arr.splice(i, 1);
+}</code></pre>
+<h2>Funksiyalarni hujjatlashtirish</h2>
+<p>Funksiya nima qilishini, qanday parametr olishini va nima qaytarishini tavsiflash uchun maxsus <strong>JSDoc</strong> uslubi bor. Bu izohlarni muharringiz o'qib, avtomatik yordam ko'rsatadi:</p>
+<pre class="code"><code>/**
+ * n-darajaga ko'tarish.
+ *
+ * @param {number} x Ko'tariladigan son.
+ * @param {number} n Daraja (butun son bo'lishi kerak).
+ * @return {number} x ning n-darajasi.
+ */
+function pow(x, n) {
+  let natija = 1;
+  for (let i = 0; i &lt; n; i++) {
+    natija *= x;
+  }
+  return natija;
+}</code></pre>
+<div class="tip">JSDoc izohlarini VS Code va WebStorm tushunadi: funksiyani chaqirganingizda ular parametrlar va tavsifni avtomatik ko'rsatadi.</div>
+<h2>Xulosa</h2>
+<p>Yaxshi izoh belgisi — bu <strong>izohning yo'qligi</strong>. Kodning o'zi imkon qadar tushunarli bo'lsin. Kerakli izohlar:</p>
+<ul><li>Arxitekturani yuqori darajada tavsiflaydi;</li><li>Kod nima <em>qilishini</em> emas, <em>nega</em> shunday qilinganini tushuntiradi;</li><li>Ochiq ko'rinmaydigan nozik jihatlarni yoritadi;</li><li>Funksiyalarni JSDoc orqali hujjatlashtiradi.</li></ul>
+<p>Kerakmas izohlar esa — kod nima qilishini so'zma-so'z takrorlaydi va faqat chalg'itadi.</p>
+<nav class="lesson-nav">
+  <a href="kod-uslubi.html"><span class="dir">← Oldingi</span><span class="ttl">Kod uslubi</span></a>
+  <a class="next" href="testlash.html"><span class="dir">Keyingi →</span><span class="ttl">Avtomatlashtirilgan testlar (Mocha)</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

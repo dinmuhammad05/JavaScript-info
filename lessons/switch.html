@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>switch konstruksiyasi — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Bir o'zgaruvchini bir nechta qiymat bilan solishtirish uchun switch/case/default.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a class="active" href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">JavaScript asoslari</div>
+<h1>switch konstruksiyasi</h1>
+<p class="lead">Bir o'zgaruvchini bir nechta variant bilan solishtirish kerak bo'lganda, ko'plab <code>if..else</code> o'rniga <code>switch</code> konstruksiyasi ancha aniqroq va o'qishga qulay bo'ladi.</p>
+<h2>Umumiy ko'rinish</h2>
+<p><code>switch</code> bitta yoki bir nechta <code>case</code> blokidan va ixtiyoriy <code>default</code> dan iborat:</p>
+<pre class="code"><code>switch (x) {
+  case 'qiymat1':  // if (x === 'qiymat1')
+    // ...
+    break;
+
+  case 'qiymat2':  // if (x === 'qiymat2')
+    // ...
+    break;
+
+  default:
+    // ...
+    break;
+}</code></pre>
+<ul><li><code>x</code> qiymati har bir <code>case</code> qiymati bilan tartib bo'yicha solishtiriladi;</li><li>Mos <code>case</code> topilsa, kod o'sha yerdan <code>break</code> ga qadar (yoki <code>switch</code> oxiriga qadar) bajariladi;</li><li>Hech qaysi <code>case</code> mos kelmasa, <code>default</code> bloki bajariladi (agar bo'lsa).</li></ul>
+<h2>Ishlash misoli</h2>
+<p>Quyidagi misolda <code>a</code> qiymatiga qarab turli xabar chiqadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch.js</span></div><textarea spellcheck="false">let a = 3;
+switch (a) {
+  case 1:
+    console.log("Juda kichik");
+    break;
+  case 3:
+    console.log("Aynan uch!");
+    break;
+  case 5:
+    console.log("Katta");
+    break;
+  default:
+    console.log("Noma'lum qiymat");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>a = 3</code> bo'lgani uchun <code>case 3</code> ishga tushib, "Aynan uch!" chiqadi, so'ng <code>break</code> switch'dan chiqaradi.</p>
+<h2>"break" ning ahamiyati</h2>
+<p>Agar <code>break</code> yozilmasa, bajarilish <em>keyingi</em> <code>case</code> ga "o'tib ketadi", shartni tekshirmasdan! Buni "fall-through" (o'tib ketish) deyiladi.</p>
+<p><code>break</code> siz misolni ko'raylik:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-break.js</span></div><textarea spellcheck="false">let a = 2;
+switch (a) {
+  case 1:
+    console.log("Bir");
+  case 2:
+    console.log("Ikki");   // shu yerdan boshlanadi
+  case 3:
+    console.log("Uch");    // break yo'q, davom etadi
+  default:
+    console.log("Default"); // buni ham chiqaradi!
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Yuqoridagi kod <code>a = 2</code> uchun "Ikki", "Uch", "Default" — hammasini chiqaradi! Chunki mos <code>case</code> topilgach, <code>break</code> uchramaguncha barcha keyingi bloklar bajariladi. Bu ko'pincha xatolarga sabab bo'ladi, shuning uchun har bir <code>case</code> oxiriga <code>break</code> qo'yishni unutmang.</div>
+<h2>"case" larni guruhlash</h2>
+<p>Bir nechta <code>case</code> bir xil kodni bajarishi kerak bo'lsa, ularni guruhlash mumkin. Bu aynan "fall-through" xususiyatidan foydalanadi:</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-group.js</span></div><textarea spellcheck="false">let a = 4;
+switch (a) {
+  case 3:
+    console.log("Kichik");
+    break;
+
+  case 4: // ikkala case bir xil kodni bajaradi
+  case 5:
+    console.log("O'rtacha");
+    break;
+
+  default:
+    console.log("Boshqa");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda <code>case 4</code> tanasi bo'sh, shuning uchun bajarilish <code>case 5</code> ga o'tib, "O'rtacha" chiqaradi. Ya'ni 4 va 5 uchun bir xil natija.</p>
+<h2>Tur muhim: qat'iy tenglik (===)</h2>
+<p><code>switch</code> qiymatlarni <strong>qat'iy tenglik</strong> (<code>===</code>) bilan solishtiradi. Ya'ni turlar ham mos kelishi shart, hech qanday avtomatik o'girish yo'q.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-strict.js</span></div><textarea spellcheck="false">let a = "3"; // bu satr (string), son emas!
+switch (a) {
+  case 3: // 3 === '3' → false, chunki turlar farq qiladi
+    console.log("Son uch");
+    break;
+  case "3": // '3' === '3' → true
+    console.log("Satr uch");
+    break;
+  default:
+    console.log("Topilmadi");
+}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Yuqorida <code>a</code> — satr <code>"3"</code>. <code>case 3</code> (son) mos kelmaydi, chunki <code>3 === "3"</code> — bu <code>false</code>. Faqat <code>case "3"</code> mos keladi.</p>
+<div class="tip">Agar foydalanuvchidan olingan qiymatni tekshirsangiz, u ko'pincha satr bo'ladi. Sonlar bilan solishtirishdan oldin <code>Number(a)</code> orqali o'girishni yoki <code>case</code> larni satr shaklida yozishni unutmang.</div>
+<h2>Amaliy misol: hafta kunlari</h2>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-kun.js</span></div><textarea spellcheck="false">let kun = 3;
+let nom;
+switch (kun) {
+  case 1: nom = "Dushanba"; break;
+  case 2: nom = "Seshanba"; break;
+  case 3: nom = "Chorshanba"; break;
+  case 4: nom = "Payshanba"; break;
+  case 5: nom = "Juma"; break;
+  case 6:
+  case 7:
+    nom = "Dam olish kuni";
+    break;
+  default:
+    nom = "Noto'g'ri kun";
+}
+console.log(nom); // Chorshanba</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Xulosa</h2>
+<ul><li><strong>switch</strong> — bir qiymatni bir nechta variant bilan solishtirishning ixcham usuli;</li><li>Solishtirish <strong>qat'iy tenglik (===)</strong> bilan bajariladi — turlar ham mos kelishi kerak;</li><li>Har bir <code>case</code> oxiriga <strong>break</strong> qo'yish shart, aks holda keyingi bloklar ham bajariladi;</li><li>Bir nechta <code>case</code> ni guruhlab, ular uchun bir xil kod bajarish mumkin;</li><li><strong>default</strong> — hech qaysi variant mos kelmaganda ishlaydi.</li></ul>
+<nav class="lesson-nav">
+  <a href="sikllar.html"><span class="dir">← Oldingi</span><span class="ttl">Sikllar: while va for</span></a>
+  <a class="next" href="funksiyalar.html"><span class="dir">Keyingi →</span><span class="ttl">Funksiyalar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

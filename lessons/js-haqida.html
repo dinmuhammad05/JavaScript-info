@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript haqida — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="JavaScript nima, u qanday paydo bo'lgan va bugungi kunda qayerda ishlaydi.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details open>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a class="active" href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Kirish</div>
+<h1>JavaScript haqida</h1>
+<p class="lead">JavaScript — bu veb-sahifalarni "jonli" qiluvchi dasturlash tili. Ushbu darsda uning tabiati, tarixi va imkoniyatlari bilan tanishamiz.</p>
+<h2>JavaScript qanday paydo bo'lgan?</h2>
+<p>JavaScript dastlab 1995-yilda faqat brauzerlarga "jon" bag'ishlash — sahifalarni interaktiv qilish uchun yaratilgan edi. Dastur kodi to'g'ridan-to'g'ri HTML sahifasiga yozilib, sahifa yuklanganda avtomatik ishga tushardi.</p>
+<p>Bugungi kunda JavaScript nafaqat brauzerda, balki serverda (<strong>Node.js</strong> orqali), va umuman <em>JavaScript dvigateli</em> (engine) o'rnatilgan istalgan qurilmada ishlay oladi.</p>
+<div class="note">Brauzerda o'rnatilgan JavaScript dvigatelining nomlari bor: <strong>V8</strong> — Chrome, Opera va Edge uchun; <strong>SpiderMonkey</strong> — Firefox uchun. Node.js ham V8 dvigatelida ishlaydi.</div>
+<h2>Dvigatel kodni qanday bajaradi?</h2>
+<p>Dvigatellar murakkab, lekin asosiy g'oya sodda:</p>
+<ol><li>Dvigatel skriptni o'qiydi (<em>"parse"</em> qiladi);</li><li>Uni mashina kodiga o'giradi (<em>"compile"</em> qiladi);</li><li>So'ng mashina kodi tez ishga tushadi.</li></ol>
+<p>Dvigatel jarayonning har bir bosqichida optimallashtirish qo'llaydi, shuning uchun zamonaviy JavaScript juda tez ishlaydi.</p>
+<h2>Brauzerda JavaScript nimalar qila oladi?</h2>
+<ul><li>Sahifaga yangi HTML qo'shish, mavjud mazmun va uslublarni o'zgartirish;</li><li>Foydalanuvchi harakatlariga javob berish — bosish, sichqoncha, tugmalar;</li><li>Server bilan tarmoq orqali so'rov yuborish (AJAX, Fetch), fayl yuklash;</li><li>Cookie olish va o'rnatish, foydalanuvchidan savol so'rash, xabar ko'rsatish;</li><li>Ma'lumotni brauzer xotirasida saqlash (<code>localStorage</code>).</li></ul>
+<h2>Brauzerdagi JavaScript nimalarni QILA OLMAYDI?</h2>
+<p>Xavfsizlik uchun brauzerdagi JavaScript imkoniyatlari cheklangan:</p>
+<div class="warn">Sahifadagi JavaScript diskdagi ixtiyoriy fayllarni o'qiy olmaydi yoki dasturlarni ishga tushira olmaydi. Uning operatsion tizim funksiyalariga to'g'ridan-to'g'ri kirishi yo'q.</div>
+<p>Turli oynalar/tablar odatda bir-birini "bilmaydi" (bu <em>"Same Origin Policy"</em> — bir manba siyosati deb ataladi). Bu foydalanuvchi ma'lumotlarini himoya qiladi.</p>
+<h2>JavaScript'ni nimasi maxsus?</h2>
+<ul><li><strong>HTML/CSS bilan to'liq integratsiya</strong> — uchtasi birga ishlaydi;</li><li><strong>Sodda ishlarni sodda bajaradi</strong>;</li><li><strong>Barcha asosiy brauzerlarda qo'llab-quvvatlanadi</strong> va standart (ECMAScript) sifatida yoqilgan.</li></ul>
+<div class="tip">JavaScript — brauzerda ishlaydigan yagona til bo'lgani uchun eng keng tarqalgan. Uning "ustki" tillari ham bor (TypeScript, Dart), ular kodni JavaScript'ga o'giradi.</div>
+<h2>Xulosa</h2>
+<ul><li>JavaScript — brauzer uchun yaratilgan, endi ko'p muhitlarda ishlaydigan til;</li><li>Brauzerda u DOM, hodisalar, tarmoq va xotira bilan ishlay oladi;</li><li>Xavfsizlik sababli uning imkoniyatlari cheklangan;</li><li>U HTML va CSS bilan mukammal integratsiyalashgan.</li></ul>
+<nav class="lesson-nav">
+  <a href="../index.html"><span class="dir">← Ortga</span><span class="ttl">Bosh sahifa</span></a>
+  <a class="next" href="qollanmalar.html"><span class="dir">Keyingi →</span><span class="ttl">Qo'llanmalar va spetsifikatsiyalar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
