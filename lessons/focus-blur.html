@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fokuslash: focus/blur — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="focus()/blur() metodlari, focus/blur hodisalari, tabindex bilan fokusni boshqarish, focusin/focusout orqali delegatsiya va validatsiya misoli.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details open>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a class="active" href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Formalar va boshqaruv elementlari</div>
+<h1>Fokuslash: focus/blur</h1>
+<p class="lead">Element foydalanuvchi u bilan ishlashga tayyorlanganda "fokus" oladi — masalan, matn kiritish maydoniga bosilganda. Fokuslash va uni yo'qotish ("blur") ma'lumot kiritilib bo'lgan payni belgilash, tekshirishlarni ishga tushirish yoki interfeys holatini o'zgartirish uchun ishlatiladi. Ushbu darsda fokus bilan bog'liq metodlar, hodisalar va delegatsiyani chuqur o'rganamiz.</p>
+<h2>focus/blur hodisalari</h2>
+<p><code>focus</code> hodisasi element fokus olganda, <code>blur</code> hodisasi esa uni yo'qotganda (masalan, foydalanuvchi boshqa joyga bosganda) ishga tushadi. Ular yordamida qiymatni tekshirish yoki interfeysni o'zgartirish mumkin. Masalan, email maydonini fokus yo'qolganda tekshiramiz:</p>
+<pre class="code"><code>&amp;lt;style&amp;gt;
+  .invalid { border-color: red; }
+  #error { color: red }
+&amp;lt;/style&amp;gt;
+
+Email: &amp;lt;input type="email" id="input"&amp;gt;
+&amp;lt;div id="error"&amp;gt;&amp;lt;/div&amp;gt;
+
+&amp;lt;script&amp;gt;
+  input.onblur = function() {
+    // manzil noto'g'ri bo'lsa xatolikni ko'rsatamiz
+    if (!input.value.includes('@')) {
+      input.classList.add('invalid');
+      error.innerHTML = 'Iltimos, to'g'ri email kiriting.';
+    }
+  };
+
+  input.onfocus = function() {
+    // foydalanuvchi qayta kiritmoqchi bo'lsa, xatolikni o'chiramiz
+    if (this.classList.contains('invalid')) {
+      this.classList.remove('invalid');
+      error.innerHTML = '';
+    }
+  };
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu yerda <code>onblur</code> foydalanuvchi maydonni tark etganda qiymatni tekshiradi, <code>onfocus</code> esa u qaytib kelganda avvalgi xatolik belgisini olib tashlaydi.</p>
+<h2>focus/blur metodlari</h2>
+<p><code>elem.focus()</code> va <code>elem.blur()</code> metodlari elementga fokusni dasturiy ravishda berish yoki undan olib qo'yish imkonini beradi. Masalan, qiymat noto'g'ri bo'lsa, foydalanuvchini maydondan chiqarmaymiz — fokusni qaytaramiz:</p>
+<pre class="code"><code>Email: &amp;lt;input type="email" id="input"&amp;gt;
+&amp;lt;input type="text" style="width:220px" placeholder="noto'g'ri kiriting, keyin bu yerga o'ting"&amp;gt;
+
+&amp;lt;script&amp;gt;
+  input.onblur = function() {
+    if (!this.value.includes('@')) {
+      // xatolikni ko'rsatamiz
+      this.classList.add('error');
+      // ...va fokusni qaytaramiz
+      input.focus();
+    } else {
+      this.classList.remove('error');
+    }
+  };
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="warn">Fokusni bunday "majburiy ushlab qolish" (foydalanuvchini maydondan chiqarmaslik) UX nuqtai nazaridan yomon amaliyot hisoblanadi. Foydalanuvchi keyinroq to'g'rilashni xohlashi mumkin. Xatolikni ko'rsatish yaxshiroq, lekin foydalanuvchini majburan ushlab turmaslik kerak. Bundan tashqari, JavaScript sabab bo'lgan <code>focus()</code> chaqiruvi ba'zi brauzerlarda <code>blur</code> hodisasi ichida ishlamasligi ham mumkin.</div>
+<div class="note">Ko'p hodisalar odatda JavaScriptdan <code>focus()</code>/<code>blur()</code> chaqirilganda ham ishga tushadi. Lekin qiziq holat bor: agar <code>onblur</code> ishlovchisi ichida yana <code>focus()</code> chaqirsangiz, brauzer ba'zan uni e'tiborsiz qoldirishi mumkin.</div>
+<h2>Istalgan elementga fokus: tabindex</h2>
+<p>Standart holatda ko'p elementlar fokus qabul qilmaydi. Fokus qabul qiladigan elementlar — foydalanuvchi ular bilan ishlashi mumkin bo'lganlar: <code>&lt;input&gt;</code>, <code>&lt;button&gt;</code>, <code>&lt;a href&gt;</code> va boshqalar. Aksincha, <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;table&gt;</code> kabi elementlar standart holatda fokuslanmaydi — ular uchun <code>elem.focus()</code> ishlamaydi va <code>focus</code>/<code>blur</code> hodisalari yuz bermaydi.</p>
+<p>Buni <code>tabindex</code> HTML-atributi o'zgartiradi. <code>tabindex</code> qiymatiga ega istalgan element fokuslanadigan bo'ladi. Bundan tashqari, atribut qiymati foydalanuvchi <kbd>Tab</kbd> bosganda o'tish tartibini ham belgilaydi:</p>
+<ul><li><code>tabindex="1"</code>, <code>"2"</code> va h.k. — bunday elementlar birinchi bo'lib, o'z raqamlari tartibida fokuslanadi (avval 1, keyin 2, ...);</li><li><code>tabindex="0"</code> — element odatiy elementlar bilan bir qatorda, hujjatdagi tartibda fokuslanadi. Bu eng ko'p ishlatiladigan qiymat;</li><li><code>tabindex="-1"</code> — element <kbd>Tab</kbd> orqali fokuslanmaydi, lekin dasturiy <code>focus()</code> orqali fokuslanishi mumkin.</li></ul>
+<pre class="code"><code>&amp;lt;ul&amp;gt;
+  &amp;lt;li tabindex="1"&amp;gt;Bir&amp;lt;/li&amp;gt;
+  &amp;lt;li tabindex="0"&amp;gt;Nol&amp;lt;/li&amp;gt;
+  &amp;lt;li tabindex="2"&amp;gt;Ikki&amp;lt;/li&amp;gt;
+  &amp;lt;li tabindex="-1"&amp;gt;Minus bir&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+&amp;lt;!-- Tab bosish tartibi: 1 -&amp;gt; 2 -&amp;gt; 0 (va boshqa odatiy elementlar) --&amp;gt;
+&amp;lt;!-- "Minus bir" Tab bilan olinmaydi, lekin focus() bilan olinadi --&amp;gt;</code></pre>
+<div class="tip">Amalda <code>tabindex="0"</code> eng foydali qiymatdir: u elementni fokuslanadigan qiladi, lekin tabiiy o'tish tartibini buzmaydi. JavaScriptda ham xuddi shunday: <code>elem.tabIndex = 0</code> yozish mumkin.</div>
+<h2>Delegatsiya: focusin/focusout</h2>
+<p><code>focus</code> va <code>blur</code> hodisalarining muhim xususiyati bor: ular <strong>ko'tarilmaydi (bubble)</strong>. Ya'ni ular ota-elementga tarqalmaydi. Bu delegatsiyani qiyinlashtiradi — masalan, butun forma uchun bitta ishlovchi qo'yib, ichidagi maydonlarni kuzatib bo'lmaydi:</p>
+<pre class="code"><code>&amp;lt;form onfocus="this.className='focused'"&amp;gt;
+  &amp;lt;input type="text" name="name" value="Ismingiz"&amp;gt;
+  &amp;lt;input type="text" name="surname" value="Familiyangiz"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;!-- Bu ISHLAMAYDI, chunki input fokuslansa,
+     focus hodisasi form'ga ko'tarilmaydi --&amp;gt;</code></pre>
+<p>Buni ikki yo'l bilan hal qilish mumkin.</p>
+<p><strong>Birinchi yo'l</strong> — <code>focus</code>/<code>blur</code> ko'tarilmasa ham, ular <em>tutish fazasida</em> (capturing phase) yuqoridan pastga o'tadi. Shuning uchun <code>addEventListener</code>ni uchinchi argumenti <code>true</code> bilan (capturing) ishlatamiz:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  &amp;lt;input type="text" name="name" value="Ismingiz"&amp;gt;
+  &amp;lt;input type="text" name="surname" value="Familiyangiz"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // capturing fazasida ushlaymiz (uchinchi argument true)
+  form.addEventListener('focus', () =&amp;gt; form.classList.add('focused'), true);
+  form.addEventListener('blur', () =&amp;gt; form.classList.remove('focused'), true);
+&amp;lt;/script&amp;gt;</code></pre>
+<p><strong>Ikkinchi yo'l</strong> — <code>focusin</code> va <code>focusout</code> hodisalaridan foydalanish. Ular <code>focus</code>/<code>blur</code> bilan aynan bir xil, lekin farqi shundaki, ular <strong>ko'tariladi (bubble)</strong>:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  &amp;lt;input type="text" name="name" value="Ismingiz"&amp;gt;
+  &amp;lt;input type="text" name="surname" value="Familiyangiz"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // focusin/focusout ko'tariladi, shuning uchun oddiy delegatsiya
+  form.addEventListener('focusin', () =&amp;gt; form.classList.add('focused'));
+  form.addEventListener('focusout', () =&amp;gt; form.classList.remove('focused'));
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="warn">Muhim jihat: <code>focusin</code>/<code>focusout</code>ni faqat <code>addEventListener</code> orqali ulash kerak, <code>on&lt;event&gt;</code> xossasi (masalan, <code>elem.onfocusin</code>) orqali emas — bu ishlamaydi. Aksincha, <code>focus</code>/<code>blur</code>ni capturing orqali ushlash ham, <code>focusin</code>/<code>focusout</code>ni ishlatish ham to'g'ri yechim.</div>
+<h2>Validatsiya misoli</h2>
+<p>Fokus hodisalarining amaliy qo'llanilishi — forma maydonlarini foydalanuvchi ular bilan ishlab bo'lgach tekshirish. Delegatsiya orqali butun forma uchun bir joyda validatsiya yozamiz:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  Login: &amp;lt;input name="login"&amp;gt;
+  Parol: &amp;lt;input name="password" type="password"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // focusout ko'tarilgani uchun formada bitta ishlovchi bilan
+  // har qanday maydonni tekshira olamiz
+  form.addEventListener('focusout', function(event) {
+    let input = event.target;
+
+    if (input.value.trim() === '') {
+      input.style.borderColor = 'red';
+    } else {
+      input.style.borderColor = '';
+    }
+  });
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu yerda <code>event.target</code> — fokusni yo'qotgan aynan o'sha maydon. Bitta ishlovchi barcha maydonlar uchun ishlaydi — bu delegatsiyaning kuchi.</p>
+<h2>Xulosa</h2>
+<ul><li><code>focus</code> hodisasi element fokus olganda, <code>blur</code> — uni yo'qotganda ishga tushadi;</li><li><code>elem.focus()</code> va <code>elem.blur()</code> metodlari fokusni dasturiy boshqaradi;</li><li>Standart holatda faqat interaktiv elementlar (<code>input</code>, <code>button</code>, <code>a href</code>) fokuslanadi. Boshqalarga <code>tabindex</code> qo'yish orqali fokus berish mumkin;</li><li><code>tabindex="0"</code> — tabiiy tartibda fokuslash, <code>tabindex="-1"</code> — faqat dasturiy fokus;</li><li><code>focus</code>/<code>blur</code> <strong>ko'tarilmaydi</strong>. Delegatsiya uchun capturing (<code>addEventListener</code>, uchinchi argument <code>true</code>) yoki ko'tariladigan <code>focusin</code>/<code>focusout</code> hodisalaridan foydalaning;</li><li><code>focusin</code>/<code>focusout</code>ni faqat <code>addEventListener</code> orqali ulash mumkin.</li></ul>
+<nav class="lesson-nav">
+  <a href="form-xossalari.html"><span class="dir">← Oldingi</span><span class="ttl">Forma xossalari va metodlari</span></a>
+  <a class="next" href="form-hodisalari.html"><span class="dir">Keyingi →</span><span class="ttl">Hodisalar: change, input, cut, copy, paste</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

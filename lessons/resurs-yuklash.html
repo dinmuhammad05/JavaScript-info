@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resurs yuklash: onload va onerror — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Tashqi resurslarni (skript, rasm, iframe) yuklash holatini kuzatish: onload va onerror hodisalari, crossorigin atributi va resursning tayyor bo'lishini aniqlash.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a class="active" href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Hujjat va resurs yuklanishi</div>
+<h1>Resurs yuklash: onload va onerror</h1>
+<p class="lead">Brauzer bizga tashqi resurslar — skriptlar, rasm, iframe va boshqalar — yuklanishini kuzatish imkonini beradi. Buning uchun ikkita asosiy hodisa bor: <code>load</code> — resurs muvaffaqiyatli yuklandi va <code>error</code> — yuklashda xatolik yuz berdi. Bu, masalan, skriptni dinamik yuklab, u tayyor bo'lgach undagi funksiyalarni chaqirish uchun, yoki rasm yuklanmaganda zaxira rasmni ko'rsatish uchun kerak bo'ladi. Ushbu darsda resurs yuklanishini kuzatishni chuqur o'rganamiz.</p>
+<div class="warn">Bu darsdagi misollar brauzer muhitiga (DOM elementlari, <code>document</code>) tegishli. Kurs maydonchasi Node.js muhitida ishlaydi va DOM'ga ega emas — shu sabab misollar <strong>statik</strong>, faqat o'qish uchun keltiriladi.</div>
+<h2>load va error hodisalari</h2>
+<p>Ko'pchilik resurslar, ya'ni tashqi <code>src</code>ga ega elementlar (rasm, tashqi skript va h.k.) ikkita hodisani generatsiya qiladi:</p>
+<ul><li><code>load</code> — resurs muvaffaqiyatli yuklanganda;</li><li><code>error</code> — resursni yuklashda xatolik yuz berganda.</li></ul>
+<p>Istisno: <code>&lt;iframe&gt;</code> — u tarixiy sabablarga ko'ra yuklash tugagach har doim <code>load</code>ni generatsiya qiladi, hatto sahifa topilmasa ham.</p>
+<h2>Skriptni yuklashni kuzatish (script.onload)</h2>
+<p>Aytaylik, biz tashqi skriptdagi funksiyani chaqirmoqchimiz. Skriptni dinamik yuklaymiz:</p>
+<pre class="code"><code>let script = document.createElement('script');
+script.src = 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js';
+document.head.append(script);</code></pre>
+<p>Lekin skript yuklanguncha undagi funksiyalarni chaqira olmaymiz. Skript qachon tayyor bo'lishini bilish uchun <code>load</code> hodisasidan foydalanamiz:</p>
+<pre class="code"><code>let script = document.createElement('script');
+script.src = 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js';
+document.head.append(script);
+
+script.onload = function() {
+  // skript yuklandi, endi undagi o'zgaruvchi va funksiyalar mavjud
+  alert(_.VERSION); // lodash kutubxonasi versiyasi
+};</code></pre>
+<p><code>onload</code> ishlovchisi skript yuklanib, bajarilib bo'lgach ishga tushadi. Shu paytda skript e'lon qilgan barcha o'zgaruvchi va funksiyalardan foydalanish mumkin.</p>
+<h2>script.onerror</h2>
+<p>Skriptni yuklashda xatoliklarni ham kuzatishimiz kerak. <code>error</code> hodisasi yuklash muvaffaqiyatsiz bo'lganda ishga tushadi:</p>
+<pre class="code"><code>let script = document.createElement('script');
+script.src = 'https://example.com/mavjud-emas.js'; // bunday skript yo'q
+document.head.append(script);
+
+script.onerror = function() {
+  alert('Xatolik: ' + this.src + ' yuklanmadi');
+};</code></pre>
+<p>Bu yerda mavjud bo'lmagan skript yuklanishga urinilgani uchun <code>onerror</code> ishga tushadi.</p>
+<div class="warn">Muhim: <code>onload/onerror</code> faqat yuklash jarayonining o'zini kuzatadi — resurs olindimi yoki yo'qmi. Agar skript <strong>yuklandi</strong>, lekin uning ichida xatolik bo'lsa (masalan, kod ichida <code>throw</code> yoki sintaksis xatosi), buni <code>onerror</code> ushlamaydi. Yuklash muvaffaqiyatli bo'lgani uchun <code>onload</code> baribir ishga tushadi. Kod ichidagi xatoliklarni kuzatish uchun <code>window.onerror</code> global ishlovchisidan foydalaniladi.</div>
+<h2>Boshqa resurslar (rasm, iframe)</h2>
+<p><code>load</code> va <code>error</code> hodisalari boshqa resurslar uchun ham ishlaydi, ba'zi nozikliklar bilan.</p>
+<p>Rasmlar (<code>&lt;img&gt;</code>), tashqi stillar, skriptlar va boshqa resurslarda <code>onload</code> va <code>onerror</code> hodisalari mavjud:</p>
+<pre class="code"><code>let img = document.createElement('img');
+img.src = 'https://js.cx/clipart/train.gif'; // yuklashni boshlaydi
+
+img.onload = function() {
+  alert(`Rasm yuklandi, o'lchami: ${img.width}x${img.height}`);
+};
+
+img.onerror = function() {
+  alert('Rasm yuklashda xatolik');
+};</code></pre>
+<p>Rasm uchun ba'zi nozikliklar bor: aksariyat brauzerlarda rasmni yuklash <code>src</code> tayinlangan zahoti boshlanadi (elementni <code>document</code>ga qo'shish shart emas). Shu sabab <code>onload</code>ni <code>src</code>dan <strong>oldin</strong> tayinlash yaxshi amaliyot — aks holda keshdagi rasm darhol yuklanib, hodisani "o'tkazib yuborish" ehtimoli bor:</p>
+<pre class="code"><code>let img = document.createElement('img');
+
+// avval hodisa ishlovchilarini tayinlaymiz
+img.onload = () =&amp;gt; alert('Yuklandi');
+img.onerror = () =&amp;gt; alert('Xatolik');
+
+// keyin src — shu paytda yuklash boshlanadi
+img.src = 'https://js.cx/clipart/train.gif';</code></pre>
+<div class="note"><code>&lt;iframe&gt;</code> uchun <code>load</code> hodisasi iframe ichidagi sahifa yuklanib bo'lgach ishlaydi — muvaffaqiyatli ham, muvaffaqiyatsiz ham (masalan, 404). Bu tarixiy xususiyat, shuning uchun iframe'da <code>error</code> hodisasiga ishonib bo'lmaydi.</div>
+<h2>Crossorigin siyosati (crossorigin atributi)</h2>
+<p>Bir muhim qoida bor: bir saytdagi (origin) skript boshqa saytning ichki ma'lumotlariga kira olmaydi. Aniqrog'i, bitta <strong>origin</strong> (domen/port/protokol) boshqasidagi resurs tarkibiga to'liq kira olmaydi. Bu "Same-Origin Policy" (bir manba siyosati) deb ataladi va xavfsizlik uchun mavjud.</p>
+<p>Agar boshqa domendan (masalan, CDN'dan) yuklangan skriptda xatolik yuz bersa, <code>window.onerror</code> global ishlovchisi bu haqda batafsil ma'lumot ololmaydi — u faqat qisqa "Script error" xabarini oladi, satr raqami yoki xato tafsilotlarisiz. Bu xavfsizlik cheklovi.</p>
+<p>Buning sababi — skript boshqa domendan bo'lsa, uning ichki xatolik ma'lumotini ko'rsatish maxfiy ma'lumotning sizib chiqishiga olib kelishi mumkin. Masalan, boshqa domendagi skript ichida foydalanuvchiga xos ma'lumot bo'lsa, xato xabari orqali uni o'g'irlash mumkin bo'lardi.</p>
+<p>To'liq xatolik ma'lumotini olish uchun ikki narsa kerak:</p>
+<ol><li>Tashqi skriptda <code>crossorigin</code> atributi bo'lishi;</li><li>Uzoq server esa <code>Access-Control-Allow-Origin</code> HTTP sarlavhasini yuborishi.</li></ol>
+<p><code>crossorigin</code> atributining uch varianti bor:</p>
+<ul><li><code>crossorigin</code> yo'q — kirish taqiqlangan (to'liq xato ma'lumoti berilmaydi);</li><li><code>crossorigin="anonymous"</code> — server <code>Access-Control-Allow-Origin</code> yuborsa, kirishga ruxsat. Cookie va autentifikatsiya ma'lumotlari yuborilmaydi;</li><li><code>crossorigin="use-credentials"</code> — server maxsus sarlavhalar yuborsa, kirishga ruxsat. Cookie va autentifikatsiya ma'lumotlari ham yuboriladi.</li></ul>
+<pre class="code"><code>&amp;lt;script crossorigin="anonymous" src="https://another-site.com/script.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<div class="tip">Aksariyat hollarda uchinchi tomon skriptlari uchun <code>crossorigin="anonymous"</code> yetarli. Bu esa <code>window.onerror</code>da to'liq xato tafsilotlarini olish imkonini beradi — bu, ayniqsa, ishlab chiqarishda (production) xatolarni kuzatuvchi tizimlar (Sentry va h.k.) uchun muhim.</div>
+<h2>Resurs holatini kuzatish (amaliy misol)</h2>
+<p>Yuqoridagi bilimlarni birlashtirib, resursni yuklab, uni kuzatuvchi umumiy funksiya yozamiz. Bu funksiya skriptni yuklaydi va <code>callback</code> orqali natijani (xato yoki muvaffaqiyat) qaytaradi:</p>
+<pre class="code"><code>function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
+  document.head.append(script);
+
+  script.onload = () =&amp;gt; callback(null, script);
+  script.onerror = () =&amp;gt; callback(new Error('Skript yuklashda xatolik: ' + src));
+}
+
+// ishlatish:
+loadScript('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js', function(error, script) {
+  if (error) {
+    // xatolikni qayta ishlash
+    alert(error.message);
+  } else {
+    // skript muvaffaqiyatli yuklandi
+    alert('Yuklandi: ' + script.src);
+  }
+});</code></pre>
+<p>Bu Node.js uslubidagi (error-first) callback pattern — birinchi argument xato, ikkinchisi natija. Uni Promise'ga o'rab, <code>async/await</code> bilan ishlatish ham mumkin:</p>
+<pre class="code"><code>function loadScriptPromise(src) {
+  return new Promise((resolve, reject) =&amp;gt; {
+    let script = document.createElement('script');
+    script.src = src;
+    document.head.append(script);
+
+    script.onload = () =&amp;gt; resolve(script);
+    script.onerror = () =&amp;gt; reject(new Error('Xatolik: ' + src));
+  });
+}
+
+// ishlatish:
+loadScriptPromise('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js')
+  .then(script =&amp;gt; alert('Yuklandi'))
+  .catch(error =&amp;gt; alert(error.message));</code></pre>
+<div class="tip">Bir necha resursni ketma-ket yoki parallel yuklashda Promise varianti juda qulay: <code>Promise.all</code> bilan hammasini parallel yuklab, hammasi tayyor bo'lishini kutish mumkin.</div>
+<h2>Xulosa</h2>
+<p>Tashqi resurslarni yuklashni kuzatish:</p>
+<ul><li>Rasmlar (<code>img</code>), tashqi stillar, skriptlar va boshqa resurslar <code>load</code> va <code>error</code> hodisalarini generatsiya qiladi;</li><li><code>load</code> — resurs muvaffaqiyatli yuklanganda; <code>error</code> — yuklashda xatolik bo'lganda;</li><li>Istisno — <code>&lt;iframe&gt;</code>: u har doim <code>load</code>ni generatsiya qiladi (muvaffaqiyat/xatolikdan qat'i nazar);</li><li><code>load/onerror</code> faqat yuklashni kuzatadi — skript <strong>ichidagi</strong> ishlash xatolarini ko'rmaydi (buning uchun <code>window.onerror</code>).</li></ul>
+<p>Crossorigin (bir manba) siyosati: boshqa domendan yuklangan skript xatoliklarining to'liq ma'lumotini olish uchun <code>crossorigin</code> atributi va server tomonida <code>Access-Control-Allow-Origin</code> sarlavhasi kerak. <code>crossorigin="anonymous"</code> odatda yetarli.</p>
+<div class="note">Amaliyotda resurs yuklashni kuzatish ko'p ishlatiladi: dinamik skript va stillarni yuklash, rasm yuklanmaganda zaxira ko'rsatish, ko'p resurslarni <code>Promise.all</code> bilan boshqarish. Bu texnikalar zamonaviy SPA (Single Page Application) ilovalarida asos hisoblanadi.</div>
+<nav class="lesson-nav">
+  <a href="script-async-defer.html"><span class="dir">← Oldingi</span><span class="ttl">Skriptlar: async, defer</span></a>
+  <a class="next" href="mutation-observer.html"><span class="dir">Keyingi →</span><span class="ttl">Mutation observer</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

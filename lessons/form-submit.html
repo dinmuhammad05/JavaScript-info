@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forma yuborish: submit hodisasi va metod — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="submit hodisasi, Enter bilan yuborish, form.submit() metodi, yuborishdan oldingi validatsiya va preventDefault bilan oldini olish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details open>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a class="active" href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Formalar va boshqaruv elementlari</div>
+<h1>Forma yuborish: submit hodisasi va metod</h1>
+<p class="lead">Forma yuborilganda (submit) <code>submit</code> hodisasi ishga tushadi. Odatda u ma'lumot serverga jo'natilishidan oldin uni tekshirish (validatsiya) yoki yuborishni to'xtatib, ma'lumotni JavaScript orqali qayta ishlash uchun ishlatiladi. Ushbu darsda forma yuborishning barcha jihatlarini chuqur o'rganamiz.</p>
+<h2>submit hodisasi</h2>
+<p>Forma yuborishning ikki asosiy usuli bor:</p>
+<ol><li><code>&lt;input type="submit"&gt;</code> yoki <code>&lt;input type="image"&gt;</code> tugmasini bosish;</li><li>Matn maydonida <kbd>Enter</kbd> tugmasini bosish.</li></ol>
+<p>Ikkala usul ham formada <code>submit</code> hodisasini keltirib chiqaradi. Ishlovchi ma'lumotni tekshirishi va agar xatolik bo'lsa, <code>event.preventDefault()</code> bilan yuborishni to'xtatishi mumkin:</p>
+<pre class="code"><code>&amp;lt;form onsubmit="alert('yuborildi!'); return false"&amp;gt;
+  Birinchi: &amp;lt;input type="text" name="one"&amp;gt;
+  &amp;lt;input type="submit" value="Yuborish"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;!-- Enter yoki tugma bosilsa, alert chiqadi.
+     return false yuborishni to'xtatadi (sahifa yangilanmaydi) --&amp;gt;</code></pre>
+<div class="note"><code>on&lt;event&gt;</code> ichida <code>return false</code> yozish — <code>event.preventDefault()</code>ning eski, lekin haligacha ishlaydigan muqobili. Zamonaviy koddagi ravshanlik uchun <code>event.preventDefault()</code>ni afzal ko'ring.</div>
+<h2>Enter bilan yuborish</h2>
+<p>Matn maydonida <kbd>Enter</kbd> bosilishi ham formani yuboradi (agar bir nechta matn maydoni bo'lsa). Bu foydalanuvchilarga tanish qulaylik: qidiruv maydoniga yozib, <kbd>Enter</kbd> bosish odatiy holat.</p>
+<p>Qiziq nozik jihat: <kbd>Enter</kbd> bosilganda avval yuboruvchi tugmada <code>click</code> hodisasi generatsiya qilinadi — hatto foydalanuvchi tugmani bosmagan bo'lsa ham. Ya'ni brauzer tugma bosilgandek imitatsiya qiladi:</p>
+<pre class="code"><code>&amp;lt;form&amp;gt;
+  Matn: &amp;lt;input type="text" name="text"&amp;gt;
+  &amp;lt;input type="submit" value="Yuborish" onclick="alert('click hodisasi ishladi!')"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;!-- Matn maydonida Enter bossangiz, tugmaning
+     onclick ishlovchisi ham ishga tushadi --&amp;gt;</code></pre>
+<h2>submit va click bog'liqligi</h2>
+<p>Formani dasturiy yuborish uchun tugmada <code>button.click()</code> yoki <code>button.dispatchEvent(...)</code>ni chaqirsak, forma yuboriladi. Chunki <code>click</code> tugmada <code>submit</code>ni keltirib chiqaradi:</p>
+<pre class="code"><code>let form = document.getElementById('form');
+
+// form.dispatchEvent orqali submit generatsiya qilish
+let event = new Event('submit', { bubbles: true, cancelable: true });
+form.dispatchEvent(event);</code></pre>
+<div class="note"><code>button</code> yoki <code>input type=submit</code> ustida <code>click()</code> chaqirilsa, forma tabiiy yo'l bilan (submit hodisasi bilan) yuboriladi. Bu tabiiy imkoniyat: interfeys elementini bosishni imitatsiya qilish.</div>
+<h2>form.submit() metodi</h2>
+<p>Formani dasturiy yuborishning to'g'ridan-to'g'ri yo'li — <code>form.submit()</code> metodi. Uni chaqirganda ma'lumot serverga jo'natiladi:</p>
+<pre class="code"><code>let form = document.createElement('form');
+form.action = 'https://example.com/search';
+form.method = 'GET';
+
+form.innerHTML = '&amp;lt;input name="q" value="salom"&amp;gt;';
+
+// forma DOM'da bo'lishi kerak
+document.body.append(form);
+
+form.submit();</code></pre>
+<div class="warn">Muhim va ko'pincha unutiladigan jihat: <code>form.submit()</code> metodi chaqirilganda <strong>submit hodisasi generatsiya qilinmaydi</strong>! Ya'ni <code>onsubmit</code> ishlovchisi ishga tushmaydi. Buning mantiqi shuki, dasturchi <code>form.submit()</code>ni ataylab chaqirgan, demak barcha kerakli tekshiruvlarni allaqachon o'zi bajargan deb hisoblanadi. Agar validatsiya kerak bo'lsa, uni <code>submit()</code>ni chaqirishdan oldin qo'lda bajaring.</div>
+<h2>Yuborishdan oldin validatsiya</h2>
+<p>Amaliyotda <code>submit</code> hodisasi eng ko'p validatsiya uchun ishlatiladi. Agar ma'lumot noto'g'ri bo'lsa, <code>event.preventDefault()</code> bilan yuborishni to'xtatib, foydalanuvchiga xatolikni ko'rsatamiz:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  Email: &amp;lt;input type="text" name="email" id="email"&amp;gt;
+  &amp;lt;div id="error" style="color:red"&amp;gt;&amp;lt;/div&amp;gt;
+  &amp;lt;input type="submit" value="Yuborish"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  form.onsubmit = function(event) {
+    let email = form.email.value;
+
+    if (!email.includes('@')) {
+      // xatolik: yuborishni to'xtatamiz
+      event.preventDefault();
+      error.innerHTML = 'Iltimos, to'g'ri email kiriting.';
+      return;
+    }
+
+    // hammasi joyida bo'lsa, forma yuboriladi
+    error.innerHTML = '';
+  };
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu yerda <code>event.preventDefault()</code> brauzerning odatiy harakatini — formani serverga yuborib, sahifani yangilashni — to'xtatadi. Xatolik tuzatilib, qaytadan yuborilganda esa forma normal jo'natiladi.</p>
+<h2>AJAX bilan yuborish</h2>
+<p>Ko'p zamonaviy ilovalarda forma umuman odatiy yo'l bilan yuborilmaydi. Aksincha, <code>preventDefault()</code> bilan brauzer yuborishini to'sib, ma'lumot JavaScript orqali (masalan, <code>fetch</code>) jo'natiladi. Bu sahifani yangilamasdan ma'lumot almashish imkonini beradi:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  &amp;lt;input name="login"&amp;gt;
+  &amp;lt;input type="submit" value="Yuborish"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  form.onsubmit = async function(event) {
+    event.preventDefault(); // odatiy yuborishni to'saylik
+
+    // ma'lumotni to'playmiz va fetch bilan jo'natamiz
+    let data = new FormData(form);
+
+    let response = await fetch('/submit', {
+      method: 'POST',
+      body: data
+    });
+
+    let result = await response.json();
+    alert(result.message);
+  };
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="tip"><code>new FormData(form)</code> — formadagi barcha maydonlarni avtomatik yig'ib beruvchi qulay obyekt. Uni to'g'ridan-to'g'ri <code>fetch</code>ning <code>body</code>siga berish mumkin — brauzer ma'lumotni to'g'ri formatlaydi.</div>
+<h2>Xulosa</h2>
+<ul><li>Forma <code>submit</code> hodisasi tugma bosilganda yoki matn maydonida <kbd>Enter</kbd> bosilganda ishga tushadi;</li><li><kbd>Enter</kbd> bosilganda yuboruvchi tugmada <code>click</code> hodisasi ham generatsiya qilinadi;</li><li>Yuborishni to'xtatish uchun <code>event.preventDefault()</code> (yoki <code>on&lt;event&gt;</code>da <code>return false</code>) ishlatiladi;</li><li><code>form.submit()</code> metodi formani dasturiy yuboradi, lekin <strong>submit hodisasini generatsiya qilmaydi</strong>;</li><li><code>submit</code> hodisasi ko'pincha validatsiya uchun ishlatiladi — xato bo'lsa <code>preventDefault()</code> bilan to'xtatiladi;</li><li>Zamonaviy ilovalarda forma ko'pincha <code>preventDefault()</code> + <code>fetch</code> orqali AJAX bilan yuboriladi; <code>new FormData(form)</code> ma'lumotni qulay yig'adi.</li></ul>
+<nav class="lesson-nav">
+  <a href="form-hodisalari.html"><span class="dir">← Oldingi</span><span class="ttl">Hodisalar: change, input, cut, copy, paste</span></a>
+  <a class="next" href="page-lifecycle.html"><span class="dir">Keyingi →</span><span class="ttl">Sahifa: DOMContentLoaded, load, beforeunload, unload</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

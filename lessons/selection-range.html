@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tanlash va Range — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Range obyekti bilan hujjatning bir qismini belgilash, Selection obyekti orqali foydalanuvchi tanlagan matnni o'qish va dastur orqali tanlash o'rnatish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a class="active" href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Qo'shimcha brauzer mavzulari</div>
+<h1>Tanlash va Range</h1>
+<p class="lead">Hujjatdagi matn yoki elementlarni tanlash brauzerda ikki bosqichli tushuncha bilan ifodalanadi: <code>Range</code> — hujjatning ma'lum bir <strong>qismi</strong> (boshlanish va tugash nuqtalari bilan), <code>Selection</code> esa — foydalanuvchi yoki dastur belgilagan <strong>joriy tanlov</strong>. Ushbu darsda ular qanday ishlashini va dastur orqali qanday boshqarilishini ko'ramiz.</p>
+<h2>Range obyekti</h2>
+<p><code>Range</code> — hujjatdagi ikki nuqta orasidagi qismni ifodalaydi. Har bir nuqta ikkita qiymat bilan beriladi: <em>tugun</em> (node) va uning ichidagi <em>siljish</em> (offset).</p>
+<pre class="code"><code>let range = new Range();</code></pre>
+<p>Boshlanish va tugash nuqtalari <code>setStart</code> va <code>setEnd</code> bilan o'rnatiladi:</p>
+<ul><li><code>range.setStart(node, offset)</code> — boshlanish nuqtasini o'rnatadi;</li><li><code>range.setEnd(node, offset)</code> — tugash nuqtasini o'rnatadi.</li></ul>
+<p>Bu yerda <code>offset</code> ikki xil ma'noga ega:</p>
+<ul><li>Agar <code>node</code> — matn tuguni bo'lsa, <code>offset</code> matn ichidagi <strong>belgi (harf) pozitsiyasi</strong>;</li><li>Agar <code>node</code> — element bo'lsa, <code>offset</code> uning <strong>bola tugunlari</strong> orasidagi pozitsiya.</li></ul>
+<h2>setStart va setEnd</h2>
+<p>Aytaylik, sahifada <code>&lt;p id="matn"&gt;Salom, dunyo!&lt;/p&gt;</code> bor. Matndagi <code>'Salom'</code> so'zini tanlaymiz — bu <code>&lt;p&gt;</code>ning birinchi matn tuguni ichidagi 0-belgidan 5-belgigacha:</p>
+<pre class="code"><code>let p = document.getElementById('matn');
+let textNode = p.firstChild; // matn tuguni: 'Salom, dunyo!'
+
+let range = new Range();
+range.setStart(textNode, 0);  // 0-belgidan
+range.setEnd(textNode, 5);    // 5-belgigacha (S-a-l-o-m)
+
+console.log(range.toString()); // 'Salom'</code></pre>
+<p><code>range.toString()</code> tanlangan qismning matnli ko'rinishini qaytaradi.</p>
+<div class="note"><code>setEnd(textNode, 5)</code> — bu "5-belgidan keyin" degani. Ya'ni <code>'Salom'</code> so'zining beshta harfi (indekslari 0..4) tanlanadi, tugash nuqtasi esa 5-pozitsiyada turadi. Nuqtalar belgilar <em>orasida</em> joylashadi.</div>
+<h2>Elementlarni qamrab olish</h2>
+<p>Nuqta faqat matn ichida emas, elementlar orasida ham bo'lishi mumkin. Masalan, <code>&lt;p&gt;</code> ichida <code>&lt;i&gt;</code> va <code>&lt;b&gt;</code> teglari bor deylik. Ularning bir qismini tanlash uchun <code>offset</code> bola tugun indeksini bildiradi:</p>
+<pre class="code"><code>// &lt;p&gt;Bu &lt;i&gt;muhim&lt;/i&gt; va &lt;b&gt;qalin&lt;/b&gt; matn&lt;/p&gt;
+let p = document.getElementById('matn');
+
+let range = new Range();
+range.setStart(p, 0);  // birinchi bola tugundan oldin
+range.setEnd(p, 2);    // ikkinchi bola tugungacha
+
+// natijada 'Bu &lt;i&gt;muhim&lt;/i&gt;' qismi tanlanadi
+console.log(range.toString());</code></pre>
+<p>Yana qulay usullar mavjud:</p>
+<ul><li><code>range.selectNode(node)</code> — tugunni butunlay (o'zi bilan birga) tanlaydi;</li><li><code>range.selectNodeContents(node)</code> — tugunning faqat ichini tanlaydi;</li><li><code>range.setStartBefore(node)</code> / <code>setStartAfter(node)</code> — tugundan oldin/keyin boshlaydi;</li><li><code>range.setEndBefore(node)</code> / <code>setEndAfter(node)</code> — tugundan oldin/keyin tugatadi;</li><li><code>range.collapse(toStart)</code> — Range'ni bir nuqtaga siqadi (bo'sh qiladi).</li></ul>
+<h2>Range xususiyatlari</h2>
+<p><code>Range</code> obyekti quyidagi asosiy xususiyatlarga ega:</p>
+<ul><li><code>startContainer</code>, <code>startOffset</code> — boshlanish tuguni va siljishi;</li><li><code>endContainer</code>, <code>endOffset</code> — tugash tuguni va siljishi;</li><li><code>collapsed</code> — agar boshlanish va tugash bir xil bo'lsa (bo'sh Range) <code>true</code>;</li><li><code>commonAncestorContainer</code> — barcha tanlangan tugunlarning eng yaqin umumiy ajdodi.</li></ul>
+<h2>Range bilan amallar</h2>
+<p><code>Range</code> orqali tanlangan qismni nusxalash, o'chirish yoki chiqarib olish mumkin:</p>
+<ul><li><code>range.deleteContents()</code> — tanlangan qismni hujjatdan o'chiradi;</li><li><code>range.extractContents()</code> — o'chiradi va <code>DocumentFragment</code> sifatida qaytaradi;</li><li><code>range.cloneContents()</code> — hujjatga tegmasdan nusxasini <code>DocumentFragment</code> qilib qaytaradi;</li><li><code>range.insertNode(node)</code> — Range boshiga yangi tugun kiritadi;</li><li><code>range.surroundContents(node)</code> — tanlangan qismni berilgan tugun ichiga o'raydi.</li></ul>
+<pre class="code"><code>let range = new Range();
+range.setStart(textNode, 0);
+range.setEnd(textNode, 5);
+
+// tanlangan 'Salom' qismini &lt;mark&gt; ichiga o'raymiz
+let mark = document.createElement('mark');
+range.surroundContents(mark);</code></pre>
+<div class="warn"><code>surroundContents</code> talabchan: agar Range tugunlarni "yarim" kessa (masalan, bir elementning boshi tanlansa-yu, oxiri boshqa elementda qolsa), u xatolik beradi. Bunday holatda <code>extractContents</code> + <code>insertNode</code> kombinatsiyasini qo'llash kerak.</div>
+<h2>Selection obyekti</h2>
+<p><code>Range</code> — bu shunchaki hujjatning bir qismi; u hali ekranda ko'rinmaydi. Foydalanuvchi ko'rgan haqiqiy tanlovni <code>Selection</code> obyekti ifodalaydi. Uni <code>window.getSelection()</code> yoki <code>document.getSelection()</code> orqali olamiz:</p>
+<pre class="code"><code>let selection = window.getSelection();</code></pre>
+<p>Nazariy jihatdan bir tanlov bir nechta Range'dan iborat bo'lishi mumkin (masalan, Firefox'da <code>Ctrl</code> bilan bir nechta qismni tanlash mumkin), ammo amalda ko'pchilik brauzerlarda bitta Range bo'ladi.</p>
+<p><code>Selection</code>ning asosiy xususiyatlari:</p>
+<ul><li><code>anchorNode</code>, <code>anchorOffset</code> — tanlov <strong>boshlangan</strong> nuqta (foydalanuvchi bosgan joy);</li><li><code>focusNode</code>, <code>focusOffset</code> — tanlov <strong>tugagan</strong> nuqta (kursor hozir turgan joy);</li><li><code>isCollapsed</code> — tanlov bo'shmi (faqat kursor turibdimi);</li><li><code>rangeCount</code> — tanlovdagi Range'lar soni.</li></ul>
+<div class="note"><code>anchor</code> (langar) va <code>focus</code> — tanlovning boshi va oxiri, lekin ular hujjat tartibida oldinma-keyin bo'lishi <em>shart emas</em>. Agar foydalanuvchi o'ngdan chapga tanlasa, <code>focus</code> <code>anchor</code>dan oldinda turadi. <code>Range</code>da esa doim <code>start</code> hujjat bo'yicha <code>end</code>dan oldin keladi.</div>
+<h2>getSelection va matnni o'qish</h2>
+<p>Foydalanuvchi tanlagan matnni olishning eng oson yo'li — <code>Selection</code>ni matnga aylantirish:</p>
+<pre class="code"><code>document.onselectionchange = function() {
+  let selection = document.getSelection();
+  console.log('Tanlangan matn: ' + selection.toString());
+};</code></pre>
+<p><code>selectionchange</code> hodisasi tanlov har o'zgarganda ishga tushadi. Bu tanlangan matnni real vaqtda kuzatish uchun qulay.</p>
+<p>Agar Range darajasida ishlash kerak bo'lsa:</p>
+<pre class="code"><code>let selection = document.getSelection();
+
+if (selection.rangeCount &gt; 0) {
+  let range = selection.getRangeAt(0);
+  console.log(range.startContainer, range.startOffset);
+  console.log(range.endContainer, range.endOffset);
+}</code></pre>
+<h2>Dastur orqali tanlash</h2>
+<p>Tanlovni faqat o'qibgina qolmay, dastur orqali o'rnatish ham mumkin. Buning uchun avval Range tuzamiz, keyin uni tanlovga qo'shamiz:</p>
+<pre class="code"><code>let p = document.getElementById('matn');
+let textNode = p.firstChild;
+
+// 'Salom' so'zini qamrab oluvchi Range
+let range = new Range();
+range.setStart(textNode, 0);
+range.setEnd(textNode, 5);
+
+let selection = window.getSelection();
+selection.removeAllRanges();  // avvalgi tanlovni tozalaymiz
+selection.addRange(range);    // yangi tanlovni o'rnatamiz</code></pre>
+<p><code>Selection</code>da bir necha qulay metodlar bor:</p>
+<ul><li><code>selection.addRange(range)</code> — tanlovga Range qo'shadi;</li><li><code>selection.removeAllRanges()</code> — barcha tanlovni olib tashlaydi;</li><li><code>selection.collapse(node, offset)</code> — tanlovni bir nuqtaga siqadi;</li><li><code>selection.selectAllChildren(node)</code> — tugunning barcha bolalarini tanlaydi;</li><li><code>selection.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset)</code> — anchor va focusni bir yo'la o'rnatadi;</li><li><code>selection.deleteFromDocument()</code> — tanlangan matnni hujjatdan o'chiradi.</li></ul>
+<div class="tip">Butun bir elementning matnini bir bosishda tanlash kerak bo'lsa, eng oson yo'l — <code>selection.selectAllChildren(elem)</code>. Bu, masalan, "kod bo'lagini bosganda hammasini tanlansin" xatti-harakati uchun juda qulay.</div>
+<h2>Form maydonlaridagi tanlash</h2>
+<p>Muhim istisno: <code>&lt;input&gt;</code> va <code>&lt;textarea&gt;</code> maydonlarida yuqoridagi <code>Range</code>/<code>Selection</code> ishlamaydi. Ular oddiy matndan iborat bo'lgani uchun o'zining alohida, soddaroq API'siga ega:</p>
+<ul><li><code>input.selectionStart</code>, <code>input.selectionEnd</code> — tanlovning boshi va oxiri (belgi indekslari);</li><li><code>input.selectionDirection</code> — tanlov yo'nalishi;</li><li><code>input.select()</code> — barcha matnni tanlaydi;</li><li><code>input.setSelectionRange(start, end)</code> — tanlovni o'rnatadi;</li><li><code>input.setRangeText(replacement, start, end)</code> — tanlangan qismni matn bilan almashtiradi.</li></ul>
+<pre class="code"><code>let input = document.getElementById('maydon');
+
+input.onclick = function() {
+  // birinchi 5 ta belgini tanlaymiz
+  input.setSelectionRange(0, 5);
+  input.focus();
+};</code></pre>
+<h2>Xulosa</h2>
+<ul><li><code>Range</code> — hujjatning bir qismi; <code>setStart(node, offset)</code> va <code>setEnd(node, offset)</code> bilan nuqtalari belgilanadi;</li><li><code>offset</code> matn tugunida — belgi indeksi, elementda — bola tugun indeksi;</li><li><code>Range</code> orqali qismni o'chirish, nusxalash, o'rash mumkin: <code>deleteContents</code>, <code>extractContents</code>, <code>surroundContents</code> va h.k.;</li><li><code>Selection</code> — foydalanuvchi ko'rgan joriy tanlov; <code>window.getSelection()</code> orqali olinadi;</li><li><code>selection.toString()</code> — tanlangan matn; <code>getRangeAt(0)</code> — Range darajasi;</li><li>Dastur orqali tanlash: <code>removeAllRanges()</code> + <code>addRange(range)</code>, yoki <code>selectAllChildren(node)</code>;</li><li><code>&lt;input&gt;</code>/<code>&lt;textarea&gt;</code> uchun alohida API: <code>selectionStart</code>, <code>setSelectionRange</code> va boshqalar.</li></ul>
+<nav class="lesson-nav">
+  <a href="mutation-observer.html"><span class="dir">← Oldingi</span><span class="ttl">Mutation observer</span></a>
+  <a class="next" href="event-loop.html"><span class="dir">Keyingi →</span><span class="ttl">Hodisalar tsikli: mikro va makrovazifalar</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

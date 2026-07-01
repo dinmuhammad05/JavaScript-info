@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutation observer — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="MutationObserver bilan DOM daraxtidagi o'zgarishlarni — element qo'shilishi, o'chirilishi, atribut va matn o'zgarishlarini — kuzatish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a class="active" href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Qo'shimcha brauzer mavzulari</div>
+<h1>Mutation observer</h1>
+<p class="lead"><code>MutationObserver</code> — bu DOM daraxtini kuzatib turuvchi va unda <strong>o'zgarish</strong> ro'y berganda (element qo'shilganda yoki o'chirilganda, atribut o'zgarganda, matn tahrirlanganda) sizga xabar beruvchi maxsus obyekt. U ayniqsa sahifaga tashqaridan kelgan kodni (masalan, uchinchi tomon skriptlari yoki reklama bloklari) nazorat qilishda, redaktorlarni yozishda va kutubxonalarni integratsiya qilishda juda qadrli.</p>
+<h2>Nima uchun kerak</h2>
+<p>Tasavvur qiling, siz sahifaga uchinchi tomon skriptini qo'shdingiz — u foydali kontent bilan birga o'zining reklamasini yoki keraksiz <code>&lt;div&gt;</code>larini ham qo'shadi. Bu skriptning ichiga kira olmaysiz. Lekin uning DOMga qanday o'zgarish kiritishini kuzatib, keraksiz elementni darhol o'chirib tashlashingiz mumkin. Aynan shu vazifani <code>MutationObserver</code> bajaradi.</p>
+<p>Yana bir keng tarqalgan holat — sintaksisni ranglaydigan kutubxonalar (<code>Prism.js</code>, <code>highlight.js</code> kabi). Yangi kod bloki sahifaga qo'shilganda uni avtomatik ravishda bo'yash kerak bo'ladi. Buni <code>MutationObserver</code> orqali eshitib turish mumkin.</p>
+<h2>Sintaksis</h2>
+<p>Avval kuzatuvchi yaratamiz, so'ng uni biror tugunga (node) bog'laymiz:</p>
+<pre class="code"><code>let observer = new MutationObserver(callback);
+
+observer.observe(node, config);</code></pre>
+<p><code>callback</code> — o'zgarish ro'y berganda chaqiriladigan funksiya. U ikkita argument oladi: o'zgarishlar ro'yxati (<code>mutationRecords</code>) va kuzatuvchining o'zi.</p>
+<p><code>observe(node, config)</code> — qaysi tugunni va aynan qanday o'zgarishlarni kuzatishni belgilaydi. <code>config</code> — bu mantiqiy (boolean) bayroqlar to'plami:</p>
+<ul><li><code>childList</code> — <code>node</code>ning bevosita bolalari (child) qo'shilishi/o'chirilishi;</li><li><code>subtree</code> — <code>node</code>ning nafaqat bolalari, balki barcha avlodlari (nabiralari va h.k.);</li><li><code>attributes</code> — <code>node</code> atributlaridagi o'zgarishlar;</li><li><code>attributeFilter</code> — faqat sanab o'tilgan atributlar massivini kuzatish;</li><li><code>characterData</code> — <code>node.data</code> (matn tugunidagi matn) o'zgarishi;</li><li><code>attributeOldValue</code> — atributning eski qiymatini ham yozib berish;</li><li><code>characterDataOldValue</code> — matnning eski qiymatini ham yozib berish.</li></ul>
+<div class="warn"><code>config</code>da kamida <code>childList</code>, <code>attributes</code> yoki <code>characterData</code>dan bittasi <code>true</code> bo'lishi shart. Aks holda <code>observe</code> xatolik beradi — chunki nima kuzatilishi noaniq bo'lib qoladi.</div>
+<h2>Oddiy misol</h2>
+<p>Quyida biror <code>&lt;div&gt;</code>ning ichidagi barcha o'zgarishlarni (butun poddaraxtni) kuzatamiz. E'tibor bering, bu kod brauzerda ishlaydi — bu yerda u statik namuna sifatida keltirilgan:</p>
+<pre class="code"><code>let elem = document.getElementById('kuzatiladigan');
+
+let observer = new MutationObserver(mutationRecords =&gt; {
+  console.log(mutationRecords); // o'zgarishlar ro'yxati
+});
+
+// har qanday o'zgarishni kuzatishni boshlaymiz
+observer.observe(elem, {
+  childList: true,        // to'g'ridan-to'g'ri bolalar
+  subtree: true,          // barcha avlodlar ham
+  characterData: true,    // matn o'zgarishlari
+  attributes: true        // atributlar
+});
+
+// endi elem ichini o'zgartiramiz
+elem.innerHTML = '&lt;b&gt;Salom&lt;/b&gt; dunyo';</code></pre>
+<p>Kod ishlaganda konsolga <code>MutationRecord</code> obyektlaridan iborat massiv chiqadi.</p>
+<h2>MutationRecord obyekti</h2>
+<p><code>callback</code>ga tushadigan har bir o'zgarish yozuvi (record) quyidagi asosiy xususiyatlarga ega:</p>
+<ul><li><code>type</code> — o'zgarish turi: <code>'attributes'</code>, <code>'characterData'</code> yoki <code>'childList'</code>;</li><li><code>target</code> — o'zgarish qaysi tugunda ro'y berdi (atribut uchun element, matn uchun matn tuguni);</li><li><code>addedNodes</code> / <code>removedNodes</code> — qo'shilgan va olib tashlangan tugunlar ro'yxati;</li><li><code>previousSibling</code> / <code>nextSibling</code> — qo'shilgan tugunlarning yonidagi tugunlar;</li><li><code>attributeName</code> — o'zgargan atribut nomi;</li><li><code>oldValue</code> — eski qiymat (faqat <code>attributeOldValue</code> yoki <code>characterDataOldValue</code> yoqilgan bo'lsa).</li></ul>
+<p>Masalan, atribut o'zgarishini eski qiymati bilan qo'lga olamiz:</p>
+<pre class="code"><code>let observer = new MutationObserver(records =&gt; {
+  for (let record of records) {
+    if (record.type === 'attributes') {
+      console.log(
+        record.attributeName + ' atributi o'zgardi. ' +
+        'Eski qiymat: ' + record.oldValue
+      );
+    }
+  }
+});
+
+observer.observe(elem, {
+  attributes: true,
+  attributeOldValue: true
+});</code></pre>
+<div class="note">Bir <code>callback</code> chaqiruvida bir nechta o'zgarish yig'ilib kelishi mumkin. Shuning uchun <code>records</code> — bu massiv. Brauzer o'zgarishlarni to'plab, keyin bir yo'la yetkazadi (mikrovazifa sifatida — bu haqda uchinchi darsda gaplashamiz).</div>
+<h2>Qo'llanish: keraksiz elementni o'chirish</h2>
+<p>Sahifaga qo'shilayotgan reklama <code>&lt;div&gt;</code>larini avtomatik o'chiruvchi kuzatuvchi. <code>childList</code> va <code>subtree</code> yordamida yangi qo'shilgan tugunlarni ko'ramiz:</p>
+<pre class="code"><code>let observer = new MutationObserver(records =&gt; {
+  for (let record of records) {
+    for (let node of record.addedNodes) {
+      // faqat elementlar bilan ishlaymiz (matn tugunlarini o'tkazamiz)
+      if (!(node instanceof HTMLElement)) continue;
+
+      if (node.classList.contains('reklama')) {
+        node.remove();
+        console.log('Reklama olib tashlandi');
+      }
+    }
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});</code></pre>
+<h2>Qo'llanish: kutubxona integratsiyasi</h2>
+<p>Faraz qilaylik, bizda <code>highlight()</code> funksiyasi bor — u <code>&lt;pre&gt;</code> ichidagi kodni bo'yaydi. Yangi kod bloki sahifaga qanday yo'l bilan qo'shilishidan qat'i nazar (<code>innerHTML</code>, <code>append</code> yoki boshqa skript orqali), biz uni avtomatik bo'yashni istaymiz:</p>
+<pre class="code"><code>function highlight(block) {
+  // ... kodni bo'yash mantig'i ...
+  console.log('Bloklandi va bo'yaldi');
+}
+
+let observer = new MutationObserver(records =&gt; {
+  for (let record of records) {
+    for (let node of record.addedNodes) {
+      if (!(node instanceof HTMLElement)) continue;
+
+      // qo'shilgan tugunning o'zi &lt;pre&gt; bo'lsa
+      if (node.matches('pre[class*="language-"]')) {
+        highlight(node);
+      }
+
+      // yoki uning ichida &lt;pre&gt;lar bo'lsa
+      for (let pre of node.querySelectorAll('pre[class*="language-"]')) {
+        highlight(pre);
+      }
+    }
+  }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });</code></pre>
+<div class="tip">Bu usul juda kuchli: sahifaga kim va qanday kod qo'shishidan qat'i nazar, siz uni bir joyda "ushlab" qayta ishlaysiz. Redaktor, chat, dinamik ro'yxatlar — hammasi bilan ishlaydi.</div>
+<h2>observe konfiguratsiya kombinatsiyalari</h2>
+<p>Ba'zi keng tarqalgan sozlamalar:</p>
+<ul><li>Faqat bolalarning kelib-ketishi: <code>{ childList: true }</code>;</li><li>Butun ichki daraxt (istalgan chuqurlikda): <code>{ childList: true, subtree: true }</code>;</li><li>Faqat <code>class</code> va <code>style</code> atributlari: <code>{ attributes: true, attributeFilter: ['class', 'style'] }</code>;</li><li>Matn tahrirlarini eski qiymati bilan: <code>{ characterData: true, characterDataOldValue: true }</code>.</li></ul>
+<h2>disconnect va takeRecords</h2>
+<p>Kuzatishni to'xtatish uchun <code>disconnect()</code> chaqiriladi:</p>
+<pre class="code"><code>observer.disconnect();</code></pre>
+<p><code>takeRecords()</code> — hali <code>callback</code>ga yetkazilmagan, ammo qayd etilgan o'zgarishlar ro'yxatini oladi va navbatni bo'shatadi. Bu odatda <code>disconnect()</code>dan oldin, "oxirgi paytida" yig'ilib qolgan o'zgarishlarni ham qo'lda qayta ishlash uchun ishlatiladi:</p>
+<pre class="code"><code>// hali qayta ishlanmagan o'zgarishlarni olamiz
+let pending = observer.takeRecords();
+process(pending);
+
+// keyin kuzatishni to'xtatamiz
+observer.disconnect();</code></pre>
+<div class="warn"><code>disconnect()</code> chaqirilgach, <code>takeRecords()</code> endi bo'sh massiv qaytaradi — chunki navbat allaqachon bo'shatilgan bo'ladi. Shu bois <code>takeRecords()</code>ni <code>disconnect()</code>dan <strong>oldin</strong> chaqiring.</div>
+<div class="note"><code>MutationObserver</code> kuzatuvchi obyekti kuzatilayotgan tugunlarga <em>kuchsiz</em> (weak) bog'lanmaydi — u tugunga qattiq ishora saqlaydi. Kuzatuvchini <code>disconnect()</code> qilmasangiz, u va u ushlab turgan tugunlar xotirada qolib ketishi mumkin (xotira sizib chiqishi). Kerak bo'lmaganda albatta uzib qo'ying.</div>
+<h2>Xotira boshqaruvi</h2>
+<p>Muhim jihat: kuzatuvchi kuzatayotgan tugunlar DOMdan olib tashlansa ham, ular xotirada saqlanib qolishi mumkin — chunki kuzatuvchi ularga ishora saqlaydi. Element endi kerak bo'lmasa, uni kuzatishdan to'xtatish yaxshi amaliyot. Odatda komponent "o'chirilganda" (unmount) <code>disconnect()</code> chaqiriladi.</p>
+<h2>Xulosa</h2>
+<ul><li><code>MutationObserver</code> — DOM daraxtidagi o'zgarishlarni kuzatuvchi obyekt;</li><li><code>observer.observe(node, config)</code> bilan kuzatish boshlanadi; <code>config</code> nimani kuzatishni belgilaydi (<code>childList</code>, <code>subtree</code>, <code>attributes</code>, <code>characterData</code> va h.k.);</li><li><code>callback</code>ga <code>MutationRecord</code> obyektlari massivi keladi: <code>type</code>, <code>target</code>, <code>addedNodes</code>, <code>removedNodes</code>, <code>oldValue</code> va boshqalar;</li><li>Asosiy qo'llanishlar: keraksiz elementlarni tozalash, kutubxonalarni integratsiya qilish, DOM o'zgarishlarini kuzatib turish;</li><li><code>disconnect()</code> kuzatishni to'xtatadi; <code>takeRecords()</code> qayta ishlanmagan o'zgarishlarni oladi;</li><li>Xotira sizishining oldini olish uchun kerak bo'lmaganda kuzatuvchini uzing.</li></ul>
+<nav class="lesson-nav">
+  <a href="resurs-yuklash.html"><span class="dir">← Oldingi</span><span class="ttl">Resurs yuklash: onload va onerror</span></a>
+  <a class="next" href="selection-range.html"><span class="dir">Keyingi →</span><span class="ttl">Tanlash va Range</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

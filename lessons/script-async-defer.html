@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skriptlar: async, defer — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="Skriptlarni yuklashda bloklovchi muammo, defer va async atributlari, ularning farqi, dinamik skriptlar va qaysi birini qachon ishlatish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a class="active" href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Hujjat va resurs yuklanishi</div>
+<h1>Skriptlar: async, defer</h1>
+<p class="lead">Zamonaviy saytlarda skriptlar ko'pincha HTML'dan "og'irroq" bo'ladi: ular hajmi katta, yuklanishi va ishga tushishi vaqt oladi. Brauzer HTML'ni o'qib turib <code>&lt;script&gt;</code> tegiga duch kelsa, u DOM qurishni to'xtatib skriptni yuklab bajarishi kerak. Bu esa sahifaning ko'rinishini kechiktiradi. Bu muammoni hal qilish uchun ikkita atribut bor: <code>defer</code> va <code>async</code>. Ushbu darsda ular qanday ishlashini va farqini chuqur o'rganamiz.</p>
+<div class="warn">Bu darsdagi HTML/DOM misollari brauzer muhitiga tegishli. Kurs sahifasidagi maydoncha Node.js muhitida ishlaydi, shu sabab bu misollar <strong>statik</strong> — faqat o'qish uchun, ishga tushirib bo'lmaydi.</div>
+<h2>Bloklovchi skript muammosi</h2>
+<p>Ikkita muhim muammo bor. Birinchidan, skriptlar undan <strong>keyingi</strong> DOM elementlarini ko'ra olmaydi. Shuning uchun ularga hodisa biriktira olmaydi:</p>
+<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+
+&amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;!-- bu tugmani skript ko'rmaydi --&amp;gt;
+&amp;lt;p&amp;gt;...skriptdan keyingi kontent...&amp;lt;/p&amp;gt;</code></pre>
+<p>Ikkinchidan, agar sahifaning yuqorisida katta skript bo'lsa, u "bloklovchi" — brauzer skriptni yuklab bajarmaguncha, undan pastdagi sahifani ko'rsata olmaydi:</p>
+<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+
+&amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;!-- bu skript yuklanmaguncha ko'rinmaydi --&amp;gt;
+&amp;lt;p&amp;gt;...skriptdan keyingi kontent...&amp;lt;/p&amp;gt;</code></pre>
+<p>Bunga qisman yechim bor — skriptni sahifaning eng oxiriga, <code>&lt;/body&gt;</code> yopilishidan oldin qo'yish. Unda skript o'zidan yuqoridagi barcha elementlarni ko'radi va sahifa ko'rsatilishini bloklamaydi:</p>
+<pre class="code"><code>&amp;lt;body&amp;gt;
+  ...barcha kontent skriptdan yuqorida...
+
+  &amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;</code></pre>
+<p>Lekin bu yechim ideal emas: brauzer skriptni faqat butun HTML hujjatni yuklab bo'lgach ko'radi va yuklashni boshlaydi. Katta HTML'larda bu sezilarli kechikish beradi. Bu muammoni <code>defer</code> va <code>async</code> atributlari hal qiladi.</p>
+<h2>defer</h2>
+<p><code>defer</code> atributi brauzerga skriptni "fon rejimida" yuklashni buyuradi: brauzer skriptni yuklab olishda kutmaydi, HTML'ni qurishda davom etadi. Skript esa DOM to'liq tayyor bo'lgach bajariladi:</p>
+<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+
+&amp;lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;!-- darhol ko'rinadi, skriptni kutmaydi --&amp;gt;
+&amp;lt;p&amp;gt;...skriptdan keyingi kontent...&amp;lt;/p&amp;gt;</code></pre>
+<p>Boshqacha aytganda:</p>
+<ul><li><code>defer</code>li skriptlar sahifani <strong>hech qachon bloklamaydi</strong>;</li><li><code>defer</code>li skriptlar har doim to'liq DOM tayyor bo'lgach, lekin <code>DOMContentLoaded</code> hodisasidan <strong>oldin</strong> bajariladi.</li></ul>
+<p>Quyidagi misol buni ko'rsatadi. Kontent darhol ko'rinadi, <code>DOMContentLoaded</code> esa skriptni kutadi:</p>
+<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+
+&amp;lt;script&amp;gt;
+  document.addEventListener('DOMContentLoaded', () =&amp;gt; alert('DOM tayyor (skriptdan keyin)'));
+&amp;lt;/script&amp;gt;
+
+&amp;lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu yerda <code>DOMContentLoaded</code> <code>defer</code>li skript yuklanib bajarilishini kutadi.</p>
+<h3>defer skriptlar tartibni saqlaydi</h3>
+<p>Bir necha <code>defer</code>li skript bo'lsa, ular <strong>hujjatdagi tartibda</strong> bajariladi — xuddi oddiy skriptlar kabi:</p>
+<pre class="code"><code>&amp;lt;script defer src="long.js"&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script defer src="small.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu yerda <code>long.js</code> hajmi katta bo'lsa-da, u avval yuklab bo'lingandek kutiladi va <code>small.js</code>dan oldin bajariladi. Brauzer skriptlarni parallel yuklaydi (tezlik uchun), lekin ularni belgilangan tartibda ishga tushiradi.</p>
+<div class="tip"><code>defer</code> — kodning to'g'ri tartibda bajarilishi muhim bo'lganda ajoyib. Masalan, ikkinchi skript birinchisiga bog'liq bo'lsa (kutubxona + uni ishlatuvchi kod), <code>defer</code> tartibni kafolatlaydi.</div>
+<div class="note"><code>defer</code> atributi faqat tashqi skriptlar uchun, ya'ni <code>src</code> ga ega skriptlar uchun ishlaydi. Agar <code>&lt;script&gt;</code>da <code>src</code> bo'lmasa (kodni to'g'ridan-to'g'ri yozgan bo'lsangiz), <code>defer</code> e'tiborga olinmaydi.</div>
+<h2>async</h2>
+<p><code>async</code> atributi ham skriptni fon rejimida yuklaydi, lekin butunlay boshqacha mustaqillik beradi. <code>async</code>li skript to'liq mustaqil:</p>
+<ul><li>Sahifa <code>async</code>li skriptni kutmaydi: kontent ko'rsatiladi, <code>DOMContentLoaded</code> hodisasi ham skriptni kutmasligi mumkin;</li><li><code>async</code>li skriptlar boshqa skriptlarni kutmaydi va ularni ham kutib turmaydi — tartib yo'q. Qaysi biri avval yuklansa, o'sha avval bajariladi ("load-first" tartibi).</li></ul>
+<pre class="code"><code>&amp;lt;p&amp;gt;...skriptdan oldingi kontent...&amp;lt;/p&amp;gt;
+
+&amp;lt;script&amp;gt;
+  document.addEventListener('DOMContentLoaded', () =&amp;gt; alert('DOM tayyor!'));
+&amp;lt;/script&amp;gt;
+
+&amp;lt;script async src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script async src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"&amp;gt;&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu yerdagi tartib "belgilanmagan":</p>
+<ul><li>Sahifa kontenti darhol ko'rsatiladi: <code>async</code> bloklamaydi;</li><li><code>DOMContentLoaded</code> va <code>async</code> bir-birini kutmaydi — <code>DOMContentLoaded</code> <code>async</code>dan oldin ham, keyin ham bo'lishi mumkin (yuklanish tezligiga qarab);</li><li><code>async</code> skriptlar bir-birini kutmaydi: qaysi biri oldin yuklansa (kichikroq yoki keshdan olingan), o'sha oldin bajariladi.</li></ul>
+<div class="tip"><code>async</code> boshqa skriptlarga bog'liq bo'lmagan mustaqil skriptlar uchun ideal: hisoblagichlar (counters), reklama, analitika kabi uchinchi tomon skriptlari. Ular sahifangizning boshqa kodiga bog'liq emas va sizning kodingiz ham ularga bog'liq emas.</div>
+<h2>async va defer farqi</h2>
+<p>Ikkalasi ham skriptni bloklamasdan fon rejimida yuklaydi. Asosiy farq — <strong>tartib</strong> va <strong>qachon bajarilishi</strong>:</p>
+<ul><li><strong>Tartib (order):</strong> <code>defer</code> — hujjatdagi tartibda bajariladi; <code>async</code> — qaysi biri oldin yuklansa, o'sha oldin (load-first, tartib yo'q).</li><li><strong>DOMContentLoaded:</strong> <code>defer</code> — DOM qurilib bo'lgach, lekin <code>DOMContentLoaded</code>dan <strong>oldin</strong> bajariladi (uni kutadi); <code>async</code> — istalgan vaqtda, <code>DOMContentLoaded</code> bilan bog'liq emas.</li><li><strong>Foydalanish:</strong> <code>defer</code> — tartib va DOM muhim bo'lganda (bog'liq skriptlar, DOM bilan ishlash); <code>async</code> — mustaqil, boshqa hech narsaga bog'liq bo'lmagan skriptlar uchun.</li></ul>
+<p>Uni jadval ko'rinishida umumlashtiramiz:</p>
+<pre class="code"><code>                Tartib               DOMContentLoaded
+-----------------------------------------------------------
+defer   |  hujjatdagi tartibda     |  KUTADI (undan oldin)
+async   |  load-first tartibida    |  BOG'LIQ EMAS (kutmaydi)</code></pre>
+<div class="warn">Amaliyotda <code>defer</code> odatda DOM'ga muhtoj yoki bir-biriga bog'liq skriptlar uchun, <code>async</code> esa mustaqil skriptlar (analitika, reklama) uchun ishlatiladi. Ko'p hollarda dasturchilar bosh sahifa kodini <code>defer</code> bilan, uchinchi tomon vidjetlarini <code>async</code> bilan yuklaydi.</div>
+<div class="note">Agar skriptda ham <code>async</code>, ham <code>defer</code> yozilsa, zamonaviy brauzerlarda <code>async</code> ustunlik qiladi. Eski, <code>async</code>ni qo'llab-quvvatlamaydigan brauzerlarda esa <code>defer</code> zaxira sifatida ishlaydi.</div>
+<h2>Dinamik skriptlar</h2>
+<p>Skriptni HTML'da yozish shart emas — uni JavaScript orqali dinamik ravishda ham qo'shishimiz mumkin. Buning uchun element yaratib, uni hujjatga qo'shamiz:</p>
+<pre class="code"><code>let script = document.createElement('script');
+script.src = '/article/dynamic-scripts/long.js';
+
+document.body.append(script); // shu paytda yuklanish va bajarilish boshlanadi</code></pre>
+<p>Muhim nozik jihat: <strong>dinamik qo'shilgan skriptlar sukut bo'yicha <code>async</code> kabi harakat qiladi.</strong> Ya'ni:</p>
+<ul><li>Ular hech narsani kutmaydi va ularni ham hech kim kutmaydi;</li><li>Avval yuklangan skript avval bajariladi (load-first tartibi).</li></ul>
+<p>Buni o'zgartirib, aniq tartibni tiklash mumkin — <code>script.async = false</code> qo'yish orqali. Unda skriptlar oddiy <code>defer</code> kabi hujjatdagi tartibda bajariladi:</p>
+<pre class="code"><code>function loadScript(src) {
+  let script = document.createElement('script');
+  script.src = src;
+  script.async = false; // tartibni saqlash uchun
+  document.body.append(script);
+}
+
+// long.js avval bajariladi, chunki oldin qo'shildi (async=false tufayli)
+loadScript('/article/dynamic-scripts/long.js');
+loadScript('/article/dynamic-scripts/small.js');</code></pre>
+<p>Agar <code>script.async = false</code> qo'ymasak, tartib "load-first" bo'lardi — kichikroq <code>small.js</code> ehtimol oldin yuklanib, oldin bajarilardi.</p>
+<div class="tip"><code>script.async = false</code> — bir necha dinamik skriptni to'g'ri tartibda yuklashning oddiy usuli. Bu ayniqsa modulli kutubxonalarni tartib bilan yuklashda foydali.</div>
+<h2>Xulosa</h2>
+<p><code>async</code> va <code>defer</code> ikkalasi ham skript yuklanishini bloklamasdan amalga oshiradi va foydalanuvchi sahifani deyarli darhol ko'radi. Farqlar:</p>
+<ul><li><code>defer</code>: tartibni saqlaydi (hujjatdagi kabi), <code>DOMContentLoaded</code>dan oldin bajariladi, DOM tayyor bo'lishini kutadi. To'g'ri tartib va DOM muhim bo'lganda ishlating;</li><li><code>async</code>: mustaqil, load-first tartibi (belgilanmagan), <code>DOMContentLoaded</code> bilan bog'liq emas. Reklama, analitika kabi mustaqil skriptlar uchun;</li><li>Dinamik skriptlar sukut bo'yicha <code>async</code> — tartibni tiklash uchun <code>script.async = false</code> qo'ying.</li></ul>
+<div class="warn">Muhim tavsiya: <code>defer</code> yoki <code>async</code> ishlatganda skript yuklanmasdan turib sahifa ko'rsatilishini yodda tuting. Foydalanuvchi skript hali ishga tushmagan sahifani ko'radi — ba'zi tugmalar hali "jonlanmagan" bo'lishi mumkin. Shu sabab yuklanish holatini ko'rsatuvchi indikator qo'shish yoki funksionallikni asta-sekin yoqish yaxshi amaliyot hisoblanadi.</div>
+<nav class="lesson-nav">
+  <a href="page-lifecycle.html"><span class="dir">← Oldingi</span><span class="ttl">Sahifa: DOMContentLoaded, load, beforeunload, unload</span></a>
+  <a class="next" href="resurs-yuklash.html"><span class="dir">Keyingi →</span><span class="ttl">Resurs yuklash: onload va onerror</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

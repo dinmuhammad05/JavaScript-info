@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forma xossalari va metodlari — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="document.forms, form.elements, input/textarea/select/option bilan ishlash: value, checked, selectedIndex va options orqali qiymatlarni o'qish va yozish.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details open>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a class="active" href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Formalar va boshqaruv elementlari</div>
+<h1>Forma xossalari va metodlari</h1>
+<p class="lead">Formalar (<code>&lt;form&gt;</code>) va ular ichidagi boshqaruv elementlari (<code>input</code>, <code>textarea</code>, <code>select</code> va boshqalar) foydalanuvchi bilan ma'lumot almashishning asosiy vositasi. Ular DOM'da o'ziga xos xossa va metodlarga ega bo'lib, ularni oddiy DOM elementlaridan qulayroq topish va boshqarish imkonini beradi. Ushbu darsda formalarga navigatsiya qilishni va boshqaruv elementlari bilan ishlashni chuqur o'rganamiz.</p>
+<h2>Formalarga navigatsiya: document.forms</h2>
+<p>Formalar hujjatdagi maxsus to'plam — <code>document.forms</code>ning bir qismidir. Bu "nomlangan to'plam" (named collection): unga ham tartib raqami, ham forma <code>name</code> atributi orqali murojaat qilish mumkin.</p>
+<pre class="code"><code>document.forms.my;   // name="my" bo'lgan forma
+document.forms[0];   // hujjatdagi birinchi forma</code></pre>
+<p>Formani olganimizdan so'ng, uning ichidagi istalgan elementga <code>form.elements</code> to'plami orqali yetib boramiz:</p>
+<pre class="code"><code>&amp;lt;form name="my"&amp;gt;
+  &amp;lt;input name="one" value="1"&amp;gt;
+  &amp;lt;input name="two" value="2"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // formani olamiz
+  let form = document.forms.my;
+
+  // element olamiz
+  let elem = form.elements.one;
+
+  alert(elem.value); // 1
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Bir nechta element bir xil <code>name</code>ga ega bo'lishi mumkin (masalan, radio tugmalar). Bunday holatda <code>form.elements[name]</code> to'plam (collection) qaytaradi:</p>
+<pre class="code"><code>&amp;lt;form&amp;gt;
+  &amp;lt;input type="radio" name="age" value="10"&amp;gt;
+  &amp;lt;input type="radio" name="age" value="20"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  let form = document.forms[0];
+
+  let ageElems = form.elements.age;
+
+  alert(ageElems[0]); // [object HTMLInputElement]
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="note">Bu navigatsiya xossalari HTML tuzilmasining chuqurligiga bog'liq emas. Element nechanchi darajada joylashganidan qat'i nazar, <code>form.elements</code> orqali barcha boshqaruv elementlari to'g'ridan-to'g'ri mavjud bo'ladi.</div>
+<h2>Fieldset "kichik forma" sifatida</h2>
+<p>Forma ichida bir yoki bir nechta <code>&lt;fieldset&gt;</code> elementi bo'lishi mumkin. Ular ham <code>elements</code> xossasiga ega bo'lib, o'z ichidagi boshqaruv elementlarini saqlaydi:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  &amp;lt;fieldset name="userFields"&amp;gt;
+    &amp;lt;legend&amp;gt;info&amp;lt;/legend&amp;gt;
+    &amp;lt;input name="login" type="text"&amp;gt;
+  &amp;lt;/fieldset&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  alert(form.elements.login); // input orqali
+
+  let fieldset = form.elements.userFields;
+  alert(fieldset); // HTMLFieldSetElement
+
+  // login ni ham forma orqali, ham fieldset orqali olsak bo'ladi
+  alert(fieldset.elements.login === form.elements.login); // true
+&amp;lt;/script&amp;gt;</code></pre>
+<h2>Qisqa yozuv: form.name</h2>
+<p>Uzun <code>form.elements.login</code> o'rniga qisqaroq <code>form.login</code> yozuvi ham ishlaydi — forma o'zi ham o'z elementlariga nom orqali kirishga imkon beradi:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  &amp;lt;input name="login"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // ikkalasi bir xil elementga ishora qiladi
+  alert(form.elements.login == form.login); // true
+
+  form.login.name = 'username'; // name ni o'zgartiramiz
+
+  // form.login endi ishlamaydi, chunki name o'zgardi!
+  alert(form.elements.username); // input
+  alert(form.login); // undefined
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="warn">Qisqa yozuv (<code>form.login</code>) qulay, lekin bitta "nozik" kamchiligi bor: elementning <code>name</code>ini kodda o'zgartirsak, u eski nom orqali darhol topilmay qoladi. Bu odatiy holat, lekin nomni dinamik o'zgartirganda esda tutish kerak. Aksincha, <code>form.elements</code> to'plami esa o'zgargan yangi nomni to'g'ri qaytaradi.</div>
+<h2>Orqaga havola: element.form</h2>
+<p>Har bir forma elementi o'zi tegishli bo'lgan formaga <code>element.form</code> xossasi orqali murojaat qila oladi. Ya'ni forma o'z elementlariga ishora qiladi, elementlar esa formaga qaytadan ishora qiladi:</p>
+<pre class="code"><code>&amp;lt;form id="form"&amp;gt;
+  &amp;lt;input type="text" name="login"&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // form -&gt; element
+  let login = form.login;
+
+  // element -&gt; form
+  alert(login.form); // HTMLFormElement
+&amp;lt;/script&amp;gt;</code></pre>
+<div class="tip"><code>element.form</code> hodisa ishlovchilarida juda qulay: masalan, tugma bosilganda uning <code>event.target.form</code> orqali qaysi formaga tegishli ekanligini darhol bilib olish mumkin — DOM bo'ylab qidirish shart emas.</div>
+<h2>Elementlar bilan ishlash: input va textarea</h2>
+<p>Matnli input va <code>textarea</code>ning qiymatiga <code>input.value</code> (string) orqali kiramiz yoki checkbox/radio uchun <code>input.checked</code> (boolean) orqali:</p>
+<pre class="code"><code>input.value = 'Yangi qiymat';
+textarea.value = 'Yangi matn';
+
+input.checked = true; // checkbox yoki radio uchun</code></pre>
+<div class="warn"><code>textarea</code>ning qiymatini o'qish uchun har doim <code>textarea.value</code>dan foydalaning, <code>textarea.innerHTML</code>dan emas! <code>innerHTML</code> faqat sahifa dastlab yuklangandagi HTML'ni saqlaydi va foydalanuvchi kiritgan yangi matnni <em>aks ettirmaydi</em>.</div>
+<h2>select va option bilan ishlash</h2>
+<p><code>&lt;select&gt;</code> elementi (ochiladigan ro'yxat) uch muhim xossaga ega:</p>
+<ul><li><code>select.options</code> — <code>&lt;option&gt;</code> elementlari to'plami;</li><li><code>select.value</code> — hozir tanlangan <code>&lt;option&gt;</code>ning qiymati (value);</li><li><code>select.selectedIndex</code> — hozir tanlangan <code>&lt;option&gt;</code>ning tartib raqami.</li></ul>
+<p>Ular <code>&lt;select&gt;</code> uchun qiymat belgilashning uch xil usulini beradi:</p>
+<ol><li>Kerakli <code>&lt;option&gt;</code>ning tartib raqamini toping va <code>select.selectedIndex</code>ga bering;</li><li>Kerakli qiymatni <code>select.value</code>ga to'g'ridan-to'g'ri bering;</li><li>Kerakli <code>&lt;option&gt;</code>ning <code>option.selected</code> xossasiga <code>true</code> bering.</li></ol>
+<pre class="code"><code>&amp;lt;select id="select"&amp;gt;
+  &amp;lt;option value="apple"&amp;gt;Olma&amp;lt;/option&amp;gt;
+  &amp;lt;option value="pear"&amp;gt;Nok&amp;lt;/option&amp;gt;
+  &amp;lt;option value="banana"&amp;gt;Banan&amp;lt;/option&amp;gt;
+&amp;lt;/select&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // uch usul ham "Nok" ni tanlaydi:
+  select.selectedIndex = 1;
+  select.value = 'pear';
+  select.options[1].selected = true;
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Boshqa boshqaruv elementlaridan farqli, <code>&lt;select&gt;</code> <code>multiple</code> atributi bilan bir nechta qiymatni tanlashga ruxsat beradi (garchi kamdan-kam ishlatilsa ham). Bu holatda tanlangan qiymatlarni olish uchun <code>option.selected</code>ni tekshirib chiqish kerak:</p>
+<pre class="code"><code>&amp;lt;select id="select" multiple&amp;gt;
+  &amp;lt;option value="blues" selected&amp;gt;Blyuz&amp;lt;/option&amp;gt;
+  &amp;lt;option value="rock" selected&amp;gt;Rok&amp;lt;/option&amp;gt;
+  &amp;lt;option value="classic"&amp;gt;Klassik&amp;lt;/option&amp;gt;
+&amp;lt;/select&amp;gt;
+
+&amp;lt;script&amp;gt;
+  // barcha tanlangan qiymatlarni yig'amiz
+  let selected = Array.from(select.options)
+    .filter(option =&amp;gt; option.selected)
+    .map(option =&amp;gt; option.value);
+
+  alert(selected); // blues,rock
+&amp;lt;/script&amp;gt;</code></pre>
+<h2>new Option</h2>
+<p><code>&lt;option&gt;</code> elementlarini dinamik yaratish uchun qisqa maxsus sintaksis mavjud — <code>new Option</code> konstruktori:</p>
+<pre class="code"><code>let option = new Option(text, value, defaultSelected, selected);</code></pre>
+<ul><li><code>text</code> — <code>&lt;option&gt;</code> ichidagi ko'rinadigan matn;</li><li><code>value</code> — <code>&lt;option&gt;</code>ning qiymati;</li><li><code>defaultSelected</code> — <code>true</code> bo'lsa, <code>selected</code> HTML-atributi qo'yiladi;</li><li><code>selected</code> — <code>true</code> bo'lsa, <code>&lt;option&gt;</code> tanlanadi.</li></ul>
+<pre class="code"><code>// oddiy holat: matn va value bilan
+let option = new Option('Matn', 'value');
+
+// tanlangan holatda
+let option2 = new Option('Matn', 'value', true, true);
+
+// keyin uni select ichiga qo'shamiz
+select.append(option);</code></pre>
+<div class="note"><code>&lt;option&gt;</code> elementlari yana bir necha foydali xossaga ega: <code>option.selected</code> (tanlanganmi?), <code>option.index</code> (ro'yxatdagi raqami), <code>option.text</code> (ko'rinadigan matni).</div>
+<h2>Xulosa</h2>
+<ul><li>Formalarga navigatsiya: <code>document.forms</code> — barcha formalar; <code>form.elements</code> — forma ichidagi elementlar; <code>fieldset.elements</code> — kichik guruh elementlari;</li><li>Qisqa yozuv <code>form.name</code> ishlaydi, lekin element <code>name</code>i o'zgarsa eski nom orqali topilmay qoladi;</li><li>Orqaga havola <code>element.form</code> — element o'z formasiga ishora qiladi;</li><li>Matnli input/textarea qiymati — <code>value</code> (har doim <code>value</code>, <code>innerHTML</code> emas!); checkbox/radio holati — <code>checked</code>;</li><li><code>&lt;select&gt;</code> uchun uch usul: <code>selectedIndex</code>, <code>value</code>, yoki <code>option.selected</code>; <code>options</code> — barcha optionlar to'plami;</li><li>Yangi <code>&lt;option&gt;</code>ni <code>new Option(text, value, defaultSelected, selected)</code> bilan tez yaratish mumkin.</li></ul>
+<nav class="lesson-nav">
+  <a href="weakref.html"><span class="dir">← Oldingi</span><span class="ttl">WeakRef va FinalizationRegistry</span></a>
+  <a class="next" href="focus-blur.html"><span class="dir">Keyingi →</span><span class="ttl">Fokuslash: focus/blur</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>

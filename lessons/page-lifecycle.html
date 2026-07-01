@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sahifa: DOMContentLoaded, load, beforeunload, unload — JavaScript.info O'zbekcha</title>
+  <meta name="description" content="HTML sahifaning hayot sikli: DOMContentLoaded, load, beforeunload va unload hodisalari qachon yuz beradi, readyState, sahifadan chiqishdan oldin ogohlantirish va sendBeacon.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">JS</span> JavaScript.info <small style="font-weight:400;color:#9ca3af">o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-part">1-qism: JavaScript tili</div>
+  <details>
+    <summary>Kirish</summary>
+    <ol>
+      <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+      <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+      <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+      <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>JavaScript asoslari</summary>
+    <ol>
+      <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+      <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+      <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+      <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+      <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+      <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+      <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+      <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+      <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+      <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+      <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+      <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+      <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+      <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+      <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+      <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Kod sifati</summary>
+    <ol>
+      <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+      <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+      <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+      <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+      <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyektlar: asoslar</summary>
+    <ol>
+      <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+      <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+      <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+      <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+      <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+      <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+      <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+      <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Ma'lumot turlari</summary>
+    <ol>
+      <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+      <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+      <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+      <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+      <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+      <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+      <li><a href="../lessons/map-set.html">Map va Set</a></li>
+      <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+      <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+      <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+      <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+      <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Funksiyalar bilan chuqur ishlash</summary>
+    <ol>
+      <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+      <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+      <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+      <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+      <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+      <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+      <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+      <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+      <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+      <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+      <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Obyekt xossalari konfiguratsiyasi</summary>
+    <ol>
+      <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+      <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Prototiplar, meros</summary>
+    <ol>
+      <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+      <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+      <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+      <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Klasslar</summary>
+    <ol>
+      <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+      <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+      <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+      <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+      <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+      <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+      <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Xatoliklarni boshqarish</summary>
+    <ol>
+      <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+      <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Promise, async/await</summary>
+    <ol>
+      <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+      <li><a href="../lessons/promise.html">Promise</a></li>
+      <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+      <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+      <li><a href="../lessons/promise-api.html">Promise API</a></li>
+      <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+      <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+      <li><a href="../lessons/async-await.html">Async/await</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Generatorlar, ilg'or iteratsiya</summary>
+    <ol>
+      <li><a href="../lessons/generator.html">Generatorlar</a></li>
+      <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Modullar</summary>
+    <ol>
+      <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+      <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+      <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha mavzular</summary>
+    <ol>
+      <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+      <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+      <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+      <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+      <li><a href="../lessons/bigint.html">BigInt</a></li>
+      <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+      <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+    </ol>
+  </details>
+  <div class="side-part">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</div>
+  <details>
+    <summary>Formalar va boshqaruv elementlari</summary>
+    <ol>
+      <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+      <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+      <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+      <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+    </ol>
+  </details>
+  <details open>
+    <summary>Hujjat va resurs yuklanishi</summary>
+    <ol>
+      <li><a class="active" href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+      <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+      <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+    </ol>
+  </details>
+  <details>
+    <summary>Qo'shimcha brauzer mavzulari</summary>
+    <ol>
+      <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+      <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+      <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+    </ol>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Hujjat va resurs yuklanishi</div>
+<h1>Sahifa: DOMContentLoaded, load, beforeunload, unload</h1>
+<p class="lead">HTML sahifaning hayot sikli (lifecycle) uchta muhim hodisaga ega: <code>DOMContentLoaded</code> — brauzer HTML'ni to'liq yuklab, DOM daraxtini qurganida; <code>load</code> — nafaqat HTML, balki barcha tashqi resurslar (rasm, stil, skript) yuklanganida; <code>beforeunload</code> va <code>unload</code> — foydalanuvchi sahifani tark etayotganida. Har bir hodisa foydali bo'lishi mumkin: <code>DOMContentLoaded</code> — DOM tayyor bo'lgach initsializatsiya qilish uchun, <code>load</code> — barcha resurslar yuklanganini tekshirish uchun, <code>beforeunload/unload</code> — foydalanuvchi ketayotganda o'zgarishlarni saqlash uchun. Bu darsda ularni chuqur o'rganamiz.</p>
+<div class="warn">Bu bo'limdagi barcha misollar brauzer muhitiga (DOM, <code>document</code>, <code>window</code>) tegishli. Kurs sahifasidagi interaktiv maydoncha Node.js muhitida ishlaydi va DOM'ga ega emas — shu sabab bu darsdagi kod misollari <strong>statik</strong> bo'lib, faqat o'qib o'rganish uchun keltiriladi. Ularni ishga tushirib bo'lmaydi.</div>
+<h2>DOMContentLoaded</h2>
+<p><code>DOMContentLoaded</code> hodisasi <code>document</code> obyektida yuz beradi. Uni kuzatish uchun albatta <code>addEventListener</code>dan foydalanish kerak:</p>
+<pre class="code"><code>document.addEventListener('DOMContentLoaded', ready);
+// funksiya sifatida yozamiz, chaqirmaymiz: ready() emas, balki ready</code></pre>
+<p>Masalan:</p>
+<pre class="code"><code>&amp;lt;script&amp;gt;
+  function ready() {
+    alert('DOM tayyor');
+
+    // rasm hali yuklanmagan bo'lishi mumkin (agar keshda bo'lmasa),
+    // shu sabab o'lchami 0x0 bo'lishi mumkin
+    alert(`Rasm o'lchami: ${img.offsetWidth}x${img.offsetHeight}`);
+  }
+
+  document.addEventListener('DOMContentLoaded', ready);
+&amp;lt;/script&amp;gt;
+
+&amp;lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;amp;cache=0"&amp;gt;</code></pre>
+<p>Bu misolda <code>DOMContentLoaded</code> ishlaganida hujjat butunlay yuklangan — brauzer barcha HTML elementlarni ko'rgan va ularga qo'l uzata oladi. Lekin rasm (<code>&lt;img&gt;</code>) hali yuklanib ulgurmagan bo'lishi mumkin, shuning uchun uning o'lchami ko'pincha <code>0x0</code> chiqadi.</p>
+<div class="note"><code>DOMContentLoaded</code> — bu <strong>DOM daraxti tayyor</strong> degani, resurslar tayyor emas. Rasm va boshqa tashqi fayllar hali yuklanayotgan bo'lishi mumkin. Agar sizga faqat DOM elementlari kerak bo'lsa (masalan, tugmaga hodisa biriktirish), bu hodisadan foydalanish eng to'g'ri yechim.</div>
+<h2>DOMContentLoaded va skriptlar</h2>
+<p>Brauzer HTML'ni qayta ishlaganda, agar <code>&lt;script&gt;</code> tegiga duch kelsa, DOM qurishni <strong>to'xtatib</strong>, uni bajarishi shart. Buning sababi bor: skript DOM'ni o'zgartirishi yoki hatto <code>document.write</code> orqali yangi HTML qo'shishi mumkin, shuning uchun brauzer skript tugaguncha kutadi.</p>
+<p>Demak, <code>DOMContentLoaded</code> hodisasi <strong>skriptlar bajarilib bo'lgach</strong> sodir bo'ladi:</p>
+<pre class="code"><code>&amp;lt;script&amp;gt;
+  document.addEventListener('DOMContentLoaded', () =&gt; {
+    alert('DOM tayyor!');
+  });
+&amp;lt;/script&amp;gt;
+
+&amp;lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;script&amp;gt;
+  alert('Kutubxona yuklandi, kod ishga tayyor');
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Bu misolda avval "Kutubxona yuklandi", so'ng "DOM tayyor!" ko'rsatiladi. Ya'ni <code>DOMContentLoaded</code> barcha skriptlar bajarilishini kutadi.</p>
+<div class="warn">Yuqoridagi qoidaning ikkita <strong>istisnosi</strong> bor. Bular <code>DOMContentLoaded</code>ni bloklamaydi: <code>async</code> atributiga ega skriptlar va <code>document.createElement('script')</code> orqali dinamik qo'shilgan skriptlar. Ular mustaqil yuklanadi va DOM qurilishini kutmaydi. Bularni keyingi darslarda batafsil ko'rib chiqamiz.</div>
+<h2>DOMContentLoaded va stillar</h2>
+<p>Tashqi stil jadvallari (<code>&lt;link rel="stylesheet"&gt;</code>) DOM'ga ta'sir qilmaydi, shuning uchun <code>DOMContentLoaded</code> ularni kutmaydi.</p>
+<p>Lekin bir nozik holat bor: agar stildan <strong>keyin</strong> skript kelsa, u skript stil yuklanguncha kutadi:</p>
+<pre class="code"><code>&amp;lt;link type="text/css" rel="stylesheet" href="style.css"&amp;gt;
+&amp;lt;script&amp;gt;
+  // skript style.css yuklanmaguncha bajarilmaydi
+  alert(getComputedStyle(document.body).marginTop);
+&amp;lt;/script&amp;gt;</code></pre>
+<p>Sababi shundaki: skript elementlarning haqiqiy koordinatalari va boshqa stilga bog'liq xossalarini o'qishga muhtoj bo'lishi mumkin. Shu sababdan skript oldidagi stil to'liq yuklanishini kutadi. Bu esa o'z navbatida <code>DOMContentLoaded</code>ni ham kechiktiradi.</p>
+<h2>Brauzerning avto-to'ldirishi (autofill)</h2>
+<p>Firefox, Chrome va Opera <code>DOMContentLoaded</code> hodisasida formalarni avtomatik to'ldiradi (autofill). Masalan, agar sahifada login/parol formasi bo'lsa va foydalanuvchi qiymatlarini saqlagan bo'lsa, brauzer <code>DOMContentLoaded</code>da ularni qo'yib chiqadi.</p>
+<p>Shuning uchun agar sahifada ko'p yuklanadigan skriptlar tufayli <code>DOMContentLoaded</code> kechiksa, avto-to'ldirish ham kechikadi. Buni foydalanuvchilar sahifa "sekin" ochilayotgandek his qilishi mumkin.</p>
+<h2>load, unload va readyState</h2>
+<p>Endi qolgan hodisalarni ko'rib chiqamiz.</p>
+<h3>window.onload</h3>
+<p><code>load</code> hodisasi <code>window</code> obyektida yuz beradi va u <strong>barcha resurslar</strong> — rasm, stil, skriptlar — yuklanib bo'lgach ishga tushadi:</p>
+<pre class="code"><code>&amp;lt;script&amp;gt;
+  window.onload = function() {
+    alert('Sahifa to'liq yuklandi');
+
+    // endi rasm haqiqiy o'lchamiga ega
+    alert(`Rasm o'lchami: ${img.offsetWidth}x${img.offsetHeight}`);
+  };
+&amp;lt;/script&amp;gt;
+
+&amp;lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;amp;cache=0"&amp;gt;</code></pre>
+<p>Bu yerda <code>DOMContentLoaded</code>dan farqli o'laroq, rasm yuklangan va uning to'g'ri o'lchamlari ko'rsatiladi.</p>
+<h3>window.onunload</h3>
+<p>Foydalanuvchi sahifadan ketganda <code>window</code> obyektida <code>unload</code> hodisasi ishga tushadi. Bu yerda pop-up oynalar ochish kabi kechiktirishga imkon bermaydigan ishlar mumkin emas, lekin analitika ma'lumotlarini yuborish uchun ishlatiladi:</p>
+<pre class="code"><code>window.addEventListener('unload', function() {
+  // ma'lumotni ketishdan oldin yuborish
+});</code></pre>
+<p>Amaliyotda <code>unload</code>da tarmoq so'rovlarini yuborish qiyin, chunki sahifa yopilib qolishi mumkin. Buning uchun maxsus <code>navigator.sendBeacon</code> metodi mavjud (quyida ko'ramiz).</p>
+<h3>document.readyState</h3>
+<p><code>document.readyState</code> xossasi hujjatning joriy yuklanish holatini bildiradi. Uning uchta qiymati bor:</p>
+<ul><li><code>'loading'</code> — hujjat hali yuklanmoqda;</li><li><code>'interactive'</code> — hujjat to'liq o'qildi, DOM tayyor (bu <code>DOMContentLoaded</code> bilan bir vaqtga to'g'ri keladi);</li><li><code>'complete'</code> — hujjat va barcha resurslar to'liq yuklandi (bu <code>window.onload</code> bilan bir vaqtga to'g'ri keladi).</li></ul>
+<p>Uni tekshirib, holatga qarab ish yuritishimiz mumkin. Ba'zan skript kechroq ishga tushadi va <code>DOMContentLoaded</code> allaqachon o'tib ketgan bo'ladi. Bunday holda hodisani kutish behuda bo'ladi, shuning uchun <code>readyState</code>ni tekshirish kerak:</p>
+<pre class="code"><code>function work() { /* ... */ }
+
+if (document.readyState == 'loading') {
+  // hali yuklanmoqda — hodisani kutamiz
+  document.addEventListener('DOMContentLoaded', work);
+} else {
+  // DOM allaqachon tayyor!
+  work();
+}</code></pre>
+<p>Holatning o'zgarishini kuzatish uchun <code>readystatechange</code> hodisasi ham bor, lekin bu bugungi kunda kam ishlatiladi — <code>DOMContentLoaded</code> va <code>load</code> yetarli:</p>
+<pre class="code"><code>// joriy holat
+console.log(document.readyState);
+
+// har o'zgarishda
+document.addEventListener('readystatechange', () =&gt; {
+  console.log(document.readyState);
+});</code></pre>
+<div class="note">Hodisalarning odatiy ketma-ketligi: <code>readyState:loading</code> → <code>readyState:interactive</code> → <code>DOMContentLoaded</code> → (rasm/resurslar yuklanadi) → <code>readyState:complete</code> → <code>window.onload</code>. Ya'ni <code>interactive</code> <code>DOMContentLoaded</code>dan biroz oldin, <code>complete</code> esa <code>load</code>dan biroz oldin belgilanadi.</div>
+<h2>beforeunload bilan ogohlantirish</h2>
+<p>Agar foydalanuvchi sahifadan ketmoqchi bo'lsa yoki oynani yopmoqchi bo'lsa, <code>beforeunload</code> ishlovchisi qo'shimcha tasdiqni so'rashi mumkin. Bu ayniqsa foydalanuvchi to'ldirilmagan formani tashlab ketayotganda foydali — "O'zgarishlar saqlanmagan, chindan ham ketmoqchimisiz?" degan savol chiqarish uchun.</p>
+<p>Agar biz <code>beforeunload</code> hodisasini bekor qilsak, brauzer foydalanuvchidan tasdiq so'raydi:</p>
+<pre class="code"><code>window.addEventListener('beforeunload', function(event) {
+  event.preventDefault();
+
+  // eski brauzerlar uchun returnValue kerak bo'lishi mumkin
+  event.returnValue = '';
+});</code></pre>
+<div class="warn">Zamonaviy brauzerlarda <code>event.returnValue</code>ga qo'ygan matningizni ko'rsatib bo'lmaydi — brauzer o'zining standart xabarini chiqaradi (masalan, "Ushbu sahifani tark etmoqchimisiz?"). Bu foydalanuvchini yolg'on xabarlar bilan aldashning oldini olish uchun qilingan. Shu sabab matnni maxsuslashtirishga urinmang — u baribir ko'rinmaydi.</div>
+<p>Muhim nozik jihat: bu ishlovchi faqat foydalanuvchi sahifa bilan <strong>o'zaro aloqada bo'lgan</strong> (bosgan, matn kiritgan) holatda ishlaydi. Agar foydalanuvchi sahifa bilan hech qanday muloqot qilmasa, ba'zi brauzerlar ogohlantirishni ko'rsatmaydi.</p>
+<h2>navigator.sendBeacon</h2>
+<p>Foydalanuvchi sahifadan ketayotganda ko'pincha serverga analitika yoki statistika ma'lumotlarini yuborishimiz kerak bo'ladi. Muammo shundaki, <code>unload</code>da oddiy <code>fetch</code> yoki <code>XMLHttpRequest</code> so'rovi ko'pincha bekor qilinadi, chunki sahifa yopilib qolyapti.</p>
+<p>Bu vazifa uchun maxsus <code>navigator.sendBeacon(url, data)</code> metodi mavjud. U ma'lumotni fon rejimida yuboradi va sahifa yopilsa ham so'rovni yakunlaydi:</p>
+<pre class="code"><code>let analyticsData = { /* ma'lumotlar obyekti */ };
+
+window.addEventListener('unload', function() {
+  navigator.sendBeacon('/analytics', JSON.stringify(analyticsData));
+});</code></pre>
+<ul><li>So'rov <strong>POST</strong> metodi bilan yuboriladi;</li><li>Nafaqat satr, balki forma va boshqa formatlarni ham yuborish mumkin, lekin odatda satrli obyekt yuboriladi;</li><li>Ma'lumot hajmi 64 KB dan oshmasligi kerak;</li><li>So'rov tugaganini kutib bo'lmaydi — <code>sendBeacon</code> hech qanday javob (response) qaytarmaydi va <code>unload</code>da javobni kutib bo'lmaydi ham.</li></ul>
+<div class="tip"><code>sendBeacon</code> yuborilgach, brauzer sahifa yopilgan taqdirda ham so'rovni yakunlashga harakat qiladi. Shu sababdan ketish paytida analitika yuborishning eng ishonchli usuli aynan shu. Zamonaviy alternativa: <code>fetch(url, { keepalive: true })</code> ham xuddi shunday vazifani bajaradi.</div>
+<h2>Xulosa</h2>
+<p>Sahifa hayot sikli hodisalari:</p>
+<ul><li><code>DOMContentLoaded</code> (<code>document</code>da) — DOM tayyor, lekin rasm/stillar hali yuklanmagan bo'lishi mumkin. Skriptlarni kutadi (<code>async</code> va dinamik skriptlardan tashqari). Element bilan ishlashni shu yerda boshlash mumkin;</li><li><code>load</code> (<code>window</code>da) — nafaqat DOM, balki barcha tashqi resurslar (rasm, stil) yuklandi. Endi o'lchamlar aniq;</li><li><code>beforeunload</code> (<code>window</code>da) — foydalanuvchi ketmoqchi. Bekor qilinsa, brauzer tasdiq so'raydi (matnni maxsuslashtirib bo'lmaydi);</li><li><code>unload</code> (<code>window</code>da) — foydalanuvchi deyarli ketdi. Faqat oddiy amallar, ketish ma'lumotini <code>navigator.sendBeacon</code> orqali yuborish mumkin.</li></ul>
+<p><code>document.readyState</code> orqali istalgan paytda holatni tekshirish mumkin: <code>loading</code>, <code>interactive</code> yoki <code>complete</code>. Bu skript kech ishga tushganda <code>DOMContentLoaded</code> o'tib ketgan-ketmaganini bilishga yordam beradi.</p>
+<nav class="lesson-nav">
+  <a href="form-submit.html"><span class="dir">← Oldingi</span><span class="ttl">Forma yuborish: submit hodisasi va metod</span></a>
+  <a class="next" href="script-async-defer.html"><span class="dir">Keyingi →</span><span class="ttl">Skriptlar: async, defer</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 JavaScript.info — O'zbekcha variant. Ta'lim maqsadida.</span>
+    <span><a href="../index.html">Bosh sahifa</a></span>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+</body>
+</html>
