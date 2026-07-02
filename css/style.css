@@ -149,6 +149,13 @@ img { max-width: 100%; }
 }
 .side-search input:focus { outline: 2px solid var(--brand); outline-offset: -1px; background: #fff; }
 .side-noresult { color: var(--muted); font-size: .85rem; padding: 8px 10px; }
+/* Dars ICHIDAN (matndan) topilgan natijaga belgi */
+.sidebar li.content-hit > a::after {
+  content: " · matn ichida";
+  color: var(--muted);
+  font-size: .72em;
+  font-style: italic;
+}
 
 /* Qism (part) — birinchi daraja yig'iladigan */
 .sidebar .part-group { margin: 2px 0; }

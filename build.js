@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "3";
+const ASSET_VER = "4";
 
 const BRAND = {
   name: "Kodla",
@@ -97,7 +97,7 @@ function sidebar(parts, currentSlug, depth) {
   // Jonli qidiruv maydoni
   html +=
     '  <div class="side-search">\n' +
-    '    <input type="search" id="lessonSearch" placeholder="🔍 Dars qidirish..." ' +
+    '    <input type="search" id="lessonSearch" placeholder="🔍 Qidirish (mavzu + matn)..." ' +
     'aria-label="Dars qidirish" autocomplete="off">\n' +
     '    <div class="side-noresult" hidden>Hech narsa topilmadi</div>\n' +
     "  </div>\n";
@@ -106,7 +106,9 @@ function sidebar(parts, currentSlug, depth) {
     const partHasCurrent = part.chapters.some((ch) =>
       ch.lessons.some((l) => l.slug === currentSlug)
     );
-    const openPart = partHasCurrent || (currentSlug == null && pi === 0);
+    // Qismlar sukut bo'yicha yig'iq turadi; faqat joriy dars qaysi qismda
+    // bo'lsa, o'sha qism ochiladi. Bosh sahifada hammasi yig'iq (toza 1-2-3 ro'yxat).
+    const openPart = partHasCurrent;
     html += '  <details class="part-group"' + (openPart ? " open" : "") + ">\n";
     html += '    <summary class="part-summary">' + esc(part.name) + "</summary>\n";
     for (const ch of part.chapters) {
@@ -215,6 +217,35 @@ function renderBody(body) {
   if (typeof body === "string") return body; // orqaga moslik
   if (!Array.isArray(body)) return "";
   return body.map(renderBlock).join("\n");
+}
+
+/* Dars tanasidan toza matn ajratib olish (qidiruv indeksi uchun).
+   HTML teglari va entity'lar olib tashlanadi, kichik harfga o'giriladi. */
+function lessonText(lesson) {
+  const body = lesson.body;
+  if (!Array.isArray(body)) return "";
+  const chunks = [];
+  for (const b of body) {
+    if (typeof b === "string") chunks.push(b);
+    else if (b.lead != null) chunks.push(b.lead);
+    else if (b.p != null) chunks.push(b.p);
+    else if (b.h2 != null) chunks.push(b.h2);
+    else if (b.h3 != null) chunks.push(b.h3);
+    else if (b.ul != null) chunks.push(b.ul.join(" "));
+    else if (b.ol != null) chunks.push(b.ol.join(" "));
+    else if (b.code != null) chunks.push(b.code);
+    else if (b.pg != null) chunks.push(b.pg);
+    else if (b.note != null) chunks.push(b.note);
+    else if (b.tip != null) chunks.push(b.tip);
+    else if (b.warn != null) chunks.push(b.warn);
+    else if (b.html != null) chunks.push(b.html);
+  }
+  let t = chunks.join(" ");
+  t = t.replace(/<[^>]+>/g, " ")
+       .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
+       .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&[a-z]+;/g, " ");
+  t = t.replace(/\s+/g, " ").trim().toLowerCase();
+  return t;
 }
 
 /* Ba'zi kontent fayllarida o'zbekcha apostrof (') xato ravishda
@@ -382,10 +413,20 @@ function main() {
   // Bosh sahifa
   fs.writeFileSync(path.join(ROOT, "index.html"), renderIndex(parts, flat.length));
 
+  // Qidiruv indeksi (dars ichidagi so'zlarni topish uchun)
+  const searchIndex = [];
+  for (const ch of chapters) {
+    for (const l of ch.lessons) {
+      searchIndex.push({ slug: l.slug, title: l.title, chapter: ch.chapter, text: lessonText(l) });
+    }
+  }
+  fs.writeFileSync(path.join(ROOT, "search-index.json"), JSON.stringify(searchIndex));
+
   console.log("✅ Generatsiya tugadi:");
   console.log("   Qismlar:  " + parts.length);
   console.log("   Boblar:   " + chapters.length);
   console.log("   Darslar:  " + count);
+  console.log("   Qidiruv indeksi: search-index.json (" + searchIndex.length + " dars)");
 }
 
 main();

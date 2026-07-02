@@ -180,24 +180,51 @@
   var details = Array.prototype.slice.call(sidebar.querySelectorAll("details"));
   var origOpen = details.map(function (d) { return d.open; });
 
+  // Har bir <li> uchun slug'ni oldindan hisoblab olamiz
+  var items = Array.prototype.slice.call(sidebar.querySelectorAll(".chapter-group li")).map(function (li) {
+    var a = li.querySelector("a");
+    var href = a ? a.getAttribute("href") : "";
+    var slug = href.split("/").pop().replace(".html", "");
+    return { li: li, slug: slug, title: li.textContent.toLowerCase() };
+  });
+
+  // Dars ichidagi matnni qidirish uchun indeks (bir marta yuklanadi)
+  var contentIndex = null, indexLoading = false;
+  function loadIndex(cb) {
+    if (contentIndex) { cb(); return; }
+    if (indexLoading) return;
+    indexLoading = true;
+    var base = /\/lessons\//.test(location.pathname) ? "../" : "";
+    fetch(base + "search-index.json")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        contentIndex = {};
+        data.forEach(function (it) { contentIndex[it.slug] = it.text; });
+        cb();
+      })
+      .catch(function () { contentIndex = {}; cb(); });
+  }
+
   function reset() {
     sidebar.querySelectorAll(".hidden").forEach(function (el) { el.classList.remove("hidden"); });
     details.forEach(function (d, i) { d.open = origOpen[i]; });
     if (noResult) noResult.hidden = true;
   }
 
-  input.addEventListener("input", function () {
-    var q = input.value.trim().toLowerCase();
-    if (!q) { reset(); return; }
-
+  function applyFilter(q) {
     var anyMatch = false;
     parts.forEach(function (part) {
       var partMatch = false;
       part.querySelectorAll(".chapter-group").forEach(function (ch) {
         var chMatch = false;
         ch.querySelectorAll("li").forEach(function (li) {
-          var hit = li.textContent.toLowerCase().indexOf(q) !== -1;
+          var slug = li.getAttribute("data-slug");
+          var title = li.textContent.toLowerCase();
+          var inContent = contentIndex && contentIndex[slug] && contentIndex[slug].indexOf(q) !== -1;
+          var hit = title.indexOf(q) !== -1 || inContent;
           li.classList.toggle("hidden", !hit);
+          // Dars ichidan topilganini belgilaymiz
+          li.classList.toggle("content-hit", !!(inContent && title.indexOf(q) === -1));
           if (hit) chMatch = true;
         });
         ch.classList.toggle("hidden", !chMatch);
@@ -209,6 +236,20 @@
       if (partMatch) anyMatch = true;
     });
     if (noResult) noResult.hidden = anyMatch;
+  }
+
+  // slug'larni <li>ga yozib qo'yamiz (applyFilter tez ishlashi uchun)
+  items.forEach(function (it) { it.li.setAttribute("data-slug", it.slug); });
+
+  input.addEventListener("input", function () {
+    var q = input.value.trim().toLowerCase();
+    if (!q) { reset(); return; }
+    applyFilter(q);                       // darhol: sarlavha (va indeks yuklangan bo'lsa, matn)
+    if (!contentIndex) {
+      loadIndex(function () {
+        if (input.value.trim().toLowerCase() === q) applyFilter(q);  // matn bo'yicha qayta filtrlash
+      });
+    }
   });
 
   // Esc tugmasi qidiruvni tozalaydi
