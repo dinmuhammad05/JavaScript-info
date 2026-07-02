@@ -488,17 +488,72 @@ pre.code code {
 
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
+
+  /* Yon menyu — kontent USTIDA ochiladigan chap "drawer" (overlay) */
   .sidebar {
-    position: static;
-    max-height: none;
-    display: none;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 86%;
+    max-width: 340px;
+    max-height: 100vh;
+    margin: 0;
+    padding: 16px 16px 40px;
+    background: var(--bg);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, .25);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    border: none;
+    display: block;          /* ko'rinish transform bilan boshqariladi */
   }
-  .sidebar.open { display: block; }
+  .sidebar.open { transform: translateX(0); }
+
+  /* Orqa fon (backdrop) — bosilganda menyu yopiladi */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    z-index: 250;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .sidebar-backdrop.show { opacity: 1; visibility: visible; }
+
+  /* Menyu ochiq bo'lganda sahifa aylanmasin */
+  body.nav-open { overflow: hidden; }
+
+  /* Drawer ichidagi yopish tugmasi */
+  .side-close {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 6px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .side-close button {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 4px 10px;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
   .menu-toggle { display: inline-block; }
   .site-nav { display: none; }
   .hero { padding: 40px 26px; }
   .hero h1 { font-size: 2rem; }
   .hero::after { display: none; }
 }
+
+/* Yopish paneli faqat mobil drawerda ko'rinadi */
+.side-close { display: none; }

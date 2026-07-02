@@ -6,12 +6,45 @@
 (function () {
   "use strict";
 
-  /* --------- Mobil yon menyu ochish/yopish --------- */
+  /* --------- Mobil yon menyu: kontent ustida "drawer" (overlay) --------- */
   const toggle = document.querySelector(".menu-toggle");
   const sidebar = document.querySelector(".sidebar");
   if (toggle && sidebar) {
+    // Orqa fon (backdrop) — bosilganda menyu yopiladi
+    const backdrop = document.createElement("div");
+    backdrop.className = "sidebar-backdrop";
+    document.body.appendChild(backdrop);
+
+    // Drawer tepasiga yopish tugmasi (faqat mobil ko'rinadi)
+    const closeBar = document.createElement("div");
+    closeBar.className = "side-close";
+    closeBar.innerHTML = "<span>Mavzular</span><button aria-label=\"Yopish\">✕</button>";
+    sidebar.insertBefore(closeBar, sidebar.firstChild);
+
+    function openNav() {
+      sidebar.classList.add("open");
+      backdrop.classList.add("show");
+      document.body.classList.add("nav-open");
+    }
+    function closeNav() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("show");
+      document.body.classList.remove("nav-open");
+    }
+
     toggle.addEventListener("click", function () {
-      sidebar.classList.toggle("open");
+      if (sidebar.classList.contains("open")) closeNav();
+      else openNav();
+    });
+    backdrop.addEventListener("click", closeNav);
+    closeBar.querySelector("button").addEventListener("click", closeNav);
+    // Dars havolasiga bosilganda ham yopamiz
+    sidebar.addEventListener("click", function (e) {
+      if (e.target.closest("a")) closeNav();
+    });
+    // Escape tugmasi menyuni yopadi
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && sidebar.classList.contains("open")) closeNav();
     });
   }
 
