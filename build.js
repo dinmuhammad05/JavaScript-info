@@ -22,6 +22,10 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
 /* ---------- Brend va muallif sozlamalari ----------
    Nomni o'zgartirish uchun faqat shu yerni tahrirlang — butun sayt
    bo'ylab avtomatik yangilanadi. */
+/* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
+   CSS yoki JS o'zgarganda bu raqamni oshiring. */
+const ASSET_VER = "3";
+
 const BRAND = {
   name: "Kodla",
   mark: "K",                                  // logotipdagi harf
@@ -63,7 +67,7 @@ function head(title, desc, depth) {
     '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
     "  <title>" + title + "</title>\n" +
     '  <meta name="description" content="' + (desc || "").replace(/"/g, "&quot;") + '">\n' +
-    '  <link rel="stylesheet" href="' + base + 'css/style.css">\n' +
+    '  <link rel="stylesheet" href="' + base + 'css/style.css?v=' + ASSET_VER + '">\n' +
     "</head>\n<body>\n"
   );
 }
@@ -133,7 +137,7 @@ function footer(depth) {
     '<a href="' + BRAND.github + '" target="_blank" rel="noopener">GitHub</a> · ' +
     '<a href="' + BRAND.telegram + '" target="_blank" rel="noopener">Telegram</a></span>\n' +
     "  </div>\n</footer>\n" +
-    '<script src="' + base + 'js/main.js"></script>\n' +
+    '<script src="' + base + 'js/main.js?v=' + ASSET_VER + '"></script>\n' +
     "</body>\n</html>\n"
   );
 }
