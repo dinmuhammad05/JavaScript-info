@@ -395,10 +395,83 @@ module.exports = {
           "Ishonchsiz bo'lsangiz DP ga tayaning: u ehtiyotkorroq. Greedy ni esa faqat to'g'riligiga ishonchingiz komil bo'lsa ishlating."
         ] },
 
+        { h2: "Misol: fraksion ryukzak (Fractional Knapsack)" },
+        { p: "Sizda sig'imi cheklangan ryukzak va bir nechta narsa bor — har birining vazni va qiymati ma'lum. <strong>Fraksion</strong> variantda narsaning bir qismini ham olsa bo'ladi (masalan oltin kukunini). Maksimal qiymatni yig'ish uchun ochko'z tanlov: har kilogrammga eng ko'p qiymat beradigan narsani (ya'ni <code>qiymat / vazn</code> nisbati eng kattasini) birinchi oling." },
+        { pg: [
+          "function fraksionRyukzak(narsalar, sigim) {",
+          "  // qiymat/vazn nisbati bo'yicha kamayish tartibida saralaymiz",
+          "  const saralangan = [...narsalar].sort(",
+          "    (a, b) => (b.qiymat / b.vazn) - (a.qiymat / a.vazn)",
+          "  );",
+          "  let jamiQiymat = 0;",
+          "  let qolgan = sigim;",
+          "  for (const n of saralangan) {",
+          "    if (qolgan <= 0) break;",
+          "    const olinadi = Math.min(n.vazn, qolgan); // qismini olish mumkin",
+          "    jamiQiymat += n.qiymat * (olinadi / n.vazn);",
+          "    qolgan -= olinadi;",
+          "  }",
+          "  return jamiQiymat;",
+          "}",
+          "",
+          "const narsalar = [",
+          "  { nom: 'oltin',  vazn: 10, qiymat: 60 },  // nisbat 6.0",
+          "  { nom: 'kumush', vazn: 20, qiymat: 100 }, // nisbat 5.0",
+          "  { nom: 'bronza', vazn: 30, qiymat: 120 }  // nisbat 4.0",
+          "];",
+          "console.log('Maksimal qiymat:', fraksionRyukzak(narsalar, 50));"
+        ].join("\n"), file: "ryukzak.js" },
+        { p: "Sig'im 50: to'liq oltin (10) va kumush (20) olinadi, qolgan 20 ga bronzaning uchdan ikki qismi. Jami qiymat = 60 + 100 + 80 = <strong>240</strong>. Bu yerda ochko'z tanlov isbotlangan tarzda optimal." },
+        { warn: "Diqqat: agar narsani <strong>bo'lish mumkin bo'lmasa</strong> (0/1 knapsack — yo butun olasan, yo umuman olmaysan), ochko'z yondashuv aldaydi va DP kerak bo'ladi. \"Fraksion\" so'zi bu yerda kalit — u ochko'zlikni to'g'ri qiladi." },
+
+        { h2: "Misol: sakrash o'yini (Jump Game)" },
+        { p: "Massiv berilgan; har katakdagi son — o'sha katakdan oldinga qancha sakrash mumkinligi. Birinchi katakdan oxirigacha yetib borish mumkinmi? Ochko'z g'oya: har qadamda <strong>hozirgacha yetib borish mumkin bo'lgan eng uzoq indeks</strong>ni kuzatib borish yetarli." },
+        { pg: [
+          "function yetibBoradimi(nums) {",
+          "  let engUzoq = 0; // shu paytgacha yetsa bo'ladigan eng uzoq indeks",
+          "  for (let i = 0; i < nums.length; i++) {",
+          "    if (i > engUzoq) return false; // bu katakka umuman yetib bo'lmaydi",
+          "    engUzoq = Math.max(engUzoq, i + nums[i]);",
+          "  }",
+          "  return true;",
+          "}",
+          "",
+          "console.log(yetibBoradimi([2, 3, 1, 1, 4])); // true",
+          "console.log(yetibBoradimi([3, 2, 1, 0, 4])); // false (indeks 3 da qotib qolamiz)"
+        ].join("\n"), file: "jump-game.js" },
+        { p: "Bu yerda barcha yo'llarni sinab ko'rish (backtracking) <code>O(2^n)</code> bo'lardi. Ochko'z yechim esa bitta o'tishda — <code>O(n)</code> vaqt, <code>O(1)</code> xotira. Har qadamda faqat \"eng uzoq yeta oladigan joy\"ni yangilash kifoya." },
+
+        { h2: "Ochko'z tanlovni qanday isbotlash mumkin" },
+        { p: "Ochko'z algoritmning eng qiyin qismi — kod emas, balki uning <strong>to'g'riligini isbotlash</strong>. Amaliyotda eng ko'p qo'llaniladigan usul — <em>almashtirish argumenti</em> (exchange argument):" },
+        { ol: [
+          "Faraz qiling, qandaydir optimal yechim bor, lekin u ochko'z tanlovdan farq qiladi.",
+          "Ko'rsating: optimal yechimdagi birinchi \"farqli\" qadamni ochko'z tanlovga <strong>almashtirsak</strong>, yechim yomonlashmaydi (balki shunchalik yaxshi qoladi).",
+          "Demak ochko'z tanlovni o'z ichiga olgan optimal yechim ham mavjud — ya'ni ochko'zlik xato qilmaydi."
+        ] },
+        { p: "Agar bunday almashtirishni asoslay olsangiz — ochko'z ishlaydi. Asoslay olmasangiz, ehtimol masala DP ni talab qiladi. Amalda tez tekshiruv: bir nechta kichik va \"noqulay\" misolda ochko'z javobini brute-force yoki DP javobi bilan solishtiring." },
+
+        { h2: "Chegaraviy holatlar va tipik xatolar" },
+        { ul: [
+          "<strong>Bo'sh kirish:</strong> narsalar/tadbirlar ro'yxati bo'sh bo'lsa, natija 0 yoki bo'sh ro'yxat bo'lishi kerak — sikl umuman ishlamaydi, bu odatda to'g'ri.",
+          "<strong>Bitta element:</strong> har doim tanlanadi — alohida tekshiring.",
+          "<strong>Teng qiymatlar (ties):</strong> saralashda teng nisbat/vaqtli elementlar tartibi natijaga ta'sir qilishi mumkin — masala shartiga qarab hal qiling.",
+          "<strong>Saralashni unutish:</strong> ko'p ochko'z algoritm avval saralashga tayanadi; saralamasangiz noto'g'ri javob olasiz."
+        ] },
+        { warn: "Eng keng tarqalgan xato — <strong>noto'g'ri mezon bo'yicha saralash</strong>. Masalan faoliyat rejalashtirishda boshlanish vaqti bo'yicha saralash noto'g'ri; <strong>tugash</strong> vaqti bo'yicha saralash kerak. Ryukzakda esa alohida vazn yoki alohida qiymat emas, aynan <code>qiymat/vazn</code> nisbati bo'yicha." },
+
         { h2: "Murakkablik" },
         { p: "Ochko'z algoritmlar ko'pincha juda tez, chunki ular ma'lumot ustidan bir marta o'tadi. Odatda asosiy narx <strong>saralash</strong>dan keladi: tadbirlarni tugash vaqti bo'yicha, tangalarni kattaligi bo'yicha saralash <code>O(n log n)</code> ni oladi, keyin bitta chiziqli o'tish <code>O(n)</code>." },
         { p: "Shuning uchun tipik ochko'z algoritm murakkabligi <strong>O(n log n)</strong>. Bu ko'p DP yechimlaridan (masalan <code>O(n * summa)</code>) tezroq — agar greedy to'g'ri ishlasa, bu katta yutuq." },
 
+        { h2: "Qachon greedy haqida o'ylash kerak" },
+        { p: "Intervyu yoki real masalada quyidagi belgilar ochko'z yondashuvga ishora qilishi mumkin:" },
+        { ul: [
+          "Masalada \"<strong>maksimal</strong>\" yoki \"<strong>minimal</strong>\" nimadir so'ralsa va har qadamda mustaqil tanlov qilish mumkin bo'lsa.",
+          "\"Eng erta tugaydigan\", \"eng katta\", \"eng arzon\" kabi <strong>tabiiy tartiblash</strong> mezoni ko'rinib tursa (ko'pincha avval saralash kerak).",
+          "Qismini olish mumkin bo'lgan (fraksion) resurs taqsimoti.",
+          "Bir o'tishda hal bo'ladigan, orqaga qaytish shart bo'lmagan masala."
+        ] },
+        { note: "Agar ochko'z tanlovni isbotlay olmasangiz yoki kichik misolda u aldasa — bu DP masalasi bo'lishi ehtimoli katta. Ikkalasi ham optimallashtirish uchun, lekin greedy tezroq va faqat ba'zi masalalarda to'g'ri." },
         { tip: "Ochko'z algoritm tez va chiroyli, lekin har doim to'g'ri emas. Kod yozishdan oldin uning to'g'riligini isbotlang, yoki kichik misollarda DP javobi bilan solishtirib tekshiring. \"Ishlaydiganga o'xshaydi\" — bu hali isbot emas." }
       ]
     },
