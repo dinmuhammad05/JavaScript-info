@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MongoDB (NoSQL) — Kodla</title>
   <meta name="description" content="MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Ma'lumotlar bazalari</div>
 <h1>MongoDB (NoSQL)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#kolleksiya-va-hujjat">Kolleksiya va hujjat</a></li>
+<li class="lvl2"><a href="#sql-bilan-atamalar-taqqosi">SQL bilan atamalar taqqosi</a></li>
+<li class="lvl2"><a href="#hujjat-qo-shish-insertone-va-insertmany">Hujjat qo'shish: insertOne va insertMany</a></li>
+<li class="lvl2"><a href="#ma-lumot-o-qish-find-va-findone">Ma'lumot o'qish: find va findOne</a></li>
+<li class="lvl2"><a href="#so-rov-operatorlari-gt-lt-in-va-boshqalar">So'rov operatorlari: $gt, $lt, $in va boshqalar</a></li>
+<li class="lvl2"><a href="#ma-lumotni-o-zgartirish-updateone-va-set">Ma'lumotni o'zgartirish: updateOne va $set</a></li>
+<li class="lvl2"><a href="#hujjatni-o-chirish-deleteone-va-deletemany">Hujjatni o'chirish: deleteOne va deleteMany</a></li>
+<li class="lvl2"><a href="#mongodb-ning-kuchli-va-zaif-tomonlari">MongoDB'ning kuchli va zaif tomonlari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">MongoDB — eng mashhur hujjatli NoSQL baza. U ma'lumotni jadval emas, JSON-simon <strong>hujjatlar</strong> ko'rinishida saqlaydi. Node.js dasturchilari uni yaxshi ko'radi, chunki hujjatlar JavaScript obyektlariga juda o'xshaydi. Ushbu darsda MongoDB'ning asosiy amallarini o'rganamiz va ularni SQL bilan solishtiramiz.</p>
-<h2>Kolleksiya va hujjat</h2>
+<h2 id="kolleksiya-va-hujjat">Kolleksiya va hujjat</h2>
 <p>MongoDB'da ma'lumot ikki darajali tuzilishda saqlanadi:</p>
 <ul><li><strong>Hujjat</strong> (document) — bitta yozuv, JSON obyektiga o'xshash. SQL'dagi "qator" (row) ga to'g'ri keladi;</li><li><strong>Kolleksiya</strong> (collection) — bir turdagi hujjatlar to'plami. SQL'dagi "jadval" (table) ga to'g'ri keladi;</li><li><strong>Baza</strong> (database) — kolleksiyalar to'plami.</li></ul>
 <p>Hujjat quyidagicha ko'rinadi (BSON, ya'ni JSON'ning ichki formati):</p>
@@ -609,7 +626,7 @@
   "hobbies": ["futbol", "kitob"]
 }</code></pre>
 <div class="note">Har bir hujjat avtomatik <code>_id</code> maydoniga ega bo'ladi — bu SQL'dagi PRIMARY KEY'ga o'xshaydi. Agar siz <code>_id</code> bermasangiz, MongoDB o'zi <code>ObjectId</code> — takrorlanmaydigan maxsus identifikator yaratadi.</div>
-<h2>SQL bilan atamalar taqqosi</h2>
+<h2 id="sql-bilan-atamalar-taqqosi">SQL bilan atamalar taqqosi</h2>
 <p>MongoDB'ga o'tishdan oldin atamalarni SQL bilan solishtirib olaylik:</p>
 <pre class="code"><code>SQL              MongoDB
 -------------    ----------------------
@@ -623,7 +640,7 @@ SELECT           find / findOne
 UPDATE           updateOne / updateMany
 DELETE           deleteOne / deleteMany
 WHERE            filtr obyekti { ... }</code></pre>
-<h2>Hujjat qo'shish: insertOne va insertMany</h2>
+<h2 id="hujjat-qo-shish-insertone-va-insertmany">Hujjat qo'shish: insertOne va insertMany</h2>
 <p>Yangi hujjat qo'shish uchun <code>insertOne</code> ishlatiladi. Buyruqlar JavaScript obyekti sifatida yoziladi:</p>
 <pre class="code"><code>db.users.insertOne({
   name: "Ali",
@@ -636,7 +653,7 @@ WHERE            filtr obyekti { ... }</code></pre>
   { name: "Guli", email: "guli@mail.com", age: 22 }
 ]);</code></pre>
 <p>SQL bilan solishtiring: SQL'da avval <code>CREATE TABLE</code> bilan tuzilishni belgilash kerak edi. MongoDB'da esa hujjatni to'g'ridan-to'g'ri qo'shasiz — tuzilish oldindan belgilanmaydi.</p>
-<h2>Ma'lumot o'qish: find va findOne</h2>
+<h2 id="ma-lumot-o-qish-find-va-findone">Ma'lumot o'qish: find va findOne</h2>
 <p>Hujjatlarni o'qish uchun <code>find</code> ishlatiladi. Bo'sh <code>{}</code> filtr barcha hujjatlarni qaytaradi (SQL'dagi <code>SELECT *</code> kabi):</p>
 <pre class="code"><code>db.users.find({});          // barcha foydalanuvchilar
 db.users.findOne({});       // faqat bitta (birinchi) hujjat</code></pre>
@@ -650,7 +667,7 @@ db.users.find({ age: 25 });</code></pre>
 <pre class="code"><code>// SQL:  ... WHERE name = 'Ali' AND age = 25;
 db.users.find({ name: "Ali", age: 25 });</code></pre>
 <div class="tip">Faqat kerakli maydonlarni olish uchun <code>find</code>ning ikkinchi argumenti (projection) beriladi: <code>db.users.find({}, { name: 1, email: 1 })</code> — bu faqat <code>name</code> va <code>email</code> (hamda <code>_id</code>) qaytaradi. Bu SQL'dagi <code>SELECT name, email</code> ga o'xshaydi.</div>
-<h2>So'rov operatorlari: $gt, $lt, $in va boshqalar</h2>
+<h2 id="so-rov-operatorlari-gt-lt-in-va-boshqalar">So'rov operatorlari: $gt, $lt, $in va boshqalar</h2>
 <p>"Katta", "kichik", "ro'yxatda" kabi shartlar uchun MongoDB maxsus operatorlardan foydalanadi. Ular <code>$</code> belgisi bilan boshlanadi va obyekt ichida yoziladi:</p>
 <ul><li><code>$gt</code> — katta (greater than), <code>$gte</code> — katta yoki teng;</li><li><code>$lt</code> — kichik (less than), <code>$lte</code> — kichik yoki teng;</li><li><code>$ne</code> — teng emas (not equal);</li><li><code>$in</code> — ro'yxatdagi qiymatlardan biri;</li><li><code>$nin</code> — ro'yxatda yo'q.</li></ul>
 <pre class="code"><code>// SQL:  ... WHERE age &gt; 25;
@@ -670,7 +687,7 @@ db.users.find({
   ]
 });</code></pre>
 <div class="note">Saralash va cheklash ham bor: <code>db.users.find().sort({ age: -1 }).limit(3)</code> — yosh bo'yicha kamayish tartibida (<code>-1</code>) 3 ta hujjat. Bu SQL'dagi <code>ORDER BY age DESC LIMIT 3</code> ga teng. <code>1</code> — o'sish, <code>-1</code> — kamayish.</div>
-<h2>Ma'lumotni o'zgartirish: updateOne va $set</h2>
+<h2 id="ma-lumotni-o-zgartirish-updateone-va-set">Ma'lumotni o'zgartirish: updateOne va $set</h2>
 <p>Hujjatni o'zgartirish uchun <code>updateOne</code> ikki argument oladi: (1) qaysi hujjat(lar)ni topish (filtr), (2) qanday o'zgartirish. O'zgartirishda <code>$set</code> operatori ishlatiladi:</p>
 <pre class="code"><code>// SQL:  UPDATE users SET age = 26 WHERE name = 'Ali';
 db.users.updateOne(
@@ -685,7 +702,7 @@ db.users.updateMany(
   { $set: { is_active: false } }
 );</code></pre>
 <div class="tip">Boshqa foydali o'zgartirish operatorlari: <code>$inc</code> — sonni oshiradi/kamaytiradi (<code>{ $inc: { age: 1 } }</code> — yoshni 1ga oshiradi), <code>$push</code> — massivga element qo'shadi, <code>$unset</code> — maydonni o'chiradi.</div>
-<h2>Hujjatni o'chirish: deleteOne va deleteMany</h2>
+<h2 id="hujjatni-o-chirish-deleteone-va-deletemany">Hujjatni o'chirish: deleteOne va deleteMany</h2>
 <p>O'chirish uchun <code>deleteOne</code> (birinchi mos hujjatni) yoki <code>deleteMany</code> (barcha mos hujjatlarni) ishlatiladi:</p>
 <pre class="code"><code>// SQL:  DELETE FROM users WHERE name = 'Guli';
 db.users.deleteOne({ name: "Guli" });
@@ -693,11 +710,11 @@ db.users.deleteOne({ name: "Guli" });
 // SQL:  DELETE FROM users WHERE age &lt; 18;
 db.users.deleteMany({ age: { $lt: 18 } });</code></pre>
 <div class="warn"><code>db.users.deleteMany({})</code> — bo'sh filtr bilan chaqirilsa, kolleksiyadagi BARCHA hujjatlarni o'chiradi! SQL'dagi <code>DELETE FROM users;</code> kabi ehtiyot bo'ling.</div>
-<h2>MongoDB'ning kuchli va zaif tomonlari</h2>
+<h2 id="mongodb-ning-kuchli-va-zaif-tomonlari">MongoDB'ning kuchli va zaif tomonlari</h2>
 <p>MongoDB har doim ham eng yaxshi tanlov emas. Uni tanlashdan oldin farqlarni bilish muhim:</p>
 <ul><li><strong>Kuchli:</strong> erkin tuzilish (tez o'zgaradigan ma'lumot uchun qulay), ichma-ich murakkab obyektlarni bemalol saqlaydi, JavaScript bilan tabiiy ishlaydi, katta hajmda gorizontal kengayadi;</li><li><strong>Zaif:</strong> murakkab bog'lanishlar (JOIN) uchun SQL kabi qulay emas, ma'lumot ko'pincha takrorlanadi, moliyaviy operatsiyalar uchun (tranzaksiyalar) SQL bazalar kuchliroq va sinovdan o'tgan.</li></ul>
 <div class="note">Ko'p JOIN va murakkab hisobotlar kerak bo'lsa — SQL bazani tanlang. Ma'lumot tuzilishi tez o'zgarsa yoki hujjat ko'rinishi tabiiy bo'lsa (masalan, mahsulot katalogi turli xususiyatlar bilan) — MongoDB qulay bo'lishi mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>MongoDB ma'lumotni <strong>kolleksiya</strong> (jadval) va <strong>hujjat</strong> (qator) ko'rinishida saqlaydi; hujjat JSON-simon;</li><li><code>insertOne</code>/<code>insertMany</code> — qo'shadi; tuzilish oldindan belgilanmaydi;</li><li><code>find</code>/<code>findOne</code> — o'qiydi; filtr obyekti <code>WHERE</code> vazifasini bajaradi;</li><li>Operatorlar: <code>$gt</code>, <code>$lt</code>, <code>$gte</code>, <code>$lte</code>, <code>$in</code>, <code>$ne</code>, <code>$or</code>;</li><li><code>updateOne</code> + <code>$set</code> — o'zgartiradi (<code>$set</code>ni unutmang!); <code>deleteOne</code>/<code>deleteMany</code> — o'chiradi;</li><li>MongoDB erkin tuzilish uchun qulay, lekin murakkab bog'lanish va tranzaksiyalarda SQL bazalar kuchliroq.</li></ul>
 <nav class="lesson-nav">
   <a href="sql-join.html"><span class="dir">← Oldingi</span><span class="ttl">SQL: bog'lanishlar va JOIN</span></a>
@@ -711,6 +728,6 @@ db.users.deleteMany({ age: { $lt: 18 } });</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

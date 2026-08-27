@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Getter va setterlar — Kodla</title>
   <meta name="description" content="Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,26 @@
 <main class="content article">
 <div class="crumbs">Obyekt xossalari konfiguratsiyasi</div>
 <h1>Getter va setterlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#getter-va-setter-nima">Getter va setter nima?</a></li>
+<li class="lvl2"><a href="#obyekt-literalida-getter-va-setter">Obyekt literalida getter va setter</a></li>
+<li class="lvl2"><a href="#setter-qo-shish">Setter qo'shish</a></li>
+<li class="lvl2"><a href="#aksessor-deskriptorlari">Aksessor deskriptorlari</a></li>
+<li class="lvl2"><a href="#object-defineproperty-bilan-getter-setter">Object.defineProperty bilan getter/setter</a></li>
+<li class="lvl2"><a href="#aksessorlar-validatsiya-uchun">Aksessorlar validatsiya uchun</a></li>
+<li class="lvl2"><a href="#aksessorlar-moslashuvchanlik-uchun">Aksessorlar — moslashuvchanlik uchun</a></li>
+<li class="lvl2"><a href="#hisoblangan-computed-xossa">Hisoblangan (computed) xossa</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Obyekt xossalari ikki turga bo'linadi. Birinchisi — biz odatda ishlatadigan <strong>ma'lumot xossalari</strong> (data properties). Ikkinchisi — yangi tur: <strong>aksessor xossalari</strong> (accessor properties). Ular aslida qiymatni o'qish va yozishni boshqaradigan funksiyalardir, lekin tashqaridan oddiy xossaga o'xshaydi.</p>
-<h2>Getter va setter nima?</h2>
+<h2 id="getter-va-setter-nima">Getter va setter nima?</h2>
 <p>Aksessor xossalari ikkita maxsus metod bilan ifodalanadi:</p>
 <ul><li><strong>getter</strong> — <code>get</code> so'zi bilan belgilanadi; xossani <em>o'qiganimizda</em> ishga tushadi va qiymat qaytaradi;</li><li><strong>setter</strong> — <code>set</code> so'zi bilan belgilanadi; xossaga qiymat <em>yozganimizda</em> ishga tushadi va argument sifatida yangi qiymatni oladi.</li></ul>
 <p>Tashqi kod uchun aksessor xossa oddiy xossaga o'xshaydi: siz <code>obj.propName</code> deb o'qiysiz va <code>obj.propName = value</code> deb yozasiz — qavslar yo'q, xuddi oddiy xossadek. Ammo ostida funksiyalar ishlaydi.</p>
-<h2>Obyekt literalida getter va setter</h2>
+<h2 id="obyekt-literalida-getter-va-setter">Obyekt literalida getter va setter</h2>
 <p>Obyekt literalida ular <code>get</code> va <code>set</code> kalit so'zlari orqali e'lon qilinadi:</p>
 <pre class="code"><code>let obj = {
   get propName() {
@@ -625,7 +642,7 @@
 console.log(user.fullName); // Jasur Karimov — qavslarsiz o'qildi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: <code>user.fullName</code> — bu funksiya chaqiruvi emas (qavslar yo'q), lekin baribir <code>get fullName</code> metodi ishga tushdi. Bu getterning kuchi — u xossaga o'xshab ishlaydi.</p>
 <div class="note">Hozircha <code>fullName</code>da faqat getter bor. Agar unga qiymat yozmoqchi bo'lsak — <code>user.fullName = "..."</code> — xatolik yuzaga keladi (yoki sokin rejimda e'tiborsiz qoladi), chunki setter mavjud emas.</div>
-<h2>Setter qo'shish</h2>
+<h2 id="setter-qo-shish">Setter qo'shish</h2>
 <p>Endi <code>fullName</code>ga yozishni ham qo'llab-quvvatlash uchun setter qo'shamiz. U kelgan qatorni bo'sh joy bo'yicha ajratib, <code>name</code> va <code>surname</code>ni yangilaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>setter-fullname.js</span></div><textarea spellcheck="false">let user = {
   name: "Jasur",
@@ -648,11 +665,11 @@ console.log(user.surname);  // Navoiy
 console.log(user.fullName); // Alisher Navoiy</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Natijada bizda <code>fullName</code> "virtual" xossasi bor: uni o'qish ham, yozish ham mumkin, garchi u obyektda alohida saqlanmasa ham. U har safar <code>name</code> va <code>surname</code>dan hisoblanadi.</p>
 <div class="tip">Getter va setter — obyektning tashqi ko'rinishi (interfeysi) bilan ichki tuzilishini ajratishga imkon beradi. Foydalanuvchi <code>fullName</code>ni ishlatadi, ichkarida esa ma'lumot <code>name</code> va <code>surname</code>da saqlanadi.</div>
-<h2>Aksessor deskriptorlari</h2>
+<h2 id="aksessor-deskriptorlari">Aksessor deskriptorlari</h2>
 <p>Aksessor xossalarining deskriptori ma'lumot xossalaridan farq qiladi. Unda <code>value</code> va <code>writable</code> o'rniga <code>get</code> va <code>set</code> funksiyalari bo'ladi. Deskriptor kalitlari:</p>
 <ul><li><strong>get</strong> — argumentsiz funksiya, xossa o'qilganda ishlaydi;</li><li><strong>set</strong> — bitta argumentli funksiya, xossaga yozilganda ishlaydi;</li><li><strong>enumerable</strong> — ma'lumot xossalaridagi kabi;</li><li><strong>configurable</strong> — ma'lumot xossalaridagi kabi.</li></ul>
 <div class="warn">Xossa bir vaqtning o'zida <em>ham</em> aksessor (<code>get</code>/<code>set</code>), <em>ham</em> ma'lumot (<code>value</code>/<code>writable</code>) bo'la olmaydi. Agar deskriptorda ham <code>get</code>, ham <code>value</code> ko'rsatsangiz, xatolik yuzaga keladi.</div>
-<h2>Object.defineProperty bilan getter/setter</h2>
+<h2 id="object-defineproperty-bilan-getter-setter">Object.defineProperty bilan getter/setter</h2>
 <p>Aksessor xossani <code>Object.defineProperty</code> orqali ham e'lon qilish mumkin. Bu obyekt yaratilgandan keyin xossa qo'shish kerak bo'lganda foydali:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>defineproperty-accessor.js</span></div><textarea spellcheck="false">let user = {
   name: "Jasur",
@@ -673,7 +690,7 @@ Object.defineProperty(user, "fullName", {
 console.log(user.fullName); // Jasur Karimov
 user.fullName = "Bobur Mirzo";
 console.log(user.name);     // Bobur</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Aksessorlar validatsiya uchun</h2>
+<h2 id="aksessorlar-validatsiya-uchun">Aksessorlar validatsiya uchun</h2>
 <p>Getter/setterlarning eng foydali qo'llanishlaridan biri — qiymatni <strong>tekshirish</strong> (validatsiya). Setter orqali biz noto'g'ri qiymat yozilishining oldini olamiz.</p>
 <p>Quyidagi misolda <code>age</code> uchun setter salbiy qiymatni rad etadi. Haqiqiy ma'lumot esa "maxfiy" <code>_age</code> xossasida saqlanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>setter-validation.js</span></div><textarea spellcheck="false">let user = {
@@ -696,7 +713,7 @@ console.log(user.age);  // 25
 user.age = -5;          // Xato: yosh manfiy bo'lolmaydi!
 console.log(user.age);  // 25 — o'zgarmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Bu yerda <code>_age</code> ismidagi ostki chiziq (underscore) — bu shartli kelishuv. U xossa "ichki", to'g'ridan-to'g'ri chetdan tegilmasligi kerak degan ma'noni bildiradi. Bu texnik cheklov emas, balki dasturchilar orasidagi urf-odat.</div>
-<h2>Aksessorlar — moslashuvchanlik uchun</h2>
+<h2 id="aksessorlar-moslashuvchanlik-uchun">Aksessorlar — moslashuvchanlik uchun</h2>
 <p>Getter/setterlar kodni kelajakda o'zgartirishni osonlashtiradi. Aytaylik, boshida <code>name</code> oddiy ma'lumot xossasi edi. Keyinchalik ismning uzunligini cheklash kerak bo'lib qoldi. Butun kodni o'zgartirish o'rniga, biz shunchaki nomni <code>_name</code>ga o'zgartirib, ustiga tekshiruvchi setter qo'yamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>accessor-flexibility.js</span></div><textarea spellcheck="false">function User(name, age) {
   this.age = age;
@@ -724,7 +741,7 @@ console.log(user.name);        // undefined
 user.name = "Alisher";
 console.log(user.name);        // Alisher</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Muhimi: tashqi kod hali ham <code>user.name</code> deb yozadi va o'qiydi — interfeys o'zgarmadi. Faqat ichki mantiq kuchaydi. Bu — getter/setterlarning katta afzalligi.</p>
-<h2>Hisoblangan (computed) xossa</h2>
+<h2 id="hisoblangan-computed-xossa">Hisoblangan (computed) xossa</h2>
 <p>Getterlar obyektda saqlanmaydigan, boshqa qiymatlardan <em>hisoblanadigan</em> xossalar yaratish uchun ideal. Masalan, to'rtburchakning yuzasi tomonlaridan har safar hisoblab beriladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>computed-getter.js</span></div><textarea spellcheck="false">let rectangle = {
   width: 4,
@@ -745,7 +762,7 @@ console.log("Perimetr: " + rectangle.perimeter); // 18
 rectangle.width = 10;
 console.log("Yangi yuza: " + rectangle.area);  // 50 — avtomatik yangilandi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>area</code>ni oddiy xossa qilib qo'ymaganimiz muhim: agar shunday qilsak, <code>width</code> o'zgarganda <code>area</code> eskirib qolardi. Getter esa har safar yangi qiymatni hisoblab beradi — u har doim dolzarb.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Xossalar ikki turga bo'linadi: <strong>ma'lumot xossalari</strong> va <strong>aksessor xossalari</strong> (getter/setter);</li><li>Getter — <code>get</code> bilan belgilanadi, xossa o'qilganda ishlaydi; setter — <code>set</code> bilan, xossaga yozilganda ishlaydi;</li><li>Tashqaridan ular oddiy xossaga o'xshaydi: <code>obj.prop</code> va <code>obj.prop = value</code>;</li><li>Ularni obyekt literalida (<code>get/set</code> so'zlari) yoki <code>Object.defineProperty</code> orqali e'lon qilish mumkin;</li><li>Asosiy foydasi: <strong>validatsiya</strong> (noto'g'ri qiymatni rad etish), <strong>hisoblangan xossalar</strong> (masalan, <code>fullName</code>, <code>area</code>) va <strong>moslashuvchanlik</strong> (interfeysni buzmasdan mantiqni o'zgartirish).</li></ul>
 <nav class="lesson-nav">
   <a href="property-flags.html"><span class="dir">← Oldingi</span><span class="ttl">Xossa bayroqlari va deskriptorlari</span></a>
@@ -759,6 +776,6 @@ console.log("Yangi yuza: " + rectangle.area);  // 50 — avtomatik yangilandi</t
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

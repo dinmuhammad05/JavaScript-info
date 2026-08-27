@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Async testlar va mock — Kodla</title>
   <meta name="description" content="async/await testlari, resolves/rejects, jest.fn mock funksiyalar, jest.mock bilan modul mock qilish, beforeEach/afterEach va spy.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Testlash (Jest)</div>
 <h1>Async testlar va mock</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#asinxron-kodni-testlash-muammosi">Asinxron kodni testlash muammosi</a></li>
+<li class="lvl2"><a href="#async-await-bilan-testlash">async/await bilan testlash</a></li>
+<li class="lvl2"><a href="#resolves-va-rejects">resolves va rejects</a></li>
+<li class="lvl2"><a href="#mock-funksiya-jest-fn">Mock funksiya: jest.fn()</a></li>
+<li class="lvl2"><a href="#modulni-mock-qilish-jest-mock">Modulni mock qilish: jest.mock()</a></li>
+<li class="lvl2"><a href="#beforeeach-va-aftereach">beforeEach va afterEach</a></li>
+<li class="lvl2"><a href="#spy-haqiqiy-funksiyani-kuzatish">Spy — haqiqiy funksiyani kuzatish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Real dasturlar tarmoq so'rovlari, ma'lumotlar bazasi va tashqi xizmatlar bilan ishlaydi. Bularni testda to'g'ri tekshirish uchun asinxron testlar va mock (soxta) obyektlarni bilish shart. Bu darsda aynan shularni o'rganamiz.</p>
-<h2>Asinxron kodni testlash muammosi</h2>
+<h2 id="asinxron-kodni-testlash-muammosi">Asinxron kodni testlash muammosi</h2>
 <p>Agar test ichida promise bo'lsa, lekin siz uni kutmasangiz, Jest testni <em>tugadi</em> deb hisoblaydi va natija kelishidan oldin yashil ko'rsatadi. Bu xavfli — test aslida hech narsani tekshirmagan bo'lishi mumkin:</p>
 <pre class="code"><code>// XATO: bu test har doim o'tadi, hatto natija noto'g'ri bo'lsa ham!
 test('foydalanuvchini oladi', () =&gt; {
@@ -606,7 +622,7 @@ test('foydalanuvchini oladi', () =&gt; {
   });
 });</code></pre>
 <div class="warn">Asinxron testda promise'ni <code>return</code> qilishni yoki <code>async/await</code> ishlatishni unutmang. Aks holda Jest natijani kutmasdan testni tugatadi va soxta yashil natija chiqadi.</div>
-<h2>async/await bilan testlash</h2>
+<h2 id="async-await-bilan-testlash">async/await bilan testlash</h2>
 <p>Eng toza yo'l — test funksiyasini <code>async</code> qilish va promise'ni <code>await</code> bilan kutish:</p>
 <pre class="code"><code>async function foydalanuvchiOl(id) {
   // aslida bu yerda tarmoq so'rovi bo'ladi
@@ -619,7 +635,7 @@ test('foydalanuvchini id bo'yicha oladi', async () =&gt; {
   expect(user.id).toBe(1);
 });</code></pre>
 <p>Bu yerda <code>await</code> promise hal bo'lishini kutadi, so'ng tekshiruvlar bajariladi. Jest <code>async</code> funksiya qaytargan promise'ni avtomatik kutadi.</p>
-<h2>resolves va rejects</h2>
+<h2 id="resolves-va-rejects">resolves va rejects</h2>
 <p>Promise'ni <code>await</code>siz to'g'ridan-to'g'ri tekshirishning qisqa yo'li ham bor: <code>resolves</code> muvaffaqiyatli natijani, <code>rejects</code> esa xatoni tekshiradi:</p>
 <pre class="code"><code>// Promise muvaffaqiyatli hal bo'lishini tekshirish:
 test('foydalanuvchi obyektini qaytaradi', async () =&gt; {
@@ -635,7 +651,7 @@ test('mavjud bo'lmagan foydalanuvchi uchun xato beradi', async () =&gt; {
   await expect(xatoOl()).rejects.toThrow('Topilmadi');
 });</code></pre>
 <div class="tip"><code>resolves</code> va <code>rejects</code> oldida <code>await</code> qo'yishni unutmang. Bularsiz Jest promise natijasini kutmaydi.</div>
-<h2>Mock funksiya: jest.fn()</h2>
+<h2 id="mock-funksiya-jest-fn">Mock funksiya: jest.fn()</h2>
 <p><strong>Mock</strong> (soxta) funksiya — bu chaqiruvlarni yozib boradigan va siz belgilagan qiymatni qaytaradigan sun'iy funksiya. U <code>jest.fn()</code> bilan yaratiladi. Mocklar ikki holatda juda foydali:</p>
 <ul><li>Funksiya <strong>chaqirilganini</strong>, necha marta va qanday argument bilan chaqirilganini tekshirish.</li><li>Real, sekin yoki xavfli kodni (masalan tarmoq so'rovi) sinovda soxta versiya bilan almashtirish.</li></ul>
 <pre class="code"><code>test('mock funksiya chaqiruvlarni yozadi', () =&gt; {
@@ -659,7 +675,7 @@ olMock.mockResolvedValue({ ok: 1 }); // promise sifatida hal bo'ladi
 
 expect(olMock()).toBe(5);  // birinchisi
 expect(olMock()).toBe(10); // keyingilari</code></pre>
-<h2>Modulni mock qilish: jest.mock()</h2>
+<h2 id="modulni-mock-qilish-jest-mock">Modulni mock qilish: jest.mock()</h2>
 <p>Ko'pincha butun modulni soxtalashtirish kerak bo'ladi — masalan, testda real tarmoq so'rovi yubormaslik uchun HTTP kutubxonasini almashtiramiz. Buni <code>jest.mock()</code> qiladi. Aytaylik, bizda foydalanuvchini serverdan oladigan xizmat bor:</p>
 <pre class="code"><code>// apiClient.js
 async function get(url) {
@@ -693,7 +709,7 @@ test('foydalanuvchi ismini qaytaradi', async () =&gt; {
   expect(apiClient.get).toHaveBeenCalledWith('/users/7');
 });</code></pre>
 <div class="note"><code>jest.mock('./apiClient')</code> chaqirilganda Jest moduldagi barcha funksiyalarni avtomatik <code>jest.fn()</code>ga aylantiradi. So'ng test ichida har biriga qaytariladigan qiymatni bering.</div>
-<h2>beforeEach va afterEach</h2>
+<h2 id="beforeeach-va-aftereach">beforeEach va afterEach</h2>
 <p>Har bir testdan oldin yoki keyin bir xil tayyorgarlik yoki tozalash kerak bo'ladi. Buning uchun <strong>hooklar</strong> ishlatiladi:</p>
 <ul><li><code>beforeEach</code> — har bir testdan <em>oldin</em> ishlaydi (masalan ma'lumotni tayyorlash).</li><li><code>afterEach</code> — har bir testdan <em>keyin</em> ishlaydi (masalan mocklarni tozalash).</li><li><code>beforeAll</code> / <code>afterAll</code> — butun fayl bo'yicha faqat bir marta ishlaydi.</li></ul>
 <pre class="code"><code>describe('savat', () =&gt; {
@@ -719,7 +735,7 @@ test('foydalanuvchi ismini qaytaradi', async () =&gt; {
   });
 });</code></pre>
 <div class="warn">Mocklar testlar orasida holatini saqlaydi. Buni tozalamasangiz, bir test boshqasiga ta'sir qilishi mumkin. <code>afterEach</code>da <code>jest.clearAllMocks()</code> chaqirish — yaxshi odat.</div>
-<h2>Spy — haqiqiy funksiyani kuzatish</h2>
+<h2 id="spy-haqiqiy-funksiyani-kuzatish">Spy — haqiqiy funksiyani kuzatish</h2>
 <p>Ba'zan funksiyani butunlay almashtirmasdan, faqat <strong>kuzatmoqchi</strong> bo'lasiz: u chaqirildimi, qanday argument bilan? Bunda <code>jest.spyOn</code> ishlatiladi. Spy asl funksiyani saqlab qoladi, lekin chaqiruvlarni yozib boradi:</p>
 <pre class="code"><code>const kalkulyator = {
   qoshish(a, b) {
@@ -738,7 +754,7 @@ test('qoshish metodi chaqirilganini kuzatadi', () =&gt; {
   spy.mockRestore(); // asl holatga qaytaramiz
 });</code></pre>
 <div class="tip">Spy'ni <code>mockRestore()</code> bilan tiklashni unutmang, aks holda kuzatuv keyingi testlarga ta'sir qiladi. Kerak bo'lsa spy'ni <code>mockImplementation()</code> bilan vaqtincha boshqacha ishlashga majburlash ham mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Asinxron testda promise'ni <code>async/await</code> bilan kuting yoki <code>return</code> qiling — aks holda soxta yashil natija chiqadi.</li><li><code>resolves</code> muvaffaqiyatli natijani, <code>rejects</code> xatoni tekshiradi (oldida <code>await</code> bilan).</li><li><code>jest.fn()</code> — mock funksiya; chaqiruvlarni yozadi va qiymat qaytaradi.</li><li><code>jest.mock('./modul')</code> butun modulni mockga aylantiradi — real tarmoqqa chiqmaslik uchun.</li><li><code>beforeEach</code>/<code>afterEach</code> har test uchun tayyorlash va tozalash bajaradi; mocklarni <code>clearAllMocks</code> bilan tozalang.</li><li><code>jest.spyOn</code> asl funksiyani saqlab, faqat chaqiruvlarni kuzatadi; oxirida <code>mockRestore()</code> qiling.</li></ul>
 <nav class="lesson-nav">
   <a href="jest-boshlash.html"><span class="dir">← Oldingi</span><span class="ttl">Jest asoslari</span></a>
@@ -752,6 +768,6 @@ test('qoshish metodi chaqirilganini kuzatadi', () =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

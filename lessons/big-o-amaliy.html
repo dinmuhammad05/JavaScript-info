@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Keng tarqalgan murakkabliklar: O(1) dan O(n!) gacha — Kodla</title>
   <meta name="description" content="O(1), O(log n), O(n), O(n log n), O(n²), O(2^n), O(n!) - har birini misol va taqqoslash bilan tushunish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Algoritm asoslari</div>
 <h1>Keng tarqalgan murakkabliklar: O(1) dan O(n!) gacha</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#murakkabliklar-zinapoyasi">Murakkabliklar zinapoyasi</a></li>
+<li class="lvl2"><a href="#o-1-konstanta-vaqt">O(1) - konstanta vaqt</a></li>
+<li class="lvl2"><a href="#o-log-n-logaritmik-vaqt">O(log n) - logaritmik vaqt</a></li>
+<li class="lvl2"><a href="#o-n-chiziqli-vaqt">O(n) - chiziqli vaqt</a></li>
+<li class="lvl2"><a href="#o-n-log-n-chiziqli-logaritmik-vaqt">O(n log n) - chiziqli-logaritmik vaqt</a></li>
+<li class="lvl2"><a href="#o-n-kvadratik-vaqt">O(n²) - kvadratik vaqt</a></li>
+<li class="lvl2"><a href="#o-2-n-eksponensial-vaqt">O(2^n) - eksponensial vaqt</a></li>
+<li class="lvl2"><a href="#o-n-faktorial-vaqt">O(n!) - faktorial vaqt</a></li>
+<li class="lvl2"><a href="#barchasini-bir-jadvalda-taqqoslash">Barchasini bir jadvalda taqqoslash</a></li>
+<li class="lvl2"><a href="#ehtiyot-ichma-ich-sikl-har-doim-o-n-emas">Ehtiyot: ichma-ich sikl har doim O(n²) emas</a></li>
+<li class="lvl2"><a href="#real-kodda-murakkablikni-qanday-aniqlash">Real kodda murakkablikni qanday aniqlash</a></li>
+  </ul>
+</details>
 <p class="lead">O'tgan darsda Big O ning umumiy g'oyasini o'rgandik. Endi eng ko'p uchraydigan murakkabliklar oilasi bilan birma-bir tanishamiz - eng tezidan (O(1)) eng dahshatlisiga (O(n!)) qadar. Har birini jonli kod, hayotiy o'xshatish va amallar soni bilan ko'ramiz. Bu darsni tugatganingizda, har qanday kodga qarab uning taxminiy murakkabligini ayta olasiz - bu esa yaxshi dasturchining asosiy ko'nikmalaridan biri.</p>
-<h2>Murakkabliklar zinapoyasi</h2>
+<h2 id="murakkabliklar-zinapoyasi">Murakkabliklar zinapoyasi</h2>
 <p>Barcha asosiy murakkabliklarni tezlikdan sekinlikka qarab tartiblab qo'yaylik. Bu "zinapoya" ni yodda tutish juda foydali:</p>
 <pre class="code"><code>O(1)       - eng tez     (a'lo)
 O(log n)   - juda tez    (juda yaxshi)
@@ -607,7 +626,7 @@ O(n²)      - sekin       (ehtiyot bo'l)
 O(2^n)     - juda sekin  (yomon)
 O(n!)      - dahshatli   (deyarli ishlatilmaydi)</code></pre>
 <p>Yuqoridagilar qanchalik pastga tushsak, shunchalik yomonlashadi. Endi har birini alohida ko'rib chiqamiz.</p>
-<h2>O(1) - konstanta vaqt</h2>
+<h2 id="o-1-konstanta-vaqt">O(1) - konstanta vaqt</h2>
 <p><strong>O(1)</strong> - eng ideal murakkablik. Bu "kirish hajmi qanday bo'lishidan qat'i nazar, doim bir xil vaqt" degani. Ma'lumot million ta ham, milliard ta ham bo'lsin - ish vaqti o'zgarmaydi.</p>
 <p>Misollar: massivning ma'lum indeksidagi elementini olish, obyektdan kalit orqali qiymat olish, ikki sonni qo'shish. Bularning barchasi bir zumda bajariladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>o1-amaliy.js</span></div><textarea spellcheck="false">const massiv = [10, 20, 30, 40, 50];
@@ -619,7 +638,7 @@ console.log(foydalanuvchi.ism); // kalit orqali - O(1)
 // Massiv million element bo'lsa ham,
 // indeks orqali olish baribir O(1) bo'lib qoladi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Obyekt (yoki Map) da kalit orqali qidirish O(1) bo'lishi - ma'lumotlar tuzilmalarini o'rganishda eng muhim tushunchalardan biri. Agar bir narsani tez-tez qidirsangiz, uni massivda emas, obyektda saqlash algoritmingizni keskin tezlashtiradi.</div>
-<h2>O(log n) - logaritmik vaqt</h2>
+<h2 id="o-log-n-logaritmik-vaqt">O(log n) - logaritmik vaqt</h2>
 <p><strong>O(log n)</strong> - juda kuchli murakkablik. Bu "har qadamda muammoni yarmiga qisqartirish" degani. Ma'lumot ikki barobar ko'paysa, ish faqat bir qadamga ko'payadi. Bu aql bovar qilmas darajada samarali.</p>
 <p>Eng mashhur misol - <strong>ikkilik qidiruv</strong> (binary search). Tasavvur qiling, saralangan (tartiblangan) 1000 ta sonli massivdan biror sonni izlayapsiz. O'rtadagi elementga qaraysiz: agar izlayotganingiz undan kichik bo'lsa, o'ng yarmni butunlay tashlab yuborasiz. Har qadamda yarim ma'lumot yo'qoladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>log-n-qidiruv.js</span></div><textarea spellcheck="false">function ikkilikQidiruv(massiv, qidirilayotgan) {
@@ -643,7 +662,7 @@ console.log(ikkilikQidiruv(sonlar, 23)); // 5
 console.log(ikkilikQidiruv(sonlar, 7));  // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>1000 ta elementdan qidirish uchun oddiy usulda 1000 ta tekshirish kerak bo'lardi. Ikkilik qidiruvda esa faqat ~10 ta! Chunki 1000 ni yarmiga bo'lib borsak: 1000 -> 500 -> 250 -> 125 -> ... -> 1 ga yetish uchun atigi ~10 qadam kerak. Million element uchun ham - atigi ~20 qadam.</p>
 <div class="note">Logaritm - bu "nechta marta ikkiga bo'lsak, 1 ga yetamiz?" degan savolning javobi. log(1000) taxminan 10, log(1,000,000) taxminan 20. Shuning uchun ikkilik qidiruv shunchalik tez. Lekin bir shart bor: ma'lumot oldindan saralangan bo'lishi kerak.</div>
-<h2>O(n) - chiziqli vaqt</h2>
+<h2 id="o-n-chiziqli-vaqt">O(n) - chiziqli vaqt</h2>
 <p><strong>O(n)</strong> - juda keng tarqalgan va yaxshi murakkablik. Bu "har bir elementni bir marta ko'rib chiqish" degani. Ma'lumot ikki barobar ko'paysa, ish ham ikki barobar ko'payadi - to'g'ri, mutanosib bog'liqlik.</p>
 <p>Bitta sikl bilan massivni bir marta aylanib chiqish - bu tipik O(n). Masalan, massivdagi barcha sonlar yig'indisini topish yoki biror elementni oddiy izlash:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>on-amaliy.js</span></div><textarea spellcheck="false">function summa(massiv) {
@@ -657,7 +676,7 @@ console.log(ikkilikQidiruv(sonlar, 7));  // -1</textarea><div class="pg-actions"
 console.log(summa([5, 10, 15, 20])); // 50
 // n ta element = n ta amal = O(n)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>O(n) - bu ko'p masalalar uchun tabiiy va qabul qilinadigan yechim. Agar barcha ma'lumotni ko'rib chiqishingiz kerak bo'lsa, O(n) dan tezroq bo'lishning iloji yo'q - chunki hech bo'lmaganda har birini bir marta ko'rish shart.</p>
-<h2>O(n log n) - chiziqli-logaritmik vaqt</h2>
+<h2 id="o-n-log-n-chiziqli-logaritmik-vaqt">O(n log n) - chiziqli-logaritmik vaqt</h2>
 <p><strong>O(n log n)</strong> - O(n) dan biroz sekinroq, lekin baribir juda yaxshi murakkablik. Bu asosan <strong>samarali saralash algoritmlari</strong>da uchraydi: birlashtirib saralash (merge sort), tez saralash (quick sort) va boshqalar.</p>
 <p>Intuitsiya: siz n ta elementni ko'rib chiqasiz (bu O(n) qism), lekin buni log n marta takrorlaysiz (ma'lumotni yarmiga bo'lib ishlash sababli). n * log n = O(n log n).</p>
 <p>JavaScript ning o'z <code>sort</code> metodi ham aynan O(n log n) da ishlaydi:</p>
@@ -669,7 +688,7 @@ const saralangan = [...sonlar].sort((a, b) =&gt; a - b);
 console.log(saralangan); // [3, 7, 15, 19, 42, 60, 88]
 // n ta element uchun taxminan n * log(n) amal</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>n = 1000 uchun: O(n²) bo'lsa 1,000,000 amal, O(n log n) bo'lsa esa faqat ~10,000 amal. Farq juda katta! Shuning uchun katta ma'lumotni saralashda har doim O(n log n) algoritmlar ishlatiladi.</p>
-<h2>O(n²) - kvadratik vaqt</h2>
+<h2 id="o-n-kvadratik-vaqt">O(n²) - kvadratik vaqt</h2>
 <p><strong>O(n²)</strong> - ehtiyot bo'lish kerak bo'lgan murakkablik. Bu odatda <strong>ichma-ich ikki sikl</strong>dan kelib chiqadi. Ma'lumot ikki barobar ko'paysa, ish to'rt barobar ko'payadi. Kichik ma'lumotda muammo emas, lekin katta ma'lumotda halokatli.</p>
 <p>Klassik misol - barcha element juftliklarini solishtirish. Masalan, massivda takrorlangan sonlar bor-yo'qligini ikkita ichma-ich sikl bilan tekshirish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>on2-amaliy.js</span></div><textarea spellcheck="false">function takrorBormi(massiv) {
@@ -688,7 +707,7 @@ console.log(takrorBormi([1, 2, 3, 2])); // true
 // Ichma-ich sikl = O(n²)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yechim to'g'ri ishlaydi, lekin O(n²). Qizig'i shuki, xuddi shu masalani obyekt (Set) yordamida O(n) da ham yechish mumkin - ko'rgan sonlarni eslab qolib, har yangi sonni bir zumda tekshirib. Bu - algoritmik fikrlashning kuchi: sekin yechimni tez yechimga aylantirish.</p>
 <div class="warn">O(n²) kodni ko'rsangiz, doim so'rang: "Buni O(n) yoki O(n log n) da yechib bo'ladimi?" Ko'pincha - ha. Ichma-ich sikl - bu "to'xta va o'yla" signali.</div>
-<h2>O(2^n) - eksponensial vaqt</h2>
+<h2 id="o-2-n-eksponensial-vaqt">O(2^n) - eksponensial vaqt</h2>
 <p><strong>O(2^n)</strong> - juda yomon murakkablik. Bu "har bir qo'shimcha element ishni ikki barobar oshiradi" degani. Bunday algoritmlar juda tez portlab ketadi va faqat kichik n uchun ishlatsa bo'ladi.</p>
 <p>Klassik misol - <strong>naive (sodda) rekursiv Fibonacci</strong>. Har bir chaqiruv o'zini ikki marta chaqiradi, natijada chaqiruvlar daraxti eksponensial o'sadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eksponensial-fib.js</span></div><textarea spellcheck="false">function fib(n) {
@@ -702,7 +721,7 @@ console.log(fib(20)); // 6765 - hali tez
 // Bu O(2^n) - eksponensial</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>fib(50)</code> ni bu usulda hisoblash uchun taxminan 2^50 = 1,125,899,906,842,624 (kvadrilliondan ortiq) amal kerak! Bu deyarli imkonsiz. Shuning uchun bunday masalalarni keshlash (memoization) yoki iteratsiya bilan O(n) ga tushirish kerak.</p>
 <div class="note">Eksponensial algoritmlar odatda "barcha mumkin bo'lgan variantlarni sinab ko'rish" masalalarida paydo bo'ladi. Ular to'g'ri javob beradi, lekin katta n da amalda foydasiz. Ularni optimallashtirish - alohida san'at.</div>
-<h2>O(n!) - faktorial vaqt</h2>
+<h2 id="o-n-faktorial-vaqt">O(n!) - faktorial vaqt</h2>
 <p><strong>O(n!)</strong> - eng yomon amaliy murakkablik. Faktorial (n! = n * (n-1) * ... * 2 * 1) shu qadar tez o'sadiki, hatto kichik n uchun ham amallar soni astronomik bo'ladi.</p>
 <p>Bu murakkablik odatda <strong>barcha o'rin almashtirishlarni (permutations)</strong> topish masalalarida uchraydi. Masalan, n ta elementni necha xil tartibda joylashtirish mumkin? Javob - n! xil.</p>
 <pre class="code"><code>3 ta element  -&gt; 3!  = 6 ta tartib
@@ -710,7 +729,7 @@ console.log(fib(20)); // 6765 - hali tez
 10 ta element -&gt; 10! = 3,628,800 ta tartib
 15 ta element -&gt; 15! = 1,307,674,368,000 ta tartib!</code></pre>
 <p>Ko'rib turibsizki, 15 ta element uchun ham triliondan ortiq variant paydo bo'ladi. Klassik "kommivoyajyor masalasi" (sayohatchi eng qisqa yo'lni tanlashi) sodda ko'rinishda aynan O(n!) bo'ladi va shuning uchun katta shaharlar uchun uni to'g'ridan-to'g'ri yechib bo'lmaydi.</p>
-<h2>Barchasini bir jadvalda taqqoslash</h2>
+<h2 id="barchasini-bir-jadvalda-taqqoslash">Barchasini bir jadvalda taqqoslash</h2>
 <p>Endi eng muhim jadval - turli n qiymatlarida har bir murakkablik taxminan qancha amal talab qilishini ko'raylik. Bu jadval sizga qaysi algoritm qaysi ma'lumot hajmida yashay olishini ko'rsatadi:</p>
 <pre class="code"><code>n          O(1)  O(log n)  O(n)        O(n log n)   O(n²)
 -----------------------------------------------------------------
@@ -720,7 +739,7 @@ console.log(fib(20)); // 6765 - hali tez
 1,000,000  1     ~20       1,000,000   ~20,000,000  10^12 (juda katta)</code></pre>
 <p>Eksponensial (2^n) va faktorial (n!) ni bu jadvalga qo'shmadik, chunki n = 100 da ular shunchalik katta bo'ladiki, koinotdagi atomlar sonidan ham oshib ketadi. Ular faqat juda kichik n uchun mos.</p>
 <p><strong>Amaliy qoida:</strong> O(1), O(log n), O(n), O(n log n) - bularni "yaxshi" deb bilsa bo'ladi, ular millionlab elementda ham ishlaydi. O(n²) - o'rtacha (minglab elementgacha yaxshi). O(2^n) va O(n!) - faqat kichik ma'lumot uchun.</p>
-<h2>Ehtiyot: ichma-ich sikl har doim O(n²) emas</h2>
+<h2 id="ehtiyot-ichma-ich-sikl-har-doim-o-n-emas">Ehtiyot: ichma-ich sikl har doim O(n²) emas</h2>
 <div class="warn">Umumiy xato: "ikkita sikl ko'rdim - demak O(n²)". Bu har doim to'g'ri emas! Muhimi - har bir sikl necha marta aylanadi.</div>
 <p>Masalan, quyidagi kodda ikkita sikl bor, lekin ikkinchisi <strong>doim 3 marta</strong> aylanadi, n ga bog'liq emas. Shuning uchun bu O(n * 3) = O(n), ya'ni chiziqli:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sikl-tuzoq.js</span></div><textarea spellcheck="false">function ranglar(mahsulotlar) {
@@ -735,7 +754,7 @@ console.log(fib(20)); // 6765 - hali tez
 ranglar(["koylak", "shim"]);
 // Ichki sikl n ga bog'liq emas =&gt; O(n), O(n²) emas!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Aksincha, ikkita sikl ketma-ket (biri tugab, keyin ikkinchisi) bo'lsa - bu O(n) + O(n) = O(2n) = O(n), n² emas. Faqat sikllar <strong>ichma-ich</strong> bo'lib, ikkalasi ham n ga bog'liq bo'lgandagina O(n²) bo'ladi.</p>
-<h2>Real kodda murakkablikni qanday aniqlash</h2>
+<h2 id="real-kodda-murakkablikni-qanday-aniqlash">Real kodda murakkablikni qanday aniqlash</h2>
 <div class="tip">Kodning murakkabligini baholash uchun oddiy amaliy qadamlar:</div>
 <ol><li>Kirish hajmiga bog'liq bo'lgan sikllarni toping. n ga bog'liq bitta sikl - odatda O(n).</li><li>Ichma-ich sikllarni ko'ring. Ikkalasi ham n ga bog'liq bo'lsa - O(n²). Uchtasi - O(n³).</li><li>Har qadamda ma'lumot yarmiga qisqarsa - bu O(log n) belgisi.</li><li>O'rnatilgan (built-in) metodlarni unutmang: <code>sort</code> - O(n log n), massivda <code>includes</code> yoki <code>indexOf</code> - O(n), obyektda kalit qidirish - O(1).</li><li>Eng katta o'sadigan qismni oling. O(n² + n) = O(n²). Faqat dominant qism qoladi.</li></ol>
 <p>Bu ko'nikma mashq bilan keladi. Har safar kod yozganingizda o'zingizga savol bering: "Ma'lumot million marta ko'paysa, bu kod qanchaga sekinlashadi?" Vaqt o'tib bu savol avtomatik ravishda miyangizda paydo bo'ladi - ana o'shanda haqiqiy algoritmik fikrlashga ega bo'lasiz.</p>
@@ -752,6 +771,6 @@ ranglar(["koylak", "shim"]);
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

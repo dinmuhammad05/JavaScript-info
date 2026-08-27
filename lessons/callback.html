@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kirish: callback'lar — Kodla</title>
   <meta name="description" content="Asinxron harakatlar, callback g'oyasi, xatolik-birinchi (error-first) uslub va &quot;callback jahannami&quot; muammosi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,25 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Kirish: callback'lar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#asinxron-harakat-nima">Asinxron harakat nima?</a></li>
+<li class="lvl2"><a href="#settimeout-eng-sodda-asinxron-misol">setTimeout — eng sodda asinxron misol</a></li>
+<li class="lvl2"><a href="#callback-g-oyasi">Callback g'oyasi</a></li>
+<li class="lvl2"><a href="#xatolik-birinchi-error-first-callback">Xatolik-birinchi (error-first) callback</a></li>
+<li class="lvl2"><a href="#callback-jahannami-pyramid-of-doom">Callback jahannami (pyramid of doom)</a></li>
+<li class="lvl2"><a href="#sodda-amaliy-misol">Sodda amaliy misol</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da ko'p funksiyalar <em>asinxron</em> harakatlarni — ya'ni hozir boshlanib, keyinroq tugaydigan ishlarni — rejalashtiradi. Bunday harakatlar tugaganda natijani qanday qabul qilamiz? Eng qadimiy va sodda usul — <strong>callback</strong> funksiyalar. Ushbu darsda callback g'oyasini, uning kuchli va zaif tomonlarini ko'rib chiqamiz.</p>
-<h2>Asinxron harakat nima?</h2>
+<h2 id="asinxron-harakat-nima">Asinxron harakat nima?</h2>
 <p><strong>Asinxron</strong> harakat — bu hozir boshlanadigan, ammo kelajakda (keyinroq) yakunlanadigan ish. Masalan:</p>
 <ul><li>Serverdan ma'lumot yuklab olish (tarmoq so'rovi);</li><li>Ma'lum vaqt kutish (<code>setTimeout</code>);</li><li>Diskdan fayl o'qish (Node.js);</li><li>Tashqi skript yoki modulni yuklash.</li></ul>
 <p>Bunday harakatlar sekin bo'lishi mumkin, shuning uchun JavaScript ularni kutib turmaydi — kod bajarilishda davom etadi, natija esa tayyor bo'lganda alohida yetkaziladi.</p>
 <div class="note">JavaScript <em>bir oqimli</em> (single-threaded) tildir. Ya'ni u bir vaqtda faqat bitta ishni bajaradi. Asinxron mexanizmlar aynan shu tufayli muhim: sekin ishlarni kutib turmasdan, dastur bloklanmasligini ta'minlaydi.</div>
-<h2>setTimeout — eng sodda asinxron misol</h2>
+<h2 id="settimeout-eng-sodda-asinxron-misol">setTimeout — eng sodda asinxron misol</h2>
 <p>Keling, biror kodni ma'lum vaqtdan keyin ishga tushiruvchi <code>setTimeout</code> misolidan boshlaymiz. Uning ikkinchi argumenti — millisekundlardagi kutish vaqti:</p>
 <pre class="code"><code>console.log("Boshlandi");
 
@@ -618,7 +633,7 @@ console.log("Tugadi");
 // 1 sekunddan keyin   &lt;- eng oxirida, 1 sekunddan so'ng</code></pre>
 <p>E'tibor bering: <code>"Tugadi"</code> so'zi <code>"1 sekunddan keyin"</code>dan <strong>oldin</strong> chiqdi. Chunki <code>setTimeout</code> ichidagi funksiya darhol bajarilmaydi — u keyinroq chaqiriladi. Kod esa uni kutib turmaydi, pastga davom etadi.</p>
 <p>Mana bu funksiya — <code>setTimeout</code>ga uzatilgan va "keyin chaqirib qo'ying" deb topshirilgan funksiya — <strong>callback</strong> deb ataladi.</p>
-<h2>Callback g'oyasi</h2>
+<h2 id="callback-g-oyasi">Callback g'oyasi</h2>
 <p><strong>Callback</strong> (so'zma-so'z "qayta chaqirish") — bu boshqa funksiyaga <em>argument sifatida</em> uzatiladigan va asinxron harakat tugaganda chaqiriladigan funksiya. G'oya sodda: "Sen ishingni bajar, tugatgach mana bu funksiyani chaqir".</p>
 <p>Faraz qilaylik, biror skriptni yuklab, so'ng u yuklangach biror ish qilmoqchimiz. Yuklash asinxron bo'lgani uchun, "yuklangandan keyin"gi kodni callback shaklida uzatamiz:</p>
 <pre class="code"><code>function loadScript(src, callback) {
@@ -640,7 +655,7 @@ loadScript("/my/script.js", function (script) {
 });</code></pre>
 <p>Bu yerda <code>loadScript</code> ikkinchi argument sifatida funksiya (callback) qabul qiladi va skript yuklangach uni chaqiradi. Shunday qilib, biz asinxron harakat <em>tugaganidan keyin</em> bajariladigan kodni belgilay oldik.</p>
 <div class="tip">Callback'ning asosiy afzalligi: u sodda va tushunarli. Kichik, bir bosqichli asinxron ishlar uchun bu yechim juda qulay.</div>
-<h2>Xatolik-birinchi (error-first) callback</h2>
+<h2 id="xatolik-birinchi-error-first-callback">Xatolik-birinchi (error-first) callback</h2>
 <p>Yuqoridagi misolda hammasi yaxshi ketishini nazarda tutdik. Ammo real hayotda xatolik bo'lishi mumkin — skript topilmasligi, tarmoq uzilishi va hokazo. Callback bunday holatni ham qabul qila olishi kerak.</p>
 <p>JavaScript va ayniqsa Node.js hamjamiyatida bu muammo uchun <strong>error-first callback</strong> (xatolik-birinchi callback) uslubi qabul qilingan. Uning qoidalari:</p>
 <ul><li>Callback'ning <strong>birinchi argumenti</strong> — xatolik uchun ajratiladi. Agar xatolik bo'lsa, u shu yerga uzatiladi;</li><li><strong>Keyingi argumentlar</strong> — muvaffaqiyatli natijalar uchun;</li><li>Agar xatolik bo'lmasa, birinchi argument <code>null</code> bo'ladi.</li></ul>
@@ -671,7 +686,7 @@ loadScript("/my/script.js", function (error, script) {
 });</code></pre>
 <p>Endi bitta callback ikki xil vaziyatni ham boshqaradi: avval <code>error</code>ni tekshiramiz, xatolik bo'lmasa natija bilan ishlaymiz. Bu uslub juda keng tarqalgan va uni bilish shart.</p>
 <div class="note">"Error-first" nomi shundan: xatolik doim <strong>birinchi</strong> argumentda turadi. Node.js'ning ko'pgina o'rnatilgan funksiyalari (masalan, <code>fs.readFile</code>) aynan shu qoidaga amal qiladi.</div>
-<h2>Callback jahannami (pyramid of doom)</h2>
+<h2 id="callback-jahannami-pyramid-of-doom">Callback jahannami (pyramid of doom)</h2>
 <p>Callback bitta asinxron harakat uchun ajoyib. Lekin ketma-ket bir nechta asinxron ishni bajarishimiz kerak bo'lsa-chi? Masalan: bitta skriptni yuklab, u yuklangach ikkinchisini, keyin uchinchisini yuklashimiz kerak. Har biri oldingisining callback'i ichida yozilishi kerak:</p>
 <pre class="code"><code>loadScript("1.js", function (error, script) {
   if (error) {
@@ -698,7 +713,7 @@ loadScript("/my/script.js", function (error, script) {
 <div class="warn">Bu holat <strong>"callback jahannami"</strong> (callback hell) yoki <strong>"pyramid of doom"</strong> (halokat piramidasi) deb ataladi. Kod o'qish qiyinlashadi, xatolikni boshqarish takrorlanaveradi, o'zgartirish esa qo'rqinchli bo'lib qoladi.</div>
 <p>Ichma-ich joylashuv chuqurlashgani sayin kod "tortmaga sig'maydigan" holatga keladi. Buni funksiyalarni alohida ajratib biroz yumshatish mumkin, lekin muammo tubdan hal bo'lmaydi — kod baribir tarqoq bo'lib qoladi.</p>
 <p>Aynan shu muammoni chiroyli hal qilish uchun JavaScript'ga <strong>Promise</strong> (va'da) tushunchasi kiritilgan. Keyingi darslarda uni o'rganamiz — u asinxron kodni tekis va tushunarli yozishga imkon beradi.</p>
-<h2>Sodda amaliy misol</h2>
+<h2 id="sodda-amaliy-misol">Sodda amaliy misol</h2>
 <p>Callback shunchaki "boshqa funksiyaga uzatilgan funksiya" ekanini yaxshi anglash uchun, sinxron (darhol ishlaydigan) sodda misolni ko'ramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>callback.js</span></div><textarea spellcheck="false">function amalBajar(a, b, callback) {
   const natija = a + b;
@@ -713,7 +728,7 @@ amalBajar(10, 20, function (natija) {
   console.log("Yana yig'indi: " + natija);
 });</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu misolda callback darhol (sinxron) chaqiriladi, shuning uchun natija konsolda ko'rinadi. Real asinxron misollarda esa (setTimeout, tarmoq so'rovi) callback keyinroq chaqiriladi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Asinxron harakat</strong> — hozir boshlanib, keyin tugaydigan ish (setTimeout, tarmoq, fayl);</li><li><strong>Callback</strong> — asinxron harakat tugaganda chaqirilishi uchun boshqa funksiyaga uzatilgan funksiya;</li><li><strong>Error-first uslub</strong> — callback'ning birinchi argumenti xatolik uchun, keyingilari natija uchun;</li><li>Ketma-ket ko'p asinxron ish callback'lar ichma-ich joylashuviga — <strong>callback jahannami</strong>ga olib keladi;</li><li>Bu muammoni <strong>Promise</strong> chiroyli hal qiladi — keyingi darsda o'rganamiz.</li></ul>
 <nav class="lesson-nav">
   <a href="custom-error.html"><span class="dir">← Oldingi</span><span class="ttl">Maxsus xatoliklar, Error'ni kengaytirish</span></a>
@@ -727,6 +742,6 @@ amalBajar(10, 20, function (natija) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

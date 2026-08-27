@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Axlat yig'ish (Garbage collection) — Kodla</title>
   <meta name="description" content="Xotira boshqaruvi, erishuvchanlik (reachability), root, ishlatilmaydigan obyektlarni tozalash va mark-and-sweep algoritmi g'oyasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,27 @@
 <main class="content article">
 <div class="crumbs">Obyektlar: asoslar</div>
 <h1>Axlat yig'ish (Garbage collection)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#erishuvchanlik-reachability">Erishuvchanlik (Reachability)</a></li>
+<li class="lvl2"><a href="#oddiy-misol">Oddiy misol</a></li>
+<li class="lvl2"><a href="#ikkita-havola">Ikkita havola</a></li>
+<li class="lvl2"><a href="#o-zaro-bog-langan-obyektlar">O'zaro bog'langan obyektlar</a></li>
+<li class="lvl2"><a href="#yetib-bo-lmaydigan-orol">Yetib bo'lmaydigan orol</a></li>
+<li class="lvl2"><a href="#ichki-algoritm-mark-and-sweep">Ichki algoritm: mark-and-sweep</a></li>
+<li class="lvl2"><a href="#optimallashtirishlar">Optimallashtirishlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da xotira boshqaruvi avtomatik va ko'zga ko'rinmas tarzda amalga oshiriladi. Biz o'zgaruvchilar, obyektlar, funksiyalar yaratamiz — bularning hammasi xotira egallaydi. Endi savol: kerak bo'lmay qolgan narsalar bilan nima bo'ladi? Buni <strong>axlat yig'uvchi</strong> (garbage collector) hal qiladi.</p>
-<h2>Erishuvchanlik (Reachability)</h2>
+<h2 id="erishuvchanlik-reachability">Erishuvchanlik (Reachability)</h2>
 <p>JavaScript'dagi xotira boshqaruvining asosiy tushunchasi — <strong>erishuvchanlik</strong> (reachability). Sodda qilib aytganda, "erishsa bo'ladigan" qiymatlar — bu qandaydir yo'l bilan ishlatilishi mumkin bo'lgan qiymatlar. Ular xotirada saqlanib qoladi.</p>
 <p>Erishsa bo'ladigan qiymatlar to'plami mavjud. Ba'zi qiymatlar <em>ta'rifga ko'ra</em> erishsa bo'ladigan hisoblanadi. Bularni <strong>root</strong> (ildiz) deb ataymiz:</p>
 <ul><li>Hozir bajarilayotgan funksiyaning lokal o'zgaruvchilari va parametrlari;</li><li>Ichma-ich chaqiruvlar zanjiridagi boshqa funksiyalarning o'zgaruvchi va parametrlari;</li><li>Global o'zgaruvchilar;</li><li>(va yana bir nechta ichki, tizim darajasidagilar).</li></ul>
 <p>Asosiy qoida shunday: agar biror qiymatga <strong>root</strong>dan havola yoki havolalar zanjiri orqali yetib borilsa — u erishsa bo'ladigan (kerakli) hisoblanadi va saqlanadi. Aks holda — u "axlat" va tozalanadi.</p>
 <div class="note">Fonda uzluksiz ishlaydigan maxsus jarayon — <strong>garbage collector</strong> (axlat yig'uvchi) — barcha obyektlarni kuzatib turadi, erishib bo'lmaydiganlarini topadi va o'chiradi.</div>
-<h2>Oddiy misol</h2>
+<h2 id="oddiy-misol">Oddiy misol</h2>
 <p>Global o'zgaruvchida obyektga havola bor:</p>
 <pre class="code"><code>// user global o'zgaruvchisi obyektga havola qiladi
 let user = {
@@ -615,7 +631,7 @@ let user = {
 // Endi "Jaloliddin" obyektiga hech qanday havola yo'q.
 // Unga erishib bo'lmaydi — garbage collector uni o'chiradi,
 // xotira bo'shatiladi.</code></pre>
-<h2>Ikkita havola</h2>
+<h2 id="ikkita-havola">Ikkita havola</h2>
 <p>Endi bir obyektga ikkita havola bo'lsa, vaziyat o'zgaradi:</p>
 <pre class="code"><code>let user = {
   name: "Jaloliddin"
@@ -625,7 +641,7 @@ let admin = user; // ikkinchi havola</code></pre>
 <p>Agar endi <code>user</code>ni <code>null</code> qilsak:</p>
 <pre class="code"><code>user = null;</code></pre>
 <p>Obyekt hamon erishsa bo'ladigan bo'lib qoladi, chunki unga <code>admin</code> orqali yetib borilyapti. U xotirada saqlanadi. Faqat <code>admin = null</code> ham qilsak, obyekt erishib bo'lmaydigan bo'ladi va o'chiriladi.</p>
-<h2>O'zaro bog'langan obyektlar</h2>
+<h2 id="o-zaro-bog-langan-obyektlar">O'zaro bog'langan obyektlar</h2>
 <p>Endi murakkabroq misol — bir-biriga havola qiluvchi obyektlar. Bir oila obyektini tasavvur qiling:</p>
 <pre class="code"><code>function marry(man, woman) {
   woman.husband = man;
@@ -647,18 +663,18 @@ let family = marry(
 delete family.mother.husband;</code></pre>
 <p>"Sardor" (father) obyektiga endi hech qanday <em>kiruvchi</em> havola qolmadi: <code>family.father</code> o'chirildi, <code>woman.husband</code> ham. Uning ichidan tashqariga havolalar bo'lishi (masalan, u <code>wife</code>ga havola qilishi) ahamiyatsiz — muhimi unga <em>tashqaridan</em> yetib bo'lmasligi. Shu sabab "Sardor" obyekti o'chiriladi.</p>
 <div class="warn">Diqqat: erishuvchanlik faqat <strong>kiruvchi</strong> havolalar bilan aniqlanadi. Obyektning boshqalarga havola qilishi uni saqlab qolmaydi — unga root'dan yetib borish kerak.</div>
-<h2>Yetib bo'lmaydigan orol</h2>
+<h2 id="yetib-bo-lmaydigan-orol">Yetib bo'lmaydigan orol</h2>
 <p>Bir butun bog'langan obyektlar guruhi ham axlatga aylanishi mumkin — agar butun guruhga tashqaridan yetib bo'lmasa. Agar <code>family = null</code> qilsak, ichkarida obyektlar bir-biriga havola qilib tursa ham, ularga root'dan yo'l yo'q. Shunday "orol" butunligicha o'chiriladi.</p>
 <div class="note">Bu muhim: obyektlarning o'zaro bog'langani ularni saqlab qolmaydi. Agar butun bir tarmoqqa root'dan yetib bo'lmasa, u to'liq tozalanadi.</div>
-<h2>Ichki algoritm: mark-and-sweep</h2>
+<h2 id="ichki-algoritm-mark-and-sweep">Ichki algoritm: mark-and-sweep</h2>
 <p>Asosiy axlat yig'ish algoritmi <strong>"mark-and-sweep"</strong> (belgila va tozala) deb ataladi. U taxminan quyidagicha ishlaydi:</p>
 <ol><li>Garbage collector root'larni oladi va ularni "belgilaydi" (eslab qoladi);</li><li>So'ng root'lardan havola qilinayotgan barcha obyektlarga tashrif buyurib, ularni belgilaydi;</li><li>So'ng belgilangan obyektlarga tashrif buyuradi va ular havola qilayotganlarni belgilaydi. Barcha yo'llar to'liq ko'rilguncha bu davom etadi;</li><li>Belgilanmagan barcha obyektlar — erishib bo'lmaydigan hisoblanadi va o'chiriladi (xotira bo'shatiladi).</li></ol>
 <p>Buni bo'yoq to'kilishiga o'xshatish mumkin: root'dan boshlab, havolalar bo'ylab "bo'yoq" tarqaladi. Bo'yoq yetib bormagan (belgilanmagan) obyektlar — erishib bo'lmaydigan va o'chiriladi.</p>
-<h2>Optimallashtirishlar</h2>
+<h2 id="optimallashtirishlar">Optimallashtirishlar</h2>
 <p>Zamonaviy dvigatellar axlat yig'ishni tezlashtirish uchun ilg'or usullar qo'llaydi:</p>
 <ul><li><strong>Avloviy yig'ish (generational collection)</strong> — obyektlar "yangi" va "eski"larga bo'linadi. Ko'p obyekt yaratilib, tez ishlatilib bo'ladi; ularni tez-tez tekshiradi. Uzoq yashaganlarini kamroq tekshiradi;</li><li><strong>Bosqichli yig'ish (incremental collection)</strong> — juda ko'p obyekt bo'lsa, hammasini birdan belgilash kechikish yaratadi. Shuning uchun ish kichik bo'laklarga bo'lib bajariladi;</li><li><strong>Bo'sh vaqtda yig'ish (idle-time collection)</strong> — protsessor bo'sh bo'lganda ishlab, asosiy kodga ta'sirni kamaytirishga harakat qiladi.</li></ul>
 <div class="tip">Bu optimallashtirishlar ichki tafsilotlar — ular vaqt o'tishi bilan o'zgaradi. Kundalik dasturlashda ularni yodda tutish shart emas; dvigatel o'zi hal qiladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Xotira boshqaruvi JavaScript'da <strong>avtomatik</strong> — biz uni qo'lda boshqarmaymiz;</li><li>Asosiy tushuncha — <strong>erishuvchanlik</strong> (reachability): root'dan yetib boriladigan qiymatlar saqlanadi;</li><li><strong>Root</strong>lar — global o'zgaruvchilar, joriy funksiya o'zgaruvchilari va boshqalar;</li><li>Obyektni saqlab qoladigan narsa — unga <strong>kiruvchi</strong> havolalar, chiquvchilari emas;</li><li>Bir-biriga bog'langan, ammo root'dan uzilgan obyektlar guruhi butunligicha o'chiriladi;</li><li>Asosiy algoritm — <strong>mark-and-sweep</strong>; dvigatellar buni turli optimallashtirishlar bilan tezlashtiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="obyekt-nusxalash.html"><span class="dir">← Oldingi</span><span class="ttl">Obyekt havolalari va nusxalash</span></a>
@@ -672,6 +688,6 @@ delete family.mother.husband;</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

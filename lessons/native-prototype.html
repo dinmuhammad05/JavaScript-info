@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tug'ma prototiplar — Kodla</title>
   <meta name="description" content="Object.prototype, Array.prototype, String.prototype va boshqalar, hamda ularni kengaytirish xavfi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Prototiplar, meros</div>
 <h1>Tug'ma prototiplar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#object-prototype">Object.prototype</a></li>
+<li class="lvl2"><a href="#boshqa-tug-ma-prototiplar">Boshqa tug'ma prototiplar</a></li>
+<li class="lvl2"><a href="#primitivlar-va-prototiplar">Primitivlar va prototiplar</a></li>
+<li class="lvl2"><a href="#tug-ma-prototiplarni-kengaytirish">Tug'ma prototiplarni kengaytirish</a></li>
+<li class="lvl2"><a href="#prototiplardan-qarz-olish-borrowing">Prototiplardan qarz olish (borrowing)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>prototype</code> xossasi JavaScript yadrosining o'zida keng qo'llaniladi. Barcha tug'ma (native) konstruktor funksiyalar — <code>Object</code>, <code>Array</code>, <code>Function</code>, <code>Number</code> va boshqalar — o'z <code>prototype</code> laridan foydalanadi. Aynan shu sababli obyektlar, massivlar va satrlarda ko'plab tayyor metodlar mavjud.</p>
-<h2>Object.prototype</h2>
+<h2 id="object-prototype">Object.prototype</h2>
 <p>Bo'sh obyekt yaratganimizda, u aslida bo'sh emas. <code>let obj = {}</code> yozuvi <code>let obj = new Object()</code> bilan bir xil, bu yerda <code>Object</code> — tug'ma konstruktor funksiya. Uning <code>Object.prototype</code> si <code>toString</code> va boshqa metodlarga ega, ular meros orqali barcha obyektlarga o'tadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>native-object.js</span></div><textarea spellcheck="false">let obj = {};
 
@@ -610,7 +624,7 @@ console.log(obj.__proto__ === Object.prototype);                // true
 // Object.prototype'ning ustida hech narsa yo'q:
 console.log(Object.prototype.__proto__);                        // null</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Demak, zanjir shunday: <code>obj</code> → <code>Object.prototype</code> → <code>null</code>. <code>Object.prototype</code> zanjirning eng tepasi — uning prototipi <code>null</code>.</p>
-<h2>Boshqa tug'ma prototiplar</h2>
+<h2 id="boshqa-tug-ma-prototiplar">Boshqa tug'ma prototiplar</h2>
 <p><code>Array</code>, <code>Function</code>, <code>Number</code>, <code>String</code>, <code>Boolean</code> kabi tug'ma obyektlar ham o'z metodlarini prototiplarida saqlaydi. Masalan, massiv yaratganimizda <code>[1, 2, 3]</code> aslida <code>new Array(1, 2, 3)</code> ga o'xshaydi va uning barcha metodlari <code>Array.prototype</code> da yashaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>native-array.js</span></div><textarea spellcheck="false">let arr = [1, 2, 3];
 
@@ -628,7 +642,7 @@ console.log(arr.toString()); // "1,2,3" (Array.prototype.toString)
 let obj = { a: 1 };
 console.log(obj.toString()); // "[object Object]" (Object.prototype.toString)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Funksiyalar ham obyekt — ularning <code>[[Prototype]]</code> si <code>Function.prototype</code> bo'lib, u <code>call</code>, <code>apply</code>, <code>bind</code> kabi metodlarni beradi. Shu sababli istalgan funksiyada bu metodlar mavjud.</div>
-<h2>Primitivlar va prototiplar</h2>
+<h2 id="primitivlar-va-prototiplar">Primitivlar va prototiplar</h2>
 <p>Satr, son va mantiqiy qiymatlar (primitivlar) obyekt emas. Ammo biz ularning xossa yoki metodlariga murojaat qilsak (masalan, <code>str.toUpperCase()</code>), vaqtinchalik "o'ram" (wrapper) obyekt yaratiladi. U o'z ishini bajaradi va yo'qoladi. Bu o'ram obyektlarning metodlari ham prototiplarda joylashgan: <code>String.prototype</code>, <code>Number.prototype</code>, <code>Boolean.prototype</code>.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>native-primitive.js</span></div><textarea spellcheck="false">let str = "salom";
 console.log(str.toUpperCase()); // SALOM (String.prototype'dan)
@@ -636,7 +650,7 @@ console.log(str.toUpperCase()); // SALOM (String.prototype'dan)
 let num = 5;
 console.log(num.toFixed(2));     // 5.00 (Number.prototype'dan)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>null</code> va <code>undefined</code> ning o'ram obyektlari YO'Q — ularda hech qanday metod yoki xossa yo'q. Ularga murojaat qilsangiz xato yuz beradi.</div>
-<h2>Tug'ma prototiplarni kengaytirish</h2>
+<h2 id="tug-ma-prototiplarni-kengaytirish">Tug'ma prototiplarni kengaytirish</h2>
 <p>Tug'ma prototiplarni o'zgartirish (kengaytirish) mumkin. Masalan, <code>String.prototype</code> ga yangi metod qo'shsak, u barcha satrlarda paydo bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>native-extend.js</span></div><textarea spellcheck="false">String.prototype.show = function() {
   return "Satr: " + this;
@@ -658,7 +672,7 @@ if (!String.prototype.repeatText) {
 }
 
 console.log("ab".repeatText(3)); // ababab</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Prototiplardan qarz olish (borrowing)</h2>
+<h2 id="prototiplardan-qarz-olish-borrowing">Prototiplardan qarz olish (borrowing)</h2>
 <p>Ba'zan bir tug'ma prototip metodini boshqa obyektga "qarzga" olamiz. Masalan, massivga o'xshash (array-like) obyektga <code>Array.prototype</code> metodlarini qo'llash mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>native-borrow.js</span></div><textarea spellcheck="false">let obj = {
   0: "a",
@@ -671,7 +685,7 @@ obj.join = Array.prototype.join;
 
 console.log(obj.join(",")); // a,b</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu ishlaydi, chunki <code>join</code> ning ichki algoritmi faqat to'g'ri son indekslar va <code>length</code> xossasini kutadi — obyekt haqiqiy massiv bo'lishini talab qilmaydi. Bu texnika "metod qarz olish" (method borrowing) deb ataladi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Barcha tug'ma obyektlar metodlarini prototiplarida saqlaydi: <code>Object.prototype</code>, <code>Array.prototype</code>, <code>String.prototype</code> va h.k.;</li><li>Obyektlarning zanjiri eng tepada <code>Object.prototype</code> ga, undan keyin <code>null</code> ga boradi;</li><li>Primitivlar metodlarini vaqtinchalik o'ram obyektlar orqali oladi (<code>String.prototype</code> va boshqalar);</li><li><code>null</code> va <code>undefined</code> da metod yo'q;</li><li>Tug'ma prototiplarni kengaytirish mumkin, lekin bu deyarli har doim yomon g'oya — istisno faqat polyfill'lar;</li><li>Prototip metodlarini boshqa obyektlarga "qarzga" berish mumkin (method borrowing).</li></ul>
 <nav class="lesson-nav">
   <a href="f-prototype.html"><span class="dir">← Oldingi</span><span class="ttl">F.prototype</span></a>
@@ -685,6 +699,6 @@ console.log(obj.join(",")); // a,b</textarea><div class="pg-actions"><button cla
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

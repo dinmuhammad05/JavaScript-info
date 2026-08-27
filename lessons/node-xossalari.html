@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Node xossalari: tur, teg va tarkib — Kodla</title>
   <meta name="description" content="DOM tugun sinflari ierarxiyasi, nodeType, nodeName va tagName, innerHTML va outerHTML, nodeValue/textContent hamda hidden xossasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Node xossalari: tur, teg va tarkib</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#dom-tugun-sinflari">DOM tugun sinflari</a></li>
+<li class="lvl2"><a href="#nodetype-tugun-turi">nodeType — tugun turi</a></li>
+<li class="lvl2"><a href="#nodename-va-tagname">nodeName va tagName</a></li>
+<li class="lvl2"><a href="#innerhtml-tarkib">innerHTML — tarkib</a></li>
+<li class="lvl2"><a href="#outerhtml-element-bilan-birga">outerHTML — element bilan birga</a></li>
+<li class="lvl2"><a href="#nodevalue-va-textcontent">nodeValue va textContent</a></li>
+<li class="lvl3"><a href="#textcontent">textContent</a></li>
+<li class="lvl2"><a href="#hidden-xossasi">hidden xossasi</a></li>
+<li class="lvl2"><a href="#boshqa-xossalar">Boshqa xossalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi DOM tugunlarini chuqurroq o'rganamiz. Ular turli sinflarga tegishli bo'lib, har biri o'z xossalariga ega. Ushbu darsda tugunlarning turini, teg nomini va ichki tarkibini qanday o'qish va yozishni ko'rib chiqamiz — bu DOM bilan har kunlik ishning asosi.</p>
-<h2>DOM tugun sinflari</h2>
+<h2 id="dom-tugun-sinflari">DOM tugun sinflari</h2>
 <p>Turli DOM tugunlari turli xossalarga ega bo'lishi mumkin. Masalan, <code>&lt;a&gt;</code> tegiga mos element tuguni havola bilan bog'liq xossalarga (<code>href</code>), <code>&lt;input&gt;</code> tuguni esa kiritish bilan bog'liq xossalarga (<code>value</code>) ega. Matn tugunlari esa element tugunlaridan farqli. Ammo ular orasida umumiy narsalar ham bor, chunki barcha DOM tugunlari bitta ierarxiyani tashkil etadi.</p>
 <p>Har bir DOM tuguni tegishli sinfga tegishli. Ierarxiyaning ildizi — <code>EventTarget</code>. Undan <code>Node</code>, undan esa boshqalari meros oladi:</p>
 <ul><li><strong>EventTarget</strong> — abstrakt ildiz sinf. Bu sinf obyektlari hech qachon yaratilmaydi. U barcha tugunlar uchun asos bo'lib xizmat qiladi va hodisalarni (events) qo'llab-quvvatlash imkonini beradi;</li><li><strong>Node</strong> — ham abstrakt sinf, barcha DOM tugunlari uchun asos. U asosiy daraxt funksionalligini beradi: <code>parentNode</code>, <code>nextSibling</code>, <code>childNodes</code> va h.k. (ular getter'lar). <code>Node</code> obyektlari ham hech qachon to'g'ridan-to'g'ri yaratilmaydi. Undan aniq tugun sinflari meros oladi: <code>Text</code>, <code>Element</code>, <code>Comment</code>;</li><li><strong>Element</strong> — DOM elementlari uchun asosiy sinf. U element darajasidagi navigatsiyani (<code>nextElementSibling</code>, <code>children</code>) va qidiruvni (<code>getElementsByTagName</code>, <code>querySelector</code>) beradi. Brauzerdagi elementlar faqat HTML uchun emas — SVG uchun ham. <code>HTMLElement</code> sinfi <code>Element</code>dan meros oladi;</li><li><strong>HTMLElement</strong> — barcha HTML elementlar uchun asosiy sinf. Undan aniq HTML elementlar meros oladi: <code>HTMLInputElement</code> (<code>&lt;input&gt;</code> uchun), <code>HTMLBodyElement</code> (<code>&lt;body&gt;</code> uchun), <code>HTMLAnchorElement</code> (<code>&lt;a&gt;</code> uchun) va h.k.</li></ul>
@@ -606,7 +624,7 @@
 let input = document.body.querySelector('input');
 alert(input.constructor.name); // HTMLInputElement</code></pre>
 <div class="note">Elementning barcha xossa va metodlarini ko'rish uchun uni konsolda <code>console.dir(elem)</code> orqali ko'ring. Yoki spetsifikatsiyalarni o'qing: DOM (dom.spec.whatwg.org) va HTML (html.spec.whatwg.org). Ular murakkab, ammo to'liq.</div>
-<h2>nodeType — tugun turi</h2>
+<h2 id="nodetype-tugun-turi">nodeType — tugun turi</h2>
 <p><code>nodeType</code> xossasi tugun turini bildiruvchi eski, ammo hali ishlatiladigan usul. U son qiymat qaytaradi:</p>
 <ul><li><code>elem.nodeType == 1</code> — element tugunlari uchun;</li><li><code>elem.nodeType == 3</code> — matn tugunlari uchun;</li><li><code>elem.nodeType == 9</code> — <code>document</code> obyekti uchun;</li><li>Boshqa qiymatlar ham bor (izohlar uchun 8 va h.k.), ammo bulari eng ko'p uchraydiganlari.</li></ul>
 <pre class="code"><code>&lt;body&gt;
@@ -624,7 +642,7 @@ alert(input.constructor.name); // HTMLInputElement</code></pre>
   &lt;/script&gt;
 &lt;/body&gt;</code></pre>
 <div class="note">Zamonaviy skriptlarda tugun turini <code>instanceof</code> yoki boshqa sinf-asosli tekshiruvlar orqali aniqlash mumkin. Ammo ba'zan <code>nodeType</code> eng sodda yo'l. Uni faqat o'qishimiz mumkin, o'zgartira olmaymiz.</div>
-<h2>nodeName va tagName</h2>
+<h2 id="nodename-va-tagname">nodeName va tagName</h2>
 <p>Tugunning teg nomini <code>nodeName</code> yoki <code>tagName</code> orqali o'qishimiz mumkin:</p>
 <pre class="code"><code>alert( document.body.nodeName ); // BODY
 alert( document.body.tagName ); // BODY</code></pre>
@@ -642,7 +660,7 @@ alert( document.body.tagName ); // BODY</code></pre>
 &lt;/body&gt;</code></pre>
 <p>Boshqacha aytganda, <code>tagName</code> faqat elementlarda ishlaydi (bu mantiqan to'g'ri — faqat elementlarda teg bo'ladi), <code>nodeName</code> esa boshqa tugun turlari uchun ham biror-bir ma'lumot beradi.</p>
 <div class="warn">Teg nomi HTML rejimida har doim BOSH harflarda qaytariladi. Brauzer HTML'ni katta-kichik harfga befarq qayta ishlaydi, ammo <code>tagName</code> va <code>nodeName</code> teglarni BOSH harfda beradi: <code>BODY</code>, <code>DIV</code>, <code>INPUT</code> va h.k. (XML rejimida esa asl holicha saqlanadi, ammo bu kamdan-kam uchraydi).</div>
-<h2>innerHTML — tarkib</h2>
+<h2 id="innerhtml-tarkib">innerHTML — tarkib</h2>
 <p><code>innerHTML</code> xossasi elementning ichidagi HTML'ni satr sifatida olish yoki o'rnatish imkonini beradi. Bu eng ko'p ishlatiladigan xossalardan biri:</p>
 <pre class="code"><code>&lt;body&gt;
   &lt;p&gt;Paragraf&lt;/p&gt;
@@ -661,7 +679,7 @@ alert( document.body.innerHTML ); // &lt;b&gt;test&lt;/b&gt; (avtomatik tuzatild
 chatDiv.innerHTML += '&lt;div&gt;Salom&lt;img src='smile.gif'/&gt; !&lt;/div&gt;';
 chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
 <div class="tip">Element ichiga HTML qo'shishning yaxshiroq yo'llari bor: <code>elem.insertAdjacentHTML</code> yoki <code>append/prepend</code> metodlari. Ular mavjud tarkibni qayta yozmaydi. Bular bilan keyingi darslarda tanishamiz.</div>
-<h2>outerHTML — element bilan birga</h2>
+<h2 id="outerhtml-element-bilan-birga">outerHTML — element bilan birga</h2>
 <p><code>outerHTML</code> xossasi elementning to'liq HTML'ini — <strong>elementning o'zini ham</strong> — o'z ichiga oladi. Bu <code>innerHTML</code> ustiga element tegining o'zini qo'shgani bilan farq qiladi:</p>
 <pre class="code"><code>&lt;div id="elem"&gt;Salom &lt;b&gt;Dunyo&lt;/b&gt;&lt;/div&gt;
 
@@ -682,7 +700,7 @@ chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
   // DOM'da esa endi &lt;p&gt; turibdi
 &lt;/script&gt;</code></pre>
 <p>Yuqoridagi kod ko'pchilikni chalkashtiradi. Sabab: <code>div.outerHTML = ...</code> <code>div</code>ni DOM'dan olib tashladi va uning o'rniga yangi HTML qo'ydi. Ammo <code>div</code> o'zgaruvchisi hali ham eski elementga ishora qiladi. Yangi qo'shilgan tugunni olish uchun DOM'dan qayta topish kerak.</p>
-<h2>nodeValue va textContent</h2>
+<h2 id="nodevalue-va-textcontent">nodeValue va textContent</h2>
 <p><code>innerHTML</code> faqat element tugunlarida ishlaydi. Boshqa tugun turlarida (matn, izoh) tarkibni o'qish uchun ularning "o'xshashlari" bor: <code>nodeValue</code> va <code>data</code> xossalari. Ular deyarli bir xil, amaliyotda kichik farqlari bilan:</p>
 <pre class="code"><code>&lt;body&gt;
   Salom
@@ -696,7 +714,7 @@ chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
   &lt;/script&gt;
 &lt;/body&gt;</code></pre>
 <p>Matn tugunlari uchun ular ma'noli bo'ladi, izohlar uchun ham. Ammo element tugunlari uchun nega bizga ular kerak? Odatda kerak emas — element uchun <code>textContent</code> foydaliroq.</p>
-<h3>textContent</h3>
+<h3 id="textcontent">textContent</h3>
 <p><code>textContent</code> element ichidagi <strong>faqat matnni</strong> beradi — barcha teglar tashlab yuboriladi, faqat matn qoladi:</p>
 <pre class="code"><code>&lt;div id="news"&gt;
   &lt;h1&gt;Sarlavha!&lt;/h1&gt;
@@ -721,7 +739,7 @@ chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
   elem2.textContent = name; // &lt;b&gt;Salbarchi&lt;/b&gt; — matn holicha ko'rinadi
 &lt;/script&gt;</code></pre>
 <div class="warn"><code>textContent</code> foydalanuvchi kiritgan matnni chiqarishda XAVFSIZLIK uchun juda muhim! Agar foydalanuvchi <code>&lt;script&gt;...&lt;/script&gt;</code> yoki boshqa xavfli HTML kiritsa, <code>innerHTML</code> uni bajarishi mumkin (XSS hujumi). <code>textContent</code> esa uni oddiy matn deb qabul qiladi va hech qanday teg ishlamaydi.</div>
-<h2>hidden xossasi</h2>
+<h2 id="hidden-xossasi">hidden xossasi</h2>
 <p><code>hidden</code> atributi va DOM xossasi element ko'rinishmi yoki yashiringanmi ekanligini belgilaydi. Bu texnik jihatdan <code>style="display:none"</code> bilan bir xil ishlaydi, ammo yozishda qulayroq:</p>
 <pre class="code"><code>&lt;div&gt;Ikkalasi ham quyida yashiringan&lt;/div&gt;
 
@@ -738,7 +756,7 @@ chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
 &lt;script&gt;
   setInterval(() =&gt; elem.hidden = !elem.hidden, 1000);
 &lt;/script&gt;</code></pre>
-<h2>Boshqa xossalar</h2>
+<h2 id="boshqa-xossalar">Boshqa xossalar</h2>
 <p>DOM elementlari yana ko'plab xossalarga ega. Xususan, aniq element sinfiga bog'liq bo'lganlari:</p>
 <ul><li><code>value</code> — <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code> uchun (<code>HTMLInputElement</code> va h.k.);</li><li><code>href</code> — <code>&lt;a href="..."&gt;</code> uchun (<code>HTMLAnchorElement</code>);</li><li><code>id</code> — barcha elementlar uchun <code>id</code> atributining qiymati (<code>HTMLElement</code>).</li></ul>
 <pre class="code"><code>&lt;input type="text" id="elem" value="qiymat"&gt;
@@ -749,7 +767,7 @@ chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
   alert(elem.value); // qiymat
 &lt;/script&gt;</code></pre>
 <div class="tip">Aksariyat standart HTML atributlari mos DOM xossasiga ega, biz ularni o'qiy va o'zgartira olamiz. Xossa va atribut orasidagi nozik farqlarni keyingi "Atributlar va xossalar" darsida batafsil ko'ramiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Har bir DOM tuguni tegishli sinfga ega. Sinflar ierarxiya tashkil qiladi: <code>EventTarget</code> → <code>Node</code> → <code>Element</code> → <code>HTMLElement</code> → aniq element sinflari;</li><li><code>nodeType</code> — tugun turini son bilan bildiradi (element=1, matn=3, document=9);</li><li><code>tagName</code>/<code>nodeName</code> — teg nomi (BOSH harfda);</li><li><code>innerHTML</code> — element ichidagi HTML (o'qish/yozish);</li><li><code>outerHTML</code> — element o'zi bilan birga HTML (yozish uni almashtiradi);</li><li><code>nodeValue</code>/<code>data</code> — matn va izoh tugunlari tarkibi;</li><li><code>textContent</code> — faqat matn; foydalanuvchi kiritgan matnni xavfsiz chiqarishda muhim;</li><li><code>hidden</code> — elementni yashirish/ko'rsatish.</li></ul>
 <nav class="lesson-nav">
   <a href="dom-qidirish.html"><span class="dir">← Oldingi</span><span class="ttl">Elementlarni qidirish: getElement*, querySelector*</span></a>
@@ -763,6 +781,6 @@ chatDiv.innerHTML += 'Xayr &lt;img src='goodbye.jpg'/&gt; :)';</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

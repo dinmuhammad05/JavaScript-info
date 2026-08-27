@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HTML nima? — Kodla</title>
   <meta name="description" content="HTML — veb-sahifalarni belgilash tili. Teg, element va atribut tushunchalari, HTML hujjatining skeleti (DOCTYPE, html, head, body), title va meta teglari, hamda birinchi sahifani yozish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,33 @@
 <main class="content article">
 <div class="crumbs">HTML</div>
 <h1>HTML nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#html-nima-va-u-nima-uchun-kerak">HTML nima va u nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#teg-nima">Teg nima?</a></li>
+<li class="lvl2"><a href="#element-nima">Element nima?</a></li>
+<li class="lvl2"><a href="#atribut-nima">Atribut nima?</a></li>
+<li class="lvl2"><a href="#html-hujjatining-skeleti">HTML hujjatining skeleti</a></li>
+<li class="lvl3"><a href="#1-hujjat-turi">1. — hujjat turi</a></li>
+<li class="lvl3"><a href="#2-ildiz-element">2. — ildiz element</a></li>
+<li class="lvl3"><a href="#3-texnik-ma-lumotlar-bo-limi">3. — texnik ma'lumotlar bo'limi</a></li>
+<li class="lvl3"><a href="#4-ko-rinadigan-mazmun">4. — ko'rinadigan mazmun</a></li>
+<li class="lvl2"><a href="#title-va-meta-teglari">title va meta teglari</a></li>
+<li class="lvl2"><a href="#birinchi-sahifani-yozish">Birinchi sahifani yozish</a></li>
+<li class="lvl2"><a href="#bo-shliqlar-va-yangi-qatorlar-haqida">Bo'shliqlar va yangi qatorlar haqida</a></li>
+<li class="lvl2"><a href="#kommentariylar-izohlar">Kommentariylar (izohlar)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>HTML</strong> — bu har bir veb-sahifaning poydevori. Internetda ko'rgan har bir sayt, matn, rasm, tugma va havola aynan HTML yordamida yaratilgan. Ushbu darsda HTML nima ekanligini mutlaqo noldan o'rganamiz: teg, element va atribut nima, HTML hujjati qanday tuzilishga ega va o'z qo'lingiz bilan birinchi veb-sahifani qanday yozish mumkin.</p>
 <div class="note">Bu bob — <strong>frontend</strong> (brauzerda ko'rinadigan qism) asoslariga bag'ishlangan. Bu yerdagi barcha kod misollari brauzerda ishlaydi. Ularni sinab ko'rish uchun oddiy matn muharririda (masalan, VS Code) fayl yaratib, uni <code>.html</code> kengaytmasi bilan saqlang va brauzerda oching.</div>
-<h2>HTML nima va u nima uchun kerak?</h2>
+<h2 id="html-nima-va-u-nima-uchun-kerak">HTML nima va u nima uchun kerak?</h2>
 <p>HTML — bu <strong>HyperText Markup Language</strong> so'zlarining qisqartmasi, ya'ni "Gipermatnli Belgilash Tili". Nomdagi har bir so'zni ajratib tushunaylik:</p>
 <ul><li><strong>HyperText (Gipermatn)</strong> — bu oddiy matndan farqli, ichida bir sahifadan boshqasiga o'tadigan <strong>havolalar</strong> bo'lgan matn. Aynan havolalar butun internetni bir-biriga bog'lab turadi;</li><li><strong>Markup (Belgilash)</strong> — matnni maxsus <strong>belgilar (teglar)</strong> bilan o'rab, brauzerga "bu — sarlavha", "bu — paragraf", "bu — rasm" deb aytish;</li><li><strong>Language (Til)</strong> — bularning barchasi aniq qoidalarga ega bo'lgan til orqali yoziladi.</li></ul>
 <p>Muhim tushuncha: HTML — bu <strong>dasturlash tili emas</strong>. Unda shartlar, sikllar yoki hisob-kitob yo'q. HTML faqat sahifaning <strong>tuzilishini</strong> va <strong>mazmunini</strong> tasvirlaydi. U brauzerga nimani ko'rsatishni aytadi, lekin qanday harakat qilishni emas. Boshqacha aytganda, HTML — bu sahifaning "skeleti" yoki "suyaklari".</p>
 <p>Bir sahifani odam tanasiga qiyoslasak: <strong>HTML</strong> — suyaklar va a'zolar (tuzilish), <strong>CSS</strong> — tashqi ko'rinish, kiyim va bezak (ranglar, o'lchamlar), <strong>JavaScript</strong> — mushaklar va harakat (bosilganda nima bo'lishi). Biz hozir eng birinchisi — suyaklarni o'rganamiz.</p>
-<h2>Teg nima?</h2>
+<h2 id="teg-nima">Teg nima?</h2>
 <p>HTML'ning eng asosiy birligi — <strong>teg</strong> (tag). Teg — bu burchakli qavslar <code>&lt;</code> va <code>&gt;</code> ichiga yozilgan maxsus so'z. Masalan, paragraf uchun teg <code>&lt;p&gt;</code> ko'rinishida bo'ladi.</p>
 <p>Teglar odatda <strong>juft</strong> bo'lib keladi: <strong>ochuvchi teg</strong> va <strong>yopuvchi teg</strong>. Yopuvchi teg ochuvchisiga o'xshaydi, faqat oldida qiya chiziq (<code>/</code>) turadi:</p>
 <pre class="code"><code>&lt;p&gt;Bu — bitta paragraf.&lt;/p&gt;</code></pre>
@@ -611,7 +633,7 @@
 <p>Ba'zi teglar mazmunni o'rab olmaydi, chunki ularning ichida matn bo'lmaydi. Bunday teglar <strong>bo'sh (yakka)</strong> teglar deyiladi va ularda yopuvchi teg bo'lmaydi. Masalan, satrni yangi qatordan boshlaydigan <code>&lt;br&gt;</code> yoki rasm qo'yadigan <code>&lt;img&gt;</code>:</p>
 <pre class="code"><code>&lt;br&gt;</code></pre>
 <div class="note">Eski HTML uslubida bo'sh teglarni <code>&lt;br /&gt;</code> ko'rinishida oxiriga qiya chiziq qo'yib yozishardi. Zamonaviy HTML5'da bu shart emas — oddiy <code>&lt;br&gt;</code> yetarli. Ikkalasi ham to'g'ri ishlaydi.</div>
-<h2>Element nima?</h2>
+<h2 id="element-nima">Element nima?</h2>
 <p><strong>Element</strong> — bu ochuvchi teg, mazmun va yopuvchi tegdan iborat <strong>to'liq birlik</strong>. Ya'ni teg — bu shunchaki belgi, element esa — belgi bilan o'ralgan butun bo'lak.</p>
 <pre class="code"><code>&lt;h1&gt;Salom, dunyo!&lt;/h1&gt;
 &lt;p&gt;Bu mening birinchi veb-sahifam.&lt;/p&gt;</code></pre>
@@ -619,7 +641,7 @@
 <p>Elementlar bir-birining <strong>ichiga joylashtirilishi</strong> (ichma-ich) mumkin. Masalan, paragraf ichida biror so'zni qalin qilib ajratmoqchi bo'lsak:</p>
 <pre class="code"><code>&lt;p&gt;Men &lt;strong&gt;HTML&lt;/strong&gt; o'rganyapman.&lt;/p&gt;</code></pre>
 <p>Bu yerda <code>strong</code> elementi <code>p</code> elementining <strong>ichida</strong> joylashgan. Muhim qoida: ichma-ich joylangan teglar <strong>to'g'ri tartibda</strong> yopilishi kerak. Oxirgi ochilgan teg birinchi bo'lib yopiladi. Ya'ni <code>&lt;p&gt;&lt;strong&gt;...&lt;/strong&gt;&lt;/p&gt;</code> to'g'ri, lekin <code>&lt;p&gt;&lt;strong&gt;...&lt;/p&gt;&lt;/strong&gt;</code> noto'g'ri.</p>
-<h2>Atribut nima?</h2>
+<h2 id="atribut-nima">Atribut nima?</h2>
 <p><strong>Atribut</strong> — bu tegga qo'shimcha <strong>ma'lumot</strong> beruvchi maxsus qism. Atributlar ochuvchi teg ichiga yoziladi va elementga qo'shimcha xususiyat qo'shadi. Atribut ikki qismdan iborat: <strong>nomi</strong> va <strong>qiymati</strong>, ular orasida teng belgisi (<code>=</code>) turadi. Qiymat esa qo'shtirnoq ichiga olinadi.</p>
 <p>Eng ko'p ishlatiladigan misol — havola. Havola <code>&lt;a&gt;</code> tegi bilan yaratiladi, lekin qayerga o'tishni <code>href</code> atributi belgilaydi:</p>
 <pre class="code"><code>&lt;a href="https://example.com"&gt;Saytga o'tish&lt;/a&gt;</code></pre>
@@ -629,7 +651,7 @@
 <pre class="code"><code>&lt;img src="rasm.jpg" alt="Chiroyli manzara"&gt;</code></pre>
 <p>Bu yerda <code>src</code> — rasm fayli manzili, <code>alt</code> — rasm ko'rinmasa yoki ekranni o'quvchi dastur uchun matnli tavsif.</p>
 <div class="tip">Atribut qiymatlarini har doim <strong>qo'shtirnoq</strong> ichiga oling: <code>href="..."</code>. Texnik jihatdan tirnoqsiz ham ishlaydi, lekin qiymatda bo'sh joy bo'lsa xato beradi. Shuning uchun har doim tirnoq qo'yish — yaxshi odat.</div>
-<h2>HTML hujjatining skeleti</h2>
+<h2 id="html-hujjatining-skeleti">HTML hujjatining skeleti</h2>
 <p>Har bir to'liq HTML sahifasi ma'lum bir <strong>standart tuzilishga</strong> ega. Bu — sahifaning "skeleti", ya'ni har safar takrorlanadigan asosiy karkas. Mana to'liq bo'sh sahifa qanday ko'rinadi:</p>
 <pre class="code"><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="uz"&gt;
@@ -644,17 +666,17 @@
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 <p>Bu tuzilish dastlab murakkab tuyulishi mumkin, lekin har bir qismini alohida ko'rib chiqsak, hammasi tushunarli bo'ladi.</p>
-<h3>1. <!DOCTYPE html> — hujjat turi</h3>
+<h3 id="1-hujjat-turi">1. <!DOCTYPE html> — hujjat turi</h3>
 <p>Fayilning eng birinchi qatori — <code>&lt;!DOCTYPE html&gt;</code>. Bu brauzerga "bu hujjat zamonaviy HTML5 standartida yozilgan" deb aytadi. Bu teg emas, balki <strong>e'lon (deklaratsiya)</strong>. U doim eng yuqorida, boshqa hamma narsadan oldin turishi kerak.</p>
 <div class="warn">Agar <code>&lt;!DOCTYPE html&gt;</code> ni tushirib qoldirsangiz, brauzer eski, mos kelmaydigan ("quirks") rejimga o'tishi mumkin va sahifangiz kutilmaganda noto'g'ri ko'rinadi. Shuning uchun uni hech qachon unutmang.</div>
-<h3>2. <html> — ildiz element</h3>
+<h3 id="2-ildiz-element">2. <html> — ildiz element</h3>
 <p><code>&lt;html&gt;</code> — butun hujjatni o'rab turadigan <strong>eng asosiy (ildiz)</strong> element. Boshqa hamma teglar shu elementning ichida joylashadi. Uning <code>lang</code> atributi sahifa qaysi tilda ekanini bildiradi: <code>lang="uz"</code> — o'zbek tili, <code>lang="en"</code> — ingliz tili. Bu qidiruv tizimlari va ekran o'quvchilari uchun muhim.</p>
-<h3>3. <head> — texnik ma'lumotlar bo'limi</h3>
+<h3 id="3-texnik-ma-lumotlar-bo-limi">3. <head> — texnik ma'lumotlar bo'limi</h3>
 <p><code>&lt;head&gt;</code> ("bosh") bo'limi — sahifa haqidagi <strong>ko'rinmaydigan</strong> texnik ma'lumotlarni saqlaydi. Bu yerdagi narsalar sahifada to'g'ridan-to'g'ri chiqmaydi, lekin brauzer va qidiruv tizimlari uchun juda muhim. Bu yerga sahifa sarlavhasi, kodlash usuli, CSS va JavaScript havolalari joylashadi.</p>
-<h3>4. <body> — ko'rinadigan mazmun</h3>
+<h3 id="4-ko-rinadigan-mazmun">4. <body> — ko'rinadigan mazmun</h3>
 <p><code>&lt;body&gt;</code> ("tana") bo'limi — foydalanuvchi ekranda <strong>ko'radigan</strong> hamma narsani saqlaydi: sarlavhalar, matnlar, rasmlar, tugmalar, havolalar. Sahifaning butun mazmuni aynan shu yerga yoziladi.</p>
 <div class="note">Oddiy qoida: agar biror narsa <strong>ko'rinishi</strong> kerak bo'lsa — u <code>&lt;body&gt;</code> ichida bo'ladi. Agar u sahifa haqidagi <strong>ma'lumot</strong> (sozlama) bo'lsa — u <code>&lt;head&gt;</code> ichida bo'ladi.</div>
-<h2>title va meta teglari</h2>
+<h2 id="title-va-meta-teglari">title va meta teglari</h2>
 <p><code>&lt;head&gt;</code> ichidagi eng muhim ikki narsa — <code>title</code> va <code>meta</code> teglari.</p>
 <p><strong>&lt;title&gt;</strong> — sahifaning sarlavhasi. U sahifada emas, balki brauzer <strong>yorlig'ida (tab)</strong> va qidiruv natijalarida ko'rinadi. Yaxshi title yozish — SEO (qidiruv tizimida yaxshi joy olish) uchun juda muhim:</p>
 <pre class="code"><code>&lt;title&gt;Bosh sahifa — Mening saytim&lt;/title&gt;</code></pre>
@@ -663,7 +685,7 @@
 &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
 <ul><li><code>&lt;meta charset="UTF-8"&gt;</code> — belgilar kodlashini o'rnatadi. UTF-8 barcha tillardagi harflarni (jumladan o'zbekcha <em>o', g', sh, ch</em>) to'g'ri ko'rsatadi. Busiz matn "krakozyabra" bo'lib ketishi mumkin;</li><li><code>&lt;meta name="viewport"...&gt;</code> — sahifaning telefon va planshetlarda to'g'ri ko'rinishini ta'minlaydi. Zamonaviy saytlar uchun bu shart.</li></ul>
 <div class="tip">Sahifada matn o'rniga tushunarsiz belgilar (masalan, <em>Ð¡Ð°Ð»Ð¾Ð¼</em>) chiqsa — deyarli har doim sabab <code>&lt;meta charset="UTF-8"&gt;</code> ning yo'qligi. Uni <code>&lt;head&gt;</code> ning eng boshiga qo'ying.</div>
-<h2>Birinchi sahifani yozish</h2>
+<h2 id="birinchi-sahifani-yozish">Birinchi sahifani yozish</h2>
 <p>Endi hamma bilimni birlashtirib, o'z qo'lingiz bilan haqiqiy sahifa yasaymiz. Quyidagi qadamlarni bajaring:</p>
 <ol><li>Kompyuteringizda yangi papka yarating (masalan, <code>birinchi-sayt</code>);</li><li>Matn muharririda (VS Code tavsiya etiladi) yangi fayl yarating;</li><li>Uni <code>index.html</code> nomi bilan saqlang (kengaytma aynan <code>.html</code> bo'lishi shart);</li><li>Quyidagi kodni ko'chiring va faylni saqlang;</li><li>Faylni brauzerda oching (ustiga ikki marta bosing yoki brauzerga tashlang).</li></ol>
 <pre class="code"><code>&lt;!DOCTYPE html&gt;
@@ -681,21 +703,21 @@
 &lt;/html&gt;</code></pre>
 <p>Brauzerda katta sarlavha va ikkita paragraf ko'rinadi. Yorliqda esa "Men haqimda" yozuvi turadi. Tabriklaymiz — siz endigina o'z birinchi veb-sahifangizni yaratdingiz!</p>
 <div class="note">HTML fayllar oddiy matn fayllari. Ularni o'zgartirish uchun hech qanday maxsus dastur shart emas — hatto oddiy "Bloknot" (Notepad) ham yetarli. Lekin <strong>VS Code</strong> kabi muharrirlar rang berish, avtomatik yakunlash va xatoni ko'rsatish bilan ishni ancha osonlashtiradi.</div>
-<h2>Bo'shliqlar va yangi qatorlar haqida</h2>
+<h2 id="bo-shliqlar-va-yangi-qatorlar-haqida">Bo'shliqlar va yangi qatorlar haqida</h2>
 <p>HTML kodida qancha bo'shliq (probel) yoki yangi qator qo'ymang, brauzer ularni <strong>bittaga</strong> qisqartiradi. Ya'ni kodda chiroyli tartib uchun bo'shliq qo'ysangiz ham, u sahifaga ta'sir qilmaydi:</p>
 <pre class="code"><code>&lt;p&gt;Bir     ikki       uch&lt;/p&gt;</code></pre>
 <p>Bu kod brauzerda "Bir ikki uch" bo'lib, bitta bo'shliq bilan chiqadi. Agar matnni haqiqatan yangi qatordan boshlamoqchi bo'lsangiz, <code>&lt;br&gt;</code> tegini ishlating:</p>
 <pre class="code"><code>&lt;p&gt;Birinchi qator&lt;br&gt;
 Ikkinchi qator&lt;/p&gt;</code></pre>
 <div class="tip">Kodni <strong>chekinishlar (otstup, indentatsiya)</strong> bilan yozing — ichma-ich elementlarni ikki yoki to'rt bo'shliq bilan surib qo'ying. Bu sahifaga ta'sir qilmaydi, lekin kodni o'qishni juda osonlashtiradi va xatolarni kamaytiradi.</div>
-<h2>Kommentariylar (izohlar)</h2>
+<h2 id="kommentariylar-izohlar">Kommentariylar (izohlar)</h2>
 <p>HTML'da kodga <strong>izoh</strong> qoldirish mumkin — bu matn sahifada ko'rinmaydi, faqat kodni o'qiyotgan dasturchi uchun. Izoh <code>&lt;!--</code> bilan boshlanib, <code>--&gt;</code> bilan tugaydi:</p>
 <pre class="code"><code>&lt;!-- Bu — sarlavha qismi --&gt;
 &lt;h1&gt;Xush kelibsiz&lt;/h1&gt;
 &lt;!-- Quyida asosiy matn --&gt;
 &lt;p&gt;Saytimizga xush kelibsiz.&lt;/p&gt;</code></pre>
 <p>Izohlar kodning qaysi qismi nima uchun ekanini eslatib turish yoki vaqtincha biror qatorni "o'chirib turish" (izohga o'rab qo'yish) uchun ishlatiladi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>HTML</strong> — veb-sahifalarning tuzilishini tasvirlaydigan belgilash tili (dasturlash tili emas);</li><li><strong>Teg</strong> — burchakli qavsdagi belgi (<code>&lt;p&gt;</code>), ular odatda ochuvchi va yopuvchi bo'lib juft keladi;</li><li><strong>Element</strong> — ochuvchi teg + mazmun + yopuvchi tegdan iborat to'liq birlik;</li><li><strong>Atribut</strong> — tegga qo'shimcha ma'lumot beradi (<code>href="..."</code>), ochuvchi teg ichiga yoziladi;</li><li>Har bir sahifa skeleti: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> (ko'rinmaydigan sozlamalar) va <code>&lt;body&gt;</code> (ko'rinadigan mazmun);</li><li><code>&lt;title&gt;</code> — yorliqdagi sarlavha; <code>&lt;meta charset="UTF-8"&gt;</code> — barcha harflar to'g'ri ko'rinishi uchun majburiy;</li><li>Fayl <code>.html</code> kengaytmasi bilan saqlanadi va brauzerda ochiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="nestjs-guard.html"><span class="dir">← Oldingi</span><span class="ttl">Middleware, Guard, Interceptor, Exception filter</span></a>
@@ -709,6 +731,6 @@ Ikkinchi qator&lt;/p&gt;</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

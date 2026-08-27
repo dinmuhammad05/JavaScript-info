@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clickjacking hujumi — Kodla</title>
   <meta name="description" content="Clickjacking (bosishni o'g'irlash) hujumining g'oyasi, saytni ko'rinmas iframe ustiga qo'yish, va himoya usullari: X-Frame-Options, CSP frame-ancestors, samesite cookie.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,27 @@
 <main class="content article">
 <div class="crumbs">Oynalar va freymlar</div>
 <h1>Clickjacking hujumi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#hujumning-g-oyasi">Hujumning g'oyasi</a></li>
+<li class="lvl2"><a href="#hujumning-texnik-ko-rinishi">Hujumning texnik ko'rinishi</a></li>
+<li class="lvl2"><a href="#nega-an-anaviy-himoya-yetarli-emas">Nega an'anaviy himoya yetarli emas?</a></li>
+<li class="lvl2"><a href="#himoya-1-x-frame-options">Himoya 1: X-Frame-Options</a></li>
+<li class="lvl2"><a href="#himoya-2-csp-frame-ancestors">Himoya 2: CSP frame-ancestors</a></li>
+<li class="lvl2"><a href="#himoya-3-samesite-cookie">Himoya 3: SameSite cookie</a></li>
+<li class="lvl2"><a href="#ko-p-qatlamli-himoya">Ko'p qatlamli himoya</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Clickjacking (so'zma-so'z: bosishni o'g'irlash) — bu foydalanuvchini <strong>bilmagan holda</strong> zararli tugmani bosishga majburlovchi hujum. Hujumchi qurbon saytni ko'rinmas <code>iframe</code>ga joylashtiradi va foydalanuvchi o'zi ko'rgan sahifada bosaman deb, aslida yashiringan saytdagi tugmani bosadi. Ushbu darsda hujum qanday ishlashini va undan qanday himoyalanishni chuqur o'rganamiz.</p>
 <div class="note">Bu dars asosan <strong>xavfsizlik nazariyasi</strong>ga oid. Kod bloklari HTTP sarlavhalari va HTML misollari bo'lib, ular server sozlamasiga tegishli — kurs playground'ida bajarilmaydi. Ular <strong>statik misol</strong> sifatida berilgan.</div>
-<h2>Hujumning g'oyasi</h2>
+<h2 id="hujumning-g-oyasi">Hujumning g'oyasi</h2>
 <p>Clickjacking g'oyasi oddiy va ayni paytda ayyorona. Tasavvur qiling, hujumchi (<code>evil.com</code> sayti) foydalanuvchini biror ijtimoiy tarmoqdagi "Yoqdi" (Like) tugmasini yoki "Ha, ruxsat beraman" tugmasini bosishga majburlamoqchi.</p>
 <p>Hujum bosqichlari:</p>
 <ol><li>Hujumchi o'z saytida (<code>evil.com</code>) foydalanuvchini qiziqtiradigan biror narsa (masalan, "Bu yerni bosing va sovg'a yutib oling" tugmasi) ko'rsatadi;</li><li>Aynan shu tugma ustiga, <strong>ko'rinmas</strong> qilib, qurbon saytni (masalan, <code>facebook.com</code>ning "Like" tugmasi bilan) <code>iframe</code>da joylashtiradi;</li><li>Foydalanuvchi "sovg'a" tugmasini bosaman deb o'ylab, aslida ko'rinmas iframe ichidagi "Like" tugmasini bosadi;</li><li>Agar foydalanuvchi o'sha ijtimoiy tarmoqqa allaqachon kirgan bo'lsa (cookie mavjud), bosish haqiqiy hisoblanadi va harakat bajariladi.</li></ol>
 <p>Muhim jihat: hujum foydalanuvchi qurbon saytga <strong>tizimga kirgan (login qilingan)</strong> holatidan foydalanadi. Bosish qurbon saytda amalga oshadi, cookie'lar odatdagidek yuboriladi, shuning uchun sayt bosishni qonuniy deb qabul qiladi.</p>
-<h2>Hujumning texnik ko'rinishi</h2>
+<h2 id="hujumning-texnik-ko-rinishi">Hujumning texnik ko'rinishi</h2>
 <p>Hujumchi sahifasi taxminan quyidagicha tuziladi. Qurbon sahifasi <code>iframe</code>da yuklanadi, lekin u shaffof (<code>opacity</code>) qilinadi va aldov tugma tagida joylashtiriladi:</p>
 <pre class="code"><code>&lt;style&gt;
   iframe { /* qurbon sayt iframe'i */
@@ -630,7 +646,7 @@
 <p>Bu yerda hiyla:</p>
 <ul><li><code>opacity: 0.0001</code> — iframe deyarli to'liq ko'rinmas, lekin texnik jihatdan hali ham mavjud va bosishlarni qabul qiladi;</li><li><code>z-index: 1</code> — iframe aldov tugmadan (<code>z-index: 0</code>) ustunroq qatlamda, shuning uchun bosish iframe'ga tushadi;</li><li>iframe qurbon saytning kerakli tugmasi ustma-ust keladigan qilib joylashtiriladi.</li></ul>
 <div class="warn">Ba'zi murakkab hujumlarda sichqoncha kursorini kuzatib, iframe'ni doim kursor ostida ushlab turadigan variantlar ("cursorjacking") ham mavjud. Umumiy g'oya bir xil: foydalanuvchi ko'rgan narsa va aslida bosgan narsasi bir-biridan farq qiladi.</div>
-<h2>Nega an'anaviy himoya yetarli emas?</h2>
+<h2 id="nega-an-anaviy-himoya-yetarli-emas">Nega an'anaviy himoya yetarli emas?</h2>
 <p>Ba'zi eski himoya usullari (masalan, JavaScript orqali "agar men iframe ichida bo'lsam, chiqib ketaman" degan busting kod) ishonchsiz. Masalan:</p>
 <pre class="code"><code>// eski, ishonchsiz himoya (frame busting):
 if (top !== self) {
@@ -639,7 +655,7 @@ if (top !== self) {
 <p>Bu usul zaif, chunki:</p>
 <ul><li>Hujumchi <code>iframe</code>ga <code>sandbox</code> atributini qo'yib, undagi navigatsiyani bloklashi mumkin — shunda <code>top.location</code>ni o'zgartirish ishlamaydi;</li><li>Ba'zi hollarda brauzer <code>beforeunload</code> hodisasi orqali foydalanuvchini qo'shimcha dialog bilan chalg'itish mumkin;</li><li>JavaScript o'chirilgan bo'lsa, bu himoya umuman ishlamaydi.</li></ul>
 <p>Shuning uchun ishonchli himoya <strong>server tomonidagi HTTP sarlavhalari</strong> bilan ta'minlanadi — brauzer saytni umuman iframe'ga qo'yishga ruxsat bermaydi.</p>
-<h2>Himoya 1: X-Frame-Options</h2>
+<h2 id="himoya-1-x-frame-options">Himoya 1: X-Frame-Options</h2>
 <p><code>X-Frame-Options</code> — bu sayt tomonidan yuboriladigan HTTP javob sarlavhasi. U brauzerga sahifani iframe'ga qo'yishga ruxsat berish yoki bermaslikni aytadi. Uch qiymati bor:</p>
 <ul><li><code>X-Frame-Options: DENY</code> — sahifani <strong>hech qanday</strong> iframe'ga qo'yishga ruxsat berilmaydi (hatto o'z sayti ichida ham);</li><li><code>X-Frame-Options: SAMEORIGIN</code> — sahifani faqat <strong>bir xil manbadagi</strong> iframe'ga qo'yish mumkin;</li><li><code>X-Frame-Options: ALLOW-FROM https://example.com</code> — faqat ko'rsatilgan manbaga ruxsat (eskirgan, ko'p brauzerlar qo'llab-quvvatlamaydi).</li></ul>
 <pre class="code"><code>// Server javob sarlavhalari (misol):
@@ -649,7 +665,7 @@ X-Frame-Options: SAMEORIGIN
 X-Frame-Options: DENY</code></pre>
 <p>Agar brauzer bu sarlavhani ko'rsa va u <code>DENY</code> yoki mos kelmagan manba bo'lsa, u sahifani iframe'da <strong>umuman ko'rsatmaydi</strong> — hujumchi qurbon saytni yashira olmaydi.</p>
 <div class="note"><code>X-Frame-Options</code> — HTTP <strong>javob</strong> sarlavhasi. Uni HTML <code>&lt;meta&gt;</code> tegi orqali qo'yib bo'lmaydi — u albatta server tomonidan yuborilishi kerak. Serveringiz konfiguratsiyasida (Nginx, Apache, Express va h.k.) sozlanadi.</div>
-<h2>Himoya 2: CSP frame-ancestors</h2>
+<h2 id="himoya-2-csp-frame-ancestors">Himoya 2: CSP frame-ancestors</h2>
 <p>Zamonaviyroq va moslashuvchan usul — <strong>Content-Security-Policy (CSP)</strong> sarlavhasidagi <code>frame-ancestors</code> direktivasi. U <code>X-Frame-Options</code> o'rnini bosadi va ko'proq imkoniyat beradi:</p>
 <pre class="code"><code>// hech kim iframe'ga qo'ya olmasin:
 Content-Security-Policy: frame-ancestors 'none'
@@ -661,7 +677,7 @@ Content-Security-Policy: frame-ancestors 'self'
 Content-Security-Policy: frame-ancestors 'self' https://trusted.com https://partner.com</code></pre>
 <ul><li><code>'none'</code> — <code>X-Frame-Options: DENY</code> bilan bir xil: hech qanday iframe'ga ruxsat yo'q;</li><li><code>'self'</code> — <code>SAMEORIGIN</code> bilan bir xil: faqat o'z manbamiz;</li><li>manzillar ro'yxati — bir nechta ishonchli manbaga ruxsat berish mumkin (bu <code>X-Frame-Options</code>da yo'q imkoniyat).</li></ul>
 <div class="tip">Yangi loyihalarda <code>frame-ancestors</code>ni afzal ko'ring, chunki u moslashuvchan va zamonaviy standart. Eski brauzerlar uchun qo'shimcha xavfsizlik sifatida <code>X-Frame-Options</code>ni ham qo'shib qo'yish mumkin — ikkalasini birga ishlatish keng tarqalgan amaliyot.</div>
-<h2>Himoya 3: SameSite cookie</h2>
+<h2 id="himoya-3-samesite-cookie">Himoya 3: SameSite cookie</h2>
 <p>Clickjacking hujumi foydalanuvchining <strong>cookie'lari</strong> avtomatik yuborilishiga tayanadi (chunki qurbon saytga tizimga kirgan). Agar autentifikatsiya cookie'lari boshqa saytdagi iframe'dan yuborilmasa, hujum foydasiz bo'ladi — sayt bosishni anonim deb qabul qiladi.</p>
 <p>Cookie'ning <code>SameSite</code> atributi aynan shu vaziyatni boshqaradi:</p>
 <ul><li><code>SameSite=Strict</code> — cookie faqat sahifaning <strong>o'z manbasidan</strong> so'rovlarga yuboriladi; boshqa saytdagi iframe yoki havoladan kelgan so'rovlarga <strong>yuborilmaydi</strong>;</li><li><code>SameSite=Lax</code> — cookie odatdagi navigatsiyalarda yuboriladi, lekin ko'plab cross-site kontekstlarda (jumladan iframe'lardagi so'rovlar) yuborilmaydi. Bu zamonaviy brauzerlarda <strong>standart</strong> qiymat;</li><li><code>SameSite=None</code> — cookie barcha kontekstlarda yuboriladi (bunda <code>Secure</code> ham majburiy). Bu clickjacking'ga qarshi himoyani <strong>o'chiradi</strong>.</li></ul>
@@ -669,11 +685,11 @@ Content-Security-Policy: frame-ancestors 'self' https://trusted.com https://part
 Set-Cookie: session=abc123; SameSite=Strict; Secure; HttpOnly</code></pre>
 <div class="note"><code>SameSite=Lax</code> (yoki <code>Strict</code>) tufayli, hujumchi iframe'idagi qurbon saytga so'rovda autentifikatsiya cookie'lari qo'shilmaydi. Shunda bosish tizimga kirmagan (anonim) foydalanuvchi harakati sifatida ko'rinadi va zararli amal bajarilmaydi.</div>
 <div class="warn"><code>SameSite</code> kuchli himoya, lekin u <strong>yagona</strong> yechim emas. Ba'zi holatlar (masalan, <code>GET</code> orqali amalga oshiriladigan xavfsiz bo'lmagan operatsiyalar yoki <code>SameSite=None</code> ishlatilgan cookie'lar) hali ham zaif bo'lishi mumkin. Uni <code>frame-ancestors</code>/<code>X-Frame-Options</code> bilan <strong>birga</strong> ishlating.</div>
-<h2>Ko'p qatlamli himoya</h2>
+<h2 id="ko-p-qatlamli-himoya">Ko'p qatlamli himoya</h2>
 <p>Ishonchli xavfsizlik uchun himoya usullarini <strong>birgalikda</strong> qo'llash tavsiya etiladi. To'liq strategiya:</p>
 <ol><li><strong>frame-ancestors</strong> (CSP) — sahifani begona iframe'ga qo'yishni to'sish (asosiy himoya);</li><li><strong>X-Frame-Options</strong> — eski brauzerlar uchun zaxira himoya;</li><li><strong>SameSite cookie</strong> — cross-site kontekstda autentifikatsiya cookie'larini yubormaslik;</li><li>Muhim amallar uchun qo'shimcha tasdiqlash (masalan, tugma bosilgach parolni yoki CAPTCHA'ni so'rash) — hujumchi buni takrorlay olmaydi.</li></ol>
 <div class="tip">Xavfsizlikda "chuqurlikdagi himoya" (defense in depth) tamoyili muhim: bitta qatlam yiqilsa, boshqasi himoya qiladi. Clickjacking'da <code>frame-ancestors</code> + <code>SameSite</code> + muhim amallar uchun tasdiqlash birgalikda kuchli himoya beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Clickjacking</strong> — foydalanuvchini ko'rinmas iframe ustidagi tugmani bilmasdan bosishga majburlovchi hujum;</li><li>Hujum qurbon saytga <strong>tizimga kirgan (login)</strong> holatdan va avtomatik yuboriladigan cookie'lardan foydalanadi;</li><li>JavaScript orqali "frame busting" himoyasi <strong>ishonchsiz</strong> — server tomonidagi himoya kerak;</li><li><code>X-Frame-Options</code> (<code>DENY</code>/<code>SAMEORIGIN</code>) sahifani iframe'ga qo'yishni bloklaydi;</li><li><code>Content-Security-Policy: frame-ancestors</code> — zamonaviy va moslashuvchan muqobil;</li><li><code>SameSite</code> cookie atributi cross-site kontekstda autentifikatsiya cookie'larini yubormaydi va hujumni foydasiz qiladi;</li><li>Eng yaxshi natija uchun bu himoyalarni <strong>birgalikda</strong> ishlating.</li></ul>
 <nav class="lesson-nav">
   <a href="cross-window.html"><span class="dir">← Oldingi</span><span class="ttl">Oynalararo aloqa</span></a>
@@ -687,6 +703,6 @@ Set-Cookie: session=abc123; SameSite=Strict; Secure; HttpOnly</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

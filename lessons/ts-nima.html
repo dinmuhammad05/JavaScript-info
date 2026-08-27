@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TypeScript nima? — Kodla</title>
   <meta name="description" content="TypeScript — JavaScript ustiga turlarni qo'shadigan til; nega kerak, o'rnatish, tsc bilan kompilyatsiya va .ts fayllari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">TypeScript</div>
 <h1>TypeScript nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#typescript-javascript-ning-kengaytmasi">TypeScript — JavaScript'ning "kengaytmasi"</a></li>
+<li class="lvl2"><a href="#nega-typescript-kerak">Nega TypeScript kerak?</a></li>
+<li class="lvl2"><a href="#typescript-ni-o-rnatish">TypeScript'ni o'rnatish</a></li>
+<li class="lvl2"><a href="#birinchi-ts-fayl-va-kompilyatsiya">Birinchi .ts fayl va kompilyatsiya</a></li>
+<li class="lvl2"><a href="#kompilyatsiya-jarayonini-tushunish">Kompilyatsiya jarayonini tushunish</a></li>
+<li class="lvl2"><a href="#kuzatuv-rejimi-watch-mode">Kuzatuv rejimi (watch mode)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Agar siz JavaScript'ni yaxshi bilsangiz, <strong>TypeScript</strong> (qisqacha TS) o'rganish sizga oson bo'ladi. Chunki TypeScript — bu mutlaqo yangi til emas. U aynan JavaScript'ning ustiga qurilgan: JS'ning barcha imkoniyatlarini saqlab qoladi va ustiga bitta katta qo'shimcha beradi — <strong>statik turlar tizimi</strong> (static type system). Ushbu bobda biz JavaScript'ni bilgan holda TypeScript'ni tez o'zlashtirishga harakat qilamiz.</p>
-<h2>TypeScript — JavaScript'ning "kengaytmasi"</h2>
+<h2 id="typescript-javascript-ning-kengaytmasi">TypeScript — JavaScript'ning "kengaytmasi"</h2>
 <p>TypeScript'ni ko'pincha "JavaScript ustiga turlar qo'shadigan til" deb ta'riflashadi. Bu ta'rifni to'g'ri tushunish muhim:</p>
 <ul><li>Har qanday to'g'ri (valid) JavaScript kodi — bir vaqtning o'zida to'g'ri TypeScript kodi hamdir. Ya'ni TS — JS'ning <em>ustki to'plami</em> (superset);</li><li>TypeScript'ga siz <strong>tur izohlari</strong> (type annotations) qo'shasiz — o'zgaruvchi, funksiya parametri yoki qaytish qiymati qanday turda bo'lishini yozib qo'yasiz;</li><li>Brauzer yoki Node.js TypeScript'ni to'g'ridan-to'g'ri <em>tushunmaydi</em>. TS kodi avval oddiy JavaScript'ga <strong>kompilyatsiya</strong> (aylantirish) qilinadi, so'ng ishga tushadi.</li></ul>
 <p>Oddiy JavaScript'da o'zgaruvchi turi haqida hech narsa yozmaymiz:</p>
@@ -610,7 +625,7 @@ let message: string = "Salom";
 message = 42;
 // Xato: Type 'number' is not assignable to type 'string'.</code></pre>
 <div class="note">Diqqat qiling: bu xato kod <strong>ishga tushmasdan oldin</strong>, ya'ni yozayotgan paytingizda tahririyingiz (IDE) ichida chiqadi. Bu TypeScript'ning asosiy ustunligi.</div>
-<h2>Nega TypeScript kerak?</h2>
+<h2 id="nega-typescript-kerak">Nega TypeScript kerak?</h2>
 <p>JavaScript — <strong>dinamik turli</strong> (dynamically typed) til. Bu qulay, lekin katta loyihalarda muammolar keltirib chiqaradi. Xatolar ko'pincha faqat dastur ishga tushganda, ba'zan esa foydalanuvchi qo'lida sezilib qoladi. TypeScript quyidagi muammolarni hal qiladi:</p>
 <ul><li><strong>Xatoni erta topish.</strong> Turlar mos kelmasligi, mavjud bo'lmagan xossaga murojaat, funksiyaga noto'g'ri argument — bularning barchasi kompilyatsiya bosqichida aniqlanadi, ishga tushmasdan oldin;</li><li><strong>IDE yordami.</strong> Turlar aniq bo'lgani uchun tahririy avtomatik to'ldirish (autocomplete), xossalar ro'yxati va aniq maslahatlarni ko'rsatadi;</li><li><strong>Hujjat vazifasini bajaradi.</strong> Tur izohlari kodning o'zi qanday ma'lumot kutayotganini aniq ko'rsatadi — alohida izoh yozish shart emas;</li><li><strong>Ishonchli refaktoring.</strong> Nom o'zgartirilganda yoki tuzilma o'zgarganda kompilyator buzilgan barcha joylarni ko'rsatadi.</li></ul>
 <p>Klassik misol — funksiyaga noto'g'ri tur uzatish. JavaScript'da bu jimgina noto'g'ri natija beradi:</p>
@@ -623,7 +638,7 @@ summa("2", "3");  // Xato: Argument of type 'string'
                   // is not assignable to parameter of type 'number'.</code></pre>
 <p>JavaScript'da <code>summa("2", "3")</code> hech qanday xatosiz <code>"23"</code> qaytarardi — bu esa yashirin nosozlik. TypeScript esa buni darrov ushlaydi.</p>
 <div class="tip">TypeScript ishga tushish paytida (runtime) hech qanday tekshiruv qo'shmaydi. Barcha tekshiruv <em>kompilyatsiya</em> bosqichida bo'ladi. Shuning uchun TS kodi tayyor JS'dan sekinroq ishlamaydi.</div>
-<h2>TypeScript'ni o'rnatish</h2>
+<h2 id="typescript-ni-o-rnatish">TypeScript'ni o'rnatish</h2>
 <p>TypeScript'ni Node.js va npm orqali o'rnatamiz. Uni butun tizim bo'ylab (global) o'rnatish eng oson yo'l:</p>
 <pre class="code"><code>npm install -g typescript</code></pre>
 <p>O'rnatilganini tekshirish uchun versiyani so'raymiz. Bu buyruq <code>tsc</code> (TypeScript Compiler) dasturi ishlayotganini bildiradi:</p>
@@ -633,7 +648,7 @@ summa("2", "3");  // Xato: Argument of type 'string'
 <pre class="code"><code>npm install --save-dev typescript
 // keyin: npx tsc --version</code></pre>
 <div class="note"><code>tsc</code> — bu <strong>TypeScript Compiler</strong>. Uning yagona vazifasi: <code>.ts</code> fayllarni o'qib, ulardan oddiy <code>.js</code> fayllar yasab berish.</div>
-<h2>Birinchi .ts fayl va kompilyatsiya</h2>
+<h2 id="birinchi-ts-fayl-va-kompilyatsiya">Birinchi .ts fayl va kompilyatsiya</h2>
 <p>TypeScript kodi <code>.ts</code> kengaytmali fayllarda yoziladi (JS'da <code>.js</code> bo'lgani kabi). Keling, <code>salom.ts</code> nomli fayl yaratamiz:</p>
 <pre class="code"><code>// salom.ts
 function salomBer(ism: string): string {
@@ -652,16 +667,16 @@ console.log(salomBer("Ali"));</code></pre>
 <p>Endi bu oddiy JS faylni Node.js orqali ishga tushiramiz:</p>
 <pre class="code"><code>node salom.js
 // Salom, Ali!</code></pre>
-<h2>Kompilyatsiya jarayonini tushunish</h2>
+<h2 id="kompilyatsiya-jarayonini-tushunish">Kompilyatsiya jarayonini tushunish</h2>
 <p>TypeScript'ning ish tartibi ikki asosiy bosqichdan iborat. Buni tushunish TS bilan ishlashda muhim:</p>
 <ol><li><strong>Tur tekshiruvi</strong> (type checking): kompilyator turlar to'g'ri ishlatilganini tekshiradi. Xato topsa, sizga xabar beradi;</li><li><strong>Turlarni o'chirish</strong> (type erasure): tekshiruvdan so'ng barcha tur izohlari olib tashlanadi va sof JavaScript hosil bo'ladi.</li></ol>
 <p>Ya'ni turlar faqat <em>dasturchi uchun</em> va <em>kompilyator uchun</em> mavjud. Tayyor JS kodda ular umuman yo'q — bu "turlarni o'chirish" deb ataladi.</p>
 <div class="warn">Muhim nozik jihat: standart holatda TypeScript tur xatosi bo'lsa ham, baribir <code>.js</code> faylni yaratib beradi. Ya'ni xato kodni ham "ishlaydigan" JS'ga aylantiradi. Bunday xatti-harakatni <code>noEmitOnError</code> sozlamasi bilan o'chirish mumkin (bu haqda oxirgi darsda gaplashamiz).</div>
-<h2>Kuzatuv rejimi (watch mode)</h2>
+<h2 id="kuzatuv-rejimi-watch-mode">Kuzatuv rejimi (watch mode)</h2>
 <p>Har safar qo'lda <code>tsc</code> yozish noqulay. TypeScript o'zgarishlarni avtomatik kuzatib, faylni har o'zgartirganingizda qayta kompilyatsiya qila oladi. Buning uchun <code>--watch</code> (yoki <code>-w</code>) bayrog'i ishlatiladi:</p>
 <pre class="code"><code>tsc salom.ts --watch</code></pre>
 <p>Endi <code>salom.ts</code>ni saqlaganingizda kompilyator darhol ishga tushadi va yangi <code>salom.js</code> yasaydi. Bu ishlab chiqish jarayonini ancha tezlashtiradi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>TypeScript</strong> — JavaScript ustiga statik turlarni qo'shadigan til; har qanday JS kodi ayni paytda TS kodi hamdir;</li><li>Turlar <strong>xatoni erta topishga</strong> (ishga tushmasdan oldin) va IDE yordamini yaxshilashga xizmat qiladi;</li><li>TS'ni <code>npm install -g typescript</code> orqali o'rnatamiz, <code>tsc</code> kompilyatoridan foydalanamiz;</li><li><code>.ts</code> fayl <code>tsc</code> orqali oddiy <code>.js</code> faylga aylantiriladi — <strong>turlar o'chiriladi</strong>, sof JS qoladi;</li><li>Turlar faqat kompilyatsiya paytida yashaydi; ishga tushishda hech qanday qo'shimcha xarajat bo'lmaydi;</li><li><code>--watch</code> rejimi fayllarni avtomatik qayta kompilyatsiya qiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="css-styling.html"><span class="dir">← Oldingi</span><span class="ttl">Ranglar, shrift va bezaklar</span></a>
@@ -675,6 +690,6 @@ console.log(salomBer("Ali"));</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

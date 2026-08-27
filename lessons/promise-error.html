@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promise bilan xatoliklarni boshqarish — Kodla</title>
   <meta name="description" content=".catch bilan xatoliklarni ushlash, xatoning zanjir bo'ylab o'tishi, qayta tashlash va unhandledrejection hodisasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Promise bilan xatoliklarni boshqarish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#catch-xatolikni-ushlaydi">.catch xatolikni ushlaydi</a></li>
+<li class="lvl2"><a href="#xatolik-zanjir-bo-ylab-o-tishi">Xatolik zanjir bo'ylab o'tishi</a></li>
+<li class="lvl2"><a href="#catch-dan-keyin-zanjir-davom-etadi">.catch'dan keyin zanjir davom etadi</a></li>
+<li class="lvl2"><a href="#xatoni-qayta-tashlash-rethrowing">Xatoni qayta tashlash (rethrowing)</a></li>
+<li class="lvl2"><a href="#ishlov-berilmagan-rad-etishlar-unhandledrejection">Ishlov berilmagan rad etishlar (unhandledrejection)</a></li>
+<li class="lvl2"><a href="#amaliy-misol-xatoni-ushlab-tiklanish">Amaliy misol: xatoni ushlab, tiklanish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Asinxron ishlarda xatoliklar muqarrar: tarmoq uzilishi, noto'g'ri ma'lumot, server xatosi. Promise xatoliklarni boshqarishning ancha qulay yo'lini beradi. Ushbu darsda <code>.catch</code>, xatoning zanjir bo'ylab "sakrashi", qayta tashlash va e'tiborsiz qolgan rad etishlarni ko'rib chiqamiz.</p>
-<h2>.catch xatolikni ushlaydi</h2>
+<h2 id="catch-xatolikni-ushlaydi">.catch xatolikni ushlaydi</h2>
 <p>Promise zanjiri uzun bo'lsa ham, xatolikni boshqarish oson: zanjir oxiriga bitta <code>.catch</code> qo'yish kifoya. U zanjirning <strong>istalgan joyida</strong> yuz bergan xatolikni ushlaydi:</p>
 <pre class="code"><code>new Promise(function (resolve, reject) {
   setTimeout(function () {
@@ -611,7 +626,7 @@
     console.log("Xato ushlandi: " + error.message); // Xato ushlandi: Ma'lumot yuklanmadi!
   });</code></pre>
 <p>Reject bo'lgan Promise'da natija <code>.then</code>dan "sakrab o'tib", to'g'ridan-to'g'ri eng yaqin <code>.catch</code>ga boradi.</p>
-<h2>Xatolik zanjir bo'ylab o'tishi</h2>
+<h2 id="xatolik-zanjir-bo-ylab-o-tishi">Xatolik zanjir bo'ylab o'tishi</h2>
 <p>Xatoliklarni boshqarishdagi eng muhim tamoyil: <strong>reject (yoki tashlangan xato) zanjir bo'ylab eng yaqin <code>.catch</code>gacha "sakraydi"</strong>. Oradagi barcha <code>.then</code>lar o'tkazib yuboriladi.</p>
 <pre class="code"><code>new Promise(function (resolve, reject) {
   resolve(1);
@@ -631,7 +646,7 @@
   });</code></pre>
 <div class="note"><code>.then</code> ichida <code>throw</code> qilingan xato ham, <code>reject</code> ham bir xil yo'l bilan boshqariladi — ikkalasi ham Promise'ni rejected qiladi va keyingi <code>.catch</code>ga uzatiladi. Ya'ni Promise ichidagi <code>throw new Error(...)</code> avtomatik <code>reject(...)</code>ga aylanadi.</div>
 <p>Bu — juda qulay xususiyat. Uzun zanjirda xatolik qayerda bo'lishidan qat'i nazar, uni bitta joyda — oxirgi <code>.catch</code>da ushlaymiz. Callback'dagi kabi har bosqichda <code>if (error)</code> yozish shart emas.</p>
-<h2>.catch'dan keyin zanjir davom etadi</h2>
+<h2 id="catch-dan-keyin-zanjir-davom-etadi">.catch'dan keyin zanjir davom etadi</h2>
 <p><code>.catch</code> xatoni ushlab, uni "tuzatgach", zanjir <strong>normal (fulfilled) holatda davom etadi</strong>. Chunki <code>.catch</code> ham Promise qaytaradi, va agar u xato tashlamasa, natija muvaffaqiyatli hisoblanadi:</p>
 <pre class="code"><code>new Promise(function (resolve, reject) {
   reject(new Error("Boshlang'ich xato"));
@@ -645,7 +660,7 @@
     console.log("Davom: " + result); // Davom: zaxira qiymat
   });</code></pre>
 <div class="tip">Bu "xatodan tiklanish" (recovery) namunasi: xatolikni ushlab, o'rniga zaxira (fallback) qiymat berib, dasturni to'xtatmasdan davom ettirish mumkin.</div>
-<h2>Xatoni qayta tashlash (rethrowing)</h2>
+<h2 id="xatoni-qayta-tashlash-rethrowing">Xatoni qayta tashlash (rethrowing)</h2>
 <p>Ba'zan <code>.catch</code> ichida xatoni ushlaymiz-u, lekin uni <em>bartaraf eta olmaymiz</em> — masalan, kutilmagan boshqa turdagi xato. Bunday holda uni <strong>qayta tashlash</strong> (rethrow) mumkin, shunda u keyingi <code>.catch</code>ga o'tadi:</p>
 <pre class="code"><code>new Promise(function (resolve, reject) {
   reject(new Error("Tarmoq xatosi"));
@@ -667,7 +682,7 @@
     console.log("Hal qilinmagan xato: " + error.message);
   });</code></pre>
 <p>Qoida sodda: agar <code>.catch</code> ichida <code>throw</code> qilsangiz — nazorat <strong>keyingi</strong> <code>.catch</code>ga o'tadi. Agar oddiy qaytsa (throw qilmasa) — zanjir <strong>normal</strong> davom etadi. Bu <code>try...catch</code>ning "agar hal qila olmasam, yuqoriga uzataman" tamoyiliga o'xshaydi.</p>
-<h2>Ishlov berilmagan rad etishlar (unhandledrejection)</h2>
+<h2 id="ishlov-berilmagan-rad-etishlar-unhandledrejection">Ishlov berilmagan rad etishlar (unhandledrejection)</h2>
 <p>Agar Promise reject bo'lsa-yu, uni ushlaydigan <strong>hech qanday <code>.catch</code> bo'lmasa</strong> nima bo'ladi? Xato "tiqilib" qoladi — dastur bu haqda bilmay qoladi. Buni sezish uchun maxsus global hodisa bor: <code>unhandledrejection</code>.</p>
 <pre class="code"><code>// Bu Promise reject bo'ladi, ammo .catch YO'Q!
 new Promise(function (resolve, reject) {
@@ -685,7 +700,7 @@ window.addEventListener("unhandledrejection", function (event) {
 <ul><li><code>event.promise</code> — xatolik yuz bergan Promise obyekti;</li><li><code>event.reason</code> — rad etish sababi (odatda <code>Error</code> obyekti).</li></ul>
 <div class="note">Node.js'da bu hodisa <code>process.on("unhandledRejection", handler)</code> orqali ushlanadi. Nomlanishi ozgina farq qiladi (bosh harflar), lekin g'oya bir xil.</div>
 <div class="warn">Ishlov berilmagan rad etishlar — jiddiy xato belgisidir. Ular odatda kodda unutilgan <code>.catch</code>ni bildiradi. Har bir asinxron zanjir oxirida <strong>albatta</strong> <code>.catch</code> bo'lishini ta'minlang — bu xatoni "yashirin" qolishidan saqlaydi.</div>
-<h2>Amaliy misol: xatoni ushlab, tiklanish</h2>
+<h2 id="amaliy-misol-xatoni-ushlab-tiklanish">Amaliy misol: xatoni ushlab, tiklanish</h2>
 <p>Sodda sinxron-o'xshash misol bilan "xato &rarr; catch &rarr; davom" oqimini mustahkamlaymiz. Bu yerda darhol reject bo'lgan Promise ishlatilgan, natija konsolda ko'rinadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>promise-error.js</span></div><textarea spellcheck="false">Promise.reject(new Error("Birinchi xato"))
   .catch(function (err) {
@@ -703,7 +718,7 @@ window.addEventListener("unhandledrejection", function (event) {
     console.log("Bu ishlamaydi, chunki xato allaqachon hal qilingan");
   });</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: birinchi <code>.catch</code> xatoni ushlab, <code>42</code> qaytardi. Shundan so'ng zanjir normal davom etdi (42 &rarr; 50). Oxirgi <code>.catch</code> esa ishlamaydi, chunki hech qanday hal qilinmagan xato qolmadi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>.catch</code> zanjirning istalgan joyidagi xatolikni ushlaydi — uni oxiriga qo'yish kifoya;</li><li>Reject yoki <code>throw</code> qilingan xato eng yaqin <code>.catch</code>gacha <strong>sakraydi</strong>, oradagi <code>.then</code>lar o'tkazib yuboriladi;</li><li>Promise ichidagi <code>throw</code> avtomatik <code>reject</code>ga aylanadi;</li><li><code>.catch</code> xatoni "yamab" bo'lgach, zanjir <strong>normal</strong> davom etadi;</li><li><code>.catch</code> ichida <code>throw</code> qilsangiz — xato <strong>keyingi</strong> <code>.catch</code>ga uzatiladi (qayta tashlash);</li><li>Ushlanmagan xato <strong>unhandledrejection</strong> hodisasini keltirib chiqaradi — har zanjirda <code>.catch</code> bo'lsin.</li></ul>
 <nav class="lesson-nav">
   <a href="promise-chaining.html"><span class="dir">← Oldingi</span><span class="ttl">Promise zanjiri</span></a>
@@ -717,6 +732,6 @@ window.addEventListener("unhandledrejection", function (event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

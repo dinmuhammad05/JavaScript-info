@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>O'zgaruvchi ko'lami, closure — Kodla</title>
   <meta name="description" content="Blok ko'lami (let/const), leksik muhit, closure va hisoblagich (counter) misoli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>O'zgaruvchi ko'lami, closure</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#blok-ko-lami-block-scope">Blok ko'lami (block scope)</a></li>
+<li class="lvl2"><a href="#ichki-funksiyalar-va-tashqi-o-zgaruvchilar">Ichki funksiyalar va tashqi o'zgaruvchilar</a></li>
+<li class="lvl2"><a href="#leksik-muhit-lexical-environment-soddalashtirib">Leksik muhit (lexical environment) — soddalashtirib</a></li>
+<li class="lvl2"><a href="#closure-nima">Closure nima?</a></li>
+<li class="lvl2"><a href="#hisoblagich-counter-misoli">Hisoblagich (counter) misoli</a></li>
+<li class="lvl2"><a href="#amaliy-foyda">Amaliy foyda</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript funksiyalar tili sanaladi. Bu unga katta moslashuvchanlik beradi: funksiyalarni yaratish, o'zgaruvchiga berish, boshqa funksiyaga uzatish va keyinroq chaqirish mumkin. Buni tushunish uchun <strong>o'zgaruvchi ko'lami</strong> va <strong>closure</strong> tushunchalarini o'rganamiz.</p>
-<h2>Blok ko'lami (block scope)</h2>
+<h2 id="blok-ko-lami-block-scope">Blok ko'lami (block scope)</h2>
 <p><code>let</code> va <code>const</code> orqali e'lon qilingan o'zgaruvchi faqat o'zi joylashgan <strong>blok</strong> ichida (figurali qavslar <code>{ }</code> orasida) ko'rinadi. Blokdan tashqarida u mavjud emas:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>block-scope.js</span></div><textarea spellcheck="false">{
   let message = 'Salom';
@@ -615,7 +630,7 @@ console.log('Blokdan tashqaridamiz');</textarea><div class="pg-actions"><button 
 // bu yerda i mavjud emas
 console.log('Sikl tugadi');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Blok ko'lami — kodni xavfsizroq qiladi. O'zgaruvchi faqat kerak bo'lgan joyda yashaydi va tasodifan boshqa joyni buzib qo'ymaydi.</div>
-<h2>Ichki funksiyalar va tashqi o'zgaruvchilar</h2>
+<h2 id="ichki-funksiyalar-va-tashqi-o-zgaruvchilar">Ichki funksiyalar va tashqi o'zgaruvchilar</h2>
 <p>Funksiya ichida boshqa funksiya (ichki, nested funksiya) e'lon qilinishi mumkin. Eng muhimi — <strong>ichki funksiya tashqi funksiyaning o'zgaruvchilariga kira oladi</strong>:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nested-fn.js</span></div><textarea spellcheck="false">function sayHiTo(name) {
   let phrase = 'Salom, ' + name;
@@ -630,12 +645,12 @@ console.log('Sikl tugadi');</textarea><div class="pg-actions"><button class="pg-
 
 sayHiTo('Dilnoza');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ichki funksiya tashqi o'zgaruvchini nafaqat o'qishi, balki o'zgartirishi ham mumkin. Bu oddiy ko'rinsa-da, closure'ning asosini tashkil etadi.</p>
-<h2>Leksik muhit (lexical environment) — soddalashtirib</h2>
+<h2 id="leksik-muhit-lexical-environment-soddalashtirib">Leksik muhit (lexical environment) — soddalashtirib</h2>
 <p>JavaScript ichkarida o'zgaruvchilarni qanday izlaydi? Buni tushunish uchun <em>leksik muhit</em> tushunchasi kerak. Uni soddalashtirib shunday tasavvur qiling:</p>
 <ul><li>Har bir ishlayotgan blok, funksiya va butun skript uchun ichkarida maxsus <strong>Leksik Muhit</strong> obyekti bor;</li><li>Bu obyektda o'sha joydagi barcha lokal o'zgaruvchilar saqlanadi;</li><li>Har bir muhit o'zining <strong>tashqi (ota) muhiti</strong>ga ishora qiladi.</li></ul>
 <p>O'zgaruvchi ishlatilganda, JavaScript uni <strong>avval joriy muhitdan</strong> qidiradi. Topmasa — tashqi muhitga chiqadi, u yerdan ham topmasa yana tashqariga... shu tariqa eng tashqi (global) muhitga qadar. Bu "tashqariga qarab qidirish" zanjiri closure'ning kalitidir.</p>
 <div class="note">Muhim tafsilot: o'zgaruvchining qaysi tashqi muhitga bog'lanishi funksiya <strong>qayerda YOZILGANI</strong> bilan aniqlanadi ("leksik" so'zi shundan), qayerda chaqirilgani bilan emas. Ya'ni bog'lanish kod matnida qanday joylashganiga qarab, oldindan belgilanadi.</div>
-<h2>Closure nima?</h2>
+<h2 id="closure-nima">Closure nima?</h2>
 <p><strong>Closure (yopilma)</strong> — bu tashqi o'zgaruvchilarni <em>eslab qoladigan</em> va ularga kira oladigan funksiya. JavaScript'da <strong>deyarli barcha funksiyalar closure hisoblanadi</strong> — ular yaratilgan joydagi tashqi o'zgaruvchilarni "eslab qoladi".</p>
 <p>Sehr shundaki: tashqi funksiya ishlab bo'lgach ham, uning o'zgaruvchilari <strong>yo'qolmaydi</strong> — agar ularga ichki funksiya hali ham ishora qilib turgan bo'lsa. Quyidagi misolda buni ko'ramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>closure-basic.js</span></div><textarea spellcheck="false">function makeGreeter(name) {
@@ -651,7 +666,7 @@ let greetVali = makeGreeter('Vali');
 greetAli();   // makeGreeter allaqachon tugagan, lekin 'name' esda
 greetVali();  // har bir funksiya O'Z 'name' ini eslaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>makeGreeter('Ali')</code> chaqiruvi tugagan bo'lsa ham, qaytarilgan funksiya o'zining <code>name = 'Ali'</code> qiymatini eslab turadi. <code>greetAli</code> va <code>greetVali</code> — bir-biridan mustaqil, chunki har biri o'z leksik muhitini saqlaydi.</p>
-<h2>Hisoblagich (counter) misoli</h2>
+<h2 id="hisoblagich-counter-misoli">Hisoblagich (counter) misoli</h2>
 <p>Closure'ning eng klassik va foydali misoli — <strong>hisoblagich</strong>. Har chaqirilganda keyingi sonni qaytaruvchi funksiya yasaymiz. Hisob <code>count</code> tashqarida yashiringan, unga faqat qaytarilgan funksiya orqali kirish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>counter.js</span></div><textarea spellcheck="false">function makeCounter() {
   let count = 0;   // yashirin, tashqaridan ko'rinmaydi
@@ -683,7 +698,7 @@ console.log(counter1());  // 1
 console.log(counter1());  // 2
 console.log(counter2());  // 1 — mustaqil, o'z hisobi bor
 console.log(counter1());  // 3</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Amaliy foyda</h2>
+<h2 id="amaliy-foyda">Amaliy foyda</h2>
 <p>Closure nazariya emas — u har kuni ishlatiladigan amaliy vosita:</p>
 <ul><li><strong>Ma'lumotni yashirish</strong> — <code>count</code> kabi o'zgaruvchini tashqi dunyodan berkitib, faqat ma'lum funksiyalar orqali boshqarish (inkapsulyatsiya);</li><li><strong>Holatni saqlash</strong> — hisoblagichlar, ID generatorlari, keshlash;</li><li><strong>Callback va hodisa ishlovchilari</strong> — tugma bosilganda ishlaydigan funksiya o'zi yaratilgan paytdagi ma'lumotni eslaydi;</li><li><strong>Funksiya fabrikalari</strong> — <code>makeGreeter</code> kabi, sozlangan yangi funksiyalar yasash.</li></ul>
 <p>Sozlanadigan funksiya fabrikasi misoli — berilgan koeffitsientga ko'paytiruvchi funksiyalar yasaymiz:</p>
@@ -700,7 +715,7 @@ console.log(double(5));   // 10
 console.log(triple(5));   // 15
 console.log(double(100)); // 200</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Agar funksiya boshqa funksiyani qaytarsa yoki argument sifatida qabul qilsa — ehtimol siz closure ishlatayotgansiz. Bu JavaScript'ning eng kuchli xususiyatlaridan biri, uni yaxshi tushunish katta ustunlik beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>let</code>/<code>const</code> o'zgaruvchilari <strong>blok ko'lami</strong>ga ega — faqat <code>{ }</code> ichida yashaydi;</li><li>Ichki funksiya <strong>tashqi funksiyaning o'zgaruvchilari</strong>ga kira oladi;</li><li>O'zgaruvchi qidiruvi ichkaridan tashqariga <strong>leksik muhit</strong> zanjiri bo'ylab boradi; bog'lanish kod yozilgan joyga qarab aniqlanadi;</li><li><strong>Closure</strong> — tashqi o'zgaruvchilarni eslab qoladigan funksiya; tashqi funksiya tugasa ham ular saqlanadi;</li><li>Closure ma'lumotni yashirish, holatni saqlash va funksiya fabrikalari uchun ishlatiladi (masalan <strong>hisoblagich</strong>).</li></ul>
 <nav class="lesson-nav">
   <a href="rest-spread.html"><span class="dir">← Oldingi</span><span class="ttl">Rest parametrlar va spread</span></a>
@@ -714,6 +729,6 @@ console.log(double(100)); // 200</textarea><div class="pg-actions"><button class
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

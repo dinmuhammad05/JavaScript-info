@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mantiqiy operatorlar — Kodla</title>
   <meta name="description" content="|| && ! operatorlari, qisqa tutashuv (short-circuit) va ularning qiymat qaytarish xususiyati.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Mantiqiy operatorlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#yoki">|| (YOKI)</a></li>
+<li class="lvl2"><a href="#birinchi-truthy-qiymatni-topadi-short-circuit">|| birinchi truthy qiymatni topadi (short-circuit)</a></li>
+<li class="lvl2"><a href="#qisqa-tutashuv-short-circuit-evaluation">Qisqa tutashuv (short-circuit evaluation)</a></li>
+<li class="lvl2"><a href="#va">&amp;&amp; (VA)</a></li>
+<li class="lvl2"><a href="#birinchi-falsy-qiymatni-topadi">&amp;&amp; birinchi falsy qiymatni topadi</a></li>
+<li class="lvl2"><a href="#emas">! (EMAS)</a></li>
+<li class="lvl2"><a href="#amaliy-qo-llanish">Amaliy qo'llanish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da uchta mantiqiy operator bor: <code>||</code> (YOKI), <code>&amp;&amp;</code> (VA) va <code>!</code> (EMAS). Ular "mantiqiy" deb atalsa-da, aslida istalgan turdagi qiymatlarga qo'llaniladi va natija sifatida ham istalgan turdagi qiymat qaytarishi mumkin. Keling, chuqur o'rganamiz.</p>
-<h2>|| (YOKI)</h2>
+<h2 id="yoki">|| (YOKI)</h2>
 <p>Ikki operandli oddiy holatda <code>||</code> agar operandlardan hech bo'lmaganda bittasi <code>true</code> bo'lsa, <code>true</code> qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yoki-oddiy.js</span></div><textarea spellcheck="false">console.log( true || true );   // true
 console.log( false || true );  // true
@@ -610,7 +626,7 @@ if (soat &lt; 10 || soat &gt; 18) {
   console.log("Ofis yopiq");
 }
 // Chiqadi: Ofis yopiq (soat &lt; 10 rost)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>|| birinchi truthy qiymatni topadi (short-circuit)</h2>
+<h2 id="birinchi-truthy-qiymatni-topadi-short-circuit">|| birinchi truthy qiymatni topadi (short-circuit)</h2>
 <p>Endi <code>||</code> ning JavaScript'ga xos kuchli xususiyatini ko'ramiz. U shunday ishlaydi:</p>
 <ol><li>Operandlarni chapdan o'ngga baholaydi;</li><li>Har birini boolean'ga o'giradi. Agar natija <code>true</code> bo'lsa — to'xtaydi va <strong>o'sha operandning asl (o'girilmagan) qiymatini</strong> qaytaradi;</li><li>Agar barcha operandlar false bo'lsa — oxirgi operandni qaytaradi.</li></ol>
 <p>Ya'ni <code>||</code> boolean emas, balki <strong>birinchi truthy qiymatni</strong> yoki barchasi falsy bo'lsa — oxirgisini qaytaradi:</p>
@@ -627,7 +643,7 @@ let taxallus = "SuperUser";
 console.log( ism || familiya || taxallus || "Anonim" );
 // Chiqadi: SuperUser</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>||</code> zanjiri qiymatlarni chapdan o'ngga tekshiradi. Bo'sh matn va <code>null</code> falsy bo'lgani uchun ular o'tkazib yuboriladi, birinchi truthy qiymat — <code>"SuperUser"</code> tanlanadi.</div>
-<h2>Qisqa tutashuv (short-circuit evaluation)</h2>
+<h2 id="qisqa-tutashuv-short-circuit-evaluation">Qisqa tutashuv (short-circuit evaluation)</h2>
 <p><code>||</code> ning yana bir xususiyati — <strong>qisqa tutashuv</strong>. Chapdagi operand truthy bo'lsa, o'ngdagisi umuman baholanmaydi. Bu, agar operandda funksiya chaqiruvi yoki qo'shimcha ta'sir (side effect) bo'lsa, muhim:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>short-circuit-yoki.js</span></div><textarea spellcheck="false">// Chap tomon true bo'lgani uchun o'ng tomon ISHGA TUSHMAYDI:
 true || console.log("bu chiqmaydi");
@@ -635,7 +651,7 @@ true || console.log("bu chiqmaydi");
 // Chap tomon false, shuning uchun o'ng tomon ishlaydi:
 false || console.log("bu chiqadi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Qisqa tutashuvni amal bajarish uchun <code>if</code> o'rniga ishlatish mumkin, lekin bu kodni o'qishni qiyinlashtiradi. Amallar uchun <code>if</code>, qiymat tanlash uchun <code>||</code> dan foydalaning.</div>
-<h2>&& (VA)</h2>
+<h2 id="va">&& (VA)</h2>
 <p><code>&amp;&amp;</code> operatori oddiy holatda ikkala operand ham <code>true</code> bo'lgandagina <code>true</code> qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>va-oddiy.js</span></div><textarea spellcheck="false">console.log( true &amp;&amp; true );   // true
 console.log( false &amp;&amp; true );  // false
@@ -646,7 +662,7 @@ let soat = 12, daqiqa = 30;
 if (soat === 12 &amp;&amp; daqiqa === 30) {
   console.log("Vaqt: 12:30");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>&& birinchi falsy qiymatni topadi</h2>
+<h2 id="birinchi-falsy-qiymatni-topadi">&& birinchi falsy qiymatni topadi</h2>
 <p><code>&amp;&amp;</code> ham xuddi <code>||</code> kabi qiymat qaytaradi, lekin teskarisicha ishlaydi:</p>
 <ol><li>Operandlarni chapdan o'ngga baholaydi;</li><li>Har birini boolean'ga o'giradi. Agar natija <code>false</code> bo'lsa — to'xtaydi va <strong>o'sha operandning asl qiymatini</strong> qaytaradi;</li><li>Agar barcha operandlar truthy bo'lsa — oxirgisini qaytaradi.</li></ol>
 <p>Ya'ni <code>&amp;&amp;</code> <strong>birinchi falsy qiymatni</strong>, yoki hech biri falsy bo'lmasa — oxirgisini qaytaradi:</p>
@@ -656,7 +672,7 @@ console.log( null &amp;&amp; 5 );    // null — birinchi falsy
 console.log( 1 &amp;&amp; 2 &amp;&amp; 3 );  // 3 — hammasi truthy, oxirgisi
 console.log( 1 &amp;&amp; null &amp;&amp; 2 ); // null — birinchi falsy</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>&amp;&amp;</code> ustuvorligi <code>||</code> dan yuqori. Shuning uchun <code>a || b &amp;&amp; c</code> aslida <code>a || (b &amp;&amp; c)</code> deb hisoblanadi. Chalkashlikdan qochish uchun murakkab ifodalarda qavs ishlating.</div>
-<h2>! (EMAS)</h2>
+<h2 id="emas">! (EMAS)</h2>
 <p><code>!</code> operatori bitta operandga qo'llaniladi va quyidagicha ishlaydi:</p>
 <ol><li>Operandni boolean'ga o'giradi: <code>true / false</code>;</li><li>Uning teskarisini qaytaradi.</li></ol>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>emas.js</span></div><textarea spellcheck="false">console.log( !true );  // false
@@ -671,7 +687,7 @@ console.log( !!1 );       // true
 // Boolean() bilan bir xil natija:
 console.log( Boolean("salom") ); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>!</code> operatorining ustuvorligi barcha mantiqiy operatorlar ichida eng yuqori. Shuning uchun u har doim <code>&amp;&amp;</code> va <code>||</code> dan oldin bajariladi.</div>
-<h2>Amaliy qo'llanish</h2>
+<h2 id="amaliy-qo-llanish">Amaliy qo'llanish</h2>
 <p>Mantiqiy operatorlarning qiymat qaytarish xususiyati amalda juda foydali. Masalan, standart (default) qiymat berish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>amaliy.js</span></div><textarea spellcheck="false">function salomla(ism) {
   // Agar ism bo'sh bo'lsa, "mehmon" ishlatiladi:
@@ -687,7 +703,7 @@ console.log( salomla("") );    // Salom, mehmon!</textarea><div class="pg-action
 // faol bo'lsagina xabar chiqadi:
 foydalanuvchi.faol &amp;&amp; console.log("Foydalanuvchi faol");
 // Chiqadi: Foydalanuvchi faol</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>||</code> — birinchi truthy qiymatni (yoki oxirgisini) qaytaradi;</li><li><code>&amp;&amp;</code> — birinchi falsy qiymatni (yoki oxirgisini) qaytaradi;</li><li><code>!</code> — qiymatni boolean'ga o'girib, teskarisini qaytaradi; <code>!!</code> — boolean'ga o'girish;</li><li>Qisqa tutashuv: kerak bo'lmasa, o'ng operand baholanmaydi;</li><li>Ustuvorlik: <code>!</code> &gt; <code>&amp;&amp;</code> &gt; <code>||</code>;</li><li>Amaliy: default qiymat (<code>||</code>) va shartli bajarish (<code>&amp;&amp;</code>).</li></ul>
 <nav class="lesson-nav">
   <a href="if-else.html"><span class="dir">← Oldingi</span><span class="ttl">Shartli operatorlar: if, ?</span></a>
@@ -701,6 +717,6 @@ foydalanuvchi.faol &amp;&amp; console.log("Foydalanuvchi faol");
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

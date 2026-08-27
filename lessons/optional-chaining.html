@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Optional chaining ?. — Kodla</title>
   <meta name="description" content="?. operatori — zanjirdagi oraliq xossalar mavjud bo'lmasa ham xatosiz ishlaydigan xavfsiz kirish usuli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Obyektlar: asoslar</div>
 <h1>Optional chaining ?.</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#mavjud-emas-muammosi">"Mavjud emas" muammosi</a></li>
+<li class="lvl2"><a href="#optional-chaining">Optional chaining ?.</a></li>
+<li class="lvl2"><a href="#qisqa-tutashuv-short-circuit">Qisqa tutashuv (short-circuit)</a></li>
+<li class="lvl2"><a href="#boshqa-variantlar-va">Boshqa variantlar: ?.() va ?.[]</a></li>
+<li class="lvl3"><a href="#metod-bor-yo-qligini-tekshirish">?.() — metod bor-yo'qligini tekshirish</a></li>
+<li class="lvl3"><a href="#kvadrat-qavs-bilan">?.[] — kvadrat qavs bilan</a></li>
+<li class="lvl2"><a href="#qachon-ishlatilmaydi">Qachon ISHLATILMAYDI?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Optional chaining</strong> (ixtiyoriy zanjir) <code>?.</code> — obyekt xossalariga xavfsiz murojaat qilishning zamonaviy usuli. Agar oraliq xossa mavjud bo'lmasa, xato o'rniga <code>undefined</code> qaytadi.</p>
-<h2>"Mavjud emas" muammosi</h2>
+<h2 id="mavjud-emas-muammosi">"Mavjud emas" muammosi</h2>
 <p>Aytaylik, ba'zi foydalanuvchilarning manzili bor, ba'zilarniki yo'q. Manzilning ko'chasini o'qimoqchi bo'lsak:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>muammo.js</span></div><textarea spellcheck="false">let user = {};  // manzili yo'q foydalanuvchi
 
@@ -611,7 +627,7 @@ console.log(user.address);         // undefined — bu mayli
 console.log(
   user.address &amp;&amp; user.address.street &amp;&amp; user.address.street.name
 );</code></pre>
-<h2>Optional chaining ?.</h2>
+<h2 id="optional-chaining">Optional chaining ?.</h2>
 <p><code>?.</code> operatori muammoni oson hal qiladi. <code>value?.prop</code> quyidagicha ishlaydi:</p>
 <ul><li>Agar <code>value</code> — <code>undefined</code> yoki <code>null</code> bo'lsa — <code>undefined</code> qaytaradi va davom etmaydi;</li><li>Aks holda — oddiygina <code>value.prop</code>'ni qaytaradi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>optional.js</span></div><textarea spellcheck="false">let user = {};  // manzili yo'q
@@ -620,7 +636,7 @@ console.log(user?.address);         // undefined
 console.log(user?.address?.street); // undefined — XATOSIZ!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'ryapmizki, kod qisqa, aniq va xatosiz. <code>user?.address</code> <code>undefined</code> bo'lgani sababli, undan keyingi <code>?.street</code> ham to'xtab, <code>undefined</code> qaytardi.</p>
 <div class="note"><code>?.</code> faqat o'zining chap tomonidagi qiymatni tekshiradi, undan oldingisini emas. <code>user?.address?.street</code>'da <code>user</code>'ning o'zi e'lon qilinmagan bo'lsa xato bo'ladi — <code>?.</code> mavjud bo'lmagan o'zgaruvchilarni himoya qilmaydi.</div>
-<h2>Qisqa tutashuv (short-circuit)</h2>
+<h2 id="qisqa-tutashuv-short-circuit">Qisqa tutashuv (short-circuit)</h2>
 <p><code>?.</code> chap qismi <code>null/undefined</code> bo'lsa, hisoblashni <strong>darhol to'xtatadi</strong>. Zanjirning qolgan qismidagi funksiya chaqiruvlari ham bajarilmaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>short-circuit.js</span></div><textarea spellcheck="false">let user = null;
 let x = 0;
@@ -628,9 +644,9 @@ let x = 0;
 user?.sayHi(x++);  // hech narsa bo'lmaydi
 
 console.log(x);  // 0 — x++ bajarilmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Boshqa variantlar: ?.() va ?.[]</h2>
+<h2 id="boshqa-variantlar-va">Boshqa variantlar: ?.() va ?.[]</h2>
 <p><code>?.</code> — operator emas, balki uch xil sintaktik shakli bor maxsus konstruksiya. U xossa uchun, funksiya chaqiruvi uchun va kvadrat qavs uchun ishlaydi.</p>
-<h3>?.() — metod bor-yo'qligini tekshirish</h3>
+<h3 id="metod-bor-yo-qligini-tekshirish">?.() — metod bor-yo'qligini tekshirish</h3>
 <p>Obyektning ba'zi metodlari bo'lishi mumkin, ba'zilarida yo'q. <code>?.()</code> metod mavjud bo'lsagina chaqiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>metod.js</span></div><textarea spellcheck="false">let userAdmin = {
   admin() { return "Men adminman"; }
@@ -639,7 +655,7 @@ let userGuest = {};
 
 console.log(userAdmin.admin?.());  // Men adminman
 console.log(userGuest.admin?.());  // undefined — xatosiz</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>?.[] — kvadrat qavs bilan</h3>
+<h3 id="kvadrat-qavs-bilan">?.[] — kvadrat qavs bilan</h3>
 <p>Xossaga nuqta emas, kvadrat qavs orqali murojaat qilinsa, <code>?.[]</code> ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>qavs.js</span></div><textarea spellcheck="false">let key = "ism";
 let user1 = { ism: "Aziz" };
@@ -648,13 +664,13 @@ let user2 = null;
 console.log(user1?.[key]);  // Aziz
 console.log(user2?.[key]);  // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>?.</code> o'chirish (<code>delete</code>) bilan ham ishlaydi: <code>delete user?.name</code> — <code>user</code> mavjud bo'lsagina <code>name</code>'ni o'chiradi.</p>
-<h2>Qachon ISHLATILMAYDI?</h2>
+<h2 id="qachon-ishlatilmaydi">Qachon ISHLATILMAYDI?</h2>
 <div class="warn"><code>?.</code>'dan haddan tashqari foydalanmang! Uni faqat qiymatning mavjud bo'lmasligi <strong>normal</strong> bo'lgan joylarda ishlating. Agar <code>user</code> mantiqan albatta bo'lishi kerak bo'lsa, uni <code>user?.address</code> deb yozish xatolarni yashirib qo'yadi va debug qilishni qiyinlashtiradi.</div>
 <p>Yana bir muhim cheklov: <code>?.</code>'ning chap qismidagi o'zgaruvchi <strong>e'lon qilingan</strong> bo'lishi shart (<code>let/const/var</code> yoki funksiya parametri). E'lon qilinmagan o'zgaruvchi uchun <code>?.</code> yordam bermaydi.</p>
 <p>Shuningdek, <code>?.</code> faqat <strong>o'qish va chaqirish</strong> uchun. Uning chap qismiga qiymat yozib bo'lmaydi:</p>
 <pre class="code"><code>// Bunday yozib bo'lmaydi:
 user?.name = "Yangi";  // XATO — chap tomonda ?. yozilmaydi</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>obj?.prop</code> — <code>obj</code> <code>null/undefined</code> bo'lsa <code>undefined</code>, aks holda <code>obj.prop</code>;</li><li><code>obj?.[key]</code> va <code>obj?.()</code> — kvadrat qavs va funksiya chaqiruvi uchun variantlar;</li><li><code>?.</code> chap qismi <code>null/undefined</code> bo'lsa, zanjir darhol to'xtaydi (short-circuit);</li><li><code>?.</code>'ni ortiqcha ishlatmang — faqat yo'qligi normal bo'lgan joyda;</li><li>Chap qismidagi o'zgaruvchi baribir e'lon qilingan bo'lishi kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="new-operator.html"><span class="dir">← Oldingi</span><span class="ttl">Konstruktor, new operatori</span></a>
@@ -668,6 +684,6 @@ user?.name = "Yangi";  // XATO — chap tomonda ?. yozilmaydi</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

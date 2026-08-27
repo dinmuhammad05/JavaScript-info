@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>switch konstruksiyasi — Kodla</title>
   <meta name="description" content="Bir o'zgaruvchini bir nechta qiymat bilan solishtirish uchun switch/case/default.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>switch konstruksiyasi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#umumiy-ko-rinish">Umumiy ko'rinish</a></li>
+<li class="lvl2"><a href="#ishlash-misoli">Ishlash misoli</a></li>
+<li class="lvl2"><a href="#break-ning-ahamiyati">"break" ning ahamiyati</a></li>
+<li class="lvl2"><a href="#case-larni-guruhlash">"case" larni guruhlash</a></li>
+<li class="lvl2"><a href="#tur-muhim-qat-iy-tenglik">Tur muhim: qat'iy tenglik (===)</a></li>
+<li class="lvl2"><a href="#amaliy-misol-hafta-kunlari">Amaliy misol: hafta kunlari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Bir o'zgaruvchini bir nechta variant bilan solishtirish kerak bo'lganda, ko'plab <code>if..else</code> o'rniga <code>switch</code> konstruksiyasi ancha aniqroq va o'qishga qulay bo'ladi.</p>
-<h2>Umumiy ko'rinish</h2>
+<h2 id="umumiy-ko-rinish">Umumiy ko'rinish</h2>
 <p><code>switch</code> bitta yoki bir nechta <code>case</code> blokidan va ixtiyoriy <code>default</code> dan iborat:</p>
 <pre class="code"><code>switch (x) {
   case 'qiymat1':  // if (x === 'qiymat1')
@@ -613,7 +628,7 @@
     break;
 }</code></pre>
 <ul><li><code>x</code> qiymati har bir <code>case</code> qiymati bilan tartib bo'yicha solishtiriladi;</li><li>Mos <code>case</code> topilsa, kod o'sha yerdan <code>break</code> ga qadar (yoki <code>switch</code> oxiriga qadar) bajariladi;</li><li>Hech qaysi <code>case</code> mos kelmasa, <code>default</code> bloki bajariladi (agar bo'lsa).</li></ul>
-<h2>Ishlash misoli</h2>
+<h2 id="ishlash-misoli">Ishlash misoli</h2>
 <p>Quyidagi misolda <code>a</code> qiymatiga qarab turli xabar chiqadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch.js</span></div><textarea spellcheck="false">let a = 3;
 switch (a) {
@@ -630,7 +645,7 @@ switch (a) {
     console.log("Noma'lum qiymat");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>a = 3</code> bo'lgani uchun <code>case 3</code> ishga tushib, "Aynan uch!" chiqadi, so'ng <code>break</code> switch'dan chiqaradi.</p>
-<h2>"break" ning ahamiyati</h2>
+<h2 id="break-ning-ahamiyati">"break" ning ahamiyati</h2>
 <p>Agar <code>break</code> yozilmasa, bajarilish <em>keyingi</em> <code>case</code> ga "o'tib ketadi", shartni tekshirmasdan! Buni "fall-through" (o'tib ketish) deyiladi.</p>
 <p><code>break</code> siz misolni ko'raylik:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-break.js</span></div><textarea spellcheck="false">let a = 2;
@@ -645,7 +660,7 @@ switch (a) {
     console.log("Default"); // buni ham chiqaradi!
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Yuqoridagi kod <code>a = 2</code> uchun "Ikki", "Uch", "Default" — hammasini chiqaradi! Chunki mos <code>case</code> topilgach, <code>break</code> uchramaguncha barcha keyingi bloklar bajariladi. Bu ko'pincha xatolarga sabab bo'ladi, shuning uchun har bir <code>case</code> oxiriga <code>break</code> qo'yishni unutmang.</div>
-<h2>"case" larni guruhlash</h2>
+<h2 id="case-larni-guruhlash">"case" larni guruhlash</h2>
 <p>Bir nechta <code>case</code> bir xil kodni bajarishi kerak bo'lsa, ularni guruhlash mumkin. Bu aynan "fall-through" xususiyatidan foydalanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-group.js</span></div><textarea spellcheck="false">let a = 4;
 switch (a) {
@@ -662,7 +677,7 @@ switch (a) {
     console.log("Boshqa");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>case 4</code> tanasi bo'sh, shuning uchun bajarilish <code>case 5</code> ga o'tib, "O'rtacha" chiqaradi. Ya'ni 4 va 5 uchun bir xil natija.</p>
-<h2>Tur muhim: qat'iy tenglik (===)</h2>
+<h2 id="tur-muhim-qat-iy-tenglik">Tur muhim: qat'iy tenglik (===)</h2>
 <p><code>switch</code> qiymatlarni <strong>qat'iy tenglik</strong> (<code>===</code>) bilan solishtiradi. Ya'ni turlar ham mos kelishi shart, hech qanday avtomatik o'girish yo'q.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-strict.js</span></div><textarea spellcheck="false">let a = "3"; // bu satr (string), son emas!
 switch (a) {
@@ -677,7 +692,7 @@ switch (a) {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Yuqorida <code>a</code> — satr <code>"3"</code>. <code>case 3</code> (son) mos kelmaydi, chunki <code>3 === "3"</code> — bu <code>false</code>. Faqat <code>case "3"</code> mos keladi.</p>
 <div class="tip">Agar foydalanuvchidan olingan qiymatni tekshirsangiz, u ko'pincha satr bo'ladi. Sonlar bilan solishtirishdan oldin <code>Number(a)</code> orqali o'girishni yoki <code>case</code> larni satr shaklida yozishni unutmang.</div>
-<h2>Amaliy misol: hafta kunlari</h2>
+<h2 id="amaliy-misol-hafta-kunlari">Amaliy misol: hafta kunlari</h2>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>switch-kun.js</span></div><textarea spellcheck="false">let kun = 3;
 let nom;
 switch (kun) {
@@ -694,7 +709,7 @@ switch (kun) {
     nom = "Noto'g'ri kun";
 }
 console.log(nom); // Chorshanba</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>switch</strong> — bir qiymatni bir nechta variant bilan solishtirishning ixcham usuli;</li><li>Solishtirish <strong>qat'iy tenglik (===)</strong> bilan bajariladi — turlar ham mos kelishi kerak;</li><li>Har bir <code>case</code> oxiriga <strong>break</strong> qo'yish shart, aks holda keyingi bloklar ham bajariladi;</li><li>Bir nechta <code>case</code> ni guruhlab, ular uchun bir xil kod bajarish mumkin;</li><li><strong>default</strong> — hech qaysi variant mos kelmaganda ishlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="sikllar.html"><span class="dir">← Oldingi</span><span class="ttl">Sikllar: while va for</span></a>
@@ -708,6 +723,6 @@ console.log(nom); // Chorshanba</textarea><div class="pg-actions"><button class=
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ma'lumotlar bazasi (TypeORM) — Kodla</title>
   <meta name="description" content="NestJS'da ma'lumotlar bazasi bilan ishlash: TypeORM integratsiyasi, @Entity bilan jadval e'loni, Repository shabloni, to'liq CRUD service misoli va Prisma bilan qisqacha taqqoslash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">NestJS</div>
 <h1>Ma'lumotlar bazasi (TypeORM)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#orm-nima-va-nega-typeorm">ORM nima va nega TypeORM?</a></li>
+<li class="lvl2"><a href="#o-rnatish-va-ulanish">O'rnatish va ulanish</a></li>
+<li class="lvl2"><a href="#entity-jadval-e-loni">@Entity — jadval e'loni</a></li>
+<li class="lvl2"><a href="#repository-shabloni">Repository shabloni</a></li>
+<li class="lvl2"><a href="#to-liq-crud-service-misoli">To'liq CRUD service misoli</a></li>
+<li class="lvl2"><a href="#controller-bilan-bog-lash">Controller bilan bog'lash</a></li>
+<li class="lvl2"><a href="#prisma-bilan-qisqacha-taqqoslash">Prisma bilan qisqacha taqqoslash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Haqiqiy ilovalar ma'lumotni doimiy saqlashi kerak — bu esa ma'lumotlar bazasini talab qiladi. NestJS eng mashhur <strong>ORM</strong> (Object-Relational Mapping) kutubxonalari bilan chuqur integratsiyaga ega. Ushbu darsda <strong>TypeORM</strong> orqali bazaga ulanishni, <code>@Entity</code> bilan jadval yaratishni, <strong>Repository</strong> shablonini va to'liq CRUD servisni yozishni o'rganamiz.</p>
-<h2>ORM nima va nega TypeORM?</h2>
+<h2 id="orm-nima-va-nega-typeorm">ORM nima va nega TypeORM?</h2>
 <p><strong>ORM</strong> — bu ma'lumotlar bazasidagi jadvallarni kodingizdagi obyektlar bilan bog'lovchi qatlam. U sizni SQL so'rovlarini qo'lda yozishdan qutqaradi: siz obyektlar bilan ishlaysiz, ORM esa ularni SQL'ga o'giradi. <strong>TypeORM</strong> — TypeScript uchun eng mashhur ORM'lardan biri va NestJS bilan rasmiy integratsiyaga ega.</p>
 <ul><li>SQL o'rniga TypeScript klasslari va metodlar bilan ishlaysiz;</li><li>PostgreSQL, MySQL, SQLite, MariaDB va boshqalarni qo'llab-quvvatlaydi;</li><li>Migratsiyalar orqali baza sxemasini boshqarish imkoni;</li><li>TypeScript tiplari bilan to'liq mos ishlaydi.</li></ul>
 <div class="note">Ushbu darsda misollar uchun <strong>PostgreSQL</strong>ni ishlatamiz, lekin sozlamada bazani almashtirish orqali istalgan bazaga o'tish mumkin. TypeORM'ning kuchli tomoni — kodingiz baza turidan deyarli mustaqil bo'ladi.</div>
-<h2>O'rnatish va ulanish</h2>
+<h2 id="o-rnatish-va-ulanish">O'rnatish va ulanish</h2>
 <p>Avval kerakli paketlarni o'rnatamiz: NestJS'ning TypeORM adapteri, TypeORM'ning o'zi va PostgreSQL drayveri:</p>
 <pre class="code"><code>npm install @nestjs/typeorm typeorm pg</code></pre>
 <p>Endi bazaga ulanishni ildiz modulda sozlaymiz. <code>TypeOrmModule.forRoot()</code> ulanish parametrlarini qabul qiladi:</p>
@@ -625,7 +641,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 })
 export class AppModule {}</code></pre>
 <div class="warn"><code>synchronize: true</code> baza sxemasini entity'laringizga qarab avtomatik yangilaydi. Bu ishlab chiqishda qulay, lekin <strong>ishlab chiqarishda (production) hech qachon ishlatmang</strong> — u ma'lumotni yo'q qilishi mumkin. Production'da <strong>migratsiyalar</strong>dan foydalaning.</div>
-<h2>@Entity — jadval e'loni</h2>
+<h2 id="entity-jadval-e-loni">@Entity — jadval e'loni</h2>
 <p><strong>Entity</strong> — bu ma'lumotlar bazasidagi jadvalni ifodalovchi klass. Har bir entity nusxasi jadvalning bir qatoriga, har bir xossa esa ustunga mos keladi. Entity'ni <code>@Entity</code> dekoratori bilan belgilaymiz:</p>
 <pre class="code"><code>// src/users/user.entity.ts
 import {
@@ -651,7 +667,7 @@ export class User {
 }</code></pre>
 <p>Asosiy ustun dekoratorlari:</p>
 <ul><li><code>@PrimaryGeneratedColumn()</code> — avtomatik o'suvchi asosiy kalit;</li><li><code>@Column()</code> — oddiy ustun, parametrlarga <code>length</code>, <code>unique</code>, <code>default</code>, <code>nullable</code> berish mumkin;</li><li><code>@CreateDateColumn()</code> — qator yaratilgan vaqtni avtomatik saqlaydi;</li><li><code>@UpdateDateColumn()</code> — oxirgi yangilanish vaqtini avtomatik saqlaydi.</li></ul>
-<h2>Repository shabloni</h2>
+<h2 id="repository-shabloni">Repository shabloni</h2>
 <p><strong>Repository</strong> — bu ma'lum bir entity bilan ishlash uchun tayyor obyekt. U <code>find</code>, <code>save</code>, <code>delete</code> kabi metodlar orqali bazaga so'rov yuboradi. TypeORM har bir entity uchun avtomatik repository yaratadi.</p>
 <p>Repository'ni service ichida ishlatish uchun ikki bosqich kerak. Avval feature modulda entity'ni ro'yxatdan o'tkazamiz — <code>TypeOrmModule.forFeature()</code> orqali:</p>
 <pre class="code"><code>// src/users/users.module.ts
@@ -682,7 +698,7 @@ export class UsersService {
   ) {}
 }</code></pre>
 <div class="note"><code>Repository&lt;User&gt;</code> — bu generik tip. U repository aynan <code>User</code> entity bilan ishlashini bildiradi. Shu tufayli <code>find</code> yoki <code>save</code> chaqirganingizda TypeScript sizga to'g'ri tiplarni ko'rsatadi.</div>
-<h2>To'liq CRUD service misoli</h2>
+<h2 id="to-liq-crud-service-misoli">To'liq CRUD service misoli</h2>
 <p>Endi barcha CRUD amallarini (Create, Read, Update, Delete) o'z ichiga olgan to'liq servisni yozamiz. Repository metodlariga e'tibor bering — ular deyarli SQL yozmasdan hamma ishni bajaradi:</p>
 <pre class="code"><code>// src/users/users.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -734,7 +750,7 @@ export class UsersService {
 <p>Eng ko'p ishlatiladigan repository metodlari:</p>
 <ul><li><code>create(dto)</code> — entity nusxasini tayyorlaydi (hali saqlamaydi);</li><li><code>save(entity)</code> — bazaga yozadi (yangi bo'lsa INSERT, mavjud bo'lsa UPDATE);</li><li><code>find()</code> / <code>findOne({ where })</code> — o'qish;</li><li><code>remove(entity)</code> — o'chirish;</li><li><code>count()</code>, <code>update()</code>, <code>delete()</code> — qo'shimcha amallar.</li></ul>
 <div class="tip"><code>findOne</code> topa olmasa <code>null</code> qaytaradi. Shuning uchun yuqoridagi kodda biz uni tekshirib, <code>NotFoundException</code> tashladik. NestJS bu istisnoni avtomatik <strong>404 Not Found</strong> javobiga o'giradi — bu qulay tayyor mexanizm.</div>
-<h2>Controller bilan bog'lash</h2>
+<h2 id="controller-bilan-bog-lash">Controller bilan bog'lash</h2>
 <p>Endi servisni controller'ga ulaymiz. Controller ingichka qoladi — u faqat so'rovni qabul qilib, servisga uzatadi:</p>
 <pre class="code"><code>// src/users/users.controller.ts
 import {
@@ -767,7 +783,7 @@ export class UsersController {
     return this.service.remove(id);
   }
 }</code></pre>
-<h2>Prisma bilan qisqacha taqqoslash</h2>
+<h2 id="prisma-bilan-qisqacha-taqqoslash">Prisma bilan qisqacha taqqoslash</h2>
 <p>TypeORM yagona tanlov emas. So'nggi yillarda <strong>Prisma</strong> juda mashhur bo'ldi. U boshqacha yondashuvni tanlaydi: entity klasslari o'rniga alohida <code>schema.prisma</code> faylida sxema e'lon qilinadi va undan tiplar avtomatik generatsiya qilinadi.</p>
 <pre class="code"><code>// schema.prisma faylida sxema (TypeScript emas):
 model User {
@@ -778,7 +794,7 @@ model User {
 }</code></pre>
 <ul><li><strong>TypeORM:</strong> dekoratorlar bilan ishlaydi, NestJS uslubiga tabiiy mos keladi, moslashuvchan;</li><li><strong>Prisma:</strong> alohida sxema fayli, avtomatik generatsiya qilingan mustahkam tiplar, ajoyib developer tajribasi;</li><li>Ikkalasi ham NestJS bilan yaxshi ishlaydi — tanlov jamoa afzalligiga bog'liq.</li></ul>
 <div class="note">Yangi loyihalarda ko'p jamoalar Prisma'ni tanlaydi, chunki uning tip xavfsizligi va migratsiya tizimi kuchli. TypeORM esa NestJS bilan tabiiy uyg'unligi va rasmiy integratsiyasi tufayli hali ham juda mashhur. Ikkovi ham to'g'ri tanlov.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>ORM</strong> baza jadvallarini kod obyektlariga bog'laydi, SQL yozishni kamaytiradi;</li><li><code>TypeOrmModule.forRoot()</code> ildiz modulda ulanishni sozlaydi;</li><li><strong>@Entity</strong> jadvalni, <code>@PrimaryGeneratedColumn</code>/<code>@Column</code> ustunlarni belgilaydi;</li><li><code>TypeOrmModule.forFeature([Entity])</code> feature modulda repository'ni ochadi;</li><li><strong>Repository</strong> <code>find</code>, <code>save</code>, <code>remove</code> metodlari bilan CRUD amallarini bajaradi;</li><li>Topilmagan yozuv uchun <code>NotFoundException</code> tashlansa, NestJS avtomatik 404 qaytaradi;</li><li><code>synchronize: true</code> faqat development uchun; production'da migratsiyalar ishlating;</li><li><strong>Prisma</strong> — TypeORM'ga zamonaviy muqobil, kuchli tip xavfsizligi bilan.</li></ul>
 <nav class="lesson-nav">
   <a href="nestjs-di.html"><span class="dir">← Oldingi</span><span class="ttl">Provider va Dependency Injection</span></a>
@@ -792,6 +808,6 @@ model User {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

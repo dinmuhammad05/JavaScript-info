@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hodisaga javob (Incident Response) va cheklist — Kodla</title>
   <meta name="description" content="Buzilishga tayyorgarlik, incident response bosqichlari, backup, buzilgandagi birinchi qadamlar va butun kiberxavfsizlik bo'limining yakuniy amaliy cheklisti.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,28 +599,40 @@
 <main class="content article">
 <div class="crumbs">Amaliy himoya va DevSecOps</div>
 <h1>Hodisaga javob (Incident Response) va cheklist</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-tayyorgarlik-hal-qiluvchi">Nega tayyorgarlik hal qiluvchi</a></li>
+<li class="lvl2"><a href="#incident-response-bosqichlari">Incident Response bosqichlari</a></li>
+<li class="lvl2"><a href="#backup-va-uni-sinash">Backup — va uni sinash</a></li>
+<li class="lvl2"><a href="#buzilganda-birinchi-qadamlar">Buzilganda birinchi qadamlar</a></li>
+<li class="lvl2"><a href="#foydalanuvchilarni-ogohlantirish">Foydalanuvchilarni ogohlantirish</a></li>
+<li class="lvl2"><a href="#yakuniy-yaxlit-xavfsizlik-cheklisti">Yakuniy yaxlit xavfsizlik cheklisti</a></li>
+<li class="lvl2"><a href="#yo-l-davom-etadi">Yo'l davom etadi</a></li>
+  </ul>
+</details>
 <p class="lead">Kiberxavfsizlikda achchiq, ammo halol haqiqat bor: yetarlicha uzoq ishlasangiz, ertami-kechmi biror hodisa yuz beradi. Eng kuchli himoya ham 100% kafolat bermaydi. Shu sabab yetuk jamoalar savolni "agar buzilsa?" emas, "buzilganda nima qilamiz?" tarzida qo'yadi. Tayyorgarlik — bu qo'rqoqlik emas, yetuklik belgisidir. Hodisa yuz berganda vahima emas, reja kerak bo'ladi.</p>
-<h2>Nega tayyorgarlik hal qiluvchi</h2>
+<h2 id="nega-tayyorgarlik-hal-qiluvchi">Nega tayyorgarlik hal qiluvchi</h2>
 <p>Hodisa sodir bo'lgan payt — reja tuzadigan payt emas. O'sha daqiqada bosim baland, vaqt tig'iz, va har bir noto'g'ri qadam zararni kattalashtiradi. Agar oldindan reja bo'lsa, jamoa vahimaga tushmasdan, aniq qadamlar bo'yicha harakat qiladi. Farq — tartibli javob bilan tartibsizlik orasidagi farq.</p>
-<h2>Incident Response bosqichlari</h2>
+<h2 id="incident-response-bosqichlari">Incident Response bosqichlari</h2>
 <p><strong>Incident Response</strong> (IR — hodisaga javob) sohada oltita bosqichli standart aylanaga ega. Bu ketma-ketlikni yodda tutish — hodisa paytida yo'l ko'rsatuvchi xarita bo'lib xizmat qiladi:</p>
 <ol><li><strong>Tayyorgarlik (preparation)</strong> — hodisadan oldin: reja, aloqa ro'yxati, backup va vositalarni tayyorlab qo'yish;</li><li><strong>Aniqlash (identification)</strong> — biror g'ayrioddiy narsa yuz berayotganini sezish va uni haqiqiy hodisa deb tasdiqlash;</li><li><strong>Ushlab qolish (containment)</strong> — zararning tarqalishini to'xtatish; buzilgan qismni izolyatsiya qilib, qolganini asrash;</li><li><strong>Yo'q qilish (eradication)</strong> — hodisaning asl sababini (masalan, zararli kod yoki ochiq eshikni) tizimdan butunlay olib tashlash;</li><li><strong>Tiklash (recovery)</strong> — tizimni xavfsiz, toza holatda qayta ishga tushirish va normal ishlashni tekshirish;</li><li><strong>Saboqlar (lessons learned)</strong> — hammasi tinchigach: nima bo'ldi, nega bo'ldi, kelajakda qanday oldini olamiz — yozib, jarayonni yaxshilash.</li></ol>
 <p>Diqqat qiling: birinchi bosqich — tayyorgarlik — hodisadan <em>oldin</em> bajariladi. Va oxirgi bosqich — saboqlar — keyingi hodisaning tayyorgarligini kuchaytiradi. Shu tariqa aylana yopiladi: har bir hodisa jamoani kuchliroq qiladi.</p>
-<h2>Backup — va uni sinash</h2>
+<h2 id="backup-va-uni-sinash">Backup — va uni sinash</h2>
 <p>Ko'p hodisalarda (ayniqsa ma'lumot yo'qolishi yoki shifrlanishida) yagona najot — <strong>backup</strong> (zaxira nusxa). Ammo backup borligi yetarli emas. Muhimi — u <em>ishlashi</em>.</p>
 <div class="warn">Sinalmagan backup — backup emas, umid. Ko'plab jamoalar backup olib turishgan, ammo kerak bo'lganda u buzuq yoki chala ekanini bilib qolishgan. Backupdan tiklashni muntazam <em>mashq qiling</em>: nusxadan haqiqatan tizimni tiklab, hammasi ishlashiga ishonch hosil qiling.</div>
 <p>Yaxshi qoida — <strong>3-2-1</strong>: ma'lumotning kamida 3 nusxasi bo'lsin, 2 xil turdagi saqlagichda, va 1 nusxa boshqa joyda (masalan, boshqa fizik manzilda) turibsin. Shunda bitta falokat hamma nusxani birdan yo'q qilolmaydi.</p>
-<h2>Buzilganda birinchi qadamlar</h2>
+<h2 id="buzilganda-birinchi-qadamlar">Buzilganda birinchi qadamlar</h2>
 <p>Hodisani sezdingiz. Vahimaga tushmasdan, quyidagi tartibda harakat qiling:</p>
 <ol><li>Vahimaga tushmang va hech narsani shoshib o'chirmang — dalillar (loglar, izlar) keyingi tahlil uchun kerak bo'ladi;</li><li>Ushlab qoling — buzilgan tizimni tarmoqdan izolyatsiya qilib, zararning tarqalishini to'xtating;</li><li>Hujjatlashtiring — nima, qachon, qanday sezilganini yozib boring; vaqt muhr bilan;</li><li>Xabar bering — javobgar shaxslar va zarur bo'lsa mas'ul organlarga ma'lum qiling;</li><li>Sirlarni almashtiring — buzilishga aloqador bo'lishi mumkin bo'lgan barcha parol, kalit va tokenlarni bekor qilib, yangilang.</li></ol>
-<h2>Foydalanuvchilarni ogohlantirish</h2>
+<h2 id="foydalanuvchilarni-ogohlantirish">Foydalanuvchilarni ogohlantirish</h2>
 <p>Agar hodisa foydalanuvchilar ma'lumotiga taalluqli bo'lsa, ularni ogohlantirish — nafaqat qonuniy majburiyat (ko'p mamlakatlarda), balki ishonchni saqlashning yagona halol yo'lidir. Yashirishga urinish deyarli har doim vaziyatni yomonlashtiradi: haqiqat baribir ochiladi, va o'shanda yashirgan tomon eng ko'p yo'qotadi.</p>
 <p>To'g'ri ogohlantirish — o'z vaqtida, halol va aniq bo'ladi: nima bo'ldi, qaysi ma'lumot ta'sirlangan, foydalanuvchi nima qilishi kerak (masalan, parolini o'zgartirishi), va siz muammoni hal qilish uchun nima qilayotganingiz.</p>
-<h2>Yakuniy yaxlit xavfsizlik cheklisti</h2>
+<h2 id="yakuniy-yaxlit-xavfsizlik-cheklisti">Yakuniy yaxlit xavfsizlik cheklisti</h2>
 <p>Endi butun 9-qism — kiberxavfsizlik bo'limi — bo'ylab o'rganganlarimizni bitta amaliy ro'yxatga jamlaymiz. Bu cheklistni har bir loyihangizda ishga tushirishdan oldin ko'zdan kechiring. U — nazariyani amaliy odatga aylantiruvchi ko'prik:</p>
 <ul><li><strong>HTTPS hamma joyda</strong> — barcha trafik shifrlangan (TLS); HTTP so'rovlari HTTPS'ga yo'naltiriladi;</li><li><strong>Parollar xesh + tuz bilan</strong> — parollar hech qachon ochiq saqlanmaydi; kuchli algoritm bilan xeshlanadi va har biriga alohida tuz (salt) qo'shiladi;</li><li><strong>Barcha kirish validatsiya qilinadi</strong> — serverda, allowlist yondashuvi bilan; hech qanday tashqi ma'lumotga ishonilmaydi;</li><li><strong>Chiqish escape qilinadi</strong> — ma'lumot HTML, SQL yoki buyruqqa joylashdan oldin kontekstga mos zararsizlantiriladi;</li><li><strong>Xavfsizlik sarlavhalari o'rnatilgan</strong> — kerakli HTTP xavfsizlik sarlavhalari (masalan, kontent siyosati) sozlangan;</li><li><strong>Sirlar kodda emas</strong> — parol, kalit, token muhit o'zgaruvchilarida; <code>.env</code> git'ga tushmaydi;</li><li><strong>Bog'liqliklar auditdan o'tgan</strong> — <code>npm audit</code> toza; lock fayl git'da; avtomatik yangilash sozlangan;</li><li><strong>Ikki bosqichli autentifikatsiya (2FA)</strong> — hech bo'lmaganda muhim va admin hisoblar uchun yoqilgan;</li><li><strong>Eng kam imtiyoz</strong> — har bir hisob va jarayon faqat zarur huquqqa ega;</li><li><strong>Xatolar xavfsiz</strong> — foydalanuvchiga ichki tafsilot (stack, so'rov) chiqmaydi; tizim xato holatda ochilib qolmaydi;</li><li><strong>Backup mavjud va sinalgan</strong> — 3-2-1 qoidasi; tiklash muntazam mashq qilinadi;</li><li><strong>Loglash va kuzatuv</strong> — muhim hodisalar qayd etiladi (sirlarsiz); g'ayrioddiy faollik sezilishi mumkin;</li><li><strong>Muntazam yangilanish</strong> — tizim, kutubxona va bog'liqliklar yangilanib turadi; ma'lum zaifliklar yopiladi;</li><li><strong>Hodisaga javob rejasi tayyor</strong> — kim, nima qiladi — hodisadan oldin belgilangan.</li></ul>
 <div class="note">Bu cheklist — butun kiberxavfsizlik bo'limining amaliy xulosasidir. Uni ko'zdan kechirib chiqish har bir loyihangizning yakuniy odatiga aylansin. Xavfsizlik — bir marta bajarib qo'yiladigan vazifa emas, balki har bir loyihada takrorlanadigan intizom.</div>
-<h2>Yo'l davom etadi</h2>
+<h2 id="yo-l-davom-etadi">Yo'l davom etadi</h2>
 <p>Siz endi xavfsizlikning asosiy tamoyillarini bilasiz: kirishga ishonmaslik, chuqur himoya, eng kam imtiyoz, bog'liqliklarni kuzatish, test qilish va hodisaga tayyor turish. Bu — mustahkam poydevor. Soha esa doim rivojlanib boradi, shu bois eng muhim mahorat — o'rganishni to'xtatmaslikdir.</p>
 <div class="tip">Xavfsizlik — manzil emas, yo'l. Har kuni ozgina o'rganib, har loyihada shu cheklistni qo'llab, siz nafaqat yaxshi dasturchi, balki ishonchli, mas'uliyatli muhandis bo'lib yetishasiz. Omad tilaymiz — endi bilimni amaliyotga aylantirish navbati sizniki.</div>
 <nav class="lesson-nav">
@@ -632,6 +647,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

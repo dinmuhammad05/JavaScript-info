@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xesh-jadval (HashMap) — kalit-qiymat sehri — Kodla</title>
   <meta name="description" content="O(1) da qidirish, xesh funksiya, kolliziyalar, JS'da obyekt va Map, va HashMap bilan masalalarni tezlashtirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,27 @@
 <main class="content article">
 <div class="crumbs">Chiziqli ma'lumotlar tuzilmalari</div>
 <h1>Xesh-jadval (HashMap) — kalit-qiymat sehri</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#g-oya-kalitni-indeksga-aylantirish">G'oya: kalitni indeksga aylantirish</a></li>
+<li class="lvl2"><a href="#xesh-funksiya-nima">Xesh funksiya nima?</a></li>
+<li class="lvl2"><a href="#nega-o-1">Nega O(1)?</a></li>
+<li class="lvl2"><a href="#kolliziya-va-zanjir-usuli">Kolliziya va zanjir usuli</a></li>
+<li class="lvl2"><a href="#javascript-da-obyekt-va-map">JavaScript'da obyekt va Map</a></li>
+<li class="lvl2"><a href="#qachon-obyekt-qachon-map">Qachon obyekt, qachon Map?</a></li>
+<li class="lvl2"><a href="#qo-llanish-1-chastota-sanash">Qo'llanish 1: chastota sanash</a></li>
+<li class="lvl2"><a href="#qo-llanish-2-ikki-son-yig-indisi-two-sum">Qo'llanish 2: ikki son yig'indisi (Two Sum)</a></li>
+<li class="lvl2"><a href="#qo-llanish-3-takror-borligini-topish">Qo'llanish 3: takror borligini topish</a></li>
+<li class="lvl2"><a href="#big-o-ta-kidi">Big O ta'kidi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Katta kutubxonani tasavvur qiling. Agar kitoblar tartibsiz taxlangan bo'lsa, kerakli kitobni topguncha butun javonlarni aylanib chiqasiz. Ammo har bir kitobga aniq raqamli joy berilgan bo'lsa — kutubxonachi katalogga qaraydi, raqamni oladi va to'g'ri javonga boradi, izlab o'tirmaydi. Mana shu "to'g'ridan-to'g'ri joyga borish" g'oyasi — <strong>xesh-jadval (hash map)</strong>ning yuragi.</p>
-<h2>G'oya: kalitni indeksga aylantirish</h2>
+<h2 id="g-oya-kalitni-indeksga-aylantirish">G'oya: kalitni indeksga aylantirish</h2>
 <p>Oddiy massivda biz <em>raqamli indeks</em> bo'yicha bir zumda element olamiz: <code>arr[3]</code>. Bu <code>O(1)</code>, chunki kompyuter to'g'ri joyni hisoblab boradi.</p>
 <p>Xesh-jadval shu g'oyani <em>istalgan kalit</em> uchun ishlatadi. Kalit <code>"ism"</code> matnimi, son yoki boshqa narsami — mayli. Sirli qism: kalitni maxsus funksiya orqali raqamli indeksga aylantiramiz, keyin o'sha indeksga to'g'ridan-to'g'ri boramiz. Izlash yo'q — hisoblab, to'g'ri joyga sakrash bor.</p>
-<h2>Xesh funksiya nima?</h2>
+<h2 id="xesh-funksiya-nima">Xesh funksiya nima?</h2>
 <p><strong>Xesh funksiya</strong> — istalgan kalitni oladi va uni cheklangan diapazondagi butun songa (massiv indeksiga) aylantiradi. Yaxshi xesh funksiya:</p>
 <ul><li>bir xil kalit uchun <strong>doim bir xil</strong> son qaytaradi</li><li>kalitlarni indekslar bo'ylab <strong>tekis</strong> tarqatadi</li><li><strong>tez</strong> ishlaydi</li></ul>
 <p>Quyida oddiy (jiddiy loyihalar uchun emas, o'quv maqsadidagi) xesh funksiyani ko'ring — u matndagi belgilar kodlarini yig'ib, jadval hajmiga bo'lgandagi qoldiqni oladi:</p>
@@ -617,15 +636,15 @@ console.log(xesh('anor', 10));
 console.log(xesh('uzum', 10));
 console.log(xesh('olma', 10)); // yana bir xil natija</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: <code>'olma'</code> har safar bir xil indeks beradi. Aynan shu barqarorlik tufayli biz keyin ham o'sha joydan qiymatni topa olamiz.</p>
-<h2>Nega O(1)?</h2>
+<h2 id="nega-o-1">Nega O(1)?</h2>
 <p>Kalit-qiymat juftligini saqlaganda: kalitni xeshlaymiz -> indeks olamiz -> o'sha indeksga qiymatni qo'yamiz. Qidirganda: yana xeshlaymiz -> o'sha indeksga boramiz -> qiymatni olamiz. Jadvalda million juftlik bo'lsa ham, biz faqat bitta hisob-kitob qilamiz.</p>
 <ul><li><strong>Qo'shish</strong> — o'rtacha <code>O(1)</code></li><li><strong>Qidirish</strong> — o'rtacha <code>O(1)</code></li><li><strong>O'chirish</strong> — o'rtacha <code>O(1)</code></li></ul>
 <div class="warn">Bu <code>O(1)</code> — <em>o'rtacha</em> holat. Eng yomon holatda xesh-jadval <code>O(n)</code> ga tushib qolishi mumkin — buning sababi kolliziya, buni hozir tushuntiramiz.</div>
-<h2>Kolliziya va zanjir usuli</h2>
+<h2 id="kolliziya-va-zanjir-usuli">Kolliziya va zanjir usuli</h2>
 <p>Ba'zan ikki xil kalit bir xil indeksga tushib qoladi — buni <strong>kolliziya</strong> deymiz. Masalan, yuqoridagi funksiyada <code>'ab'</code> va <code>'ba'</code> bir xil yig'indi berishi mumkin. Kolliziya muqarrar: cheksiz kalitlarni cheklangan indekslarga joylashtirmoqchimiz.</p>
 <p>Eng ko'p qo'llaniladigan yechim — <strong>zanjir (chaining)</strong>. Har bir indeks yakka qiymat emas, balki kichik ro'yxat ("vedro") saqlaydi. Bir indeksga bir nechta juftlik tushsa, ularni shu ro'yxatga qo'shamiz. Qidirganda o'sha kichik ro'yxatni aylanamiz.</p>
 <p>Agar xesh funksiya yomon bo'lsa va hamma kalitlar bitta indeksga tushsa, jadval bitta uzun ro'yxatga aylanadi — o'shanda qidirish <code>O(n)</code> bo'lib qoladi. Shuning uchun yaxshi xesh funksiya juda muhim.</p>
-<h2>JavaScript'da obyekt va Map</h2>
+<h2 id="javascript-da-obyekt-va-map">JavaScript'da obyekt va Map</h2>
 <p>Yaxshi xabar: JavaScriptda xesh-jadvalni qo'lda yozib o'tirish shart emas — u tilga <em>ichki qurilgan</em>. Ikki varianti bor: oddiy obyekt <code>{}</code> va maxsus <code>Map</code>. Ikkalasi ham ichida xesh-jadval ishlaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>obyekt-map.js</span></div><textarea spellcheck="false">// oddiy obyekt bilan
 const yosh = {};
@@ -647,12 +666,12 @@ console.log(xarita.has('Vali'));   // true
 console.log(xarita.size);          // 2
 xarita.delete('Ali');
 console.log(xarita.get('Ali'));    // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qachon obyekt, qachon Map?</h2>
+<h2 id="qachon-obyekt-qachon-map">Qachon obyekt, qachon Map?</h2>
 <p>Ikkalasi o'xshash, lekin muhim farqlari bor. <code>Map</code> ni tanlang, agar:</p>
 <ul><li>kalitlar faqat matn emas — <strong>istalgan tur</strong> (son, obyekt, hatto funksiya) bo'lsa; obyektda kalitlar doim matnga aylantiriladi</li><li><strong>qo'shilish tartibi</strong> muhim bo'lsa — <code>Map</code> juftliklarni qo'shilgan tartibda saqlaydi</li><li>elementlar sonini tez-tez bilish kerak bo'lsa — <code>map.size</code> darrov beradi (obyektda <code>Object.keys(obj).length</code> yozish kerak)</li><li>kalitlar dinamik qo'shilib-o'chirilsa — <code>Map</code> shunga optimallashtirilgan</li></ul>
 <p>Oddiy obyekt esa qulay, agar ma'lumot sobit tuzilishga ega bo'lsa yoki uni JSON ga aylantirmoqchi bo'lsangiz (<code>JSON.stringify</code> obyekt bilan ishlaydi, <code>Map</code> bilan to'g'ridan-to'g'ri emas).</p>
 <div class="note"><code>Set</code> — <code>Map</code> ning yaqin qarindoshi: u faqat <em>kalitlarni</em> (takrorlanmas qiymatlarni) saqlaydi, qiymatsiz. <code>new Set([1, 2, 2, 3])</code> avtomatik ravishda <code>{1, 2, 3}</code> ga aylanadi. Takrorlarni olib tashlash yoki "bu element bormi?" ni <code>O(1)</code> da tekshirish uchun ideal.</div>
-<h2>Qo'llanish 1: chastota sanash</h2>
+<h2 id="qo-llanish-1-chastota-sanash">Qo'llanish 1: chastota sanash</h2>
 <p>Xesh-jadvalning eng keng tarqalgan ishi — biror narsa necha marta uchraganini sanash. Matndagi so'zlar yoki massivdagi sonlar chastotasini bir marta aylanib chiqib topamiz — <code>O(n)</code>.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>chastota.js</span></div><textarea spellcheck="false">function chastota(sozlar) {
   const hisob = new Map();
@@ -669,7 +688,7 @@ const natija = chastota(matn);
 console.log('olma:', natija.get('olma')); // 3
 console.log('anor:', natija.get('anor')); // 2
 console.log('uzum:', natija.get('uzum')); // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qo'llanish 2: ikki son yig'indisi (Two Sum)</h2>
+<h2 id="qo-llanish-2-ikki-son-yig-indisi-two-sum">Qo'llanish 2: ikki son yig'indisi (Two Sum)</h2>
 <p>Mashhur masala: massivda yig'indisi berilgan songa teng bo'lgan ikki sonni toping. Avval sodda (naive) yechimni ko'raylik — har juftlikni tekshiramiz. Bu ikki ichma-ich sikl, ya'ni <strong>O(n²)</strong>.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>two-sum-sodda.js</span></div><textarea spellcheck="false">function twoSumSodda(sonlar, nishon) {
   for (let i = 0; i &lt; sonlar.length; i++) {
@@ -700,7 +719,7 @@ console.log(twoSumSodda([3, 2, 4], 6));      // [1, 2]</textarea><div class="pg-
 console.log(twoSumTez([2, 7, 11, 15], 9)); // [0, 1]
 console.log(twoSumTez([3, 2, 4], 6));      // [1, 2]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>10 000 elementli massivda sodda yechim ~50 million amal bajaradi, tez yechim esa atigi ~10 000. Xesh-jadval <code>O(n²)</code> ni <code>O(n)</code> ga aylantirdi — bu ulkan farq.</p>
-<h2>Qo'llanish 3: takror borligini topish</h2>
+<h2 id="qo-llanish-3-takror-borligini-topish">Qo'llanish 3: takror borligini topish</h2>
 <p>Massivda takrorlanuvchi element bormi? <code>Set</code> yordamida bir aylanishda topamiz. Har elementni <code>Set</code> ga qo'shamiz; agar u allaqachon ichida bo'lsa — takror topildi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>takror.js</span></div><textarea spellcheck="false">function takrorBormi(sonlar) {
   const korilgan = new Set();
@@ -716,10 +735,10 @@ console.log(twoSumTez([3, 2, 4], 6));      // [1, 2]</textarea><div class="pg-ac
 console.log(takrorBormi([1, 2, 3, 4]));    // false
 console.log(takrorBormi([1, 2, 3, 2]));    // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yechim <code>O(n)</code> vaqt sarflaydi. Xuddi shu masalani har juftlikni solishtirib yechsak, <code>O(n²)</code> bo'lardi. Yana bir bor xesh tuzilmasi tezlik keltirdi.</p>
-<h2>Big O ta'kidi</h2>
+<h2 id="big-o-ta-kidi">Big O ta'kidi</h2>
 <p>Xesh-jadvalning kuchini yodda saqlang: o'rtacha holatda qo'shish, qidirish, o'chirish — hammasi <code>O(1)</code>. Bu tezlik ko'plab sekin (<code>O(n²)</code>) algoritmlarni tez (<code>O(n)</code>) algoritmlarga aylantirishning kalitidir. Faqat eng yomon holatni (yomon xesh, ko'p kolliziya) unutmang, lekin amalda JavaScriptning <code>Map</code> va obyektlari bunga yaxshi qarshi turadi.</p>
 <div class="tip">Intervyu qoidasi: masalada "buni tezroq qilib bo'ladimi?" degan savol tug'ilsa, birinchi bo'lib <strong>HashMap (yoki Set)</strong> haqida o'ylang. Ko'pincha qo'shimcha xotira evaziga vaqtni keskin tejash mumkin — bu "vaqt va xotira almashinuvi" deb ataladigan klassik yondashuv.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Xesh-jadval — kalitni indeksga aylantirib, to'g'ridan-to'g'ri joyga boradigan sehrli tuzilma. Xesh funksiya, kolliziya, zanjir — ichki mexanizmi. JavaScriptda <code>{}</code>, <code>Map</code> va <code>Set</code> shaklida tayyor keladi. O'rtacha <code>O(1)</code> qidirish tufayli u algoritm masalalarini tezlashtirishning eng kuchli quroli. Chiziqli ma'lumotlar tuzilmalari bobini shu bilan yakunlaymiz — stek, navbat, bog'langan ro'yxat va xesh-jadval endi sizning asboblar qutingizda.</p>
 <nav class="lesson-nav">
   <a href="linked-list.html"><span class="dir">← Oldingi</span><span class="ttl">Bog'langan ro'yxat (Linked List)</span></a>
@@ -733,6 +752,6 @@ console.log(takrorBormi([1, 2, 3, 2]));    // true</textarea><div class="pg-acti
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

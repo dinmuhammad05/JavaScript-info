@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VPS serverga deploy qilish — Kodla</title>
   <meta name="description" content="VPS olish (DigitalOcean/Hetzner), SSH bilan ulanish, Node.js o'rnatish, kodni git clone qilish, muhit o'zgaruvchilari (.env), PM2 bilan doimiy ishga tushirish va Nginx reverse proxy sozlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,28 @@
 <main class="content article">
 <div class="crumbs">Loyihani deploy qilish</div>
 <h1>VPS serverga deploy qilish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#1-bosqich-vps-olish">1-bosqich: VPS olish</a></li>
+<li class="lvl2"><a href="#2-bosqich-ssh-bilan-ulanish">2-bosqich: SSH bilan ulanish</a></li>
+<li class="lvl2"><a href="#3-bosqich-node-js-o-rnatish">3-bosqich: Node.js o'rnatish</a></li>
+<li class="lvl2"><a href="#4-bosqich-kodni-git-clone-qilish">4-bosqich: Kodni git clone qilish</a></li>
+<li class="lvl2"><a href="#5-bosqich-muhit-o-zgaruvchilari-env">5-bosqich: Muhit o'zgaruvchilari (.env)</a></li>
+<li class="lvl2"><a href="#6-bosqich-pm2-bilan-doimiy-ishga-tushirish">6-bosqich: PM2 bilan doimiy ishga tushirish</a></li>
+<li class="lvl2"><a href="#7-bosqich-nginx-reverse-proxy">7-bosqich: Nginx reverse proxy</a></li>
+<li class="lvl2"><a href="#to-liq-deploy-zanjiri">To'liq deploy zanjiri</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi eng amaliy qismga o'tamiz: Node.js ilovasini haqiqiy <strong>VPS serverga</strong> deploy qilamiz. Bu darsda toza Linux serverdan boshlab, ilovangiz internetda domen orqali ochiladigan holatga qadar barcha bosqichlarni ketma-ket ko'ramiz. Siz SSH, Git va Node.js bilan tanish bo'lganingiz uchun har bir qadam mantiqiy ravishda ulanadi.</p>
 <div class="note">Bu darsdagi barcha buyruqlar <strong>Linux serverida</strong>, terminalda ishlaydi. Ular statik misollar sifatida keltirilgan — siz ularni o'z serveringizda ketma-ket bajarasiz. Serverning IP manzili misollarda <code>203.0.113.10</code>, foydalanuvchi esa <code>deploy</code> deb olinadi.</div>
-<h2>1-bosqich: VPS olish</h2>
+<h2 id="1-bosqich-vps-olish">1-bosqich: VPS olish</h2>
 <p>Avvalo VPS provayderdan server ijaraga olasiz. Eng mashhurlari — <strong>DigitalOcean</strong> (u yerda server "Droplet" deb ataladi) va <strong>Hetzner</strong> (arzon narxlari bilan mashhur). Ro'yxatdan o'tib, quyidagi tanlovlarni qilasiz:</p>
 <ul><li><strong>Operatsion tizim:</strong> Ubuntu (masalan, 22.04 LTS yoki 24.04 LTS) — eng keng tarqalgan va hujjatlari ko'p;</li><li><strong>Resurs:</strong> boshlang'ich loyiha uchun 1 GB RAM, 1 CPU yetarli (eng arzon tarif);</li><li><strong>Hudud (region):</strong> foydalanuvchilaringizga eng yaqin joy — masalan, Yevropa (Germaniya) O'zbekiston uchun yaxshi variant;</li><li><strong>Autentifikatsiya:</strong> parol o'rniga <strong>SSH kalit</strong> tanlash tavsiya etiladi (ancha xavfsizroq).</li></ul>
 <p>Server yaratilgach, provayder sizga <strong>ommaviy IP manzil</strong> beradi — masalan <code>203.0.113.10</code>. Ana shu manzil orqali serverga ulanamiz.</p>
 <div class="tip">Agar SSH kalitingiz bo'lmasa, uni lokalxostda yaratasiz: <code>ssh-keygen -t ed25519 -C "email@example.com"</code>. Bu ikki fayl hosil qiladi — maxfiy kalit (<code>~/.ssh/id_ed25519</code>) va ommaviy kalit (<code>~/.ssh/id_ed25519.pub</code>). Ommaviy kalitni provayder paneliga qo'shasiz, maxfiysini esa <strong>hech kimga bermaysiz</strong>.</div>
-<h2>2-bosqich: SSH bilan ulanish</h2>
+<h2 id="2-bosqich-ssh-bilan-ulanish">2-bosqich: SSH bilan ulanish</h2>
 <p>Serverga <strong>SSH</strong> (Secure Shell) orqali ulanasiz. Bu — masofadagi serverning terminaliga xavfsiz kirish protokoli. Birinchi ulanish odatda <code>root</code> foydalanuvchi sifatida bo'ladi:</p>
 <pre class="code"><code># Lokalxostdan serverga ulanish:
 $ ssh root@203.0.113.10</code></pre>
@@ -615,7 +632,7 @@ $ usermod -aG sudo deploy
 # Endi shu foydalanuvchi bilan ulanamiz:
 $ ssh deploy@203.0.113.10</code></pre>
 <div class="warn">Serverni olgach, birinchi ishlardan biri — uni yangilash va oddiy xavfsizlik choralari. Kamida <code>sudo apt update && sudo apt upgrade -y</code> bajaring va faqat kerakli portlarni oching (SSH uchun 22, veb uchun 80 va 443). Ochiq qolgan port — xavfsizlik teshigidir.</div>
-<h2>3-bosqich: Node.js o'rnatish</h2>
+<h2 id="3-bosqich-node-js-o-rnatish">3-bosqich: Node.js o'rnatish</h2>
 <p>Yangi serverda Node.js o'rnatilmagan bo'ladi. Uni o'rnatishning ishonchli usuli — <strong>NodeSource</strong> ombori orqali. Bu sizga kerakli versiyani (masalan, LTS 20 yoki 22) beradi:</p>
 <pre class="code"><code># NodeSource ombori orqali Node.js 20 LTS o'rnatish:
 $ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
@@ -627,7 +644,7 @@ v20.11.0
 $ npm -v
 10.2.4</code></pre>
 <div class="note">Bir necha Node.js versiyasini boshqarish kerak bo'lsa, <strong>nvm</strong> (Node Version Manager) yaxshi vosita. U turli versiyalarni o'rnatib, ular orasida almashish imkonini beradi. Bitta ilova uchun esa NodeSource yondashuvi soddaroq.</div>
-<h2>4-bosqich: Kodni git clone qilish</h2>
+<h2 id="4-bosqich-kodni-git-clone-qilish">4-bosqich: Kodni git clone qilish</h2>
 <p>Kodni serverga yetkazishning eng qulay yo'li — <strong>Git</strong>. Kodingiz GitHub yoki boshqa Git xostingida bo'lsa, uni serverga <code>git clone</code> bilan tortib olasiz. Avval Git o'rnatilganiga ishonch hosil qiling:</p>
 <pre class="code"><code># Git o'rnatish (ko'pincha oldindan mavjud):
 $ sudo apt install -y git
@@ -641,7 +658,7 @@ $ cd mening-loyiham
 $ npm ci --omit=dev</code></pre>
 <p>Bu yerda <code>npm ci</code> — <code>npm install</code>ning ishonchli varianti. U <code>package-lock.json</code> asosida aniq versiyalarni o'rnatadi va serverda oldindan mavjud <code>node_modules</code>ni tozalab, toza o'rnatadi. Serverda deploy uchun aynan shu tavsiya etiladi.</p>
 <div class="tip">Xususiy (private) repozitoriy uchun HTTPS o'rniga <strong>SSH kalit</strong> yoki <strong>deploy token</strong> ishlatiladi. GitHub'da "Deploy keys" bo'limi orqali serverning ommaviy kalitini faqat shu repozitoriyaga o'qish huquqi bilan qo'shish mumkin — bu xavfsiz yechim.</div>
-<h2>5-bosqich: Muhit o'zgaruvchilari (.env)</h2>
+<h2 id="5-bosqich-muhit-o-zgaruvchilari-env">5-bosqich: Muhit o'zgaruvchilari (.env)</h2>
 <p>Ilovaning maxfiy ma'lumotlari — ma'lumotlar bazasi paroli, API kalitlari, sessiya siri — <strong>hech qachon</strong> kodga yozilmaydi va Git'ga yuklanmaydi. Ular <strong>muhit o'zgaruvchilari</strong>da saqlanadi. Serverda ular odatda <code>.env</code> faylida bo'ladi:</p>
 <pre class="code"><code># Serverda .env faylini yaratish (loyiha papkasida):
 $ nano .env</code></pre>
@@ -661,7 +678,7 @@ const dbUrl = process.env.DATABASE_URL;
 console.log('Port:', port);</code></pre>
 <div class="warn"><code>.env</code> faylini <strong>doim</strong> <code>.gitignore</code>ga qo'shing! Aks holda maxfiy parollaringiz GitHub'ga ochiq yuklanadi. Bu eng ko'p uchraydigan va xavfli xatolardan biri — bir marta yuklangan sir butun tarixda qoladi va uni darhol almashtirish kerak bo'ladi.</div>
 <div class="note">Repozitoriyaga faqat namuna sifatida <code>.env.example</code> faylini qo'shish odat: unda qiymatlarsiz kalitlar ro'yxati bo'ladi (masalan, <code>DATABASE_URL=</code>). Shunda boshqa dasturchi qaysi o'zgaruvchilar kerakligini biladi, lekin haqiqiy sirlarni ko'rmaydi.</div>
-<h2>6-bosqich: PM2 bilan doimiy ishga tushirish</h2>
+<h2 id="6-bosqich-pm2-bilan-doimiy-ishga-tushirish">6-bosqich: PM2 bilan doimiy ishga tushirish</h2>
 <p>Ilovani shunchaki <code>node server.js</code> bilan ishga tushirsangiz, u faqat SSH sessiyasi ochiq turgunicha ishlaydi — siz terminaldan chiqishingiz bilan to'xtaydi. Bundan tashqari, ilova xato bilan qulasa, o'zi qayta ishga tushmaydi. Buni hal qilish uchun <strong>PM2</strong> — Node.js jarayon menejeridan foydalanamiz.</p>
 <p>PM2 ilovani fonda ishlatadi, qulasa avtomatik qayta ishga tushiradi, loglarni saqlaydi va server qayta yuklanganda ilovani o'zi qayta boshlaydi. Uni global o'rnatamiz:</p>
 <pre class="code"><code># PM2'ni global o'rnatish:
@@ -688,7 +705,7 @@ $ npm ci --omit=dev
 $ pm2 reload mening-ilova</code></pre>
 <div class="tip"><code>pm2 reload</code> — <code>pm2 restart</code>dan yaxshiroq: u ilovani "nol vaqt uzilishi" (zero-downtime) bilan yangilashga harakat qiladi, ya'ni foydalanuvchilar uchun uzilish sezilmaydi. Katta trafikli loyihalarda bu muhim.</div>
 <div class="note">PM2 ilovani bir necha nusxada (cluster rejimida) ham ishga tushira oladi — bu Node.js'ning bir oqimli tabiatini yengib, serverdagi barcha yadrolardan foydalanish imkonini beradi: <code>pm2 start server.js -i max</code>.</div>
-<h2>7-bosqich: Nginx reverse proxy</h2>
+<h2 id="7-bosqich-nginx-reverse-proxy">7-bosqich: Nginx reverse proxy</h2>
 <p>Hozir ilovangiz <code>localhost:3000</code>da ishlayapti, lekin foydalanuvchilar odatiy <strong>80</strong> (HTTP) va <strong>443</strong> (HTTPS) portlariga kirishadi. Node.js ilovasini to'g'ridan-to'g'ri 80-portga qo'yish yaxshi amaliyot emas. Buning o'rniga <strong>Nginx</strong>ni <em>reverse proxy</em> sifatida oldinga qo'yamiz.</p>
 <p>Nginx darsidan eslasangiz, <strong>reverse proxy</strong> brauzerdan kelgan so'rovni qabul qilib, uni orqadagi ilovaga (bizning holatda <code>localhost:3000</code>ga) uzatadi. Bu bizga statik fayllarni tez uzatish, HTTPS'ni bir joyda boshqarish va ilovani tashqi dunyodan yashirish imkonini beradi.</p>
 <pre class="code"><code># Nginx o'rnatish:
@@ -727,11 +744,11 @@ $ sudo systemctl reload nginx</code></pre>
 <div class="warn">Nginx'ni qayta yuklashdan oldin <strong>doimo</strong> <code>sudo nginx -t</code> bilan config'ni tekshiring. Xato config bilan qayta yuklasangiz, Nginx ishga tushmay qolishi va butun saytingiz o'chib qolishi mumkin. <code>nginx -t</code> muvaffaqiyatli bo'lsagina qayta yuklang.</div>
 <p>Endi <code>proxy_pass</code> qatoridagi <code>$http_upgrade</code> va <code>Connection 'upgrade'</code> sarlavhalari <strong>WebSocket</strong> ulanishlarini ham qo'llab-quvvatlaydi — agar ilovangizda real vaqtli aloqa (chat, bildirishnomalar) bo'lsa, bu kerak bo'ladi.</p>
 <div class="note">Hozircha bu HTTP (80-port) orqali ishlaydi. HTTPS (443-port) va domen ulashni oxirgi darsda ko'ramiz — u yerda aynan shu config'ni Let's Encrypt sertifikati bilan kengaytiramiz.</div>
-<h2>To'liq deploy zanjiri</h2>
+<h2 id="to-liq-deploy-zanjiri">To'liq deploy zanjiri</h2>
 <p>Barcha bosqichlarni bir joyga jamlaymiz. Toza Ubuntu serverdan ishlaydigan ilovagacha bo'lgan yo'l:</p>
 <ol><li>VPS olish va SSH kalit sozlash;</li><li><code>ssh deploy@203.0.113.10</code> bilan ulanish, tizimni yangilash;</li><li>Node.js, Git, Nginx o'rnatish;</li><li><code>git clone</code> va <code>npm ci --omit=dev</code>;</li><li><code>.env</code> faylini yaratish (Git'ga qo'shmasdan);</li><li><code>pm2 start</code> va <code>pm2 startup</code> + <code>pm2 save</code>;</li><li>Nginx reverse proxy config'ini yozib, <code>nginx -t</code> va <code>reload</code>;</li><li>(Keyingi dars) domen va HTTPS.</li></ol>
 <div class="tip">Bu bosqichlarni har safar qo'lda takrorlash zerikarli. Ularni bitta <strong>deploy skript</strong>iga (masalan, <code>deploy.sh</code>) yig'ib qo'yish yoki keyinchalik <strong>GitHub Actions</strong> orqali avtomatlashtirish mumkin. Lekin avtomatlashtirishdan oldin har bir bosqichni qo'lda tushunib chiqish shart.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>VPS</strong> olib, unga <strong>SSH</strong> orqali ulaniladi; root o'rniga <code>sudo</code>li alohida foydalanuvchi yaxshi amaliyot;</li><li>Node.js NodeSource orqali, kod esa <code>git clone</code> bilan serverga yetkaziladi; <code>npm ci --omit=dev</code> ishlatiladi;</li><li>Maxfiy sozlamalar <strong><code>.env</code></strong> faylida saqlanadi va <strong>hech qachon Git'ga yuklanmaydi</strong> (<code>.gitignore</code>ga qo'shiladi);</li><li><strong>PM2</strong> ilovani fonda, doimiy va avtomatik qayta ishga tushiriladigan qiladi; <code>pm2 startup</code> + <code>save</code> serverni qayta yuklashda tiklaydi;</li><li><strong>Nginx reverse proxy</strong> 80/443 portidan <code>localhost:3000</code>dagi Node.js ilovasiga trafikni uzatadi;</li><li>Har bir Nginx o'zgarishidan keyin <code>nginx -t</code> bilan tekshirib, keyin <code>reload</code> qilinadi.</li></ul>
 <nav class="lesson-nav">
   <a href="deploy-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Deploy nima?</span></a>
@@ -745,6 +762,6 @@ $ sudo systemctl reload nginx</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

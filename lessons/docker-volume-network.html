@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Volume va tarmoq (network) — Kodla</title>
   <meta name="description" content="Konteyner ma'lumoti yo'qolishi muammosi, volume va bind mount, docker volume buyruqlari, konteynerlararo tarmoq va xizmat nomi orqali ulanish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Docker</div>
 <h1>Volume va tarmoq (network)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-konteyner-ma-lumoti-yo-qoladi">Muammo: konteyner ma'lumoti yo'qoladi</a></li>
+<li class="lvl2"><a href="#yechim-volume-hajm">Yechim: volume (hajm)</a></li>
+<li class="lvl2"><a href="#volume-va-bind-mount-farqi">Volume va bind mount farqi</a></li>
+<li class="lvl2"><a href="#docker-volume-buyruqlari">docker volume buyruqlari</a></li>
+<li class="lvl2"><a href="#muammo-konteynerlar-bir-birini-qanday-topadi">Muammo: konteynerlar bir-birini qanday topadi?</a></li>
+<li class="lvl2"><a href="#docker-network-tarmoq-yaratish">docker network — tarmoq yaratish</a></li>
+<li class="lvl2"><a href="#xizmat-nomi-orqali-ulanish">Xizmat nomi orqali ulanish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Konteynerlar vaqtinchalik (ephemeral) — ularni o'chirsangiz, ichidagi ma'lumot ham yo'qoladi. Ma'lumotlar bazasi uchun bu falokat! Bu darsda ma'lumotni doimiy saqlash uchun <strong>volume</strong>'larni va konteynerlarni bir-biriga bog'lash uchun <strong>tarmoq (network)</strong>'ni o'rganamiz.</p>
-<h2>Muammo: konteyner ma'lumoti yo'qoladi</h2>
+<h2 id="muammo-konteyner-ma-lumoti-yo-qoladi">Muammo: konteyner ma'lumoti yo'qoladi</h2>
 <p>Konteyner ichida yozilgan har qanday ma'lumot konteynerning o'ziga tegishli. Konteynerni <code>docker rm</code> bilan o'chirsangiz — u ma'lumot bilan birga <strong>butunlay yo'qoladi</strong>.</p>
 <p>Buni tasavvur qiling: PostgreSQL konteynerida foydalanuvchilar bazasi bor. Konteynerni yangilash yoki qayta yaratish uchun o'chirdingiz — va barcha foydalanuvchilar ma'lumoti ketdi. Bu qabul qilib bo'lmas holat.</p>
 <div class="warn">Konteyner ichidagi fayl tizimi <strong>vaqtinchalik</strong>. Ma'lumotlar bazasi, yuklangan fayllar, foydalanuvchi kontenti kabi <em>doimiy</em> saqlanishi kerak bo'lgan narsalarni hech qachon shunchaki konteyner ichida qoldirmang.</div>
-<h2>Yechim: volume (hajm)</h2>
+<h2 id="yechim-volume-hajm">Yechim: volume (hajm)</h2>
 <p><strong>Volume</strong> — bu Docker boshqaradigan, konteynerdan <em>tashqarida</em> saqlanadigan ma'lumot ombori. Konteynerni o'chirsangiz ham, volume va undagi ma'lumot saqlanib qoladi. Yangi konteyner o'sha volume'ga ulanib, avvalgi ma'lumotni davom ettira oladi.</p>
 <p>Volume'ni konteynerga ulash uchun <code>-v</code> bayrog'i ishlatiladi:</p>
 <pre class="code"><code>docker run -d \
@@ -610,7 +626,7 @@
   -v baza-malumoti:/var/lib/postgresql/data \
   postgres:16</code></pre>
 <p>Bu yerda <code>-v baza-malumoti:/var/lib/postgresql/data</code> degani: <code>baza-malumoti</code> nomli volume'ni konteynerning <code>/var/lib/postgresql/data</code> papkasiga ula. PostgreSQL o'z ma'lumotini shu papkaga yozadi — endi u volume'da, xavfsiz saqlanadi. Konteynerni o'chirib, qayta yaratsangiz ham ma'lumot joyida qoladi.</p>
-<h2>Volume va bind mount farqi</h2>
+<h2 id="volume-va-bind-mount-farqi">Volume va bind mount farqi</h2>
 <p>Ma'lumot saqlashning ikki asosiy usuli bor:</p>
 <ul><li><strong>Nomli volume (named volume):</strong> Docker boshqaradi, maxsus joyda saqlanadi. Masalan <code>-v baza-malumoti:/data</code>. Ma'lumotlar bazasi uchun ideal;</li><li><strong>Bind mount:</strong> kompyuteringizdagi aniq papkani konteynerga ulaydi. Masalan <code>-v /home/user/loyiha:/app</code>. Dasturlash paytida kodni jonli tahrirlash uchun qulay.</li></ul>
 <p>Farqni sintaksisdan bilish mumkin: agar chap tomonda <strong>oddiy nom</strong> bo'lsa — bu volume; agar <strong>yo'l (/ bilan boshlanadi)</strong> bo'lsa — bu bind mount:</p>
@@ -623,7 +639,7 @@ docker run -v /home/user/loyiha:/app ...
 # Joriy papkani ulash ($(pwd) — joriy papka yo'li)
 docker run -v $(pwd):/app ...</code></pre>
 <div class="tip">Dasturlash paytida bind mount juda foydali: kompyuteringizda kodni o'zgartirasiz, u darhol konteynerda aks etadi — image'ni qayta build qilish shart emas. Ishlab chiqarish (production) va ma'lumotlar bazalari uchun esa nomli volume afzal.</div>
-<h2>docker volume buyruqlari</h2>
+<h2 id="docker-volume-buyruqlari">docker volume buyruqlari</h2>
 <p>Volume'larni boshqarish uchun quyidagi buyruqlar bor:</p>
 <pre class="code"><code># Barcha volume'lar ro'yxati
 docker volume ls
@@ -640,10 +656,10 @@ docker volume rm mening-volumeim
 # Ishlatilmayotgan barcha volume'larni tozalash
 docker volume prune</code></pre>
 <div class="warn"><code>docker volume rm</code> va <code>docker volume prune</code> volume'dagi ma'lumotni <strong>butunlay o'chiradi</strong> va uni tiklab bo'lmaydi. Muhim ma'lumot volume'larini o'chirishdan oldin ikki marta tekshiring.</div>
-<h2>Muammo: konteynerlar bir-birini qanday topadi?</h2>
+<h2 id="muammo-konteynerlar-bir-birini-qanday-topadi">Muammo: konteynerlar bir-birini qanday topadi?</h2>
 <p>Endi tarmoqqa o'tamiz. Web-ilova konteyneri ma'lumotlar bazasi konteyneriga qanday ulanadi? Ular alohida, izolyatsiyalangan. IP manzillar esa konteyner har qayta ishga tushganda o'zgaradi — shuning uchun IP'ga tayanish ishonchsiz.</p>
 <p>Yechim — konteynerlarni bitta <strong>tarmoq (network)</strong>ga ulash. Bir tarmoqdagi konteynerlar bir-birini <strong>nomi orqali</strong> topa oladi.</p>
-<h2>docker network — tarmoq yaratish</h2>
+<h2 id="docker-network-tarmoq-yaratish">docker network — tarmoq yaratish</h2>
 <p>Maxsus tarmoq yaratib, konteynerlarni unga ulaymiz:</p>
 <pre class="code"><code># Yangi tarmoq yaratish
 docker network create mening-tarmogim
@@ -665,7 +681,7 @@ docker run -d \
   -e DB_HOST=baza \
   -p 3000:3000 \
   mening-ilovam</code></pre>
-<h2>Xizmat nomi orqali ulanish</h2>
+<h2 id="xizmat-nomi-orqali-ulanish">Xizmat nomi orqali ulanish</h2>
 <p>Diqqat qiling: web-ilovaga <code>DB_HOST=baza</code> deb berdik — bu ma'lumotlar bazasi konteynerining <strong>nomi</strong>. Bir tarmoqdagi konteynerlar bir-birini nomi orqali topa oladi.</p>
 <p>Ya'ni web-ilova kodi ichida ma'lumotlar bazasiga <code>baza:5432</code> manzili orqali ulanadi — IP manzil kerak emas! Docker ichki DNS xizmati konteyner nomini avtomatik uning joriy IP manziliga tarjima qiladi.</p>
 <pre class="code"><code>// Node.js ilovada ma'lumotlar bazasiga ulanish (misol)
@@ -677,7 +693,7 @@ const pool = new Pool({
   database: 'dukon'
 });</code></pre>
 <div class="note">Aynan shu mexanizmni oldingi darsda Docker Compose ichida ko'rgan edik. Compose barcha xizmatlarni avtomatik bir tarmoqqa ulaydi va ularni xizmat nomi orqali topish mumkin bo'ladi. Ya'ni Compose bu tarmoq ishini siz uchun avtomatik qiladi — bu qulaylikning asosiy sababi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Konteyner ma'lumoti <strong>vaqtinchalik</strong> — konteynerni o'chirsangiz yo'qoladi;</li><li><strong>Volume</strong> — konteynerdan tashqarida, doimiy saqlanadigan ma'lumot ombori (<code>-v nom:/yo'l</code>);</li><li><strong>Nomli volume</strong> — Docker boshqaradi (baza uchun); <strong>bind mount</strong> — kompyuterdagi aniq papka (kod tahrirlash uchun);</li><li><code>docker volume ls/create/rm/prune</code> — volume'larni boshqaradi;</li><li><code>docker network create</code> bilan tarmoq yaratib, konteynerlarni <code>--network</code> orqali ulaysiz;</li><li>Bir tarmoqdagi konteynerlar bir-birini <strong>nomi orqali</strong> topadi (IP kerak emas) — Docker Compose buni avtomatik qiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="docker-compose.html"><span class="dir">← Oldingi</span><span class="ttl">Docker Compose</span></a>
@@ -691,6 +707,6 @@ const pool = new Pool({
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

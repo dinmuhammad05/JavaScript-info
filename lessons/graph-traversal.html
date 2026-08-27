@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grafni aylanib chiqish: BFS va DFS — Kodla</title>
   <meta name="description" content="Grafda BFS va DFS, tashrif buyurilgan tugunlarni belgilash (visited), eng qisqa yo'l va amaliy masalalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Daraxt va graf</div>
 <h1>Grafni aylanib chiqish: BFS va DFS</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#grafda-aylanishning-daraxtdan-farqi">Grafda aylanishning daraxtdan farqi</a></li>
+<li class="lvl2"><a href="#dfs-chuqurlikka-aylanish">DFS: chuqurlikka aylanish</a></li>
+<li class="lvl3"><a href="#dfs-stek-bilan-rekursiyasiz">DFS stek bilan (rekursiyasiz)</a></li>
+<li class="lvl2"><a href="#bfs-kenglikka-aylanish">BFS: kenglikka aylanish</a></li>
+<li class="lvl2"><a href="#big-o">Big O</a></li>
+<li class="lvl2"><a href="#amaliy-masala-eng-qisqa-yo-l">Amaliy masala: eng qisqa yo'l</a></li>
+<li class="lvl2"><a href="#boshqa-amaliy-qo-llanishlar">Boshqa amaliy qo'llanishlar</a></li>
+<li class="lvl2"><a href="#bog-langan-komponentlarni-sanash">Bog'langan komponentlarni sanash</a></li>
+<li class="lvl2"><a href="#keyingi-qadam-og-irlikli-yo-llar">Keyingi qadam: og'irlikli yo'llar</a></li>
+  </ul>
+</details>
 <p class="lead">Grafni yaratdik — endi uning bo'ylab harakatlanishni o'rganamiz. Daraxtda aylanish ko'rgan edik, va g'oya o'xshash. Lekin grafda bitta yangi, jiddiy tuzoq bor: <strong>tsikllar</strong>. Bu tuzoqni bilmasak, dasturimiz cheksiz siklga tushib qoladi. Keling, buni to'g'ri hal qilaylik.</p>
-<h2>Grafda aylanishning daraxtdan farqi</h2>
+<h2 id="grafda-aylanishning-daraxtdan-farqi">Grafda aylanishning daraxtdan farqi</h2>
 <p>Daraxtni aylanganda hech qachon "orqaga" borish muammosi bo'lmagan — chunki daraxtda tsikl yo'q. Har bir tugunga faqat bitta yo'l bilan yetib borardik va hech qachon o'zimizni takror ko'rmasdik.</p>
 <p>Grafda esa hammasi boshqacha. Grafda <strong>tsikl bo'lishi mumkin</strong>: A → B → C → A. Agar biz oddiygina qo'shnilarga o'tib boraversak, A dan B ga, B dan C ga, C dan yana A ga, A dan yana B ga... — cheksiz aylanamiz. Dastur hech qachon to'xtamaydi.</p>
 <pre class="code"><code>   A --- B         Bu grafda tsikl bor:
@@ -605,7 +622,7 @@
    C --- D         Ehtiyot bo'lmasak,
                    cheksiz aylanib qolamiz!</code></pre>
 <div class="warn">Grafni aylanishda <strong>tashrif buyurilgan tugunlarni belgilash SHART</strong>. Buning uchun <code>visited</code> to'plami (Set) ishlatiladi: har bir tugunga tashrif buyurganda uni to'plamga qo'shamiz, va faqat hali ko'rilmagan tugunlargagina o'tamiz. Bu qadamni tashlab ketsangiz, tsikli bor grafda dasturingiz cheksiz siklga tushadi va "muzlab" qoladi.</div>
-<h2>DFS: chuqurlikka aylanish</h2>
+<h2 id="dfs-chuqurlikka-aylanish">DFS: chuqurlikka aylanish</h2>
 <p><strong>DFS (Depth-First Search)</strong> grafda ham xuddi daraxtdagidek ishlaydi: bir yo'nalishni imkon qadar chuqur kuzatib boradi, tupikka yetganda orqaga qaytadi. Farqi faqat <code>visited</code> to'plamida.</p>
 <p>Avval rekursiv versiyani ko'raylik — u eng tabiiy va o'qishga oson:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>dfs-recursive.js</span></div><textarea spellcheck="false">const graph = {
@@ -631,7 +648,7 @@ function dfs(node, visited = new Set(), result = []) {
 console.log('DFS:', dfs('A').join(' '));
 // A B D E F C  (chuqurga ketadi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Har bir tugunda avval uni <code>visited</code> ga qo'shamiz, keyin qo'shnilarini aylanib, faqat hali ko'rilmaganlarga chuqurlashamiz. Bir marta ko'rilgan tugunga qaytmaymiz — tsikl muammosi hal.</p>
-<h3>DFS stek bilan (rekursiyasiz)</h3>
+<h3 id="dfs-stek-bilan-rekursiyasiz">DFS stek bilan (rekursiyasiz)</h3>
 <p>Rekursiya aslida ichida stek ishlatadi. Uni qo'lda stek bilan almashtira olamiz — bu ba'zan foydali, masalan juda chuqur graflarda rekursiya chuqurlik limitiga urilib qolganda.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>dfs-stack.js</span></div><textarea spellcheck="false">const graph = {
   A: ['B', 'C'],
@@ -661,7 +678,7 @@ function dfsIterative(start) {
 
 console.log('DFS (stek):', dfsIterative('A').join(' '));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering — DFS <strong>stek</strong> ishlatadi ("oxirgi kelgan birinchi chiqadi"). Aynan shu tufayli u chuqurga ketadi: eng oxirida qo'shilgan qo'shni birinchi bo'lib qayta ishlanadi.</p>
-<h2>BFS: kenglikka aylanish</h2>
+<h2 id="bfs-kenglikka-aylanish">BFS: kenglikka aylanish</h2>
 <p><strong>BFS (Breadth-First Search)</strong> boshlang'ich tugundan pog'ona-pog'ona kengayadi: avval barcha bevosita qo'shnilar, keyin ularning qo'shnilari va hokazo. DFS stek ishlatsa, BFS <strong>navbat (queue)</strong> ishlatadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bfs-graph.js</span></div><textarea spellcheck="false">const graph = {
   A: ['B', 'C'],
@@ -693,10 +710,10 @@ function bfs(start) {
 console.log('BFS:', bfs('A').join(' '));
 // A B C D E F  (pog'ona-pog'ona)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Muhim detal: BFSda tugunni <code>visited</code> ga <strong>navbatga qo'shish paytida</strong> belgilaymiz, olgandan keyin emas. Aks holda bir tugun navbatga bir necha marta tushib qolishi mumkin.</p>
-<h2>Big O</h2>
+<h2 id="big-o">Big O</h2>
 <p>Ikkala algoritm ham har bir tugunga bir marta tashrif buyuradi va har bir qirrani bir marta ko'rib chiqadi. Shuning uchun ikkalasining vaqti ham bir xil:</p>
 <p><strong>O(V + E)</strong> — bu yerda V tugunlar soni, E qirralar soni. Bu graf algoritmlarida juda ko'p uchraydigan ifoda: "barcha tugunlar plyus barcha qirralar". Xotira ham O(V) — visited to'plami va stek/navbat uchun.</p>
-<h2>Amaliy masala: eng qisqa yo'l</h2>
+<h2 id="amaliy-masala-eng-qisqa-yo-l">Amaliy masala: eng qisqa yo'l</h2>
 <p>BFSning eng kuchli tomoni — og'irliksiz grafda u <strong>eng qisqa yo'lni</strong> topadi. Sababi: BFS pog'ona-pog'ona kengayadi, shuning uchun manzilga birinchi marta yetganda — u eng kam qadamli yo'l bo'ladi. Har bir tugun uchun "qayerdan kelganini" eslab qolsak, yo'lni tiklashimiz mumkin.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>shortest-path.js</span></div><textarea spellcheck="false">const graph = {
   A: ['B', 'C'],
@@ -726,10 +743,10 @@ function shortestPath(start, end) {
 console.log('A dan F ga:', shortestPath('A', 'F').join(' -&gt; '));
 // A -&gt; B -&gt; D -&gt; F  (yoki A -&gt; C -&gt; D -&gt; F, ikkalasi 3 qadam)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Har bir navbat elementi tugun va unga kelgan yo'lni birga saqlaydi. Manzilga birinchi yetgan yo'l — eng qisqasi.</p>
-<h2>Boshqa amaliy qo'llanishlar</h2>
+<h2 id="boshqa-amaliy-qo-llanishlar">Boshqa amaliy qo'llanishlar</h2>
 <p>BFS va DFS — grafdagi ko'p masalalarning poydevori. Mana eng ko'p uchraydiganlari:</p>
 <ul><li><strong>Bog'langan komponentlar</strong> — grafda nechta alohida "orolcha" bor? Har bir ko'rilmagan tugundan DFS/BFS ishga tushirib, komponentlarni sanaymiz.</li><li><strong>Ikki tugun orasida yo'l bormi?</strong> Biridan aylanishni boshlab, ikkinchisiga yeta olsak — ha, bog'langan.</li><li><strong>Og'irliksiz eng qisqa yo'l</strong> — yuqorida ko'rdik, BFS bilan.</li><li><strong>Tsiklni aniqlash</strong> — aylanish paytida allaqachon ko'rilgan tugunga qaytsak (maxsus shartlar bilan), grafda tsikl bor.</li></ul>
-<h2>Bog'langan komponentlarni sanash</h2>
+<h2 id="bog-langan-komponentlarni-sanash">Bog'langan komponentlarni sanash</h2>
 <p>Amaliy misol sifatida bog'langan komponentlarni sanaymiz. Ba'zi tugunlar bir guruh, ba'zilari boshqa, o'rtada bog'lanish yo'q. Nechta alohida guruh borligini topamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>components.js</span></div><textarea spellcheck="false">const graph = {
   A: ['B'], B: ['A'],       // 1-guruh: A-B
@@ -759,7 +776,7 @@ function countComponents(graph) {
 
 console.log('Guruhlar soni:', countComponents(graph)); // 3</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Har safar ko'rilmagan tugunga duch kelsak — bu yangi guruh boshlanishi. DFS o'sha guruhning barcha tugunlarini belgilab chiqadi, keyin sanoqni oshiramiz.</p>
-<h2>Keyingi qadam: og'irlikli yo'llar</h2>
+<h2 id="keyingi-qadam-og-irlikli-yo-llar">Keyingi qadam: og'irlikli yo'llar</h2>
 <p>BFS og'irliksiz grafda eng qisqa yo'lni topadi. Lekin agar qirralarning turli og'irligi bo'lsa (masalan yo'llar turli uzunlikda), BFS to'g'ri javob bermaydi — chunki u qadamlar sonini sanaydi, og'irliklar yig'indisini emas.</p>
 <p>Bunday holat uchun <strong>Dijkstra algoritmi</strong> bor — u og'irlikli grafda eng qisqa (eng arzon) yo'lni topadi. Uni bu darsda faqat nom bilan tanishtiramiz; u alohida, kengroq mavzu va kelajakda batafsil ko'ramiz.</p>
 <div class="tip">Oddiy qoida sifatida yodda tuting: <strong>eng qisqa yo'l (og'irliksiz) kerakmi — BFS ishlating</strong>, chunki u pog'ona-pog'ona kengayadi. <strong>Barcha yo'llarni izlash yoki chuqur strukturani tekshirish kerakmi — DFS yoki backtracking ishlating</strong>. Va grafda har doim, har doim <code>visited</code> to'plamini unutmang.</div>
@@ -775,6 +792,6 @@ console.log('Guruhlar soni:', countComponents(graph)); // 3</textarea><div class
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Node.js bilan bazaga ulanish — Kodla</title>
   <meta name="description" content="Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,26 @@
 <main class="content article">
 <div class="crumbs">Ma'lumotlar bazalari</div>
 <h1>Node.js bilan bazaga ulanish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#pg-kutubxonasini-o-rnatish">pg kutubxonasini o'rnatish</a></li>
+<li class="lvl2"><a href="#oddiy-ulanish-client">Oddiy ulanish: Client</a></li>
+<li class="lvl2"><a href="#so-rov-natijasi-bilan-ishlash">So'rov natijasi bilan ishlash</a></li>
+<li class="lvl2"><a href="#sql-injection-jiddiy-xavf">SQL injection — jiddiy xavf</a></li>
+<li class="lvl2"><a href="#yechim-parametrlangan-so-rovlar">Yechim: parametrlangan so'rovlar</a></li>
+<li class="lvl2"><a href="#to-liq-crud-misoli">To'liq CRUD misoli</a></li>
+<li class="lvl2"><a href="#connection-pool-ulanishlar-havzasi">Connection Pool — ulanishlar havzasi</a></li>
+<li class="lvl2"><a href="#mongodb-uchun-mongoose-qisqacha">MongoDB uchun: mongoose (qisqacha)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi eng amaliy qismga keldik: bazani Node.js dasturingizdan qanday ishlatish. Buning uchun maxsus kutubxona (driver) kerak. PostgreSQL uchun eng mashhuri — <code>pg</code>. Ushbu darsda ulanish, so'rov yuborish, xavfsizlik va to'liq CRUD amallarini o'rganamiz.</p>
-<h2>pg kutubxonasini o'rnatish</h2>
+<h2 id="pg-kutubxonasini-o-rnatish">pg kutubxonasini o'rnatish</h2>
 <p>PostgreSQL bilan ishlash uchun <code>pg</code> paketini npm orqali o'rnatamiz:</p>
 <pre class="code"><code>npm install pg</code></pre>
 <p>Bu kutubxona Node.js'dan PostgreSQL serveriga ulanish, so'rov yuborish va natijani JavaScript obyektlari sifatida olish imkonini beradi.</p>
-<h2>Oddiy ulanish: Client</h2>
+<h2 id="oddiy-ulanish-client">Oddiy ulanish: Client</h2>
 <p>Eng oddiy usul — bitta <code>Client</code> yaratish. Unga ulanish ma'lumotlarini beramiz:</p>
 <pre class="code"><code>const { Client } = require("pg");
 
@@ -623,7 +640,7 @@ async function main() {
 main();</code></pre>
 <p>Bu yerda muhim jihatlar: <code>connect()</code> ulanadi, <code>query()</code> so'rov yuboradi, <code>end()</code> ulanishni yopadi. Barchasi <code>async/await</code> bilan ishlaydi, chunki baza bilan aloqa vaqt oladi (asinxron).</p>
 <div class="warn">Haqiqiy loyihada parol va boshqa maxfiy ma'lumotlarni kodga to'g'ridan-to'g'ri yozmang! Ularni muhit o'zgaruvchilarida (<code>process.env.DB_PASSWORD</code>) yoki <code>.env</code> faylda saqlang. Aks holda parol kod tarixida (git) ochiq qoladi.</div>
-<h2>So'rov natijasi bilan ishlash</h2>
+<h2 id="so-rov-natijasi-bilan-ishlash">So'rov natijasi bilan ishlash</h2>
 <p><code>client.query()</code> obyekt qaytaradi. Uning eng muhim xususiyati — <code>rows</code>, ya'ni natija qatorlari massivi. Har bir qator oddiy JavaScript obyekti:</p>
 <pre class="code"><code>const res = await client.query("SELECT id, name FROM users");
 
@@ -633,7 +650,7 @@ console.log(res.rows);
 console.log(res.rows.length); // qatorlar soni
 console.log(res.rows[0].name); // 'Ali'</code></pre>
 <p>Ko'rib turganingizdek, SQL natijasi to'g'ridan-to'g'ri JavaScript obyektlariga aylanadi — ustun nomlari obyekt kalitlariga aylanadi. Bu bilan ishlash juda qulay.</p>
-<h2>SQL injection — jiddiy xavf</h2>
+<h2 id="sql-injection-jiddiy-xavf">SQL injection — jiddiy xavf</h2>
 <p>Endi eng muhim mavzu — xavfsizlik. Aytaylik, foydalanuvchidan kelgan ism bo'yicha qidirmoqchisiz. Vasvasaga tushib, so'rovni shunday yozishingiz mumkin:</p>
 <pre class="code"><code>// XAVFLI! Hech qachon bunday qilmang!
 const name = req.query.name; // foydalanuvchidan kelgan
@@ -645,7 +662,7 @@ const res = await client.query(
 <p>Unda so'rov shunday bo'ladi va butun jadval o'chib ketadi:</p>
 <pre class="code"><code>SELECT * FROM users WHERE name = ''; DROP TABLE users; --'</code></pre>
 <div class="warn">Bu — <strong>SQL injection</strong> hujumi, veb-xavfsizlikdagi eng mashhur va xavfli zaifliklardan biri. Foydalanuvchi ma'lumotini hech qachon to'g'ridan-to'g'ri SQL matniga qo'shmang. Hujumchi ma'lumotni o'g'irlashi, o'zgartirishi yoki butun bazani yo'q qilishi mumkin.</div>
-<h2>Yechim: parametrlangan so'rovlar</h2>
+<h2 id="yechim-parametrlangan-so-rovlar">Yechim: parametrlangan so'rovlar</h2>
 <p>To'g'ri yechim — <strong>parametrlangan so'rovlar</strong> (parameterized queries). Qiymatlarni matnga qo'shish o'rniga, so'rovda <code>$1</code>, <code>$2</code> kabi joy egallovchilar (placeholder) qo'yamiz, qiymatlarni esa alohida massivda beramiz:</p>
 <pre class="code"><code>// TO'G'RI va XAVFSIZ usul
 const name = req.query.name;
@@ -660,7 +677,7 @@ const res = await client.query(
   [25, true]
 );</code></pre>
 <div class="tip">Qoidani eslab qoling: <strong>foydalanuvchidan kelgan har qanday ma'lumot parametr orqali berilishi kerak</strong>, hech qachon satrni birlashtirish (<code>+</code>) orqali emas. Bu backend xavfsizligining eng asosiy qoidalaridan biri.</div>
-<h2>To'liq CRUD misoli</h2>
+<h2 id="to-liq-crud-misoli">To'liq CRUD misoli</h2>
 <p>Endi to'rtta asosiy amalni (CREATE, READ, UPDATE, DELETE — CRUD) parametrlangan so'rovlar bilan yozamiz. Bular real loyihada ishlatiladigan funksiyalar:</p>
 <pre class="code"><code>const { Client } = require("pg");
 const client = new Client({ /* sozlamalar */ });
@@ -719,7 +736,7 @@ async function deleteUser(id) {
 
 main().catch(err =&gt; console.error("Xato:", err));</code></pre>
 <div class="tip">Har bir baza so'rovi xatolik berishi mumkin (ulanish uzilishi, noto'g'ri so'rov). Shuning uchun ularni <code>try/catch</code> yoki <code>.catch()</code> bilan o'rab, xatolarni to'g'ri qayta ishlash muhim. Yuqorida <code>.catch()</code> butun <code>main</code>ni himoya qiladi.</div>
-<h2>Connection Pool — ulanishlar havzasi</h2>
+<h2 id="connection-pool-ulanishlar-havzasi">Connection Pool — ulanishlar havzasi</h2>
 <p>Yuqorida bitta <code>Client</code> ishlatdik. Lekin veb-serverda bir vaqtda yuzlab so'rov keladi. Har so'rov uchun yangi ulanish ochish sekin va samarasiz. Yechim — <strong>Pool</strong> (ulanishlar havzasi):</p>
 <pre class="code"><code>const { Pool } = require("pg");
 
@@ -738,7 +755,7 @@ async function getUsers() {
 }</code></pre>
 <p>Pool oldindan bir nechta ulanishni ochib qo'yadi va ularni qayta ishlatadi. So'rov kelganda tayyor ulanishni beradi, tugagach uni havzaga qaytaradi. Bu ancha tez va samarali.</p>
 <div class="tip">Real loyihalarda deyarli har doim <code>Client</code> emas, <code>Pool</code> ishlatiladi. <code>pool.query()</code> avtomatik ulanish oladi va qaytaradi — siz <code>connect</code>/<code>end</code> haqida o'ylashingiz shart emas.</div>
-<h2>MongoDB uchun: mongoose (qisqacha)</h2>
+<h2 id="mongodb-uchun-mongoose-qisqacha">MongoDB uchun: mongoose (qisqacha)</h2>
 <p>Agar MongoDB ishlatsangiz, Node.js'da eng mashhur kutubxona — <code>mongoose</code>. U ulanishni va ma'lumot bilan ishlashni osonlashtiradi:</p>
 <pre class="code"><code>npm install mongoose</code></pre>
 <pre class="code"><code>const mongoose = require("mongoose");
@@ -758,7 +775,7 @@ const hammasi = await User.find({ age: { $gt: 20 } });
 await User.updateOne({ name: "Ali" }, { $set: { age: 26 } });
 await User.deleteOne({ name: "Ali" });</code></pre>
 <div class="note">Mongoose'da parametrlangan so'rovlar haqida qayg'urish shart emas — siz filtrlarni obyekt sifatida berasiz, kutubxona ularni xavfsiz qayta ishlaydi. Bu MongoDB'ning ma'lumot bilan ishlash uslubining tabiiy afzalligi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>PostgreSQL uchun <code>pg</code> kutubxonasi ishlatiladi: <code>connect</code>, <code>query</code>, <code>end</code>;</li><li>So'rov natijasi <code>res.rows</code> massivida keladi — har qator oddiy JavaScript obyekti;</li><li><strong>SQL injection</strong> — foydalanuvchi ma'lumotini SQL matniga to'g'ridan-to'g'ri qo'shishdan kelib chiqadigan jiddiy xavf;</li><li>Yechim — <strong>parametrlangan so'rovlar</strong>: <code>query("... WHERE id = $1", [id])</code>;</li><li>To'liq CRUD funksiyalari <code>async/await</code> bilan yoziladi; <code>RETURNING *</code> o'zgargan qatorni qaytaradi;</li><li>Real loyihada <strong>Pool</strong> (ulanishlar havzasi) ishlatiladi — tez va samarali;</li><li>MongoDB uchun <code>mongoose</code> — sxema, model va oson CRUD imkoniyatlarini beradi.</li></ul>
 <nav class="lesson-nav">
   <a href="mongodb.html"><span class="dir">← Oldingi</span><span class="ttl">MongoDB (NoSQL)</span></a>
@@ -772,6 +789,6 @@ await User.deleteOne({ name: "Ali" });</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Funksiya bog'lash (bind) — Kodla</title>
   <meta name="description" content="this yo'qolishi muammosi, func.bind orqali kontekstni bog'lash va qisman qo'llash (partial application).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Funksiya bog'lash (bind)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#this-yo-qolishi-muammosi">this yo'qolishi muammosi</a></li>
+<li class="lvl2"><a href="#vaqtinchalik-yechim-o-ram">Vaqtinchalik yechim: o'ram</a></li>
+<li class="lvl2"><a href="#func-bind-kontekstni-mahkamlash">func.bind — kontekstni mahkamlash</a></li>
+<li class="lvl2"><a href="#qisman-qo-llash-partial-application">Qisman qo'llash (partial application)</a></li>
+<li class="lvl2"><a href="#bind-haqida-muhim-jihatlar">bind haqida muhim jihatlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Obyekt metodini alohida uzatganimizda — masalan, <code>setTimeout</code>ga yoki hodisa (event) ishlovchisiga — <strong><code>this</code> yo'qoladi</strong>. Ushbu darsda bu klassik muammoni va uni <code>bind</code> orqali hal qilishni o'rganamiz.</p>
-<h2>this yo'qolishi muammosi</h2>
+<h2 id="this-yo-qolishi-muammosi">this yo'qolishi muammosi</h2>
 <p>Obyekt metodini bir joyga uzatib, keyin boshqa kontekstda chaqirsak — <code>this</code> asl obyektga emas, boshqa qiymatga ishora qiladi. Klassik misol — metodni <code>setTimeout</code>ga uzatish:</p>
 <pre class="code"><code>let user = {
   ism: "Ali",
@@ -612,7 +626,7 @@ setTimeout(user.salom, 1000);
 // (chunki setTimeout metodni obyektdan "ajratib" chaqiradi)</code></pre>
 <p>Nima uchun shunday bo'ladi? Chunki <code>setTimeout</code> <code>user.salom</code> <strong>funksiyasini</strong> oladi, lekin <code>user</code> obyektidan uzilgan holda. Chaqirilganda esa <code>this</code> mavjud emas (yoki brauzerda <code>window</code>) bo'lib qoladi.</p>
 <div class="note">Muammoning mohiyati: JavaScript'da <code>this</code> funksiya <em>qanday e'lon qilinishiga</em> emas, <strong>qanday chaqirilishiga</strong> bog'liq. <code>user.salom()</code> chaqirilsa <code>this</code> — <code>user</code>; alohida <code>func()</code> chaqirilsa — yo'q.</div>
-<h2>Vaqtinchalik yechim: o'ram</h2>
+<h2 id="vaqtinchalik-yechim-o-ram">Vaqtinchalik yechim: o'ram</h2>
 <p>Eng oddiy yechim — funksiyani o'rovchi (wrapper) funksiyaga o'rab uzatish:</p>
 <pre class="code"><code>let user = {
   ism: "Ali",
@@ -626,7 +640,7 @@ setTimeout(function() {
 }, 1000);
 // Natija: Salom, Ali</code></pre>
 <div class="warn">Bu yechim ishlaydi, lekin nozik xatosi bor: agar <code>setTimeout</code> ishga tushguncha <code>user</code> o'zgartirilsa (masalan <code>user = boshqaObyekt</code>), o'ram <em>yangi</em> qiymatni ishlatadi. <code>bind</code> esa qiymatni bog'lanish vaqtida qat'iy mahkamlaydi.</div>
-<h2>func.bind — kontekstni mahkamlash</h2>
+<h2 id="func-bind-kontekstni-mahkamlash">func.bind — kontekstni mahkamlash</h2>
 <p><code>bind</code> metodi <code>this</code>ni <strong>qat'iy bog'langan</strong> yangi funksiyani qaytaradi. Sintaksisi:</p>
 <pre class="code"><code>let bog_langan = func.bind(context);</code></pre>
 <p>Natijadagi <code>bog_langan</code> — bu <code>func</code> bilan bir xil funksiya, lekin uning <code>this</code>i <em>doimo</em> <code>context</code> bo'ladi, qanday chaqirilishidan qat'i nazar:</p>
@@ -649,7 +663,7 @@ console.log(f()); // Salom, Ali</textarea><div class="pg-actions"><button class=
 setTimeout(salomBer, 1000);
 // Natija: Salom, Ali — this yo'qolmaydi</code></pre>
 <div class="tip">Agar bir obyektning bir nechta metodini bog'lash kerak bo'lsa, ularni siklda aylanib <code>obj[key] = obj[key].bind(obj)</code> qilish mumkin. Ba'zi kutubxonalar (masalan React'ning eski kodi) shu naqshni ko'p ishlatgan.</div>
-<h2>Qisman qo'llash (partial application)</h2>
+<h2 id="qisman-qo-llash-partial-application">Qisman qo'llash (partial application)</h2>
 <p><code>bind</code> nafaqat <code>this</code>ni, balki <strong>argumentlarni ham</strong> oldindan mahkamlashi mumkin. Bu <em>qisman qo'llash</em> (partial application) deb ataladi:</p>
 <pre class="code"><code>let bog_langan = func.bind(context, arg1, arg2, ...);</code></pre>
 <p>Argumentlardan bir qismini oldindan belgilab, faqat qolganini keyin uzatiladigan yangi funksiya olamiz:</p>
@@ -679,13 +693,13 @@ console.log(aliDanValiGa("Salom!"));
 console.log(aliDanValiGa("Qalaysan?"));
 // Ali -&gt; Vali: Qalaysan?</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Argumentlar chapdan o'ngga mahkamlanadi. Ya'ni <code>bind</code> birinchi argumentlarni belgilaydi, keyin chaqiruv paytida berilganlar ularning davomiga qo'shiladi.</div>
-<h2>bind haqida muhim jihatlar</h2>
+<h2 id="bind-haqida-muhim-jihatlar">bind haqida muhim jihatlar</h2>
 <ul><li>Bog'langan funksiyani <strong>qayta bog'lash mumkin emas</strong> — <code>bind</code> bir marta va butunlay mahkamlaydi;</li><li><code>bind</code> har chaqirilganda <strong>yangi funksiya</strong> yaratadi, shuning uchun uni saqlab qo'yish kerak (ayniqsa hodisa ishlovchilarini olib tashlashda);</li><li>Bog'langan funksiyaning <code>name</code> xossasi <code>"bound "</code> prefiksi bilan boshlanadi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bind-name.js</span></div><textarea spellcheck="false">let user = { ism: "Ali", salom() { return this.ism; } };
 let bog_langan = user.salom.bind(user);
 console.log(bog_langan.name); // bound salom</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>func.bind(user1).bind(user2)</code> — ikkinchi <code>bind</code> ta'sir qilmaydi! <code>this</code> baribir <code>user1</code> bo'lib qoladi. Bog'lanish qaytarilmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Metodni alohida uzatganda <code>this</code> <strong>yo'qoladi</strong> — chunki u chaqirilish usuliga bog'liq;</li><li><code>func.bind(context)</code> — <code>this</code>i doimo <code>context</code> bo'lgan yangi funksiya qaytaradi;</li><li>Bu <code>setTimeout</code>, hodisa ishlovchilari va callback'larda juda foydali;</li><li><code>func.bind(context, arg1, arg2)</code> — argumentlarni ham oldindan mahkamlaydi (<strong>qisman qo'llash</strong>);</li><li>Bog'langan funksiyani qayta bog'lab bo'lmaydi va u har safar yangi funksiya bo'ladi.</li></ul>
 <nav class="lesson-nav">
   <a href="call-apply.html"><span class="dir">← Oldingi</span><span class="ttl">Dekoratorlar va uzatish, call/apply</span></a>
@@ -699,6 +713,6 @@ console.log(bog_langan.name); // bound salom</textarea><div class="pg-actions"><
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

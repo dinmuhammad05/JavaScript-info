@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rekursiya va stek — Kodla</title>
   <meta name="description" content="Rekursiya g'oyasi, asos va rekursiv holat, faktorial, daraja, Fibonachchi va ijro steki.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,26 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Rekursiya va stek</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#rekursiya-g-oyasi">Rekursiya g'oyasi</a></li>
+<li class="lvl2"><a href="#birinchi-misol-daraja-pow">Birinchi misol: daraja (pow)</a></li>
+<li class="lvl2"><a href="#ijro-steki-execution-stack">Ijro steki (execution stack)</a></li>
+<li class="lvl2"><a href="#ikkinchi-misol-faktorial">Ikkinchi misol: faktorial</a></li>
+<li class="lvl2"><a href="#uchinchi-misol-fibonachchi-sonlari">Uchinchi misol: Fibonachchi sonlari</a></li>
+<li class="lvl2"><a href="#rekursiv-ma-lumot-tuzilmalari">Rekursiv ma'lumot tuzilmalari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Rekursiya — bu masalani <em>o'ziga o'xshash, ammo soddaroq</em> qism-masalalarga bo'lib yechish uslubi. Bunda funksiya o'zini o'zi chaqiradi. Bu dasturlashning eng go'zal va kuchli g'oyalaridan biri.</p>
-<h2>Rekursiya g'oyasi</h2>
+<h2 id="rekursiya-g-oyasi">Rekursiya g'oyasi</h2>
 <p>Funksiya boshqa funksiyani chaqirishi mumkin. Agar funksiya <strong>o'zini o'zi</strong> chaqirsa — bu <em>rekursiya</em> deb ataladi.</p>
 <p>Rekursiyaning asosiy g'oyasi shunda: katta masalani biroz kichraytiramiz va o'sha kichik masalani <strong>o'sha funksiyaning o'zi</strong> orqali yechamiz. Bu jarayon masala shu qadar kichrayguncha davom etadiki, oxir-oqibat javob to'g'ridan-to'g'ri ma'lum bo'lib qoladi.</p>
 <p>Demak, har qanday rekursiv funksiyada ikkita holat bo'ladi:</p>
 <ul><li><strong>Asos (baza) holati</strong> — masala shu qadar sodda bo'ladiki, javobni darhol qaytaramiz. Bu rekursiyani <em>to'xtatadigan</em> holat;</li><li><strong>Rekursiv holat</strong> — masalani kichraytirib, funksiyaning o'zini yana chaqiramiz.</li></ul>
 <div class="warn">Agar asos holatini unutib qo'ysangiz yoki masala hech qachon kichraymasa, funksiya o'zini cheksiz chaqiraveradi va dastur xatolik bilan to'xtaydi (<code>RangeError: Maximum call stack size exceeded</code>).</div>
-<h2>Birinchi misol: daraja (pow)</h2>
+<h2 id="birinchi-misol-daraja-pow">Birinchi misol: daraja (pow)</h2>
 <p><code>x</code> sonini <code>n</code>-darajaga ko'taruvchi funksiya yozamiz, ya'ni <code>x</code>ni o'zini <code>n</code> marta ko'paytiramiz. Buni ikki xil ko'rish mumkin.</p>
 <p><strong>Iterativ (takroriy) yo'l</strong> — oddiy <code>for</code> sikli bilan:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>pow-iter.js</span></div><textarea spellcheck="false">function pow(x, n) {
@@ -634,13 +649,13 @@ console.log(pow(2, 3));
 <p><code>pow(2, 3)</code> chaqirilganda ijro quyidagicha "pastga tushadi" va so'ng "yuqoriga qaytadi":</p>
 <ol><li><code>pow(2, 3)</code> = 2 * <code>pow(2, 2)</code></li><li><code>pow(2, 2)</code> = 2 * <code>pow(2, 1)</code></li><li><code>pow(2, 1)</code> = 2 (asos holati, rekursiya to'xtaydi)</li><li>Endi orqaga qaytamiz: 2 * 2 = 4, so'ng 2 * 4 = 8.</li></ol>
 <div class="note">Rekursiv yechim ko'pincha <strong>qisqaroq va tushunarliroq</strong> bo'ladi. Iterativ yechim esa odatda <em>tezroq</em> va kamroq xotira sarflaydi. Har ikkisini bilish foydali.</div>
-<h2>Ijro steki (execution stack)</h2>
+<h2 id="ijro-steki-execution-stack">Ijro steki (execution stack)</h2>
 <p>Har bir funksiya chaqirilganda, uning ichki ma'lumotlari — o'zgaruvchilari, argumentlari va hozir ijro qilinayotgan qatorning o'rni — maxsus ichki tuzilmada saqlanadi. Bu tuzilma <strong>ijro steki</strong> (execution context stack) deb ataladi.</p>
 <p>Har bir chaqiruv uchun alohida <em>ijro konteksti</em> (execution context) yaratiladi va u stekning ustiga qo'yiladi. Funksiya boshqa funksiyani chaqirsa:</p>
 <ol><li>Joriy funksiyaning ijrosi <em>pauza</em> qilinadi;</li><li>Uning konteksti stekda saqlanib turadi;</li><li>Yangi chaqiruv uchun yangi kontekst stek ustiga qo'yiladi;</li><li>Yangi chaqiruv tugagach, uning konteksti stekdan olib tashlanadi va pauza qilingan kontekst davom etadi.</li></ol>
 <p><code>pow(2, 3)</code> uchun stek eng chuqur nuqtada uchta kontekstni saqlaydi: <code>pow(2,3)</code>, <code>pow(2,2)</code> va <code>pow(2,1)</code>. Asos holatiga yetgach, ular birma-bir stekdan tozalanib boradi.</p>
 <div class="warn">Rekursiyaning chuqurligi (bir vaqtning o'zida stekdagi kontekstlar soni) cheklangan. JavaScript dvigatellari odatda o'n minglab chuqurlikni ko'taradi, undan ortiq bo'lsa xatolik chiqadi. Juda chuqur rekursiya kerak bo'lsa, uni sikl (iteratsiya)ga aylantirish afzal.</div>
-<h2>Ikkinchi misol: faktorial</h2>
+<h2 id="ikkinchi-misol-faktorial">Ikkinchi misol: faktorial</h2>
 <p>Faktorial <code>n!</code> — 1 dan <code>n</code> gacha bo'lgan sonlarning ko'paytmasi: <code>n! = 1 * 2 * 3 * ... * n</code>. Uni rekursiv shaklda juda chiroyli yozish mumkin, chunki <code>n! = n * (n-1)!</code>:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>factorial.js</span></div><textarea spellcheck="false">function factorial(n) {
   if (n == 0) {
@@ -655,7 +670,7 @@ console.log(factorial(5));
 // 5! = 5 * 4 * 3 * 2 * 1 = 120</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda asos holati <code>n == 0</code> bo'lib, <code>1</code> qaytaradi (matematikada <code>0! = 1</code>). Qolgan barcha holatlar rekursiv ravishda soddalashadi.</p>
 <div class="tip">Rekursiv funksiyani yozayotganda avval o'zingizdan so'rang: <strong>"Qachon to'xtayman?"</strong> (asos holati) va <strong>"Masalani qanday kichraytiraman?"</strong> (rekursiv holat). Shu ikki savolga javob topsangiz, funksiya deyarli tayyor.</div>
-<h2>Uchinchi misol: Fibonachchi sonlari</h2>
+<h2 id="uchinchi-misol-fibonachchi-sonlari">Uchinchi misol: Fibonachchi sonlari</h2>
 <p>Fibonachchi ketma-ketligi 0 va 1 dan boshlanadi, keyingi har bir son avvalgi ikkitasining yig'indisiga teng: <code>0, 1, 1, 2, 3, 5, 8, 13, ...</code>. Ta'rifning o'zi rekursiv: <code>F(n) = F(n-1) + F(n-2)</code>.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fib.js</span></div><textarea spellcheck="false">function fib(n) {
   if (n &lt;= 1) {
@@ -683,7 +698,7 @@ console.log(fib(10));</textarea><div class="pg-actions"><button class="pg-run">�
 
 console.log(fib(10));
 console.log(fib(35));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Rekursiv ma'lumot tuzilmalari</h2>
+<h2 id="rekursiv-ma-lumot-tuzilmalari">Rekursiv ma'lumot tuzilmalari</h2>
 <p>Rekursiya faqat funksiyalarga xos emas. Ba'zi <em>ma'lumot tuzilmalari</em> ham rekursiv tabiatga ega — ular o'z ichida o'ziga o'xshash qismlarni saqlaydi.</p>
 <ul><li><strong>Bo'linmaydigan (nested) obyektlar</strong> — masalan kompaniya bo'limlari, ularning ichida yana ichki bo'limlar bor;</li><li><strong>Daraxt (tree)</strong> — HTML hujjatning DOM tuzilmasi, fayl tizimidagi papkalar;</li><li><strong>Bog'langan ro'yxat (linked list)</strong> — har bir element keyingi elementga ishora qiladi.</li></ul>
 <p>Bunday tuzilmalarni <em>rekursiv funksiya</em> bilan qayta ishlash juda tabiiy. Misol uchun, ichma-ich joylashgan bo'limlardagi umumiy maoshni sanaymiz:</p>
@@ -713,7 +728,7 @@ function sumSalaries(dept) {
 
 console.log(sumSalaries(company));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">E'tibor bering: funksiya massivga duch kelsa (asos holati) — to'g'ridan-to'g'ri yig'indini qaytaradi. Obyektga duch kelsa (rekursiv holat) — har bir ichki qismi uchun o'zini qayta chaqiradi. Tuzilma qanchalik chuqur bo'lsa ham, kod o'zgarmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Rekursiya</strong> — funksiyaning o'zini o'zi chaqirishi orqali masalani soddaroq qism-masalalarga bo'lib yechish;</li><li>Har bir rekursiv funksiyada <strong>asos holati</strong> (to'xtash) va <strong>rekursiv holat</strong> (kichraytirish) bo'lishi shart;</li><li>Har bir chaqiruv <strong>ijro steki</strong> da yangi kontekst yaratadi; chuqurlik cheklangan;</li><li>Rekursiv yechim ko'pincha qisqa va tushunarli, iterativ yechim esa odatda tezroq;</li><li>Daraxt, ichma-ich obyektlar kabi <strong>rekursiv tuzilmalar</strong> rekursiya bilan tabiiy qayta ishlanadi.</li></ul>
 <nav class="lesson-nav">
   <a href="json-metodlari.html"><span class="dir">← Oldingi</span><span class="ttl">JSON metodlari, toJSON</span></a>
@@ -727,6 +742,6 @@ console.log(sumSalaries(company));</textarea><div class="pg-actions"><button cla
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

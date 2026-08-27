@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Injection: SQL va buyruq inyeksiyasi — Kodla</title>
   <meta name="description" content="Injection g'oyasi, SQL injection va parametrlangan so'rovlar, buyruq inyeksiyasi himoyasi, NoSQL eslatma va umumiy himoya tamoyillari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,23 @@
 <main class="content article">
 <div class="crumbs">Web ilova xavfsizligi (OWASP Top 10)</div>
 <h1>Injection: SQL va buyruq inyeksiyasi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#injection-g-oyasi">Injection g'oyasi</a></li>
+<li class="lvl2"><a href="#sql-injection-konsepti">SQL injection konsepti</a></li>
+<li class="lvl2"><a href="#xavfsiz-yechim-parametrlangan-so-rovlar">Xavfsiz yechim: parametrlangan so'rovlar</a></li>
+<li class="lvl2"><a href="#buyruq-inyeksiyasi-command-injection">Buyruq inyeksiyasi (command injection)</a></li>
+<li class="lvl2"><a href="#nosql-injection-eslatmasi">NoSQL injection eslatmasi</a></li>
+<li class="lvl2"><a href="#xavfsiz-validatsiya-g-oyasini-modellashtirish">Xavfsiz validatsiya g'oyasini modellashtirish</a></li>
+<li class="lvl2"><a href="#umumiy-himoya-tamoyillari">Umumiy himoya tamoyillari</a></li>
+  </ul>
+</details>
 <p class="lead">Injection — o'nlab yillardan beri OWASP ro'yxatining yuqori qismidan tushmayotgan zaiflik toifasi. Uning butun mohiyati bitta jumlada: <strong>ishonchsiz kiritma kod sifatida bajarilib qolganda</strong> muammo tug'iladi. Bu darsda biz eng mashhur turi — SQL inyeksiyasini, shuningdek buyruq inyeksiyasini ko'rib chiqamiz va, eng muhimi, ularning ishonchli himoyasini — parametrlashni o'rganamiz.</p>
-<h2>Injection g'oyasi</h2>
+<h2 id="injection-g-oyasi">Injection g'oyasi</h2>
 <p>Deyarli har qanday dastur ma'lumot va buyruqni birga ishlatadi. Masalan, SQL so'rovida <em>buyruq</em> (SELECT, WHERE) va <em>ma'lumot</em> (foydalanuvchi kiritgan qiymat) aralashadi. Agar dastur bularni to'g'ri ajratmasa, hujumchi o'z ma'lumotini shunday tuzadiki, u <strong>ma'lumot emas, buyruq</strong> sifatida talqin qilinadi.</p>
 <p>Injection bir necha muhitda uchraydi: SQL ma'lumotlar bazasida (SQL injection), operatsion tizim buyruqlarida (command injection), NoSQL bazalarda, hatto LDAP va boshqa joylarda. Umumiy sabab bitta — kiritma va kodning aralashib ketishi.</p>
-<h2>SQL injection konsepti</h2>
+<h2 id="sql-injection-konsepti">SQL injection konsepti</h2>
 <p>SQL injectionda hujumchi so'rovga o'z SQL bo'lagini "suqib" kiritadi. Buning yagona sababi — dasturchining foydalanuvchi kiritmasini to'g'ridan-to'g'ri so'rov satriga <strong>ulab qo'ygani</strong>.</p>
 <p>Quyidagi zaif kodni ko'ring — u foydalanuvchi nomini oddiy satr birlashtirish orqali so'rovga qo'shadi:</p>
 <pre class="code"><code>// ZAIF: satr birlashtirish orqali so'rov qurish
@@ -613,7 +628,7 @@ db.query(sorov);
 // tuzilishini o'zgartirib yuborishi mumkin. Kiritma
 // bu yerda ma'lumot emas, KOD qismiga aylanib qoladi.</code></pre>
 <div class="note">Biz bu yerda ataylab hech qanday ishlaydigan hujum satrini ko'rsatmaymiz. Muhimi — <em>sabab</em>ni tushunish: kiritma so'rov matniga bevosita ulanganda, u so'rovning mantiqini o'zgartirishi mumkin bo'lib qoladi.</div>
-<h2>Xavfsiz yechim: parametrlangan so'rovlar</h2>
+<h2 id="xavfsiz-yechim-parametrlangan-so-rovlar">Xavfsiz yechim: parametrlangan so'rovlar</h2>
 <p>To'g'ri himoya — <strong>parametrlangan so'rovlar</strong> (parameterized queries), ya'ni <em>prepared statements</em>. Bu usulda so'rovning tuzilishi va unga uzatiladigan qiymatlar <strong>alohida</strong> yuboriladi. Ma'lumotlar bazasi qiymatni faqat ma'lumot deb qabul qiladi — u hech qachon buyruq sifatida bajarilmaydi.</p>
 <pre class="code"><code>// XAVFSIZ: parametrlangan so'rov
 const nom = req.body.foydalanuvchiNomi;
@@ -628,7 +643,7 @@ db.query(
 // ishlatiladi, so'rov tuzilishiga ta'sir qilolmaydi.</code></pre>
 <p>Ko'plab ORM kutubxonalari (masalan, Prisma, Sequelize, TypeORM) so'rovlarni ichkarida parametrlab beradi — bu ham yaxshi himoya qatlami. Ammo ORM ishlatganingizda ham xom (raw) so'rov yozsangiz, uni albatta parametrlang.</p>
 <div class="tip">Qoidani yodda saqlang: <strong>foydalanuvchi kiritmasini hech qachon so'rov matniga ulamang</strong>. Har doim parametr (placeholder) orqali uzating. Bu SQL injectiondan himoyaning eng ishonchli usulidir.</div>
-<h2>Buyruq inyeksiyasi (command injection)</h2>
+<h2 id="buyruq-inyeksiyasi-command-injection">Buyruq inyeksiyasi (command injection)</h2>
 <p><strong>Buyruq inyeksiyasi</strong> — bu SQL injectionga o'xshash, lekin bu safar foydalanuvchi kiritmasi <em>operatsion tizim buyrug'iga</em> aralashadi. Bu ko'pincha dastur foydalanuvchi kiritmasini olib, uni tizim buyrug'i (masalan, fayl bilan ishlash) ichiga qo'shganda yuzaga keladi.</p>
 <p>Himoya tamoyillari:</p>
 <ul><li><strong>Iloji boricha tizim buyrug'ini chaqirmang:</strong> ko'p vazifani buyruq qatorisiz, tilning o'z kutubxonalari bilan bajarish mumkin;</li><li><strong>Qobiqni chetlab o'ting:</strong> agar tashqi dastur chaqirish zarur bo'lsa, argumentlarni massiv sifatida uzating (masalan, Node.js da <code>execFile</code> yoki <code>spawn</code>), qobiq satrini (<code>exec</code>) qurmang;</li><li><strong>Kiritmani qat'iy tekshiring:</strong> faqat kutilgan qiymatlarga (masalan, oldindan belgilangan ro'yxat) ruxsat bering.</li></ul>
@@ -642,10 +657,10 @@ execFile('convert', [faylNomi, 'chiqish.png'], (xato) =&gt; {
 
 // Bu yerda 'faylNomi' argument sifatida beriladi,
 // shuning uchun u buyruq tuzilishiga aralasholmaydi.</code></pre>
-<h2>NoSQL injection eslatmasi</h2>
+<h2 id="nosql-injection-eslatmasi">NoSQL injection eslatmasi</h2>
 <p>Injection faqat SQL bilan cheklanmaydi. NoSQL bazalarda (masalan, MongoDB) ham o'xshash muammo bor: agar foydalanuvchi kiritmasi so'rov obyektiga tekshirilmasdan qo'shilsa, hujumchi so'rov mantiqini o'zgartira oladigan maxsus tuzilma yubora oladi.</p>
 <ul><li>Kiritmaning <strong>turini tekshiring:</strong> string kutilgan joyda obyekt kelmasligini ta'minlang;</li><li>So'rovga foydalanuvchi obyektini <em>butunligicha</em> qo'shmang; kerakli maydonlarni aniq ajratib oling;</li><li>Sxema validatsiyasidan (masalan, Zod, Joi) foydalaning.</li></ul>
-<h2>Xavfsiz validatsiya g'oyasini modellashtirish</h2>
+<h2 id="xavfsiz-validatsiya-g-oyasini-modellashtirish">Xavfsiz validatsiya g'oyasini modellashtirish</h2>
 <p>Quyidagi misolda biz himoyaning ikki qatlamini — kiritmani ruxsat etilgan qiymatlar ro'yxatiga tekshirish (allowlist) va parametrlashni taqlid qiluvchi ajratishni — ko'rsatamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>xavfsiz-validatsiya.js</span></div><textarea spellcheck="false">// 1-qatlam: kiritmani allowlist orqali tekshirish
 function statusValidmi(status) {
@@ -668,7 +683,7 @@ function xavfsizSorovTayyorla(status) {
 console.log(xavfsizSorovTayyorla('faol'));
 console.log(xavfsizSorovTayyorla('boshqacha'));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Diqqat qiling: <code>shablon</code> va <code>qiymatlar</code> alohida turadi. Aynan shu ajratish — parametrlangan so'rovlarning asosidir. Bunga qo'shimcha allowlist tekshiruvi esa faqat kutilgan qiymatlarga yo'l ochadi.</p>
-<h2>Umumiy himoya tamoyillari</h2>
+<h2 id="umumiy-himoya-tamoyillari">Umumiy himoya tamoyillari</h2>
 <ul><li><strong>Kiritmaga ishonma:</strong> tashqaridan kelgan har qanday ma'lumotni potensial zararli deb qara;</li><li><strong>Validatsiya qil:</strong> ma'lumotning turi, uzunligi va formatini kutilganiga solishtir;</li><li><strong>Parametrlang:</strong> so'rov tuzilishini va qiymatlarni hech qachon aralashtirma;</li><li><strong>Eng kam huquq:</strong> ma'lumotlar bazasi foydalanuvchisiga faqat zarur amallar (masalan, o'qish/yozish) uchun ruxsat ber;</li><li><strong>Xatolarni yashir:</strong> baza xatolarini foydalanuvchiga to'liq ko'rsatma — ular hujumchiga ma'lumot beradi.</li></ul>
 <div class="note">Injectionga qarshi himoyaning eng samarali usuli — foydalanuvchi kiritmasini <em>hech qachon</em> bajariladigan kod (so'rov, buyruq) bilan aralashtirmaslikdir. Parametrlash va argumentlarni ajratish aynan shu vazifani bajaradi.</div>
 <nav class="lesson-nav">
@@ -683,6 +698,6 @@ console.log(xavfsizSorovTayyorla('boshqacha'));</textarea><div class="pg-actions
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

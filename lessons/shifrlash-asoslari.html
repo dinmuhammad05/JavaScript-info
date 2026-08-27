@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shifrlash: simmetrik va asimmetrik — Kodla</title>
   <meta name="description" content="Shifrlash nima, plaintext va ciphertext, kalit tushunchasi; simmetrik (AES) va asimmetrik (RSA) shifrlash farqi; Caesar va XOR shifrlari faqat tushunish uchun; gibrid yondashuv va kalitlarni himoyalash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,18 +599,31 @@
 <main class="content article">
 <div class="crumbs">Kriptografiya asoslari</div>
 <h1>Shifrlash: simmetrik va asimmetrik</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#shifrlash-nima">Shifrlash nima?</a></li>
+<li class="lvl2"><a href="#simmetrik-shifrlash">Simmetrik shifrlash</a></li>
+<li class="lvl2"><a href="#caesar-shifri-faqat-tushunish-uchun">Caesar shifri — faqat tushunish uchun</a></li>
+<li class="lvl2"><a href="#xor-shifri-yana-bir-soddalik">XOR shifri — yana bir soddalik</a></li>
+<li class="lvl2"><a href="#asimmetrik-shifrlash">Asimmetrik shifrlash</a></li>
+<li class="lvl2"><a href="#gibrid-yondashuv-ikkalasining-kuchi">Gibrid yondashuv — ikkalasining kuchi</a></li>
+<li class="lvl2"><a href="#kalitlarni-himoyalash">Kalitlarni himoyalash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Kriptografiya — bu ma'lumotni begonalar o'qiy olmaydigan holatga keltirish san'ati. Zamonaviy internetning deyarli har bir xavfsiz aloqasi — bank ilovasi, xabar almashish, HTTPS sahifasi — shifrlashga tayanadi. Ushbu darsda biz shifrlashning asosiy tushunchalarini, simmetrik va asimmetrik usullar farqini o'rganamiz. Maqsad — <strong>to'g'ri kriptografiyani to'g'ri ishlatishni</strong> o'rganish, uni o'zimiz ixtiro qilish emas.</p>
 <div class="note">Ushbu bob to'liq ta'lim maqsadida yozilgan. Biz sizni <strong>himoyachi</strong> dasturchi qilib tarbiyalaymiz: kriptografiya qanday ishlashini tushunib, uni ishonchli kutubxonalar orqali to'g'ri qo'llashni bilishingiz uchun.</div>
-<h2>Shifrlash nima?</h2>
+<h2 id="shifrlash-nima">Shifrlash nima?</h2>
 <p>Shifrlash — bu ochiq matnni (<strong>plaintext</strong>) tushunarsiz shaklga (<strong>ciphertext</strong>) o'girish jarayoni. Bu jarayon maxsus qiymat — <strong>kalit</strong> (key) yordamida bajariladi. Faqat to'g'ri kalitga ega bo'lgan tomon ciphertext'ni qaytadan o'qiladigan matnga aylantira oladi. Bunga <em>deshifrlash</em> deyiladi.</p>
 <ul><li><strong>Plaintext</strong> — asl, o'qiladigan ma'lumot (masalan, "Salom, dunyo");</li><li><strong>Ciphertext</strong> — shifrlangan, tushunarsiz ma'lumot (masalan, "9f2a...");</li><li><strong>Kalit</strong> — shifrlash va deshifrlashni boshqaradigan maxfiy qiymat;</li><li><strong>Algoritm</strong> — shifrlash qoidasi (masalan, AES).</li></ul>
 <p>Muhim tamoyil bor — bu <strong>Kerckhoffs prinsipi</strong>: tizimning xavfsizligi algoritmning maxfiyligiga emas, balki <em>faqat kalitning</em> maxfiyligiga tayanishi kerak. Ya'ni algoritm ochiq, hamma tomonidan tekshirilgan bo'lishi mumkin — muhimi kalitni sir saqlash.</p>
 <div class="tip">"Yashirinlik orqali xavfsizlik" (security through obscurity) — yomon g'oya. Ishonchli algoritmlar ochiq, minglab mutaxassislar tomonidan tekshirilgan bo'ladi. Sir tutilgan "o'z" algoritmingiz ko'pincha tez sinadi.</div>
-<h2>Simmetrik shifrlash</h2>
+<h2 id="simmetrik-shifrlash">Simmetrik shifrlash</h2>
 <p><strong>Simmetrik shifrlash</strong>da shifrlash va deshifrlash uchun <em>bitta bir xil kalit</em> ishlatiladi. Ikkala tomon ham shu bitta maxfiy kalitni bilishi kerak. Bu qulf va uning yagona kalitiga o'xshaydi: kim kalitga ega bo'lsa, u ochadi ham, yopadi ham.</p>
 <ul><li><strong>Tezlik:</strong> simmetrik algoritmlar juda tez ishlaydi — katta hajmdagi ma'lumotni shifrlashga qulay;</li><li><strong>Eng mashhur algoritm:</strong> <strong>AES</strong> (Advanced Encryption Standard), zamonaviy standart;</li><li><strong>Muammo:</strong> kalitni ikkala tomonga qanday xavfsiz yetkazish kerak?</li></ul>
 <p>Aynan mana shu <strong>kalit almashish muammosi</strong> — simmetrik shifrlashning eng katta kamchiligi. Agar men sizga xabar yubormoqchi bo'lsam, avval kalitni sizga yetkazishim kerak. Lekin kalitni internet orqali yuborsam, uni yo'ldagi hujumchi ushlab olishi mumkin. Unda esa butun himoya ma'nosini yo'qotadi.</p>
-<h2>Caesar shifri — faqat tushunish uchun</h2>
+<h2 id="caesar-shifri-faqat-tushunish-uchun">Caesar shifri — faqat tushunish uchun</h2>
 <p>Simmetrik shifrlash <em>g'oyasini</em> his qilish uchun eng oddiy tarixiy misolni ko'raylik — <strong>Caesar shifri</strong>. Bunda har bir harf alifboda muayyan qadam (kalit) miqdorida siljitiladi. Bu shifr <strong>hech qachon</strong> real himoya uchun ishlatilmaydi — biz uni faqat "kalit" tushunchasini ko'rsatish uchun keltiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>caesar.js</span></div><textarea spellcheck="false">// Caesar shifri — FAQAT o'quv maqsadida, tushunish uchun.
 // Bu shifr real hayotda MUTLAQO ishlatilmaydi (sekundlarda sinadi).
@@ -637,7 +653,7 @@ const shifr = caesarShifrla(asl, 3);
 console.log('Ciphertext:', shifr);
 console.log('Deshifr:', caesarDeshifrla(shifr, 3));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Caesar shifrida atigi 25 ta mumkin kalit bor — hujumchi hammasini bir soniyada sinab ko'radi. Undan tashqari, harflar chastotasi tahlili orqali kalitsiz ham ochiladi. Bu shifr xavfsizlik uchun <strong>umuman yaroqsiz</strong>.</div>
-<h2>XOR shifri — yana bir soddalik</h2>
+<h2 id="xor-shifri-yana-bir-soddalik">XOR shifri — yana bir soddalik</h2>
 <p>Yana bir o'quv misoli — <strong>XOR shifri</strong>. Bunda har bir bayt kalit bilan bit darajasida <code>XOR</code> amaliga uchraydi. Qiziq xususiyati: bir xil amalni takrorlash asl matnni qaytaradi. Bu ham faqat <em>g'oyani</em> ko'rsatadi; qisqa yoki takrorlanuvchi kalit bilan XOR oson sinadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>xor.js</span></div><textarea spellcheck="false">// XOR shifri — FAQAT tushunish uchun, real himoya EMAS.
 // XOR amali: bir xil kalit bilan ikki marta qo'llansa, asl matn qaytadi.
@@ -662,21 +678,21 @@ console.log('Ochilgan matn:', ochilgan);
 // nega zaif: qisqa, takrorlanuvchi kalit chastota tahliliga beriladi.
 // To'g'ri usul: AES kabi sinovdan o'tgan algoritm.</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Diqqat: yagona, matn uzunligidagi, tasodifiy va bir marta ishlatiladigan kalit bilan XOR ("one-time pad") nazariy jihatdan buzilmas. Lekin bunday kalitni xavfsiz yaratish va tarqatish amalda deyarli imkonsiz — shu bois real tizimlar AES ishlatadi.</div>
-<h2>Asimmetrik shifrlash</h2>
+<h2 id="asimmetrik-shifrlash">Asimmetrik shifrlash</h2>
 <p><strong>Asimmetrik shifrlash</strong> (ochiq kalitli kriptografiya) kalit almashish muammosini hal qiladi. Bu yerda bitta emas, <em>ikkita</em> bog'liq kalit bo'ladi:</p>
 <ul><li><strong>Ochiq kalit (public key)</strong> — hammaga ochiq berilishi mumkin; u bilan <em>shifrlanadi</em>;</li><li><strong>Maxfiy kalit (private key)</strong> — faqat egasida saqlanadi; u bilan <em>deshifrlanadi</em>.</li></ul>
 <p>Sehr shundaki: ochiq kalit bilan shifrlangan xabarni <em>faqat</em> mos maxfiy kalit ocha oladi. Demak, men sizning ochiq kalitingizni oldindan bilsam, xabarni shifrlab yubora olaman — va uni faqat siz (maxfiy kalit egasi) o'qiy olasiz. Endi hech qanday maxfiy kalitni internet orqali almashishga hojat yo'q!</p>
 <p>Eng mashhur asimmetrik algoritmlar — <strong>RSA</strong> va elliptik egri chiziqlarga asoslangan <strong>ECC</strong>. Ular yirik matematik masalalarga (masalan, katta sonlarni tub ko'paytuvchilarga ajratish qiyinligiga) tayanadi.</p>
 <div class="warn">Asimmetrik shifrlash simmetrikdan ancha <strong>sekin</strong> ishlaydi. Shuning uchun katta hajmdagi ma'lumotni to'g'ridan-to'g'ri RSA bilan shifrlash amaliy emas.</div>
-<h2>Gibrid yondashuv — ikkalasining kuchi</h2>
+<h2 id="gibrid-yondashuv-ikkalasining-kuchi">Gibrid yondashuv — ikkalasining kuchi</h2>
 <p>Amalda ikkala usul <strong>birgalikda</strong> ishlatiladi — bunga <strong>gibrid shifrlash</strong> deyiladi. Aynan shu tarzda <strong>TLS/HTTPS</strong> ishlaydi:</p>
 <ol><li>Asimmetrik shifrlash yordamida tomonlar bir-biriga <em>bir martalik simmetrik kalitni</em> xavfsiz yetkazadi (sekin, lekin faqat kichik kalit uchun);</li><li>So'ngra butun katta ma'lumot oqimi shu simmetrik kalit bilan (AES) tez shifrlanadi.</li></ol>
 <p>Natijada asimmetrik shifrlashning <em>xavfsiz kalit almashishi</em> va simmetrik shifrlashning <em>tezligi</em> birlashadi. Har bir usul o'z kuchli tomonini beradi.</p>
-<h2>Kalitlarni himoyalash</h2>
+<h2 id="kalitlarni-himoyalash">Kalitlarni himoyalash</h2>
 <p>Butun kriptografiyaning ishonchliligi bitta narsaga — <strong>kalitning maxfiyligiga</strong> bog'liq. Eng kuchli AES ham kalit sizib ketsa, foydasiz bo'lib qoladi. Shuning uchun:</p>
 <ul><li>Maxfiy kalitlarni <strong>hech qachon</strong> kod ichiga yozmang yoki Git'ga joylashtirmang;</li><li>Kalitlarni muhit o'zgaruvchilari yoki maxsus kalit boshqaruv tizimlarida (masalan, Vault, cloud KMS) saqlang;</li><li>Kalitlarni vaqti-vaqti bilan yangilab (rotatsiya qilib) turing;</li><li>Har bir maqsad uchun alohida kalit ishlating.</li></ul>
 <div class="warn">Eng muhim maslahat: <strong>o'zingiz shifrlash algoritmi o'ylab topmang va yozmang.</strong> Kriptografiya juda nozik soha; bitta kichik xato butun himoyani buzadi. Har doim keng sinovdan o'tgan kutubxonalardan foydalaning: Node.js'da o'rnatilgan <code>crypto</code> moduli, brauzerda <code>Web Crypto API</code>.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Shifrlash — plaintext'ni kalit yordamida ciphertext'ga o'girish; xavfsizlik <strong>faqat kalitga</strong> tayanadi (Kerckhoffs prinsipi);</li><li><strong>Simmetrik</strong> (AES): bitta kalit, tez, lekin kalit almashish muammosi bor;</li><li><strong>Asimmetrik</strong> (RSA): ochiq va maxfiy kalit juftligi, kalit almashishni hal qiladi, lekin sekin;</li><li>Caesar va XOR shifrlari <strong>faqat o'quv maqsadida</strong> — real himoya uchun yaroqsiz;</li><li><strong>Gibrid</strong> yondashuv (TLS) ikkalasini birlashtiradi: asimmetrik bilan kalit almashib, simmetrik bilan tez shifrlaydi;</li><li>Kalitlarni himoyalang va <strong>hech qachon</strong> o'z kriptografiyangizni yozmang — sinovdan o'tgan kutubxonadan foydalaning.</li></ul>
 <nav class="lesson-nav">
   <a href="etika-qonun-kasb.html"><span class="dir">← Oldingi</span><span class="ttl">Etika, qonun va kiberxavfsizlik kasbi</span></a>
@@ -690,6 +706,6 @@ console.log('Ochilgan matn:', ochilgan);
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

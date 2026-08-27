@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Strelka funksiyalari (qayta ko'rib chiqish) — Kodla</title>
   <meta name="description" content="Strelka funksiyalarining chuqur xususiyatlari: o'z this va arguments yo'qligi, new bilan ishlamasligi va qachon foydali ekanligi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Strelka funksiyalari (qayta ko'rib chiqish)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#strelkada-o-z-this-yo-q">Strelkada o'z this yo'q</a></li>
+<li class="lvl2"><a href="#bind-call-apply-strelkaga-ta-sir-qilmaydi">bind/call/apply strelkaga ta'sir qilmaydi</a></li>
+<li class="lvl2"><a href="#strelkada-arguments-yo-q">Strelkada arguments yo'q</a></li>
+<li class="lvl2"><a href="#strelka-new-bilan-ishlamaydi">Strelka new bilan ishlamaydi</a></li>
+<li class="lvl2"><a href="#boshqa-yo-q-xususiyatlar">Boshqa yo'q xususiyatlar</a></li>
+<li class="lvl2"><a href="#qachon-foydali">Qachon foydali?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Strelka funksiyalari (<code>=&gt;</code>) shunchaki "funksiya yozishning qisqa usuli" emas. Ularning o'ziga xos, muhim xususiyatlari bor. Ushbu darsda ularni chuqur qayta ko'rib chiqamiz.</p>
-<h2>Strelkada o'z this yo'q</h2>
+<h2 id="strelkada-o-z-this-yo-q">Strelkada o'z this yo'q</h2>
 <p>Eng muhim xususiyat: strelka funksiyasining <strong>o'z <code>this</code>i yo'q</strong>. Uning ichida <code>this</code> ishlatilsa, u <em>tashqi</em> (o'rab turuvchi) funksiyaning <code>this</code>ini oladi.</p>
 <p>Bu obyekt metodi ichida ichki funksiya yozganda juda foydali. Oddiy funksiyada <code>this</code> yo'qolardi, strelkada esa saqlanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-this.js</span></div><textarea spellcheck="false">let guruh = {
@@ -618,7 +633,7 @@ guruh.korsat();
 // Bizning guruh: Guli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Agar bu yerda <code>talaba =&gt; ...</code> o'rniga oddiy <code>function(talaba) { ... }</code> yozilganida, ichki funksiyada <code>this</code> <code>undefined</code> bo'lib, <code>this.sarlavha</code> xatolik bergan bo'lardi.</p>
 <div class="note">Strelkada <code>this</code> "yo'q" degani — u umuman aniqlanmaydi va JavaScript uni tashqi muhitdan qidiradi (xuddi oddiy o'zgaruvchan kabi). Shuning uchun strelka "tashqi <code>this</code>ni oladi" deb aytiladi.</div>
-<h2>bind/call/apply strelkaga ta'sir qilmaydi</h2>
+<h2 id="bind-call-apply-strelkaga-ta-sir-qilmaydi">bind/call/apply strelkaga ta'sir qilmaydi</h2>
 <p>Strelkaning o'z <code>this</code>i bo'lmagani uchun, unga <code>call</code>, <code>apply</code> yoki <code>bind</code> orqali <code>this</code> berib bo'lmaydi — ular e'tiborsiz qoldiriladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-bind-yoq.js</span></div><textarea spellcheck="false">let f = () =&gt; this;
 
@@ -628,7 +643,7 @@ let obyekt = { ism: "test" };
 console.log(f.call(obyekt) === obyekt); // false
 console.log(f.bind(obyekt)() === obyekt); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Aynan shu sabab strelka funksiyalari React, hodisa ishlovchilari va <code>setTimeout</code> ichida qulay — ular <code>this</code>ni ataylab "o'rab turgan" komponentga bog'lab qoldiradi va tasodifan yo'qolmaydi.</div>
-<h2>Strelkada arguments yo'q</h2>
+<h2 id="strelkada-arguments-yo-q">Strelkada arguments yo'q</h2>
 <p>Strelka funksiyalarning <strong>o'z <code>arguments</code> obyekti ham yo'q</strong>. Bu dekoratorlarda tashqi funksiyaning argumentlariga murojaat qilishda foydali:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-arguments.js</span></div><textarea spellcheck="false">function ortiqcha(func) {
   // Strelka o'z arguments'iga ega emas,
@@ -644,7 +659,7 @@ let o_ram = ortiqcha(say);
 // o_ram(...) chaqirilganda tashqi arguments ishlatiladi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Zamonaviy kodda ko'pincha <code>arguments</code> o'rniga rest parametri (<code>...args</code>) ishlatiladi. Lekin strelkaning <code>arguments</code>ni tashqaridan olishi ba'zi holatlarda foydali qoladi.</p>
 <div class="warn">Agar strelka ichida <code>arguments</code>ni ishlatsangiz, u <strong>tashqi</strong> oddiy funksiyaning <code>arguments</code>iga ishora qiladi. Agar tashqarida hech qanday oddiy funksiya bo'lmasa, xatolik yuzaga keladi.</div>
-<h2>Strelka new bilan ishlamaydi</h2>
+<h2 id="strelka-new-bilan-ishlamaydi">Strelka new bilan ishlamaydi</h2>
 <p>Strelka funksiyalarni <strong>konstruktor sifatida ishlatib bo'lmaydi</strong> — ular o'z <code>this</code>iga ega emasligi bilan bevosita bog'liq. <code>new</code> bilan chaqirsak, xatolik chiqadi:</p>
 <pre class="code"><code>let Foydalanuvchi = (ism) =&gt; {
   this.ism = ism;
@@ -653,11 +668,11 @@ let o_ram = ortiqcha(say);
 // let u = new Foydalanuvchi("Ali");
 // TypeError: Foydalanuvchi is not a constructor</code></pre>
 <p>Obyekt yaratuvchi konstruktor kerak bo'lsa — oddiy funksiya yoki <code>class</code> ishlatiladi, strelka emas.</p>
-<h2>Boshqa yo'q xususiyatlar</h2>
+<h2 id="boshqa-yo-q-xususiyatlar">Boshqa yo'q xususiyatlar</h2>
 <p>Strelka funksiyalarda quyidagilar ham yo'q:</p>
 <ul><li><strong>O'z <code>this</code>i</strong> — tashqaridan olinadi;</li><li><strong><code>arguments</code> obyekti</strong> — tashqaridan olinadi;</li><li><strong><code>super</code></strong> — sinf metodlarida tashqaridan olinadi;</li><li><strong>Konstruktor sifatida ishlash</strong> (<code>new</code> ishlamaydi);</li><li><strong><code>prototype</code> xossasi</strong> — strelkada yo'q.</li></ul>
 <div class="note">Aslida bu "kamchiliklar" emas — strelka ataylab shunday tarhlangan. U <em>kontekstga ega bo'lmagan, qisqa</em> funksiya sifatida ishlash uchun mo'ljallangan. "O'z konteksti yo'qligi" uning eng katta kuchli tomoni.</div>
-<h2>Qachon foydali?</h2>
+<h2 id="qachon-foydali">Qachon foydali?</h2>
 <ul><li>Qisqa <strong>callback</strong>lar: <code>arr.map(x =&gt; x * 2)</code>, <code>arr.filter(x =&gt; x &gt; 0)</code>;</li><li>Metod ichidagi <strong>ichki funksiyalar</strong> — tashqi <code>this</code>ni saqlab qolish uchun;</li><li><code>setTimeout</code>, hodisa ishlovchilarida <code>this</code>ni bog'lab qoldirish uchun.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-callback.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3, 4, 5];
 
@@ -669,7 +684,7 @@ console.log(ikkiBaravar); // [ 2, 4, 6, 8, 10 ]
 console.log(juftlar);     // [ 2, 4 ]
 console.log(yigindi);     // 15</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Qachon strelkani ISHLATMASLIK kerak? — Obyekt metodini o'zi <code>this</code> orqali obyektga murojaat qilishi kerak bo'lsa. Bunda oddiy metod sintaksisi (<code>korsat() {}</code>) to'g'ri, chunki strelkada <code>this</code> obyektga emas, global muhitga ishora qilib qoladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Strelkaning <strong>o'z <code>this</code>i yo'q</strong> — u tashqi funksiyadan olinadi;</li><li><code>call</code>/<code>apply</code>/<code>bind</code> strelkaning <code>this</code>ini o'zgartirmaydi;</li><li>Strelkada <strong><code>arguments</code> yo'q</strong> — tashqi funksiyadan olinadi;</li><li>Strelkani <strong><code>new</code> bilan ishlatib bo'lmaydi</strong> (u konstruktor emas);</li><li>Strelka qisqa callback'lar va tashqi <code>this</code>ni saqlash uchun ideal;</li><li>Obyektning asosiy metodlari uchun strelka o'rniga oddiy metod sintaksisidan foydalaning.</li></ul>
 <nav class="lesson-nav">
   <a href="bind.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiya bog'lash (bind)</span></a>
@@ -683,6 +698,6 @@ console.log(yigindi);     // 15</textarea><div class="pg-actions"><button class=
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fetch: yuklanish jarayoni — Kodla</title>
   <meta name="description" content="Katta javoblarni yuklashda jarayonni (progress) kuzatish: response.body va ReadableStream, getReader(), Content-Length va foizni hisoblash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,24 @@
 <main class="content article">
 <div class="crumbs">Tarmoq so'rovlari</div>
 <h1>Fetch: yuklanish jarayoni</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#response-body-readablestream">response.body — ReadableStream</a></li>
+<li class="lvl2"><a href="#getreader-bilan-o-qish">getReader() bilan o'qish</a></li>
+<li class="lvl2"><a href="#content-length-umumiy-hajm">Content-Length — umumiy hajm</a></li>
+<li class="lvl2"><a href="#progressni-to-liq-hisoblash">Progressni to'liq hisoblash</a></li>
+<li class="lvl2"><a href="#bo-laklarni-birlashtirish">Bo'laklarni birlashtirish</a></li>
+<li class="lvl2"><a href="#nima-uchun-oddiy-usul-yetarli-emas">Nima uchun oddiy usul yetarli emas?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Katta hajmdagi ma'lumotni yuklab olayotganda (masalan, katta fayl yoki video), foydalanuvchiga <strong>necha foiz yuklanganini</strong> ko'rsatish foydali. <code>fetch</code> buni <code>response.body</code> orqali — oqim (stream) sifatida o'qish imkonini beradi.</p>
 <div class="note">Eslatma: <code>fetch</code> <strong>yuklab olish</strong> (download) jarayonini kuzatishga imkon beradi, ammo <strong>yuklab jo'natish</strong> (upload) jarayonini kuzata olmaydi — buning uchun keyingi darsdagi <code>XMLHttpRequest</code> kerak bo'ladi.</div>
-<h2>response.body — ReadableStream</h2>
+<h2 id="response-body-readablestream">response.body — ReadableStream</h2>
 <p>Oldingi darslarda javob tanasini <code>response.json()</code> yoki <code>response.text()</code> bilan bir martaga o'qidik. Ammo <code>response.body</code> — bu <strong>ReadableStream</strong> obyekti: ma'lumotni bo'lak-bo'lak (chunk) o'qishga imkon beradigan maxsus oqim.</p>
 <p>Aynan shu bo'laklarni sanab, umumiy hajmga solishtirib, yuklanish foizini hisoblashimiz mumkin.</p>
-<h2>getReader() bilan o'qish</h2>
+<h2 id="getreader-bilan-o-qish">getReader() bilan o'qish</h2>
 <p>Oqimdan o'qish uchun undan <strong>reader</strong> (o'quvchi) olamiz va <code>read()</code> metodini takroran chaqiramiz. Har chaqiruv bitta bo'lakni qaytaradi:</p>
 <pre class="code"><code>let response = await fetch('https://example.com/big-file');
 
@@ -619,7 +634,7 @@ while (true) {
 }</code></pre>
 <p><code>reader.read()</code> promise qaytaradi va u ikki maydonli obyekt bilan bajariladi:</p>
 <ul><li><code>done</code> — agar oqim tugagan bo'lsa <code>true</code>, aks holda <code>false</code>;</li><li><code>value</code> — navbatdagi ma'lumot bo'lagi (<code>Uint8Array</code> turidagi baytlar massivi).</li></ul>
-<h2>Content-Length — umumiy hajm</h2>
+<h2 id="content-length-umumiy-hajm">Content-Length — umumiy hajm</h2>
 <p>Foizni hisoblash uchun umumiy hajmni bilishimiz kerak. Buni server <code>Content-Length</code> sarlavhasida yuboradi:</p>
 <pre class="code"><code>let response = await fetch(url);
 
@@ -628,7 +643,7 @@ const total = parseInt(contentLength, 10);
 
 console.log('Umumiy hajm: ' + total + ' bayt');</code></pre>
 <div class="warn">Diqqat: <code>Content-Length</code> har doim ham mavjud bo'lavermaydi — masalan, server ma'lumotni siqilgan (gzip) yoki chunked ko'rinishda yuborsa, u yo'q yoki noaniq bo'lishi mumkin. Shuning uchun kodda uning yo'qligini ham hisobga oling.</div>
-<h2>Progressni to'liq hisoblash</h2>
+<h2 id="progressni-to-liq-hisoblash">Progressni to'liq hisoblash</h2>
 <p>Endi hammasini birlashtiramiz: umumiy hajmni olamiz, bo'laklarni o'qib, qabul qilingan baytlarni sanaymiz va foizni chiqaramiz:</p>
 <pre class="code"><code>async function yuklabOl(url) {
   let response = await fetch(url);
@@ -663,7 +678,7 @@ console.log('Umumiy hajm: ' + total + ' bayt');</code></pre>
   return chunks;
 }</code></pre>
 <p>Bu yerda har bir bo'lak <code>chunks</code> massiviga saqlanadi va <code>receivedLength</code> oshib boradi. Foiz — <code>qabul qilingan / umumiy * 100</code> formulasi bilan hisoblanadi.</p>
-<h2>Bo'laklarni birlashtirish</h2>
+<h2 id="bo-laklarni-birlashtirish">Bo'laklarni birlashtirish</h2>
 <p>Barcha bo'laklar o'qib bo'lingach, ularni bitta massivga birlashtirib, so'ng matnga (yoki JSON'ga) aylantirishimiz mumkin:</p>
 <pre class="code"><code>// chunks — Uint8Array bo'laklari massivi
 
@@ -683,7 +698,7 @@ let result = new TextDecoder('utf-8').decode(chunksAll);
 let data = JSON.parse(result);
 console.log(data);</code></pre>
 <div class="note"><code>TextDecoder</code> — baytlarni (Uint8Array) matnga aylantiradigan o'rnatilgan brauzer vositasi. UTF-8 kodlashda emoji va o'zbekcha harflar to'g'ri o'qiladi.</div>
-<h2>Nima uchun oddiy usul yetarli emas?</h2>
+<h2 id="nima-uchun-oddiy-usul-yetarli-emas">Nima uchun oddiy usul yetarli emas?</h2>
 <p>Agar progress kerak bo'lmasa, oddiygina <code>await response.json()</code> yozish yetarli — u ancha soddaroq. ReadableStream faqat <strong>yuklanish jarayonini kuzatish</strong> kerak bo'lganda ishlatiladi:</p>
 <pre class="code"><code>// Progress kerak bo'lmasa — sodda:
 let response = await fetch(url);
@@ -693,7 +708,7 @@ let data = await response.json();
 let reader = response.body.getReader();
 // ...bo'lak-bo'lak o'qish va foiz hisoblash</code></pre>
 <div class="tip">Amaliyotda ReadableStream katta fayllar, video yoki uzoq davom etadigan yuklashlar uchun ajratilgan. Kichik JSON javoblar uchun oddiy <code>response.json()</code> to'g'ri tanlov.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>response.body</code> — javob tanasini bo'lak-bo'lak o'qish imkonini beruvchi <strong>ReadableStream</strong>;</li><li><code>response.body.getReader()</code> — oqimdan o'quvchi (reader) beradi;</li><li><code>reader.read()</code> — har chaqiruvda <code>{ done, value }</code> qaytaradi: <code>value</code> — navbatdagi bo'lak (Uint8Array);</li><li>Umumiy hajm <code>Content-Length</code> sarlavhasida keladi (ammo har doim ham mavjud emas);</li><li>Foiz = <code>qabul qilingan baytlar / umumiy hajm * 100</code>;</li><li>Bo'laklar <code>Uint8Array</code>ga birlashtirilib, <code>TextDecoder</code> bilan matnga aylantiriladi;</li><li><code>fetch</code> faqat <strong>yuklab olish</strong> progressini kuzatadi — yuklab jo'natish (upload) uchun <code>XMLHttpRequest</code> kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="formdata.html"><span class="dir">← Oldingi</span><span class="ttl">FormData</span></a>
@@ -707,6 +722,6 @@ let reader = response.body.getReader();
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

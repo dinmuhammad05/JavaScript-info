@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hashing va parollarni xavfsiz saqlash — Kodla</title>
   <meta name="description" content="Hash funksiyasi nima (bir tomonlama, deterministik, avalanche), shifrlashdan farqi; parolni ochiq saqlash falokati; nega oddiy hash yetarli emas; salt, sekin hash (bcrypt, argon2, scrypt); register va login oqimi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,25 @@
 <main class="content article">
 <div class="crumbs">Kriptografiya asoslari</div>
 <h1>Hashing va parollarni xavfsiz saqlash</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#hash-funksiyasi-nima">Hash funksiyasi nima?</a></li>
+<li class="lvl2"><a href="#hashing-va-shifrlash-farqi">Hashing va shifrlash farqi</a></li>
+<li class="lvl2"><a href="#parolni-ochiq-saqlash-falokat">Parolni ochiq saqlash — falokat</a></li>
+<li class="lvl2"><a href="#nega-oddiy-hash-yetarli-emas">Nega oddiy hash yetarli emas?</a></li>
+<li class="lvl3"><a href="#1-ular-juda-tez">1. Ular juda tez</a></li>
+<li class="lvl3"><a href="#2-rainbow-jadvallar">2. Rainbow jadvallar</a></li>
+<li class="lvl2"><a href="#yechim-1-salt-tuz">Yechim 1: salt (tuz)</a></li>
+<li class="lvl2"><a href="#yechim-2-sekin-hash-bcrypt-argon2">Yechim 2: sekin hash (bcrypt, argon2)</a></li>
+<li class="lvl2"><a href="#register-va-login-oqimi">Register va login oqimi</a></li>
+<li class="lvl3"><a href="#ro-yxatdan-o-tish-register">Ro'yxatdan o'tish (register)</a></li>
+<li class="lvl3"><a href="#tizimga-kirish-login">Tizimga kirish (login)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Deyarli har bir ilova foydalanuvchi parolini saqlashi kerak. Lekin parolni <em>qanday</em> saqlash — xavfsizlikdagi eng ko'p xato qilinadigan joylardan biri. Ushbu darsda hash funksiyalari nima ekanini, nega oddiy hash parol uchun yetarli emasligini, hamda salt va sekin hash algoritmlari (bcrypt, argon2) qanday yordam berishini o'rganamiz.</p>
-<h2>Hash funksiyasi nima?</h2>
+<h2 id="hash-funksiyasi-nima">Hash funksiyasi nima?</h2>
 <p><strong>Hash funksiyasi</strong> — istalgan uzunlikdagi ma'lumotdan qat'iy uzunlikdagi "barmoq izi" (hash, digest) yaratadigan funksiya. Yaxshi kriptografik hash funksiyasi uch muhim xususiyatga ega:</p>
 <ul><li><strong>Bir tomonlama (one-way):</strong> hashdan asl ma'lumotni tiklab bo'lmaydi;</li><li><strong>Deterministik:</strong> bir xil kirish doim bir xil hash beradi;</li><li><strong>Avalanche effekti:</strong> kirishning bitta bitini o'zgartirish hashni butunlay o'zgartiradi;</li><li><strong>To'qnashuvga chidamli:</strong> ikki xil kirish uchun bir xil hash topish amalda imkonsiz.</li></ul>
 <pre class="code"><code>// Node.js'ning o'rnatilgan crypto moduli hash misoli.
@@ -616,22 +636,22 @@ console.log(sha256('parol123'));
 console.log(sha256('parol123'));
 console.log(sha256('parol124'));</code></pre>
 <div class="note">Diqqat: bu yerda SHA-256 ni <em>parol</em> uchun emas, balki hash <em>xususiyatlarini ko'rsatish</em> uchun ishlatdik. Quyida nega SHA parollar uchun yetarli emasligini ko'ramiz.</div>
-<h2>Hashing va shifrlash farqi</h2>
+<h2 id="hashing-va-shifrlash-farqi">Hashing va shifrlash farqi</h2>
 <p>Bu ikkisini aralashtirmaslik muhim:</p>
 <ul><li><strong>Shifrlash</strong> — ikki tomonlama: kalit bilan shifrlab, keyin <em>qaytarib</em> ochish mumkin;</li><li><strong>Hashing</strong> — bir tomonlama: hashdan asl matnni <em>qaytarib bo'lmaydi</em>.</li></ul>
 <p>Aynan shu "qaytarib bo'lmaslik" xususiyati hashni parollarni saqlash uchun ideal qiladi. Bizga parolning o'zi kerak emas — bizga faqat "kiritilgan parol saqlangani bilan mos keladimi?" degan savolga javob kerak. Buni esa hashlarni solishtirib bilsak bo'ladi, asl parolni bilmasdan.</p>
-<h2>Parolni ochiq saqlash — falokat</h2>
+<h2 id="parolni-ochiq-saqlash-falokat">Parolni ochiq saqlash — falokat</h2>
 <p>Eng jiddiy xato — parolni ma'lumotlar bazasida <strong>ochiq matnda</strong> (o'qiladigan holatda) saqlash. Nima uchun bu falokat?</p>
 <ul><li>Ma'lumotlar bazasi o'g'irlansa (bu tez-tez sodir bo'ladi), <em>barcha</em> parollar darhol ochiladi;</li><li>Odamlar ko'pincha bir parolni bir necha saytda ishlatadi — bitta sizish boshqa xizmatlarga ham xavf soladi;</li><li>Ma'lumotlar bazasiga kirish huquqi bor xodim (yoki hujumchi) hamma parolni ko'ra oladi.</li></ul>
 <div class="warn">Parolni <strong>ochiq matnda</strong> saqlamang. Uni <strong>oddiy shifrlash</strong> bilan ham saqlamang — shifr kaliti sizsa, hammasi ochiladi. To'g'ri yechim — parolni <strong>hashlab</strong> saqlash.</div>
-<h2>Nega oddiy hash yetarli emas?</h2>
+<h2 id="nega-oddiy-hash-yetarli-emas">Nega oddiy hash yetarli emas?</h2>
 <p>"Unda parolni SHA-256 bilan hashlaymiz-da?" — deb o'ylashingiz mumkin. Afsuski, oddiy tez hash funksiyalari (MD5, SHA-1, SHA-256) parollar uchun <strong>yetarli emas</strong>. Ikkita katta muammo bor.</p>
-<h3>1. Ular juda tez</h3>
+<h3 id="1-ular-juda-tez">1. Ular juda tez</h3>
 <p>SHA-256 shu qadar tezki, zamonaviy kompyuter sekundiga milliardlab hashni hisoblay oladi. Bu "barcha mumkin parollarni sinab ko'rish" (brute-force) hujumini osonlashtiradi. Parollar uchun bizga aksincha — <strong>ataylab sekin</strong> funksiya kerak.</p>
-<h3>2. Rainbow jadvallar</h3>
+<h3 id="2-rainbow-jadvallar">2. Rainbow jadvallar</h3>
 <p>Oddiy hash deterministik bo'lgani uchun, hujumchilar mashhur parollarning hashlarini oldindan hisoblab, ulkan jadvallar (<strong>rainbow tables</strong>) tuzib qo'yishgan. Bunday jadvaldan hashni izlab, asl parolni bir zumda topish mumkin.</p>
 <div class="note">MD5 va SHA-1 — bugungi kunda <strong>buzilgan</strong> hisoblanadi va yangi loyihalarda umuman ishlatilmasligi kerak. Ularni faqat nega yaroqsizligini bilish uchun eslaymiz, xolos.</div>
-<h2>Yechim 1: salt (tuz)</h2>
+<h2 id="yechim-1-salt-tuz">Yechim 1: salt (tuz)</h2>
 <p><strong>Salt</strong> (tuz) — bu har bir parolga hashlashdan oldin qo'shiladigan <em>tasodifiy</em>, noyob qiymat. Salt maxfiy emas — u parol yonida saqlanadi. Uning vazifasi:</p>
 <ul><li>Har bir foydalanuvchi uchun salt farqli — demak bir xil parol ham <em>har xil</em> hash beradi;</li><li>Rainbow jadvallar foydasiz bo'lib qoladi — oldindan hisoblab qo'yib bo'lmaydi;</li><li>Ikki foydalanuvchi bir xil parol qo'ysa ham, bazada bu ko'rinmaydi.</li></ul>
 <pre class="code"><code>// Salt g'oyasini ko'rsatuvchi DEMO (o'quv maqsadida).
@@ -656,7 +676,7 @@ console.log('User2:', saltliHash('parol123', salt2));
 
 // bazada: { salt, hash } juftligini saqlaymiz.
 // Lekin bu hali ham TEZ hash — shuning uchun yetarli emas!</code></pre>
-<h2>Yechim 2: sekin hash (bcrypt, argon2)</h2>
+<h2 id="yechim-2-sekin-hash-bcrypt-argon2">Yechim 2: sekin hash (bcrypt, argon2)</h2>
 <p>Salt rainbow jadvallarni yechadi, lekin "tez hash" muammosi qoladi. Buning yechimi — <strong>ataylab sekin</strong> ishlaydigan, parollar uchun maxsus yaratilgan algoritmlar:</p>
 <ul><li><strong>bcrypt</strong> — vaqt sinovidan o'tgan, keng qo'llaniladigan tanlov; ichida salt ham bor;</li><li><strong>argon2</strong> — zamonaviy tavsiya etilgan algoritm (Password Hashing Competition g'olibi);</li><li><strong>scrypt</strong> — ko'p xotira talab qiladigan yana bir ishonchli variant.</li></ul>
 <p>Bu algoritmlarda <strong>"cost" (narx) parametri</strong> bo'ladi — u qancha katta bo'lsa, hash shuncha sekin hisoblanadi. Bu qonuniy login uchun sezilmas (masalan, 0.2 soniya), lekin hujumchi uchun milliardlab sinovni deyarli imkonsiz qiladi. Kompyuterlar tezlashgani sari cost'ni oshirib borish mumkin.</p>
@@ -685,11 +705,11 @@ console.timeEnd('cost=14');
 
 // Real loyihada: bcrypt.hash(parol, 12) — kutubxona bularni to'g'ri qiladi.</code></pre>
 <div class="warn">Yuqoridagi kod — faqat g'oyani tushuntirish uchun. Real loyihada <strong>hech qachon</strong> o'z hash sxemangizni yozmang. <code>bcrypt</code> yoki <code>argon2</code> kutubxonasidan foydalaning — ular salt, cost va boshqa nozikliklarni to'g'ri hal qiladi.</div>
-<h2>Register va login oqimi</h2>
+<h2 id="register-va-login-oqimi">Register va login oqimi</h2>
 <p>Salt va sekin hash bilan parolni saqlash va tekshirish oqimi qanday ko'rinadi:</p>
-<h3>Ro'yxatdan o'tish (register)</h3>
+<h3 id="ro-yxatdan-o-tish-register">Ro'yxatdan o'tish (register)</h3>
 <ol><li>Foydalanuvchi parol kiritadi;</li><li>Server tasodifiy salt yaratadi va parolni sekin hash bilan hashlaydi (bcrypt buni bir qadamda qiladi);</li><li>Bazaga <strong>faqat hash</strong> saqlanadi (bcrypt salt'ni hash ichiga qo'shib yuboradi). Asl parol hech qayerda saqlanmaydi.</li></ol>
-<h3>Tizimga kirish (login)</h3>
+<h3 id="tizimga-kirish-login">Tizimga kirish (login)</h3>
 <ol><li>Foydalanuvchi parolni qayta kiritadi;</li><li>Server bazadagi hashni oladi va kiritilgan parolni <em>o'sha salt</em> bilan qayta hashlaydi;</li><li>Ikki hashni solishtiradi — mos kelsa, parol to'g'ri (asl parolni hech qachon bilmasdan).</li></ol>
 <pre class="code"><code>// Konseptual misol (bcrypt kutubxonasi bilan)
 const bcrypt = require('bcrypt');
@@ -707,7 +727,7 @@ async function kirish(kiritilganParol, saqlanganHash) {
   return mosKeladi; // true yoki false
 }</code></pre>
 <div class="tip">Login muvaffaqiyatsiz bo'lganda "login yoki parol noto'g'ri" deb umumiy xabar bering — "parol noto'g'ri" demang. Aks holda hujumchi qaysi login mavjudligini bilib oladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Hash funksiyasi</strong> — bir tomonlama, deterministik, avalanche effektli; shifrlashdan farqli o'laroq qaytarib bo'lmaydi;</li><li>Parolni <strong>ochiq matnda saqlash</strong> — falokat; shifrlash ham yechim emas, hash kerak;</li><li>Oddiy tez hash (MD5, SHA) parol uchun <strong>yetarli emas</strong>: juda tez va rainbow jadvallarga beriladi;</li><li><strong>Salt</strong> — har parolga noyob tasodifiy qiymat; bir xil parollarni ajratadi va rainbow jadvalni foydasiz qiladi;</li><li><strong>Sekin hash</strong> (bcrypt, argon2, scrypt) — ataylab sekin, cost parametri bilan sozlanadi;</li><li>Real loyihada <strong>o'z hashingizni yozmang</strong> — bcrypt yoki argon2 kutubxonasidan foydalaning.</li></ul>
 <nav class="lesson-nav">
   <a href="shifrlash-asoslari.html"><span class="dir">← Oldingi</span><span class="ttl">Shifrlash: simmetrik va asimmetrik</span></a>
@@ -721,6 +741,6 @@ async function kirish(kiritilganParol, saqlanganHash) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

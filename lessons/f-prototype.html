@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>F.prototype — Kodla</title>
   <meta name="description" content="Konstruktor funksiyaning prototype xossasi, new bilan bog'liqligi, default prototype va constructor.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,19 @@
 <main class="content article">
 <div class="crumbs">Prototiplar, meros</div>
 <h1>F.prototype</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#f-prototype-qanday-ishlaydi">F.prototype qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#default-f-prototype-va-constructor">Default F.prototype va constructor</a></li>
+<li class="lvl2"><a href="#constructor-ni-yo-qotib-qo-yish-xavfi">constructor'ni yo'qotib qo'yish xavfi</a></li>
+<li class="lvl2"><a href="#f-prototype-faqat-new-paytida">F.prototype — faqat new paytida</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Yangi obyektlarni <code>new F()</code> ko'rinishidagi konstruktor funksiya orqali yaratishimiz mumkinligini eslaysiz. Agar konstruktor funksiyaning <code>prototype</code> xossasi obyektga teng bo'lsa, <code>new</code> operatori undan yangi obyektlarning <code>[[Prototype]]</code> sini o'rnatish uchun foydalanadi.</p>
 <div class="warn">Bu yerda ikkita turli tushunchani chalkashtirmang: <code>F.prototype</code> — bu oddiy funksiyaning oddiy xossasi (nomi shunchaki "prototype"). U obyektning yashirin <code>[[Prototype]]</code> xossasi bilan bir xil narsa EMAS, lekin ular o'zaro bog'liq.</div>
-<h2>F.prototype qanday ishlaydi?</h2>
+<h2 id="f-prototype-qanday-ishlaydi">F.prototype qanday ishlaydi?</h2>
 <p>Ideya sodda: agar <code>new F()</code> orqali obyekt yaratilsa va <code>F.prototype</code> obyekt bo'lsa, unda <code>new</code> operatori yangi obyektning <code>[[Prototype]]</code> sini <code>F.prototype</code> ga tenglashtiradi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-basic.js</span></div><textarea spellcheck="false">let animal = {
   eats: true
@@ -616,7 +629,7 @@ console.log(rabbit.name);  // Oq quyon (o'zidan)
 console.log(rabbit.eats);  // true (prototipdan = animal)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>Rabbit.prototype = animal</code> qatori shuni bildiradi: "<code>new Rabbit</code> orqali yasalgan har bir obyektning prototipi <code>animal</code> bo'lsin". Shuning uchun <code>rabbit.eats</code> zanjir orqali <code>animal</code> obyektidan topiladi.</p>
 <div class="note"><code>F.prototype</code> faqat <code>new F()</code> chaqirilgan PAYTDA ishlatiladi. Undan keyin uning qiymatini o'zgartirsangiz, avval yaratilgan obyektlar eski prototipini saqlab qoladi, faqat yangi obyektlar yangisini oladi.</div>
-<h2>Default F.prototype va constructor</h2>
+<h2 id="default-f-prototype-va-constructor">Default F.prototype va constructor</h2>
 <p>Har bir funksiyada standart (default) <code>prototype</code> xossasi mavjud — biz uni belgilamasak ham. Bu default <code>prototype</code> — faqat bitta <code>constructor</code> xossasidan iborat obyekt bo'lib, <code>constructor</code> funksiyaning o'ziga qaytib ishora qiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-constructor.js</span></div><textarea spellcheck="false">function Rabbit() {}
 // default: Rabbit.prototype = { constructor: Rabbit }
@@ -630,7 +643,7 @@ let rabbit = new Rabbit();
 // rabbit'da constructor yo'q, u prototipdan (Rabbit.prototype) keladi:
 console.log(rabbit.constructor === Rabbit); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>constructor</code> yordamida mavjud obyekt turini bilmasak ham, xuddi shunday yangi obyekt yaratishimiz mumkin: <code>let rabbit2 = new rabbit.constructor("...");</code>. Bu ba'zan obyektni yasagan funksiya noma'lum bo'lgan holatlarda foydali bo'ladi.</div>
-<h2>constructor'ni yo'qotib qo'yish xavfi</h2>
+<h2 id="constructor-ni-yo-qotib-qo-yish-xavfi">constructor'ni yo'qotib qo'yish xavfi</h2>
 <p>JavaScript <code>constructor</code> ning to'g'ri qiymatini kafolatlamaydi. Agar biz default <code>prototype</code> ni to'liq yangi obyekt bilan ALMASHTIRSAK, undagi <code>constructor</code> yo'qoladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-lost.js</span></div><textarea spellcheck="false">function Rabbit() {}
 
@@ -661,7 +674,7 @@ Hare.prototype = {
 console.log(new Rabbit().constructor === Rabbit); // true
 console.log(new Hare().constructor === Hare);     // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Amalda <code>constructor</code> xossasiga ko'p tayanmaslik ma'qul, chunki uni buzib qo'yish oson. Lekin uning qanday ishlashini bilish, ayniqsa boshqa kishilarning kodini o'qiganda, muhim.</div>
-<h2>F.prototype — faqat new paytida</h2>
+<h2 id="f-prototype-faqat-new-paytida">F.prototype — faqat new paytida</h2>
 <p>Yana bir bor ta'kidlaymiz: <code>F.prototype</code> xossasi obyekt yaratilayotgan aniq bir onda ishlatiladi. Agar keyin <code>F.prototype</code> boshqa obyektga o'zgartirilsa, bu allaqachon mavjud obyektlarga ta'sir qilmaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fproto-timing.js</span></div><textarea spellcheck="false">function Rabbit() {}
 Rabbit.prototype = { eats: true };
@@ -675,7 +688,7 @@ let newRabbit = new Rabbit(); // prototipi = {eats:false}
 
 console.log(oldRabbit.eats); // true (eski prototip)
 console.log(newRabbit.eats); // false (yangi prototip)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>F.prototype</code> — funksiyaning oddiy xossasi (yashirin <code>[[Prototype]]</code> emas);</li><li><code>new F()</code> yangi obyekt yaratganda uning <code>[[Prototype]]</code> sini <code>F.prototype</code> ga tenglashtiradi;</li><li><code>F.prototype</code> obyekt bo'lishi kerak, aks holda <code>new</code> uni e'tiborsiz qoldiradi;</li><li>Har bir funksiyaning default <code>prototype</code> si <code>{ constructor: F }</code> ko'rinishida bo'ladi;</li><li><code>constructor</code> obyektlarga meros orqali o'tadi va ularni yaratgan funksiyaga ishora qiladi;</li><li>Default <code>prototype</code> ni to'liq almashtirsangiz, <code>constructor</code> yo'qoladi — uni qo'lda tiklang.</li></ul>
 <nav class="lesson-nav">
   <a href="prototip-meros.html"><span class="dir">← Oldingi</span><span class="ttl">Prototipli meros</span></a>
@@ -689,6 +702,6 @@ console.log(newRabbit.eats); // false (yangi prototip)</textarea><div class="pg-
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guruhlash va tutish — Kodla</title>
   <meta name="description" content="Qavslar bilan qismlarni guruhlash; guruh natijalari (match) va nomli guruhlar (?<name>); replace da $1 va $<name>; tutmaydigan guruh (?:...).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Guruhlash va tutish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#guruhga-kvantor-qo-llash">Guruhga kvantor qo'llash</a></li>
+<li class="lvl2"><a href="#guruh-natijalari-tutib-olish">Guruh natijalari (tutib olish)</a></li>
+<li class="lvl2"><a href="#matchall-bilan-barcha-guruhlar">matchAll bilan barcha guruhlar</a></li>
+<li class="lvl2"><a href="#nomli-guruhlar">Nomli guruhlar (? )</a></li>
+<li class="lvl2"><a href="#replace-da-guruhlardan-foydalanish">replace da guruhlardan foydalanish</a></li>
+<li class="lvl2"><a href="#tutmaydigan-guruh">Tutmaydigan guruh (?:...)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Muntazam ifodada bir qism belgilarni yumaloq qavs <code>(...)</code> ichiga olsak, ular <strong>guruh</strong>ga aylanadi. Guruhlar ikki foyda beradi: birinchidan, kvantorni bir necha belgiga birdan qo'llash imkonini beradi; ikkinchidan, mos kelgan qismni alohida <strong>tutib olib</strong> (capture), keyinchalik ishlatish imkonini beradi.</p>
-<h2>Guruhga kvantor qo'llash</h2>
+<h2 id="guruhga-kvantor-qo-llash">Guruhga kvantor qo'llash</h2>
 <p>Qavssiz kvantor faqat bitta belgiga ta'sir qiladi. Qavs bilan esa butun ketma-ketlikni takrorlashimiz mumkin. Masalan, <code>(go)+</code> — bir yoki undan ko'p "go":</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>guruh-kvantor.js</span></div><textarea spellcheck="false">console.log("gogogo".match(/(go)+/)[0]);  // gogogo
 console.log("go go".match(/(go)+/)[0]);   // go  (bo'sh joy ketma-ketlikni uzadi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
@@ -606,7 +621,7 @@ console.log("go go".match(/(go)+/)[0]);   // go  (bo'sh joy ketma-ketlikni uzadi
 
 console.log("site.com".match(regexp));       // [ 'site.com' ]
 console.log("mail.google.com".match(regexp)); // [ 'mail.google.com' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Guruh natijalari (tutib olish)</h2>
+<h2 id="guruh-natijalari-tutib-olish">Guruh natijalari (tutib olish)</h2>
 <p>Har bir <code>(...)</code> guruh mos kelgan qismni alohida saqlaydi. <code>str.match(regexp)</code> (bayroqsiz, <code>g</code> siz) chaqirilganda natija massivi qaytadi:</p>
 <ul><li><code>[0]</code> — butun mos kelish (to'liq topilgan matn);</li><li><code>[1]</code> — birinchi guruh mazmuni;</li><li><code>[2]</code> — ikkinchi guruh mazmuni, va hokazo.</li><li>Guruhlar <strong>ochiluvchi qavs</strong> tartibida raqamlanadi.</li></ul>
 <p>Masalan, HTML tegdan uning nomini ajratamiz. <code>&lt;(\w+)&gt;</code> — butun teg tutiladi, ichidagi <code>(\w+)</code> esa tegning nomini alohida saqlaydi:</p>
@@ -624,7 +639,7 @@ console.log(m[2]);  // 2026        (yil)
 console.log(m[3]);  // 07          (oy)
 console.log(m[4]);  // 01          (kun)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Agar guruh ixtiyoriy (masalan <code>(...)?</code>) bo'lib, mos kelmasa, uning natijasi massivda <code>undefined</code> bo'ladi. Guruhning raqami esa o'zgarmaydi — u qavs tartibi bo'yicha aniqlanadi.</div>
-<h2>matchAll bilan barcha guruhlar</h2>
+<h2 id="matchall-bilan-barcha-guruhlar">matchAll bilan barcha guruhlar</h2>
 <p><code>g</code> bayrog'i bilan oddiy <code>match</code> guruhlarni yo'qotadi — u faqat butun mos kelishlar ro'yxatini qaytaradi. Barcha mos kelishlarni <em>va</em> ularning guruhlarini olish uchun <code>str.matchAll(regexp)</code> ishlatiladi (u iterator qaytaradi):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>guruh-matchall.js</span></div><textarea spellcheck="false">let str = "&lt;h1&gt;Bosh&lt;/h1&gt; &lt;p&gt;Matn&lt;/p&gt;";
 let regexp = /&lt;(\w+)&gt;/g;
@@ -635,7 +650,7 @@ for (let m of str.matchAll(regexp)) {
 // &lt;h1&gt; -&gt; nomi: h1
 // &lt;p&gt; -&gt; nomi: p</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>matchAll</code> iterator qaytaradi. To'liq massiv kerak bo'lsa, <code>Array.from(str.matchAll(re))</code> yoki <code>[...str.matchAll(re)]</code> ishlatiladi.</div>
-<h2>Nomli guruhlar (?<name>)</h2>
+<h2 id="nomli-guruhlar">Nomli guruhlar (?<name>)</h2>
 <p>Guruhlarni raqam bo'yicha eslab yurish noqulay. Ularga <strong>nom</strong> berish mumkin: qavs boshiga <code>?&lt;name&gt;</code> qo'yiladi. Natijada guruh <code>match.groups</code> obyektida nom bo'yicha ochiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nomli-guruh.js</span></div><textarea spellcheck="false">let str = "Sana: 2026-07-01";
 let regexp = /(?&lt;yil&gt;\d{4})-(?&lt;oy&gt;\d{2})-(?&lt;kun&gt;\d{2})/;
@@ -653,7 +668,7 @@ for (let m of str.matchAll(regexp)) {
 }
 // 01.07.2026
 // 31.12.1999</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>replace da guruhlardan foydalanish</h2>
+<h2 id="replace-da-guruhlardan-foydalanish">replace da guruhlardan foydalanish</h2>
 <p><code>str.replace(regexp, o'rniga)</code> da almashtiruvchi matn ichida guruhlarga murojaat qilish mumkin:</p>
 <ul><li><code>$1</code>, <code>$2</code>, ... — mos raqamli guruh mazmuni;</li><li><code>$&lt;name&gt;</code> — nomli guruh mazmuni;</li><li><code>$&amp;</code> — butun mos kelish;</li><li><code>$$</code> — oddiy dollar belgisi (<code>$</code>).</li></ul>
 <p>Sana formatini <code>yil-oy-kun</code> dan <code>kun.oy.yil</code> ga o'zgartiramiz. Raqamli guruhlar bilan:</p>
@@ -667,7 +682,7 @@ let regexp = /(?&lt;yil&gt;\d{4})-(?&lt;oy&gt;\d{2})-(?&lt;kun&gt;\d{2})/;
 let natija = str.replace(regexp, "$&lt;kun&gt;.$&lt;oy&gt;.$&lt;yil&gt;");
 
 console.log(natija);  // 01.07.2026</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Tutmaydigan guruh (?:...)</h2>
+<h2 id="tutmaydigan-guruh">Tutmaydigan guruh (?:...)</h2>
 <p>Ba'zan guruh faqat kvantor qo'llash uchun kerak, lekin uning mazmunini <em>saqlashni istamaymiz</em>. Bunday guruhni <code>?:</code> bilan boshlaymiz — u <strong>tutmaydigan</strong> (non-capturing) bo'ladi va natija massiviga tushmaydi.</p>
 <p>Masalan, "go" takrorini tutamiz, lekin faqat oxirida qolgan so'z kerak. Oddiy guruh keraksiz <code>[1]</code> yaratadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tutmaydigan-guruh.js</span></div><textarea spellcheck="false">// Oddiy guruh: keraksiz [1] paydo bo'ladi
@@ -679,7 +694,7 @@ console.log(m1[2]);  // Ali
 let m2 = "gogogo Ali".match(/(?:go)+ (\w+)/);
 console.log(m2[1]);  // Ali  (endi ism to'g'ri [1] da)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>(?:...)</code> ni ishlatish kod aniqligini oshiradi va katta shablonlarda ozgina tezlik beradi, chunki dvigatel keraksiz qismlarni saqlab yurmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>(...)</code> — qismni guruhlaydi va uning mazmunini <strong>tutib oladi</strong>;</li><li>Guruhlar ochiluvchi qavs tartibida raqamlanadi: <code>match[1]</code>, <code>match[2]</code>, ...;</li><li><code>g</code> bilan barcha guruhlarni olish uchun <code>matchAll</code> ishlatiladi;</li><li>Nomli guruh: <code>(?&lt;name&gt;...)</code> -> <code>match.groups.name</code>;</li><li><code>replace</code> da: <code>$1</code>, <code>$&lt;name&gt;</code>, <code>$&amp;</code>, <code>$$</code>;</li><li><code>(?:...)</code> — tutmaydigan guruh: faqat guruhlaydi, lekin natijaga tushmaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-quantifiers.html"><span class="dir">← Oldingi</span><span class="ttl">Kvantorlar: +, *, ?, {n,m}</span></a>
@@ -693,6 +708,6 @@ console.log(m2[1]);  // Ali  (endi ism to'g'ri [1] da)</textarea><div class="pg-
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

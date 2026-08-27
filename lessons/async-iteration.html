@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asinxron iteratsiya va generatorlar — Kodla</title>
   <meta name="description" content="for await..of, Symbol.asyncIterator va async generatorlar — ma'lumot asta-sekin, so'rovlar orqali kelganda ishlatiladi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Generatorlar, ilg'or iteratsiya</div>
 <h1>Asinxron iteratsiya va generatorlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#oddiy-iteratsiyani-eslaylik">Oddiy iteratsiyani eslaylik</a></li>
+<li class="lvl2"><a href="#sinxron-va-asinxron-iteratsiya-farqi">Sinxron va asinxron iteratsiya farqi</a></li>
+<li class="lvl2"><a href="#symbol-asynciterator">Symbol.asyncIterator</a></li>
+<li class="lvl2"><a href="#asinxron-generatorlar-async-function">Asinxron generatorlar (async function*)</a></li>
+<li class="lvl2"><a href="#generator-orqali-asinxron-iterativ-obyekt">Generator orqali asinxron iterativ obyekt</a></li>
+<li class="lvl2"><a href="#amaliy-misol-sahifama-sahifa-ma-lumot-yuklash">Amaliy misol: sahifama-sahifa ma'lumot yuklash</a></li>
+<li class="lvl2"><a href="#qachon-asinxron-iteratsiya-kerak">Qachon asinxron iteratsiya kerak?</a></li>
+<li class="lvl2"><a href="#muhim-nozikliklar-va-tuzoqlar">Muhim nozikliklar va tuzoqlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Asinxron iteratsiya bizga ma'lumot <strong>asinxron ravishda</strong>, ya'ni <code>Promise</code> lar orqali qismlar bo'lib kelganda uni birma-bir qayta ishlashga imkon beradi. Masalan, tarmoqdan sahifama-sahifa yuklanadigan ma'lumot — bu asinxron iteratsiya uchun ideal holat.</p>
-<h2>Oddiy iteratsiyani eslaylik</h2>
+<h2 id="oddiy-iteratsiyani-eslaylik">Oddiy iteratsiyani eslaylik</h2>
 <p>Avval sinxron (oddiy) iteratsiyani eslaymiz. Iterativ obyekt yaratish uchun unga <code>Symbol.iterator</code> metodini qo'shamiz:</p>
 <pre class="code"><code>let range = {
   from: 1,
@@ -623,12 +640,12 @@ for (let value of range) {
   console.log(value); // 1, 2, 3, 4, 5
 }</code></pre>
 <p>Bu yerda barcha qadamlar <strong>sinxron</strong> — <code>next()</code> darhol tayyor <code>{value, done}</code> obyektini qaytaradi. Kutish yo'q. Ammo hayotda ko'p ma'lumotlar <em>vaqt talab qilib</em> keladi: tarmoqdan yuklab olish, fayl o'qish, ma'lumotlar bazasidan so'rov. Bunday holatlar uchun asinxron iteratsiya kerak.</p>
-<h2>Sinxron va asinxron iteratsiya farqi</h2>
+<h2 id="sinxron-va-asinxron-iteratsiya-farqi">Sinxron va asinxron iteratsiya farqi</h2>
 <p>Asinxron iteratsiya sinxronidan uch nuqtada farq qiladi. Farqlarni jadval kabi solishtiramiz:</p>
 <ul><li><strong>Metod nomi:</strong> sinxronda <code>Symbol.iterator</code>, asinxronda <code>Symbol.asyncIterator</code>;</li><li><strong>next() qaytaruvchisi:</strong> sinxronda oddiy <code>{value, done}</code> obyekt, asinxronda <code>{value, done}</code> ga <em>resolve</em> bo'ladigan <code>Promise</code>;</li><li><strong>Sikl:</strong> sinxronda <code>for..of</code>, asinxronda <code>for await..of</code>.</li></ul>
 <div class="note">Asinxron iteratorda <code>next()</code> <code>Promise</code> qaytargani uchun, <code>for await..of</code> har bir qadamda avtomatik ravishda <code>await</code> qiladi — ya'ni <code>Promise</code> bajarilishini kutadi, so'ng keyingi qadamga o'tadi.</div>
 <div class="warn">Asinxron iterativlar bilan spread sintaksisi <code>...</code> <strong>ishlamaydi</strong> — u <code>Symbol.iterator</code> (sinxron) ni kutadi, <code>Symbol.asyncIterator</code> ni emas. Xuddi shunday, oddiy <code>for..of</code> ham asinxron iterativ bilan ishlamaydi.</div>
-<h2>Symbol.asyncIterator</h2>
+<h2 id="symbol-asynciterator">Symbol.asyncIterator</h2>
 <p>Obyektni asinxron iterativ qilish uchun unga <code>Symbol.iterator</code> emas, <code>Symbol.asyncIterator</code> metodini qo'shamiz. Uning <code>next()</code> metodi <code>Promise</code> qaytarishi (yoki <code>async</code> bo'lishi) kerak.</p>
 <p>Quyidagi misolda <code>range</code> obyektini asinxron qilamiz — har qiymat 1 sekundlik kechikish bilan keladi:</p>
 <pre class="code"><code>let range = {
@@ -664,7 +681,7 @@ for (let value of range) {
 })();</code></pre>
 <p>E'tibor bering: <code>next()</code> ichida <code>await</code> ishlatilgani uchun u <code>async</code> deb belgilandi, va sikl <code>for await..of</code> bo'ldi. Har bir iteratsiya <code>Promise</code> bajarilishini kutadi.</p>
 <div class="warn"><code>for await..of</code> faqat <code>async</code> funksiya ichida ishlatilishi mumkin (yoki top-level modul kontekstida). Oddiy sinxron funksiya ichida uni ishlata olmaysiz.</div>
-<h2>Asinxron generatorlar (async function*)</h2>
+<h2 id="asinxron-generatorlar-async-function">Asinxron generatorlar (async function*)</h2>
 <p>Oddiy generatorlar sinxron edi — ular ichida <code>await</code> ishlatib bo'lmaydi va barcha qiymatlar sinxron chiqadi. <strong>Asinxron generator</strong> esa <code>async function*</code> orqali yaratiladi va uning ichida <code>await</code> ishlatish mumkin.</p>
 <pre class="code"><code>async function* generateSequence(start, end) {
   for (let i = start; i &lt;= end; i++) {
@@ -694,7 +711,7 @@ for (let value of range) {
   console.log(await g.next()); // {value: 2, done: false}
   console.log(await g.next()); // {value: undefined, done: true}
 })();</code></pre>
-<h2>Generator orqali asinxron iterativ obyekt</h2>
+<h2 id="generator-orqali-asinxron-iterativ-obyekt">Generator orqali asinxron iterativ obyekt</h2>
 <p>Sinxron dunyodagidek, asinxron obyektlarni ham generator yordamida ancha soddalashtirish mumkin. <code>Symbol.asyncIterator</code> ni asinxron generator qilib e'lon qilamiz:</p>
 <pre class="code"><code>let range = {
   from: 1,
@@ -716,7 +733,7 @@ for (let value of range) {
 })();</code></pre>
 <p>Bu variant qo'lda <code>next()</code>, <code>current</code>, <code>last</code> yozishdan ancha qisqa va o'qishga oson. Generator holatni (joriy qiymat, sikl joyi) o'zida avtomatik saqlaydi.</p>
 <div class="tip">Umumiy qoida: agar iteratsiya mantig'i murakkab bo'lsa yoki holatni qo'lda boshqarish zerikarli bo'lsa — generator (sinxron yoki asinxron) yozing. U kodni sezilarli darajada soddalashtiradi.</div>
-<h2>Amaliy misol: sahifama-sahifa ma'lumot yuklash</h2>
+<h2 id="amaliy-misol-sahifama-sahifa-ma-lumot-yuklash">Amaliy misol: sahifama-sahifa ma'lumot yuklash</h2>
 <p>Asinxron generatorlar eng ko'p <strong>sahifalash</strong> (pagination) uchun ishlatiladi. Ko'p API'lar ma'lumotni bo'laklarga (sahifalarga) bo'lib beradi: har so'rov bir sahifa qaytaradi, unda keyingi sahifa manzili (URL) bo'ladi. Asinxron generator bu jarayonni chiroyli inkapsulyatsiya qiladi:</p>
 <pre class="code"><code>// Tasavvur qiling: bu funksiya URL bo'yicha bir sahifani yuklaydi
 // va { items: [...], next: 'keyingi-url yoki null' } qaytaradi.
@@ -744,15 +761,15 @@ async function* fetchCommits(url) {
 })();</code></pre>
 <p>Bu kodning go'zalligi shundaki — foydalanuvchi (<code>for await..of</code> yozgan kod) sahifalash haqida umuman o'ylamaydi. Generator sahifalarni orqa fonda, kerak bo'lganda yuklaydi. <code>break</code> qilinsa, keyingi sahifalar umuman so'ralmaydi — bu tarmoq trafigini tejaydi.</p>
 <div class="note">Bu — <em>dangasa (lazy) yuklash</em>ning kuchli namunasi: ma'lumot faqat <code>for await..of</code> keyingi qiymat so'raganda yuklanadi. Foydalanuvchi 100 elementdan keyin to'xtasa, million elementli manba ham to'liq yuklanmaydi.</div>
-<h2>Qachon asinxron iteratsiya kerak?</h2>
+<h2 id="qachon-asinxron-iteratsiya-kerak">Qachon asinxron iteratsiya kerak?</h2>
 <p>Asinxron iteratsiyani qachon tanlash kerakligini aniq belgilaymiz:</p>
 <ul><li><strong>Ma'lumot asta-sekin keladi:</strong> tarmoq so'rovlari, fayllarni oqim (stream) sifatida o'qish, ma'lumotlar bazasidan katta natijalarni kursor orqali olish;</li><li><strong>Cheksiz yoki noma'lum uzunlikdagi oqim:</strong> real vaqt hodisalari, WebSocket xabarlari;</li><li><strong>Sahifalash:</strong> API'dan sahifama-sahifa yuklash (yuqoridagi misol);</li><li><strong>Resurslarni tejash:</strong> hamma ma'lumotni bir vaqtda xotiraga yuklash o'rniga, kerakli qismini dangasa olish.</li></ul>
 <p>Agar ma'lumotingiz allaqachon xotirada tayyor bo'lsa (oddiy massiv, string, <code>Map</code>) — asinxron iteratsiya <strong>kerak emas</strong>, oddiy <code>for..of</code> yetarli va tezroq.</p>
 <div class="tip">Qoidani sodda eslang: agar iteratsiyaning <em>har bir qadami</em> kutishni (<code>Promise</code>) talab qilsa — asinxron iteratsiya (<code>for await..of</code>, <code>async function*</code>) ishlating. Aks holda — oddiy iteratsiya.</div>
-<h2>Muhim nozikliklar va tuzoqlar</h2>
+<h2 id="muhim-nozikliklar-va-tuzoqlar">Muhim nozikliklar va tuzoqlar</h2>
 <ul><li><code>for await..of</code> ni sinxron funksiya ichida ishlatib bo'lmaydi — faqat <code>async</code> funksiya ichida yoki top-level modulda;</li><li>Spread <code>...</code> va oddiy <code>for..of</code> asinxron iterativ bilan <strong>ishlamaydi</strong> — ular sinxron <code>Symbol.iterator</code> ni kutadi;</li><li>Asinxron generatorning <code>next()</code> i <code>Promise</code> qaytaradi — qo'lda chaqirsangiz <code>await</code> qiling;</li><li><code>Symbol.asyncIterator</code> va <code>Symbol.iterator</code> ni bir obyektga birga qo'yish mumkin — kontekstga qarab keraklisi tanlanadi.</li></ul>
 <div class="warn">Katta xatolik: asinxron generator ichida <code>await</code> ishlatishni unutmang. Agar asinxronlik kerak bo'lmasa, umuman oddiy (sinxron) generator yozing — <code>async</code> ortiqcha yuk qo'shadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Asinxron iteratsiya ma'lumot <code>Promise</code> lar orqali asta-sekin kelganda ishlatiladi;</li><li>Asinxron iterativ obyektda <code>Symbol.asyncIterator</code> metodi bo'ladi, uning <code>next()</code> i <code>Promise</code> qaytaradi;</li><li>Bunday obyektlarni <code>for await..of</code> sikli bilan aylanamiz (faqat <code>async</code> funksiya ichida);</li><li><code>async function*</code> — asinxron generator; ichida <code>await</code> ishlatish mumkin;</li><li>Asinxron generatorlar sahifalash, oqimlar, cheksiz asinxron ketma-ketliklar uchun ideal;</li><li>Spread <code>...</code> va oddiy <code>for..of</code> asinxron iterativlar bilan ishlamaydi;</li><li>Ma'lumot allaqachon xotirada bo'lsa — oddiy iteratsiya yetarli, asinxroni shart emas.</li></ul>
 <nav class="lesson-nav">
   <a href="generator.html"><span class="dir">← Oldingi</span><span class="ttl">Generatorlar</span></a>
@@ -766,6 +783,6 @@ async function* fetchCommits(url) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eval: kod satrini ishga tushirish — Kodla</title>
   <meta name="description" content="eval() funksiyasi bilan satr ko'rinishidagi kodni bajarish, uning ko'lami, xavflari va zamonaviy muqobillari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,18 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>Eval: kod satrini ishga tushirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#sintaksis">Sintaksis</a></li>
+<li class="lvl2"><a href="#eval-ko-lami-scope">eval ko'lami (scope)</a></li>
+<li class="lvl2"><a href="#nega-eval-xavfli">Nega eval xavfli?</a></li>
+<li class="lvl2"><a href="#muqobillar">Muqobillar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>eval</code> — o'rnatilgan funksiya bo'lib, satr (string) ko'rinishida berilgan JavaScript kodini ishga tushirib, natijasini qaytaradi. U kuchli, ammo xavfli — shu sabab zamonaviy kodda deyarli ishlatilmaydi.</p>
-<h2>Sintaksis</h2>
+<h2 id="sintaksis">Sintaksis</h2>
 <p><code>eval(code)</code> satrni kod sifatida bajaradi va oxirgi ifodaning qiymatini qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-oddiy.js</span></div><textarea spellcheck="false">let natija = eval("2 + 2 * 3");
 console.log(natija);  // 8
@@ -607,7 +620,7 @@ console.log(eval(kod));  // 100</textarea><div class="pg-actions"><button class=
 <p>Kod bir nechta ifoda va operatordan iborat bo'lishi mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-kop.js</span></div><textarea spellcheck="false">let kod = "let a = 5; let b = 7; a * b + 1";
 console.log(eval(kod));  // 36</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>eval ko'lami (scope)</h2>
+<h2 id="eval-ko-lami-scope">eval ko'lami (scope)</h2>
 <p><code>eval</code> ichidagi kod <strong>joriy leksik ko'lamda</strong> ishlaydi, ya'ni atrofdagi o'zgaruvchilarni ko'ra oladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>eval-scope.js</span></div><textarea spellcheck="false">let salom = "Salom";
 
@@ -619,11 +632,11 @@ eval("let mahalliy = 100; console.log(mahalliy)");  // 100
 
 // bu yerda 'mahalliy' mavjud emas
 console.log(typeof mahalliy);  // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Nega eval xavfli?</h2>
+<h2 id="nega-eval-xavfli">Nega eval xavfli?</h2>
 <p><code>eval</code> odatda quyidagi sabablarga ko'ra tavsiya etilmaydi:</p>
 <ul><li><strong>Xavfsizlik</strong> — agar satr foydalanuvchidan yoki tashqi manbadan kelsa, unda zararli kod bo'lishi mumkin. <code>eval</code> uni cheklovsiz bajaradi;</li><li><strong>Sekinlik</strong> — dvigatel <code>eval</code> ichidagi kodni oldindan kompilyatsiya va optimallashtira olmaydi;</li><li><strong>Nosozliklarni tuzatishda qiyinchilik</strong> — satr ichidagi kodni tahrirlagichlar tekshirmaydi, xatolarni topish qiyin;</li><li><strong>Minifikatsiya muammosi</strong> — kod qisqartirilganda tashqi o'zgaruvchilar nomi o'zgaradi, <code>eval</code> ichidagi satr esa eskicha qoladi va buziladi.</li></ul>
 <div class="warn">Foydalanuvchi kiritgan matnni <strong>hech qachon</strong> to'g'ridan-to'g'ri <code>eval</code>ga bermang. Bu ilovangizni to'liq egallab olishga imkon beruvchi jiddiy xavfsizlik teshigi.</div>
-<h2>Muqobillar</h2>
+<h2 id="muqobillar">Muqobillar</h2>
 <p>Deyarli har doim <code>eval</code>siz yaxshiroq yechim topiladi:</p>
 <ul><li>Obyekt xususiyatiga dinamik nom bilan murojaat — <code>obj[nomSatr]</code> (kvadrat qavs);</li><li>JSON matnini o'qish — <code>JSON.parse(satr)</code> (<code>eval</code>dan xavfsiz va tez);</li><li>Nomga ko'ra funksiya chaqirish — funksiyalarni obyektga ("lug'atga") joylash;</li><li>Cheklangan, izolyatsiyalangan bajarish kerak bo'lsa — <code>new Function</code> yoki Web Worker.</li></ul>
 <p>Dinamik xususiyat nomi bilan <code>eval</code>siz ishlash:</p>
@@ -637,7 +650,7 @@ console.log(user[kalit]);  // 25</textarea><div class="pg-actions"><button class
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>new-function.js</span></div><textarea spellcheck="false">let qoshuv = new Function("a", "b", "return a + b");
 console.log(qoshuv(3, 4));  // 7</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Agar dinamik kod juda zarur bo'lsa, <code>eval</code> o'rniga <code>new Function</code>ni afzal ko'ring — u tashqi ko'lamga kira olmaydi, demak kamroq xavf tug'diradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>eval(code)</code> satr ko'rinishidagi kodni bajaradi va oxirgi ifoda qiymatini qaytaradi;</li><li>U joriy ko'lamni ko'radi; qat'iy rejimda o'zgaruvchilari sizib chiqmaydi;</li><li>Xavfsizlik, sekinlik va nosozlik tuzatish sabablariga ko'ra tavsiya etilmaydi;</li><li>Ko'p hollarda kvadrat qavs, <code>JSON.parse</code> yoki obyekt-lug'at yechadi;</li><li>Chindan kerak bo'lsa — <code>new Function</code> xavfsizroq muqobil.</li></ul>
 <nav class="lesson-nav">
   <a href="proxy-reflect.html"><span class="dir">← Oldingi</span><span class="ttl">Proxy va Reflect</span></a>
@@ -651,6 +664,6 @@ console.log(qoshuv(3, 4));  // 7</textarea><div class="pg-actions"><button class
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

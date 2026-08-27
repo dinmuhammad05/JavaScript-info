@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buzilgan kirish nazorati va IDOR — Kodla</title>
   <meta name="description" content="Autentifikatsiya va avtorizatsiya farqi, Broken Access Control (2021 #1), IDOR konsepti, zaif va xavfsiz kod, eng kam imtiyoz va himoya cheklisti.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,20 +599,33 @@
 <main class="content article">
 <div class="crumbs">Web ilova xavfsizligi (OWASP Top 10)</div>
 <h1>Buzilgan kirish nazorati va IDOR</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#autentifikatsiya-vs-avtorizatsiya">Autentifikatsiya vs avtorizatsiya</a></li>
+<li class="lvl2"><a href="#broken-access-control-nima">Broken Access Control nima?</a></li>
+<li class="lvl2"><a href="#idor-obyektga-to-g-ridan-to-g-ri-havola-zaifligi">IDOR — obyektga to'g'ridan-to'g'ri havola zaifligi</a></li>
+<li class="lvl2"><a href="#zaif-kod-server-egalikni-tekshirmaydi">Zaif kod: server egalikni tekshirmaydi</a></li>
+<li class="lvl2"><a href="#xavfsiz-kod-har-so-rovda-egalik-va-rolni-tekshirish">Xavfsiz kod: har so'rovda egalik va rolni tekshirish</a></li>
+<li class="lvl2"><a href="#egalikni-tekshirish-g-oyasini-modellashtirish">Egalikni tekshirish g'oyasini modellashtirish</a></li>
+<li class="lvl2"><a href="#eng-kam-imtiyoz-tamoyili">Eng kam imtiyoz tamoyili</a></li>
+<li class="lvl2"><a href="#himoya-cheklisti">Himoya cheklisti</a></li>
+  </ul>
+</details>
 <p class="lead">Foydalanuvchi tizimga kirdi — bu uni hamma narsaga haqli qiladimi? Yo'q. Aynan shu savolga noto'g'ri javob berish OWASP Top 10 ning 2021-yil ro'yxatida <strong>birinchi o'rinni</strong> egallagan zaiflikni — buzilgan kirish nazoratini keltirib chiqaradi. Bu darsda biz kirish nazorati nima ekanini, u qanday buzilishini va har so'rovda uni to'g'ri tekshirishni o'rganamiz.</p>
-<h2>Autentifikatsiya vs avtorizatsiya</h2>
+<h2 id="autentifikatsiya-vs-avtorizatsiya">Autentifikatsiya vs avtorizatsiya</h2>
 <p>Ko'p dasturchi bu ikki tushunchani chalkashtiradi, holbuki ular butunlay boshqa vazifani bajaradi:</p>
 <ul><li><strong>Autentifikatsiya (authentication):</strong> "Sen kimsan?" degan savolga javob. Foydalanuvchining kimligini tasdiqlash — login va parol, token orqali;</li><li><strong>Avtorizatsiya (authorization):</strong> "Senga nima qilishga ruxsat bor?" degan savolga javob. Aniqlangan foydalanuvchining biror amalga yoki ma'lumotga huquqi borligini tekshirish.</li></ul>
 <p>Xavfsizlik xatolarining aksariyati aynan <strong>ikkinchisi unutilgani</strong> uchun sodir bo'ladi. Dasturchi "foydalanuvchi kirgan, demak ishonamiz" deb o'ylaydi va har bir amalda uning huquqini qayta tekshirishni unutadi.</p>
-<h2>Broken Access Control nima?</h2>
+<h2 id="broken-access-control-nima">Broken Access Control nima?</h2>
 <p><strong>Kirish nazorati</strong> (access control) — bu "kim nimaga kira oladi" qoidalarini amalga oshiruvchi mexanizm. U <em>buzilgan</em> deyilsa, demak foydalanuvchi o'ziga ruxsat etilmagan ma'lumotni ko'ra oladi yoki amalni bajara oladi.</p>
 <p>Bunga misollar:</p>
 <ul><li>Oddiy foydalanuvchi administrator sahifasiga (masalan, <code>/admin</code>) kira oladi;</li><li>Foydalanuvchi boshqa birovning shaxsiy ma'lumotini ko'radi;</li><li>Foydalanuvchi o'zining rolini yoki huquqini so'rov orqali o'zgartira oladi.</li></ul>
-<h2>IDOR — obyektga to'g'ridan-to'g'ri havola zaifligi</h2>
+<h2 id="idor-obyektga-to-g-ridan-to-g-ri-havola-zaifligi">IDOR — obyektga to'g'ridan-to'g'ri havola zaifligi</h2>
 <p><strong>IDOR</strong> (Insecure Direct Object Reference) — kirish nazorati buzilishining eng klassik ko'rinishidir. Konseptual g'oyasi oddiy: agar ma'lumotga URL yoki so'rovdagi identifikator (<code>id</code>) orqali murojaat qilinsa va server bu ma'lumot <em>so'rayotgan foydalanuvchiga tegishli ekanini tekshirmasa</em>, muammo tug'iladi.</p>
 <p>Tasavvur qiling, foydalanuvchi o'z hisobvarag'ini <code>/api/hisob/1005</code> manzilida ko'radi. Agar u shunchaki raqamni <code>1006</code> ga o'zgartirsa va server "bu hisob senikimi?" deb tekshirmasa, u begona odamning ma'lumotini ko'radi. Bu — IDOR.</p>
 <div class="note">Diqqat qiling: bu yerda hech qanday "buzish" yoki murakkab hujum yo'q. Muammoning butun mohiyati — <strong>serverning bitta tekshiruvni tashlab ketgani</strong>. Xavfsizlik ko'pincha aynan shunday oddiy, unutilgan tekshiruvdan buziladi.</div>
-<h2>Zaif kod: server egalikni tekshirmaydi</h2>
+<h2 id="zaif-kod-server-egalikni-tekshirmaydi">Zaif kod: server egalikni tekshirmaydi</h2>
 <p>Quyidagi kod aynan IDOR zaifligini o'zida saqlaydi — u <code>id</code> bo'yicha ma'lumotni oladi, lekin uning so'rovchiga tegishli ekanini tekshirmaydi:</p>
 <pre class="code"><code>// ZAIF: egalik tekshirilmaydi
 app.get('/api/hisob/:id', async (req, res) =&gt; {
@@ -617,7 +633,7 @@ app.get('/api/hisob/:id', async (req, res) =&gt; {
   // Muammo: bu hisob req.user ga tegishlimi? Tekshirilmadi!
   res.json(hisob);
 });</code></pre>
-<h2>Xavfsiz kod: har so'rovda egalik va rolni tekshirish</h2>
+<h2 id="xavfsiz-kod-har-so-rovda-egalik-va-rolni-tekshirish">Xavfsiz kod: har so'rovda egalik va rolni tekshirish</h2>
 <p>To'g'ri yechim — ma'lumotni qaytarishdan oldin uning aynan shu foydalanuvchiga tegishli ekanini (yoki foydalanuvchida yetarli rol borligini) tekshirish:</p>
 <pre class="code"><code>// XAVFSIZ: egalik server tomonida tekshiriladi
 app.get('/api/hisob/:id', async (req, res) =&gt; {
@@ -632,7 +648,7 @@ app.get('/api/hisob/:id', async (req, res) =&gt; {
   res.json(hisob);
 });</code></pre>
 <p>E'tibor bering: biz begona ma'lumotni so'raganda <code>404</code> yoki <code>403</code> qaytaramiz, lekin "bu hisob mavjud, ammo senga ruxsat yo'q" deb ortiqcha ma'lumot bermaymiz. Bu ham himoyaning bir qismi.</p>
-<h2>Egalikni tekshirish g'oyasini modellashtirish</h2>
+<h2 id="egalikni-tekshirish-g-oyasini-modellashtirish">Egalikni tekshirish g'oyasini modellashtirish</h2>
 <p>Quyidagi interaktiv misolda biz sof mantiqni — foydalanuvchi o'ziga tegishli bo'lmagan resursga murojaat qilganda ruxsatni rad etishni — soddalashtirilgan ko'rinishda ko'rsatamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>egalik-tekshirish.js</span></div><textarea spellcheck="false">// Soddalashtirilgan resurslar bazasi
 const hujjatlar = [
@@ -657,11 +673,11 @@ console.log(hujjatOl(1, 'aziz'));
 // Aziz Boburning hujjatini so'raydi — rad etiladi
 console.log(hujjatOl(2, 'aziz'));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rib turganingizdek, butun himoya bitta shartda — <code>h.egaId !== joriyFoydalanuvchi</code> — jamlangan. Aynan shu qatorni tushirib qoldirish IDOR zaifligini yaratadi.</p>
-<h2>Eng kam imtiyoz tamoyili</h2>
+<h2 id="eng-kam-imtiyoz-tamoyili">Eng kam imtiyoz tamoyili</h2>
 <p><strong>Eng kam imtiyoz</strong> (principle of least privilege) — har bir foydalanuvchi, rol yoki komponent faqat o'z vazifasini bajarish uchun <em>zarur bo'lgan minimal</em> huquqqa ega bo'lishi kerak degan tamoyildir.</p>
 <ul><li>Yangi foydalanuvchiga standart holatda eng kam huquq bering, keyin kerak bo'lsa qo'shing;</li><li>Administrator huquqini faqat haqiqatan zarur bo'lganlarga bering;</li><li>Rollarni aniq belgilang: o'quvchi, muharrir, admin — har biriga faqat kerakli amallar.</li></ul>
 <p>Bu tamoyil zaiflik yuzaga kelganda ham zararni cheklaydi: agar oddiy foydalanuvchi hisobi buzilsa, hujumchi faqat oz huquqqa ega bo'ladi, butun tizimga emas.</p>
-<h2>Himoya cheklisti</h2>
+<h2 id="himoya-cheklisti">Himoya cheklisti</h2>
 <p>Kirish nazoratini to'g'ri tashkil qilish uchun quyidagilarni tekshiring:</p>
 <ul><li><strong>Standart holatda rad et:</strong> ruxsat aniq berilmagan bo'lsa, kirishni taqiqla;</li><li><strong>Server tomonida tekshir:</strong> har bir maxfiy so'rovda huquqni qayta tasdiqla;</li><li><strong>Egalikni tekshir:</strong> <code>id</code> bo'yicha ma'lumot berishdan oldin egalikni tekshir;</li><li><strong>Rollarni markazlashtir:</strong> ruxsat mantiqini bir joyda saqlab, takrorlanishni kamaytir;</li><li><strong>Test qil:</strong> "boshqa foydalanuvchi bu ma'lumotni ko'ra oladimi?" degan holatlarni tekshir.</li></ul>
 <div class="warn">Hech qachon faqat frontendga (masalan, tugmani yashirishga) ishonmang. Frontend — bu foydalanuvchi to'liq nazorat qiladigan muhit; u so'rovni istagancha o'zgartirishi mumkin. Haqiqiy kirish nazorati <strong>doim server tomonida</strong> amalga oshirilishi shart.</div>
@@ -677,6 +693,6 @@ console.log(hujjatOl(2, 'aziz'));</textarea><div class="pg-actions"><button clas
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

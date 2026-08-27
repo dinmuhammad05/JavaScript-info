@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bash skript asoslari — Kodla</title>
   <meta name="description" content="Shebang (#!/bin/bash), chmod +x bilan ishga tushirish, o'zgaruvchilar, echo va read, if/else shartlari, for/while sikllari, funksiyalar va to'liq skript misoli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,20 +599,34 @@
 <main class="content article">
 <div class="crumbs">Linux va terminal</div>
 <h1>Bash skript asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#birinchi-skript-va-shebang">Birinchi skript va shebang</a></li>
+<li class="lvl2"><a href="#skriptni-ishga-tushirish">Skriptni ishga tushirish</a></li>
+<li class="lvl2"><a href="#o-zgaruvchilar">O'zgaruvchilar</a></li>
+<li class="lvl2"><a href="#echo-va-read-chiqarish-va-o-qish">echo va read — chiqarish va o'qish</a></li>
+<li class="lvl2"><a href="#if-else-shartlar">if/else — shartlar</a></li>
+<li class="lvl2"><a href="#for-va-while-sikllar">for va while — sikllar</a></li>
+<li class="lvl2"><a href="#funksiyalar">Funksiyalar</a></li>
+<li class="lvl2"><a href="#to-liq-skript-misoli">To'liq skript misoli</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Bir necha buyruqni takror-takror yozish o'rniga, ularni bitta <strong>skript</strong> faylga yozib, bir buyruq bilan ishga tushirish mumkin. Bu — avtomatlashtirishning kaliti. Bu darsda bash skriptlarini yozishni: o'zgaruvchilar, shartlar, sikllar va funksiyalarni noldan o'rganamiz.</p>
-<h2>Birinchi skript va shebang</h2>
+<h2 id="birinchi-skript-va-shebang">Birinchi skript va shebang</h2>
 <p>Bash skripti — bu shunchaki buyruqlar yozilgan matnli fayl (odatda <code>.sh</code> kengaytmasi bilan). Uning eng birinchi qatori maxsus — <strong>shebang</strong> deyiladi:</p>
 <pre class="code"><code>#!/bin/bash
 echo 'Salom, dunyo!'</code></pre>
 <p><code>#!/bin/bash</code> qatori tizimga "bu faylni bash bilan ishga tushir" deb aytadi. U <strong>albatta birinchi qator</strong> bo'lishi kerak. Undan keyingi qatorlar — oddiy buyruqlar, xuddi terminalda yozganingizdek.</p>
 <div class="note"><code>#</code> belgisi bilan boshlangan qatorlar — <strong>izoh</strong> (comment), ular bajarilmaydi. Faqat birinchi qatordagi <code>#!</code> maxsus ma'noga ega. Qolgan barcha <code>#</code> izohlar kodni tushuntirish uchun ishlatiladi.</div>
-<h2>Skriptni ishga tushirish</h2>
+<h2 id="skriptni-ishga-tushirish">Skriptni ishga tushirish</h2>
 <p>Skriptni <code>salom.sh</code> nomi bilan saqladingiz deylik. Uni ishga tushirishdan oldin unga <strong>bajarish ruxsati</strong> berish kerak (esingizdami — ruxsatlar darsi):</p>
 <pre class="code"><code>chmod +x salom.sh    # bajarish ruxsatini berish
 ./salom.sh           # skriptni ishga tushirish</code></pre>
 <p>Diqqat: skript nomining oldiga <code>./</code> qo'yiladi. Bu "joriy papkadagi skript"ni bildiradi (chunki xavfsizlik uchun joriy papka avtomatik qidirilmaydi). Muqobil yo'l — bashga to'g'ridan-to'g'ri berish (ruxsat shart emas):</p>
 <pre class="code"><code>bash salom.sh</code></pre>
-<h2>O'zgaruvchilar</h2>
+<h2 id="o-zgaruvchilar">O'zgaruvchilar</h2>
 <p>O'zgaruvchi qiymat saqlaydi. Uni belgilashda <strong>tenglik atrofida bo'shliq bo'lmasligi</strong> shart:</p>
 <pre class="code"><code>#!/bin/bash
 ism="Aziz"
@@ -626,7 +643,7 @@ sana=$(date)
 papka=$(pwd)
 echo "Hozir: $sana"
 echo "Joriy papka: $papka"</code></pre>
-<h2>echo va read — chiqarish va o'qish</h2>
+<h2 id="echo-va-read-chiqarish-va-o-qish">echo va read — chiqarish va o'qish</h2>
 <p><code>echo</code> ekranga matn chiqaradi (buni allaqachon ishlatdik). <code>read</code> esa foydalanuvchidan matn <strong>o'qib oladi</strong> va o'zgaruvchiga saqlaydi:</p>
 <pre class="code"><code>#!/bin/bash
 echo "Ismingizni kiriting:"
@@ -636,7 +653,7 @@ echo "Salom, $ism!"</code></pre>
 <pre class="code"><code>#!/bin/bash
 read -p "Yoshingiz nechada? " yosh
 echo "Siz $yosh yoshdasiz."</code></pre>
-<h2>if/else — shartlar</h2>
+<h2 id="if-else-shartlar">if/else — shartlar</h2>
 <p>Shart tekshirish uchun <code>if</code> ishlatiladi. Bash sintaksisi biroz o'ziga xos — shart <code>[ ]</code> qavs ichida yoziladi, blok <code>then</code> bilan boshlanib <code>fi</code> bilan tugaydi:</p>
 <pre class="code"><code>#!/bin/bash
 read -p "Yoshingiz: " yosh
@@ -665,7 +682,7 @@ else
   echo "config.txt topilmadi!"
 fi</code></pre>
 <div class="tip">O'zgaruvchini shart ichida doim <strong>ikki tirnoq</strong> ichida yozing: <code>[ "$parol" = ... ]</code>. Agar o'zgaruvchi bo'sh bo'lsa, tirnoqsiz yozuv xatolik beradi. Tirnoq bu muammoni oldini oladi.</div>
-<h2>for va while — sikllar</h2>
+<h2 id="for-va-while-sikllar">for va while — sikllar</h2>
 <p><code>for</code> sikli ro'yxat ustidan yuradi — har bir element uchun blokni takrorlaydi:</p>
 <pre class="code"><code>#!/bin/bash
 for meva in olma nok uzum; do
@@ -689,7 +706,7 @@ while [ $son -le 5 ]; do
   son=$((son + 1))
 done</code></pre>
 <p>Bu yerda <code>$((...))</code> — bashda <strong>matematik amal</strong> bajarish usuli. <code>son=$((son + 1))</code> sonni birga oshiradi. Shart <code>[ $son -le 5 ]</code> yolg'onga aylanganda (son 6 bo'lganda) sikl to'xtaydi.</p>
-<h2>Funksiyalar</h2>
+<h2 id="funksiyalar">Funksiyalar</h2>
 <p>Takrorlanuvchi kodni <strong>funksiya</strong>ga o'rab, keyin nom bilan chaqirish mumkin:</p>
 <pre class="code"><code>#!/bin/bash
 
@@ -702,7 +719,7 @@ salomlash Dilnoza</code></pre>
 <p>Funksiyaga argument <code>$1</code>, <code>$2</code> orqali uzatiladi — birinchi argument <code>$1</code>, ikkinchisi <code>$2</code> va hokazo. Yuqorida <code>Aziz</code> — <code>$1</code> bo'lib keldi. Natija:</p>
 <pre class="code"><code>Salom, Aziz!
 Salom, Dilnoza!</code></pre>
-<h2>To'liq skript misoli</h2>
+<h2 id="to-liq-skript-misoli">To'liq skript misoli</h2>
 <p>Endi o'rganganlarimizni birlashtiramiz. Quyidagi skript loyihaning zaxira nusxasini yaratadi — papka mavjudligini tekshiradi, zaxira papkasini yaratadi va fayllarni nusxalaydi:</p>
 <pre class="code"><code>#!/bin/bash
 
@@ -729,7 +746,7 @@ echo "Tayyor! $soni ta element nusxalandi."</code></pre>
 <p>Bu skriptni tahlil qilaylik:</p>
 <ul><li><code>zaxira="zaxira-$(date +%Y-%m-%d)"</code> — zaxira papkasiga bugungi sanani qo'shadi;</li><li><code>if [ ! -d "$manba" ]</code> — <code>!</code> inkor: "agar papka <em>yo'q</em> bo'lsa";</li><li><code>exit 1</code> — skriptni xato kodi bilan to'xtatadi (0 — muvaffaqiyat, boshqa son — xato);</li><li><code>cp -r "$manba"/*</code> — manbadagi hamma narsani nusxalaydi;</li><li><code>ls ... | wc -l</code> — nusxalangan elementlar sonini sanaydi.</li></ul>
 <div class="tip">Skriptlarni jiddiy ishlatishdan oldin sinab ko'ring. Boshiga <code>set -e</code> qo'shsangiz, birorta buyruq xato bersa skript darhol to'xtaydi — bu xavfsizroq. Yana <code>set -u</code> aniqlanmagan o'zgaruvchi ishlatilsa xato beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Skript birinchi qatori — <strong>shebang</strong>: <code>#!/bin/bash</code>;</li><li>Ishga tushirish: <code>chmod +x skript.sh</code>, keyin <code>./skript.sh</code>;</li><li>O'zgaruvchi: <code>ism="Aziz"</code> (bo'shliqsiz!), o'qish: <code>$ism</code>; buyruq natijasi: <code>$(...)</code>;</li><li><code>echo</code> — chiqarish, <code>read</code> — foydalanuvchidan o'qish;</li><li><code>if [ shart ]; then ... else ... fi</code>; sonlar uchun <code>-eq</code>/<code>-gt</code>/<code>-lt</code>, matn uchun <code>=</code>;</li><li><code>for ... do ... done</code> va <code>while ... do ... done</code> — sikllar; matematika: <code>$((...))</code>;</li><li>Funksiyalar argumentni <code>$1</code>, <code>$2</code> orqali oladi;</li><li><code>exit</code>, <code>set -e</code>, <code>set -u</code> — skriptni ishonchli qiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="jarayon-tarmoq.html"><span class="dir">← Oldingi</span><span class="ttl">Jarayonlar va tarmoq</span></a>
@@ -743,6 +760,6 @@ echo "Tayyor! $soni ta element nusxalandi."</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

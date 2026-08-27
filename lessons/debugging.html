@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brauzerda debugging — Kodla</title>
   <meta name="description" content="Sources paneli, breakpoint'lar, kodni qadamma-qadam bajarish va debugger buyrug'i.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,23 +599,35 @@
 <main class="content article">
 <div class="crumbs">Kod sifati</div>
 <h1>Brauzerda debugging</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#sources-paneli">Sources paneli</a></li>
+<li class="lvl2"><a href="#konsol">Konsol</a></li>
+<li class="lvl2"><a href="#breakpoint-to-xtash-nuqtasi">Breakpoint (to'xtash nuqtasi)</a></li>
+<li class="lvl2"><a href="#debugger-buyrug-i">debugger buyrug'i</a></li>
+<li class="lvl2"><a href="#kodni-qadamma-qadam-bajarish">Kodni qadamma-qadam bajarish</a></li>
+<li class="lvl2"><a href="#o-zgaruvchilarni-kuzatish">O'zgaruvchilarni kuzatish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Debugging</strong> (nosozliklarni tuzatish) — bu skriptdagi xatolarni topish va bartaraf etish jarayoni. Zamonaviy brauzerlar va aksariyat boshqa muhitlar buni ancha osonlashtiradigan kuchli <em>debugging vositalarini</em> qo'llab-quvvatlaydi. Ushbu darsda biz brauzer vositalari bilan tanishamiz.</p>
 <div class="note">Bizning maydonchamizda (playground) haqiqiy debugging vositasi yo'q, shuning uchun bu darsda misollar asosan tavsif va statik kod ko'rinishida beriladi. Amaliyotni brauzeringizning haqiqiy vositalarida bajaring.</div>
-<h2>Sources paneli</h2>
+<h2 id="sources-paneli">Sources paneli</h2>
 <p>Chrome brauzerida debugging'ning asosiy joyi — <strong>Sources</strong> paneli. Uni ochish uchun <code>F12</code> tugmasini bosing, so'ng <strong>Sources</strong> yorlig'iga o'ting. Bu panel uch qismdan iborat:</p>
 <ol><li><strong>File Navigator</strong> — sahifaga ulangan barcha fayllar (HTML, JavaScript, CSS, rasmlar) ro'yxati;</li><li><strong>Code Editor</strong> — tanlangan faylning matni ko'rsatiladigan muharrir;</li><li><strong>JavaScript Debugging</strong> — debugging uchun barcha boshqaruv elementlari (breakpoint'lar, o'zgaruvchilar va h.k.).</li></ol>
 <div class="tip">File Navigator panelini yashirish yoki ko'rsatish uchun <code>Esc</code> tugmasidan foydalaning — u pastdan konsolni ochadi/yopadi. Shunda kodni va konsolni bir vaqtda ko'rish qulay bo'ladi.</div>
-<h2>Konsol</h2>
+<h2 id="konsol">Konsol</h2>
 <p>Agar biz kod ichida <code>Esc</code> orqali konsolni ochsak, u yerda istalgan JavaScript ifodasini yozib, <code>Enter</code> bosib bajarishimiz mumkin. Natija darhol ko'rinadi. Bu tezkor tekshiruvlar uchun juda foydali.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>konsol.js</span></div><textarea spellcheck="false">console.log("Debugging boshlandi");
 let natija = 2 * 2;
 console.log("2 * 2 =", natija);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Breakpoint (to'xtash nuqtasi)</h2>
+<h2 id="breakpoint-to-xtash-nuqtasi">Breakpoint (to'xtash nuqtasi)</h2>
 <p><strong>Breakpoint</strong> — bu JavaScript bajarilishi avtomatik to'xtaydigan kod nuqtasi. Kod to'xtaganda biz o'sha ondagi o'zgaruvchilar qiymatlarini tekshirib, buyruqlarni bir-bir bajara olamiz.</p>
 <p>Sources panelida faylning qator raqamini bosish orqali breakpoint qo'yiladi. Kod o'sha qatorga yetganda "muzlab" qoladi. Bir vaqtning o'zida bir nechta breakpoint qo'yish mumkin.</p>
 <p>Breakpoint'ning yana bir kuchli imkoniyati — <strong>shartli breakpoint</strong>. Qator raqamiga o'ng tugma bosib, shart yozish mumkin. Kod faqat shart <code>true</code> bo'lganda to'xtaydi. Bu, masalan, sikl ichida faqat ma'lum bir qiymatda to'xtash uchun qulay.</p>
 <div class="note">Breakpoint qo'yishning yana bir usuli — kodda to'g'ridan-to'g'ri <code>debugger</code> buyrug'ini yozish. Bu quyida ko'rsatilgan.</div>
-<h2>debugger buyrug'i</h2>
+<h2 id="debugger-buyrug-i">debugger buyrug'i</h2>
 <p>Biz kodni to'xtatishni bevosita skript ichida ham belgilashimiz mumkin — buning uchun <code>debugger</code> buyrug'idan foydalaniladi:</p>
 <pre class="code"><code>function hisobla(a, b) {
   let yigindi = a + b;
@@ -624,15 +639,15 @@ console.log("2 * 2 =", natija);</textarea><div class="pg-actions"><button class=
 
 hisobla(3, 4);</code></pre>
 <div class="warn"><code>debugger</code> buyrug'i faqat ishlab chiquvchi vositalari (dev tools) ochiq bo'lganda ishlaydi. Aks holda brauzer uni e'tiborsiz qoldiradi. Ishlab chiqarishga (production) chiqarishdan oldin bunday buyruqlarni albatta olib tashlang.</div>
-<h2>Kodni qadamma-qadam bajarish</h2>
+<h2 id="kodni-qadamma-qadam-bajarish">Kodni qadamma-qadam bajarish</h2>
 <p>Kod breakpoint'da to'xtaganda, Sources panelining o'ng yuqorisidagi tugmalar orqali uni boshqaramiz. Asosiy tugmalar:</p>
 <ul><li><strong>Resume (davom ettirish)</strong> — kodni keyingi breakpoint'gacha yoki oxirigacha davom ettiradi (<code>F8</code>);</li><li><strong>Step (keyingi qadam)</strong> — keyingi buyruqni bajaradi (<code>F9</code>);</li><li><strong>Step over</strong> — keyingi buyruqni bajaradi, lekin funksiya <em>ichiga kirmaydi</em> (funksiyani butunlay bajaradi);</li><li><strong>Step into</strong> — funksiya chaqiruviga duch kelsa, uning <em>ichiga kiradi</em>;</li><li><strong>Step out</strong> — joriy funksiyani oxirigacha bajarib, undan <em>chiqadi</em>.</li></ul>
 <p>Bu tugmalar yordamida siz kodning har bir qadamini kuzatib, qayerda va nima uchun kutilmagan qiymat paydo bo'lganini aniqlaysiz.</p>
-<h2>O'zgaruvchilarni kuzatish</h2>
+<h2 id="o-zgaruvchilarni-kuzatish">O'zgaruvchilarni kuzatish</h2>
 <p>Kod to'xtaganda, o'ng paneldagi bloklar juda foydali:</p>
 <ul><li><strong>Watch</strong> — istalgan ifodani kiritib, uning joriy qiymatini doimiy kuzatish mumkin;</li><li><strong>Call Stack</strong> — funksiya chaqiruvlarining ichki zanjirini ko'rsatadi (qaysi funksiya qaysinisini chaqirgani);</li><li><strong>Scope</strong> — joriy paytdagi barcha o'zgaruvchilar qiymatlari (lokal va global).</li></ul>
 <div class="tip">Kod ichida <code>console.log</code> yozib "debugging" qilish mumkin, lekin breakpoint'lar ancha kuchli: ular kodni o'zgartirmasdan, istalgan ondagi holatni to'liq tekshirishga imkon beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Kodni debugging qilishning uch asosiy yo'li bor:</p>
 <ol><li><strong>Konsol</strong> — <code>console.log</code> orqali qiymatlarni chiqarish;</li><li><strong>Breakpoint'lar</strong> — Sources panelida qator raqamini bosib qo'yiladi;</li><li><code>debugger</code> — kod ichiga yozilgan to'xtash buyrug'i.</li></ol>
 <p>To'xtagan kodni <strong>Step</strong> tugmalari bilan qadamma-qadam bajarib, <strong>Watch</strong>, <strong>Call Stack</strong> va <strong>Scope</strong> bloklari orqali holatni kuzatasiz. Bu ko'nikmani egallash dasturchi uchun juda muhim.</p>
@@ -648,6 +663,6 @@ hisobla(3, 4);</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

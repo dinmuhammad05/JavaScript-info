@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nega test yozamiz? — Kodla</title>
   <meta name="description" content="Qo'lda testning muammolari, avtomatik testning foydasi, test turlari, test piramidasi, TDD va mashhur vositalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Testlash (Jest)</div>
 <h1>Nega test yozamiz?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#qo-lda-testlash-muammosi">Qo'lda testlash muammosi</a></li>
+<li class="lvl2"><a href="#avtomatik-test-nima-beradi">Avtomatik test nima beradi?</a></li>
+<li class="lvl2"><a href="#test-turlari">Test turlari</a></li>
+<li class="lvl3"><a href="#unit-birlik-testlar">Unit (birlik) testlar</a></li>
+<li class="lvl3"><a href="#integration-integratsiya-testlar">Integration (integratsiya) testlar</a></li>
+<li class="lvl3"><a href="#end-to-end-e2e-testlar">End-to-end (E2E) testlar</a></li>
+<li class="lvl2"><a href="#test-piramidasi">Test piramidasi</a></li>
+<li class="lvl2"><a href="#tdd-tushunchasi">TDD tushunchasi</a></li>
+<li class="lvl2"><a href="#mashhur-vositalar">Mashhur vositalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Kod yozish — ishning yarmi. Ikkinchi yarmi esa kod haqiqatan ishlayotganini va kelajakda ham ishlashda davom etishini ta'minlashdir. Aynan shu joyda testlash sahnaga chiqadi. Bu darsda testlashning nima ekanini, nega u zamonaviy dasturchi uchun majburiy ko'nikma bo'lganini va qanday test turlari mavjudligini chuqur ko'rib chiqamiz.</p>
-<h2>Qo'lda testlash muammosi</h2>
+<h2 id="qo-lda-testlash-muammosi">Qo'lda testlash muammosi</h2>
 <p>Ko'pchilik dasturchi ishni shunday boshlaydi: funksiya yozadi, so'ng <code>console.log</code> qo'yib, natijani ko'zi bilan tekshiradi. Yoki brauzerni ochib, tugmani bosib, hammasi joyida ekanini qo'lda ko'radi. Bu <strong>qo'lda testlash</strong> deyiladi.</p>
 <pre class="code"><code>function narxHisobla(soni, narx) {
   return soni * narx;
@@ -609,7 +627,7 @@ console.log(narxHisobla(0, 100)); // 0 chiqishi kerak</code></pre>
 <p>Kichik funksiya uchun bu yetarli ko'rinadi. Ammo dastur o'sib borgani sari qo'lda testlash tez orada jiddiy muammoga aylanadi:</p>
 <ul><li><strong>Sekin:</strong> har bir o'zgarishdan keyin barcha holatlarni qo'lda qayta tekshirish soatlab vaqt oladi.</li><li><strong>Ishonchsiz:</strong> odam charchaydi, e'tiborsiz bo'ladi va ba'zi holatlarni tekshirishni unutadi.</li><li><strong>Takrorlanmaydi:</strong> bugun tekshirgan narsangizni ertaga aynan bir xil qadamlar bilan qayta tekshirish qiyin.</li><li><strong>Miqyoslanmaydi:</strong> 100 ta funksiya va 50 ta sahifani har safar qo'lda ko'rish deyarli imkonsiz.</li><li><strong>Regressiyani ko'rmaydi:</strong> yangi kod eski, avval ishlagan funksiyani buzsa, buni sezmay qolishingiz mumkin.</li></ul>
 <div class="warn">Eng xavfli holat — <strong>regressiya</strong>: siz bitta joyni tuzatasiz, lekin bilmagan holda boshqa joyni buzasiz. Qo'lda testlashda buzilgan joy foydalanuvchiga yetib borgach ma'lum bo'ladi.</div>
-<h2>Avtomatik test nima beradi?</h2>
+<h2 id="avtomatik-test-nima-beradi">Avtomatik test nima beradi?</h2>
 <p><strong>Avtomatik test</strong> — bu sizning kodingizni tekshiradigan yana bir kod. Ya'ni siz bir marta test yozasiz, so'ng uni cheksiz marta, bir soniyada, xatosiz ishga tushirasiz. Yuqoridagi funksiyani avtomatik test bilan quyidagicha tekshiramiz:</p>
 <pre class="code"><code>function narxHisobla(soni, narx) {
   return soni * narx;
@@ -625,15 +643,15 @@ test('0 ta mahsulot uchun 0 qaytaradi', () =&gt; {
 <p>Endi <code>console.log</code> natijasini ko'z bilan solishtirish shart emas — agar natija kutilganidan farq qilsa, test o'zi qizil rangda xatoni ko'rsatadi. Bu bizga aniq foydalar beradi:</p>
 <ul><li><strong>Ishonch:</strong> kodni o'zgartirsangiz, testlar hammasi yashil bo'lsa, hech narsani buzmaganingizga ishonch hosil qilasiz.</li><li><strong>Refaktoring erkinligi:</strong> kodni qo'rqmasdan tozalash va qayta yozish mumkin — testlar himoya to'ri vazifasini bajaradi.</li><li><strong>Jonli hujjat:</strong> yaxshi yozilgan test funksiya nima qilishini kod misolida ko'rsatadi.</li><li><strong>Tezlik:</strong> yuzlab tekshiruv bir necha soniyada avtomatik ishlaydi.</li><li><strong>Xatoni erta ushlash:</strong> xato produksiyaga emas, dasturchi kompyuterida ushlanadi — bu ancha arzon.</li></ul>
 <div class="tip">Test yozishning maqsadi — testlar sonini ko'paytirish emas, balki <strong>kodga bo'lgan ishonchni</strong> oshirish. Har bir test biror haqiqatni himoya qilishi kerak.</div>
-<h2>Test turlari</h2>
+<h2 id="test-turlari">Test turlari</h2>
 <p>Barcha testlar bir xil emas. Ular nimani va qanchalik keng tekshirishiga qarab uch asosiy turga bo'linadi.</p>
-<h3>Unit (birlik) testlar</h3>
+<h3 id="unit-birlik-testlar">Unit (birlik) testlar</h3>
 <p>Eng kichik va tez testlar. Bitta funksiya yoki bitta modulni yakka holda, boshqa qismlardan ajratib tekshiradi. Masalan, yuqoridagi <code>narxHisobla</code> uchun yozilgan testlar — bu unit testlar. Ular tez ishlaydi va xato qayerdaligini aniq ko'rsatadi.</p>
-<h3>Integration (integratsiya) testlar</h3>
+<h3 id="integration-integratsiya-testlar">Integration (integratsiya) testlar</h3>
 <p>Bir nechta qism birga qanday ishlashini tekshiradi. Masalan, ma'lumotlar bazasidan ma'lumot o'qib, uni qayta ishlab, javob qaytaradigan funksiyalar zanjiri. Ular unit testlardan sekinroq, ammo real hayotga yaqinroq.</p>
-<h3>End-to-end (E2E) testlar</h3>
+<h3 id="end-to-end-e2e-testlar">End-to-end (E2E) testlar</h3>
 <p>Butun dasturni foydalanuvchi ko'zi bilan tekshiradi: brauzer ochiladi, tugmalar bosiladi, formalar to'ldiriladi va natija ko'riladi. Eng ishonchli, ammo eng sekin va eng mo'rt (tez sinuvchan) test turi. Bunga <strong>Cypress</strong> yoki <strong>Playwright</strong> kabi vositalar ishlatiladi.</p>
-<h2>Test piramidasi</h2>
+<h2 id="test-piramidasi">Test piramidasi</h2>
 <p>Qaysi test turidan qanchasini yozish kerak? Bu savolga <strong>test piramidasi</strong> javob beradi. Bu Mike Cohn tomonidan mashhur qilingan tamoyil:</p>
 <pre class="code"><code>        /\
        /  \      E2E  — kam (sekin, qimmat, mo'rt)
@@ -644,7 +662,7 @@ test('0 ta mahsulot uchun 0 qaytaradi', () =&gt; {
   /____________\</code></pre>
 <p>Tamoyil oddiy: <strong>ko'p sonli tez unit testlar, o'rtacha integratsiya testlar va oz sonli E2E testlar</strong> yozing. Chunki unit testlar arzon va tez, E2E testlar esa qimmat va sekin. Piramida teskari bo'lib qolsa (ko'p E2E, kam unit), test to'plami sekin va ishonchsiz bo'ladi.</p>
 <div class="note">Amaliyotda odatda taxminan 70% unit, 20% integration va 10% E2E test nisbati sog'lom hisoblanadi. Bu qat'iy qoida emas, balki yo'nalish.</div>
-<h2>TDD tushunchasi</h2>
+<h2 id="tdd-tushunchasi">TDD tushunchasi</h2>
 <p><strong>TDD (Test-Driven Development)</strong> — bu kod yozishdan <em>oldin</em> testni yozadigan yondashuv. U uch qadamdan iborat va "qizil–yashil–refaktoring" tsikli deb ataladi:</p>
 <ol><li><strong>Qizil (Red):</strong> hali mavjud bo'lmagan funksiya uchun test yozasiz — u albatta yiqiladi (qizil).</li><li><strong>Yashil (Green):</strong> testni o'tkazadigan eng oddiy kodni yozasiz — test yashil bo'ladi.</li><li><strong>Refaktoring (Refactor):</strong> testlar yashil turgan holda kodni tozalaysiz, yaxshilaysiz.</li></ol>
 <pre class="code"><code>// 1-qadam (Qizil): funksiya hali yo'q, test yozamiz
@@ -660,11 +678,11 @@ function juftmi(son) {
 
 // 3-qadam (Refaktoring): kerak bo'lsa tozalash, test hali ham yashil</code></pre>
 <p>TDD dizaynni yaxshilaydi (kodni ishlatib ko'rib yozganingiz uchun qulay interfeys chiqadi) va har bir kod satri test bilan qoplanishini ta'minlaydi. Ammo bu majburiy emas — testni kod bilan birga yoki keyin yozish ham to'liq maqbul.</p>
-<h2>Mashhur vositalar</h2>
+<h2 id="mashhur-vositalar">Mashhur vositalar</h2>
 <p>JavaScript dunyosida bir nechta test freymvorki keng tarqalgan:</p>
 <ul><li><strong>Jest</strong> — Facebook (Meta) yaratgan, eng ommabop. "Batareyalari qutida": test yurgizuvchi, assertion (tekshiruv), mock va coverage bir joyda. Konfiguratsiyasiz ishlaydi. Biz shu kursda Jest'ni o'rganamiz.</li><li><strong>Vitest</strong> — Vite ekotizimi uchun zamonaviy, juda tez muqobil. API'si Jest'ga deyarli bir xil, shuning uchun Jest bilgan odam osongina o'tadi.</li><li><strong>Mocha</strong> — moslashuvchan, ammo assertion (Chai) va mock (Sinon) kutubxonalarini alohida ulash kerak. Eski loyihalarda ko'p uchraydi.</li><li><strong>Cypress / Playwright</strong> — bular unit emas, E2E testlar uchun: brauzerni boshqarib, real foydalanuvchi harakatlarini bajaradi.</li></ul>
 <div class="tip">Yangi loyiha uchun Jest yoki Vitest — eng xavfsiz tanlov. Ikkalasi ham API va falsafada juda o'xshash, birini o'rgansangiz ikkinchisi bepul keladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Qo'lda testlash sekin, ishonchsiz va miqyoslanmaydi — regressiyani ushlay olmaydi.</li><li>Avtomatik test — bu kodingizni tekshiradigan kod; u ishonch, refaktoring erkinligi va tezlik beradi.</li><li>Test turlari: unit (birlik), integration (integratsiya) va E2E (uchidan uchigacha).</li><li>Test piramidasi: ko'p unit, o'rtacha integration, kam E2E test yozing.</li><li>TDD — kod yozishdan oldin test yozish yondashuvi (qizil–yashil–refaktoring).</li><li>Mashhur vositalar: Jest, Vitest, Mocha; E2E uchun Cypress va Playwright.</li></ul>
 <nav class="lesson-nav">
   <a href="react-list-form.html"><span class="dir">← Oldingi</span><span class="ttl">Ro'yxatlar va formalar</span></a>
@@ -678,6 +696,6 @@ function juftmi(son) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

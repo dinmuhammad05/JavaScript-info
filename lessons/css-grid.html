@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSS Grid — Kodla</title>
   <meta name="description" content="display: grid bilan ikki o'lchamli joylashuv. grid-template-columns/rows (fr, repeat, minmax), gap, elementlarni joylashtirish (grid-column/row), Flexbox bilan farqi va qachon qaysi birini tanlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,24 @@
 <main class="content article">
 <div class="crumbs">CSS</div>
 <h1>CSS Grid</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#grid-asoslari">Grid asoslari</a></li>
+<li class="lvl2"><a href="#grid-template-columns-ustunlarni-belgilash">grid-template-columns — ustunlarni belgilash</a></li>
+<li class="lvl2"><a href="#fr-birligi-moslashuvchan-ulush">fr birligi — moslashuvchan ulush</a></li>
+<li class="lvl2"><a href="#repeat-takrorlashni-qisqartirish">repeat() — takrorlashni qisqartirish</a></li>
+<li class="lvl2"><a href="#minmax-eng-kichik-va-eng-katta-o-lcham">minmax() — eng kichik va eng katta o'lcham</a></li>
+<li class="lvl2"><a href="#grid-template-rows-va-gap">grid-template-rows va gap</a></li>
+<li class="lvl2"><a href="#elementlarni-joylashtirish-grid-column-va-grid-row">Elementlarni joylashtirish: grid-column va grid-row</a></li>
+<li class="lvl2"><a href="#amaliy-misol-sahifa-maketi">Amaliy misol: sahifa maketi</a></li>
+<li class="lvl2"><a href="#grid-va-flexbox-qaysi-birini-tanlash">Grid va Flexbox: qaysi birini tanlash?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>CSS Grid</strong> — elementlarni <strong>qator VA ustun</strong> bo'yicha bir vaqtda joylashtirish uchun mo'ljallangan eng kuchli CSS joylashuv tizimi. Flexbox bir yo'nalishda ishlagani (qator YOKI ustun) uchun murakkab jadval kabi tuzilmalarni yasash qiyin edi. Grid esa haqiqiy <strong>ikki o'lchamli</strong> "panjara" yaratadi — bu bilan butun sahifa maketini (layout) oson qurish mumkin.</p>
 <div class="note">Grid va Flexbox — raqib emas, hamkor. <strong>Grid</strong> — butun sahifa maketi (ikki o'lchamli katta tuzilma) uchun; <strong>Flexbox</strong> — kichik komponent ichidagi elementlarni bir qatorga terish uchun. Ko'pincha ular birga ishlatiladi.</div>
-<h2>Grid asoslari</h2>
+<h2 id="grid-asoslari">Grid asoslari</h2>
 <p>Konteynerga <code>display: grid</code> berasiz, so'ng ustunlar va qatorlarni belgilaysiz. Panjara ustun va qatorlardan tashkil topadi, ularning kesishmasi — <strong>katak (cell)</strong>. Farzand elementlar shu kataklarga joylashadi.</p>
 <pre class="code"><code>&lt;!-- HTML --&gt;
 &lt;div class="panjara"&gt;
@@ -607,7 +625,7 @@
   &lt;div&gt;3&lt;/div&gt;
   &lt;div&gt;4&lt;/div&gt;
 &lt;/div&gt;</code></pre>
-<h2>grid-template-columns — ustunlarni belgilash</h2>
+<h2 id="grid-template-columns-ustunlarni-belgilash">grid-template-columns — ustunlarni belgilash</h2>
 <p>Bu xossa nechta ustun bo'lishini va ularning kengligini belgilaydi. Har bir qiymat — bitta ustun kengligi:</p>
 <pre class="code"><code>/* 3 ta ustun: har biri 100px */
 .panjara {
@@ -615,7 +633,7 @@
   grid-template-columns: 100px 100px 100px;
 }</code></pre>
 <p>Farzandlar bu 3 ustunga birin-ketin joylashadi. To'rtinchi element avtomatik yangi qatorga o'tadi.</p>
-<h2>fr birligi — moslashuvchan ulush</h2>
+<h2 id="fr-birligi-moslashuvchan-ulush">fr birligi — moslashuvchan ulush</h2>
 <p><code>fr</code> (fraction — ulush) — Grid'ning maxsus birligi. U mavjud bo'sh joyni <strong>ulushlarga</strong> bo'ladi. Masalan <code>1fr 1fr 1fr</code> — joyni teng uch ulushga bo'ladi, har bir ustun teng kenglikda:</p>
 <pre class="code"><code>/* 3 ta teng ustun */
 .panjara {
@@ -629,7 +647,7 @@
   grid-template-columns: 1fr 2fr 1fr;
 }</code></pre>
 <div class="tip"><code>fr</code> — piksellardan ustun, chunki u moslashuvchan: ekran o'lchami o'zgarganda ustunlar avtomatik moslashadi. Aralashtirish ham mumkin: <code>grid-template-columns: 200px 1fr;</code> — birinchi ustun qat'iy 200px, ikkinchisi qolgan barcha joyni egallaydi (masalan, yon panel + asosiy kontent).</div>
-<h2>repeat() — takrorlashni qisqartirish</h2>
+<h2 id="repeat-takrorlashni-qisqartirish">repeat() — takrorlashni qisqartirish</h2>
 <p>Bir xil ustunni ko'p marta yozish o'rniga <code>repeat()</code> funksiyasidan foydalaning. <code>repeat(3, 1fr)</code> — "1fr'ni 3 marta takrorla" degani:</p>
 <pre class="code"><code>/* Bu ikkisi bir xil: */
 grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -640,7 +658,7 @@ grid-template-columns: repeat(4, 1fr);
   display: grid;
   grid-template-columns: repeat(12, 1fr);
 }</code></pre>
-<h2>minmax() — eng kichik va eng katta o'lcham</h2>
+<h2 id="minmax-eng-kichik-va-eng-katta-o-lcham">minmax() — eng kichik va eng katta o'lcham</h2>
 <p><code>minmax(min, max)</code> ustunning eng kichik va eng katta kengligini belgilaydi. Bu responsive dizaynda juda foydali. Quyidagi mashhur uslub — ekran kengligiga qarab ustunlar sonini <strong>avtomatik</strong> moslaydigan galereya yaratadi:</p>
 <pre class="code"><code>.galereya {
   display: grid;
@@ -648,7 +666,7 @@ grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }</code></pre>
 <p>Bu shunday o'qiladi: "Har bir ustun kamida 200px bo'lsin, joy bo'lsa 1fr'gacha cho'zilsin; nechta sig'sa, shuncha ustun avtomatik yaratilsin". Ekran torayganda ustunlar soni o'z-o'zidan kamayadi — media query'siz responsive galereya!</p>
-<h2>grid-template-rows va gap</h2>
+<h2 id="grid-template-rows-va-gap">grid-template-rows va gap</h2>
 <p>Ustunlar kabi qatorlar balandligini <code>grid-template-rows</code> belgilaydi. <code>gap</code> esa kataklar orasidagi bo'shliqni beradi (Flexbox'dagi kabi):</p>
 <pre class="code"><code>.panjara {
   display: grid;
@@ -658,7 +676,7 @@ grid-template-columns: repeat(4, 1fr);
   /* yoki alohida: */
   /* gap: 10px 20px;  qator-oralar 10px, ustun-oralar 20px */
 }</code></pre>
-<h2>Elementlarni joylashtirish: grid-column va grid-row</h2>
+<h2 id="elementlarni-joylashtirish-grid-column-va-grid-row">Elementlarni joylashtirish: grid-column va grid-row</h2>
 <p>Grid'ning kuchli jihati — bitta elementni <strong>bir necha katakka</strong> cho'zish mumkin. Buni <code>grid-column</code> va <code>grid-row</code> orqali qilasiz. Panjara chiziqlari 1'dan boshlab raqamlanadi.</p>
 <pre class="code"><code>/* Element 1-ustundan 3-ustungacha (2 ustun eni) */
 .katta {
@@ -676,7 +694,7 @@ grid-template-columns: repeat(4, 1fr);
   grid-row: 1 / 3;
 }</code></pre>
 <div class="note"><code>grid-column: 1 / 3</code> — "1-chiziqdan 3-chiziqgacha", ya'ni ikki ustunni egallaydi. Diqqat: bu chiziq raqamlari, katak raqami emas. 3 ta ustunlik panjarada 4 ta vertikal chiziq bo'ladi (1, 2, 3, 4).</div>
-<h2>Amaliy misol: sahifa maketi</h2>
+<h2 id="amaliy-misol-sahifa-maketi">Amaliy misol: sahifa maketi</h2>
 <p>Grid butun sahifa maketini yasashga ideal: tepada sarlavha (header), chapda yon panel, o'rtada kontent, pastda futer. Bularni <code>grid-template-areas</code> bilan nomli hududlar orqali chizish mumkin:</p>
 <pre class="code"><code>.sahifa {
   display: grid;
@@ -694,11 +712,11 @@ grid-template-columns: repeat(4, 1fr);
 .sidebar { grid-area: sidebar; }
 .kontent { grid-area: kontent; }
 .footer  { grid-area: footer; }</code></pre>
-<h2>Grid va Flexbox: qaysi birini tanlash?</h2>
+<h2 id="grid-va-flexbox-qaysi-birini-tanlash">Grid va Flexbox: qaysi birini tanlash?</h2>
 <p>Ikkalasi ham joylashuv uchun, lekin ular turli vazifalar uchun optimal:</p>
 <ul><li><strong>Flexbox</strong> — <em>bir o'lchamli</em>: elementlarni bir qatorga yoki bir ustunga terish. Menyu, tugmalar guruhi, karta ichidagi elementlar uchun;</li><li><strong>Grid</strong> — <em>ikki o'lchamli</em>: qator va ustun birga. Butun sahifa maketi, galereya, jadval kabi tuzilmalar uchun;</li><li><strong>Mazmun boshqarsa</strong> (element o'z o'lchamiga qarab joylashsin) &rarr; Flexbox;</li><li><strong>Maket boshqarsa</strong> (avval panjara chizib, keyin to'ldirsangiz) &rarr; Grid.</li></ul>
 <div class="tip">Oddiy qoida: <strong>umumiy sahifa tuzilishi</strong> uchun Grid, o'sha tuzilma ichidagi <strong>kichik komponentlar</strong> uchun Flexbox. Masalan, sahifani Grid bilan hududlarga bo'lasiz, keyin har bir hudud ichidagi menyuni Flexbox bilan tizasiz. Ular birga eng yaxshi ishlaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>CSS Grid</strong> — ikki o'lchamli (qator + ustun) joylashuv tizimi;</li><li><code>display: grid</code> + <code>grid-template-columns</code> bilan ustunlarni belgilaysiz;</li><li><code>fr</code> — moslashuvchan ulush birligi (teng ustunlar uchun ideal);</li><li><code>repeat(n, 1fr)</code> — takrorlashni qisqartiradi;</li><li><code>minmax()</code> + <code>auto-fill</code> — media query'siz responsive galereya;</li><li><code>gap</code> — kataklar orasidagi bo'shliq;</li><li><code>grid-column</code>/<code>grid-row</code> — elementni bir necha katakka cho'zadi;</li><li>Grid — sahifa maketi uchun, Flexbox — komponentlar uchun; ular birga ishlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="css-flexbox.html"><span class="dir">← Oldingi</span><span class="ttl">Flexbox</span></a>
@@ -712,6 +730,6 @@ grid-template-columns: repeat(4, 1fr);
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

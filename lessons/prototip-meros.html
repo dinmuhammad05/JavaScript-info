@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prototipli meros — Kodla</title>
   <meta name="description" content="[[Prototype]] yashirin xossa, __proto__, prototip zanjiri va xossalar qanday qidirilishi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,24 @@
 <main class="content article">
 <div class="crumbs">Prototiplar, meros</div>
 <h1>Prototipli meros</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#prototype-yashirin-xossasi">[[Prototype]] yashirin xossasi</a></li>
+<li class="lvl2"><a href="#proto-orqali-prototipni-o-rnatish">__proto__ orqali prototipni o'rnatish</a></li>
+<li class="lvl2"><a href="#prototip-zanjiri">Prototip zanjiri</a></li>
+<li class="lvl2"><a href="#yozish-write-prototipni-ishlatmaydi">Yozish (write) prototipni ishlatmaydi</a></li>
+<li class="lvl2"><a href="#this-qiymati-o-zgarmaydi">"this" qiymati o'zgarmaydi</a></li>
+<li class="lvl2"><a href="#for-in-va-prototip-xossalari">for..in va prototip xossalari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Dasturlashda biz ko'pincha mavjud narsani olib, uni biroz kengaytirmoqchi bo'lamiz. Masalan, bizda <code>user</code> obyekti bor va biz unga o'xshash, lekin qo'shimcha imkoniyatga ega <code>admin</code> yasashni istaymiz. Har safar hamma narsani qaytadan yozmaslik uchun JavaScript'da <strong>prototipli meros</strong> (prototypal inheritance) mavjud.</p>
-<h2>[[Prototype]] yashirin xossasi</h2>
+<h2 id="prototype-yashirin-xossasi">[[Prototype]] yashirin xossasi</h2>
 <p>JavaScript'dagi har bir obyektda <code>[[Prototype]]</code> deb nomlangan maxsus yashirin xossa bor. U yoki <code>null</code> ga, yoki boshqa bir obyektga ishora qiladi. O'sha ishora qilingan obyekt shu obyektning <em>prototipi</em> deb ataladi.</p>
 <p>Agar biz obyektdan biror xossani o'qimoqchi bo'lsak, lekin u xossa obyektning o'zida topilmasa, JavaScript avtomatik ravishda uni prototipdan qidiradi. Dasturlashda buni "prototipli meros" deb atashadi. Ko'plab qulay til imkoniyatlari va texnikalari aynan shu mexanizmga asoslangan.</p>
 <div class="note"><code>[[Prototype]]</code> — ichki, yashirin xossa. Biz unga to'g'ridan-to'g'ri kira olmaymiz, lekin uni o'rnatish va o'qishning bir nechta usullari bor. Ulardan biri — eskirgan, lekin ta'lim uchun qulay <code>__proto__</code>.</div>
-<h2>__proto__ orqali prototipni o'rnatish</h2>
+<h2 id="proto-orqali-prototipni-o-rnatish">__proto__ orqali prototipni o'rnatish</h2>
 <p><code>[[Prototype]]</code> ni belgilashning tarixiy usullaridan biri — <code>__proto__</code> xossasidan foydalanish. Keling, ikkita obyekt yasab, birini ikkinchisining prototipiga aylantiramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proto-set.js</span></div><textarea spellcheck="false">let animal = {
   eats: true
@@ -617,7 +632,7 @@ console.log(rabbit.jumps); // true (o'zidan)
 console.log(rabbit.eats);  // true (prototipdan)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>rabbit</code> obyektida <code>eats</code> xossasi yo'q. JavaScript uni topa olmagach, prototip — <code>animal</code> obyektiga qaraydi va u yerdan topadi. Biz "<code>animal</code> — <code>rabbit</code>ning prototipi" yoki "<code>rabbit</code> prototip orqali <code>animal</code>dan meros oladi" deymiz.</p>
 <div class="warn"><code>__proto__</code> — bu aslida <code>[[Prototype]]</code> uchun tarixiy <em>getter/setter</em>. U <code>[[Prototype]]</code> ning o'zi EMAS. Zamonaviy kodda uning o'rniga <code>Object.getPrototypeOf</code> va <code>Object.setPrototypeOf</code> ishlatiladi (bu haqda oxirgi darsda batafsil to'xtalamiz).</div>
-<h2>Prototip zanjiri</h2>
+<h2 id="prototip-zanjiri">Prototip zanjiri</h2>
 <p>Prototip yana o'z prototipiga ega bo'lishi mumkin, u ham o'zinikiga — shu tariqa <strong>prototip zanjiri</strong> (prototype chain) hosil bo'ladi. Xossa qidirilganda JavaScript shu zanjir bo'ylab yuqoriga harakatlanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proto-chain.js</span></div><textarea spellcheck="false">let animal = {
   eats: true,
@@ -643,7 +658,7 @@ console.log(longEar.eats);      // true (animal'dan)
 console.log(longEar.earLength); // 10 (o'zidan)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Yuqoridagi <code>longEar.walk()</code> chaqirilganda JavaScript avval <code>longEar</code>da <code>walk</code> ni qidiradi, topmaydi; keyin <code>rabbit</code>dan qidiradi, u ham yo'q; oxiri <code>animal</code>dan topadi. Zanjir bo'ylab yuqoriga qidirish shunday ishlaydi.</p>
 <div class="note">Zanjir bo'yicha ikkita jiddiy cheklov bor: 1) Ishoralar aylana (halqa) hosil qila olmaydi — agar <code>__proto__</code> ni aylana ko'rinishida o'rnatmoqchi bo'lsak, JavaScript xato beradi. 2) <code>__proto__</code> qiymati yoki obyekt, yoki <code>null</code> bo'lishi kerak — boshqa turlar (masalan, son yoki satr) e'tiborsiz qoldiriladi.</div>
-<h2>Yozish (write) prototipni ishlatmaydi</h2>
+<h2 id="yozish-write-prototipni-ishlatmaydi">Yozish (write) prototipni ishlatmaydi</h2>
 <p>Prototip faqat xossani <strong>o'qish</strong>da ishlatiladi. Xossaga qiymat berish (yozish) yoki uni o'chirish amallari to'g'ridan-to'g'ri obyektning O'ZIDA bajariladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proto-write.js</span></div><textarea spellcheck="false">let animal = {
   eats: true,
@@ -665,7 +680,7 @@ console.log(rabbit.walk());  // Quyon sakraydi! (o'zidan)
 console.log(animal.walk());  // Hayvon yura olmaydi (o'zgarmadi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rib turganingizdek, <code>rabbit.walk</code> ga yozish <code>animal</code> ni o'zgartirmadi — u faqat <code>rabbit</code> obyektiga yangi metod qo'shdi. Endi keyingi chaqiruvlar o'sha yangi metodni ishlatadi va prototipga umuman murojaat qilmaydi.</p>
 <div class="tip">Bu qoidada istisno bor: <em>accessor</em> xossalari (getter/setter). Agar prototipda setterli xossa bo'lsa, unga yozish o'sha setterni chaqiradi. Ammo bu ilg'or holat va boshqa darsda muhokama qilinadi.</div>
-<h2>"this" qiymati o'zgarmaydi</h2>
+<h2 id="this-qiymati-o-zgarmaydi">"this" qiymati o'zgarmaydi</h2>
 <p>Muhim savol: metod prototipdan olinsa, uning ichidagi <code>this</code> nimaga teng bo'ladi? Javob: <code>this</code> HAR DOIM nuqtadan oldingi obyektga teng bo'ladi. Metod prototipda bo'lishidan qat'i nazar, u chaqirilgan obyekt bilan ishlaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proto-this.js</span></div><textarea spellcheck="false">let animal = {
   walk() {
@@ -687,7 +702,7 @@ console.log(rabbit.walk()); // Quyon yuradi
 rabbit.isSleeping = true;
 console.log(rabbit.walk()); // Quyon uxlayapti</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Demak, metodlar umumiy (prototipda) bo'lsa-da, obyekt holati (state) esa har bir obyektning o'zida saqlanadi. Bu juda kuchli naqsh: bir necha obyekt bitta prototipdan metodlarni <em>ulashadi</em>, lekin har biri o'z ma'lumotlari bilan ishlaydi.</p>
-<h2>for..in va prototip xossalari</h2>
+<h2 id="for-in-va-prototip-xossalari">for..in va prototip xossalari</h2>
 <p><code>for..in</code> sikli obyektning nafaqat o'z xossalarini, balki meros olingan (prototipdagi) xossalarini ham aylanib chiqadi. Ammo <code>Object.keys</code> kabi metodlar faqat obyektning O'Z xossalarini qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proto-forin.js</span></div><textarea spellcheck="false">let animal = { eats: true };
 let rabbit = { jumps: true, __proto__: animal };
@@ -716,7 +731,7 @@ for (let prop in rabbit) {
 // O'z xossasi: jumps
 // Meros: eats</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">E'tibor bering: <code>hasOwnProperty</code> ning o'zi ham qayerdandir keladi — u <code>Object.prototype.hasOwnProperty</code>. Nega u <code>for..in</code>da chiqmaydi? Chunki tug'ma (built-in) prototip xossalari <em>enumerable: false</em> bayrog'iga ega, ya'ni ular sanab chiqilmaydi. Shu sababli <code>eats</code> va <code>jumps</code> chiqadi, lekin <code>hasOwnProperty</code> chiqmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>JavaScript'da har bir obyektning yashirin <code>[[Prototype]]</code> xossasi bor — u boshqa obyekt yoki <code>null</code>;</li><li>Xossa obyektda topilmasa, u prototipdan (va prototip zanjiri bo'ylab) qidiriladi;</li><li><code>__proto__</code> — <code>[[Prototype]]</code> uchun tarixiy getter/setter (zamonaviy kodda undan qoching);</li><li>Xossaga yozish va uni o'chirish to'g'ridan-to'g'ri obyektning o'zida bajariladi, prototip faqat o'qishda ishlaydi;</li><li>Metod prototipdan olinsa ham, <code>this</code> chaqirilgan obyektga teng bo'ladi;</li><li><code>for..in</code> meros olingan xossalarni ham aylanadi, <code>Object.keys</code> va <code>hasOwnProperty</code> esa faqat o'z xossalarini beradi.</li></ul>
 <nav class="lesson-nav">
   <a href="getter-setter.html"><span class="dir">← Oldingi</span><span class="ttl">Getter va setterlar</span></a>
@@ -730,6 +745,6 @@ for (let prop in rabbit) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

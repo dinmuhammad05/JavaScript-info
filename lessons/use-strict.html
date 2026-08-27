@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zamonaviy rejim, "use strict" — Kodla</title>
   <meta name="description" content="&quot;use strict&quot; direktivasi nima, u nimani o'zgartiradi va zamonaviy kodda uning avtomatikligi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,32 +599,43 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Zamonaviy rejim, "use strict"</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#use-strict-nima">"use strict" nima?</a></li>
+<li class="lvl2"><a href="#use-strict-qayerga-yoziladi">"use strict" qayerga yoziladi?</a></li>
+<li class="lvl2"><a href="#use-strict-ni-bekor-qilib-bo-lmaydi">"use strict" ni bekor qilib bo'lmaydi</a></li>
+<li class="lvl2"><a href="#u-nimani-o-zgartiradi">U nimani o'zgartiradi?</a></li>
+<li class="lvl2"><a href="#zamonaviy-kodda-use-strict-avtomatik">Zamonaviy kodda "use strict" avtomatik</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Uzoq vaqt davomida JavaScript orqaga moslikni saqlab rivojlanib keldi — eski kod buzilmasligi kerak edi. 2009-yilda ES5 standarti chiqqach, tilga yangi imkoniyatlar va ba'zi eski xatti-harakatlarni o'zgartirish qo'shildi. Ular buzilmasligi uchun maxsus <code>"use strict"</code> direktivasi bilan yoqiladigan qilindi.</p>
-<h2>"use strict" nima?</h2>
+<h2 id="use-strict-nima">"use strict" nima?</h2>
 <p>Direktiva oddiy matn ko'rinishida — <code>"use strict"</code> yoki <code>'use strict'</code> deb yoziladi. U skript yoki funksiya <strong>eng boshiga</strong> qo'yilganda, kod "zamonaviy" (strict — qat'iy) rejimda ishlaydi:</p>
 <pre class="code"><code>"use strict";
 
 // bu kod zamonaviy rejimda ishlaydi
 // ...</code></pre>
 <p>Tez orada funksiyalarni o'rganamiz — o'shanda <code>"use strict"</code> ni butun skript o'rniga faqat bitta funksiya ichiga qo'yish mumkinligini ko'ramiz. Odatda esa uni butun skriptga qo'llaymiz.</p>
-<h2>"use strict" qayerga yoziladi?</h2>
+<h2 id="use-strict-qayerga-yoziladi">"use strict" qayerga yoziladi?</h2>
 <p>Bu direktiva faqat skript yoki funksiyaning <strong>eng tepasida</strong> turgandagina ishlaydi. Undan oldin faqat izohlar bo'lishi mumkin, boshqa hech narsa emas.</p>
 <div class="warn">Agar <code>"use strict"</code> ni skript o'rtasiga yoki oxiriga qo'ysangiz, u <strong>ishlamaydi</strong>. Direktiva shunchaki e'tiborsiz qoldiriladi, xato ham bermaydi. Shuning uchun har doim eng tepaga yozing.</div>
 <pre class="code"><code>console.log("biror kod");
 "use strict"; // bu joyda kech — ishlamaydi!</code></pre>
-<h2>"use strict" ni bekor qilib bo'lmaydi</h2>
+<h2 id="use-strict-ni-bekor-qilib-bo-lmaydi">"use strict" ni bekor qilib bo'lmaydi</h2>
 <p>Diqqat qiling — <code>"use strict"</code> ni yoqib bo'lgach, uni "o'chirib" qo'yadigan hech qanday direktiva yo'q. Kodni oldingi rejimga qaytaradigan <code>"no use strict"</code> kabi buyruq mavjud emas.</p>
 <div class="note">Zamonaviy rejimga bir marta o'tsangiz, orqaga qaytish yo'q. Bu yomon narsa emas — chunki zamonaviy rejim faqat foydali qat'iyliklarni qo'shadi.</div>
-<h2>U nimani o'zgartiradi?</h2>
+<h2 id="u-nimani-o-zgartiradi">U nimani o'zgartiradi?</h2>
 <p>Zamonaviy rejim tilning ba'zi "yumshoq" xatti-harakatlarini qat'iyroq va ishonchliroq qiladi. Bir nechta muhim misol:</p>
 <ul><li>E'lon qilinmagan o'zgaruvchiga qiymat berishga urinish endi jimgina o'tib ketmaydi, balki <strong>xato</strong> beradi;</li><li>Ba'zi "jim" xatolar (silent errors) endi ochiq xatolarga aylanadi, bu esa muammolarni erta topishga yordam beradi;</li><li>Til yanada mantiqiy va bashorat qilinadigan bo'ladi.</li></ul>
 <p>Umuman olganda, <code>"use strict"</code> kodni xavfsizroq va toza qiladi. Shu sababli undan foydalanish tavsiya etiladi.</p>
 <div class="tip">Yangi loyiha yozayotgan bo'lsangiz va u alohida skriptlardan iborat bo'lsa, uni <code>"use strict"</code> bilan boshlash yaxshi odat. Ushbu kursdagi barcha misollar zamonaviy rejimni nazarda tutadi.</div>
-<h2>Zamonaviy kodda "use strict" avtomatik</h2>
+<h2 id="zamonaviy-kodda-use-strict-avtomatik">Zamonaviy kodda "use strict" avtomatik</h2>
 <p>Muhim yangilik: agar siz JavaScript <strong>klasslar</strong> (classes) yoki <strong>modullar</strong> (modules) ichida kod yozsangiz, <code>"use strict"</code> ni yozishning hojati yo'q — u u yerda <strong>avtomatik</strong> yoqilgan bo'ladi.</p>
 <p>Zamonaviy ilovalarda kod deyarli har doim modullarda joylashadi, shuning uchun ko'p hollarda direktivani qo'lda yozmaysiz ham. Biroq alohida oddiy skriptlar yozganda, uni yozib qo'ygan ma'qul.</p>
 <div class="note">Klasslar va modullarni keyingi boblarda batafsil o'rganamiz. Hozircha faqat shuni eslab qoling: ular ichida zamonaviy rejim doimo yoqilgan.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>"use strict"</code> — kodni zamonaviy (qat'iy) rejimda ishlatadigan direktiva;</li><li>U skript yoki funksiyaning eng tepasiga yoziladi, aks holda ishlamaydi;</li><li>U ba'zi jim xatolarni ochiq xatolarga aylantiradi va kodni ishonchli qiladi;</li><li>Bir marta yoqilsa, uni bekor qilib bo'lmaydi;</li><li>Klasslar va modullarda u avtomatik yoqilgan, qo'lda yozish shart emas.</li></ul>
 <nav class="lesson-nav">
   <a href="kod-tuzilishi.html"><span class="dir">← Oldingi</span><span class="ttl">Kod tuzilishi</span></a>
@@ -635,6 +649,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oynalararo aloqa — Kodla</title>
   <meta name="description" content="Same Origin (bir xil manba) siyosati, iframe va contentWindow, boshqa manbadagi oynalar bilan xavfsiz aloqa: postMessage va message hodisasi, origin tekshirish orqali xavfsizlik.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,31 @@
 <main class="content article">
 <div class="crumbs">Oynalar va freymlar</div>
 <h1>Oynalararo aloqa</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#same-origin-bir-xil-manba-nima">Same Origin (bir xil manba) nima?</a></li>
+<li class="lvl2"><a href="#bir-xil-manbadagi-oynaga-to-liq-kirish">Bir xil manbadagi oynaga to'liq kirish</a></li>
+<li class="lvl2"><a href="#boshqa-manbadagi-oyna-cheklovlar">Boshqa manbadagi oyna: cheklovlar</a></li>
+<li class="lvl2"><a href="#subdomenlar-document-domain">Subdomenlar: document.domain</a></li>
+<li class="lvl2"><a href="#iframe-name-va-yuklanish-nuozansi">iframe: name va yuklanish nuozansi</a></li>
+<li class="lvl2"><a href="#postmessage-manbalararo-xavfsiz-aloqa">postMessage: manbalararo xavfsiz aloqa</a></li>
+<li class="lvl3"><a href="#xabar-yuborish-postmessage">Xabar yuborish: postMessage</a></li>
+<li class="lvl3"><a href="#xabar-qabul-qilish-message-hodisasi">Xabar qabul qilish: message hodisasi</a></li>
+<li class="lvl2"><a href="#origin-tekshirish-eng-muhim-xavfsizlik-qoidasi">Origin tekshirish — eng muhim xavfsizlik qoidasi</a></li>
+<li class="lvl2"><a href="#amaliy-misol-iframe-bilan-ikki-tomonlama-aloqa">Amaliy misol: iframe bilan ikki tomonlama aloqa</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Same Origin (bir xil manba) siyosati — bu oyna va freymlarning bir-biriga kirishini cheklovchi asosiy xavfsizlik qoidasidir. U zararli sahifaning boshqa oyna tarkibiga (masalan, sizning bank hisobingiz ochilgan tabga) kirib ma'lumot o'g'irlashiga to'sqinlik qiladi. Ushbu darsda bu siyosat qanday ishlashini, <code>iframe</code> bilan ishlashni va turli manbalar orasida <strong>xavfsiz</strong> aloqa o'rnatuvchi <code>postMessage</code>ni chuqur o'rganamiz.</p>
 <div class="warn">Bu darsdagi API'lar (<code>iframe.contentWindow</code>, <code>postMessage</code>, <code>message</code> hodisasi va boshqalar) — brauzer muhitiga tegishli. Kurs playground'ida ular <strong>ishlamaydi</strong>. Barcha kod bloklari faqat <strong>statik misol</strong> — ularni haqiqiy brauzer sahifasida sinang.</div>
-<h2>Same Origin (bir xil manba) nima?</h2>
+<h2 id="same-origin-bir-xil-manba-nima">Same Origin (bir xil manba) nima?</h2>
 <p>Ikki URL bir xil <strong>manbaga (origin)</strong> ega deyiladi, agar ularning <strong>protokoli</strong>, <strong>domeni</strong> va <strong>porti</strong> bir xil bo'lsa. Quyidagi URL'lar bir xil manbaga tegishli:</p>
 <ul><li><code>http://site.com</code></li><li><code>http://site.com/</code></li><li><code>http://site.com/my/page.html</code></li></ul>
 <p>Quyidagilar esa <strong>boshqa</strong> manba hisoblanadi:</p>
 <ul><li><code>http://<strong>www.</strong>site.com</code> — boshqa domen (subdomen ham hisobga olinadi);</li><li><code>http://site.<strong>org</strong></code> — boshqa domen;</li><li><code><strong>https</strong>://site.com</code> — boshqa protokol;</li><li><code>http://site.com:<strong>8080</strong></code> — boshqa port.</li></ul>
 <p>Same Origin siyosati shuni bildiradi: agar bizda boshqa oyna (masalan, <code>window.open</code> bilan ochilgan yoki <code>iframe</code>dagi) havolasi bo'lsa-yu, u oyna <strong>bir xil manbadan</strong> bo'lsa — biz uning tarkibiga to'liq kira olamiz. Agar u <strong>boshqa manbadan</strong> bo'lsa — biz uning URL'ini o'zgartira olamiz (u yerga o'ta olamiz), lekin ichidagi tarkibni (o'zgaruvchilar, DOM) <strong>o'qiy olmaymiz</strong>.</p>
-<h2>Bir xil manbadagi oynaga to'liq kirish</h2>
+<h2 id="bir-xil-manbadagi-oynaga-to-liq-kirish">Bir xil manbadagi oynaga to'liq kirish</h2>
 <p>Agar boshqa oyna (masalan, popup yoki iframe) bir xil manbadan bo'lsa, biz uning barcha ichki tarkibiga kira olamiz: DOM'ini o'qish/o'zgartirish, o'zgaruvchilarini olish va h.k. Masalan, iframe bilan:</p>
 <pre class="code"><code>&lt;iframe src="/same-origin.html" id="iframe"&gt;&lt;/iframe&gt;
 
@@ -623,7 +642,7 @@
 <p>Bu yerda muhim tushunchalar:</p>
 <ul><li><code>iframe.contentWindow</code> — <code>iframe</code> ichidagi <code>window</code> obyektiga havola;</li><li><code>iframe.contentDocument</code> — <code>iframe</code> ichidagi <code>document</code> (<code>iframe.contentWindow.document</code> bilan bir xil, faqat qisqaroq).</li></ul>
 <div class="note"><code>iframe.onload</code> hodisasi freym ichidagi hujjat to'liq yuklanganda ishga tushadi. Freym yuklanmagan turib uning <code>contentDocument</code>iga kirsak, hali eski (bo'sh) hujjatni ko'rishimiz mumkin. Shuning uchun freym tarkibi bilan ishlashni <code>onload</code> ichida qiling.</div>
-<h2>Boshqa manbadagi oyna: cheklovlar</h2>
+<h2 id="boshqa-manbadagi-oyna-cheklovlar">Boshqa manbadagi oyna: cheklovlar</h2>
 <p>Agar oyna yoki iframe <strong>boshqa manbadan</strong> bo'lsa, uning tarkibiga kira olmaymiz. Quyidagi kod xatolik beradi:</p>
 <pre class="code"><code>&lt;iframe src="https://example.com" id="iframe"&gt;&lt;/iframe&gt;
 
@@ -639,13 +658,13 @@
 <p>Biroq boshqa manbadagi oynada ham ba'zi narsalarga ruxsat bor:</p>
 <ul><li><code>iframe.contentWindow.location = '...'</code> — boshqa oynaning URL'ini <strong>yozish</strong> (uni boshqa manzilga o'tkazish) mumkin. Ammo <strong>o'qish</strong> mumkin emas;</li><li><code>iframe.contentWindow.postMessage(...)</code> — xabar yuborish mumkin (bu haqda quyida).</li></ul>
 <div class="warn">Same Origin — bu <strong>xavfsizlik chegarasi</strong>. Uni chetlab o'tishga urinmang. Agar boshqa manbadagi sahifa bilan ma'lumot almashish kerak bo'lsa, buni faqat <code>postMessage</code> orqali — ikkala tomon ham <strong>rozi bo'lgan</strong> holda qiling.</div>
-<h2>Subdomenlar: document.domain</h2>
+<h2 id="subdomenlar-document-domain">Subdomenlar: document.domain</h2>
 <p>Agar ikkita oyna bir asosiy domenning turli <strong>subdomenlaridan</strong> bo'lsa (masalan, <code>john.site.com</code> va <code>peter.site.com</code>), ular tarixan <code>document.domain</code>ni umumiy qiymatga (<code>'site.com'</code>) qo'yish orqali bir-biriga kira olishardi:</p>
 <pre class="code"><code>// john.site.com va peter.site.com sahifalarining
 // ikkalasida ham bu bo'lsa, ular bir-biriga kira oladi:
 document.domain = 'site.com';</code></pre>
 <div class="warn"><code>document.domain</code> mexanizmi <strong>eskirgan (deprecated)</strong> hisoblanadi va zamonaviy brauzerlarda o'chirilmoqda. Yangi kodlarda bunga tayanmang — subdomenlar orasida aloqa uchun ham <code>postMessage</code> ishlatgan ma'qul.</div>
-<h2>iframe: name va yuklanish nuozansi</h2>
+<h2 id="iframe-name-va-yuklanish-nuozansi">iframe: name va yuklanish nuozansi</h2>
 <p>Yana bir nozik nuqta: yangi <code>iframe</code> yaratilganda, unda darhol bo'sh hujjat paydo bo'ladi (<code>about:blank</code>), keyin esa <code>src</code>dagi hujjat yuklanadi. Ya'ni qisqa vaqt ichida ikkita turli hujjat mavjud bo'ladi. Agar biz <code>src</code>dagi hujjat bilan ishlamoqchi bo'lsak, uning yuklanishini kutishimiz kerak:</p>
 <pre class="code"><code>&lt;iframe src="document.html" id="iframe"&gt;&lt;/iframe&gt;
 
@@ -658,10 +677,10 @@ document.domain = 'site.com';</code></pre>
     let body = iframe.contentDocument.body; // (same origin bo'lsa)
   };
 &lt;/script&gt;</code></pre>
-<h2>postMessage: manbalararo xavfsiz aloqa</h2>
+<h2 id="postmessage-manbalararo-xavfsiz-aloqa">postMessage: manbalararo xavfsiz aloqa</h2>
 <p><code>postMessage</code> interfeysi turli manbalardagi oynalarga bir-biri bilan <strong>xavfsiz</strong> gaplashishga imkon beradi. Bu Same Origin siyosatining maxsus ruxsat berilgan yo'lidir: ikkala oyna ham <em>rozi bo'lgan</em> holda ma'lumot almashadi.</p>
 <p>Aloqa ikki qismdan iborat: xabar <strong>yuboruvchi</strong> va xabar <strong>qabul qiluvchi</strong>.</p>
-<h3>Xabar yuborish: postMessage</h3>
+<h3 id="xabar-yuborish-postmessage">Xabar yuborish: postMessage</h3>
 <p>Xabar yubormoqchi bo'lgan oyna qabul qiluvchi oynaning <code>postMessage</code> metodini chaqiradi:</p>
 <pre class="code"><code>// win — biz xabar yubormoqchi bo'lgan oyna
 // (masalan, iframe.contentWindow yoki window.open natijasi)
@@ -675,7 +694,7 @@ win.postMessage('Salom!', 'http://example.com');
 // obyekt ham yuborsa bo'ladi:
 win.postMessage({ type: 'greet', text: 'Salom' }, 'http://example.com');</code></pre>
 <div class="warn"><code>targetOrigin</code>ni <strong>hech qachon</strong> ehtiyotsiz <code>'*'</code> qilmang, agar xabarda maxfiy ma'lumot bo'lsa. Aks holda, agar qabul qiluvchi oynaning manbasi kutilmaganda o'zgargan bo'lsa (masalan, boshqa saytga o'tib ketgan bo'lsa), maxfiy ma'lumot begona saytga tushib qolishi mumkin. Har doim aniq manba manzilini bering.</div>
-<h3>Xabar qabul qilish: message hodisasi</h3>
+<h3 id="xabar-qabul-qilish-message-hodisasi">Xabar qabul qilish: message hodisasi</h3>
 <p>Xabarni qabul qilish uchun qabul qiluvchi oyna <code>message</code> hodisasini tinglaydi:</p>
 <pre class="code"><code>window.addEventListener('message', function(event) {
   // XAVFSIZLIK: birinchi navbatda manbani tekshiramiz!
@@ -692,7 +711,7 @@ win.postMessage({ type: 'greet', text: 'Salom' }, 'http://example.com');</code><
 <p><code>message</code> hodisasi obyekti (<code>event</code>) muhim xossalarga ega:</p>
 <ul><li><code>event.data</code> — <code>postMessage</code>dan kelgan ma'lumot;</li><li><code>event.origin</code> — xabar yuboruvchi oynaning manbasi (masalan, <code>'http://javascript.info'</code>). Buni <strong>tekshirish shart</strong>;</li><li><code>event.source</code> — xabar yuboruvchi oynaga havola. Uning <code>postMessage</code>ini chaqirib javob qaytarsa bo'ladi.</li></ul>
 <div class="note">Muhim nozik jihat: <code>message</code> hodisasi uchun odatiy <code>on&lt;event&gt;</code> xossasi <strong>ishlamaydi</strong>. Ya'ni <code>window.onmessage = ...</code> qilmang — u ba'zi holatlarda kutilganidek ishlamasligi mumkin. Doim <code>window.addEventListener('message', ...)</code> ishlating.</div>
-<h2>Origin tekshirish — eng muhim xavfsizlik qoidasi</h2>
+<h2 id="origin-tekshirish-eng-muhim-xavfsizlik-qoidasi">Origin tekshirish — eng muhim xavfsizlik qoidasi</h2>
 <p><code>postMessage</code> xavfsizligining o'zagi — <strong>ikki tomonlama tekshiruv</strong>:</p>
 <ol><li><strong>Yuborishda</strong>: <code>targetOrigin</code> orqali xabar faqat kutilgan manbaga borishini kafolatlaysiz;</li><li><strong>Qabul qilishda</strong>: <code>event.origin</code>ni tekshirib, faqat ishonchli manbadan kelgan xabarni qabul qilasiz.</li></ol>
 <p>Ikkala tomon ham tekshirilishi shart. Agar qabul qiluvchi <code>event.origin</code>ni tekshirmasa, istalgan sayt (masalan, zararli iframe yoki popup) unga soxta xabar yuborib, uni chalg'itishi mumkin. Masalan, agar sahifangiz kelgan xabarga qarab foydalanuvchi hisobiga o'zgartirish kiritsa, <code>origin</code> tekshiruvi bo'lmasa — bu jiddiy zaiflikka aylanadi.</p>
@@ -708,7 +727,7 @@ win.postMessage({ type: 'greet', text: 'Salom' }, 'http://example.com');</code><
   handleMessage(event.data);
 });</code></pre>
 <div class="warn">Xabar tarkibiga (<code>event.data</code>) ham ishonchsizlik bilan yondashing: uni to'g'ridan-to'g'ri <code>innerHTML</code>ga qo'ymang yoki <code>eval</code> qilmang. Manba to'g'ri bo'lsa ham, ma'lumot formatini tekshirib, faqat kutilgan turdagi qiymatlarni qabul qiling.</div>
-<h2>Amaliy misol: iframe bilan ikki tomonlama aloqa</h2>
+<h2 id="amaliy-misol-iframe-bilan-ikki-tomonlama-aloqa">Amaliy misol: iframe bilan ikki tomonlama aloqa</h2>
 <p>Asosiy sahifa (masalan, <code>https://myapp.com</code>) va boshqa manbadagi <code>iframe</code> (<code>https://widget.com</code>) o'rtasida aloqa quyidagicha ko'rinadi.</p>
 <p>Asosiy sahifada — iframe'ga xabar yuborish va javobni tinglash:</p>
 <pre class="code"><code>let iframe = document.querySelector('#widget');
@@ -738,7 +757,7 @@ window.addEventListener('message', function(event) {
   }
 });</code></pre>
 <div class="tip">Bu naqsh (pattern) juda keng tarqalgan: to'lov widjetlari, chat oynalari, reklama freymlari, autentifikatsiya oynalari — barchasi <code>postMessage</code> orqali ishlaydi. Har doim <code>origin</code>ni ikki tomondan ham tekshiring.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Same Origin</strong> siyosati protokol, domen va port bir xil bo'lgan sahifalarga bir-birining tarkibiga to'liq kirishga ruxsat beradi;</li><li>Boshqa manbadagi oynaga faqat <code>location</code>ni <strong>yozish</strong> va <code>postMessage</code> yuborish mumkin — tarkibni o'qib bo'lmaydi;</li><li><code>iframe.contentWindow</code> va <code>iframe.contentDocument</code> orqali (same origin bo'lsa) freym ichiga kiriladi; freym tarkibini <code>onload</code> ichida ishlating;</li><li><code>win.postMessage(data, targetOrigin)</code> — turli manbalar orasida xabar yuboradi; <code>targetOrigin</code>ni aniq bering;</li><li>Xabar <code>message</code> hodisasi orqali qabul qilinadi; <code>event.data</code>, <code>event.origin</code>, <code>event.source</code> xossalari muhim;</li><li>Eng muhim qoida — <strong>doim <code>event.origin</code>ni tekshiring</strong> va xabar ma'lumotiga ishonchsizlik bilan yondashing.</li></ul>
 <nav class="lesson-nav">
   <a href="popup.html"><span class="dir">← Oldingi</span><span class="ttl">Popup oynalar va window metodlari</span></a>
@@ -752,6 +771,6 @@ window.addEventListener('message', function(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

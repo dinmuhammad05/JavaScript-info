@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SQL: bog'lanishlar va JOIN — Kodla</title>
   <meta name="description" content="Jadvallarni bog'lash: PRIMARY KEY va FOREIGN KEY, munosabatlar (1:N), JOIN turlari (INNER, LEFT, RIGHT), GROUP BY va agregat funksiyalar (COUNT, SUM, AVG), HAVING orqali guruhlarni filtrlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Ma'lumotlar bazalari</div>
 <h1>SQL: bog'lanishlar va JOIN</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nima-uchun-ma-lumotni-bo-lamiz">Nima uchun ma'lumotni bo'lamiz?</a></li>
+<li class="lvl2"><a href="#primary-key-asosiy-kalit">PRIMARY KEY — asosiy kalit</a></li>
+<li class="lvl2"><a href="#foreign-key-tashqi-kalit">FOREIGN KEY — tashqi kalit</a></li>
+<li class="lvl2"><a href="#munosabatlar-1-n">Munosabatlar: 1:N</a></li>
+<li class="lvl2"><a href="#join-jadvallarni-birlashtirish">JOIN — jadvallarni birlashtirish</a></li>
+<li class="lvl3"><a href="#inner-join">INNER JOIN</a></li>
+<li class="lvl3"><a href="#left-join">LEFT JOIN</a></li>
+<li class="lvl3"><a href="#right-join">RIGHT JOIN</a></li>
+<li class="lvl2"><a href="#group-by-va-agregat-funksiyalar">GROUP BY va agregat funksiyalar</a></li>
+<li class="lvl2"><a href="#having-guruhlarni-filtrlash">HAVING — guruhlarni filtrlash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Relatsion bazaning eng kuchli tomoni — jadvallarni bir-biriga <strong>bog'lash</strong> qobiliyatidir. Ma'lumot bir joyda takrorlanmasligi uchun uni bir necha jadvalga bo'lamiz, so'ng <code>JOIN</code> orqali birlashtirib o'qiymiz. Ushbu darsda kalitlar, munosabatlar, JOIN turlari va guruhlash bilan tanishamiz.</p>
-<h2>Nima uchun ma'lumotni bo'lamiz?</h2>
+<h2 id="nima-uchun-ma-lumotni-bo-lamiz">Nima uchun ma'lumotni bo'lamiz?</h2>
 <p>Aytaylik, foydalanuvchilar va ularning buyurtmalarini bitta jadvalda saqlamoqchimiz. Har buyurtma qatorida foydalanuvchi ismini takrorlashga to'g'ri keladi:</p>
 <pre class="code"><code>Yomon usul (hamma narsa bitta jadvalda):
 
@@ -614,14 +633,14 @@
   2 |  Vali              2 |    1    | Ruchka  |   5
                         3 |    2    | Daftar  |  10</code></pre>
 <p>Endi "Ali" faqat bir marta saqlanadi. <code>orders</code> jadvalidagi <code>user_id</code> ustuni qaysi foydalanuvchiga tegishli ekanligini ko'rsatadi. Bu — jadvallar orasidagi <strong>bog'lanish</strong>.</p>
-<h2>PRIMARY KEY — asosiy kalit</h2>
+<h2 id="primary-key-asosiy-kalit">PRIMARY KEY — asosiy kalit</h2>
 <p>Har bir jadvalda odatda <strong>asosiy kalit</strong> (primary key) bo'ladi — bu qatorni yagona aniqlaydigan ustun. Uning qiymati takrorlanmaydi va hech qachon NULL bo'lmaydi. Odatda bu <code>id</code> ustuni:</p>
 <pre class="code"><code>CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL
 );</code></pre>
 <p>Yuqorida <code>id</code> — asosiy kalit. Bazadagi har bir foydalanuvchining o'ziga xos <code>id</code>si bor: 1, 2, 3... Ana shu <code>id</code> orqali biz uni boshqa jadvallardan aniq topa olamiz.</p>
-<h2>FOREIGN KEY — tashqi kalit</h2>
+<h2 id="foreign-key-tashqi-kalit">FOREIGN KEY — tashqi kalit</h2>
 <p><strong>Tashqi kalit</strong> (foreign key) — bir jadvaldagi ustun boshqa jadvalning asosiy kalitiga ishora qiladi. <code>orders</code> jadvalidagi <code>user_id</code> — bu tashqi kalit, u <code>users</code> jadvalining <code>id</code>siga bog'langan:</p>
 <pre class="code"><code>CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
@@ -631,12 +650,12 @@
 );</code></pre>
 <p><code>REFERENCES users(id)</code> qismi bazaga aytadi: "bu <code>user_id</code> ustuni <code>users</code> jadvalining <code>id</code>siga ishora qiladi". Bu bog'lanish ma'lumot butunligini kafolatlaydi.</p>
 <div class="note">Tashqi kalit tufayli baza mavjud bo'lmagan foydalanuvchiga buyurtma qo'shishga ruxsat bermaydi. Masalan, agar <code>users</code>da <code>id = 99</code> yo'q bo'lsa, <code>orders</code>ga <code>user_id = 99</code> qo'sha olmaysiz — baza xatolik beradi. Bu "ma'lumot butunligi" (referential integrity) deyiladi.</div>
-<h2>Munosabatlar: 1:N</h2>
+<h2 id="munosabatlar-1-n">Munosabatlar: 1:N</h2>
 <p>Jadvallar orasida turli munosabatlar bo'ladi. Eng keng tarqalgani — <strong>bir-ko'p</strong> (one-to-many, 1:N):</p>
 <ul><li><strong>1:N (bir-ko'p)</strong> — bir foydalanuvchining ko'p buyurtmasi bo'lishi mumkin, lekin har buyurtma faqat bitta foydalanuvchiga tegishli. Yuqoridagi misol shunday;</li><li><strong>1:1 (bir-bir)</strong> — bir foydalanuvchining bitta profili (kamroq uchraydi);</li><li><strong>N:M (ko'p-ko'p)</strong> — masalan, bir talaba ko'p kursga yozilishi, bir kursda ko'p talaba bo'lishi mumkin. Bu holatda oraliq (bog'lovchi) jadval kerak bo'ladi.</li></ul>
-<h2>JOIN — jadvallarni birlashtirish</h2>
+<h2 id="join-jadvallarni-birlashtirish">JOIN — jadvallarni birlashtirish</h2>
 <p>Endi eng qiziq qismi. Bizga "har buyurtma qaysi foydalanuvchiniki" degan savolga javob kerak — ya'ni ikki jadvalni birlashtirib o'qishimiz kerak. Buning uchun <code>JOIN</code> ishlatiladi.</p>
-<h3>INNER JOIN</h3>
+<h3 id="inner-join">INNER JOIN</h3>
 <p><code>INNER JOIN</code> ikki jadvaldagi <strong>mos keluvchi</strong> qatorlarni birlashtiradi. Faqat ikkala tomonda ham mosligi bor qatorlar natijaga tushadi:</p>
 <pre class="code"><code>SELECT users.name, orders.product, orders.price
 FROM orders
@@ -648,17 +667,17 @@ INNER JOIN users ON orders.user_id = users.id;</code></pre>
  Ali   | Ruchka  |   5
  Vali  | Daftar  |  10</code></pre>
 <div class="tip">Jadval nomlarini har safar yozish uzun bo'ladi. Shuning uchun <em>taxallus</em> (alias) beriladi: <code>FROM orders o INNER JOIN users u ON o.user_id = u.id</code>. Endi <code>o</code> va <code>u</code> deb qisqartirasiz.</div>
-<h3>LEFT JOIN</h3>
+<h3 id="left-join">LEFT JOIN</h3>
 <p><code>LEFT JOIN</code> chap jadvaldagi (FROM'dan keyingi) <strong>barcha</strong> qatorlarni oladi, o'ng jadvalda mos kelmasa ham. Mos kelmagan joylar NULL bilan to'ldiriladi:</p>
 <pre class="code"><code>-- barcha foydalanuvchilar, buyurtmasi bo'lmaganlar ham
 SELECT users.name, orders.product
 FROM users
 LEFT JOIN orders ON orders.user_id = users.id;</code></pre>
 <p>Agar biror foydalanuvchining hech qanday buyurtmasi bo'lmasa, u baribir natijada ko'rinadi, lekin <code>product</code> ustuni NULL bo'ladi. Bu "buyurtma bermagan foydalanuvchilarni topish" kabi savollar uchun juda foydali.</p>
-<h3>RIGHT JOIN</h3>
+<h3 id="right-join">RIGHT JOIN</h3>
 <p><code>RIGHT JOIN</code> — LEFT JOIN'ning aksi: o'ng jadvaldagi barcha qatorlarni oladi. Amaliyotda kamroq ishlatiladi, chunki jadvallar o'rnini almashtirib LEFT JOIN qilish mumkin.</p>
 <div class="note">Farqni eslab qolish oson: <strong>INNER</strong> — faqat ikkala tomonda mosligi bor qatorlar; <strong>LEFT</strong> — chap jadvalning hammasi; <strong>RIGHT</strong> — o'ng jadvalning hammasi. Ko'p hollarda sizga INNER yoki LEFT JOIN yetarli bo'ladi.</div>
-<h2>GROUP BY va agregat funksiyalar</h2>
+<h2 id="group-by-va-agregat-funksiyalar">GROUP BY va agregat funksiyalar</h2>
 <p>Ko'pincha bizga alohida qatorlar emas, <strong>umumlashtirilgan</strong> ma'lumot kerak: "nechta buyurtma bor?", "jami summa qancha?", "o'rtacha narx?". Buning uchun <em>agregat funksiyalar</em> ishlatiladi:</p>
 <ul><li><code>COUNT(*)</code> — qatorlar sonini sanaydi;</li><li><code>SUM(ustun)</code> — qiymatlar yig'indisi;</li><li><code>AVG(ustun)</code> — o'rtacha qiymat;</li><li><code>MIN(ustun)</code> / <code>MAX(ustun)</code> — eng kichik / eng katta qiymat.</li></ul>
 <p>Oddiy agregat (butun jadval bo'yicha):</p>
@@ -678,7 +697,7 @@ FROM users u
 LEFT JOIN orders o ON o.user_id = u.id
 GROUP BY u.name;</code></pre>
 <div class="warn"><code>GROUP BY</code> ishlatilganda <code>SELECT</code>dagi har bir ustun yo <code>GROUP BY</code>da bo'lishi, yoki agregat funksiya ichida bo'lishi kerak. Masalan, <code>SELECT product, COUNT(*) FROM orders GROUP BY user_id</code> xato — <code>product</code> guruhlanmagan va agregatda ham emas.</div>
-<h2>HAVING — guruhlarni filtrlash</h2>
+<h2 id="having-guruhlarni-filtrlash">HAVING — guruhlarni filtrlash</h2>
 <p><code>WHERE</code> alohida qatorlarni filtrlaydi, lekin u <strong>guruhlashdan oldin</strong> ishlaydi. Guruhlangan natijani (agregatni) filtrlash uchun <code>HAVING</code> ishlatiladi:</p>
 <pre class="code"><code>-- 2 tadan ortiq buyurtma bergan foydalanuvchilar
 SELECT user_id, COUNT(*) AS soni
@@ -695,7 +714,7 @@ GROUP BY ustun
 HAVING guruh_sharti
 ORDER BY ustun
 LIMIT n;</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>PRIMARY KEY</strong> — qatorni yagona aniqlaydigan kalit (odatda <code>id</code>);</li><li><strong>FOREIGN KEY</strong> (<code>REFERENCES</code>) — boshqa jadvalning kalitiga ishora, bog'lanishni yaratadi;</li><li>Munosabatlar: eng keng tarqalgani <strong>1:N</strong> (bir foydalanuvchi — ko'p buyurtma);</li><li><code>INNER JOIN</code> — faqat mos qatorlar; <code>LEFT JOIN</code> — chap jadvalning hammasi (mos kelmagani NULL bilan);</li><li>Agregat funksiyalar: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>;</li><li><code>GROUP BY</code> — guruhlaydi, agregatni har guruh uchun hisoblaydi; <code>HAVING</code> — guruhlarni filtrlaydi (WHERE'dan farqli).</li></ul>
 <nav class="lesson-nav">
   <a href="sql-asoslar.html"><span class="dir">← Oldingi</span><span class="ttl">SQL asoslari</span></a>
@@ -709,6 +728,6 @@ LIMIT n;</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Klasslar va konfiguratsiya — Kodla</title>
   <meta name="description" content="TS klasslari, kirish modifikatorlari (public/private/protected/readonly), implements, enum va tsconfig.json asoslari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">TypeScript</div>
 <h1>Klasslar va konfiguratsiya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#typescript-klasslari">TypeScript klasslari</a></li>
+<li class="lvl2"><a href="#kirish-modifikatorlari-public-private-protected">Kirish modifikatorlari: public, private, protected</a></li>
+<li class="lvl2"><a href="#readonly-maydonlar-va-parametr-xossalari">readonly maydonlar va parametr xossalari</a></li>
+<li class="lvl2"><a href="#interfeysni-amalga-oshirish-implements">Interfeysni amalga oshirish (implements)</a></li>
+<li class="lvl2"><a href="#enum-sanaladigan-qiymatlar-to-plami">enum — sanaladigan qiymatlar to'plami</a></li>
+<li class="lvl2"><a href="#tsconfig-json-loyiha-konfiguratsiyasi">tsconfig.json — loyiha konfiguratsiyasi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">TypeScript klasslari — JavaScript klasslarining kuchaytirilgan ko'rinishi. JS'dagi barcha imkoniyatlar saqlanadi, ustiga <strong>kirish modifikatorlari</strong>, <code>implements</code> va boshqa foydali vositalar qo'shiladi. Ushbu yakuniy darsda klasslarni, <code>enum</code>ni va loyihaning yuragi bo'lgan <code>tsconfig.json</code> faylini o'rganamiz.</p>
-<h2>TypeScript klasslari</h2>
+<h2 id="typescript-klasslari">TypeScript klasslari</h2>
 <p>TypeScript klassi JavaScript klassiga o'xshaydi, lekin bir muhim farqi bor: maydonlar (fields) <em>oldindan e'lon qilinishi</em> va turlarga ega bo'lishi kerak:</p>
 <pre class="code"><code>class Foydalanuvchi {
   ism: string;
@@ -616,7 +631,7 @@
 let u = new Foydalanuvchi("Ali", 25);
 console.log(u.salomBer());</code></pre>
 <p>Diqqat qiling: <code>ism: string</code> va <code>yosh: number</code> maydonlari konstruktordan <em>oldin</em> e'lon qilingan. JavaScript'da bu shart emas edi, TypeScript'da esa maydonlarni oldindan bildirish kerak (yoki konstruktorda parametr xossalari orqali).</p>
-<h2>Kirish modifikatorlari: public, private, protected</h2>
+<h2 id="kirish-modifikatorlari-public-private-protected">Kirish modifikatorlari: public, private, protected</h2>
 <p>TypeScript maydon va metodlarga <strong>kirish modifikatorlarini</strong> qo'shadi. Ular xossaga qaysi joydan murojaat qilish mumkinligini belgilaydi:</p>
 <ul><li><code>public</code> — hamma joydan ochiq (standart, yozmasa ham shunday);</li><li><code>private</code> — faqat shu klass ichida ko'rinadi, tashqaridan murojaat mumkin emas;</li><li><code>protected</code> — shu klass va undan meros olgan klasslarda ko'rinadi.</li></ul>
 <pre class="code"><code>class HisobRaqam {
@@ -643,7 +658,7 @@ console.log(h.balansniKorish()); // 1500
 console.log(h.egasi);            // "Ali" — OK
 console.log(h.balans);           // Xato: 'balans' private</code></pre>
 <div class="warn"><code>private</code> va <code>protected</code> — faqat kompilyatsiya paytida tekshiriladi. Tayyor JavaScript'da bu xossalarga baribir kirish mumkin. Haqiqiy maxfiylik uchun JS'ning <code>#</code> (private field) sintaksisini ishlating.</div>
-<h2>readonly maydonlar va parametr xossalari</h2>
+<h2 id="readonly-maydonlar-va-parametr-xossalari">readonly maydonlar va parametr xossalari</h2>
 <p>Klass maydonini <code>readonly</code> qilib, uni faqat konstruktorda o'rnatiladigan va keyin o'zgartirib bo'lmaydigan qilish mumkin:</p>
 <pre class="code"><code>class Mahsulot {
   readonly id: number;
@@ -671,7 +686,7 @@ m.id = 2;         // Xato: 'id' read-only</code></pre>
 let p = new Nuqta(1, 2, "A");
 console.log(p.x, p.y); // 1 2</code></pre>
 <div class="tip">Parametr xossalari ko'p yozuvni qisqartiradi: <code>public x: number</code> deb yozish bilan maydon e'loni va <code>this.x = x</code> tayinlash birdaniga bajariladi.</div>
-<h2>Interfeysni amalga oshirish (implements)</h2>
+<h2 id="interfeysni-amalga-oshirish-implements">Interfeysni amalga oshirish (implements)</h2>
 <p>Klass biror interfeysga mos kelishini kafolatlash uchun <code>implements</code> kalit so'zi ishlatiladi. Bu klass interfeysdagi barcha xossa va metodlarni albatta ta'minlashini majburlaydi:</p>
 <pre class="code"><code>interface Shakl {
   yuza(): number;
@@ -701,7 +716,7 @@ console.log(d.yuza());</code></pre>
 // Xato: Class 'Kvadrat' incorrectly implements interface 'Shakl'.
 // Property 'perimetr' is missing.</code></pre>
 <div class="note"><code>extends</code> (meros) va <code>implements</code> (shartnoma) farqli: <code>extends</code> boshqa klassdan kod meros oladi; <code>implements</code> esa faqat interfeysga mos kelishni majburlaydi, kod bermaydi. Bir klass bir vaqtda <code>extends</code> va <code>implements</code> qila oladi.</div>
-<h2>enum — sanaladigan qiymatlar to'plami</h2>
+<h2 id="enum-sanaladigan-qiymatlar-to-plami">enum — sanaladigan qiymatlar to'plami</h2>
 <p><strong>enum</strong> (enumeration) — bog'liq nomlangan doimiylar to'plamini yaratish uchun ishlatiladi. Masalan, hafta kunlari yoki holatlar. JavaScript'da enum yo'q — bu sof TypeScript qo'shimchasi:</p>
 <pre class="code"><code>enum Yonalish {
   Yuqori,
@@ -722,7 +737,7 @@ console.log(y); // 0 (standart holatda 0 dan boshlab raqamlanadi)</code></pre>
 let h: Holat = Holat.Tayyor;
 console.log(h); // "TAYYOR"</code></pre>
 <div class="tip">Oddiy holatlar uchun ko'p jamoalar <code>enum</code> o'rniga literal union turlarni afzal ko'radi (masalan <code>type Holat = "tayyor" | "bekor"</code>), chunki ular tayyor JS'da qo'shimcha kod yaratmaydi. Ikkalasi ham to'g'ri yechim.</div>
-<h2>tsconfig.json — loyiha konfiguratsiyasi</h2>
+<h2 id="tsconfig-json-loyiha-konfiguratsiyasi">tsconfig.json — loyiha konfiguratsiyasi</h2>
 <p>Haqiqiy loyihalarda har safar <code>tsc fayl.ts</code> yozmaymiz. Buning o'rniga loyiha ildizida <code>tsconfig.json</code> faylini yaratamiz. U TypeScript kompilyatoriga qanday ishlashni aytadi. Uni avtomatik yaratish uchun:</p>
 <pre class="code"><code>tsc --init</code></pre>
 <p>Bu buyruq izohlar bilan to'la <code>tsconfig.json</code> yasaydi. Uning soddalashtirilgan asosiy ko'rinishi quyidagicha:</p>
@@ -745,7 +760,7 @@ console.log(h); // "TAYYOR"</code></pre>
 <pre class="code"><code>tsc          # butun loyihani kompilyatsiya qiladi
 tsc --watch  # o'zgarishlarni kuzatib turadi</code></pre>
 <div class="note"><code>strict: true</code> — TypeScript'dan maksimal foyda olishning kaliti. U <code>strictNullChecks</code>, <code>noImplicitAny</code> kabi bir nechta muhim tekshiruvni birdaniga yoqadi. Yangi loyihalarda uni doim yoqish tavsiya etiladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>TypeScript klasslarida maydonlar oldindan e'lon qilinadi va turlarga ega bo'ladi;</li><li>Kirish modifikatorlari: <code>public</code> (ochiq), <code>private</code> (faqat klass ichida), <code>protected</code> (klass va vorislarida);</li><li><code>readonly</code> maydon faqat konstruktorda o'rnatiladi; <strong>parametr xossalari</strong> yozuvni qisqartiradi;</li><li><code>implements</code> klassni interfeysga mos kelishga majburlaydi (<code>extends</code>dan farqli — kod bermaydi);</li><li><code>enum</code> nomlangan doimiylar to'plamini yaratadi (sonli yoki matnli); ba'zan literal union afzalroq;</li><li><code>tsconfig.json</code> loyiha konfiguratsiyasi — <code>tsc --init</code> bilan yaratiladi;</li><li><code>strict: true</code> sozlamasini yoqish TypeScript'dan to'liq foyda olishning eng muhim qadami.</li></ul>
 <nav class="lesson-nav">
   <a href="ts-funksiya.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiyalar va generiklar</span></a>
@@ -759,6 +774,6 @@ tsc --watch  # o'zgarishlarni kuzatib turadi</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

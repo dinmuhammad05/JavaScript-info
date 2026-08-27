@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kvantorlar: +, *, ?, {n,m} — Kodla</title>
   <meta name="description" content="Miqdor belgilari bilan belgilar nechta marta takrorlanishini boshqarish; ochko'z (greedy) va dangasa (lazy) rejimlar; raqam va HTML teglarni ajratish misollari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Kvantorlar: +, *, ?, {n,m}</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#aniq-miqdor-n">Aniq miqdor: {n}</a></li>
+<li class="lvl2"><a href="#oraliq-n-m">Oraliq: {n,m}</a></li>
+<li class="lvl2"><a href="#qisqartmalar">Qisqartmalar: +, ?, *</a></li>
+<li class="lvl2"><a href="#ochko-z-rejim-greedy">Ochko'z rejim (greedy)</a></li>
+<li class="lvl2"><a href="#dangasa-rejim-lazy">Dangasa rejim (lazy)</a></li>
+<li class="lvl2"><a href="#amaliy-misol-html-teglarni-ajratish">Amaliy misol: HTML teglarni ajratish</a></li>
+<li class="lvl2"><a href="#amaliy-misol-kasr-sonlar">Amaliy misol: kasr sonlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Kvantor</strong> (quantifier) — muntazam ifodada biror belgi yoki guruh <em>necha marta</em> takrorlanishi kerakligini bildiruvchi maxsus belgi. Masalan, <code>\d+</code> — "bir yoki undan ko'p raqam" degani. Kvantorlar RegExp'ni haqiqatan kuchli qiladi: aynan ular yordamida biz uzunligi oldindan noma'lum bo'lgan matnlarni — raqamlar, so'zlar, teglar — tuta olamiz.</p>
-<h2>Aniq miqdor: {n}</h2>
+<h2 id="aniq-miqdor-n">Aniq miqdor: {n}</h2>
 <p>Eng oddiy kvantor — figurali qavs ichidagi aniq son. <code>{n}</code> — undan oldingi belgi <strong>roppa-rosa n marta</strong> takrorlanishini talab qiladi.</p>
 <p>Masalan, <code>\d{4}</code> — ketma-ket kelgan to'rtta raqam degani (masalan yil):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>kvantor-n.js</span></div><textarea spellcheck="false">let str = "Men 1995-yilda tug'ilganman, hozir 2026-yil.";
@@ -605,7 +621,7 @@ let regexp = /\d{4}/g;
 
 console.log(str.match(regexp));  // [ '1995', '2026' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: kvantor faqat <strong>o'zidan oldingi bitta belgi yoki guruhga</strong> ta'sir qiladi. <code>\d{4}</code> da bu <code>\d</code>, ya'ni bitta raqam sinfi.</p>
-<h2>Oraliq: {n,m}</h2>
+<h2 id="oraliq-n-m">Oraliq: {n,m}</h2>
 <p><code>{n,m}</code> — takrorlanishlar soni <strong>n dan m gacha</strong> (ikkalasi ham kiritilgan) bo'lishi mumkin. Dvigatel iloji boricha ko'proq belgini olishga harakat qiladi (bu haqda pastda batafsil).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>kvantor-nm.js</span></div><textarea spellcheck="false">let str = "1 12 123 1234 12345";
 let regexp = /\d{2,4}/g;
@@ -618,7 +634,7 @@ console.log(str.match(regexp));  // [ '12', '123', '1234', '1234' ]</textarea><d
 let regexp = /\d{3,}/g;
 
 console.log(str.match(regexp));  // [ '333', '4444' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qisqartmalar: +, ?, *</h2>
+<h2 id="qisqartmalar">Qisqartmalar: +, ?, *</h2>
 <p>Amaliyotda uchta oraliq juda ko'p ishlatilgani uchun ularga qisqa belgilar berilgan:</p>
 <ul><li><code>+</code> — <code>{1,}</code> ma'nosini bildiradi: "<strong>bir yoki undan ko'p</strong>";</li><li><code>?</code> — <code>{0,1}</code> ma'nosini bildiradi: "<strong>nol yoki bitta</strong>", ya'ni belgi ixtiyoriy;</li><li><code>*</code> — <code>{0,}</code> ma'nosini bildiradi: "<strong>nol yoki undan ko'p</strong>".</li></ul>
 <p>Mana <code>+</code> yordamida matndan barcha sonlarni (uzunligidan qat'i nazar) ajratamiz:</p>
@@ -637,7 +653,7 @@ console.log("1000".match(/10+/));  // [ '1000' ] (1 va uchta 0)
 console.log("1".match(/10+/));     // null   (0 yo'q)
 console.log("1".match(/10*/));     // [ '1' ]  (0 ta 0 ham bo'ladi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Eslab qolish oson: <code>+</code> = "kamida bitta", <code>?</code> = "bor yoki yo'q", <code>*</code> = "bor bo'lsa mayli, yo'q bo'lsa ham mayli".</div>
-<h2>Ochko'z rejim (greedy)</h2>
+<h2 id="ochko-z-rejim-greedy">Ochko'z rejim (greedy)</h2>
 <p>Kvantorlar sukut bo'yicha <strong>ochko'z</strong> (greedy) ishlaydi: dvigatel iloji boricha <em>ko'proq</em> belgini olishga urinadi. Bu ba'zan kutilmagan natija beradi.</p>
 <p>Klassik misol: qo'shtirnoq ichidagi matnni tutmoqchimiz. <code>".+"</code> deb yozsak nima bo'ladi?</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ochkoz.js</span></div><textarea spellcheck="false">let str = 'Bir "kitob" va "daftar" bor.';
@@ -646,7 +662,7 @@ let regexp = /".+"/g;
 console.log(str.match(regexp));
 // [ '"kitob" va "daftar"' ]  -- kutilgani ikkita alohida so'z edi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Nega bunday bo'ldi? <code>.+</code> ochko'z bo'lgani uchun dvigatel birinchi qo'shtirnoqdan keyin <strong>matn oxirigacha</strong> hamma narsani "yamlab" oladi, so'ng oxirgi <code>"</code> ni topish uchun orqaga qaytadi va eng oxirgi qo'shtirnoqni tanlaydi. Natijada ikkala qo'shtirnoq oralig'idagi hamma narsa bitta mos kelish bo'lib qoladi.</p>
-<h2>Dangasa rejim (lazy)</h2>
+<h2 id="dangasa-rejim-lazy">Dangasa rejim (lazy)</h2>
 <p>Ochko'zlikni to'xtatish uchun kvantordan keyin <code>?</code> qo'yamiz. Bu uni <strong>dangasa</strong> (lazy) qiladi: dvigatel endi iloji boricha <em>kamroq</em> belgini oladi, ya'ni birinchi mos kelishda to'xtaydi.</p>
 <p><code>.+?</code> — "iloji boricha kam belgi, lekin kamida bitta":</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>dangasa.js</span></div><textarea spellcheck="false">let str = 'Bir "kitob" va "daftar" bor.';
@@ -656,7 +672,7 @@ console.log(str.match(regexp));
 // [ '"kitob"', '"daftar"' ]  -- endi to'g'ri!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>?</code> belgisi ikki xil vazifada ishlaydi: agar u <strong>o'zi kvantor</strong> bo'lsa — "0 yoki 1" degani; agar <strong>boshqa kvantordan keyin</strong> kelsa — o'sha kvantorni dangasa qiladi. Masalan <code>+?</code>, <code>*?</code>, <code>{2,4}?</code>.</div>
 <p>Dangasalik faqat o'zi qo'yilgan kvantorga ta'sir qiladi, boshqalari ochko'zligicha qoladi. Shuning uchun murakkab shablonlarda har bir kvantorni alohida sozlash mumkin.</p>
-<h2>Amaliy misol: HTML teglarni ajratish</h2>
+<h2 id="amaliy-misol-html-teglarni-ajratish">Amaliy misol: HTML teglarni ajratish</h2>
 <p>Matndan barcha oddiy HTML teglarni ajratamiz. Ochko'z <code>&lt;.+&gt;</code> xato ishlaydi — u birinchi <code>&lt;</code> dan oxirgi <code>&gt;</code> gacha hammasini oladi. To'g'ri yechim — dangasa <code>&lt;.+?&gt;</code> yoki undan ham yaxshisi <code>&lt;[^&gt;]+&gt;</code>:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>teg-ajratish.js</span></div><textarea spellcheck="false">let str = "&lt;p&gt;Salom&lt;/p&gt; &lt;b&gt;dunyo&lt;/b&gt;";
 
@@ -668,7 +684,7 @@ console.log(str.match(/&lt;.+?&gt;/g));
 console.log(str.match(/&lt;[^&gt;]+&gt;/g));
 // [ '&lt;p&gt;', '&lt;/p&gt;', '&lt;b&gt;', '&lt;/b&gt;' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Ko'p hollarda dangasa kvantor o'rniga <strong>inkor belgilar sinfi</strong> (masalan <code>[^&gt;]+</code>) yaxshiroq: u tezroq ishlaydi va "ortga qaytish" (backtracking) muammolaridan xoli bo'ladi.</div>
-<h2>Amaliy misol: kasr sonlar</h2>
+<h2 id="amaliy-misol-kasr-sonlar">Amaliy misol: kasr sonlar</h2>
 <p>Butun va kasr sonlarni birga tutish uchun kvantorlarni birlashtiramiz. Nuqtadan keyingi qism ixtiyoriy bo'lishi kerak, shuning uchun butun bir guruhni <code>?</code> bilan ixtiyoriy qilamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>kasr-son.js</span></div><textarea spellcheck="false">let str = "Narx: 12 yoki 12.5 yoki 100.99 so'm";
 let regexp = /\d+(\.\d+)?/g;
@@ -676,7 +692,7 @@ let regexp = /\d+(\.\d+)?/g;
 console.log(str.match(regexp));  // [ '12', '12.5', '100.99' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>\d+</code> — butun qism, <code>(\.\d+)?</code> — nuqta va undan keyingi raqamlar, ammo butun guruh <code>?</code> tufayli ixtiyoriy. Shu bois <code>12</code> ham, <code>12.5</code> ham tutiladi.</p>
 <div class="warn">Ochko'z kvantorlar juda uzun matnlarda "katastrofik backtracking"ga (dvigatel millionlab variantni sinab, qotib qolishi) olib kelishi mumkin. Ayniqsa <code>(a+)+</code> kabi ichma-ich kvantorlardan ehtiyot bo'ling.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>{n}</code> — roppa-rosa n marta; <code>{n,m}</code> — n dan m gacha; <code>{n,}</code> — kamida n marta;</li><li><code>+</code> = <code>{1,}</code>; <code>?</code> = <code>{0,1}</code>; <code>*</code> = <code>{0,}</code>;</li><li>Kvantor faqat o'zidan oldingi bitta belgi yoki guruhga ta'sir qiladi;</li><li>Sukut bo'yicha kvantorlar <strong>ochko'z</strong> — imkon qadar ko'p oladi;</li><li>Kvantordan keyin <code>?</code> qo'yilsa, u <strong>dangasa</strong> bo'ladi — imkon qadar kam oladi;</li><li>Teg va qo'shtirnoq ichidagi matnni tutishda dangasa rejim yoki inkor sinf (<code>[^x]+</code>) ishlatiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-anchor.html"><span class="dir">← Oldingi</span><span class="ttl">Langarlar: ^ va $, ko'p qatorli rejim</span></a>
@@ -690,6 +706,6 @@ console.log(str.match(regexp));  // [ '12', '12.5', '100.99' ]</textarea><div cl
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

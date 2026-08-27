@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coverage va yaxshi amaliyot — Kodla</title>
   <meta name="description" content="Kod qamrovi (--coverage), AAA namunasi, nimani test qilish kerak, yaxshi test belgilari va to'liq test misoli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Testlash (Jest)</div>
 <h1>Coverage va yaxshi amaliyot</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#kod-qamrovi-coverage">Kod qamrovi (coverage)</a></li>
+<li class="lvl2"><a href="#aaa-namunasi">AAA namunasi</a></li>
+<li class="lvl2"><a href="#nimani-test-qilish-kerak">Nimani test qilish kerak?</a></li>
+<li class="lvl2"><a href="#yaxshi-test-belgilari">Yaxshi test belgilari</a></li>
+<li class="lvl2"><a href="#to-liq-misol-valyuta-konvertori">To'liq misol: valyuta konvertori</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Test yozishni bilish — bir masala, yaxshi test yozish — boshqa masala. Bu darsda kod qamrovini o'lchash, testlarni to'g'ri tuzilish namunasida yozish va qaysi holatlarni tekshirish kerakligini o'rganamiz.</p>
-<h2>Kod qamrovi (coverage)</h2>
+<h2 id="kod-qamrovi-coverage">Kod qamrovi (coverage)</h2>
 <p><strong>Coverage (qamrov)</strong> — bu testlaringiz kodning qancha qismini ishga tushirganini ko'rsatadigan o'lchov. Jest buni <code>--coverage</code> bayrog'i bilan hisoblab beradi:</p>
 <pre class="code"><code>npx jest --coverage
 
@@ -612,7 +626,7 @@ narx.js    |   100   |    80    |   100   |   100   |
 <ul><li><strong>% Stmts</strong> — bajarilgan operatorlar (statements) ulushi.</li><li><strong>% Branch</strong> — tekshirilgan tarmoqlar (masalan <code>if/else</code> ikkala yo'li).</li><li><strong>% Funcs</strong> — chaqirilgan funksiyalar ulushi.</li><li><strong>% Lines</strong> — ishga tushgan satrlar ulushi.</li></ul>
 <div class="warn">Coverage — foydali, lekin aldamchi o'lchov. 100% qamrov kod xatosiz degani EMAS. Test satrni ishga tushirishi mumkin, lekin natijani hech tekshirmasligi mumkin. Coverage'ni maqsad emas, yo'l-yo'riq sifatida ishlating.</div>
 <div class="tip">Eng foydali ustun — <strong>% Branch</strong>. U <code>if</code>ning ham rost, ham yolg'on yo'llari tekshirilganini ko'rsatadi. Ko'p yashirin xatolar aynan tekshirilmagan tarmoqlarda yashiringan bo'ladi.</div>
-<h2>AAA namunasi</h2>
+<h2 id="aaa-namunasi">AAA namunasi</h2>
 <p>Yaxshi test aniq tuzilishga ega bo'lishi kerak. Eng ommabop namuna — <strong>AAA (Arrange-Act-Assert)</strong>, ya'ni <em>Tayyorla-Bajar-Tekshir</em>. Har bir test uch qismga bo'linadi:</p>
 <ol><li><strong>Arrange (Tayyorla):</strong> kerakli ma'lumot va holatni tayyorlaysiz.</li><li><strong>Act (Bajar):</strong> tekshirilayotgan funksiyani bir marta chaqirasiz.</li><li><strong>Assert (Tekshir):</strong> natija kutilganidek ekanini tekshirasiz.</li></ol>
 <pre class="code"><code>test('savatdagi mahsulotlar umumiy narxini hisoblaydi', () =&gt; {
@@ -629,19 +643,19 @@ narx.js    |   100   |    80    |   100   |   100   |
   expect(jami).toBe(400);
 });</code></pre>
 <div class="note">AAA namunasi testni o'qilishi oson qiladi: kim o'qisa ham, nima tayyorlangani, nima bajarilgani va nima kutilayotgani darhol ko'rinadi.</div>
-<h2>Nimani test qilish kerak?</h2>
+<h2 id="nimani-test-qilish-kerak">Nimani test qilish kerak?</h2>
 <p>Hamma narsani testlash kerak emas. Diqqatni eng ko'p xato yashiringan joylarga qarating:</p>
 <ul><li><strong>Oddiy holat (happy path):</strong> hamma narsa to'g'ri bo'lganda funksiya kutilgan natijani berishi.</li><li><strong>Chegaraviy holatlar (edge cases):</strong> bo'sh massiv, 0, manfiy son, juda katta qiymat, bitta element.</li><li><strong>Xato holatlar:</strong> noto'g'ri kirish, <code>null</code>, <code>undefined</code>, xato tashlanishi kerak bo'lgan joylar.</li><li><strong>Muhim biznes mantiq:</strong> narx hisoblash, chegirmalar, ruxsatlar kabi pul yoki xavfsizlikka aloqador qismlar.</li></ul>
 <p>Aksincha, bularni odatda alohida testlashning ma'nosi kam:</p>
 <ul><li>Tashqi kutubxonalar (ular o'z testlariga ega).</li><li>Oddiy getter/setter yoki hech qanday mantiqsiz o'ram funksiyalar.</li><li>Til yoki freymvorkning o'zi (masalan <code>Array.map</code> ishlashini tekshirish shart emas).</li></ul>
 <div class="tip">Har bir <code>if</code> uchun kamida ikkita test o'ylang: shart rost bo'lgan va yolg'on bo'lgan holatlar. Shunda tarmoqlar to'liq qoplanadi.</div>
-<h2>Yaxshi test belgilari</h2>
+<h2 id="yaxshi-test-belgilari">Yaxshi test belgilari</h2>
 <p>Yaxshi testlar bir necha xususiyatga ega. Ularni <strong>FIRST</strong> tamoyillari deb ham atashadi:</p>
 <ul><li><strong>Fast (Tez):</strong> testlar tez ishlashi kerak, aks holda ularni ishga tushirmaysiz.</li><li><strong>Isolated (Mustaqil):</strong> har bir test boshqasidan mustaqil bo'lishi, tartibi muhim bo'lmasligi kerak.</li><li><strong>Repeatable (Takrorlanuvchi):</strong> test har safar bir xil natija berishi kerak — vaqt, tasodif yoki tarmoqqa bog'liq bo'lmasligi lozim.</li><li><strong>Self-validating (O'z-o'zini tekshiruvchi):</strong> natija aniq yashil yoki qizil bo'lishi, qo'lda talqin talab qilmasligi kerak.</li><li><strong>Thorough (To'liq):</strong> muhim holatlarni — oddiy, chegaraviy va xato holatlarni qamrab olishi kerak.</li></ul>
 <p>Bundan tashqari, quyidagi amaliy maslahatlarga rioya qiling:</p>
 <ul><li>Bir testda bitta g'oyani tekshiring — nomidan nima tekshirilayotgani aniq bo'lsin.</li><li>Test nomi tushunarli jumla bo'lsin: <code>'bo'sh savat uchun 0 qaytaradi'</code>.</li><li>Testda mantiq (if, sikl) yozmang — test o'zi soddaligicha qolsin.</li><li>Testlar tasodifiy qiymat yoki joriy vaqtga bog'liq bo'lmasin.</li></ul>
 <div class="warn">Bir-biriga bog'liq testlar — eng ko'p uchraydigan muammo. Agar bitta test ikkinchisidan qolgan holatga tayansa, biri o'zgarganda ikkinchisi tushunarsiz sabab bilan yiqiladi.</div>
-<h2>To'liq misol: valyuta konvertori</h2>
+<h2 id="to-liq-misol-valyuta-konvertori">To'liq misol: valyuta konvertori</h2>
 <p>Endi barcha o'rganganlarimizni bitta funksiya uchun to'liq testda birlashtiramiz. Mana tekshiriladigan funksiya:</p>
 <pre class="code"><code>// konvertor.js
 function konvertQil(summa, kurs) {
@@ -694,7 +708,7 @@ describe('konvertQil', () =&gt; {
 });</code></pre>
 <p>E'tibor bering: test to'plami funksiyaning har bir tarmog'ini — oddiy ishlash, yaxlitlash, nol qiymatlar, manfiy va noto'g'ri turdagi kirishlarni — qamrab oldi. Aynan shunday testlar kelajakda kod o'zgartirilganda sizni himoya qiladi.</p>
 <div class="tip">To'liq testni bir zumda emas, bosqichma-bosqich yozing: avval oddiy holat, so'ng chegaraviy, oxirida xato holatlari. Har bir test qo'shilgach uni ishga tushirib, yashil ekaniga ishonch hosil qiling.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>jest --coverage</code> kodning qancha qismi test bilan qoplanganini ko'rsatadi; % Branch — eng foydali ustun.</li><li>Coverage 100% bo'lishi kod xatosiz degani emas — uni yo'l-yo'riq sifatida ishlating.</li><li>AAA namunasi: Arrange (tayyorla), Act (bajar), Assert (tekshir) — testni o'qilishli qiladi.</li><li>Oddiy, chegaraviy va xato holatlarni test qiling; tashqi kutubxona va tilning o'zini emas.</li><li>Yaxshi test FIRST: tez, mustaqil, takrorlanuvchi, o'z-o'zini tekshiruvchi va to'liq.</li><li>Har bir funksiya uchun oddiy + chegaraviy + xato holatlarni qamragan to'liq test to'plami eng ishonchli himoya beradi.</li></ul>
 <nav class="lesson-nav">
   <a href="jest-async-mock.html"><span class="dir">← Oldingi</span><span class="ttl">Async testlar va mock</span></a>
@@ -708,6 +722,6 @@ describe('konvertQil', () =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

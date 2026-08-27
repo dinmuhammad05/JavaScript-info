@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TLS/HTTPS qanday ishlaydi — Kodla</title>
   <meta name="description" content="HTTP va HTTPS farqi, nega HTTPS shart (MITM hujumi); TLS handshake yuqori darajada; sertifikat va sertifikat markazi (CA), ishonch zanjiri; HTTPS ni buzadigan xatolar; Let's Encrypt bilan bepul sertifikat.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,39 +599,52 @@
 <main class="content article">
 <div class="crumbs">Kriptografiya asoslari</div>
 <h1>TLS/HTTPS qanday ishlaydi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#http-va-https">HTTP va HTTPS</a></li>
+<li class="lvl2"><a href="#nega-https-shart-mitm-hujumi">Nega HTTPS shart: MITM hujumi</a></li>
+<li class="lvl2"><a href="#tls-handshake-yuqori-darajada">TLS handshake — yuqori darajada</a></li>
+<li class="lvl2"><a href="#sertifikat-va-sertifikat-markazi-ca">Sertifikat va sertifikat markazi (CA)</a></li>
+<li class="lvl2"><a href="#ishonch-zanjiri">Ishonch zanjiri</a></li>
+<li class="lvl2"><a href="#https-ni-buzadigan-xatolar">HTTPS ni buzadigan xatolar</a></li>
+<li class="lvl2"><a href="#let-s-encrypt-bepul-sertifikat">Let's Encrypt — bepul sertifikat</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Brauzer manzil qatorida yashil qulf belgisini ko'rganingizda, orqada murakkab va nafis kriptografik jarayon ishlab turadi. Ushbu darsda HTTP va HTTPS farqini, nega HTTPS bugungi kunda majburiy ekanini, TLS "qo'l berib ko'rishish" (handshake) qanday ishlashini va sertifikatlarga qanday ishonch qurilishini yuqori darajada o'rganamiz.</p>
-<h2>HTTP va HTTPS</h2>
+<h2 id="http-va-https">HTTP va HTTPS</h2>
 <p><strong>HTTP</strong> (HyperText Transfer Protocol) — web'ning asosiy protokoli. Muammosi shundaki, u ma'lumotni <strong>ochiq matnda</strong> uzatadi. Ya'ni siz va server orasidagi yo'lda o'tirgan har kim — Wi-Fi egasi, internet-provayder, tarmoq uskunasi — barcha ma'lumotni (parollar, xabarlar, kartalar) o'qiy oladi.</p>
 <p><strong>HTTPS</strong> — bu "HTTP over TLS", ya'ni HTTP so'rovlari <strong>TLS</strong> (Transport Layer Security) qatlami bilan shifrlanadi. HTTPS uch narsani ta'minlaydi:</p>
 <ul><li><strong>Maxfiylik:</strong> ma'lumot shifrlanadi — yo'ldagi hech kim o'qiy olmaydi;</li><li><strong>Butunlik:</strong> ma'lumot yo'lda o'zgartirilsa, buni aniqlab bo'ladi;</li><li><strong>Autentifikatsiya:</strong> siz haqiqatan ham to'g'ri serverga ulanayotganingizga ishonch hosil qilasiz.</li></ul>
 <div class="note">TLS — bu <strong>SSL</strong>ning zamonaviy davomchisi. SSL eski va buzilgan hisoblanadi; bugun aslida hamma joyda TLS ishlatiladi, lekin "SSL sertifikat" iborasi odat bo'yicha hali ham ishlatiladi.</div>
-<h2>Nega HTTPS shart: MITM hujumi</h2>
+<h2 id="nega-https-shart-mitm-hujumi">Nega HTTPS shart: MITM hujumi</h2>
 <p>HTTP'ning xavfini eng yaxshi ko'rsatadigan tahdid — <strong>o'rtadagi odam hujumi</strong> (Man-in-the-Middle, MITM). Bunda hujumchi siz va server orasiga suqilib kiradi:</p>
 <ol><li>Siz umumiy Wi-Fi'ga (masalan, kafeda) ulangansiz;</li><li>Hujumchi o'sha tarmoqda sizning HTTP trafigingizni ushlab turadi;</li><li>U parollaringizni, cookie'laringizni <em>o'qiy</em> oladi (maxfiylik buziladi);</li><li>Undan ham yomoni — u sahifa mazmunini <em>o'zgartira</em> oladi (butunlik buziladi), masalan soxta forma qo'shib.</li></ol>
 <p>HTTPS bu hujumni to'xtatadi: ma'lumot shifrlangani uchun hujumchi uni o'qiy olmaydi, o'zgartira ham olmaydi (o'zgartirsa, aniqlanadi), hamda sertifikat orqali soxta serverni ham fosh qiladi.</p>
 <div class="warn">Ochiq (parolsiz) Wi-Fi tarmoqlarida HTTP saytlarga hech qachon maxfiy ma'lumot kiritmang. Faqat HTTPS (qulf belgisi bor) saytlarga ishoning.</div>
-<h2>TLS handshake — yuqori darajada</h2>
+<h2 id="tls-handshake-yuqori-darajada">TLS handshake — yuqori darajada</h2>
 <p>HTTPS aloqasi boshlanishidan oldin brauzer va server <strong>TLS handshake</strong> (qo'l berib ko'rishish) bosqichidan o'tadi. Uning maqsadi — xavfsiz aloqa uchun umumiy <em>simmetrik kalitni</em> kelishib olish. Bu yerda o'tgan darsdagi <strong>gibrid yondashuv</strong> namoyon bo'ladi:</p>
 <ol><li><strong>Salom (ClientHello):</strong> brauzer serverga qaysi TLS versiyalari va algoritmlarni qo'llab-quvvatlashini aytadi;</li><li><strong>Sertifikat:</strong> server o'z ochiq kaliti bo'lgan <em>sertifikatini</em> yuboradi;</li><li><strong>Tekshirish:</strong> brauzer sertifikat haqiqiy va ishonchli ekanini tekshiradi (quyida batafsil);</li><li><strong>Kalit kelishish:</strong> asimmetrik kriptografiya yordamida ikkala tomon bir martalik <em>simmetrik seans kalitini</em> xavfsiz hosil qiladi;</li><li><strong>Xavfsiz aloqa:</strong> shundan keyin barcha ma'lumot shu tez simmetrik kalit (AES) bilan shifrlanadi.</li></ol>
 <p>Nima uchun ikki bosqich? Chunki asimmetrik shifrlash xavfsiz, lekin sekin; simmetrik shifrlash tez, lekin kalitni almashish qiyin. Handshake asimmetrik bilan kalitni <em>bir marta</em> xavfsiz kelishib oladi, keyin butun trafik tez simmetrik bilan yuradi.</p>
 <div class="tip">Har bir yangi seans uchun yangi simmetrik kalit yaratiladi. Bu "forward secrecy" tamoyili: agar kelajakda serverning maxfiy kaliti sizsa ham, o'tgan seanslar shifrini ochib bo'lmaydi.</div>
-<h2>Sertifikat va sertifikat markazi (CA)</h2>
+<h2 id="sertifikat-va-sertifikat-markazi-ca">Sertifikat va sertifikat markazi (CA)</h2>
 <p>Handshake'da server o'z ochiq kalitini yuboradi. Lekin qanday ishonch hosil qilamizki, bu <em>haqiqatan ham</em> o'sha saytniki, hujumchining soxta kaliti emas? Bu yerda <strong>sertifikatlar</strong> va <strong>sertifikat markazlari</strong> (Certificate Authority, CA) yordamga keladi.</p>
 <ul><li><strong>Sertifikat</strong> — bu "bu ochiq kalit falon domenga tegishli" degan raqamli hujjat;</li><li><strong>Sertifikat markazi (CA)</strong> — ishonchli tashkilot bo'lib, u domen egaligini tekshirib, sertifikatni <em>o'z maxfiy kaliti bilan imzolaydi</em>;</li><li>Brauzer va operatsion tizimda ishonchli CA'lar ro'yxati oldindan o'rnatilgan bo'ladi.</li></ul>
 <p>Ya'ni CA sertifikatni raqamli imzolaydi (bu haqda keyingi darsda batafsil). Brauzer CA'ning ochiq kaliti bilan bu imzoni tekshiradi. Imzo to'g'ri chiqsa, sertifikatga ishonadi.</p>
-<h2>Ishonch zanjiri</h2>
+<h2 id="ishonch-zanjiri">Ishonch zanjiri</h2>
 <p>Amalda sertifikatlar <strong>ishonch zanjiri</strong> (chain of trust) orqali bog'lanadi:</p>
 <ol><li><strong>Root CA</strong> — eng yuqoridagi ildiz sertifikat, brauzerga oldindan o'rnatilgan va so'zsiz ishoniladi;</li><li><strong>Intermediate CA</strong> — root tomonidan imzolangan oraliq sertifikatlar;</li><li><strong>Server sertifikati</strong> — sizning saytingizning sertifikati, intermediate tomonidan imzolangan.</li></ol>
 <p>Brauzer zanjirni pastdan tepaga tekshiradi: server sertifikatini intermediate imzolaganmi, uni root imzolaganmi, va root ishonchli ro'yxatdami. Agar zanjirning har bir bo'g'ini to'g'ri bo'lsa — ishonch o'rnatiladi.</p>
-<h2>HTTPS ni buzadigan xatolar</h2>
+<h2 id="https-ni-buzadigan-xatolar">HTTPS ni buzadigan xatolar</h2>
 <p>HTTPS o'rnatilgan bo'lsa ham, bir nechta keng tarqalgan xatolar himoyani zaiflashtiradi:</p>
 <ul><li><strong>Aralash kontent (mixed content):</strong> HTTPS sahifada HTTP orqali yuklangan skript yoki rasm — bu qism himoyasiz qoladi va butun sahifani xavf ostiga qo'yadi;</li><li><strong>Eskirgan TLS versiyalari:</strong> TLS 1.0 va 1.1 buzilgan — faqat TLS 1.2 va 1.3 ishlating;</li><li><strong>Muddati o'tgan sertifikat:</strong> yangilashni unutish saytni ishonchsiz qiladi;</li><li><strong>Zaif shifr to'plamlari:</strong> eski, zaif algoritmlarni o'chirib qo'yish kerak;</li><li><strong>HSTS yo'qligi:</strong> <code>Strict-Transport-Security</code> sarlavhasi brauzerni doim HTTPS'ga majburlaydi.</li></ul>
 <div class="warn">Aralash kontent xavflidir: agar HTTPS sahifada bitta HTTP <code>&lt;script&gt;</code> bo'lsa, hujumchi shu skriptni almashtirib butun sahifani nazorat qilishi mumkin. Barcha resurslarni HTTPS orqali yuklang.</div>
-<h2>Let's Encrypt — bepul sertifikat</h2>
+<h2 id="let-s-encrypt-bepul-sertifikat">Let's Encrypt — bepul sertifikat</h2>
 <p>Ilgari sertifikatlar pullik va olish murakkab edi. Bugun <strong>Let's Encrypt</strong> — notijorat sertifikat markazi — sertifikatlarni <strong>bepul va avtomatik</strong> beradi. Bu HTTPS'ni hamma uchun ochdi.</p>
 <ul><li>Sertifikatlar <code>certbot</code> kabi vositalar bilan avtomatik olinadi va yangilanadi;</li><li>Amal muddati qisqa (90 kun), lekin avtomatik yangilanadi — bu xavfsizroq;</li><li>Ko'plab hosting va platformalar HTTPS'ni bir tugma bilan yoqadi.</li></ul>
 <div class="tip">Har doim HTTPS ishlating — hatto oddiy, "maxfiy ma'lumoti yo'q" bloglar uchun ham. HTTPS bepul, brauzerlar HTTP saytlarni "xavfsiz emas" deb belgilaydi, va u SEO'ga ham ijobiy ta'sir qiladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>HTTP</strong> ma'lumotni ochiq uzatadi; <strong>HTTPS</strong> uni TLS bilan shifrlab, maxfiylik, butunlik va autentifikatsiyani beradi;</li><li>HTTPS <strong>MITM hujumini</strong> to'xtatadi — yo'ldagi hujumchi ma'lumotni o'qiy ham, o'zgartira ham olmaydi;</li><li><strong>TLS handshake</strong> gibrid yondashuvni ishlatadi: asimmetrik bilan simmetrik kalitni kelishib, keyin AES bilan tez shifrlaydi;</li><li><strong>Sertifikat</strong> ochiq kalitni domenga bog'laydi; <strong>CA</strong> uni imzolaydi va <strong>ishonch zanjiri</strong> orqali tekshiriladi;</li><li>Aralash kontent, eskirgan TLS, muddati o'tgan sertifikat — HTTPS'ni zaiflashtiradigan keng xatolar;</li><li><strong>Let's Encrypt</strong> bepul, avtomatik sertifikat beradi — har doim HTTPS ishlating.</li></ul>
 <nav class="lesson-nav">
   <a href="hashing-parol.html"><span class="dir">← Oldingi</span><span class="ttl">Hashing va parollarni xavfsiz saqlash</span></a>
@@ -642,6 +658,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mixinlar — Kodla</title>
   <meta name="description" content="mixin g'oyasi, Object.assign bilan qo'llash, hodisali mixin misoli va merosdan farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,22 @@
 <main class="content article">
 <div class="crumbs">Klasslar</div>
 <h1>Mixinlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#mixin-g-oyasi">Mixin g'oyasi</a></li>
+<li class="lvl2"><a href="#object-assign-bilan-eng-oddiy-mixin">Object.assign bilan eng oddiy mixin</a></li>
+<li class="lvl2"><a href="#mixin-ichida-meros">Mixin ichida meros</a></li>
+<li class="lvl2"><a href="#hodisali-mixin-eventemitter">Hodisali mixin (EventEmitter)</a></li>
+<li class="lvl2"><a href="#mixin-va-meros-farqi">Mixin va meros farqi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da faqat bitta obyektdan meros olish mumkin (bir <code>[[Prototype]]</code> va bir ota klass). Ammo ba'zan bir nechta manbadan funksionallik olishni istaymiz. Bu holda <strong>mixin</strong> yordamga keladi.</p>
-<h2>Mixin g'oyasi</h2>
+<h2 id="mixin-g-oyasi">Mixin g'oyasi</h2>
 <p><strong>Mixin</strong> — bu boshqa klasslar ishlatishi mumkin bo'lgan metodlar to'plamini o'z ichiga olgan klass yoki obyekt. Mixinning o'zi mustaqil ishlatilmaydi — u boshqa klasslarni "boyitish" uchun xizmat qiladi.</p>
 <p>Wikipediadagi ta'rif: mixin — bu boshqa klasslar tomonidan meros orqali emas, balki metodlarini <strong>nusxalash</strong> orqali ishlatiladigan metodlarni o'z ichiga olgan klass.</p>
-<h2>Object.assign bilan eng oddiy mixin</h2>
+<h2 id="object-assign-bilan-eng-oddiy-mixin">Object.assign bilan eng oddiy mixin</h2>
 <p>Amalda mixin — bu shunchaki foydali metodlar to'plamiga ega obyekt. Uni klass prototipiga <code>Object.assign</code> orqali nusxalash mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>mixin-basic.js</span></div><textarea spellcheck="false">// mixin — foydali metodlar to'plami
 let sayHiMixin = {
@@ -627,7 +641,7 @@ console.log(user.sayHi());
 console.log(user.sayBye());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: <code>User</code> allaqachon boshqa klassdan meros olishi mumkin, mixin esa unga yana qo'shimcha metodlar beradi. Ya'ni mixin merosga xalaqit bermaydi.</p>
 <div class="note">Mixin ichida <code>this</code> ishlatilyapti (masalan <code>this.name</code>). Bu shundan — mixin metodlari qaysi obyektda chaqirilsa, o'sha obyektning kontekstida ishlaydi.</div>
-<h2>Mixin ichida meros</h2>
+<h2 id="mixin-ichida-meros">Mixin ichida meros</h2>
 <p>Mixinlarning o'zi bir-biridan meros olishi ham mumkin. Masalan, bir mixin boshqasidan olingan metodni <code>super</code> orqali chaqirishi mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>mixin-super.js</span></div><textarea spellcheck="false">let sayMixin = {
   say(phrase) {
@@ -650,7 +664,7 @@ class User {
 
 Object.assign(User.prototype, sayHiMixin);
 console.log(new User("Vali").sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Hodisali mixin (EventEmitter)</h2>
+<h2 id="hodisali-mixin-eventemitter">Hodisali mixin (EventEmitter)</h2>
 <p>Mixinning eng amaliy misoli — <strong>hodisalar (events)</strong> mixini. Ko'p obyektlar hodisa "chiqarishi" (generatsiya qilishi) va boshqalar ularga "quloq solishi" (tinglashi) kerak bo'ladi. Buni mixin sifatida yozib, istalgan klassga ulash mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>mixin-events.js</span></div><textarea spellcheck="false">let eventMixin = {
   on(eventName, handler) {
@@ -687,12 +701,12 @@ menu.choose("123"); // Tanlandi: 123</textarea><div class="pg-actions"><button c
 <p>Bu yerda <code>eventMixin</code> ikkita metod beradi:</p>
 <ul><li><code>on(eventName, handler)</code> — nomli hodisaga tinglovchi (handler) qo'shadi;</li><li><code>trigger(eventName, ...args)</code> — hodisani "chiqaradi", barcha tinglovchilarni chaqiradi.</li></ul>
 <p>Endi istalgan klass shu mixinni ulab, hodisalar tizimiga ega bo'la oladi — yangi meros zanjiri yaratmasdan.</p>
-<h2>Mixin va meros farqi</h2>
+<h2 id="mixin-va-meros-farqi">Mixin va meros farqi</h2>
 <p>Mixin va meros o'rtasidagi asosiy farqlarni tushunish muhim:</p>
 <ul><li><strong>Meros</strong> — "bir turdan" chuqur bog'lanish (<code>is-a</code>, ya'ni "quyon — bu hayvon"). JavaScript'da faqat bitta ota klass mumkin;</li><li><strong>Mixin</strong> — "funksionallik qo'shish" (<code>has-a</code>, ya'ni "menyu hodisa chiqara oladi"). Bir nechta mixinni istalgancha ulash mumkin;</li><li>Meros prototip zanjiri orqali dinamik bog'lanadi, mixin esa metodlarni <em>nusxalaydi</em>.</li></ul>
 <div class="warn">Mixin obyektning mavjud metodlarini tasodifan ustidan yozib yuborishi mumkin (<code>Object.assign</code> nusxalagani uchun). Shu sababli mixin metodlariga o'ziga xos, kamdan-kam to'qnashadigan nomlar berish yaxshi amaliyot (masalan <code>_handlers</code> kabi <code>_</code>li ichki nomlar).</div>
 <div class="tip">Amaliyotda ko'p mashhur kutubxonalar (masalan Node.js'ning <code>EventEmitter</code>i) shunday hodisa mexanizmini beradi. Mixin g'oyasi esa uni istalgan obyektga ulash imkonini beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Mixin</strong> — boshqa klasslarga metodlar qo'shish uchun umumiy metodlar to'plami;</li><li>JavaScript'da mixinlar ko'pincha <code>Object.assign(Class.prototype, mixin)</code> orqali qo'llaniladi;</li><li>Mixinlar meros zanjiriga xalaqit bermaydi — klass baribir boshqa klassdan meros olishi mumkin;</li><li>Hodisali mixin (<code>on</code>/<code>trigger</code>) — eng amaliy va keng tarqalgan misol;</li><li>Meros "is-a" (bir turdan), mixin esa "has-a" (funksionallik qo'shish) munosabatini ifodalaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="instanceof.html"><span class="dir">← Oldingi</span><span class="ttl">instanceof tekshiruvi</span></a>
@@ -706,6 +720,6 @@ menu.choose("123"); // Tanlandi: 123</textarea><div class="pg-actions"><button c
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

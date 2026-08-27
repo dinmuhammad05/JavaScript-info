@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Salom, dunyo! — Kodla</title>
   <meta name="description" content="JavaScript kodini HTML sahifaga qanday ulash: script tegi, src atributi va tashqi fayllar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,18 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Salom, dunyo!</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#script-tegi">"script" tegi</a></li>
+<li class="lvl2"><a href="#zamonaviy-va-eski-belgilash">Zamonaviy va eski belgilash</a></li>
+<li class="lvl2"><a href="#tashqi-skriptlar-src-atributi">Tashqi skriptlar (src atributi)</a></li>
+<li class="lvl2"><a href="#nima-uchun-tashqi-fayl-afzal">Nima uchun tashqi fayl afzal?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ushbu darsda birinchi JavaScript kodimizni yozamiz va uni veb-sahifaga qanday ulashni o'rganamiz. Kursning katta qismi brauzerga qaratilgan, shuning uchun kodni HTML ichida ishga tushirishni bilib olish muhim.</p>
-<h2>"script" tegi</h2>
+<h2 id="script-tegi">"script" tegi</h2>
 <p>JavaScript dasturlarini HTML hujjatining deyarli istalgan joyiga <code>&lt;script&gt;</code> tegi yordamida joylashtirish mumkin. Masalan:</p>
 <pre class="code"><code>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -617,11 +630,11 @@
 <div class="note">Yuqoridagi misol <code>alert</code> ishlatgani uchun statik ko'rsatilgan. <code>alert</code>, <code>prompt</code> va <code>confirm</code> faqat haqiqiy brauzerda ishlaydi — quyidagi interaktiv maydonchalarda esa <code>console.log</code> ishlatamiz, chunki u natijani darhol chiqaradi.</div>
 <p>Endi haqiqiy ishlaydigan birinchi kodimizni sinab ko'ramiz. Quyidagi tugmani bosing va natijani kuzating:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>salom.js</span></div><textarea spellcheck="false">console.log("Salom, dunyo!");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Zamonaviy va eski belgilash</h2>
+<h2 id="zamonaviy-va-eski-belgilash">Zamonaviy va eski belgilash</h2>
 <p>Eski kodlarda <code>&lt;script&gt;</code> tegining bir nechta qo'shimcha atributlarini uchratishingiz mumkin. Ular bugungi kunda kerak emas, lekin nima uchun ishlatilganini bilib qo'yish foydali.</p>
 <ul><li><code>type</code> atributi: eski HTML4 da <code>type="text/javascript"</code> yozish talab qilinardi. Endi bu shart emas — zamonaviy HTML standarti buni butunlay o'zgartirdi va endi u JavaScript modullari uchun ishlatiladi;</li><li><code>language</code> atributi: bu atribut ishlatilayotgan tilni ko'rsatardi. Hozir JavaScript standart til bo'lgani uchun uning hech qanday ma'nosi yo'q.</li></ul>
 <div class="warn">Agar eski loyihalarda <code>&lt;!-- ... --&gt;</code> kabi HTML izohlari script ichida yozilganini ko'rsangiz — bu juda qadimgi brauzerlar uchun edi. Zamonaviy kodda ularni umuman ishlatmaymiz.</div>
-<h2>Tashqi skriptlar (src atributi)</h2>
+<h2 id="tashqi-skriptlar-src-atributi">Tashqi skriptlar (src atributi)</h2>
 <p>Agar sizda ko'p JavaScript kodi bo'lsa, uni alohida faylga chiqarib qo'yish yaxshi amaliyot hisoblanadi. Skript fayllari HTML ga <code>src</code> atributi orqali ulanadi:</p>
 <pre class="code"><code>&lt;script src="/yol/skript.js"&gt;&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>/yol/skript.js</code> — skript faylining saytdagi absolyut yo'li. To'liq URL manzil ham berish mumkin:</p>
@@ -629,7 +642,7 @@
 <p>Bir nechta skriptni ulash uchun bir nechta teg yozamiz:</p>
 <pre class="code"><code>&lt;script src="/js/script1.js"&gt;&lt;/script&gt;
 &lt;script src="/js/script2.js"&gt;&lt;/script&gt;</code></pre>
-<h2>Nima uchun tashqi fayl afzal?</h2>
+<h2 id="nima-uchun-tashqi-fayl-afzal">Nima uchun tashqi fayl afzal?</h2>
 <p>Kodni alohida faylga chiqarishning ikkita muhim afzalligi bor:</p>
 <ol><li><strong>Kesh (cache).</strong> Brauzer skriptni yuklab olib, o'z xotirasida (keshda) saqlaydi. Boshqa sahifalar ham xuddi shu faylga murojaat qilsa, brauzer uni qaytadan yuklamaydi — keshdan oladi. Bu trafikni tejaydi va sahifalar tezroq ochiladi;</li><li><strong>Tozalik.</strong> HTML va JavaScript alohida bo'lganda, kodni o'qish va boshqarish osonlashadi.</li></ol>
 <div class="warn">Agar <code>&lt;script&gt;</code> tegida <code>src</code> atributi bo'lsa, tegning ichidagi kod <strong>e'tiborga olinmaydi</strong>. Bitta teg ikkalasini birdan bajara olmaydi.</div>
@@ -642,7 +655,7 @@
 &lt;script&gt;
   alert("Salom");
 &lt;/script&gt;</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>JavaScript kodini sahifaga <code>&lt;script&gt;</code> tegi orqali ulaymiz;</li><li>Kodni to'g'ridan-to'g'ri teg ichiga yozish yoki tashqi faylga chiqarib <code>src</code> orqali ulash mumkin;</li><li>Katta kodlar uchun tashqi fayl afzal — u keshlanadi va HTML ni toza saqlaydi;</li><li>Bitta tegda bir vaqtda <code>src</code> va ichki kod ishlamaydi — alohida teglar kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="konsol.html"><span class="dir">← Oldingi</span><span class="ttl">Ishlab chiquvchi konsoli</span></a>
@@ -656,6 +669,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

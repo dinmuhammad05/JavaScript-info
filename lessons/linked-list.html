@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bog'langan ro'yxat (Linked List) — Kodla</title>
   <meta name="description" content="Tugunlar (node) va havolalar, bir/ikki tomonlama ro'yxat, qo'shish-o'chirish, massivdan farqi va klassik masalalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,29 @@
 <main class="content article">
 <div class="crumbs">Chiziqli ma'lumotlar tuzilmalari</div>
 <h1>Bog'langan ro'yxat (Linked List)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#g-oya-tugun-va-havola">G'oya: tugun va havola</a></li>
+<li class="lvl2"><a href="#massivdan-asosiy-farqi">Massivdan asosiy farqi</a></li>
+<li class="lvl2"><a href="#node-va-linkedlist-klasslari">Node va LinkedList klasslari</a></li>
+<li class="lvl2"><a href="#qo-shish-va-o-chirish-amallari">Qo'shish va o'chirish amallari</a></li>
+<li class="lvl2"><a href="#bir-tomonlama-va-ikki-tomonlama">Bir tomonlama va ikki tomonlama</a></li>
+<li class="lvl2"><a href="#big-o-massiv-vs-bog-langan-ro-yxat">Big O: massiv vs bog'langan ro'yxat</a></li>
+<li class="lvl2"><a href="#klassik-masala-ro-yxatni-teskarilash">Klassik masala: ro'yxatni teskarilash</a></li>
+<li class="lvl2"><a href="#tsikl-borligini-aniqlash-floyd-usuli">Tsikl borligini aniqlash — Floyd usuli</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Bolalar o'yinini eslang: har bir bolaning qo'lida qog'oz, unda keyingi bolaning ismi yozilgan. Xazina qidirish uchun birinchi bolaga borasiz, u sizni ikkinchisiga yuboradi, ikkinchisi uchinchisiga... Hech kim butun ro'yxatni bilmaydi — har kim faqat <em>keyingi</em> kimligini biladi. Mana shu zanjir — <strong>bog'langan ro'yxat (linked list)</strong>ning asl mohiyati.</p>
-<h2>G'oya: tugun va havola</h2>
+<h2 id="g-oya-tugun-va-havola">G'oya: tugun va havola</h2>
 <p>Bog'langan ro'yxat <strong>tugunlar (node)</strong> zanjiridan iborat. Har bir tugun ikki narsani saqlaydi:</p>
 <ul><li><strong>qiymat (value)</strong> — foydali ma'lumot, masalan son yoki matn</li><li><strong>havola (next)</strong> — keyingi tugunga ko'rsatgich (ko'rsatkich)</li></ul>
 <p>Ro'yxatning boshini <strong>head</strong> deb ataymiz — bu birinchi tugun. Oxirgi tugunning <code>next</code> qiymati <code>null</code> bo'ladi, bu "zanjir tugadi" degani. Sxematik ko'rinishi: <code>head -> [10|.] -> [20|.] -> [30|null]</code>.</p>
-<h2>Massivdan asosiy farqi</h2>
+<h2 id="massivdan-asosiy-farqi">Massivdan asosiy farqi</h2>
 <p>Massivda elementlar xotirada <strong>ketma-ket</strong>, yonma-yon turadi. Shuning uchun <code>arr[5]</code> ni bir zumda topamiz — kompyuter boshlang'ich manzilga 5 ni qo'shib, to'g'ri joyga boradi.</p>
 <p>Bog'langan ro'yxatda esa tugunlar xotiraning <strong>istalgan joyida</strong> tarqoq turishi mumkin. Ularni faqat <code>next</code> havolalar bir-biriga bog'lab turadi. Shuning uchun 5-elementga yetish uchun boshidan boshlab, havolalar bo'ylab 5 marta "sakrash" kerak. Buning evaziga qo'shish va o'chirish ancha arzon bo'ladi — buni pastda ko'ramiz.</p>
-<h2>Node va LinkedList klasslari</h2>
+<h2 id="node-va-linkedlist-klasslari">Node va LinkedList klasslari</h2>
 <p>Avval bitta tugunni ifodalovchi <code>Node</code> klassini, keyin butun ro'yxatni boshqaruvchi <code>LinkedList</code> klassini yozamiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>linked-list-asos.js</span></div><textarea spellcheck="false">class Node {
   constructor(value) {
@@ -653,7 +670,7 @@ royxat.push(10).push(20).push(30);
 console.log('Royxat:', royxat.toArray());
 console.log('Uzunlik:', royxat.length);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>toArray</code> metodi tugunlarni ketma-ket aylanib chiqib, qiymatlarni oddiy massivga yig'adi — bu ro'yxatni ko'z bilan tekshirishga yordam beradi.</p>
-<h2>Qo'shish va o'chirish amallari</h2>
+<h2 id="qo-shish-va-o-chirish-amallari">Qo'shish va o'chirish amallari</h2>
 <p>Endi eng qiziq qismi — bog'langan ro'yxatning kuchi qo'shish va o'chirishda ko'rinadi. <strong>Boshiga qo'shish</strong> juda tez: yangi tugun yasaymiz, uning <code>next</code> ini eski boshga ulaymiz, va yangi tugunni <code>head</code> qilamiz. Butun ro'yxatni suRish shart emas — atigi ikki-uchta havola o'zgaradi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>linked-list-amallar.js</span></div><textarea spellcheck="false">class Node {
   constructor(value) {
@@ -728,14 +745,14 @@ console.log('2 bormi?', list.bormi(2)); // true
 list.remove(2);
 console.log('2 ochirildi:', list.toArray()); // [1, 3]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>O'chirishning siri <code>oldingi.next = oldingi.next.next</code> qatorida: biz o'chirilayotgan tugunni shunchaki "chetlab o'tamiz". Endi hech kim unga havola qilmaydi, JavaScript avtomatik xotiradan tozalaydi. Massivdagi kabi elementlarni surish shart emas.</p>
-<h2>Bir tomonlama va ikki tomonlama</h2>
+<h2 id="bir-tomonlama-va-ikki-tomonlama">Bir tomonlama va ikki tomonlama</h2>
 <p>Yuqorida ko'rganimiz — <strong>bir tomonlama (singly)</strong> ro'yxat: har tugun faqat <em>keyingi</em>ni biladi. Faqat oldinga yura olasiz.</p>
 <p><strong>Ikki tomonlama (doubly)</strong> ro'yxatda har tugunda ikkita havola bo'ladi: <code>next</code> (keyingi) va <code>prev</code> (oldingi). Endi ro'yxat bo'ylab ikki yo'nalishda ham yura olasiz, va istalgan tugunni bilsangiz, uni <code>O(1)</code> da o'chira olasiz (chunki oldingisini qidirib topish shart emas). Evaziga har tugun bir dona qo'shimcha havolani saqlaydi — ozgina ko'proq xotira ketadi.</p>
-<h2>Big O: massiv vs bog'langan ro'yxat</h2>
+<h2 id="big-o-massiv-vs-bog-langan-ro-yxat">Big O: massiv vs bog'langan ro'yxat</h2>
 <p>Ikkala tuzilmani solishtiraylik. Bu jadval qaysi holatda qaysi birini tanlashni tushunishga yordam beradi:</p>
 <ul><li><strong>Indeks bo'yicha kirish (arr[i])</strong>: massiv <code>O(1)</code>, linked list <code>O(n)</code></li><li><strong>Qiymat bo'yicha qidirish</strong>: massiv <code>O(n)</code>, linked list <code>O(n)</code></li><li><strong>Boshiga qo'shish/o'chirish</strong>: massiv <code>O(n)</code> (surish kerak), linked list <code>O(1)</code></li><li><strong>Oxiriga qo'shish</strong>: massiv <code>O(1)</code>, linked list <code>O(n)</code> yoki oxirga ko'rsatkich bo'lsa <code>O(1)</code></li><li><strong>Ma'lum tugun yonidan qo'shish/o'chirish</strong>: massiv <code>O(n)</code>, linked list <code>O(1)</code></li></ul>
 <p>Xulosa: agar ko'p indeks bo'yicha kirish kerak bo'lsa — massiv; agar boshi/oxiri tez-tez o'zgarsa — bog'langan ro'yxat.</p>
-<h2>Klassik masala: ro'yxatni teskarilash</h2>
+<h2 id="klassik-masala-ro-yxatni-teskarilash">Klassik masala: ro'yxatni teskarilash</h2>
 <p>Intervyularda eng ko'p so'raladigan masalalardan biri: bog'langan ro'yxatni teskarisiga aylantiring. G'oya nafis — har bir tugunning <code>next</code> havolasini <em>orqaga</em> qaratamiz. Buning uchun uchta ko'rsatkich yuritamiz: <code>oldingi</code>, <code>joriy</code>, <code>keyingi</code>.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>teskarila.js</span></div><textarea spellcheck="false">class Node {
   constructor(value) { this.value = value; this.next = null; }
@@ -772,7 +789,7 @@ console.log('Oldin:', korsat(a));       // [1, 2, 3]
 const yangiHead = teskarila(a);
 console.log('Keyin:', korsat(yangiHead)); // [3, 2, 1]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu algoritm butun ro'yxatni bir marta aylanib chiqadi, demak <code>O(n)</code>. Qo'shimcha massiv yaratmagani uchun qo'shimcha xotira <code>O(1)</code> — juda tejamkor yechim.</p>
-<h2>Tsikl borligini aniqlash — Floyd usuli</h2>
+<h2 id="tsikl-borligini-aniqlash-floyd-usuli">Tsikl borligini aniqlash — Floyd usuli</h2>
 <p>Ba'zan ro'yxat noto'g'ri qurilib, oxirgi tugun boshqa tugunga qaytib bog'lanib qoladi — <strong>tsikl (cycle)</strong> hosil bo'ladi. Bunday ro'yxatni oddiy <code>while</code> bilan aylansangiz, cheksiz sikllashib qolasiz. Floydning <em>tez va sekin ko'rsatkich</em> ("toshbaqa va quyon") usuli buni nafis aniqlaydi.</p>
 <p>G'oya: ikkita ko'rsatkich yuritamiz. <strong>Sekin</strong> har qadamda bitta tugun oldinga yuradi, <strong>tez</strong> esa ikkita. Agar tsikl bo'lmasa, tez ko'rsatkich <code>null</code> ga yetib to'xtaydi. Agar tsikl bo'lsa, tez ko'rsatkich aylanib kelib, ertami-kechmi sekin ko'rsatkichni quvib yetadi — ikkalasi bir tugunda uchrashadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>floyd-tsikl.js</span></div><textarea spellcheck="false">class Node {
@@ -804,7 +821,7 @@ x.next.next.next = x;
 console.log('Tsikl bormi?', tsiklBormi(x)); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu usul <code>O(n)</code> vaqt va <code>O(1)</code> xotira sarflaydi — tugunlarni alohida to'plamda saqlab yurishning hojati yo'q.</p>
 <div class="tip">Ro'yxatning boshi yoki oxiri tez-tez o'zgaradigan holatlarda (masalan, navbat yoki stek qurishda) bog'langan ro'yxat massivdan ko'ra qulayroq — chunki qo'shish/o'chirish <code>O(1)</code>. Aksincha, tasodifiy indeks bo'yicha kirish ko'p bo'lsa, massivni tanlang.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Bog'langan ro'yxat — tugunlar va havolalar zanjiri. Indeks bo'yicha kirish sekin (<code>O(n)</code>), lekin boshi/oxiri bilan ishlash tez (<code>O(1)</code>). Teskarilash va tsikl aniqlash — klassik intervyu masalalari. Bu tuzilmalar ma'lumotni <em>tartibli</em> saqlaydi. Endi tartibni butunlay unutib, tezlikka sig'inadigan tuzilma — xesh-jadval bilan tanishaylik.</p>
 <nav class="lesson-nav">
   <a href="queue.html"><span class="dir">← Oldingi</span><span class="ttl">Navbat (Queue) va Deque</span></a>
@@ -818,6 +835,6 @@ console.log('Tsikl bormi?', tsiklBormi(x)); // true</textarea><div class="pg-act
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

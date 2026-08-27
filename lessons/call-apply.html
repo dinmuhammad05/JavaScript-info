@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dekoratorlar va uzatish, call/apply — Kodla</title>
   <meta name="description" content="Kontekstni uzatuvchi func.call va func.apply metodlari, keshlovchi dekorator hamda argumentlarni uzatish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Dekoratorlar va uzatish, call/apply</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#dekorator-nima">Dekorator nima?</a></li>
+<li class="lvl2"><a href="#kontekst-muammosi">Kontekst muammosi</a></li>
+<li class="lvl2"><a href="#func-call-kontekstni-aniq-uzatish">func.call — kontekstni aniq uzatish</a></li>
+<li class="lvl2"><a href="#func-apply-argumentlarni-massiv-bilan">func.apply — argumentlarni massiv bilan</a></li>
+<li class="lvl2"><a href="#chaqiruvni-uzatish-call-forwarding">Chaqiruvni uzatish (call forwarding)</a></li>
+<li class="lvl2"><a href="#metodni-qarzga-olish-method-borrowing">Metodni "qarzga olish" (method borrowing)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript funksiyalar bilan ishlashda ajoyib moslashuvchanlik beradi. Ularni uzatish, o'ram (wrapper) bilan qoplash mumkin. Ushbu darsda <strong>dekoratorlar</strong> va kontekstni uzatuvchi <code>call</code>/<code>apply</code> metodlarini o'rganamiz.</p>
-<h2>Dekorator nima?</h2>
+<h2 id="dekorator-nima">Dekorator nima?</h2>
 <p><strong>Dekorator</strong> — bu funksiyani argument sifatida oladigan va uning xatti-harakatini <em>o'zgartiruvchi</em> yangi funksiyani qaytaradigan funksiya. Asl funksiya o'zgarmaydi — uning atrofiga qo'shimcha imkoniyat "o'raladi".</p>
 <p>Masalan, sekin ishlaydigan funksiyaning natijalarini <strong>keshlab</strong> (eslab) qo'yadigan dekorator yozamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>kesh-dekorator.js</span></div><textarea spellcheck="false">function sekinHisob(x) {
@@ -623,7 +638,7 @@ console.log(sekinHisob(5)); // 5000 (hisoblandi)
 console.log(sekinHisob(5)); // 5000 (keshdan)
 console.log(sekinHisob(2)); // 2000 (hisoblandi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Dekoratorning go'zalligi — asl <code>sekinHisob</code> funksiyasi o'zgarmadi. Biz uni tashqaridan "kesh" imkoniyati bilan qopladik. Bu — <em>vazifalarni ajratish</em> (separation of concerns) tamoyilining yaxshi namunasi.</div>
-<h2>Kontekst muammosi</h2>
+<h2 id="kontekst-muammosi">Kontekst muammosi</h2>
 <p>Yuqoridagi keshlovchi oddiy funksiyalar uchun ishlaydi. Ammo <strong>obyekt metodlari</strong> bilan muammo chiqadi. Metod ichida <code>this</code> ishlatilsa, dekorator uni <code>func(x)</code> deb chaqirganda <code>this</code> yo'qoladi:</p>
 <pre class="code"><code>let ishchi = {
   narx: 1000,
@@ -635,7 +650,7 @@ console.log(sekinHisob(2)); // 2000 (hisoblandi)</textarea><div class="pg-action
 // keshlovchi ichida func(x) deb chaqirilsa, this yo'qoladi
 // va "Cannot read property 'narx' of undefined" xatoligi chiqadi</code></pre>
 <p>Buni hal qilish uchun bizga <code>this</code>ni to'g'ri uzatish yo'li kerak. Aynan shu yerda <code>call</code> yordamga keladi.</p>
-<h2>func.call — kontekstni aniq uzatish</h2>
+<h2 id="func-call-kontekstni-aniq-uzatish">func.call — kontekstni aniq uzatish</h2>
 <p><code>func.call(context, arg1, arg2, ...)</code> funksiyani chaqiradi, lekin <code>this</code>ni birinchi argument sifatida <strong>aniq belgilaydi</strong>:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>call-asosiy.js</span></div><textarea spellcheck="false">function aytIsm() {
   return "Ismim: " + this.ism;
@@ -655,7 +670,7 @@ let admin = { rol: "admin" };
 
 console.log(say.call(admin, "Xush kelibsiz", "Ali"));
 // Xush kelibsiz, Ali (admin)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>func.apply — argumentlarni massiv bilan</h2>
+<h2 id="func-apply-argumentlarni-massiv-bilan">func.apply — argumentlarni massiv bilan</h2>
 <p><code>func.apply</code> <code>call</code> bilan deyarli bir xil, lekin argumentlarni <strong>massiv ko'rinishida</strong> qabul qiladi:</p>
 <pre class="code"><code>func.call(context, arg1, arg2, arg3);
 func.apply(context, [arg1, arg2, arg3]); // xuddi shu natija</code></pre>
@@ -669,7 +684,7 @@ let args = ["Xush kelibsiz", "Vali"];
 console.log(say.apply(admin, args));
 // Xush kelibsiz, Vali (admin)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Zamonaviy JavaScript'da spread sintaksisi (<code>func.call(ctx, ...args)</code>) <code>apply</code>ga muqobil hisoblanadi. Ammo <code>apply</code> ba'zan bir oz tezroq (dvigatel uni yaxshi optimallashtiradi) va eski kodda ko'p uchraydi.</div>
-<h2>Chaqiruvni uzatish (call forwarding)</h2>
+<h2 id="chaqiruvni-uzatish-call-forwarding">Chaqiruvni uzatish (call forwarding)</h2>
 <p>Dekoratorlarda ko'pincha <strong>barcha argumentlarni va kontekstni</strong> asl funksiyaga to'liq uzatish kerak bo'ladi. Buning uchun <code>func.apply(this, arguments)</code> naqshi ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>call-forwarding.js</span></div><textarea spellcheck="false">function keshlovchi(func) {
   let kesh = new Map();
@@ -698,7 +713,7 @@ console.log(ishchi.hisobla(3)); // 300 (hisoblandi)
 console.log(ishchi.hisobla(3)); // 300 (keshdan)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>func.apply(this, arguments)</code> — bu <strong>chaqiruvni uzatish</strong> (call forwarding). U tashqi o'ramning <code>this</code>ini va barcha argumentlarini asl funksiyaga to'liq "o'tkazib yuboradi", go'yo o'ram umuman bo'lmagandek.</p>
 <div class="tip"><code>arguments</code> — bu massivsimon obyekt (array-like), haqiqiy massiv emas. Uni <code>apply</code>ga to'g'ridan-to'g'ri berish mumkin, lekin massiv metodlarini (masalan <code>.map</code>) ishlatish uchun <code>Array.from(arguments)</code> yoki <code>[...arguments]</code> orqali massivga o'girish kerak.</div>
-<h2>Metodni "qarzga olish" (method borrowing)</h2>
+<h2 id="metodni-qarzga-olish-method-borrowing">Metodni "qarzga olish" (method borrowing)</h2>
 <p><code>call</code>/<code>apply</code>ning yana bir foydali qo'llanishi — bir obyektning metodini boshqa obyektda ishlatish. Masalan, <code>arguments</code> massivsimon obyektida massivning <code>join</code> metodini ishlatish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>method-borrowing.js</span></div><textarea spellcheck="false">function birlashtir() {
   // arguments massiv emas, lekin uning join'ini qarzga olamiz:
@@ -706,7 +721,7 @@ console.log(ishchi.hisobla(3)); // 300 (keshdan)</textarea><div class="pg-action
 }
 
 console.log(birlashtir("a", "b", "c")); // a - b - c</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Dekorator</strong> — funksiyani o'rab, uning xatti-harakatini o'zgartiradigan funksiya (masalan, keshlovchi);</li><li><code>func.call(ctx, arg1, arg2...)</code> — <code>this</code> va argumentlarni birma-bir uzatib chaqiradi;</li><li><code>func.apply(ctx, argsMassiv)</code> — argumentlarni massiv sifatida uzatadi;</li><li><code>func.apply(this, arguments)</code> — dekoratorlarda chaqiruvni to'liq uzatish uchun ishlatiladi;</li><li><code>call</code>/<code>apply</code> metodni boshqa obyektga "qarzga berish"ga ham imkon beradi.</li></ul>
 <nav class="lesson-nav">
   <a href="settimeout.html"><span class="dir">← Oldingi</span><span class="ttl">setTimeout va setInterval</span></a>
@@ -720,6 +735,6 @@ console.log(birlashtir("a", "b", "c")); // a - b - c</textarea><div class="pg-ac
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

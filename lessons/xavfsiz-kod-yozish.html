@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xavfsiz kod yozish tamoyillari — Kodla</title>
   <meta name="description" content="Xavfsizlik dasturchining o'z ishi ekanligi, asosiy tamoyillar, kirish validatsiyasi, sirlarni saqlash va xavfsizlik nuqtai nazaridan kod sharhi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,25 @@
 <main class="content article">
 <div class="crumbs">Amaliy himoya va DevSecOps</div>
 <h1>Xavfsiz kod yozish tamoyillari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-bu-aynan-sizning-ishingiz">Nega bu aynan sizning ishingiz</a></li>
+<li class="lvl2"><a href="#asosiy-tamoyillar">Asosiy tamoyillar</a></li>
+<li class="lvl2"><a href="#barcha-kirishni-validatsiya-qiling">Barcha kirishni validatsiya qiling</a></li>
+<li class="lvl2"><a href="#sirlarni-kodda-saqlamang">Sirlarni kodda saqlamang</a></li>
+<li class="lvl2"><a href="#xavfsizlikni-yodda-tutgan-kod-sharhi">Xavfsizlikni yodda tutgan kod sharhi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'pincha dasturchilar shunday o'ylaydi: "Xavfsizlik — bu xavfsizlik jamoasining ishi, mening vazifam esa faqat funksiyalarni ishlashga majbur qilish". Bu — eng keng tarqalgan va eng qimmatga tushadigan yanglishuv. Aslida har bir yozgan qatoringiz — himoyaning bir bo'lagi. Zaiflik biror ekzotik joyda emas, aynan oddiy, e'tibordan chetda qolgan kodda tug'iladi. Shu bois xavfsiz kod yozishni o'rganish — sizning kasbiy mahoratingizning ajralmas qismi.</p>
-<h2>Nega bu aynan sizning ishingiz</h2>
+<h2 id="nega-bu-aynan-sizning-ishingiz">Nega bu aynan sizning ishingiz</h2>
 <p>Tasavvur qiling: siz forma yaratdingiz, u ishlaydi, ma'lumotni bazaga yozadi. Test o'tdi, hamma xursand. Ammo siz foydalanuvchi kiritmasini tekshirmadingiz — va oradan bir oy o'tib o'sha forma orqali butun baza o'g'irlanadi. Kod "ishlaydi" degani "xavfsiz" degani emas. Funksionallik — bu ilovaning nima qilishi; xavfsizlik — bu ilovaning <em>qila olmasligi kerak bo'lgan</em> narsalar. Ikkalasi ham dasturchining zimmasida.</p>
 <p>Yaxshi xabar shuki, xavfsiz kod yozish sehr emas. U bir nechta oddiy, ammo doimiy amal qilinadigan tamoyillarga tayanadi. Ularni bir marta yodda mustahkamlab olsangiz, refleksga aylanadi.</p>
-<h2>Asosiy tamoyillar</h2>
+<h2 id="asosiy-tamoyillar">Asosiy tamoyillar</h2>
 <p>Quyidagi tamoyillar deyarli har qanday tilda va har qanday loyihada amal qiladi. Bularni devoringizga osib qo'ysangiz arziydi:</p>
 <ul><li><strong>Hech qanday kirishga ishonmang</strong> — foydalanuvchidan, tashqi API'dan, URL'dan, hatto o'z bazangizdan kelgan har qanday ma'lumotni potensial xavfli deb hisoblang va uni validatsiya qiling;</li><li><strong>Chiqishni escape qiling</strong> — ma'lumotni HTML'ga, SQL'ga yoki buyruq qatoriga joylashdan oldin, o'sha kontekstga mos ravishda "zararsizlantiring" (escaping);</li><li><strong>Eng kam imtiyoz (least privilege)</strong> — har bir komponent, foydalanuvchi va jarayon faqat o'z ishi uchun zarur bo'lgan minimal huquqqa ega bo'lsin, undan ortig'iga emas;</li><li><strong>Chuqur himoya (defense in depth)</strong> — bitta himoya qatoriga tayanmang; agar bittasi buzilsa, ortidagi ikkinchi, uchinchi qator ushlab qolsin;</li><li><strong>Xavfsiz standart (secure by default)</strong> — sozlamalarning boshlang'ich holati eng xavfsiz variant bo'lsin; foydalanuvchi xohlasa himoyani bo'shatsin, aksincha emas;</li><li><strong>Xatolarni xavfsiz boshqaring</strong> — xatolik yuz berganda tizim ochilib qolmasin (fail securely), va xatoning ichki tafsilotlari (stack, so'rov, yo'l) foydalanuvchiga ko'rsatilmasin.</li></ul>
-<h2>Barcha kirishni validatsiya qiling</h2>
+<h2 id="barcha-kirishni-validatsiya-qiling">Barcha kirishni validatsiya qiling</h2>
 <p>Validatsiyaning ikki uslubi bor: <strong>bloklist</strong> ("mana bu yomon qiymatlarni rad et") va <strong>allowlist</strong> ("faqat mana bu yaxshi qiymatlarga ruxsat ber, qolganini rad et"). Bloklist deyarli har doim yomon: yomonlarning hammasini oldindan bilib bo'lmaydi. Allowlist esa ishonchli: agar qiymat ruxsat etilganlar ro'yxatida bo'lmasa, u o'tmaydi.</p>
 <p>Quyida allowlist yondashuviga misol. Foydalanuvchi qaysi maydon bo'yicha saralashni tanlaydi, lekin biz faqat oldindan belgilangan maydonlarga ruxsat beramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>allowlist.js</span></div><textarea spellcheck="false">// Foydalanuvchi kiritmasini to'g'ridan-to'g'ri ishlatish XAVFLI.
@@ -629,7 +643,7 @@ console.log(saralashMaydonini_tekshir("__proto__"));
 // nom  (kutilmagan qiymat ham to'sildi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: biz "yomon"ni topishga urinmadik. Biz shunchaki "yaxshi"ning ro'yxatini tuzdik va qolganini rad etdik. Bu yondashuv soddaligi bilan kuchli.</p>
 <div class="tip">Validatsiyani doim <em>serverda</em> bajaring. Brauzerdagi (klient tomondagi) tekshiruv — bu foydalanuvchi qulayligi uchun, xavfsizlik uchun emas: hujumchi brauzerni chetlab o'tib, serverga to'g'ridan-to'g'ri so'rov yubora oladi.</div>
-<h2>Sirlarni kodda saqlamang</h2>
+<h2 id="sirlarni-kodda-saqlamang">Sirlarni kodda saqlamang</h2>
 <p>Parollar, API kalitlari, tokenlar, bazaga ulanish satrlari — bularning hech biri kod ichida yozilmasligi kerak. Manba kodiga yozilgan sir bir marta git tarixiga tushsa, uni o'chirish deyarli imkonsiz: u forklarda, klonlarda, backuplarda qoladi.</p>
 <p>Sirlar muhit o'zgaruvchilari (<code>environment variables</code>) yoki maxsus sir menejerlari orqali beriladi. Kod esa faqat o'sha o'zgaruvchini o'qiydi:</p>
 <pre class="code"><code>// YOMON — sir kodda:
@@ -641,11 +655,11 @@ if (!kalit) {
   throw new Error("API_KALIT o'rnatilmagan");
 }</code></pre>
 <div class="warn">Sirlarni saqlaydigan <code>.env</code> faylini har doim <code>.gitignore</code>ga qo'shing. Aks holda u tasodifan repozitoriyga tushib qoladi. Agar sir bir marta oshkor bo'lsa — uni darhol bekor qiling (revoke) va yangisini yarating; "kim ko'ribdi" deb umid qilib qo'yib bo'lmaydi.</div>
-<h2>Xavfsizlikni yodda tutgan kod sharhi</h2>
+<h2 id="xavfsizlikni-yodda-tutgan-kod-sharhi">Xavfsizlikni yodda tutgan kod sharhi</h2>
 <p>Kod sharhi (code review) — nafaqat sifat, balki xavfsizlik uchun ham eng arzon va eng samarali vositalardan biri. Sherigingizning ko'zi siz ko'rmagan zaiflikni ilg'aydi. Sharh paytida quyidagi savollarni bering:</p>
 <ul><li>Bu funksiyaga qaysi ma'lumot tashqaridan kiradi va u validatsiya qilinganmi?</li><li>Ma'lumot chiqishga (HTML, SQL, log, buyruq) joylashdan oldin escape qilinganmi?</li><li>Bu yerda biror sir yoki maxfiy ma'lumot kodga yoki logga tushib qolmayaptimi?</li><li>Xatolik yuz berganda tizim xavfsiz holatda qoladimi yoki ochilib qoladimi?</li><li>Bu foydalanuvchiga haqiqatan shu amalni bajarishga ruxsat bormi (avtorizatsiya tekshirilganmi)?</li></ul>
 <p>Bu savollarni har bir Pull Request'da takrorlash — jamoa madaniyatiga aylansa, zaifliklarning katta qismi kodga umuman kirmaydi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Xavfsiz kod yozish — alohida bosqich emas, balki har bir qatorni yozishdagi fikrlash tarzidir. Kirishga ishonmaslik, chiqishni escape qilish, eng kam imtiyoz va chuqur himoya — bu to'rt tayanch sizni zaifliklarning aksariyatidan asraydi.</p>
 <div class="tip">Xavfsizlik — bu "keyin qo'shiladigan xususiyat" emas. Uni loyiha oxirida yamoq sifatida yopishtirib bo'lmaydi. U birinchi qatordan boshlab, arxitekturaning bir qismi bo'lishi kerak. Boshidan xavfsiz o'ylagan kod — keyin qayta yozishga to'g'ri kelmaydigan kod.</div>
 <nav class="lesson-nav">
@@ -660,6 +674,6 @@ if (!kalit) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

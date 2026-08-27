@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>mouseover/out, mouseenter/leave — Kodla</title>
   <meta name="description" content="mouseover/mouseout hodisalari va relatedTarget xossasi; kursor bolalar elementlar ustidan o'tganda yuzaga keladigan muammolar; bubbling qilmaydigan mouseenter/mouseleave hodisalari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,20 @@
 <main class="content article">
 <div class="crumbs">UI hodisalari</div>
 <h1>mouseover/out, mouseenter/leave</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#mouseover-va-mouseout-hodisalari">mouseover va mouseout hodisalari</a></li>
+<li class="lvl2"><a href="#harakatlarni-o-tkazib-yuborish-skip">Harakatlarni o'tkazib yuborish (skip)</a></li>
+<li class="lvl2"><a href="#bolalar-elementlarga-o-tishdagi-muammo">"Bolalar" elementlarga o'tishdagi muammo</a></li>
+<li class="lvl2"><a href="#mouseenter-va-mouseleave-hodisalari">mouseenter va mouseleave hodisalari</a></li>
+<li class="lvl2"><a href="#qaysi-birini-tanlash-kerak">Qaysi birini tanlash kerak?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Kursor elementga kirib-chiqishini kuzatuvchi hodisalarni ko'rib chiqamiz. Ular ikki juftlikda keladi: <code>mouseover/mouseout</code> va <code>mouseenter/mouseleave</code>. Farqlarini tushunmaslik ko'p xatoliklarga sabab bo'ladi.</p>
 <div class="warn">Bu darsdagi barcha misollar statik — DOM hodisalari playground'da ishlamaydi. Ularni HTML faylingizda sinang.</div>
-<h2>mouseover va mouseout hodisalari</h2>
+<h2 id="mouseover-va-mouseout-hodisalari">mouseover va mouseout hodisalari</h2>
 <p><code>mouseover</code> hodisasi kursor element ustiga kelganda, <code>mouseout</code> esa undan chiqib ketganda yuzaga keladi.</p>
 <pre class="code"><code>elem.onmouseover = function(event) {
   console.log('Kursor keldi, kelib chiqqan element: ' + event.target.tagName);
@@ -610,11 +624,11 @@ elem.onmouseout = function(event) {
 <p>Bu hodisalar maxsus <code>relatedTarget</code> xossasiga ega. U <code>target</code>ni to'ldiradi:</p>
 <ul><li><code>mouseover</code> uchun: <code>event.target</code> — kursor kelgan element; <code>event.relatedTarget</code> — kursor <strong>qayerdan</strong> kelgani (avvalgi element).</li><li><code>mouseout</code> uchun: <code>event.target</code> — kursor tark etgan element; <code>event.relatedTarget</code> — kursor <strong>qayerga</strong> ketgani (yangi element).</li></ul>
 <div class="warn"><code>relatedTarget</code> qiymati <code>null</code> bo'lishi mumkin. Bu normal holat: masalan, kursor oyna tashqarisidan kelgan yoki oyna tashqarisiga chiqib ketgan bo'lsa, kelib chiqqan/borgan element bo'lmaydi. Kodingizda <code>relatedTarget</code> bilan ishlaganda uni tekshirishni unutmang, aks holda <code>Cannot read property 'tagName' of null</code> kabi xatolik olishingiz mumkin.</div>
-<h2>Harakatlarni o'tkazib yuborish (skip)</h2>
+<h2 id="harakatlarni-o-tkazib-yuborish-skip">Harakatlarni o'tkazib yuborish (skip)</h2>
 <p><code>mousemove</code> hodisasi kursor har harakatlanganda ishga tushadi. Lekin bu har bir pikselni kuzatishni anglatmaydi — brauzer kursor pozitsiyasini vaqti-vaqti bilan tekshiradi. Shuning uchun kursor tez harakat qilsa, ba'zi oraliq DOM elementlari o'tkazib yuborilishi mumkin.</p>
 <p>Masalan, kursor sahifa markazidan boshqa tomonga tez o'tsa, orada joylashgan elementlar (yoki hatto butun oyna) e'tiborga olinmasligi mumkin. Bunday holatda <code>mouseover</code> to'g'ridan-to'g'ri chetdagi elementga tegishli bo'ladi.</p>
 <div class="note">Bu qulay xususiyat: agar bir vaqtning o'zida ko'p elementlarni qayta ishlashga to'g'ri kelmasa, brauzer resurslarni tejaydi. Lekin natijada ba'zi <code>mouseover</code>/<code>mouseout</code> juftliklari "yo'qolib qolishi" mumkin. Agar biror element uchun <code>mouseover</code> ishga tushgan bo'lsa, uning uchun mos <code>mouseout</code> ham kafolatlanadi.</div>
-<h2>"Bolalar" elementlarga o'tishdagi muammo</h2>
+<h2 id="bolalar-elementlarga-o-tishdagi-muammo">"Bolalar" elementlarga o'tishdagi muammo</h2>
 <p>Muhim va ko'pincha kutilmagan xatti-harakat: <code>mouseover</code> element ustiga kelganda ishga tushadi, biroq kursor <strong>bola</strong> (child) elementga o'tsa ham <code>mouseout</code> ota-elementda ishga tushib qoladi!</p>
 <p>Brauzer nuqtai nazaridan mantiq shunday: kursor bir vaqtning o'zida faqat bitta eng chuqur (topmost) element ustida bo'la oladi — bu eng ichkaridagi va eng ustunlik (z-index) bo'yicha tepadagi element. Shuning uchun kursor ota-elementdan uning ichidagi bola elementga kirsa, texnik jihatdan u ota-elementni tark etib, bolaga kirgan hisoblanadi.</p>
 <pre class="code"><code>// #parent ichida #child bor deylik.
@@ -623,7 +637,7 @@ elem.onmouseout = function(event) {
 // 2) #child uchun mouseover (target=#child, relatedTarget=#parent)</code></pre>
 <p>Bu shuni anglatadiki, agar <code>onmouseout</code> ishlov beruvchisida elementni yashirsak yoki uni "kursor ketdi" deb hisoblasak, kursor aslida hali ota-element ichida (uning bolasida) bo'lsa ham, yolg'on "ketish" hodisasini olamiz. Bu miltillash (flicker) va noto'g'ri xatti-harakatlarga olib keladi.</p>
 <div class="tip">Agar shunchaki "kursor elementga (bolalari bilan birga) kirdi/chiqdi" faktini kuzatmoqchi bo'lsangiz, quyidagi <code>mouseenter/mouseleave</code>dan foydalaning — ular aynan shu muammoni hal qiladi.</div>
-<h2>mouseenter va mouseleave hodisalari</h2>
+<h2 id="mouseenter-va-mouseleave-hodisalari">mouseenter va mouseleave hodisalari</h2>
 <p><code>mouseenter</code> va <code>mouseleave</code> hodisalari <code>mouseover/mouseout</code>ga o'xshaydi: ular ham kursor kirib-chiqishida ishga tushadi. Biroq ikki muhim farq bor:</p>
 <ol><li>Element ichidagi o'tishlar (masalan, ota-elementdan bolasiga o'tish) hisobga <strong>olinmaydi</strong>. <code>mouseenter</code> faqat kursor butun elementga (bolalari bilan birga) birinchi marta kirganda ishga tushadi; <code>mouseleave</code> esa kursor uni butunlay tark etganda.</li><li>Bu hodisalar <strong>ko'tarilmaydi (bubbling qilmaydi)</strong>.</li></ol>
 <p>Bu ikki farq ishlashni ancha soddalashtiradi. Kursor element ichidagi bolalar ustidan qanchalik o'tmasin, <code>mouseenter</code> faqat bir marta kirishda, <code>mouseleave</code> esa bir marta to'liq chiqishda ishga tushadi:</p>
@@ -636,10 +650,10 @@ elem.onmouseleave = function(event) {
   // Faqat kursor 'elem'ni butunlay tark etganda.
 };</code></pre>
 <div class="warn"><code>mouseenter/mouseleave</code> bubbling qilmagani uchun, ularni hodisa delegatsiyasi (event delegation) bilan ishlata olmaysiz. Ya'ni bitta ota-elementga ishlov beruvchi qo'yib, uning ichidagi ko'plab bolalarni bittada kuzatib bo'lmaydi. Har bir kerakli elementga alohida ishlov beruvchi qo'yish kerak. Bunday delegatsiya zarur bo'lsa, <code>mouseover/mouseout</code> va <code>relatedTarget</code> tekshiruvi bilan ishlashga to'g'ri keladi.</div>
-<h2>Qaysi birini tanlash kerak?</h2>
+<h2 id="qaysi-birini-tanlash-kerak">Qaysi birini tanlash kerak?</h2>
 <p>Amaliy tavsiya:</p>
 <ul><li>Agar shunchaki "kursor bu elementga kirdimi/chiqdimi" degan oddiy holatni kuzatmoqchi bo'lsangiz — <code>mouseenter/mouseleave</code> ishlating. Ular ishonchli va soddaroq.</li><li>Agar hodisa delegatsiyasi kerak bo'lsa (masalan, katta jadval kataklarini bittada kuzatish) — <code>mouseover/mouseout</code> va <code>relatedTarget</code> tekshiruvidan foydalaning.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>mouseover/mouseout</code> — kursor element yoki uning bolalari ustidan o'tganda ham ishga tushadi, bubbling qiladi, <code>relatedTarget</code> beradi. Bolalar bilan muammoga duch keladi.</li><li><code>mouseenter/mouseleave</code> — faqat elementga to'liq kirish/chiqishda ishga tushadi, ichki o'tishlarni e'tiborsiz qoldiradi, lekin bubbling qilmaydi (delegatsiya ishlamaydi).</li><li><code>relatedTarget</code> <code>null</code> bo'lishi mumkin — har doim tekshiring.</li></ul>
 <nav class="lesson-nav">
   <a href="sichqoncha-hodisalari.html"><span class="dir">← Oldingi</span><span class="ttl">Sichqoncha hodisalari</span></a>
@@ -653,6 +667,6 @@ elem.onmouseleave = function(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

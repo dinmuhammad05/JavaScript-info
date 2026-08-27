@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>localStorage va sessionStorage — Kodla</title>
   <meta name="description" content="Web Storage: setItem/getItem/removeItem/clear metodlari, kalitlar bo'yicha aylanish, obyektlarni JSON orqali saqlash, storage hodisasi va ikkalasining farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,27 @@
 <main class="content article">
 <div class="crumbs">Brauzerda ma'lumot saqlash</div>
 <h1>localStorage va sessionStorage</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#web-storage-nima">Web Storage nima</a></li>
+<li class="lvl2"><a href="#asosiy-metodlar">Asosiy metodlar</a></li>
+<li class="lvl2"><a href="#obyekt-kabi-murojaat">Obyekt kabi murojaat</a></li>
+<li class="lvl2"><a href="#faqat-satr-saqlanadi">Faqat satr saqlanadi</a></li>
+<li class="lvl2"><a href="#obyektlarni-json-orqali-saqlash">Obyektlarni JSON orqali saqlash</a></li>
+<li class="lvl2"><a href="#kalitlar-bo-yicha-aylanish">Kalitlar bo'yicha aylanish</a></li>
+<li class="lvl2"><a href="#storage-hodisasi">storage hodisasi</a></li>
+<li class="lvl2"><a href="#localstorage-va-sessionstorage-farqi">localStorage va sessionStorage farqi</a></li>
+<li class="lvl2"><a href="#cheklovlar">Cheklovlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>localStorage</code> va <code>sessionStorage</code> — brauzerda kalit-qiymat (key/value) ko'rinishida ma'lumot saqlash uchun ob'yektlardir. Ular cookie'dan farqli o'laroq serverga yuborilmaydi, ancha katta hajmga (odatda ~5 MB) ega va foydalanish uchun ancha qulay. Ularni birgalikda <em>Web Storage</em> deb ataladi.</p>
-<h2>Web Storage nima</h2>
+<h2 id="web-storage-nima">Web Storage nima</h2>
 <p>Ikkala ob'yekt ham bir xil metod va xususiyatlarga ega. Farqi — <em>ma'lumot qancha vaqt saqlanishida</em> va <em>qaysi oynalar orasida ulashilishida</em>:</p>
 <ul><li><code>localStorage</code> — ma'lumot brauzer yopilib qayta ochilsa ham saqlanadi. Bitta domenning barcha tab va oynalari orasida ulashiladi;</li><li><code>sessionStorage</code> — ma'lumot faqat joriy brauzer tab'i uchun saqlanadi va tab yopilganda o'chadi. Har bir tab o'z alohida <code>sessionStorage</code>iga ega.</li></ul>
 <div class="note">Web Storage <strong>brauzerga xos</strong>. Node.js yoki playground muhitida <code>localStorage</code> mavjud emas, shu sabab bu misollarni brauzer konsolida sinang.</div>
-<h2>Asosiy metodlar</h2>
+<h2 id="asosiy-metodlar">Asosiy metodlar</h2>
 <p>Web Storage quyidagi metod va xususiyatlarni beradi (misolda <code>localStorage</code>, lekin <code>sessionStorage</code> aynan bir xil):</p>
 <ul><li><code>setItem(key, value)</code> — kalit/qiymat juftligini saqlaydi;</li><li><code>getItem(key)</code> — kalit bo'yicha qiymatni oladi;</li><li><code>removeItem(key)</code> — kalit bo'yicha juftlikni o'chiradi;</li><li><code>clear()</code> — barcha juftliklarni o'chiradi;</li><li><code>key(index)</code> — indeks bo'yicha kalit nomini beradi;</li><li><code>length</code> — saqlangan juftliklar soni.</li></ul>
 <pre class="code"><code>// Brauzerda:
@@ -616,14 +634,14 @@ localStorage.setItem('b', '2');
 localStorage.clear();
 console.log(localStorage.length); // 0</code></pre>
 <div class="note">Mavjud bo'lmagan kalit uchun <code>getItem</code> <code>null</code> qaytaradi (cookie'dagi <code>undefined</code>dan farqli).</div>
-<h2>Obyekt kabi murojaat</h2>
+<h2 id="obyekt-kabi-murojaat">Obyekt kabi murojaat</h2>
 <p>Web Storage'ga oddiy obyekt kabi ham murojaat qilish mumkin — nuqta yoki kvadrat qavs orqali:</p>
 <pre class="code"><code>// bular ishlaydi, lekin tavsiya etilmaydi:
 localStorage.user = 'Ali';
 console.log(localStorage.user); // "Ali"
 delete localStorage.user;</code></pre>
 <div class="warn">Obyekt sintaksisi qulay ko'rinsa-da, <strong>metodlardan foydalanish tavsiya etiladi</strong>. Sabab: agar kalit <code>length</code>, <code>setItem</code> kabi ichki nom bilan to'qnashsa, xatti-harakat buziladi. <code>setItem</code>/<code>getItem</code> esa har doim ishonchli ishlaydi.</div>
-<h2>Faqat satr saqlanadi</h2>
+<h2 id="faqat-satr-saqlanadi">Faqat satr saqlanadi</h2>
 <p>Web Storage'da <strong>faqat satr (string)</strong> saqlash mumkin. Kalit ham, qiymat ham satr bo'lishi shart. Boshqa turdagi qiymat berilsa, u avtomatik satrga aylantiriladi, bu ko'pincha kutilmagan natija beradi:</p>
 <pre class="code"><code>localStorage.setItem('num', 123);
 console.log(localStorage.getItem('num')); // "123" (satr!)
@@ -632,7 +650,7 @@ console.log(typeof localStorage.getItem('num')); // "string"
 localStorage.setItem('obj', { a: 1 });
 console.log(localStorage.getItem('obj')); // "[object Object]" — buzilgan!</code></pre>
 <div class="warn">Obyektni to'g'ridan-to'g'ri saqlashga urinish <code>[object Object]</code> satriga aylantiradi — ma'lumot yo'qoladi. Obyektlarni doim JSON orqali saqlang (keyingi bo'lim).</div>
-<h2>Obyektlarni JSON orqali saqlash</h2>
+<h2 id="obyektlarni-json-orqali-saqlash">Obyektlarni JSON orqali saqlash</h2>
 <p>Obyekt yoki massiv saqlash uchun ularni <code>JSON.stringify</code> bilan satrga, o'qishda esa <code>JSON.parse</code> bilan qayta obyektga aylantiramiz:</p>
 <pre class="code"><code>let user = { name: 'Ali', age: 25, roles: ['admin', 'user'] };
 
@@ -657,7 +675,7 @@ saveJSON('settings', { theme: 'dark', lang: 'uz' });
 let s = loadJSON('settings');
 console.log(s.theme); // "dark"</code></pre>
 <div class="tip"><code>JSON.parse</code> noto'g'ri formatdagi satr uchun xatolik tashlaydi. Ishonchsiz ma'lumotni o'qishda <code>try...catch</code> ishlatish yoki <code>loadJSON</code>ni himoyalash foydali.</div>
-<h2>Kalitlar bo'yicha aylanish</h2>
+<h2 id="kalitlar-bo-yicha-aylanish">Kalitlar bo'yicha aylanish</h2>
 <p>Web Storage — <em>iterable emas</em>, ya'ni uni to'g'ridan-to'g'ri <code>for..of</code> bilan aylantirib bo'lmaydi. Barcha kalitlarni ko'rish uchun <code>length</code> va <code>key(i)</code> ishlatiladi:</p>
 <pre class="code"><code>// barcha juftliklarni chiqarish:
 for (let i = 0; i &lt; localStorage.length; i++) {
@@ -670,7 +688,7 @@ for (let key of keys) {
   console.log(key + ' = ' + localStorage.getItem(key));
 }</code></pre>
 <div class="warn"><code>for..in</code> tsiklini ishlatmang — u <code>setItem</code>, <code>length</code> kabi ichki maydonlarni ham aylantirib chiqadi. <code>Object.keys</code> yoki <code>key(i)</code> usuli xavfsizroq.</div>
-<h2>storage hodisasi</h2>
+<h2 id="storage-hodisasi">storage hodisasi</h2>
 <p><code>localStorage</code> yoki <code>sessionStorage</code> o'zgarganda <code>storage</code> hodisasi ishga tushadi. Muhim jihat: bu hodisa <strong>o'zgarishni amalga oshirgan oynada emas, boshqa oynalarda</strong> ishlaydi. Bu bir domenning turli tab'lari orasida ma'lumot almashishga imkon beradi:</p>
 <pre class="code"><code>// Brauzerda, bir tab'da:
 window.addEventListener('storage', function(event) {
@@ -687,13 +705,13 @@ window.addEventListener('storage', function(event) {
 <p><code>event</code> ob'yektining foydali xususiyatlari:</p>
 <ul><li><code>event.key</code> — o'zgargan kalit (<code>clear()</code> chaqirilsa <code>null</code>);</li><li><code>event.oldValue</code> — eski qiymat;</li><li><code>event.newValue</code> — yangi qiymat (o'chirilsa <code>null</code>);</li><li><code>event.url</code> — yangilanish sodir bo'lgan hujjat URL'i;</li><li><code>event.storageArea</code> — o'zgargan storage obyekti (<code>localStorage</code> yoki <code>sessionStorage</code>).</li></ul>
 <div class="tip"><code>storage</code> hodisasi tab'lar orasida oddiy "xabar almashish" mexanizmi sifatida ishlatilishi mumkin: bir tab <code>localStorage</code>ga yozadi, boshqalari hodisa orqali xabar oladi.</div>
-<h2>localStorage va sessionStorage farqi</h2>
+<h2 id="localstorage-va-sessionstorage-farqi">localStorage va sessionStorage farqi</h2>
 <p>Ikkalasining amaliy farqlari quyidagicha:</p>
 <ul><li><strong>Umr ko'rish</strong>: <code>localStorage</code> — brauzer yopilib qayta ochilsa ham saqlanadi; <code>sessionStorage</code> — tab yopilganda o'chadi;</li><li><strong>Ulashish ko'lami</strong>: <code>localStorage</code> — bir domenning barcha tab/oynalari orasida ulashiladi; <code>sessionStorage</code> — faqat bitta tab ichida (hatto ayni domenning ikkinchi tab'i alohida <code>sessionStorage</code>iga ega);</li><li><strong>Sahifa yangilanishi</strong>: <code>sessionStorage</code> sahifa yangilanganda (F5) saqlanadi, lekin yangi tab ochilganda yo'q;</li><li><strong>storage hodisasi</strong>: har ikkalasi ham hodisa chiqaradi, lekin <code>sessionStorage</code> alohida tab'ga tegishli bo'lgani uchun uning hodisasi kamroq foyda beradi.</li></ul>
 <div class="note">Doimiy sozlamalar (masalan interfeys mavzusi) uchun <code>localStorage</code>, vaqtinchalik forma holatini bitta tab uchun saqlashda esa <code>sessionStorage</code> mos keladi.</div>
-<h2>Cheklovlar</h2>
+<h2 id="cheklovlar">Cheklovlar</h2>
 <ul><li>Hajm odatda ~5 MB (brauzerga qarab o'zgaradi) — cookie'dan ancha katta;</li><li>Faqat satr saqlanadi — obyektlar uchun JSON kerak;</li><li>Sinxron API — juda katta ma'lumotni yozish/o'qish interfeysni sekinlashtiradi;</li><li>Ma'lumot serverga yuborilmaydi (bu ko'pincha afzallik);</li><li>Yashirin (private/incognito) rejimda ma'lumot tab yopilganda o'chishi mumkin.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Web Storage — brauzerda kalit-qiymat saqlashning oddiy va katta hajmli usuli (~5 MB);</li><li><code>setItem</code>/<code>getItem</code>/<code>removeItem</code>/<code>clear</code> asosiy metodlar; <code>key(i)</code> va <code>length</code> aylanish uchun;</li><li>Faqat satr saqlanadi — obyektni <code>JSON.stringify</code>/<code>JSON.parse</code> bilan o'ramoq kerak;</li><li>Aylanish uchun <code>Object.keys</code> yoki <code>key(i)</code> ishlating, <code>for..in</code>dan qoching;</li><li><code>storage</code> hodisasi o'zgarishlarni boshqa tab'larga xabar qiladi;</li><li><code>localStorage</code> — barqaror va tab'lar orasida ulashiladi; <code>sessionStorage</code> — vaqtinchalik va bitta tab uchun.</li></ul>
 <nav class="lesson-nav">
   <a href="cookie.html"><span class="dir">← Oldingi</span><span class="ttl">Cookie</span></a>
@@ -707,6 +725,6 @@ window.addEventListener('storage', function(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

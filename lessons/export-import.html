@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eksport va Import — Kodla</title>
   <meta name="description" content="export/import ning barcha ko'rinishlari: nomli eksport, default eksport, import * as, as bilan qayta nomlash va re-export.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Modullar</div>
 <h1>Eksport va Import</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#e-lon-oldidan-eksport-nomli-eksport">E'lon oldidan eksport (nomli eksport)</a></li>
+<li class="lvl2"><a href="#e-londan-alohida-eksport">E'londan alohida eksport</a></li>
+<li class="lvl2"><a href="#import">Import</a></li>
+<li class="lvl3"><a href="#hammasini-import-qilish-import-as">Hammasini import qilish: import * as</a></li>
+<li class="lvl3"><a href="#as-bilan-qayta-nomlash-import">as bilan qayta nomlash (import)</a></li>
+<li class="lvl3"><a href="#as-bilan-qayta-nomlash-export">as bilan qayta nomlash (export)</a></li>
+<li class="lvl2"><a href="#export-default-standart-eksport">Export default (standart eksport)</a></li>
+<li class="lvl3"><a href="#default-nomi">"default" nomi</a></li>
+<li class="lvl2"><a href="#re-export-qayta-eksport">Re-export (qayta eksport)</a></li>
+<li class="lvl2"><a href="#import-va-export-ko-tarilishi-hoisting">Import va export ko'tarilishi (hoisting)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Eksport va import direktivalarining bir necha ko'rinishlari bor. Oldingi darsda eng oddiy holatini ko'rdik, endi ularning to'liq imkoniyatlarini chuqurroq o'rganamiz.</p>
-<h2>E'lon oldidan eksport (nomli eksport)</h2>
+<h2 id="e-lon-oldidan-eksport-nomli-eksport">E'lon oldidan eksport (nomli eksport)</h2>
 <p>Istalgan e'lon (o'zgaruvchi, funksiya, klass) oldiga <code>export</code> qo'yib, uni eksport qilish mumkin:</p>
 <pre class="code"><code>// massivni eksport qilish
 export let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
@@ -612,7 +631,7 @@ export class User {
   }
 }</code></pre>
 <div class="note">Funksiya yoki klassdan oldingi <code>export</code>dan keyin nuqta-vergul (<code>;</code>) qo'yilmaydi — bu odatiy funksiya/klass e'loni, oddiy iboradan (statement) farq qiladi.</div>
-<h2>E'londan alohida eksport</h2>
+<h2 id="e-londan-alohida-eksport">E'londan alohida eksport</h2>
 <p>Eksportni e'londan ajratib, alohida ro'yxat sifatida ham yozish mumkin. Bu qaysi funksiyalar tashqariga chiqarilganini bir joyda ko'rish uchun qulay:</p>
 <pre class="code"><code>// 📁 say.js
 function sayHi(user) {
@@ -624,14 +643,14 @@ function sayBye(user) {
 }
 
 export { sayHi, sayBye }; // ikkala funksiyani eksport qilamiz</code></pre>
-<h2>Import</h2>
+<h2 id="import">Import</h2>
 <p>Odatda import qilinadigan narsalar ro'yxati jingalak qavs ichida (<code>{...}</code>) beriladi:</p>
 <pre class="code"><code>// 📁 main.js
 import { sayHi, sayBye } from './say.js';
 
 sayHi('Ali');  // Salom, Ali!
 sayBye('Vali'); // Xayr, Vali!</code></pre>
-<h3>Hammasini import qilish: import * as</h3>
+<h3 id="hammasini-import-qilish-import-as">Hammasini import qilish: import * as</h3>
 <p>Import qilinadigan narsalar ko'p bo'lsa, hammasini bitta obyektga <code>* as &lt;obj&gt;</code> ko'rinishida yig'ib olish mumkin:</p>
 <pre class="code"><code>// 📁 main.js
 import * as say from './say.js';
@@ -639,14 +658,14 @@ import * as say from './say.js';
 say.sayHi('Ali');  // Salom, Ali!
 say.sayBye('Vali'); // Xayr, Vali!</code></pre>
 <div class="warn">Hammasini import qilish (<code>* as</code>) qulay ko'rinsa-da, ko'pincha kerakli narsalarni aniq ro'yxatlab import qilish tavsiya etiladi. Sabablari: (1) zamonaviy build vositalari (webpack, Rollup) ishlatilmagan importlarni olib tashlab ("tree-shaking") build hajmini kichraytiradi; (2) aniq nomlar qaysi funksiya qayerdan kelganini ravshan ko'rsatadi va kodni tushunishni osonlashtiradi.</div>
-<h3>as bilan qayta nomlash (import)</h3>
+<h3 id="as-bilan-qayta-nomlash-import">as bilan qayta nomlash (import)</h3>
 <p><code>as</code> yordamida import qilinayotgan narsalarni boshqa nom bilan olish mumkin:</p>
 <pre class="code"><code>// 📁 main.js
 import { sayHi as hi, sayBye as bye } from './say.js';
 
 hi('Ali');  // Salom, Ali!
 bye('Vali'); // Xayr, Vali!</code></pre>
-<h3>as bilan qayta nomlash (export)</h3>
+<h3 id="as-bilan-qayta-nomlash-export">as bilan qayta nomlash (export)</h3>
 <p>Xuddi shunday, eksport paytida ham nomni o'zgartirish mumkin:</p>
 <pre class="code"><code>// 📁 say.js
 // ...
@@ -657,7 +676,7 @@ import * as say from './say.js';
 
 say.hi('Ali');  // Salom, Ali!
 say.bye('Vali'); // Xayr, Vali!</code></pre>
-<h2>Export default (standart eksport)</h2>
+<h2 id="export-default-standart-eksport">Export default (standart eksport)</h2>
 <p>Amalda modullar ikki turga bo'linadi: bir nechta funksiyani o'z ichiga oluvchi kutubxona modullari va bitta narsani (masalan, bitta klassni) e'lon qiluvchi modullar. Ikkinchi holat uchun <strong>default eksport</strong> qulay.</p>
 <p><code>export default</code> "bu modul faqat shu bitta narsani eksport qiladi" degani. Har bir faylda faqat <strong>bitta</strong> default eksport bo'lishi mumkin:</p>
 <pre class="code"><code>// 📁 user.js
@@ -677,7 +696,7 @@ import MyUser from './user.js';
 import Anything from './user.js';
 // hammasi bir xil default eksportni oladi</code></pre>
 <div class="note">Nomli eksportda har bir eksportning aniq nomi bor. Default eksportda esa nom yo'q, shuning uchun jamoada bir xil default'ga bir xil nom berish uchun kelishuv bo'lishi foydali.</div>
-<h3>"default" nomi</h3>
+<h3 id="default-nomi">"default" nomi</h3>
 <p>Ba'zan default eksportni belgilash uchun <code>default</code> nomidan foydalaniladi. Masalan, funksiyani e'londan alohida default eksport qilmoqchi bo'lsak:</p>
 <pre class="code"><code>// 📁 user.js
 function sayHi(user) {
@@ -710,7 +729,7 @@ import * as user from './user.js';
 let User = user.default; // default eksport
 new User('John');</code></pre>
 <div class="tip">Default eksportga qat'iy nom yo'qligi kodni tushunishni qiyinlashtirishi mumkin. Ko'p tajribali dasturchilar aniqlik uchun asosan nomli eksportlarni afzal ko'radi. Lekin bu jamoa uslubiga bog'liq — ikkalasi ham to'g'ri.</div>
-<h2>Re-export (qayta eksport)</h2>
+<h2 id="re-export-qayta-eksport">Re-export (qayta eksport)</h2>
 <p><code>export ... from ...</code> sintaksisi import qilingan narsani darhol qayta eksport qilishga (ehtimol boshqa nom bilan) imkon beradi:</p>
 <pre class="code"><code>export { sayHi } from './say.js';        // sayHi ni qayta eksport
 export { default as User } from './user.js'; // default ni User sifatida qayta eksport</code></pre>
@@ -728,9 +747,9 @@ export { default as User } from './user.js';
 <pre class="code"><code>// paketni ishlatuvchi kod:
 import { login, logout, User } from './auth/index.js';</code></pre>
 <div class="warn">Default eksportni qayta eksport qilishda ehtiyot bo'ling. <code>export User from './user.js'</code> — <strong>ishlamaydi</strong> (sintaksis xatosi). Default'ni qayta eksport qilish uchun uni aniq ko'rsatish kerak: <code>export { default as User } from './user.js'</code>. Yoki barchasini birga: <code>export * from './user.js'</code> — lekin bu <em>default</em>ni chiqarib tashlaydi, faqat nomli eksportlarni qayta chiqaradi.</div>
-<h2>Import va export ko'tarilishi (hoisting)</h2>
+<h2 id="import-va-export-ko-tarilishi-hoisting">Import va export ko'tarilishi (hoisting)</h2>
 <p><code>import/export</code> direktivalari qayerda yozilganidan qat'i nazar ishlaydi — ular "ko'tariladi" (hoisted). Ammo uslub jihatidan ularni odatda fayl boshiga yozish tavsiya etiladi, chunki bu modul bog'liqliklarini bir qarashda ko'rish imkonini beradi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Eksport turlari:</p>
 <ul><li>E'lon oldidan: <code>export let x = 1</code>, <code>export function f()</code>, <code>export class C</code>;</li><li>Alohida: <code>export { x, y }</code>;</li><li>Qayta nomlab: <code>export { x as y }</code>;</li><li>Default: <code>export default ...</code> yoki <code>export { x as default }</code>;</li><li>Qayta eksport: <code>export { x } from '...'</code>, <code>export * from '...'</code>, <code>export { default as X } from '...'</code>.</li></ul>
 <p>Import turlari:</p>
@@ -747,6 +766,6 @@ import { login, logout, User } from './auth/index.js';</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

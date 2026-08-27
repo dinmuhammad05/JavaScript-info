@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Graf (Graph) asoslari — Kodla</title>
   <meta name="description" content="Tugunlar va bog'lanishlar, yo'naltirilgan/yo'naltirilmagan graflar, og'irliklar va grafni kodda tasvirlash usullari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Daraxt va graf</div>
 <h1>Graf (Graph) asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#graf-nima">Graf nima</a></li>
+<li class="lvl2"><a href="#daraxt-grafning-maxsus-holati">Daraxt — grafning maxsus holati</a></li>
+<li class="lvl2"><a href="#graf-turlari">Graf turlari</a></li>
+<li class="lvl3"><a href="#yo-naltirilgan-va-yo-naltirilmagan">Yo'naltirilgan va yo'naltirilmagan</a></li>
+<li class="lvl3"><a href="#og-irlikli-va-og-irliksiz">Og'irlikli va og'irliksiz</a></li>
+<li class="lvl2"><a href="#grafni-kodda-tasvirlash-qo-shnilik-ro-yxati">Grafni kodda tasvirlash: qo'shnilik ro'yxati</a></li>
+<li class="lvl2"><a href="#grafni-kodda-tasvirlash-qo-shnilik-matritsasi">Grafni kodda tasvirlash: qo'shnilik matritsasi</a></li>
+<li class="lvl2"><a href="#big-o-qaysi-usul-yaxshi">Big O: qaysi usul yaxshi</a></li>
+<li class="lvl2"><a href="#real-hayotdagi-misollar">Real hayotdagi misollar</a></li>
+<li class="lvl2"><a href="#grafni-javascriptda-qurish">Grafni JavaScriptda qurish</a></li>
+  </ul>
+</details>
 <p class="lead">Daraxtni o'rgandik — unda har bir tugunning aniq bitta ota-onasi bor, tsikllar yo'q, tuzilma tartibli. Endi bu cheklovlarni olib tashlaymiz va eng umumiy, eng kuchli ma'lumotlar tuzilmasiga o'tamiz: <strong>graf (graph)</strong>. Ijtimoiy tarmoqlar, xaritalar, internet — bularning barchasi ostida graf yotadi.</p>
-<h2>Graf nima</h2>
+<h2 id="graf-nima">Graf nima</h2>
 <p><strong>Graf</strong> — bu ikki narsadan iborat tuzilma:</p>
 <ul><li><strong>Tugunlar (vertex, ko'plikda vertices)</strong> — asosiy obyektlar. Masalan odamlar, shaharlar, veb-sahifalar.</li><li><strong>Bog'lanishlar (edge)</strong> — tugunlarni bog'lovchi qirralar. Masalan do'stlik, yo'l, havola.</li></ul>
 <p>Xolos. Graf — bu "nuqtalar va ularni bog'lovchi chiziqlar" to'plami. Daraxtdan farqli, grafda hech qanday "tepa" yoki "ildiz" bo'lishi shart emas, tugunlar istalgancha bir-biriga ulanishi mumkin.</p>
@@ -607,20 +625,20 @@
    C --- D            B-D, C-D, D-E
          |
          E</code></pre>
-<h2>Daraxt — grafning maxsus holati</h2>
+<h2 id="daraxt-grafning-maxsus-holati">Daraxt — grafning maxsus holati</h2>
 <p>Qiziq fakt: <strong>daraxt aslida grafning bir turi</strong>. Aniqrog'i, daraxt — bu ikki maxsus shartni qanoatlantiradigan graf:</p>
 <ul><li><strong>Bog'langan (connected)</strong> — har qanday ikki tugun orasida yo'l mavjud, hech bir tugun "ajralib" qolmagan.</li><li><strong>Tsiklsiz (acyclic)</strong> — hech qanday halqa yo'q, ya'ni bir tugundan chiqib, aylanib yana o'ziga qaytib bo'lmaydi.</li></ul>
 <p>Grafda esa bu cheklovlar yo'q. Grafda tsikllar bo'lishi mumkin (A → B → C → A), ba'zi tugunlar butunlay ajralib qolishi mumkin. Aynan shu erkinlik grafni juda kuchli — va biroz murakkabroq — qiladi. Keyingi darsda ko'ramizki, aynan tsikllar tufayli grafni aylanishda ehtiyot bo'lish kerak.</p>
-<h2>Graf turlari</h2>
+<h2 id="graf-turlari">Graf turlari</h2>
 <p>Graflar bir necha xususiyati bilan farqlanadi. Ikkita asosiy ajratma bor.</p>
-<h3>Yo'naltirilgan va yo'naltirilmagan</h3>
+<h3 id="yo-naltirilgan-va-yo-naltirilmagan">Yo'naltirilgan va yo'naltirilmagan</h3>
 <p><strong>Yo'naltirilmagan (undirected)</strong> grafda bog'lanish ikki tomonlama. Agar A va B bog'langan bo'lsa, A dan B ga ham, B dan A ga ham o'tish mumkin. Misol: Facebook do'stligi — agar men sizning do'stingiz bo'lsam, siz ham mening do'stimsiz.</p>
 <p><strong>Yo'naltirilgan (directed)</strong> grafda bog'lanishning yo'nalishi bor. A → B bog'lanish faqat A dan B ga o'tishni bildiradi, teskarisi bo'lishi shart emas. Misol: Instagram obunasi — men sizga obuna bo'lishim mumkin, lekin siz menga obuna bo'lmasligingiz mumkin.</p>
 <pre class="code"><code>Yo'naltirilmagan:      Yo'naltirilgan:
                         
    A --- B                A --&gt; B
    (ikki tomonlama)       (faqat A dan B ga)</code></pre>
-<h3>Og'irlikli va og'irliksiz</h3>
+<h3 id="og-irlikli-va-og-irliksiz">Og'irlikli va og'irliksiz</h3>
 <p><strong>Og'irliksiz (unweighted)</strong> grafda barcha qirralar teng — ular shunchaki "bor yoki yo'q".</p>
 <p><strong>Og'irlikli (weighted)</strong> grafda har bir qirraga son (og'irlik) biriktiriladi. Bu masofa, narx, vaqt yoki mustahkamlikni bildirishi mumkin. Misol: shaharlar orasidagi yo'l og'irligi — kilometrlardagi masofa.</p>
 <pre class="code"><code>Og'irlikli graf (masofalar):
@@ -630,7 +648,7 @@
    3       2
    |       |
    C --4-- D</code></pre>
-<h2>Grafni kodda tasvirlash: qo'shnilik ro'yxati</h2>
+<h2 id="grafni-kodda-tasvirlash-qo-shnilik-ro-yxati">Grafni kodda tasvirlash: qo'shnilik ro'yxati</h2>
 <p>Graf tuzilma sifatida chiroyli, lekin uni kodda qanday saqlaymiz? Ikkita asosiy usul bor. Birinchisi va eng ko'p ishlatiladigani — <strong>qo'shnilik ro'yxati (adjacency list)</strong>.</p>
 <p>G'oya oddiy: har bir tugun uchun uning bevosita qo'shnilarining ro'yxatini saqlaymiz. Buni obyekt yoki <code>Map</code> orqali qilamiz — kalit tugun, qiymat esa uning qo'shnilari massivi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>adjacency-list.js</span></div><textarea spellcheck="false">// Qo'shnilik ro'yxati (obyekt orqali):
@@ -652,7 +670,7 @@ console.log('D qo'shnilari:', graph.D); // ['B','C','E']
 console.log('A-D bog'langanmi?', graph.A.includes('D')); // false
 console.log('B-D bog'langanmi?', graph.B.includes('D')); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Yo'naltirilmagan grafda e'tibor bering: <code>B</code> ning ro'yxatida <code>A</code> bor, va <code>A</code> ning ro'yxatida <code>B</code> bor — bog'lanish ikki tomondan yozildi. Yo'naltirilgan grafda faqat bir tomonga yozgan bo'lardik.</p>
-<h2>Grafni kodda tasvirlash: qo'shnilik matritsasi</h2>
+<h2 id="grafni-kodda-tasvirlash-qo-shnilik-matritsasi">Grafni kodda tasvirlash: qo'shnilik matritsasi</h2>
 <p>Ikkinchi usul — <strong>qo'shnilik matritsasi (adjacency matrix)</strong>. Bu ikki o'lchamli jadval (massivlar massivi). Agar grafda n ta tugun bo'lsa, biz n×n o'lchamli jadval yaratamiz. <code>matrix[i][j]</code> qiymati 1 (yoki og'irlik) bo'lsa — i va j bog'langan, 0 bo'lsa — bog'lanmagan.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>adjacency-matrix.js</span></div><textarea spellcheck="false">// Tugunlar: 0=A, 1=B, 2=C, 3=D
 // Qo'shnilik matritsasi (yo'naltirilmagan):
@@ -676,15 +694,15 @@ for (let j = 0; j &lt; 4; j++) {
 }
 console.log('C qo'shnilari (indeks):', neighbors); // [0, 1, 3]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Matritsada bog'lanishni tekshirish juda tez — <code>matrix[i][j]</code> ni bir qadamda o'qiymiz, O(1). Lekin bir tugunning barcha qo'shnilarini topish uchun butun qatorni aylanib chiqish kerak.</p>
-<h2>Big O: qaysi usul yaxshi</h2>
+<h2 id="big-o-qaysi-usul-yaxshi">Big O: qaysi usul yaxshi</h2>
 <p>Ikki usulning asosiy farqi — <strong>xotira</strong>.</p>
 <ul><li><strong>Qo'shnilik ro'yxati</strong>: xotira <strong>O(V + E)</strong>, bu yerda V — tugunlar soni, E — qirralar soni. Faqat mavjud bog'lanishlarni saqlaymiz, ortiqcha joy ketmaydi.</li><li><strong>Qo'shnilik matritsasi</strong>: xotira <strong>O(V²)</strong> — har doim to'liq n×n jadval, bog'lanishlar kam bo'lsa ham. Ko'p katakchalar 0 bo'lib, bo'sh ketadi.</li></ul>
 <p>Amalda ko'p graflar <em>siyrak (sparse)</em> — ya'ni tugunlar ko'p, lekin har biri kam sonli qo'shniga ega. Masalan ijtimoiy tarmoqda millionlab foydalanuvchi bor, lekin har biri o'rtacha bir necha yuz do'stga ega, millionta emas. Bunday holatda matritsa dahshatli isrofgarchilik bo'ladi.</p>
 <ul><li>Qo'shni tekshirish tezligi: matritsa O(1), ro'yxat O(qo'shnilar soni).</li><li>Barcha qo'shnilarni sanash: ro'yxat O(qo'shnilar soni), matritsa O(V).</li><li>Xotira: ro'yxat O(V+E), matritsa O(V²).</li></ul>
-<h2>Real hayotdagi misollar</h2>
+<h2 id="real-hayotdagi-misollar">Real hayotdagi misollar</h2>
 <p>Graf — eng ko'p uchraydigan tuzilmalardan biri. Atrofingizga qarang:</p>
 <ul><li><strong>Ijtimoiy tarmoqlar</strong> — odamlar tugunlar, do'stlik/obuna qirralar. "Tanishlaringizning tanishi" — bu grafda qidiruv.</li><li><strong>Xaritalar va navigatsiya</strong> — chorrahalar tugunlar, yo'llar qirralar, masofa og'irlik. GPS eng qisqa yo'lni grafda topadi.</li><li><strong>Internet</strong> — veb-sahifalar tugunlar, havolalar yo'naltirilgan qirralar. Google saralashi shu grafga asoslangan.</li><li><strong>Tavsiyalar</strong> — "bu mahsulotni olganlar buni ham oldi" — mahsulotlar grafi bo'ylab harakat.</li></ul>
-<h2>Grafni JavaScriptda qurish</h2>
+<h2 id="grafni-javascriptda-qurish">Grafni JavaScriptda qurish</h2>
 <p>Amaliyotda grafni ko'pincha kichik klass sifatida yozishadi — tugun qo'shish, qirra qo'shish usullari bilan. Bu qo'shnilik ro'yxatiga asoslanadi. Mana to'liq ishlaydigan misol:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>graph-class.js</span></div><textarea spellcheck="false">class Graph {
   constructor() {
@@ -726,6 +744,6 @@ console.log('D qo'shnilari:', g.neighbors('D')); // ['B','C']</textarea><div cla
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

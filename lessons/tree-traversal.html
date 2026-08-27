@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daraxtni aylanib chiqish: DFS va BFS — Kodla</title>
   <meta name="description" content="Daraxtning barcha tugunlarini ko'rish: chuqurlikka (inorder, preorder, postorder) va kenglikka (level order) aylanish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Daraxt va graf</div>
 <h1>Daraxtni aylanib chiqish: DFS va BFS</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#aylanish-traversal-nima">Aylanish (traversal) nima</a></li>
+<li class="lvl2"><a href="#dfs-uch-xil-tartib">DFS: uch xil tartib</a></li>
+<li class="lvl3"><a href="#preorder-ildiz-chap-o-ng">Preorder (ildiz-chap-o'ng)</a></li>
+<li class="lvl3"><a href="#inorder-chap-ildiz-o-ng">Inorder (chap-ildiz-o'ng)</a></li>
+<li class="lvl3"><a href="#postorder-chap-o-ng-ildiz">Postorder (chap-o'ng-ildiz)</a></li>
+<li class="lvl2"><a href="#bfs-kenglikka-level-order">BFS: kenglikka (level order)</a></li>
+<li class="lvl2"><a href="#big-o-vaqt-va-xotira">Big O: vaqt va xotira</a></li>
+<li class="lvl2"><a href="#qachon-qaysi-biri">Qachon qaysi biri</a></li>
+  </ul>
+</details>
 <p class="lead">Daraxtni yaratdik, unga qiymatlar qo'shdik. Endi tabiiy savol tug'iladi: uning <strong>barcha</strong> tugunlarini qanday ko'rib chiqamiz? Massivda oddiy tsikl bilan bo'lardi. Ammo daraxt shoxlanadi — chapga ham, o'ngga ham. Qaysi tugunni birinchi ko'ramiz? Bu darsda daraxtni aylanib chiqishning (traversal) barcha usullarini o'rganamiz.</p>
-<h2>Aylanish (traversal) nima</h2>
+<h2 id="aylanish-traversal-nima">Aylanish (traversal) nima</h2>
 <p><strong>Aylanish (traversal)</strong> — bu daraxtdagi har bir tugunga aynan bir marta tashrif buyurish jarayoni. "Tashrif buyurish" deganda odatda tugun qiymatini o'qish, chop etish yoki biror amal bajarishni nazarda tutamiz.</p>
 <p>Massivdan farqli, daraxtda bitta "to'g'ri" tartib yo'q. Ikkita asosiy yondashuv bor va ular butunlay boshqacha "harakat traektoriyasi" beradi:</p>
 <ul><li><strong>DFS (Depth-First Search)</strong> — chuqurlikka aylanish. Avval bir shoxni oxirigacha (chuqurgacha) kuzatib boramiz, keyin ortga qaytib boshqa shoxga o'tamiz.</li><li><strong>BFS (Breadth-First Search)</strong> — kenglikka aylanish. Daraxtni pog'ona-pog'ona, gorizontal qatlamlar bo'ylab ko'rib chiqamiz.</li></ul>
@@ -607,10 +623,10 @@
       2   3
      / \
     4   5</code></pre>
-<h2>DFS: uch xil tartib</h2>
+<h2 id="dfs-uch-xil-tartib">DFS: uch xil tartib</h2>
 <p>DFS chuqurlikka ketadi, lekin "tugunni qachon o'qiymiz?" degan savolga uch xil javob bor. Har bir tugun uchun uchta ish bor: <strong>o'zini o'qish</strong>, <strong>chap bolasiga tushish</strong>, <strong>o'ng bolasiga tushish</strong>. Bularning tartibini o'zgartirsak, uch xil aylanish chiqadi.</p>
 <ul><li><strong>Preorder</strong>: ildiz → chap → o'ng (avval o'zini o'qi, keyin bolalar).</li><li><strong>Inorder</strong>: chap → ildiz → o'ng (avval chap, keyin o'zi, keyin o'ng).</li><li><strong>Postorder</strong>: chap → o'ng → ildiz (avval bolalar, oxirida o'zi).</li></ul>
-<h3>Preorder (ildiz-chap-o'ng)</h3>
+<h3 id="preorder-ildiz-chap-o-ng">Preorder (ildiz-chap-o'ng)</h3>
 <p>Preorderda avval joriy tugunni o'qiymiz, keyin chap qism daraxtga, keyin o'ng qism daraxtga tushamiz. Bu "yuqoridan pastga" tabiatli — masalan daraxtning nusxasini olishda foydali, chunki avval ota-ona yaratiladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>preorder.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(v){ this.value=v; this.left=null; this.right=null; }
@@ -632,7 +648,7 @@ root.left.right = new TreeNode(5);
 
 console.log('Preorder:', preorder(root).join(' '));
 // 1 2 4 5 3</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Inorder (chap-ildiz-o'ng)</h3>
+<h3 id="inorder-chap-ildiz-o-ng">Inorder (chap-ildiz-o'ng)</h3>
 <p>Inorderda avval butun chap qism daraxtni tugatamiz, keyin joriy tugunni o'qiymiz, keyin o'ng qism daraxtga o'tamiz. Bu tartibning bitta ajoyib xossasi bor — pastda ko'ramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>inorder.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(v){ this.value=v; this.left=null; this.right=null; }
@@ -662,7 +678,7 @@ root.right.right = new TreeNode(14);
 console.log('Inorder:', inorder(root).join(' '));
 // 1 3 6 8 10 14  &lt;- saralangan tartib!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rdingizmi natijani? <code>1 3 6 8 10 14</code> — mukammal o'sish tartibida! Bu tasodif emas.</p>
-<h3>Postorder (chap-o'ng-ildiz)</h3>
+<h3 id="postorder-chap-o-ng-ildiz">Postorder (chap-o'ng-ildiz)</h3>
 <p>Postorderda joriy tugunni eng oxirida, ikkala bola tugagandan keyin o'qiymiz. Bu "pastdan yuqoriga" tabiatli — masalan daraxtni o'chirishda foydali, chunki avval bolalarni o'chirib, keyin ota-onani o'chirish kerak (aks holda bolalarga havola yo'qoladi).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>postorder.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(v){ this.value=v; this.left=null; this.right=null; }
@@ -685,7 +701,7 @@ root.left.right = new TreeNode(5);
 console.log('Postorder:', postorder(root).join(' '));
 // 4 5 2 3 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Uchala natijani solishtiring (bir xil daraxt <code>1-2-3-4-5</code> uchun): preorder <code>1 2 4 5 3</code>, postorder <code>4 5 2 3 1</code>. Farq faqat "tugunni qachon o'qidik" degan bir qatorda — lekin natija butunlay boshqacha.</p>
-<h2>BFS: kenglikka (level order)</h2>
+<h2 id="bfs-kenglikka-level-order">BFS: kenglikka (level order)</h2>
 <p>Endi butunlay boshqa yondashuv. BFS daraxtni <strong>pog'ona-pog'ona</strong> ko'rib chiqadi: avval ildiz (0-pog'ona), keyin uning bolalari (1-pog'ona), keyin nevaralar (2-pog'ona) va hokazo. Chapdan o'ngga, qatlam-qatlam.</p>
 <p>Muammo shundaki, rekursiya bu yerda tabiiy o'tirmaydi — chunki biz chuqurga tushmasdan, gorizontal harakatlanamiz. Yechim: <strong>navbat (queue)</strong> ishlatamiz. Navbat "birinchi kelgan birinchi chiqadi" tamoyilida ishlaydi, aynan shu bizga kerak.</p>
 <p>Algoritm oddiy: ildizni navbatga qo'yamiz. Keyin tsiklda navbatning boshidan tugun olamiz, uni o'qiymiz, va uning bolalarini navbat oxiriga qo'shamiz. Navbat bo'shaguncha davom etamiz.</p>
@@ -716,12 +732,12 @@ root.left.right = new TreeNode(5);
 console.log('BFS (level order):', bfs(root).join(' '));
 // 1 2 3 4 5  &lt;- pog'ona-pog'ona</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Natija <code>1 2 3 4 5</code> — aynan pog'onalar tartibida. Avval 1 (ildiz), keyin 2 va 3 (birinchi pog'ona), keyin 4 va 5 (ikkinchi pog'ona).</p>
-<h2>Big O: vaqt va xotira</h2>
+<h2 id="big-o-vaqt-va-xotira">Big O: vaqt va xotira</h2>
 <p>Barcha to'rt usul ham har bir tugunga bir marta tashrif buyuradi, shuning uchun vaqt jihatidan hammasi bir xil: <strong>O(n)</strong>, bu yerda n — tugunlar soni. Kamroq bo'lishi mumkin emas, chunki har bir tugunni ko'rish shart.</p>
 <p>Farq — <strong>xotira</strong>da. Va bu farq muhim:</p>
 <ul><li><strong>DFS</strong> rekursiya steki ishlatadi. U bir vaqtda faqat bitta shox bo'ylab chuqurga tushadi, shuning uchun xotira daraxt balandligiga bog'liq: <strong>O(h)</strong>. Muvozanatli daraxtda bu O(log n) — juda tejamli.</li><li><strong>BFS</strong> navbat ishlatadi. Eng yomon holatda navbatda daraxtning eng keng pog'onasi to'lig'icha turadi. To'liq daraxtning oxirgi pog'onasida tugunlarning yarmi bo'ladi, shuning uchun xotira <strong>O(n)</strong> gacha yetadi.</li></ul>
 <p>Demak, agar daraxt juda baland lekin ingichka bo'lsa — DFS xotira jihatdan yutadi. Agar daraxt keng bo'lsa — BFS ko'p xotira talab qiladi.</p>
-<h2>Qachon qaysi biri</h2>
+<h2 id="qachon-qaysi-biri">Qachon qaysi biri</h2>
 <p>Nazariyani bilish yaxshi, lekin amalda qaysi birini tanlash kerak? Mana amaliy qoidalar:</p>
 <ul><li><strong>Eng qisqa yo'l yoki eng yaqin narsa kerakmi?</strong> BFS ishlating. U pog'ona-pog'ona kengayadi, shuning uchun manzilni birinchi topganida — bu eng qisqa yo'l bo'ladi (og'irliksiz holatda).</li><li><strong>Butun daraxtni to'liq ko'rib chiqish, biror yo'lni sinash yoki chuqur strukturani tekshirish kerakmi?</strong> DFS ishlating. U kamroq xotira sarflaydi va rekursiya bilan sodda yoziladi.</li><li><strong>BSTda saralangan tartib kerakmi?</strong> Inorder DFS ishlating (pastdagi izohga qarang).</li><li><strong>Daraxtni o'chirish yoki pastdan yuqoriga hisoblash kerakmi?</strong> Postorder ishlating.</li></ul>
 <div class="note">Inorder aylanishning maxsus xossasini yodda tuting: <strong>BSTni inorder bilan aylansangiz, qiymatlar avtomatik o'sish tartibida chiqadi.</strong> Buning sababi — inorder avval chapdagi (kichik) qiymatlarni, keyin o'zini, keyin o'ngdagi (katta) qiymatlarni o'qiydi, va bu BST qoidasiga aynan mos keladi. Bu — BST elementlarini tartiblangan holda olishning eng oson usuli.</div>
@@ -738,6 +754,6 @@ console.log('BFS (level order):', bfs(root).join(' '));
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

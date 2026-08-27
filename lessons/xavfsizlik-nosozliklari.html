@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Security Misconfiguration, XXE va boshqalar — Kodla</title>
   <meta name="description" content="Xavfsizlik noto'g'ri sozlangani, maxfiy ma'lumot oshkorligi, XXE, ishonchsiz deserializatsiya, xavfsizlik sarlavhalari va xavfsiz standart sozlama cheklisti.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,25 @@
 <main class="content article">
 <div class="crumbs">Web ilova xavfsizligi (OWASP Top 10)</div>
 <h1>Security Misconfiguration, XXE va boshqalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#security-misconfiguration">Security Misconfiguration</a></li>
+<li class="lvl2"><a href="#sezgir-ma-lumotni-oshkor-qilish">Sezgir ma'lumotni oshkor qilish</a></li>
+<li class="lvl2"><a href="#xxe-xml-external-entity">XXE — XML External Entity</a></li>
+<li class="lvl2"><a href="#ishonchsiz-deserializatsiya">Ishonchsiz deserializatsiya</a></li>
+<li class="lvl2"><a href="#xavfsizlik-sarlavhalari">Xavfsizlik sarlavhalari</a></li>
+<li class="lvl2"><a href="#xavfsiz-standart-sozlama-cheklisti">Xavfsiz standart sozlama cheklisti</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan zaiflik kodning o'zida emas, balki tizim <em>qanday sozlanganida</em> yashiringan bo'ladi. Standart parol o'zgartirilmagan, xato xabari haddan ziyod ko'p ma'lumot beryapti, eskirgan paket yamalmagan — bularning barchasi hujumchiga eshik ochadi. Bu yakuniy darsda biz konfiguratsiya va sozlash bilan bog'liq zaifliklarni hamda ularning himoyasini ko'rib chiqamiz.</p>
-<h2>Security Misconfiguration</h2>
+<h2 id="security-misconfiguration">Security Misconfiguration</h2>
 <p><strong>Xavfsizlik noto'g'ri sozlangani</strong> (Security Misconfiguration) — OWASP Top 10ning eng keng tarqalgan bandlaridan biri. U kodda emas, balki tizim, server yoki freymvork sozlamalarida qoldirilgan kamchiliklardan iborat.</p>
 <p>Eng ko'p uchraydigan ko'rinishlari:</p>
 <ul><li><strong>Standart parollar:</strong> admin panel yoki ma'lumotlar bazasi standart login/parol bilan qolgan;</li><li><strong>Ochiq portlar va xizmatlar:</strong> kerak bo'lmagan xizmatlar tashqi olamga ochiq;</li><li><strong>Batafsil xato xabarlari:</strong> foydalanuvchiga to'liq xato izi (stack trace), fayl yo'llari yoki baza tuzilishi ko'rsatiladi;</li><li><strong>Yangilanmagan paketlar:</strong> ma'lum zaiflikka ega eski kutubxonalar ishlatilmoqda;</li><li><strong>Ortiqcha ruxsatlar:</strong> katalog ro'yxati ochiq, debug rejimi ishga tushirilgan holda qolgan.</li></ul>
 <p>Himoyasi — har bir sozlamani ongli tekshirish:</p>
 <ul><li>Barcha standart parollarni o'zgartiring va kuchli parollar qo'ying;</li><li>Ishlatmaydigan xizmat va portlarni o'chiring;</li><li>Foydalanuvchiga umumiy, qisqa xato xabari ko'rsating; to'liq tafsilotni faqat serverda logga yozing;</li><li>Debug rejimini ishlab chiqarish (production) muhitida o'chiring.</li></ul>
-<h2>Sezgir ma'lumotni oshkor qilish</h2>
+<h2 id="sezgir-ma-lumotni-oshkor-qilish">Sezgir ma'lumotni oshkor qilish</h2>
 <p>Maxfiy ma'lumot — parollar, API kalitlari, tokenlar, shaxsiy ma'lumot — noto'g'ri joyda saqlansa yoki tashqariga chiqib ketsa jiddiy muammo. Ikki keng tarqalgan xato:</p>
 <ul><li><strong>Kodda yashirin sirlar (secrets):</strong> API kaliti yoki parolni to'g'ridan-to'g'ri kodga yozib, uni versiya nazorati (git) ga jo'natish;</li><li><strong>Logda maxfiy ma'lumot:</strong> parol, token yoki karta raqamini logga yozib qo'yish.</li></ul>
 <pre class="code"><code>// ZAIF: sir to'g'ridan-to'g'ri kodda
@@ -639,20 +653,20 @@ const sorov = {
 // Xavfsiz: logga tozalangan nusxa yoziladi
 console.log('Log:', logUchunTozala(sorov));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Endi log faylida parol yoki token ko'rinmaydi. Bu — maxfiy ma'lumot oshkorligining oldini olishning oddiy, ammo samarali usulidir.</p>
-<h2>XXE — XML External Entity</h2>
+<h2 id="xxe-xml-external-entity">XXE — XML External Entity</h2>
 <p><strong>XXE</strong> (XML External Entity) — XMLni qayta ishlovchi dasturlarda uchraydigan zaiflik. XML formati "tashqi obyekt" (external entity) degan xususiyatni qo'llab-quvvatlaydi, bu esa hujjat tashqi manbaga murojaat qilishga imkon beradi.</p>
 <p>Agar XML tahlilchisi (parser) tashqi obyektlarni yoqilgan holda ishlasa, hujumchi maxsus tuzilgan XML orqali serverni tashqi yoki ichki resurslarni o'qishga majburlashi mumkin — bu SSRFga o'xshash natijaga olib keladi.</p>
 <p>Himoyasi konseptual jihatdan oddiy — <strong>tashqi obyektlarni o'chirish</strong>:</p>
 <ul><li>XML tahlilchisida tashqi obyekt (external entity) va DTD qayta ishlashni o'chirib qo'ying;</li><li>Iloji bo'lsa, XML o'rniga soddaroq va xavfsizroq format (masalan, JSON) ishlating;</li><li>XML tahlilchisini xavfsiz standart sozlamada ishga tushiring.</li></ul>
 <div class="note">Zamonaviy ko'plab XML kutubxonalari tashqi obyektlarni standart holatda o'chirib qo'ygan. Ammo bunga ishonch hosil qilish — sizning zimmangizda. "Standart xavfsiz" degan taxminni har doim tekshiring.</div>
-<h2>Ishonchsiz deserializatsiya</h2>
+<h2 id="ishonchsiz-deserializatsiya">Ishonchsiz deserializatsiya</h2>
 <p><strong>Deserializatsiya</strong> — saqlangan yoki uzatilgan ma'lumotni (masalan, matn) qaytadan dastur obyektiga aylantirish jarayoni. Agar dastur <em>ishonchsiz manbadan</em> kelgan ma'lumotni tekshirmasdan deserializatsiya qilsa, hujumchi maxsus tuzilgan ma'lumot orqali dasturning kutilmagan tarzda ishlashiga sabab bo'lishi mumkin.</p>
 <ul><li>Ishonchsiz manbadan kelgan ma'lumotni <strong>hech qachon</strong> ko'r-ko'rona deserializatsiya qilmang;</li><li>Ma'lumot butunligini tekshiring (masalan, imzo yoki tekshiruv summasi bilan);</li><li>Iloji bo'lsa, faqat ma'lumot tashuvchi oddiy formatdan (JSONni sxema validatsiyasi bilan) foydalaning, ijro etuvchi formatlardan emas.</li></ul>
-<h2>Xavfsizlik sarlavhalari</h2>
+<h2 id="xavfsizlik-sarlavhalari">Xavfsizlik sarlavhalari</h2>
 <p>HTTP javob sarlavhalari brauzerga qo'shimcha himoya ko'rsatmalari berishda muhim rol o'ynaydi. Ular arzon, ammo samarali qatlam:</p>
 <ul><li><strong>Content-Security-Policy:</strong> resurslar qayerdan yuklanishini cheklaydi (XSSga qarshi);</li><li><strong>Strict-Transport-Security:</strong> brauzerni faqat HTTPS ishlatishga majburlaydi;</li><li><strong>X-Content-Type-Options:</strong> brauzerni kontent turini "taxmin qilishdan" to'xtatadi;</li><li><strong>X-Frame-Options:</strong> sahifani begona freymda ochilishdan himoya qiladi (clickjackingga qarshi).</li></ul>
 <div class="tip">Express ilovasida <code>helmet</code> kabi kutubxonalar bu xavfsizlik sarlavhalarini avtomatik o'rnatib beradi. Bir qator kod bilan bir necha himoya qatlamini qo'shish mumkin — bu arzon va foydali odat.</div>
-<h2>Xavfsiz standart sozlama cheklisti</h2>
+<h2 id="xavfsiz-standart-sozlama-cheklisti">Xavfsiz standart sozlama cheklisti</h2>
 <p>Yakunda, konfiguratsiya bilan bog'liq zaifliklardan himoyalanish uchun umumiy cheklist:</p>
 <ul><li><strong>Standart parollarni o'zgartiring:</strong> hech bir tizim zavod sozlamasida qolmasin;</li><li><strong>Keraksiz narsani o'chiring:</strong> ishlatmaydigan xizmat, port, funksiya va debug rejimini o'chiring;</li><li><strong>Sirlarni ajrating:</strong> API kalit va parollarni koddan emas, muhit o'zgaruvchisidan oling;</li><li><strong>Xato xabarini cheklang:</strong> foydalanuvchiga qisqa xabar, logga to'liq tafsilot;</li><li><strong>Paketlarni yangilab turing:</strong> <code>npm audit</code> orqali zaif bog'liqliklarni muntazam tekshiring;</li><li><strong>Xavfsizlik sarlavhalarini qo'shing:</strong> <code>helmet</code> yoki teng vositalar bilan;</li><li><strong>Tashqi obyektni o'chiring:</strong> XML ishlatsangiz, external entityni yoqmang;</li><li><strong>Xavfsiz standartni tanlang:</strong> tizimni eng cheklangan holatda ishga tushirib, keyin kerak bo'lsa oching.</li></ul>
 <div class="tip">Bitta oltin qoida bilan yakunlaymiz: <strong>standart sozlamalar ko'pincha xavfsiz emas</strong> — ular qulaylik uchun ochiq qilib qo'yilgan bo'ladi. Har bir tizimni ishga tushirganda uni ongli ravishda qattiqlashtiring (harden), "ishlayapti" degani "xavfsiz" degani emasligini unutmang.</div>
@@ -669,6 +683,6 @@ console.log('Log:', logUchunTozala(sorov));</textarea><div class="pg-actions"><b
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

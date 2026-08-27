@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GitHub bilan ishlash: clone, push, pull — Kodla</title>
   <meta name="description" content="Remote (masofaviy ombor) tushunchasi, git remote add origin, mavjud omborni git clone bilan nusxalash, git push -u origin main bilan kodni yuborish, git pull bilan yangilanishlarni olish, git fetch va git pull farqi, mahalliy va masofaviy omborlarni sinxronlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,21 +599,35 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>GitHub bilan ishlash: clone, push, pull</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#remote-masofaviy-ombor-nima">Remote (masofaviy ombor) nima?</a></li>
+<li class="lvl2"><a href="#remote-larni-ko-rish-git-remote">Remote'larni ko'rish: git remote</a></li>
+<li class="lvl2"><a href="#mahalliy-omborni-remote-ga-bog-lash-git-remote-add-origin">Mahalliy omborni remote'ga bog'lash: git remote add origin</a></li>
+<li class="lvl2"><a href="#kodni-yuborish-git-push-u-origin-main">Kodni yuborish: git push -u origin main</a></li>
+<li class="lvl2"><a href="#mavjud-omborni-nusxalash-git-clone">Mavjud omborni nusxalash: git clone</a></li>
+<li class="lvl2"><a href="#yangilanishlarni-olish-git-pull">Yangilanishlarni olish: git pull</a></li>
+<li class="lvl2"><a href="#git-fetch-va-git-pull-farqi">git fetch va git pull farqi</a></li>
+<li class="lvl2"><a href="#mahalliy-va-masofaviy-sinxronizatsiya">Mahalliy va masofaviy sinxronizatsiya</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Hozirgacha Git bilan faqat o'z kompyuteringizda ishladingiz. Endi kodni internetga chiqaramiz. GitHub — bu Git omborlarini bulutda saqlaydigan eng mashhur platforma. U kodni zaxiralash, boshqa qurilmalarda ochish va jamoa bilan hamkorlik qilish imkonini beradi. Ushbu darsda mahalliy va masofaviy (remote) omborlarni bog'lash, kodni yuborish (push), olish (pull) va sinxronlashni chuqur o'rganamiz.</p>
 <div class="note">Bu darsdagi buyruqlar terminalda ishlaydi va haqiqiy GitHub akkaunti hamda internet aloqasini talab qiladi. Kurs sahifasidagi playground'da ular ishlamaydi — quyidagi bloklar <strong>statik misol</strong>. Ularni o'z kompyuteringizda, github.com'da yaratgan ombor bilan sinab ko'ring.</div>
-<h2>Remote (masofaviy ombor) nima?</h2>
+<h2 id="remote-masofaviy-ombor-nima">Remote (masofaviy ombor) nima?</h2>
 <p><strong>Remote</strong> — bu sizning omboringizning internetdagi (yoki boshqa serverdagi) nusxasi. Mahalliy ombor sizning kompyuteringizda, remote esa GitHub kabi serverda turadi. Ular bir-biriga bog'lanadi va o'zgarishlar ular o'rtasida ikki tomonlama ko'chiriladi.</p>
 <p>Remote'ning odatiy nomi — <strong>origin</strong>. Bu — shunchaki qulay taxallus (alias) bo'lib, uzun URL manzilni har safar yozmaslik uchun ishlatiladi. Ya'ni <code>origin</code> so'zi "asosiy masofaviy ombor URL'i"ni bildiradi.</p>
 <p>Ikki asosiy vaziyat bor:</p>
 <ul><li><strong>Yangi mahalliy ombor</strong> yaratdingiz va uni GitHub'ga chiqarmoqchisiz — bunda <code>git remote add</code> ishlatasiz;</li><li><strong>GitHub'da mavjud ombor</strong>ni kompyuteringizga tushirmoqchisiz — bunda <code>git clone</code> ishlatasiz.</li></ul>
 <p>Ikkalasini ham navbat bilan ko'ramiz.</p>
-<h2>Remote'larni ko'rish: git remote</h2>
+<h2 id="remote-larni-ko-rish-git-remote">Remote'larni ko'rish: git remote</h2>
 <p>Ombor qanday remote'larga bog'langanini <code>git remote</code> ko'rsatadi. URL'lari bilan ko'rish uchun <code>-v</code> (verbose) qo'shamiz:</p>
 <pre class="code"><code>$ git remote -v
 origin  https://github.com/foydalanuvchi/loyiha.git (fetch)
 origin  https://github.com/foydalanuvchi/loyiha.git (push)</code></pre>
 <p>Bu yerda <code>origin</code> nomli remote ikki yo'nalishga bog'langan: <strong>fetch</strong> (olish) va <strong>push</strong> (yuborish). Hozircha bitta remote yetarli — deyarli barcha oddiy loyihalarda faqat <code>origin</code> bo'ladi.</p>
-<h2>Mahalliy omborni remote'ga bog'lash: git remote add origin</h2>
+<h2 id="mahalliy-omborni-remote-ga-bog-lash-git-remote-add-origin">Mahalliy omborni remote'ga bog'lash: git remote add origin</h2>
 <p>Faraz qilaylik, kompyuteringizda tayyor ombor bor (siz <code>git init</code> qilib, commitlar ham qilgansiz). Endi uni GitHub'ga chiqarmoqchisiz. Avval github.com'da <strong>bo'sh ombor</strong> yaratasiz (README'siz), keyin uni mahalliy omborga bog'laysiz:</p>
 <pre class="code"><code>$ git remote add origin https://github.com/foydalanuvchi/loyiha.git</code></pre>
 <p>Bu buyruq shuni bildiradi: "<code>origin</code> nomli remote yarat va uni ushbu URL'ga ishora qildir". Endi bog'lanishni tekshiring:</p>
@@ -619,7 +636,7 @@ origin  https://github.com/foydalanuvchi/loyiha.git (fetch)
 origin  https://github.com/foydalanuvchi/loyiha.git (push)</code></pre>
 <div class="note">GitHub omborining URL'i ikki xil bo'ladi: <strong>HTTPS</strong> (<code>https://github.com/...</code>) va <strong>SSH</strong> (<code>git@github.com:...</code>). HTTPS oddiyroq va yangi boshlovchilarga qulay (login/parol yoki token so'raydi). SSH esa kalit sozlangach parolsiz ishlaydi va professional foydalanishda qulay. Boshlash uchun HTTPS'dan foydalaning.</div>
 <div class="warn">Agar remote'ni noto'g'ri URL bilan qo'shsangiz, uni o'zgartirish uchun: <code>git remote set-url origin YANGI-URL</code>. Butunlay o'chirish uchun: <code>git remote remove origin</code>. "remote origin already exists" xatosini olsangiz — demak origin allaqachon bor, uni qayta qo'shish o'rniga <code>set-url</code> bilan yangilang.</div>
-<h2>Kodni yuborish: git push -u origin main</h2>
+<h2 id="kodni-yuborish-git-push-u-origin-main">Kodni yuborish: git push -u origin main</h2>
 <p>Endi mahalliy commitlarni GitHub'ga jo'natamiz. Buni <strong>push</strong> deb ataymiz. Birinchi marta yuborishda maxsus <code>-u</code> bayrog'ini ishlatamiz:</p>
 <pre class="code"><code>$ git push -u origin main
 Enumerating objects: 5, done.
@@ -636,7 +653,7 @@ Enumerating objects: 3, done.
 To https://github.com/foydalanuvchi/loyiha.git
    1a2b3c4..5d6e7f8  main -&gt; main</code></pre>
 <div class="tip">Odatiy ish oqimi shunday: <code>git add .</code> &rarr; <code>git commit -m 'xabar'</code> &rarr; <code>git push</code>. Ya'ni avval o'zgarishni saqlaysiz (commit), keyin uni internetga yuborasiz (push). Commit — mahalliy, push — masofaviy. Bu ikkisi <strong>alohida</strong> qadamlar.</div>
-<h2>Mavjud omborni nusxalash: git clone</h2>
+<h2 id="mavjud-omborni-nusxalash-git-clone">Mavjud omborni nusxalash: git clone</h2>
 <p>Agar GitHub'da tayyor ombor bo'lsa (masalan, birov yaratgan yoki siz avval chiqargan), uni butunlay kompyuteringizga tushirish uchun <code>git clone</code> ishlatiladi:</p>
 <pre class="code"><code>$ git clone https://github.com/foydalanuvchi/loyiha.git
 Cloning into 'loyiha'...
@@ -651,7 +668,7 @@ $ git remote -v
 origin  https://github.com/foydalanuvchi/loyiha.git (fetch)
 origin  https://github.com/foydalanuvchi/loyiha.git (push)</code></pre>
 <div class="note">Boshqa nom bilan klonlash uchun URL oxiriga papka nomini qo'shing: <code>git clone URL yangi-nom</code>. Bunda <code>loyiha</code> o'rniga <code>yangi-nom</code> papkasi yaratiladi.</div>
-<h2>Yangilanishlarni olish: git pull</h2>
+<h2 id="yangilanishlarni-olish-git-pull">Yangilanishlarni olish: git pull</h2>
 <p>Jamoada ishlaganda yoki boshqa qurilmadan o'zgartirganda, GitHub'dagi kod sizning mahalliy nusxangizdan yangiroq bo'lishi mumkin. Masofaviy o'zgarishlarni o'z kompyuteringizga tortish uchun <code>git pull</code>:</p>
 <pre class="code"><code>$ git pull
 remote: Enumerating objects: 4, done.
@@ -661,7 +678,7 @@ Fast-forward
  1 file changed, 3 insertions(+)</code></pre>
 <p><code>git pull</code> ikki ishni birga bajaradi: GitHub'dan yangi commitlarni <strong>yuklab oladi</strong> (fetch) va ularni sizning joriy branch'ingizga <strong>birlashtiradi</strong> (merge). Natijada mahalliy nusxangiz yangilanadi.</p>
 <div class="tip">Yaxshi odat: har kuni ishni boshlashdan oldin <code>git pull</code> qiling. Bu sizni jamoadagi eng so'nggi o'zgarishlar bilan sinxron holatda ushlaydi va push qilganda konflikt ehtimolini kamaytiradi.</div>
-<h2>git fetch va git pull farqi</h2>
+<h2 id="git-fetch-va-git-pull-farqi">git fetch va git pull farqi</h2>
 <p>Ko'pchilik <code>fetch</code> va <code>pull</code>ni chalkashtiradi. Farqi juda muhim:</p>
 <ul><li><code>git fetch</code> — GitHub'dan yangi commitlarni <strong>faqat yuklab oladi</strong>, lekin sizning ishchi fayllaringizga <em>tegmaydi</em>. O'zgarishlar <code>origin/main</code>da "kutib" turadi. Siz avval ularni ko'rib, keyin birlashtirishingiz mumkin.</li><li><code>git pull</code> — bu aslida <strong>fetch + merge</strong>. Ya'ni yuklab oladi <em>va darhol</em> sizning branch'ingizga qo'shadi.</li></ul>
 <p>Ya'ni sodda formula:</p>
@@ -677,7 +694,7 @@ $ git log main..origin/main --oneline
 # 3. Rozimiz — birlashtiramiz
 $ git merge origin/main</code></pre>
 <div class="note"><code>fetch</code> xavfsizroq: u hech narsani buzmaydi, faqat ma'lumot keltiradi. Katta yoki muhim o'zgarishlardan oldin fetch qilib, nima kelayotganini ko'rib olish — professional odat. Kundalik oddiy ishda esa <code>git pull</code> yetarli va qulay.</div>
-<h2>Mahalliy va masofaviy sinxronizatsiya</h2>
+<h2 id="mahalliy-va-masofaviy-sinxronizatsiya">Mahalliy va masofaviy sinxronizatsiya</h2>
 <p>Endi umumiy manzarani jamlaymiz. Ikki ombor (mahalliy va masofaviy) o'rtasida o'zgarishlar shunday harakatlanadi:</p>
 <ul><li><strong>push</strong> — mahalliy &rarr; masofaviy (sizning commitlaringizni GitHub'ga yuborasiz);</li><li><strong>pull</strong> — masofaviy &rarr; mahalliy (GitHub'dagi o'zgarishlarni olasiz);</li><li><strong>fetch</strong> — masofaviy &rarr; mahalliy (lekin birlashtirmasdan, faqat yuklab).</li></ul>
 <p>Tipik kunlik oqim quyidagicha ko'rinadi:</p>
@@ -693,7 +710,7 @@ $ git commit -m 'Yangi funksiya qoshildi'
 # internetga yuboramiz
 $ git push</code></pre>
 <div class="warn">Agar push qilmoqchi bo'lganingizda "Updates were rejected" xatosini olsangiz — demak GitHub'da siz bilmagan yangi commitlar bor (masalan, jamoadoshingiz push qilgan). Yechim: avval <code>git pull</code> qiling (kerak bo'lsa konfliktni hal qiling), keyin qaytadan <code>git push</code>. Git avval masofaviy o'zgarishlarni olishni talab qiladi, aks holda ular yo'qolib qolar edi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Remote</strong> — omboringizning masofaviy (GitHub'dagi) nusxasi; odatiy nomi <code>origin</code>;</li><li><code>git remote add origin URL</code> — mahalliy omborni GitHub'ga bog'lash;</li><li><code>git clone URL</code> — GitHub'dagi tayyor omborni butunlay nusxalash (remote avtomatik sozlanadi);</li><li><code>git push -u origin main</code> — birinchi yuborish (kuzatuv o'rnatadi); keyin oddiy <code>git push</code>;</li><li><code>git pull</code> — masofaviy o'zgarishlarni olish va birlashtirish (= fetch + merge);</li><li><code>git fetch</code> — faqat yuklab olish, ishchi fayllarga tegmasdan;</li><li>kunlik oqim: <code>pull</code> &rarr; ishlash &rarr; <code>add</code> &rarr; <code>commit</code> &rarr; <code>push</code>.</li></ul>
 <p>Endi kodni internetga chiqarishni bilasiz. Keyingi darsda jamoa bilan ishlash — fork va Pull Request oqimini o'rganamiz.</p>
 <nav class="lesson-nav">
@@ -708,6 +725,6 @@ $ git push</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

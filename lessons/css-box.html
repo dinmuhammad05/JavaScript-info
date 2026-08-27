@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Box model — Kodla</title>
   <meta name="description" content="CSS'da har bir element to'rtburchak qutidir. Content, padding, border va margin qatlamlari; width/height; box-sizing: border-box; display xossasi (block, inline, inline-block, none) va overflow.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,27 @@
 <main class="content article">
 <div class="crumbs">CSS</div>
 <h1>Box model</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#quti-to-rtta-qatlamdan-iborat">Quti to'rtta qatlamdan iborat</a></li>
+<li class="lvl2"><a href="#padding-ichki-bo-shliq">Padding — ichki bo'shliq</a></li>
+<li class="lvl2"><a href="#border-chegara">Border — chegara</a></li>
+<li class="lvl2"><a href="#margin-tashqi-bo-shliq">Margin — tashqi bo'shliq</a></li>
+<li class="lvl2"><a href="#width-height-va-box-sizing-muammosi">width, height va box-sizing muammosi</a></li>
+<li class="lvl2"><a href="#yechim-box-sizing-border-box">Yechim: box-sizing: border-box</a></li>
+<li class="lvl2"><a href="#display-xossasi">display xossasi</a></li>
+<li class="lvl3"><a href="#block">block</a></li>
+<li class="lvl3"><a href="#inline">inline</a></li>
+<li class="lvl3"><a href="#inline-block">inline-block</a></li>
+<li class="lvl3"><a href="#none">none</a></li>
+<li class="lvl2"><a href="#overflow-mazmun-sig-masa-nima-bo-ladi">overflow — mazmun sig'masa nima bo'ladi?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">CSS'ning eng muhim tushunchasi — <strong>Box Model (quti modeli)</strong>. Brauzer uchun sahifadagi <strong>har bir element</strong> — matn, rasm, tugma yoki div — bu to'rtburchak <strong>quti</strong>. Bu qutining o'lchami va uning ichki/tashqi bo'shliqlarini qanday hisoblashini tushunmasangiz, CSS'da joylashuv har doim sirli tuyuladi. Bu darsda quti modelini to'liq o'zlashtiramiz.</p>
 <div class="note">Maslahat: brauzerda F12 tugmasini bosib <strong>Developer Tools</strong>ni oching, biror elementni tanlang va o'ng tomonda "Box Model" diagrammasini ko'ring. U content, padding, border, margin qatlamlarini rangli ko'rsatadi — bu tushunishga juda yordam beradi.</div>
-<h2>Quti to'rtta qatlamdan iborat</h2>
+<h2 id="quti-to-rtta-qatlamdan-iborat">Quti to'rtta qatlamdan iborat</h2>
 <p>Har bir element — ichkaridan tashqariga qarab — to'rtta qatlamdan tashkil topgan quti:</p>
 <ol><li><strong>Content (mazmun)</strong> — markazdagi haqiqiy mazmun: matn, rasm. Uning o'lchami <code>width</code> va <code>height</code> bilan belgilanadi;</li><li><strong>Padding (ichki bo'shliq)</strong> — mazmun bilan chegara orasidagi bo'shliq. Element fonining rangi shu qatlamgacha yoyiladi;</li><li><strong>Border (chegara)</strong> — qutini o'rab turadigan ramka (chiziq);</li><li><strong>Margin (tashqi bo'shliq)</strong> — qutining tashqi chegarasi bilan qo'shni elementlar orasidagi bo'shliq. U doim shaffof.</li></ol>
 <pre class="code"><code>  +-----------------------------+  &lt;- margin (tashqi)
@@ -608,7 +629,7 @@
   |  |  +-----------------+  |  |
   |  +-----------------------+  |
   +-----------------------------+</code></pre>
-<h2>Padding — ichki bo'shliq</h2>
+<h2 id="padding-ichki-bo-shliq">Padding — ichki bo'shliq</h2>
 <p><code>padding</code> mazmun bilan element chegarasi orasiga bo'shliq qo'shadi. Uni har tomon uchun alohida yoki birdaniga belgilash mumkin.</p>
 <pre class="code"><code>/* Barcha tomondan bir xil */
 .karta { padding: 20px; }
@@ -622,7 +643,7 @@
 /* Faqat bitta tomon */
 .karta { padding-left: 15px; }</code></pre>
 <div class="tip">To'rtta qiymat berilganda tartib doim <strong>soat mili bo'yicha</strong>: yuqori (top) &rarr; o'ng (right) &rarr; past (bottom) &rarr; chap (left). Buni eslab qolish uchun "TRBL" (yoki "trouble") deb yodlash mumkin.</div>
-<h2>Border — chegara</h2>
+<h2 id="border-chegara">Border — chegara</h2>
 <p><code>border</code> element atrofida chiziq (ramka) chizadi. U uchta qismdan iborat: qalinlik, uslub va rang.</p>
 <pre class="code"><code>/* qalinlik | uslub | rang */
 .quti {
@@ -634,7 +655,7 @@
   border-bottom: 3px dashed red;
 }</code></pre>
 <ul><li><code>solid</code> — to'liq chiziq;</li><li><code>dashed</code> — chiziqchali;</li><li><code>dotted</code> — nuqtali;</li><li><code>none</code> — chegara yo'q.</li></ul>
-<h2>Margin — tashqi bo'shliq</h2>
+<h2 id="margin-tashqi-bo-shliq">Margin — tashqi bo'shliq</h2>
 <p><code>margin</code> elementni qo'shni elementlardan uzoqlashtiradi. Uning sintaksisi <code>padding</code> bilan bir xil (bir, ikki yoki to'rt qiymat).</p>
 <pre class="code"><code>.blok {
   margin: 20px;
@@ -646,7 +667,7 @@
   margin: 0 auto;
 }</code></pre>
 <div class="warn"><strong>Margin collapse (margin yig'ilishi):</strong> agar ikki blok element yuqori-pastma-past joylashsa va biri pastki margin, ikkinchisi yuqori marginga ega bo'lsa, ular <strong>qo'shilmaydi</strong> — kattarog'i g'olib chiqadi. Masalan 30px va 20px margin uchrashsa, orada 50px emas, 30px bo'shliq qoladi. Bu boshlang'ich dasturchilarni ko'p chalkashtiradi.</div>
-<h2>width, height va box-sizing muammosi</h2>
+<h2 id="width-height-va-box-sizing-muammosi">width, height va box-sizing muammosi</h2>
 <p><code>width</code> va <code>height</code> odatda faqat <strong>content</strong> qatlamining o'lchamini belgilaydi. Bu jiddiy muammoga olib keladi. Quyidagi qutini ko'ring:</p>
 <pre class="code"><code>.quti {
   width: 200px;
@@ -654,7 +675,7 @@
   border: 5px solid black;
 }</code></pre>
 <p>Siz "quti kengligi 200px" deb o'ylaysiz, lekin brauzer standart holatda uni shunday hisoblaydi: 200 (content) + 20 (chap padding) + 20 (o'ng padding) + 5 (chap border) + 5 (o'ng border) = <strong>250px</strong>. Ya'ni haqiqiy quti siz kutgandan kengroq bo'lib qoladi va joylashuvni buzadi.</p>
-<h2>Yechim: box-sizing: border-box</h2>
+<h2 id="yechim-box-sizing-border-box">Yechim: box-sizing: border-box</h2>
 <p><code>box-sizing: border-box</code> xossasi bu muammoni hal qiladi. U bilan <code>width</code> endi <strong>butun qutini</strong> (content + padding + border) o'z ichiga oladi. Ya'ni <code>width: 200px</code> desangiz, quti aniq 200px bo'ladi — padding va border shu 200px <em>ichida</em> hisoblanadi.</p>
 <pre class="code"><code>.quti {
   box-sizing: border-box;
@@ -667,15 +688,15 @@
 <pre class="code"><code>* {
   box-sizing: border-box;
 }</code></pre>
-<h2>display xossasi</h2>
+<h2 id="display-xossasi">display xossasi</h2>
 <p><code>display</code> element qanday "quti" bo'lishini va boshqa elementlar bilan qanday joylashishini belgilaydi. Eng muhim qiymatlar:</p>
-<h3>block</h3>
+<h3 id="block">block</h3>
 <p>Block element har doim <strong>butun qatorni</strong> egallaydi va yangi qatordan boshlanadi. Unga <code>width</code>, <code>height</code>, yuqori/pastki <code>margin</code> berish mumkin. Misollar: <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;section&gt;</code>.</p>
-<h3>inline</h3>
+<h3 id="inline">inline</h3>
 <p>Inline element faqat <strong>o'z mazmuni qadar</strong> joy egallaydi va yangi qator boshlamaydi — bir qatorda yonma-yon turadi. Unga <code>width</code>/<code>height</code> va yuqori/pastki margin <strong>ta'sir qilmaydi</strong>. Misollar: <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>.</p>
-<h3>inline-block</h3>
+<h3 id="inline-block">inline-block</h3>
 <p>"Ikkalasining eng yaxshisi": element inline kabi yonma-yon turadi, lekin block kabi <code>width</code>, <code>height</code> va margin qabul qiladi. Tugmalar yoki yonma-yon kartalar uchun qulay.</p>
-<h3>none</h3>
+<h3 id="none">none</h3>
 <p>Element <strong>butunlay yashiriladi</strong> — u sahifada ko'rinmaydi va joy ham egallamaydi. Ko'pincha JavaScript orqali elementni ko'rsatish/yashirish uchun ishlatiladi.</p>
 <pre class="code"><code>.yashirin { display: none; }
 
@@ -685,14 +706,14 @@
   padding: 10px;
 }</code></pre>
 <div class="note"><code>display: none</code> bilan <code>visibility: hidden</code> farqli: birinchisida element umuman joy egallamaydi, ikkinchisida element ko'rinmaydi, lekin o'z joyini bo'sh saqlab qoladi.</div>
-<h2>overflow — mazmun sig'masa nima bo'ladi?</h2>
+<h2 id="overflow-mazmun-sig-masa-nima-bo-ladi">overflow — mazmun sig'masa nima bo'ladi?</h2>
 <p>Agar element ichidagi mazmun uning o'lchamidan katta bo'lsa (masalan, <code>height</code> kichik, matn ko'p), <code>overflow</code> xossasi ortiqcha mazmun bilan nima qilishni belgilaydi:</p>
 <ul><li><code>visible</code> — sukut bo'yicha; mazmun quti chegarasidan tashqariga chiqib "toshib" ketadi;</li><li><code>hidden</code> — sig'magan qism kesib tashlanadi (ko'rinmaydi);</li><li><code>scroll</code> — har doim aylantirish paneli (scrollbar) qo'shiladi;</li><li><code>auto</code> — faqat kerak bo'lgandagina scrollbar qo'shadi (eng ko'p ishlatiladi).</li></ul>
 <pre class="code"><code>.oyna {
   height: 150px;
   overflow: auto;
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Har bir element — to'rt qatlamli <strong>quti</strong>: content, padding, border, margin;</li><li><strong>padding</strong> — ichki bo'shliq, <strong>margin</strong> — tashqi bo'shliq, <strong>border</strong> — ramka;</li><li>Qiymatlar tartibi soat mili bo'yicha: yuqori &rarr; o'ng &rarr; past &rarr; chap;</li><li>Standart holatda <code>width</code> faqat content'ni hisoblaydi, bu chalkashlik keltiradi;</li><li><code>box-sizing: border-box</code> — width'ni butun qutiga tenglashtiradi, buni odat qiling;</li><li><code>display</code>: <strong>block</strong> (butun qator), <strong>inline</strong> (yonma-yon), <strong>inline-block</strong> (ikkalasi), <strong>none</strong> (yashirin);</li><li><code>overflow: auto</code> — sig'magan mazmun uchun scroll qo'shadi.</li></ul>
 <nav class="lesson-nav">
   <a href="css-nima.html"><span class="dir">← Oldingi</span><span class="ttl">CSS nima?</span></a>
@@ -706,6 +727,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

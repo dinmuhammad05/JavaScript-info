@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hujjatni o'zgartirish — Kodla</title>
   <meta name="description" content="Yangi elementlarni yaratish (createElement, createTextNode), ularni sahifaga qo'shish (append/prepend/before/after/replaceWith), insertAdjacentHTML, elementni o'chirish, nusxalash (cloneNode), eski usullar va DocumentFragment.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,25 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Hujjatni o'zgartirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#misol-uchun-html">Misol uchun HTML</a></li>
+<li class="lvl2"><a href="#element-yaratish-createelement-va-createtextnode">Element yaratish: createElement va createTextNode</a></li>
+<li class="lvl3"><a href="#document-createelement-tag">document.createElement(tag)</a></li>
+<li class="lvl3"><a href="#document-createtextnode-text">document.createTextNode(text)</a></li>
+<li class="lvl2"><a href="#kiritish-usullari-append-prepend-before-after-replacewith">Kiritish usullari: append, prepend, before, after, replaceWith</a></li>
+<li class="lvl2"><a href="#insertadjacenthtml-text-element">insertAdjacentHTML / Text / Element</a></li>
+<li class="lvl2"><a href="#tugunlarni-o-chirish-remove">Tugunlarni o'chirish: remove</a></li>
+<li class="lvl2"><a href="#nusxalash-clonenode">Nusxalash: cloneNode</a></li>
+<li class="lvl2"><a href="#eski-maktab-usullari">Eski maktab usullari</a></li>
+<li class="lvl2"><a href="#documentfragment">DocumentFragment</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">DOM'ni o'zgartirish — bu "jonli" sahifalar yaratishning kalitidir. Ushbu darsda biz sahifaga yangi elementlarni qanday yaratish va joylashtirishni, mavjudlarini o'chirish yoki almashtirishni chuqur o'rganamiz. Barcha zamonaviy va eski usullarni birma-bir ko'rib chiqamiz.</p>
 <div class="note">DOM bilan bog'liq kod faqat haqiqiy brauzerda ishlaydi. Ushbu kursning interaktiv maydonchasi Node.js muhitida ishlaganligi sababli bu bobdagi barcha misollar <strong>statik</strong> — ularni brauzeringizda o'zingiz sinab ko'rishingiz mumkin. Har bir misolni tushunish uchun kod bilan birga izohlarni diqqat bilan o'qing.</div>
-<h2>Misol uchun HTML</h2>
+<h2 id="misol-uchun-html">Misol uchun HTML</h2>
 <p>Ushbu darsdagi ko'p misollar quyidagi oddiy HTML tuzilmasi bilan ishlaydi — bu bizga xabar ("ziravor", ya'ni yordamchi eslatma) ko'rsatuvchi element yaratish vazifasini bajaradi:</p>
 <pre class="code"><code>&lt;style&gt;
   .alert {
@@ -613,12 +632,12 @@
 &lt;div id="div"&gt;
   &lt;p&gt;Bu sahifada muhim xabar ko'rsatiladi.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
-<h2>Element yaratish: createElement va createTextNode</h2>
+<h2 id="element-yaratish-createelement-va-createtextnode">Element yaratish: createElement va createTextNode</h2>
 <p>Yangi DOM tugunlarini (node) yaratish uchun ikkita asosiy usul mavjud.</p>
-<h3>document.createElement(tag)</h3>
+<h3 id="document-createelement-tag">document.createElement(tag)</h3>
 <p>Berilgan teg bilan yangi <strong>element tugunini</strong> (element node) yaratadi:</p>
 <pre class="code"><code>let div = document.createElement('div');</code></pre>
-<h3>document.createTextNode(text)</h3>
+<h3 id="document-createtextnode-text">document.createTextNode(text)</h3>
 <p>Berilgan matn bilan yangi <strong>matn tugunini</strong> (text node) yaratadi:</p>
 <pre class="code"><code>let textNode = document.createTextNode('Bu yerda matn.');</code></pre>
 <p>Ko'pincha element yaratib, unga to'g'ridan-to'g'ri HTML yoki matn kiritish qulayroq bo'ladi. Masalan, xabar elementini quyidagicha tayyorlaymiz:</p>
@@ -627,7 +646,7 @@ div.className = 'alert';
 div.innerHTML = "&lt;strong&gt;Salom!&lt;/strong&gt; Siz muhim xabarni o'qidingiz.";</code></pre>
 <p>Biz element yaratdik, unga <code>alert</code> klassini berdik va <code>innerHTML</code> orqali ichki HTML'ini to'ldirdik. Ammo bu element hozircha faqat <code>div</code> o'zgaruvchisida turibdi — u hali sahifada emas. Uni sahifaga qo'shishimiz kerak.</p>
 <div class="note">Element yaratish va uni hujjatga qo'shish — bu ikki alohida bosqich. Yaratilgan element sahifada ko'rinishi uchun uni DOM daraxtiga joylashtirish shart.</div>
-<h2>Kiritish usullari: append, prepend, before, after, replaceWith</h2>
+<h2 id="kiritish-usullari-append-prepend-before-after-replacewith">Kiritish usullari: append, prepend, before, after, replaceWith</h2>
 <p>Yaratilgan elementni sahifaga qo'shish uchun zamonaviy usullardan foydalanamiz. Aytaylik, <code>ol</code> ro'yxatimiz bor:</p>
 <pre class="code"><code>&lt;ol id="ol"&gt;
   &lt;li&gt;0&lt;/li&gt;
@@ -666,7 +685,7 @@ let p = document.createElement('p');
 div.append(p, 'salom', document.createElement('hr'));
 // div ichiga: &lt;p&gt;, 'salom' matni va &lt;hr&gt; qo'shildi</code></pre>
 <div class="tip">E'tibor bering: matn qatorlari <strong>matn sifatida</strong> (xavfsiz) kiritiladi, ya'ni <code>&lt;</code> va <code>&gt;</code> belgilar HTML sifatida talqin qilinmaydi, balki ekranga <code>&amp;lt;</code>, <code>&amp;gt;</code> kabi eskeyplangan holda chiqadi. Bu XSS hujumlaridan himoya qiladi.</div>
-<h2>insertAdjacentHTML / Text / Element</h2>
+<h2 id="insertadjacenthtml-text-element">insertAdjacentHTML / Text / Element</h2>
 <p>Yuqoridagi usullar tugun va matnlarni kiritadi, ammo HTML qatorini <strong>xom holda</strong> (teglar bilan) kiritish uchun <code>insertAdjacentHTML</code> ishlatiladi.</p>
 <pre class="code"><code>let div = document.getElementById('div');
 
@@ -679,7 +698,7 @@ div.insertAdjacentHTML('afterend', '&lt;p&gt;Xayr&lt;/p&gt;');</code></pre>
 <ul><li><code>elem.insertAdjacentText(position, text)</code> — sintaksisi bir xil, lekin argument <strong>matn</strong> bo'lib, xavfsiz (eskeyplab) kiritiladi;</li><li><code>elem.insertAdjacentElement(position, elem)</code> — sintaksisi bir xil, lekin <strong>element tuguni</strong>ni kiritadi.</li></ul>
 <p>Amaliyotda esa deyarli har doim <code>insertAdjacentHTML</code> ishlatiladi. Elementlar va matn uchun yuqorida ko'rilgan <code>append/prepend/before/after</code> qulayroq va o'qilishi osonroq.</p>
 <div class="note"><code>insertAdjacentHTML</code> mavjud elementlarni qayta yaratmaydi — u yangi HTML'ni parslash orqali kiritadi. Bu <code>innerHTML +=</code> dan afzalroq, chunki <code>innerHTML +=</code> butun ichki tarkibni o'chirib qayta yaratadi (obyekt havolalari va hodisalar yo'qoladi).</div>
-<h2>Tugunlarni o'chirish: remove</h2>
+<h2 id="tugunlarni-o-chirish-remove">Tugunlarni o'chirish: remove</h2>
 <p>Tugunni o'chirish uchun eng oddiy zamonaviy usul <code>node.remove()</code>:</p>
 <pre class="code"><code>let div = document.getElementById('div');
 div.remove(); // div sahifadan olib tashlanadi</code></pre>
@@ -691,7 +710,7 @@ let second = document.getElementById('second');
 // (avval o'chirish shart emas — u eski o'rnidan avtomatik olinadi)
 first.after(second);</code></pre>
 <p>Bir xil tugun ikki joyda bir vaqtda tura olmaydi, shuning uchun u har doim eski o'rnidan olib ko'chiriladi.</p>
-<h2>Nusxalash: cloneNode</h2>
+<h2 id="nusxalash-clonenode">Nusxalash: cloneNode</h2>
 <p>Bir xil elementdan yana bir nechtasini yaratmoqchi bo'lsak, uni qo'lda qayta yasash o'rniga <strong>nusxalash</strong> qulayroq.</p>
 <ul><li><code>elem.cloneNode(true)</code> — elementning <strong>"chuqur"</strong> nusxasini yaratadi: barcha atributlari va barcha ichki bolalari bilan birga;</li><li><code>elem.cloneNode(false)</code> — <strong>"sayoz"</strong> nusxa: element o'zi, atributlari bilan, lekin bolalarsiz.</li></ul>
 <pre class="code"><code>let div = document.getElementById('div');
@@ -701,7 +720,7 @@ div2.querySelector('strong').innerHTML = 'Salom yana!'; // nusxani o'zgartiramiz
 
 div.after(div2); // nusxani asl div'dan keyin ko'rsatamiz</code></pre>
 <div class="note">Chuqur nusxa (<code>true</code>) — bir xil ko'rinishdagi elementlarni tez ko'paytirish uchun juda foydali. Masalan, jadval qatorini bir marta yaratib, uni ko'p marta nusxalab qo'shish mumkin.</div>
-<h2>Eski maktab usullari</h2>
+<h2 id="eski-maktab-usullari">Eski maktab usullari</h2>
 <p>Tarixiy sabablarga ko'ra DOM'ni o'zgartirishning eski usullari ham mavjud. Ular hozir ham ishlaydi va eski kodlarda tez-tez uchraydi, shuning uchun ularni bilish muhim.</p>
 <ul><li><code>parent.appendChild(node)</code> — <code>node</code>ni <code>parent</code>ning oxirgi bolasi qilib qo'shadi;</li><li><code>parent.insertBefore(node, nextSibling)</code> — <code>node</code>ni <code>parent</code> ichiga, <code>nextSibling</code>dan oldin qo'shadi;</li><li><code>parent.replaceChild(newElem, oldElem)</code> — <code>oldElem</code>ni <code>newElem</code>ga almashtiradi;</li><li><code>parent.removeChild(node)</code> — <code>node</code>ni <code>parent</code>dan o'chiradi (<code>node</code> <code>parent</code>ning bolasi bo'lishi kerak).</li></ul>
 <p>Masalan, yangi <code>li</code>ni ro'yxat oxiriga qo'shish:</p>
@@ -724,7 +743,7 @@ ol.insertBefore(newLi, ol.firstChild); // eski usul
 div.parentNode.removeChild(div); // eski usul
 // zamonaviy ekvivalenti: div.remove();</code></pre>
 <div class="warn">Eski usullar biroz noqulay: masalan, <code>removeChild</code> uchun ota-elementga (<code>parentNode</code>) murojaat qilish kerak, garchi biz allaqachon o'chiriladigan elementni bilsak ham. Zamonaviy usullar (<code>remove</code>, <code>append</code> va h.k.) qisqaroq va tushunarliroq. Yangi kodda ularni ishlatishga harakat qiling.</div>
-<h2>DocumentFragment</h2>
+<h2 id="documentfragment">DocumentFragment</h2>
 <p><code>DocumentFragment</code> — bu tugunlar ro'yxatini o'z ichiga oluvchi maxsus DOM tugunidir. Uni tugunlar guruhi uchun "idish" (o'rovchi) deb tasavvur qilish mumkin. Uni biror joyga kiritganimizda, uning <strong>o'zi emas</strong>, balki ichidagi <strong>bolalari</strong> kiritiladi.</p>
 <pre class="code"><code>function getListContent() {
   let fragment = new DocumentFragment();
@@ -747,7 +766,7 @@ ul.append(getListContent()); // (*) fragmentning bolalari qo'shiladi</code></pre
   &lt;li&gt;3&lt;/li&gt;
 &lt;/ul&gt;</code></pre>
 <div class="note"><code>DocumentFragment</code> kamdan-kam ishlatiladi, chunki uning o'rniga oddiy massiv ham qaytarish mumkin: <code>ul.append(...arrayOfLi)</code>. Biroq fragment ma'lum stsenariylarda, ayniqsa ko'p elementlarni bir marta qo'shishda unumdorlik uchun foydali bo'lishi mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Tugunlar yaratish usullari:</p>
 <ul><li><code>document.createElement(tag)</code> — teg bilan element tuguni;</li><li><code>document.createTextNode(text)</code> — matn tuguni;</li><li><code>elem.cloneNode(deep)</code> — elementni nusxalash (<code>deep=true</code> — bolalari bilan).</li></ul>
 <p>Kiritish va o'chirish (zamonaviy):</p>
@@ -765,6 +784,6 @@ ul.append(getListContent()); // (*) fragmentning bolalari qo'shiladi</code></pre
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

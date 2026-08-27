@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kod muharrirlari — Kodla</title>
   <meta name="description" content="IDE va yengil muharrirlar — dasturchining asosiy ish quroli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,24 @@
 <main class="content article">
 <div class="crumbs">Kirish</div>
 <h1>Kod muharrirlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ide-integrated-development-environment">IDE (Integrated Development Environment)</a></li>
+<li class="lvl2"><a href="#yengil-muharrirlar">Yengil muharrirlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Kod muharriri — dasturchi vaqtining katta qismini o'tkazadigan joy. Ikki asosiy tur bor: IDE'lar va yengil muharrirlar.</p>
-<h2>IDE (Integrated Development Environment)</h2>
+<h2 id="ide-integrated-development-environment">IDE (Integrated Development Environment)</h2>
 <p><strong>IDE</strong> — "integratsiyalashgan ishlab chiqarish muhiti" — butun loyiha darajasida ishlaydigan kuchli muharrir. U avtomatik to'ldirish, xatolarni ko'rsatish, versiya nazorati (git) va debugging imkoniyatlarini beradi.</p>
 <p>Ommabop IDE'lar:</p>
 <ul><li><strong>Visual Studio Code</strong> — bepul, kuchli, JavaScript uchun eng mashhur tanlov;</li><li><strong>WebStorm</strong> — pullik, JetBrains kompaniyasidan, juda qulay.</li></ul>
 <div class="tip">Yangi boshlovchilar uchun <strong>Visual Studio Code</strong> (VS Code) eng yaxshi tanlov — bepul, tez va minglab kengaytmalarga ega.</div>
-<h2>Yengil muharrirlar</h2>
+<h2 id="yengil-muharrirlar">Yengil muharrirlar</h2>
 <p>Yengil (lightweight) muharrirlar IDE kabi kuchli emas, lekin tez va sodda. Ular asosan bitta faylni tez ochib tahrirlash uchun ishlatiladi: Sublime Text, Notepad++, Vim.</p>
 <div class="note">Muharrir tanlashda "eng yaxshisi" degan tushuncha yo'q — bu shaxsiy did masalasi. Bir nechtasini sinab ko'ring.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>IDE</strong> — to'liq loyiha uchun kuchli muhit (VS Code, WebStorm);</li><li><strong>Yengil muharrir</strong> — tez va sodda tahrirlash uchun;</li><li>Boshlash uchun VS Code tavsiya etiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="qollanmalar.html"><span class="dir">← Oldingi</span><span class="ttl">Qo'llanmalar va spetsifikatsiyalar</span></a>
@@ -619,6 +630,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

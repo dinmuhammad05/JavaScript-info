@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XSS va CSRF — Kodla</title>
   <meta name="description" content="XSS nima va undan himoya (kirishni eskeyplash, CSP, textContent va innerHTML), CSRF nima va undan himoya (CSRF token, SameSite cookie). Himoya kodlari bilan.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,28 @@
 <main class="content article">
 <div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
 <h1>XSS va CSRF</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#xss-nima">XSS nima?</a></li>
+<li class="lvl2"><a href="#xss-himoyasi-1-chiqishni-eskeyplash">XSS himoyasi 1: chiqishni eskeyplash</a></li>
+<li class="lvl2"><a href="#xss-himoyasi-2-textcontent-va-innerhtml">XSS himoyasi 2: textContent va innerHTML</a></li>
+<li class="lvl2"><a href="#xss-himoyasi-3-content-security-policy-csp">XSS himoyasi 3: Content Security Policy (CSP)</a></li>
+<li class="lvl2"><a href="#csrf-nima">CSRF nima?</a></li>
+<li class="lvl2"><a href="#csrf-himoyasi-1-samesite-cookie">CSRF himoyasi 1: SameSite cookie</a></li>
+<li class="lvl2"><a href="#csrf-himoyasi-2-csrf-token">CSRF himoyasi 2: CSRF token</a></li>
+<li class="lvl2"><a href="#xss-va-csrf-farqni-eslab-qolish">XSS va CSRF: farqni eslab qolish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">XSS va CSRF — web ilovalarga eng ko'p tahdid soladigan ikki hujum turi. Ular bir-biriga o'xshab ketadi, lekin butunlay boshqacha ishlaydi. Ushbu darsda biz har birini <strong>faqat himoya nuqtai nazaridan</strong> tushunamiz: zaiflik qanday paydo bo'ladi va undan qanday himoyalanish kerak.</p>
-<h2>XSS nima?</h2>
+<h2 id="xss-nima">XSS nima?</h2>
 <p><strong>XSS (Cross-Site Scripting)</strong> — bu hujumchi sizning sahifangizga <strong>zararli JavaScript kod</strong> "joylashtira" olishi natijasida yuzaga keladigan zaiflik. Bu ko'pincha shunday sodir bo'ladi: ilova foydalanuvchi kiritgan matnni HTML sifatida, uni tozalamasdan sahifaga chiqaradi.</p>
 <p>Masalan, izohlar bo'limi foydalanuvchi yozgan matnni to'g'ridan-to'g'ri HTML'ga qo'ysa va foydalanuvchi matn o'rniga <code>&lt;script&gt;</code> tegi yozsa, brauzer uni oddiy matn emas, <em>bajariladigan kod</em> deb qabul qiladi. Natijada boshqa foydalanuvchilar sahifani ochganda o'sha kod ularning brauzerida ishlaydi.</p>
 <p>Nima uchun bu xavfli? Chunki zararli skript foydalanuvchining brauzerida, sizning saytingiz nomidan ishlaydi:</p>
 <ul><li>U cookie'larni o'qib olishi mumkin (agar ular <code>HttpOnly</code> bo'lmasa);</li><li>U foydalanuvchi nomidan so'rovlar yuborishi mumkin;</li><li>U sahifa mazmunini o'zgartirib, foydalanuvchini aldashi mumkin.</li></ul>
 <div class="note">XSS'ning uch asosiy turi bor: <strong>saqlangan</strong> (zararli matn bazaga saqlanib, keyin boshqalarga ko'rsatiladi), <strong>aks etuvchi</strong> (URL orqali kelib, javobga aks etadi) va <strong>DOM asosidagi</strong> (mijoz tomonidagi JS xavfsiz ishlov bermaganda). Himoya tamoyillari uchalasi uchun ham deyarli bir xil.</div>
-<h2>XSS himoyasi 1: chiqishni eskeyplash</h2>
+<h2 id="xss-himoyasi-1-chiqishni-eskeyplash">XSS himoyasi 1: chiqishni eskeyplash</h2>
 <p>Eng asosiy himoya: foydalanuvchi ma'lumotini sahifaga chiqarishda uni HTML sifatida emas, <strong>oddiy matn</strong> sifatida ko'rsatish. Buning uchun maxsus HTML belgilarini "qochirish" (escaping) kerak:</p>
 <pre class="code"><code>// Foydalanuvchi kiritmasidagi xavfli belgilarni eskeyplash
 function htmlEskeyp(matn) {
@@ -626,7 +643,7 @@ const xavfsiz = htmlEskeyp(foydalanuvchiIzohi);</code></pre>
 // XAVFLI (eskeyplanmaydi, xom HTML chiqadi):
 // &lt;%- foydalanuvchi.ismi %&gt;   &lt;-- foydalanuvchi ma'lumotiga BUNI ishlatmang!</code></pre>
 <div class="warn">Eskeyplashni <strong>chiqish vaqtida</strong> (ma'lumotni ko'rsatayotganda) qiling, kontekstga qarab. HTML matnida, HTML atributida, JavaScript ichida va URL'da eskeyplash qoidalari farq qiladi. Ishonchli shablon tizimiga tayaning va uning avtomatik himoyasini o'chirmang.</div>
-<h2>XSS himoyasi 2: textContent va innerHTML</h2>
+<h2 id="xss-himoyasi-2-textcontent-va-innerhtml">XSS himoyasi 2: textContent va innerHTML</h2>
 <p>Mijoz tomonidagi JavaScript'da eng ko'p uchraydigan XSS sababi — <code>innerHTML</code> ni foydalanuvchi ma'lumoti bilan ishlatish. <code>innerHTML</code> berilgan matnni <strong>HTML sifatida talqin qiladi</strong>, ya'ni ichidagi teglar ishga tushadi:</p>
 <pre class="code"><code>// XAVFLI: innerHTML foydalanuvchi ma'lumotini HTML deb talqin qiladi
 const izoh = olinganFoydalanuvchiIzohi; // masalan '&lt;img src=x onerror=...&gt;'
@@ -648,7 +665,7 @@ matn.textContent = foydalanuvchi.izohi; // xavfsiz
 div.append(nom, matn);
 konteyner.append(div);</code></pre>
 <div class="tip">Agar foydalanuvchidan cheklangan HTML (masalan, izohlarda qalin matn) qabul qilishingiz <em>shart</em> bo'lsa, uni o'zingiz eskeyplashga urinmang — bu juda xato bo'ladi. <code>DOMPurify</code> kabi sinovdan o'tgan kutubxonadan foydalaning: u xavfli teg va atributlarni olib tashlaydi.</div>
-<h2>XSS himoyasi 3: Content Security Policy (CSP)</h2>
+<h2 id="xss-himoyasi-3-content-security-policy-csp">XSS himoyasi 3: Content Security Policy (CSP)</h2>
 <p><strong>CSP</strong> — bu qo'shimcha himoya qatlami. U HTTP sarlavhasi orqali brauzerga aytadi: "faqat shu manbalardagi skriptlarni ishga tushir". Agar XSS'ga yo'l qo'yilgan bo'lsa ham, CSP ruxsat bermagan skript ishga tushmaydi.</p>
 <pre class="code"><code>// CSP sarlavhasini o'rnatish (Express, helmet orqali)
 const helmet = require('helmet');
@@ -664,12 +681,12 @@ app.use(helmet.contentSecurityPolicy({
 }));</code></pre>
 <p>CSP'ning kuchli tomoni: <code>scriptSrc 'self'</code> bo'lsa, HTML ichiga joylashtirilgan (inline) skriptlar ishlamaydi. Bu esa ko'plab XSS hujumlarini avtomatik to'xtatadi, chunki hujumchi joylashtirgan skript aynan inline bo'ladi.</p>
 <div class="note">CSP — bu "chuqurlashtirilgan himoya" misoli: u XSS'ni oldini olmaydi, balki agar XSS bo'lsa, uning ta'sirini keskin kamaytiradi. Eskeyplash birinchi mudofaa chizig'i bo'lsa, CSP — ikkinchi. Ikkalasi ham kerak.</div>
-<h2>CSRF nima?</h2>
+<h2 id="csrf-nima">CSRF nima?</h2>
 <p><strong>CSRF (Cross-Site Request Forgery)</strong> — bu foydalanuvchining <em>allaqachon login qilgan</em> holatidan foydalanib, uni bilmagan holda biror amalni bajartirishga aldash zaifligi. XSS'dan farqi: bu yerda hujumchi sizning saytingizga kod joylashtirmaydi — u foydalanuvchi brauzerining cookie'ni avtomatik yuborish odatidan foydalanadi.</p>
 <p>Muammoning ildizi: brauzer sizning saytingizga so'rov yuborilganda, u <strong>saytingiz cookie'larini avtomatik qo'shadi</strong> — hattoki so'rov boshqa (zararli) saytdan kelib chiqqan bo'lsa ham. Agar server faqat cookie'ning mavjudligiga ishonsa, u bu so'rovni haqiqiy foydalanuvchining so'rovi deb qabul qiladi.</p>
 <p>Masalan, foydalanuvchi bank saytiga login qilgan, cookie'si bor. So'ng u boshqa zararli sahifani ochsa, o'sha sahifa foydalanuvchi bilmagan holda bank saytiga so'rov jo'natishga urinishi mumkin — va brauzer avtomatik ravishda bank cookie'sini biriktiradi.</p>
 <div class="warn">CSRF asosan <strong>holatni o'zgartiruvchi</strong> so'rovlarga (pul o'tkazish, parol o'zgartirish, o'chirish) tahdid soladi. Shuning uchun bunday amallar hech qachon oddiy <code>GET</code> so'rov bilan bajarilmasligi kerak — ular <code>POST</code>/<code>PUT</code>/<code>DELETE</code> bo'lishi va CSRF himoyasiga ega bo'lishi lozim.</div>
-<h2>CSRF himoyasi 1: SameSite cookie</h2>
+<h2 id="csrf-himoyasi-1-samesite-cookie">CSRF himoyasi 1: SameSite cookie</h2>
 <p>Eng oddiy va samarali zamonaviy himoya — cookie'ga <code>SameSite</code> atributini qo'yish. Bu brauzerga aytadi: bu cookie'ni boshqa saytdan kelgan so'rovlarda yuborma. Shu bilan CSRF hujumining asosiy mexanizmi (cookie'ning avtomatik yuborilishi) buziladi:</p>
 <pre class="code"><code>// SameSite bilan cookie: boshqa saytdan kelgan so'rovlarda
 // cookie yuborilmaydi -&gt; CSRF ning asosiy yo'li yopiladi
@@ -679,7 +696,7 @@ res.cookie('sessionId', sessionId, {
   sameSite: 'lax'  // yoki 'strict' — undan ham qattiqroq
 });</code></pre>
 <p><code>SameSite=Lax</code> ko'pchilik holatlar uchun yaxshi standart: u oddiy navigatsiyani buzmaydi, lekin xavfli o'zaro-sayt so'rovlarida cookie'ni yubormaydi. <code>SameSite=Strict</code> yanada qattiqroq, lekin ba'zan foydalanuvchi tajribasiga ta'sir qilishi mumkin.</p>
-<h2>CSRF himoyasi 2: CSRF token</h2>
+<h2 id="csrf-himoyasi-2-csrf-token">CSRF himoyasi 2: CSRF token</h2>
 <p>An'anaviy va ishonchli himoya — <strong>CSRF token</strong> (yoki "anti-forgery token"). G'oya shunday: server har bir forma uchun tasodifiy, taxmin qilib bo'lmaydigan token yaratadi. Bu token formaga yashirin maydon sifatida qo'yiladi. So'rov kelganda, server tokenning to'g'riligini tekshiradi.</p>
 <p>Nima uchun bu ishlaydi? Chunki boshqa (zararli) sayt bu tokenni <em>bila olmaydi</em> — u faqat sizning saytingizdagi haqiqiy formada mavjud. Cookie avtomatik yuborilsa ham, to'g'ri CSRF token yuborilmasa, so'rov rad etiladi.</p>
 <pre class="code"><code>// Kontseptual CSRF himoya oqimi (Express)
@@ -711,9 +728,9 @@ app.post('/parol-ozgartirish', csrfTekshir, (req, res) =&gt; {
 });</code></pre>
 <div class="note">Amaliyotda bularni o'zingiz yozish o'rniga sinovdan o'tgan middleware'lardan (masalan, <code>csurf</code> yoki freymvorkning o'z himoyasidan) foydalaning. Yuqoridagi kod tamoyilni ko'rsatish uchun soddalashtirilgan.</div>
 <div class="tip">Eng yaxshi amaliyot — bir necha qatlamni birlashtirish: <code>SameSite</code> cookie (birinchi mudofaa) + CSRF token (ishonchli ikkinchi qatlam). API'lar uchun, agar autentifikatsiya cookie'da emas, <code>Authorization</code> sarlavhasidagi tokenda bo'lsa, CSRF tabiiy ravishda kamroq muammo bo'ladi (chunki sarlavha avtomatik yuborilmaydi).</div>
-<h2>XSS va CSRF: farqni eslab qolish</h2>
+<h2 id="xss-va-csrf-farqni-eslab-qolish">XSS va CSRF: farqni eslab qolish</h2>
 <ul><li><strong>XSS</strong> — hujumchi sizning saytingizda <em>kod ishga tushiradi</em>; himoya: kirishni eskeyplash, <code>textContent</code>, CSP;</li><li><strong>CSRF</strong> — hujumchi foydalanuvchining <em>login holatidan foydalanib so'rov yuboradi</em>; himoya: <code>SameSite</code> cookie, CSRF token;</li><li>XSS aslida CSRF himoyasini ham buzishi mumkin (chunki u sahifada CSRF tokenni o'qiy oladi) — shuning uchun XSS'ni oldini olish birlamchi.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>XSS</strong> — foydalanuvchi ma'lumoti kod sifatida bajarilishi; birlamchi himoya — chiqishni eskeyplash va <code>textContent</code> ishlatish;</li><li><code>innerHTML</code> ni foydalanuvchi ma'lumoti bilan ishlatmang; kerak bo'lsa <code>DOMPurify</code>dan foydalaning;</li><li><strong>CSP</strong> — qo'shimcha qatlam: inline skriptlarni bloklab, XSS ta'sirini kamaytiradi;</li><li><strong>CSRF</strong> — foydalanuvchining login holatidan noqonuniy foydalanish; himoya — <code>SameSite</code> cookie va CSRF token;</li><li>Holatni o'zgartiruvchi amallar hech qachon <code>GET</code> bilan bo'lmasin;</li><li>Eng yaxshi yondashuv — bir necha himoya qatlamini birlashtirish (defense in depth).</li></ul>
 <nav class="lesson-nav">
   <a href="jwt.html"><span class="dir">← Oldingi</span><span class="ttl">JWT (JSON Web Token)</span></a>
@@ -727,6 +744,6 @@ app.post('/parol-ozgartirish', csrfTekshir, (req, res) =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kiberxavfsizlik nima va nega muhim — Kodla</title>
   <meta name="description" content="CIA triadasi, asosiy atamalar (zaiflik, tahdid, xavf, hujum yuzasi), chuqurlashtirilgan himoya tamoyili va sohaga qisqacha kirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,44 +599,63 @@
 <main class="content article">
 <div class="crumbs">Kiberxavfsizlik asoslari</div>
 <h1>Kiberxavfsizlik nima va nega muhim</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#kiberxavfsizlik-nima">Kiberxavfsizlik nima?</a></li>
+<li class="lvl2"><a href="#nega-bugun-bu-kritik">Nega bugun bu kritik?</a></li>
+<li class="lvl2"><a href="#cia-triadasi">CIA triadasi</a></li>
+<li class="lvl3"><a href="#1-maxfiylik-confidentiality">1. Maxfiylik (Confidentiality)</a></li>
+<li class="lvl3"><a href="#2-butunlik-integrity">2. Butunlik (Integrity)</a></li>
+<li class="lvl3"><a href="#3-mavjudlik-availability">3. Mavjudlik (Availability)</a></li>
+<li class="lvl2"><a href="#asosiy-atamalar">Asosiy atamalar</a></li>
+<li class="lvl3"><a href="#zaiflik-vulnerability">Zaiflik (vulnerability)</a></li>
+<li class="lvl3"><a href="#tahdid-threat">Tahdid (threat)</a></li>
+<li class="lvl3"><a href="#xavf-risk">Xavf (risk)</a></li>
+<li class="lvl3"><a href="#hujum-yuzasi-attack-surface">Hujum yuzasi (attack surface)</a></li>
+<li class="lvl2"><a href="#chuqurlashtirilgan-himoya">Chuqurlashtirilgan himoya</a></li>
+<li class="lvl2"><a href="#amaliyot-parol-kuchini-baholash">Amaliyot: parol kuchini baholash</a></li>
+<li class="lvl2"><a href="#kiberxavfsizlik-kasbiga-qisqa-kirish">Kiberxavfsizlik kasbiga qisqa kirish</a></li>
+  </ul>
+</details>
 <p class="lead">Kiberxavfsizlik — bu kompyuter tizimlarini, tarmoqlarni va ma'lumotlarni ruxsatsiz kirish, buzilish yoki yo'qolishdan himoya qilish san'ati va fanidir. Ushbu birinchi darsda biz xavfsizlikning asosiy tushunchalarini — nima uchun u bugungi kunda kritik ahamiyatga ega ekanini, uni baholash uchun ishlatiladigan asosiy ramkani va sohada uchraydigan kalit atamalarni <strong>faqat himoya nuqtai nazaridan</strong> o'rganamiz.</p>
 <div class="note">Ushbu butun bob to'liq ta'lim va <strong>himoya</strong> maqsadida yozilgan. Maqsad — sizni tahdidni tushunadigan va undan himoyalana oladigan mutaxassis qilib tayyorlash. Hech qanday hujum qilish yo'riqnomasi yoki zararli kod berilmaydi.</div>
-<h2>Kiberxavfsizlik nima?</h2>
+<h2 id="kiberxavfsizlik-nima">Kiberxavfsizlik nima?</h2>
 <p>Har bir zamonaviy tashkilot — bankdan tortib maktabgacha — o'z ishini raqamli tizimlarga tayanib olib boradi. Bu tizimlarda foydalanuvchilarning parollari, to'lov ma'lumotlari, tibbiy yozuvlari va shaxsiy yozishmalari saqlanadi. <strong>Kiberxavfsizlik</strong> ana shu qimmatli ma'lumotni va uni saqlaydigan tizimlarni himoya qilish bilan shug'ullanadi.</p>
 <p>Muhim tushuncha shundaki, xavfsizlik — bu <em>mahsulot</em> emas, balki <em>jarayon</em>. Uni bir marta "o'rnatib" bo'lmaydi. Tahdidlar doim o'zgaradi, shuning uchun himoya ham doimiy yangilanib turishi kerak.</p>
 <ul><li><strong>Ma'lumotni himoya qilish:</strong> parollar, kartalar, shaxsiy hujjatlar;</li><li><strong>Tizimlarni himoya qilish:</strong> serverlar, ma'lumotlar bazalari, tarmoqlar;</li><li><strong>Xizmatni saqlab qolish:</strong> foydalanuvchilar tizimdan uzluksiz foydalana olishi.</li></ul>
-<h2>Nega bugun bu kritik?</h2>
+<h2 id="nega-bugun-bu-kritik">Nega bugun bu kritik?</h2>
 <p>Yigirma yil oldin kompyuter faqat ish stolida turardi. Bugun esa deyarli har bir narsa — telefon, mashina, sovutgich, tibbiy asboblar — internetga ulangan. Bu qulaylik keltirdi, lekin ayni paytda <strong>hujum yuzasini</strong> ham keskin kengaytirdi.</p>
 <ul><li><strong>Ma'lumotning qiymati oshdi:</strong> shaxsiy ma'lumotlar qora bozorda sotiladigan tovarga aylandi;</li><li><strong>Hujumlar ko'paydi va arzonlashdi:</strong> avtomatlashtirilgan vositalar tufayli hujumlar ommalashdi;</li><li><strong>Bog'liqlik ortdi:</strong> bitta xizmatning ishdan chiqishi minglab boshqa xizmatga ta'sir qiladi;</li><li><strong>Oqibatlar og'irlashdi:</strong> ma'lumot sizib chiqishi obro'ni, pulni va odamlarning ishonchini yo'qotadi.</li></ul>
 <p>Shu sabab kiberxavfsizlik endi faqat "IT bo'limining ishi" emas. Har bir dasturchi, dizayner va oddiy foydalanuvchi ham o'z ulushiga mas'ul.</p>
-<h2>CIA triadasi</h2>
+<h2 id="cia-triadasi">CIA triadasi</h2>
 <p>Axborot xavfsizligining klassik uchligi — bu <strong>CIA triadasi</strong>. Bu razvedka boshqarmasi emas, balki uchta tamoyilning inglizcha bosh harflari: Confidentiality, Integrity, Availability. Har qanday xavfsizlik qarorini shu uch tamoyil orqali baholash mumkin.</p>
-<h3>1. Maxfiylik (Confidentiality)</h3>
+<h3 id="1-maxfiylik-confidentiality">1. Maxfiylik (Confidentiality)</h3>
 <p>Ma'lumotni faqat unga huquqi bor kishilar ko'ra olishi kerak. Masalan, foydalanuvchining paroli, xabarlari va kartasi begonaga ko'rinmasligi shart. Maxfiylikni ta'minlash vositalari: shifrlash, to'g'ri avtorizatsiya va ma'lumotga kirishni cheklash.</p>
 <p><em>Misol:</em> shifokor bemorning tashxisini ko'ra oladi, lekin qo'shni palatadagi hamshira uni ko'ra olmaydi — chunki unga bu ma'lumotga ruxsat yo'q.</p>
-<h3>2. Butunlik (Integrity)</h3>
+<h3 id="2-butunlik-integrity">2. Butunlik (Integrity)</h3>
 <p>Ma'lumot ruxsatsiz o'zgartirilmasligi kerak. Butunlik buzilsa, biz ma'lumotga ishona olmaymiz.</p>
 <p><em>Misol:</em> talaba o'z bahosini elektron jurnalda o'zgartira olmasligi kerak. Agar u "3" ni "5" ga aylantira olsa — ma'lumotning butunligi buzilgan bo'ladi. Vositalar: raqamli imzolar, hash-tekshirishlar va server tomonidagi qat'iy tekshiruvlar.</p>
-<h3>3. Mavjudlik (Availability)</h3>
+<h3 id="3-mavjudlik-availability">3. Mavjudlik (Availability)</h3>
 <p>Xizmat unga muhtoj bo'lgan foydalanuvchilar uchun ishlab turishi kerak.</p>
 <p><em>Misol:</em> imtihon kuni universitet sayti ishlamay qolsa, minglab talaba ro'yxatdan o'ta olmaydi — bu mavjudlikning buzilishi. Vositalar: zaxira nusxalar, yuklama muvozanati va so'rov chastotasini cheklash.</p>
 <div class="note">Har qanday xavfsizlik qarorini qabul qilayotganda o'zingizga savol bering: "Bu qaror maxfiylik, butunlik va mavjudlikning qaysi biriga xizmat qiladi?" Bu ramka sizga tizimli fikrlash imkonini beradi.</div>
-<h2>Asosiy atamalar</h2>
+<h2 id="asosiy-atamalar">Asosiy atamalar</h2>
 <p>Xavfsizlik sohasida ba'zi so'zlar kundalik nutqdagidan boshqacha, aniq ma'noda ishlatiladi. Ularni chalkashtirmaslik muhim:</p>
-<h3>Zaiflik (vulnerability)</h3>
+<h3 id="zaiflik-vulnerability">Zaiflik (vulnerability)</h3>
 <p>Tizimdagi kamchilik yoki xato — undan foydalanish mumkin bo'lgan "teshik". Masalan, yangilanmagan dastur yoki oddiy parol — bu zaiflik.</p>
-<h3>Tahdid (threat)</h3>
+<h3 id="tahdid-threat">Tahdid (threat)</h3>
 <p>Zaiflikdan zarar keltirish uchun foydalanishi mumkin bo'lgan potensial voqea yoki manba. Masalan, ma'lumot o'g'irlashni istagan hujumchi — bu tahdid.</p>
-<h3>Xavf (risk)</h3>
+<h3 id="xavf-risk">Xavf (risk)</h3>
 <p>Tahdid zaiflikdan foydalanib zarar keltirish <em>ehtimoli</em> va uning oqibati. Xavf = tahdid + zaiflik + qiymat. Agar zaiflik bo'lsa-yu, unga hech qanday tahdid bo'lmasa, xavf past bo'ladi.</p>
-<h3>Hujum yuzasi (attack surface)</h3>
+<h3 id="hujum-yuzasi-attack-surface">Hujum yuzasi (attack surface)</h3>
 <p>Hujumchi tizimga kirishga urinishi mumkin bo'lgan barcha nuqtalar yig'indisi. Har bir ochiq port, har bir forma, har bir API — bu hujum yuzasining bir qismi. Yaxshi himoya hujum yuzasini iloji boricha kichraytirishga intiladi.</p>
 <div class="tip">Bu atamalarni misol bilan eslab qoling: <strong>zaiflik</strong> — ochiq eshik; <strong>tahdid</strong> — o'g'ri; <strong>xavf</strong> — o'g'ri kirib ketish ehtimoli; <strong>hujum yuzasi</strong> — uydagi barcha eshik va derazalar.</div>
-<h2>Chuqurlashtirilgan himoya</h2>
+<h2 id="chuqurlashtirilgan-himoya">Chuqurlashtirilgan himoya</h2>
 <p>Xavfsizlikda muhim haqiqat bor: <strong>hujumchi doim bitta zaiflikni topsa yetadi</strong>, himoyachi esa <em>barcha</em> zaifliklarni yopishi kerak. Shu sabab bitta himoya qatliga tayanish xato. Yechim — <strong>chuqurlashtirilgan himoya</strong> (defense in depth): ustma-ust bir necha himoya qatlamini qo'yish.</p>
 <p>Buni qal'aga o'xshating: atrofda handaq, so'ng devor, so'ng darvoza soqchisi, so'ng ichki qulf. Biror qatlam yorib o'tilsa ham, keyingisi hujumni to'xtatadi.</p>
 <ul><li><strong>Tarmoq qatlami:</strong> xavfsizlik devori (firewall), HTTPS shifrlash;</li><li><strong>Ilova qatlami:</strong> kiritmani tekshirish, avtorizatsiya;</li><li><strong>Ma'lumot qatlami:</strong> shifrlash, zaxira nusxalar;</li><li><strong>Inson qatlami:</strong> xodimlarni o'qitish, kuchli parol siyosati.</li></ul>
-<h2>Amaliyot: parol kuchini baholash</h2>
+<h2 id="amaliyot-parol-kuchini-baholash">Amaliyot: parol kuchini baholash</h2>
 <p>Kuchli parol — himoyaning eng asosiy qatlamlaridan biri. Quyidagi xavfsiz misol parolning kuchini baholaydi. Bu hujum emas — aksincha, foydalanuvchiga kuchliroq parol tanlashga yordam beruvchi himoya vositasi. Uni ishga tushiring va turli parollarni sinab ko'ring:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>parol-kuchi.js</span></div><textarea spellcheck="false">function parolKuchi(parol) {
   let ball = 0;
@@ -670,7 +692,7 @@ console.log(parolXavfsizmi("123456"));
 console.log(parolXavfsizmi("qwerty"));
 console.log(parolXavfsizmi("Tulki_2026!"));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Eng kuchli parol — bu uzun parol. "To'rt-tasodifiy-so'z-birga" kabi uzun ibora ko'pincha qisqa lekin murakkab paroldan xavfsizroq va eslab qolish osonroq.</div>
-<h2>Kiberxavfsizlik kasbiga qisqa kirish</h2>
+<h2 id="kiberxavfsizlik-kasbiga-qisqa-kirish">Kiberxavfsizlik kasbiga qisqa kirish</h2>
 <p>Kiberxavfsizlik — bu bitta kasb emas, balki butun bir soha. Unda turli yo'nalishlar bor va deyarli har qanday texnik qiziqishga mos ish topiladi:</p>
 <ul><li><strong>Himoyachilar (Blue team):</strong> tizimlarni kuzatib, hujumni aniqlab, to'xtatadi;</li><li><strong>Etik hujumchilar (Red team):</strong> ruxsat asosida zaifliklarni topib beradi;</li><li><strong>Xavfsizlik muhandislari:</strong> himoyani loyihalash va qurish bilan shug'ullanadi;</li><li><strong>Tahlilchilar:</strong> tahdidlarni o'rganib, hodisalarga javob beradi.</li></ul>
 <p>Bu yo'nalishlarni keyingi darslarda batafsil ko'rib chiqamiz. Hozircha eng muhimi shu: yaxshi himoyachi bo'lish uchun avvalo <em>tahdid qanday ishlashini</em> tushunish kerak — buni biz keyingi darsda o'rganamiz.</p>
@@ -687,6 +709,6 @@ console.log(parolXavfsizmi("Tulki_2026!"));</textarea><div class="pg-actions"><b
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

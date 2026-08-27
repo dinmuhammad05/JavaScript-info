@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Intervyu masalalarini yechish strategiyasi — Kodla</title>
   <meta name="description" content="Algoritm intervyusiga tayyorlanish: masalani tahlil qilish qadamlari, texnika tanlash, murakkablikni baholash va amaliyot yo'l xaritasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,19 +599,31 @@
 <main class="content article">
 <div class="crumbs">Ilg'or texnikalar</div>
 <h1>Intervyu masalalarini yechish strategiyasi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-strategiya-kerak">Nega strategiya kerak</a></li>
+<li class="lvl2"><a href="#masalani-yechishning-6-qadami">Masalani yechishning 6 qadami</a></li>
+<li class="lvl2"><a href="#kalit-so-zlardan-texnikani-tanish">Kalit so'zlardan texnikani tanish</a></li>
+<li class="lvl2"><a href="#big-o-ni-intervyuda-qanday-aytish">Big O ni intervyuda qanday aytish</a></li>
+<li class="lvl2"><a href="#keng-tarqalgan-xatolar">Keng tarqalgan xatolar</a></li>
+<li class="lvl2"><a href="#amaliyot-yo-l-xaritasi">Amaliyot yo'l xaritasi</a></li>
+<li class="lvl2"><a href="#ruhiy-tayyorgarlik-va-ovoz-chiqarib-fikrlash">Ruhiy tayyorgarlik va ovoz chiqarib fikrlash</a></li>
+  </ul>
+</details>
 <p class="lead">Mana biz bu bo'lim yakuniga keldik. Endi o'rgangan hamma narsani — qidiruv, saralash, ma'lumotlar tuzilmalari, backtracking, DP, greedy — bitta amaliy mahoratga birlashtiramiz: algoritm intervyusini ishonch bilan yechish. Bu dars sizga tizimli fikrlash xaritasini beradi.</p>
-<h2>Nega strategiya kerak</h2>
+<h2 id="nega-strategiya-kerak">Nega strategiya kerak</h2>
 <p>Intervyuda eng katta xato — masalani o'qib, darrov kod yozishga tashlanish. Bu ko'pincha chalkash, xatoli va noto'g'ri yo'nalishga olib boradi. Yaxshi nomzod esa <strong>tizimli qadamlar</strong> bilan ishlaydi va har bir qadamda ovoz chiqarib fikrlaydi.</p>
 <p>Intervyuchi sizning <strong>fikrlash jarayoningizni</strong> ko'rmoqchi, faqat tayyor javobni emas. Shuning uchun strategiya — bu nafaqat to'g'ri yechim topish, balki uni chiroyli, tushunarli yo'l bilan topib ko'rsatish san'ati.</p>
-<h2>Masalani yechishning 6 qadami</h2>
+<h2 id="masalani-yechishning-6-qadami">Masalani yechishning 6 qadami</h2>
 <p>Har qanday algoritm masalasini quyidagi tartibda yeching. Bu ritm sizni chalkashlikdan asraydi:</p>
 <ol><li><strong>Savolni tushuning</strong> — masalani qayta o'z so'zingiz bilan ayting va aniqlashtiruvchi savollar bering: kirish qanday? sonlar musbatmi? bo'sh bo'lishi mumkinmi? natija qanday shaklda?</li><li><strong>Misollar va chegaraviy holatlar</strong> — bir-ikki oddiy misol yozing, keyin chegaraviy holatlarni o'ylang: bo'sh kirish, bitta element, juda katta n, takroriy qiymatlar, manfiy sonlar.</li><li><strong>Sodda (brute force) yechimni ayting</strong> — avval eng sodda ishlaydigan yechimni tasvirlang va uning Big O murakkabligini baholang. Bu sizga tayanch nuqta beradi.</li><li><strong>Optimallashtiring</strong> — qaysi texnika bu yerda yordam beradi? (pastdagi jadvalga qarang.) Takror hisob bormi? Saralash yordam beradimi? Qo'shimcha xotira ishlatib tezlashtira olamizmi?</li><li><strong>Kod yozing</strong> — endi, faqat endi, toza va o'qiladigan kod yozing. O'zgaruvchilarga mazmunli nom bering.</li><li><strong>Test qiling</strong> — kodni misollaringiz va chegaraviy holatlar bilan qo'lda "yuguriting". Xato topsangiz, tinch tuzating.</li></ol>
 <div class="tip">To'g'ri (optimal) yechimni topishdan oldin ISHLAYDIGAN sodda yechimni ayting. Ishlaydigan brute force + "buni shunday optimallashtirsam bo'ladi" degan reja — bu hech qanday kod yozmasdan qotib qolishdan ancha yaxshi.</div>
-<h2>Kalit so'zlardan texnikani tanish</h2>
+<h2 id="kalit-so-zlardan-texnikani-tanish">Kalit so'zlardan texnikani tanish</h2>
 <p>Intervyu masalalari ko'pincha yashirin ishoralarga ega. Masala matnidagi ba'zi so'zlar deyarli har doim ma'lum bir texnikaga ishora qiladi. Bu "kalit -> texnika" xaritasini yodda tuting:</p>
 <ul><li><strong>"Saralangan massivda qidirish"</strong> -> Binary search (O(log n))</li><li><strong>"Juftlik topish, saralangan massiv"</strong> -> Two pointers (ikki ko'rsatkich)</li><li><strong>"Ketma-ket qism massiv/satr"</strong> -> Sliding window (siljuvchi oyna)</li><li><strong>"Tez qidirish, chastota sanash, takror aniqlash"</strong> -> HashMap / HashSet (O(1) qidiruv)</li><li><strong>"Barcha variant / kombinatsiya / o'rin almashtirish"</strong> -> Backtracking</li><li><strong>"Takror hisob, optimal son, minimal/maksimal yo'l"</strong> -> Dinamik dasturlash (DP)</li><li><strong>"Grafda eng qisqa yo'l (vaznsiz)"</strong> -> BFS (kenglikka qarab qidirish)</li><li><strong>"Iyerarxiya, ota-bola, daraxt bo'ylab yurish"</strong> -> Tree traversal (DFS/BFS)</li><li><strong>"Har qadamda eng yaxshi mahalliy tanlov"</strong> -> Greedy (ehtiyot bo'lib)</li></ul>
 <p>Bu jadval sehr emas — u shunchaki tajriba to'plami. Qancha ko'p masala yechsangiz, bu ishoralarni shuncha tez ilg'aysiz.</p>
-<h2>Big O ni intervyuda qanday aytish</h2>
+<h2 id="big-o-ni-intervyuda-qanday-aytish">Big O ni intervyuda qanday aytish</h2>
 <p>Har bir yechimingiz uchun <strong>vaqt</strong> va <strong>xotira</strong> murakkabligini aytishga tayyor bo'ling. Intervyuchi buni deyarli har doim so'raydi, ba'zan siz aytmasangiz ham.</p>
 <p>Kichik namunaviy hisoblash bilan Big O tushunchasini eslaylik:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigo-taqqos.js</span></div><textarea spellcheck="false">// n ga bog'liq operatsiyalar sonini taqqoslaymiz
@@ -632,13 +647,13 @@ function taqqosla(n) {
 taqqosla(8);
 taqqosla(64);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>n</code> ni 8 dan 64 ga (8 barobar) oshirsangiz: <code>O(log n)</code> deyarli o'zgarmaydi, <code>O(n)</code> 8 barobar, <code>O(n^2)</code> esa 64 barobar o'sadi. Aynan shu farq nega optimallashtirish muhimligini ko'rsatadi. Big O ni aytganda eng katta hadga e'tibor bering va konstantalarni tashlab yuboring.</p>
-<h2>Keng tarqalgan xatolar</h2>
+<h2 id="keng-tarqalgan-xatolar">Keng tarqalgan xatolar</h2>
 <p>Intervyuda (va umuman kodlashda) quyidagi xatolar eng ko'p uchraydi. Ularni oldindan bilsangiz, oldini olasiz:</p>
 <ul><li><strong>Off-by-one xatolar</strong> — sikl chegarasida <code>&lt;</code> va <code>&lt;=</code> ni chalkashtirish, oxirgi yoki birinchi elementni o'tkazib yuborish.</li><li><strong>Bo'sh kirishni tekshirmaslik</strong> — bo'sh massiv yoki bo'sh satr kelganda kod qulaydi. Har doim shu holatni oldindan o'ylang.</li><li><strong>Chegaralarni tekshirmaslik</strong> — massiv indeksidan tashqariga chiqish, bir element yoki juda katta kirish holatlari.</li><li><strong>Integer to'lib ketishi</strong> — juda katta sonlar bilan ishlaganda (garchi JS da bu kamroq muammo, lekin mantiqan yodda tuting).</li><li><strong>Havolani nusxa deb o'ylash</strong> — massiv yoki obyektni saqlaganda uning nusxasi emas, havolasini saqlab qo'yish (backtracking darsidagi ogohlantirishni eslang).</li></ul>
-<h2>Amaliyot yo'l xaritasi</h2>
+<h2 id="amaliyot-yo-l-xaritasi">Amaliyot yo'l xaritasi</h2>
 <p>Intervyuga tayyorlanish — bu marafon, sprint emas. Quyidagi tamoyillar sizga barqaror o'sish beradi:</p>
 <ul><li><strong>Osondan boshlab, o'rtaga o'ting</strong> — LeetCode yoki shunga o'xshash platformada avval oson masalalar bilan ishonch hosil qiling, keyin o'rta darajaga o'ting. Qiyin masalalarga birdan sakramang.</li><li><strong>Kuniga oz-ozdan, muntazam</strong> — bir kunda 20 ta masala yechib, keyin bir oy dam olishdan ko'ra, har kuni 1-2 masala yechish ancha samarali.</li><li><strong>Patternlarni tushunish, yodlash emas</strong> — javobni yodlab olish foydasiz. Har masaladan keyin "bu qaysi patternga tegishli, nega bu texnika ishladi?" deb so'rang.</li><li><strong>Yechganingizni qayta ko'ring</strong> — masalani yechgandan keyin boshqalarning yechimini ko'rib, o'zingiznikini yaxshilang. Xatolaringizdan o'rganish eng tez o'sish yo'li.</li><li><strong>Vaqt bilan mashq qiling</strong> — haqiqiy intervyu vaqt bosimi ostida bo'ladi, shuning uchun ba'zan taymer bilan yeching.</li></ul>
-<h2>Ruhiy tayyorgarlik va ovoz chiqarib fikrlash</h2>
+<h2 id="ruhiy-tayyorgarlik-va-ovoz-chiqarib-fikrlash">Ruhiy tayyorgarlik va ovoz chiqarib fikrlash</h2>
 <p>Texnik mahorat muhim, lekin intervyuda <strong>qanday</strong> fikrlashingiz ham xuddi shunday muhim. Ovoz chiqarib fikrlash (think aloud) — bu intervyuchiga o'z fikr jarayoningizni ko'rsatish san'ati.</p>
 <p>Jimgina o'tirib, bir zumda mukammal yechim yozishga urinmang. Buning o'rniga: "Men avval brute force haqida o'ylayapman... bu O(n^2) bo'ladi... uni hash map bilan O(n) ga tushirsam bo'lar ekan..." deb ovoz chiqarib gapiring. Bu intervyuchiga sizga yordam berish va yo'naltirish imkonini beradi.</p>
 <p>Agar qotib qolsangiz, bu dahshatli emas — bu tabiiy. Sokin qoling, misolga qayting, sodda holatdan boshlang. "Bir daqiqa o'ylab olay" deyish mutlaqo normal. Vahima qilmaslik — bu ham mahorat.</p>
@@ -655,6 +670,6 @@ taqqosla(64);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

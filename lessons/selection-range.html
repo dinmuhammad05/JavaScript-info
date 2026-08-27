@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tanlash va Range — Kodla</title>
   <meta name="description" content="Range obyekti bilan hujjatning bir qismini belgilash, Selection obyekti orqali foydalanuvchi tanlagan matnni o'qish va dastur orqali tanlash o'rnatish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,30 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha brauzer mavzulari</div>
 <h1>Tanlash va Range</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#range-obyekti">Range obyekti</a></li>
+<li class="lvl2"><a href="#setstart-va-setend">setStart va setEnd</a></li>
+<li class="lvl2"><a href="#elementlarni-qamrab-olish">Elementlarni qamrab olish</a></li>
+<li class="lvl2"><a href="#range-xususiyatlari">Range xususiyatlari</a></li>
+<li class="lvl2"><a href="#range-bilan-amallar">Range bilan amallar</a></li>
+<li class="lvl2"><a href="#selection-obyekti">Selection obyekti</a></li>
+<li class="lvl2"><a href="#getselection-va-matnni-o-qish">getSelection va matnni o'qish</a></li>
+<li class="lvl2"><a href="#dastur-orqali-tanlash">Dastur orqali tanlash</a></li>
+<li class="lvl2"><a href="#form-maydonlaridagi-tanlash">Form maydonlaridagi tanlash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Hujjatdagi matn yoki elementlarni tanlash brauzerda ikki bosqichli tushuncha bilan ifodalanadi: <code>Range</code> — hujjatning ma'lum bir <strong>qismi</strong> (boshlanish va tugash nuqtalari bilan), <code>Selection</code> esa — foydalanuvchi yoki dastur belgilagan <strong>joriy tanlov</strong>. Ushbu darsda ular qanday ishlashini va dastur orqali qanday boshqarilishini ko'ramiz.</p>
-<h2>Range obyekti</h2>
+<h2 id="range-obyekti">Range obyekti</h2>
 <p><code>Range</code> — hujjatdagi ikki nuqta orasidagi qismni ifodalaydi. Har bir nuqta ikkita qiymat bilan beriladi: <em>tugun</em> (node) va uning ichidagi <em>siljish</em> (offset).</p>
 <pre class="code"><code>let range = new Range();</code></pre>
 <p>Boshlanish va tugash nuqtalari <code>setStart</code> va <code>setEnd</code> bilan o'rnatiladi:</p>
 <ul><li><code>range.setStart(node, offset)</code> — boshlanish nuqtasini o'rnatadi;</li><li><code>range.setEnd(node, offset)</code> — tugash nuqtasini o'rnatadi.</li></ul>
 <p>Bu yerda <code>offset</code> ikki xil ma'noga ega:</p>
 <ul><li>Agar <code>node</code> — matn tuguni bo'lsa, <code>offset</code> matn ichidagi <strong>belgi (harf) pozitsiyasi</strong>;</li><li>Agar <code>node</code> — element bo'lsa, <code>offset</code> uning <strong>bola tugunlari</strong> orasidagi pozitsiya.</li></ul>
-<h2>setStart va setEnd</h2>
+<h2 id="setstart-va-setend">setStart va setEnd</h2>
 <p>Aytaylik, sahifada <code>&lt;p id="matn"&gt;Salom, dunyo!&lt;/p&gt;</code> bor. Matndagi <code>'Salom'</code> so'zini tanlaymiz — bu <code>&lt;p&gt;</code>ning birinchi matn tuguni ichidagi 0-belgidan 5-belgigacha:</p>
 <pre class="code"><code>let p = document.getElementById('matn');
 let textNode = p.firstChild; // matn tuguni: 'Salom, dunyo!'
@@ -616,7 +634,7 @@ range.setEnd(textNode, 5);    // 5-belgigacha (S-a-l-o-m)
 console.log(range.toString()); // 'Salom'</code></pre>
 <p><code>range.toString()</code> tanlangan qismning matnli ko'rinishini qaytaradi.</p>
 <div class="note"><code>setEnd(textNode, 5)</code> — bu "5-belgidan keyin" degani. Ya'ni <code>'Salom'</code> so'zining beshta harfi (indekslari 0..4) tanlanadi, tugash nuqtasi esa 5-pozitsiyada turadi. Nuqtalar belgilar <em>orasida</em> joylashadi.</div>
-<h2>Elementlarni qamrab olish</h2>
+<h2 id="elementlarni-qamrab-olish">Elementlarni qamrab olish</h2>
 <p>Nuqta faqat matn ichida emas, elementlar orasida ham bo'lishi mumkin. Masalan, <code>&lt;p&gt;</code> ichida <code>&lt;i&gt;</code> va <code>&lt;b&gt;</code> teglari bor deylik. Ularning bir qismini tanlash uchun <code>offset</code> bola tugun indeksini bildiradi:</p>
 <pre class="code"><code>// &lt;p&gt;Bu &lt;i&gt;muhim&lt;/i&gt; va &lt;b&gt;qalin&lt;/b&gt; matn&lt;/p&gt;
 let p = document.getElementById('matn');
@@ -629,10 +647,10 @@ range.setEnd(p, 2);    // ikkinchi bola tugungacha
 console.log(range.toString());</code></pre>
 <p>Yana qulay usullar mavjud:</p>
 <ul><li><code>range.selectNode(node)</code> — tugunni butunlay (o'zi bilan birga) tanlaydi;</li><li><code>range.selectNodeContents(node)</code> — tugunning faqat ichini tanlaydi;</li><li><code>range.setStartBefore(node)</code> / <code>setStartAfter(node)</code> — tugundan oldin/keyin boshlaydi;</li><li><code>range.setEndBefore(node)</code> / <code>setEndAfter(node)</code> — tugundan oldin/keyin tugatadi;</li><li><code>range.collapse(toStart)</code> — Range'ni bir nuqtaga siqadi (bo'sh qiladi).</li></ul>
-<h2>Range xususiyatlari</h2>
+<h2 id="range-xususiyatlari">Range xususiyatlari</h2>
 <p><code>Range</code> obyekti quyidagi asosiy xususiyatlarga ega:</p>
 <ul><li><code>startContainer</code>, <code>startOffset</code> — boshlanish tuguni va siljishi;</li><li><code>endContainer</code>, <code>endOffset</code> — tugash tuguni va siljishi;</li><li><code>collapsed</code> — agar boshlanish va tugash bir xil bo'lsa (bo'sh Range) <code>true</code>;</li><li><code>commonAncestorContainer</code> — barcha tanlangan tugunlarning eng yaqin umumiy ajdodi.</li></ul>
-<h2>Range bilan amallar</h2>
+<h2 id="range-bilan-amallar">Range bilan amallar</h2>
 <p><code>Range</code> orqali tanlangan qismni nusxalash, o'chirish yoki chiqarib olish mumkin:</p>
 <ul><li><code>range.deleteContents()</code> — tanlangan qismni hujjatdan o'chiradi;</li><li><code>range.extractContents()</code> — o'chiradi va <code>DocumentFragment</code> sifatida qaytaradi;</li><li><code>range.cloneContents()</code> — hujjatga tegmasdan nusxasini <code>DocumentFragment</code> qilib qaytaradi;</li><li><code>range.insertNode(node)</code> — Range boshiga yangi tugun kiritadi;</li><li><code>range.surroundContents(node)</code> — tanlangan qismni berilgan tugun ichiga o'raydi.</li></ul>
 <pre class="code"><code>let range = new Range();
@@ -643,14 +661,14 @@ range.setEnd(textNode, 5);
 let mark = document.createElement('mark');
 range.surroundContents(mark);</code></pre>
 <div class="warn"><code>surroundContents</code> talabchan: agar Range tugunlarni "yarim" kessa (masalan, bir elementning boshi tanlansa-yu, oxiri boshqa elementda qolsa), u xatolik beradi. Bunday holatda <code>extractContents</code> + <code>insertNode</code> kombinatsiyasini qo'llash kerak.</div>
-<h2>Selection obyekti</h2>
+<h2 id="selection-obyekti">Selection obyekti</h2>
 <p><code>Range</code> — bu shunchaki hujjatning bir qismi; u hali ekranda ko'rinmaydi. Foydalanuvchi ko'rgan haqiqiy tanlovni <code>Selection</code> obyekti ifodalaydi. Uni <code>window.getSelection()</code> yoki <code>document.getSelection()</code> orqali olamiz:</p>
 <pre class="code"><code>let selection = window.getSelection();</code></pre>
 <p>Nazariy jihatdan bir tanlov bir nechta Range'dan iborat bo'lishi mumkin (masalan, Firefox'da <code>Ctrl</code> bilan bir nechta qismni tanlash mumkin), ammo amalda ko'pchilik brauzerlarda bitta Range bo'ladi.</p>
 <p><code>Selection</code>ning asosiy xususiyatlari:</p>
 <ul><li><code>anchorNode</code>, <code>anchorOffset</code> — tanlov <strong>boshlangan</strong> nuqta (foydalanuvchi bosgan joy);</li><li><code>focusNode</code>, <code>focusOffset</code> — tanlov <strong>tugagan</strong> nuqta (kursor hozir turgan joy);</li><li><code>isCollapsed</code> — tanlov bo'shmi (faqat kursor turibdimi);</li><li><code>rangeCount</code> — tanlovdagi Range'lar soni.</li></ul>
 <div class="note"><code>anchor</code> (langar) va <code>focus</code> — tanlovning boshi va oxiri, lekin ular hujjat tartibida oldinma-keyin bo'lishi <em>shart emas</em>. Agar foydalanuvchi o'ngdan chapga tanlasa, <code>focus</code> <code>anchor</code>dan oldinda turadi. <code>Range</code>da esa doim <code>start</code> hujjat bo'yicha <code>end</code>dan oldin keladi.</div>
-<h2>getSelection va matnni o'qish</h2>
+<h2 id="getselection-va-matnni-o-qish">getSelection va matnni o'qish</h2>
 <p>Foydalanuvchi tanlagan matnni olishning eng oson yo'li — <code>Selection</code>ni matnga aylantirish:</p>
 <pre class="code"><code>document.onselectionchange = function() {
   let selection = document.getSelection();
@@ -665,7 +683,7 @@ if (selection.rangeCount &gt; 0) {
   console.log(range.startContainer, range.startOffset);
   console.log(range.endContainer, range.endOffset);
 }</code></pre>
-<h2>Dastur orqali tanlash</h2>
+<h2 id="dastur-orqali-tanlash">Dastur orqali tanlash</h2>
 <p>Tanlovni faqat o'qibgina qolmay, dastur orqali o'rnatish ham mumkin. Buning uchun avval Range tuzamiz, keyin uni tanlovga qo'shamiz:</p>
 <pre class="code"><code>let p = document.getElementById('matn');
 let textNode = p.firstChild;
@@ -681,7 +699,7 @@ selection.addRange(range);    // yangi tanlovni o'rnatamiz</code></pre>
 <p><code>Selection</code>da bir necha qulay metodlar bor:</p>
 <ul><li><code>selection.addRange(range)</code> — tanlovga Range qo'shadi;</li><li><code>selection.removeAllRanges()</code> — barcha tanlovni olib tashlaydi;</li><li><code>selection.collapse(node, offset)</code> — tanlovni bir nuqtaga siqadi;</li><li><code>selection.selectAllChildren(node)</code> — tugunning barcha bolalarini tanlaydi;</li><li><code>selection.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset)</code> — anchor va focusni bir yo'la o'rnatadi;</li><li><code>selection.deleteFromDocument()</code> — tanlangan matnni hujjatdan o'chiradi.</li></ul>
 <div class="tip">Butun bir elementning matnini bir bosishda tanlash kerak bo'lsa, eng oson yo'l — <code>selection.selectAllChildren(elem)</code>. Bu, masalan, "kod bo'lagini bosganda hammasini tanlansin" xatti-harakati uchun juda qulay.</div>
-<h2>Form maydonlaridagi tanlash</h2>
+<h2 id="form-maydonlaridagi-tanlash">Form maydonlaridagi tanlash</h2>
 <p>Muhim istisno: <code>&lt;input&gt;</code> va <code>&lt;textarea&gt;</code> maydonlarida yuqoridagi <code>Range</code>/<code>Selection</code> ishlamaydi. Ular oddiy matndan iborat bo'lgani uchun o'zining alohida, soddaroq API'siga ega:</p>
 <ul><li><code>input.selectionStart</code>, <code>input.selectionEnd</code> — tanlovning boshi va oxiri (belgi indekslari);</li><li><code>input.selectionDirection</code> — tanlov yo'nalishi;</li><li><code>input.select()</code> — barcha matnni tanlaydi;</li><li><code>input.setSelectionRange(start, end)</code> — tanlovni o'rnatadi;</li><li><code>input.setRangeText(replacement, start, end)</code> — tanlangan qismni matn bilan almashtiradi.</li></ul>
 <pre class="code"><code>let input = document.getElementById('maydon');
@@ -691,7 +709,7 @@ input.onclick = function() {
   input.setSelectionRange(0, 5);
   input.focus();
 };</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>Range</code> — hujjatning bir qismi; <code>setStart(node, offset)</code> va <code>setEnd(node, offset)</code> bilan nuqtalari belgilanadi;</li><li><code>offset</code> matn tugunida — belgi indeksi, elementda — bola tugun indeksi;</li><li><code>Range</code> orqali qismni o'chirish, nusxalash, o'rash mumkin: <code>deleteContents</code>, <code>extractContents</code>, <code>surroundContents</code> va h.k.;</li><li><code>Selection</code> — foydalanuvchi ko'rgan joriy tanlov; <code>window.getSelection()</code> orqali olinadi;</li><li><code>selection.toString()</code> — tanlangan matn; <code>getRangeAt(0)</code> — Range darajasi;</li><li>Dastur orqali tanlash: <code>removeAllRanges()</code> + <code>addRange(range)</code>, yoki <code>selectAllChildren(node)</code>;</li><li><code>&lt;input&gt;</code>/<code>&lt;textarea&gt;</code> uchun alohida API: <code>selectionStart</code>, <code>setSelectionRange</code> va boshqalar.</li></ul>
 <nav class="lesson-nav">
   <a href="mutation-observer.html"><span class="dir">← Oldingi</span><span class="ttl">Mutation observer</span></a>
@@ -705,6 +723,6 @@ input.onclick = function() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

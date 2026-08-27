@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dinamik dasturlash (DP) — Kodla</title>
   <meta name="description" content="Takrorlanuvchi qism masalalarni eslab qolish: memoizatsiya va tabulyatsiya, Fibonacci, tanga va bosqichlar masalasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,28 @@
 <main class="content article">
 <div class="crumbs">Ilg'or texnikalar</div>
 <h1>Dinamik dasturlash (DP)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#dp-nima-va-nega-kerak">DP nima va nega kerak</a></li>
+<li class="lvl2"><a href="#ikki-majburiy-shart">Ikki majburiy shart</a></li>
+<li class="lvl2"><a href="#muammo-naive-rekursiv-fibonacci">Muammo: naive rekursiv Fibonacci</a></li>
+<li class="lvl2"><a href="#yechim-1-top-down-memoizatsiya">Yechim 1: Top-down (memoizatsiya)</a></li>
+<li class="lvl2"><a href="#yechim-2-bottom-up-tabulyatsiya">Yechim 2: Bottom-up (tabulyatsiya)</a></li>
+<li class="lvl2"><a href="#ikki-yondashuvni-taqqoslash">Ikki yondashuvni taqqoslash</a></li>
+<li class="lvl2"><a href="#klassik-misol-zinapoya-climbing-stairs">Klassik misol: zinapoya (climbing stairs)</a></li>
+<li class="lvl2"><a href="#yana-ikki-mashhur-masala-va-dp-qadamlari">Yana ikki mashhur masala va DP qadamlari</a></li>
+  </ul>
+</details>
 <p class="lead">Dinamik dasturlash — bu qo'rqinchli nomga ega, lekin aslida juda sodda va nafis g'oyaga tayanadigan texnika: bir marta hisoblagan javobingni yana qayta hisoblama, uni eslab qol. Keling, bu "eslab qolish" san'atini birga o'zlashtiramiz.</p>
-<h2>DP nima va nega kerak</h2>
+<h2 id="dp-nima-va-nega-kerak">DP nima va nega kerak</h2>
 <p><strong>Dinamik dasturlash</strong> (DP) — katta masalani kichikroq <strong>qism masalalarga</strong> bo'lib, ularning javoblarini bir marta hisoblab, eslab qolib, keyin qayta ishlatadigan yondashuv. "Dinamik" so'zi bu yerda "o'zgaruvchan" degani emas — bu shunchaki tarixiy nom, undan cho'chimang.</p>
 <p>DP ning yuragi bitta oddiy kuzatuvda: ko'p rekursiv masalalarda <strong>bir xil qism masala qayta-qayta hisoblanadi</strong>. Agar biz javobni birinchi marta hisoblaganda saqlab qo'ysak, keyingi safar uni bir zumda o'qib olamiz.</p>
-<h2>Ikki majburiy shart</h2>
+<h2 id="ikki-majburiy-shart">Ikki majburiy shart</h2>
 <p>Har qanday masalada DP ishlamaydi. U ishlashi uchun ikki xususiyat kerak:</p>
 <ul><li><strong>Optimal substruktura</strong> — masalaning optimal yechimi uning qism masalalari optimal yechimlaridan quriladi. Ya'ni kichik javoblardan katta javobni yig'ish mumkin.</li><li><strong>Qism masalalar takrorlanishi</strong> (overlapping subproblems) — bir xil qism masala hisoblash davomida qayta-qayta uchraydi. Aynan shu takror bizga eslab qolishdan foyda beradi.</li></ul>
 <p>Agar qism masalalar takrorlanmasa (masalan oddiy "bo'l va hukmronlik qil" saralashda), DP dan foyda yo'q. Takror bor joyda esa DP mo'jiza yaratadi.</p>
-<h2>Muammo: naive rekursiv Fibonacci</h2>
+<h2 id="muammo-naive-rekursiv-fibonacci">Muammo: naive rekursiv Fibonacci</h2>
 <p>Klassik misol — Fibonacci sonlari. Har bir son o'zidan oldingi ikkitasining yig'indisi: <code>F(n) = F(n-1) + F(n-2)</code>. To'g'ridan-to'g'ri rekursiya bilan yozsak, chiroyli ko'rinadi, lekin sekin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fib-naive.js</span></div><textarea spellcheck="false">let chaqiruvlar = 0;
 
@@ -622,7 +638,7 @@ console.log('fib(20) =', fib(20));
 console.log('Funksiya chaqiruvlari:', chaqiruvlar);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Chaqiruvlar soniga qarang — u portlab ketadi! Sababi: <code>fib(20)</code> hisoblanayotganda <code>fib(18)</code> ikki marta, <code>fib(17)</code> uch marta, <code>fib(10)</code> esa yuzlab marta qayta hisoblanadi. Bu <strong>O(2^n)</strong> murakkablik — eksponensial.</p>
 <div class="warn">Naive Fibonacci <code>fib(50)</code> da kompyuteringizni bir necha daqiqaga muzlatib qo'yadi, chunki taxminan <code>2^50</code> ta chaqiruv kerak bo'ladi. Bu aynan takroriy hisoblash isrofi.</div>
-<h2>Yechim 1: Top-down (memoizatsiya)</h2>
+<h2 id="yechim-1-top-down-memoizatsiya">Yechim 1: Top-down (memoizatsiya)</h2>
 <p><strong>Memoizatsiya</strong> — bu "esdalik" (memo) so'zidan. Biz rekursiyani saqlab qolamiz, lekin har bir hisoblangan javobni keshga (obyekt yoki massivga) yozamiz. Keyingi safar o'sha qism masala so'ralsa, qayta hisoblamay keshdan o'qiymiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fib-memo.js</span></div><textarea spellcheck="false">let chaqiruvlar = 0;
 
@@ -642,7 +658,7 @@ console.log('fib(50) =', fib(50));
 console.log('Funksiya chaqiruvlari:', chaqiruvlar);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Chaqiruvlar soniga yana qarang — endi u <code>n</code> ga chiziqli. Har bir <code>fib(k)</code> faqat bir marta haqiqiy hisoblanadi, qolgani keshdan keladi. Bu <strong>O(n)</strong>. <code>fib(50)</code> endi bir zumda hisoblanadi.</p>
 <p>Bu yondashuv <strong>top-down</strong> (yuqoridan pastga) deyiladi, chunki biz kattadan (<code>fib(50)</code>) boshlab, rekursiya bilan kichiklarga tushamiz.</p>
-<h2>Yechim 2: Bottom-up (tabulyatsiya)</h2>
+<h2 id="yechim-2-bottom-up-tabulyatsiya">Yechim 2: Bottom-up (tabulyatsiya)</h2>
 <p><strong>Tabulyatsiya</strong> — bu "jadval" (table) so'zidan. Bu yerda rekursiya umuman yo'q. Biz eng kichik javoblardan boshlab, jadvalni (massivni) pastdan yuqoriga tartib bilan to'ldiramiz, toki kerakli katta javobga yetguncha.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fib-tab.js</span></div><textarea spellcheck="false">function fib(n) {
   if (n &lt; 2) return n;
@@ -660,10 +676,10 @@ console.log('fib(20) =', fib(20));
 console.log('fib(50) =', fib(50));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu ham <strong>O(n)</strong> vaqt. Bu yondashuv <strong>bottom-up</strong> (pastdan yuqoriga) deyiladi: eng kichik holatlardan boshlab yuqoriga chiqamiz. Rekursiya bo'lmagani uchun stek to'lib ketish xavfi ham yo'q.</p>
 <div class="note">Fibonacci uchun bizga faqat oxirgi ikki qiymat kerak, shuning uchun jadval o'rniga ikki o'zgaruvchi bilan xotirani <code>O(n)</code> dan <code>O(1)</code> ga tushirish mumkin. DP da ko'pincha xotirani shunday siqish imkoni bo'ladi.</div>
-<h2>Ikki yondashuvni taqqoslash</h2>
+<h2 id="ikki-yondashuvni-taqqoslash">Ikki yondashuvni taqqoslash</h2>
 <ul><li><strong>Memoizatsiya (top-down)</strong>: yozish tabiiy va oson, chunki naive rekursiyaga bir necha qator qo'shamiz xolos. Lekin rekursiya stekidan foydalanadi va faqat kerakli qism masalalarni hisoblaydi.</li><li><strong>Tabulyatsiya (bottom-up)</strong>: rekursiya yo'q, stek xavfsiz, ko'pincha tezroq va xotira jihatidan tejamli. Lekin barcha qism masalalarni tartib bilan hisoblash kerak va hisoblash tartibini o'ylab topish biroz mashq talab qiladi.</li></ul>
 <p>Ikkalasining ham vaqt murakkabligi bir xil — bu yerda <code>O(n)</code>. Qaysi birini tanlash ko'pincha did va masala shakliga bog'liq. Boshlash uchun memoizatsiya ko'pincha osonroq.</p>
-<h2>Klassik misol: zinapoya (climbing stairs)</h2>
+<h2 id="klassik-misol-zinapoya-climbing-stairs">Klassik misol: zinapoya (climbing stairs)</h2>
 <p>Siz zinapoyaning tepasiga chiqmoqchisiz. Har qadamda 1 yoki 2 pog'ona ko'tarilishingiz mumkin. <code>n</code> pog'onali zinaga necha xil usulda chiqasiz? Bu masala aslida yashirin Fibonacci!</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>zinapoya.js</span></div><textarea spellcheck="false">function zinapoya(n) {
   // n-pog'onaga chiqish uchun: (n-1)dan 1 qadam yoki (n-2)dan 2 qadam
@@ -682,7 +698,7 @@ for (let n = 1; n &lt;= 6; n++) {
   console.log(n + ' pog'ona -&gt; ' + zinapoya(n) + ' xil usul');
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda holat oddiy: <code>usullar(n) = usullar(n-1) + usullar(n-2)</code>. Har bir pog'onaga faqat undan bir yoki ikki past pog'onadan kelish mumkin. Biz xotirani <code>O(1)</code> ga siqib, ikki o'zgaruvchi bilan yechdik.</p>
-<h2>Yana ikki mashhur masala va DP qadamlari</h2>
+<h2 id="yana-ikki-mashhur-masala-va-dp-qadamlari">Yana ikki mashhur masala va DP qadamlari</h2>
 <p><strong>Tanga masalasi</strong> (coin change): berilgan nominallar bilan ma'lum summani yig'ish uchun eng kam tanga sonini top. Bu yerda holat — "shu summani yig'ishning eng kam tanga soni", va har bir tanga qiymatini ayirib qism masalaga o'tamiz. Ushbu masalada, keyingi darsda ko'ramizki, ochko'z yondashuv har doim to'g'ri javob bermaydi, DP esa beradi.</p>
 <p><strong>Eng uzun umumiy qism ketma-ketlik</strong> (Longest Common Subsequence, LCS): ikki satrning ikkalasida ham bir xil tartibda uchraydigan eng uzun qism ketma-ketlik uzunligini top. Bu ikki o'lchovli DP jadvali bilan yechiladigan klassik masala.</p>
 <p>Har qanday DP masalasini yechishning umumiy qadamlari:</p>
@@ -700,6 +716,6 @@ for (let n = 1; n &lt;= 6; n++) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

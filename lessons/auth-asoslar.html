@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Autentifikatsiya va avtorizatsiya — Kodla</title>
   <meta name="description" content="Autentifikatsiya va avtorizatsiya farqi, parolni hech qachon ochiq saqlamaslik, bcrypt bilan hashlash va salt, sessiya (cookie) va token yondashuvlari, xavfsiz cookie.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
 <h1>Autentifikatsiya va avtorizatsiya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#autentifikatsiya-va-avtorizatsiya-farqi">Autentifikatsiya va avtorizatsiya farqi</a></li>
+<li class="lvl2"><a href="#parolni-hech-qachon-ochiq-saqlamang">Parolni HECH QACHON ochiq saqlamang</a></li>
+<li class="lvl2"><a href="#hashlash-salt-va-bcrypt">Hashlash, salt va bcrypt</a></li>
+<li class="lvl2"><a href="#foydalanuvchi-holatini-saqlash-http-holatsiz">Foydalanuvchi holatini saqlash: HTTP holatsiz</a></li>
+<li class="lvl2"><a href="#1-yondashuv-sessiya-cookie-asosida">1-yondashuv: Sessiya (cookie asosida)</a></li>
+<li class="lvl2"><a href="#2-yondashuv-token-masalan-jwt">2-yondashuv: Token (masalan JWT)</a></li>
+<li class="lvl2"><a href="#xavfsiz-cookie-httponly-secure-samesite">Xavfsiz cookie: HttpOnly, Secure, SameSite</a></li>
+<li class="lvl3"><a href="#httponly">HttpOnly</a></li>
+<li class="lvl3"><a href="#secure">Secure</a></li>
+<li class="lvl3"><a href="#samesite">SameSite</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Deyarli har bir ilova foydalanuvchini taniydi (autentifikatsiya) va unga nima qilishga ruxsat berilganini hal qiladi (avtorizatsiya). Ushbu darsda biz bu ikki tushunchani ajratamiz, parollarni xavfsiz saqlashni (hashlash va salt), hamda foydalanuvchi holatini saqlashning ikki asosiy usulini — sessiya va tokenlarni — ko'rib chiqamiz.</p>
-<h2>Autentifikatsiya va avtorizatsiya farqi</h2>
+<h2 id="autentifikatsiya-va-avtorizatsiya-farqi">Autentifikatsiya va avtorizatsiya farqi</h2>
 <p>Bu ikki so'z ko'pincha aralashtiriladi, lekin ular butunlay boshqa narsani anglatadi:</p>
 <ul><li><strong>Autentifikatsiya (Authentication)</strong> — "Sen kimsan?" degan savolga javob. Foydalanuvchining shaxsini tasdiqlash (login va parol, tokendan orqali);</li><li><strong>Avtorizatsiya (Authorization)</strong> — "Senga nima qilishga ruxsat bor?" degan savolga javob. Tasdiqlangan foydalanuvchining huquqlarini tekshirish.</li></ul>
 <p>Oddiy misol: mehmonxonaga kirganingizda pasportingizni ko'rsatasiz — bu <em>autentifikatsiya</em>. Sizga berilgan kalit faqat o'z xonangizni ochadi, boshqa xonalarni emas — bu <em>avtorizatsiya</em>.</p>
@@ -619,10 +638,10 @@ function faqatAdmin(req, res, next) {
   next();
 }</code></pre>
 <div class="note">HTTP status kodlarini eslab qoling: <strong>401 Unauthorized</strong> — "kimligingiz noma'lum, tizimga kiring" (aslida autentifikatsiya haqida); <strong>403 Forbidden</strong> — "kimligingiz ma'lum, lekin bu amalga ruxsatingiz yo'q" (avtorizatsiya haqida).</div>
-<h2>Parolni HECH QACHON ochiq saqlamang</h2>
+<h2 id="parolni-hech-qachon-ochiq-saqlamang">Parolni HECH QACHON ochiq saqlamang</h2>
 <p>Bu — autentifikatsiyadagi eng muhim qoida. Parolni ma'lumotlar bazasida <strong>o'qish mumkin bo'lgan holatda</strong> saqlash — jiddiy xato. Agar bazangiz o'g'irlansa (bu tez-tez sodir bo'ladi), barcha foydalanuvchilar parollari ochiladi. Bundan ham yomoni: odamlar ko'pincha bir parolni bir necha saytda ishlatadi.</p>
 <div class="warn">Parolni hech qachon <strong>ochiq matnda</strong> saqlamang. Uni <strong>oddiy shifrlash</strong> bilan ham saqlamang (shifrni ochish mumkin). To'g'ri yechim — <strong>bir tomonlama hashlash</strong> (hashing): natijadan asl parolni tiklab bo'lmaydi.</div>
-<h2>Hashlash, salt va bcrypt</h2>
+<h2 id="hashlash-salt-va-bcrypt">Hashlash, salt va bcrypt</h2>
 <p><strong>Hash funksiyasi</strong> — bu istalgan matndan qat'iy uzunlikdagi "barmoq izi" yaratadigan bir tomonlama funksiya. Asosiy g'oya: parolni saqlamaymiz, uning hashini saqlaymiz. Foydalanuvchi kirganda, kiritgan parolining hashini hisoblab, saqlangan hash bilan solishtiramiz.</p>
 <p>Lekin oddiy hash (masalan, SHA-256) parollar uchun yetarli emas, chunki:</p>
 <ul><li>Bir xil parol doim bir xil hash beradi — hujumchi oldindan tayyorlangan jadvallardan foydalanishi mumkin;</li><li>Oddiy hash funksiyalari juda <em>tez</em> ishlaydi — bu parolni topishga urinishlarni osonlashtiradi.</li></ul>
@@ -658,9 +677,9 @@ async function tizimgaKirish(email, parol) {
 }</code></pre>
 <div class="tip">Diqqat qiling: xato xabari doim bir xil — "Email yoki parol xato". Agar "Bunday email yo'q" va "Parol xato" deb alohida javob bersangiz, bu qaysi emaillar ro'yxatdan o'tganini fosh qiladi. Bir xil, mavhum xabar berish — bu <strong>foydalanuvchi ro'yxatga olinganini fosh qilmaslik</strong> himoyasidir.</div>
 <div class="note"><code>bcrypt.compare</code> ni ishlatishga majburmiz — hashlarni <code>===</code> bilan solishtirish ishlamaydi, chunki har safar yangi salt tufayli hash boshqacha bo'ladi. <code>compare</code> saltni hashning ichidan o'qib, to'g'ri solishtiradi.</div>
-<h2>Foydalanuvchi holatini saqlash: HTTP holatsiz</h2>
+<h2 id="foydalanuvchi-holatini-saqlash-http-holatsiz">Foydalanuvchi holatini saqlash: HTTP holatsiz</h2>
 <p>HTTP protokoli <strong>holatsiz</strong> (stateless): har bir so'rov mustaqil, server oldingi so'rovni "eslamaydi". Unda foydalanuvchi bir marta login qilgach, keyingi so'rovlarda uni qanday taniymiz? Ikki asosiy yondashuv bor: <strong>sessiya (cookie)</strong> va <strong>token</strong>.</p>
-<h2>1-yondashuv: Sessiya (cookie asosida)</h2>
+<h2 id="1-yondashuv-sessiya-cookie-asosida">1-yondashuv: Sessiya (cookie asosida)</h2>
 <p>Sessiya yondashuvida holat <strong>serverda</strong> saqlanadi:</p>
 <ol><li>Foydalanuvchi login qiladi, server uni tekshiradi;</li><li>Server tasodifiy, taxmin qilib bo'lmaydigan <strong>sessiya ID</strong> yaratadi va uni o'z xotirasida (yoki Redis, bazada) foydalanuvchi bilan bog'lab saqlaydi;</li><li>Sessiya ID cookie sifatida brauzerga yuboriladi;</li><li>Brauzer keyingi har bir so'rovda bu cookie'ni avtomatik jo'natadi;</li><li>Server cookie'dagi ID orqali foydalanuvchini topadi.</li></ol>
 <pre class="code"><code>const session = require('express-session');
@@ -677,17 +696,17 @@ app.use(session({
   }
 }));</code></pre>
 <p><strong>Afzalligi:</strong> server sessiyani istagan vaqtda bekor qila oladi (masalan, "barcha qurilmalardan chiqish"). <strong>Kamchiligi:</strong> server har bir sessiyani xotirada saqlashi kerak, bu ko'p serverli tizimlarda qo'shimcha muvofiqlashtirishni talab qiladi.</p>
-<h2>2-yondashuv: Token (masalan JWT)</h2>
+<h2 id="2-yondashuv-token-masalan-jwt">2-yondashuv: Token (masalan JWT)</h2>
 <p>Token yondashuvida holat <strong>mijozda</strong> saqlanadi. Server imzolangan token beradi, mijoz uni har so'rovda qaytaradi, server esa imzoni tekshirib, tokenga ishonadi (bazaga qaramasdan). JWT — keyingi darsning to'liq mavzusi.</p>
 <ul><li><strong>Afzalligi:</strong> server holatni saqlamaydi (stateless), bu masshtablashni osonlashtiradi;</li><li><strong>Kamchiligi:</strong> tokenni muddatidan oldin bekor qilish qiyinroq (server holatni saqlamaydi).</li></ul>
 <div class="note">Qaysi biri to'g'ri? Bu bahsli mavzu. An'anaviy server-render qilingan veb-saytlar uchun sessiya-cookie ko'pincha soddaroq va xavfsizroq. Turli mijozlar (mobil ilova + web) xizmat qiladigan API uchun tokenlar qulayroq. Ikkalasini ham to'g'ri sozlash mumkin.</div>
-<h2>Xavfsiz cookie: HttpOnly, Secure, SameSite</h2>
+<h2 id="xavfsiz-cookie-httponly-secure-samesite">Xavfsiz cookie: HttpOnly, Secure, SameSite</h2>
 <p>Agar cookie ishlatsangiz (sessiya yoki tokenni cookie'da saqlash), uni to'g'ri sozlash muhim. Uch asosiy atribut:</p>
-<h3>HttpOnly</h3>
+<h3 id="httponly">HttpOnly</h3>
 <p><code>HttpOnly</code> belgilangan cookie'ni <strong>JavaScript o'qiy olmaydi</strong> (<code>document.cookie</code> orqali ko'rinmaydi). Bu XSS hujumida cookie o'g'irlanishining oldini oladi: hattoki sahifaga zararli skript kirsa ham, u sessiya cookie'ni o'qiy olmaydi.</p>
-<h3>Secure</h3>
+<h3 id="secure">Secure</h3>
 <p><code>Secure</code> belgilangan cookie faqat <strong>HTTPS</strong> orqali yuboriladi. Bu cookie'ning shifrlanmagan tarmoqda ochiq holda o'tishining oldini oladi.</p>
-<h3>SameSite</h3>
+<h3 id="samesite">SameSite</h3>
 <p><code>SameSite</code> cookie'ning boshqa saytlardan kelgan so'rovlarda yuborilishini boshqaradi. Bu <strong>CSRF hujumidan himoyaning</strong> asosiy qismidir (keyingi darsda batafsil):</p>
 <ul><li><code>SameSite=Strict</code> — cookie faqat o'z saytimizdan kelgan so'rovlarda yuboriladi (eng qattiq);</li><li><code>SameSite=Lax</code> — asosiy navigatsiyalarda yuboriladi, lekin ko'pchilik o'zaro-sayt so'rovlarida yuborilmaydi (yaxshi standart);</li><li><code>SameSite=None</code> — barcha holatlarda yuboriladi (faqat <code>Secure</code> bilan birga; ehtiyotkorlik talab qilinadi).</li></ul>
 <pre class="code"><code>// Cookie'ni to'g'ri sozlash misoli (Express)
@@ -699,7 +718,7 @@ res.cookie('sessionId', sessionId, {
   path: '/'
 });</code></pre>
 <div class="warn">Bu uch atribut birga ishlaganda kuchli himoya beradi, ammo hech biri o'zicha yetarli emas. <code>HttpOnly</code> XSS ta'sirini kamaytiradi, lekin XSS'ning o'zini oldini olmaydi — kirishni tozalash (keyingi dars) baribir zarur.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Autentifikatsiya</strong> — "kimsan?", <strong>avtorizatsiya</strong> — "nimaga ruxsating bor?";</li><li>Parolni hech qachon ochiq yoki oddiy shifrlangan holda saqlamang — <code>bcrypt</code> kabi sekin, salt qo'shadigan algoritm bilan hashlang;</li><li>Login xatosida har doim bir xil, mavhum xabar bering (foydalanuvchi mavjudligini fosh qilmaslik uchun);</li><li>Holatni saqlashning ikki yo'li: server tomonidagi <strong>sessiya</strong> va mijoz tomonidagi <strong>token</strong>;</li><li>Cookie ishlatsangiz, <code>HttpOnly</code>, <code>Secure</code> va <code>SameSite</code> atributlarini albatta o'rnating.</li></ul>
 <nav class="lesson-nav">
   <a href="web-xavfsizlik.html"><span class="dir">← Oldingi</span><span class="ttl">Web xavfsizligi asoslari</span></a>
@@ -713,6 +732,6 @@ res.cookie('sessionId', sessionId, {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

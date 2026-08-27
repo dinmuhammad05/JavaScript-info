@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Docker nima? Konteynerlar — Kodla</title>
   <meta name="description" content="Docker qanday muammoni hal qiladi, konteyner nima, virtual mashina bilan farqi, image va container tushunchalari, Docker Hub va nega Docker foydali.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,38 +599,50 @@
 <main class="content article">
 <div class="crumbs">Docker</div>
 <h1>Docker nima? Konteynerlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-mening-kompyuterimda-ishlaydi">Muammo: 'mening kompyuterimda ishlaydi'</a></li>
+<li class="lvl2"><a href="#yechim-konteyner">Yechim: konteyner</a></li>
+<li class="lvl2"><a href="#virtual-mashina-va-konteyner-farqi">Virtual mashina va konteyner farqi</a></li>
+<li class="lvl2"><a href="#image-obraz-va-container-konteyner-farqi">Image (obraz) va container (konteyner) farqi</a></li>
+<li class="lvl2"><a href="#docker-hub-image-lar-ombori">Docker Hub — image'lar ombori</a></li>
+<li class="lvl2"><a href="#nega-docker-foydali">Nega Docker foydali?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Tasavvur qiling: siz ilovangizni yozdingiz, o'z kompyuteringizda mukammal ishlaydi. Ammo uni hamkasbingizga yoki serverga jo'natsangiz — ishlamaydi. <strong>Docker</strong> aynan shu muammoni hal qiladi: u ilovani barcha kerakli narsalari bilan birga <strong>konteyner</strong> ichiga o'raydi, shunda u har qanday joyda bir xil ishlaydi. Ushbu darsda Docker nima ekanini, konteyner va virtual mashina farqini hamda asosiy tushunchalarni chuqur o'rganamiz.</p>
 <div class="note">Docker — bu JavaScript kutubxonasi emas, balki alohida <strong>vosita</strong> (dastur). Shu sababli bu bobdagi barcha misollar <strong>statik</strong> — ular sahifada ishga tushmaydi. Ularni tushunib o'qing va o'z kompyuteringizdagi terminalda sinab ko'ring.</div>
-<h2>Muammo: 'mening kompyuterimda ishlaydi'</h2>
+<h2 id="muammo-mening-kompyuterimda-ishlaydi">Muammo: 'mening kompyuterimda ishlaydi'</h2>
 <p>Dasturchilar orasida mashhur ibora bor: <em>'It works on my machine'</em> — ya'ni <em>'mening kompyuterimda ishlaydi'</em>. Bu shunchaki hazil emas, balki real muammo. Nega bir xil kod bir joyda ishlab, boshqa joyda ishlamaydi?</p>
 <ul><li>Sizda Node.js 20-versiyasi, serverda esa 16-versiyasi bo'lishi mumkin;</li><li>Sizda ma'lumotlar bazasi o'rnatilgan, serverda esa yo'q;</li><li>Operatsion tizim boshqacha (siz macOS, server Linux);</li><li>Muhit o'zgaruvchilari (environment variables) yoki kutubxona versiyalari farq qiladi.</li></ul>
 <p>Har bir kompyuter — bu o'ziga xos, boshqacha sozlangan muhit. Ilovani yangi joyga ko'chirganda, uni yana qo'lda sozlash kerak bo'ladi. Bu vaqt oladi va xatolarga to'la.</p>
-<h2>Yechim: konteyner</h2>
+<h2 id="yechim-konteyner">Yechim: konteyner</h2>
 <p><strong>Konteyner (container)</strong> — bu ilova va uning ishlashi uchun zarur bo'lgan <strong>hamma narsa</strong> (kod, kutubxonalar, ishga tushirish muhiti, sozlamalar) birga o'ralgan yengil, izolyatsiyalangan paket. Konteyner o'z ichida to'liq muhitni olib yuradi.</p>
 <p>Yuk tashish konteynerini tasavvur qiling: ichida nima borligidan qat'i nazar, u standart o'lchamda va har qanday kema, poyezd yoki yuk mashinasiga mos keladi. Docker konteyneri ham xuddi shunday — ichidagi ilovadan qat'i nazar, u Docker o'rnatilgan har qanday kompyuterda bir xil ishlaydi.</p>
 <div class="tip">Konteynerning asosiy g'oyasi: <strong>'bir marta o'ra, hamma joyda ishga tushir'</strong>. Ilovani konteynerga o'raganingizdan so'ng, u sizning noutbukingizda ham, hamkasbingiznikida ham, bulutli serverda ham aynan bir xil xatti-harakat qiladi.</div>
-<h2>Virtual mashina va konteyner farqi</h2>
+<h2 id="virtual-mashina-va-konteyner-farqi">Virtual mashina va konteyner farqi</h2>
 <p>Ko'pchilik <strong>virtual mashina (VM)</strong> haqida eshitgan. VM ham izolyatsiyalangan muhit yaratadi, ammo u butunlay boshqa yondashuv. Farqni tushunish muhim.</p>
 <p><strong>Virtual mashina</strong> — bu haqiqiy kompyuter ichida ishlaydigan <em>to'liq</em> boshqa kompyuter. Uning o'z operatsion tizimi (mehmon OS), o'z virtual xotirasi va disklari bor. Bir VM bir necha gigabayt joy egallaydi va yuklanishi bir necha daqiqa vaqt oladi.</p>
 <p><strong>Konteyner</strong> esa asosiy operatsion tizimning <em>o'zagini (kernel)</em> baham ko'radi. U alohida OS ko'tarib yurmaydi — faqat ilova va uning bog'liqliklarini o'raydi. Shu sababli konteyner o'nlab megabaytdan iborat bo'lishi va soniyalarda ishga tushishi mumkin.</p>
 <ul><li><strong>VM:</strong> og'ir (GB'larda), sekin yuklanadi (daqiqalar), har biri to'liq OS'ga ega;</li><li><strong>Konteyner:</strong> yengil (MB'larda), tez ishga tushadi (soniyalar), asosiy OS o'zagini baham ko'radi;</li><li>Bitta kompyuterda bir vaqtning o'zida bir nechta VM ishlatish qiyin, ammo o'nlab konteynerni bemalol ishga tushirish mumkin.</li></ul>
 <div class="note">Konteyner VM'ni butunlay almashtirmaydi — ular turli maqsadlar uchun. Amalda ko'pincha konteynerlar VM ichida ishlaydi (masalan, bulutli serverda). Ammo dasturchilar uchun kundalik ishda konteyner ancha yengil va qulay.</div>
-<h2>Image (obraz) va container (konteyner) farqi</h2>
+<h2 id="image-obraz-va-container-konteyner-farqi">Image (obraz) va container (konteyner) farqi</h2>
 <p>Docker'da eng chalkash, ammo eng muhim tushunchalar — <strong>image</strong> va <strong>container</strong>. Ular bir-biriga bog'liq, lekin bir xil narsa emas.</p>
 <p><strong>Image (obraz)</strong> — bu shablon, ya'ni 'qolip'. U ilovaning muzlatilgan holati: kod, kutubxonalar va sozlamalarning o'zgarmas nusxasi. Image'ni disk fayl (masalan, dastur o'rnatuvchisi) deb tasavvur qiling — u shunchaki turadi va o'zi ishlamaydi.</p>
 <p><strong>Container (konteyner)</strong> — bu image'dan ishga tushirilgan <em>tirik nusxa</em>. Image'ni ishga tushirganingizda undan konteyner tug'iladi. Bitta image'dan bir nechta konteyner yaratish mumkin — xuddi bitta o'rnatuvchi fayldan dasturni bir necha marta o'rnatgandek.</p>
 <ul><li><strong>Image</strong> — o'zgarmas shablon (retseptga o'xshaydi);</li><li><strong>Container</strong> — ishlab turgan nusxa (retsept bo'yicha pishirilgan taomga o'xshaydi);</li><li>Bitta image'dan → ko'p konteyner yaratish mumkin;</li><li>Image diskda saqlanadi, konteyner esa xotirada ishlaydi.</li></ul>
 <div class="tip">Osongina eslash uchun: <strong>image</strong> — bu klass (class), <strong>container</strong> — bu shu klassdan yaratilgan obyekt (instance). JavaScript'dagi <code>class</code> va <code>new</code> bilan yaratilgan obyektga o'xshaydi.</div>
-<h2>Docker Hub — image'lar ombori</h2>
+<h2 id="docker-hub-image-lar-ombori">Docker Hub — image'lar ombori</h2>
 <p><strong>Docker Hub</strong> — bu tayyor image'lar saqlanadigan ulkan onlayn ombor (registry). Bu xuddi npm (JavaScript kutubxonalari uchun) yoki App Store (ilovalar uchun) kabi. U yerda minglab tayyor image'lar bor.</p>
 <ul><li><code>node</code> — Node.js o'rnatilgan tayyor muhit;</li><li><code>nginx</code> — mashhur veb-server;</li><li><code>postgres</code>, <code>mysql</code>, <code>mongo</code> — ma'lumotlar bazalari;</li><li><code>ubuntu</code>, <code>alpine</code> — asosiy operatsion tizim image'lari.</li></ul>
 <p>Bu image'larni <code>docker pull</code> buyrug'i bilan yuklab olib, darhol ishlatishingiz mumkin. Ya'ni PostgreSQL ma'lumotlar bazasini o'rnatish uchun uni qo'lda sozlashingiz shart emas — Docker Hub'dan tayyor image'ni olib, bitta buyruq bilan ishga tushirasiz.</p>
 <div class="note">Docker Hub manzili — <a href="https://hub.docker.com">hub.docker.com</a>. U yerdan image nomlarini qidirib topishingiz mumkin. Ko'pchilik image'lar bepul va ochiq.</div>
-<h2>Nega Docker foydali?</h2>
+<h2 id="nega-docker-foydali">Nega Docker foydali?</h2>
 <p>Endi Docker qanday amaliy foyda berishini umumlashtiraylik:</p>
 <ul><li><strong>Bir xillik:</strong> ilova har qanday joyda (noutbuk, server, bulut) bir xil ishlaydi — 'mening kompyuterimda ishlaydi' muammosi yo'qoladi;</li><li><strong>Tez sozlash:</strong> yangi loyihaga qo'shilgan hamkasb bitta buyruq bilan butun muhitni ishga tushira oladi;</li><li><strong>Izolyatsiya:</strong> har bir ilova o'z konteynerida — biri ikkinchisiga xalaqit bermaydi, versiyalar to'qnashmaydi;</li><li><strong>Yengillik:</strong> konteynerlar VM'dan ancha yengil va tez;</li><li><strong>Tozalik:</strong> konteynerni o'chirsangiz, hech qanday iz qolmaydi — kompyuteringiz 'iflos' bo'lmaydi.</li></ul>
 <p>Ayniqsa veb-dasturlashda Docker keng qo'llaniladi: backend, ma'lumotlar bazasi, kesh va boshqa xizmatlar — hammasi alohida konteynerlarda ishga tushiriladi va bir-biri bilan bog'lanadi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Docker 'mening kompyuterimda ishlaydi' muammosini hal qiladi — ilovani hamma joyda bir xil ishlashini ta'minlaydi;</li><li><strong>Konteyner</strong> — ilova va uning barcha bog'liqliklarini o'z ichiga olgan yengil, izolyatsiyalangan paket;</li><li>Konteyner asosiy OS o'zagini baham ko'radi, VM esa to'liq alohida OS ko'taradi — shuning uchun konteyner yengilroq va tezroq;</li><li><strong>Image</strong> — o'zgarmas shablon (klass kabi), <strong>container</strong> — undan ishga tushirilgan tirik nusxa (obyekt kabi);</li><li><strong>Docker Hub</strong> — tayyor image'lar ombori (npm yoki App Store kabi);</li><li>Docker bir xillik, tez sozlash, izolyatsiya va tozalik keltiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="git-foydali.html"><span class="dir">← Oldingi</span><span class="ttl">Foydali vositalar: .gitignore, undo, stash</span></a>
@@ -641,6 +656,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

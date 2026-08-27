@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jamoa bilan ishlash: fork va Pull Request — Kodla</title>
   <meta name="description" content="Fork (o'zingizga nusxa ochish) tushunchasi, Pull Request (PR) nima va uning to'liq jarayoni, issue (muammo) yaratish, kod ko'rib chiqish (code review), branch'da ishlab PR ochish oqimi, upstream bilan sinxronlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,27 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>Jamoa bilan ishlash: fork va Pull Request</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#fork-nima">Fork nima?</a></li>
+<li class="lvl2"><a href="#upstream-va-origin-ikki-remote">upstream va origin: ikki remote</a></li>
+<li class="lvl2"><a href="#issue-muammo-yaratish">Issue (muammo) yaratish</a></li>
+<li class="lvl2"><a href="#pull-request-pr-nima">Pull Request (PR) nima?</a></li>
+<li class="lvl2"><a href="#pr-ochish-oqimi-to-liq-bosqichma-bosqich">PR ochish oqimi: to'liq bosqichma-bosqich</a></li>
+<li class="lvl2"><a href="#kod-ko-rib-chiqish-code-review">Kod ko'rib chiqish (code review)</a></li>
+<li class="lvl2"><a href="#upstream-bilan-sinxronlash">upstream bilan sinxronlash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ochiq kodli (open source) loyihalar va professional jamoalar bir necha dasturchi bir kod ustida ishlashini talab qiladi. Buning uchun GitHub maxsus ish oqimini taklif etadi: <strong>fork</strong>, <strong>branch</strong>, <strong>Pull Request</strong> va <strong>code review</strong>. Ushbu darsda ushbu jamoaviy oqimni bosqichma-bosqich o'rganamiz — bu bilan har qanday loyihaga hissa qo'sha olasiz.</p>
 <div class="note">Fork, Pull Request, issue va code review — bular asosan <strong>GitHub veb-saytida</strong> (brauzerda) bajariladigan amallar. Terminaldagi <code>git</code> buyruqlari ular bilan birga ishlatiladi. Kurs playground'ida bu amallar ishlamaydi — quyidagi bloklar statik misol va bosqichma-bosqich tavsif sifatida keltiriladi.</div>
-<h2>Fork nima?</h2>
+<h2 id="fork-nima">Fork nima?</h2>
 <p><strong>Fork</strong> — bu boshqa birovning GitHub omborini <em>o'z akkauntingizga</em> to'liq nusxalash. Fork qilinganda, o'sha loyihaning aynan nusxasi sizning GitHub profilingizda paydo bo'ladi va u <strong>butunlay sizga tegishli</strong> bo'ladi — istagancha o'zgartirasiz, asl loyihaga ta'sir qilmaydi.</p>
 <p>Fork nima uchun kerak? Chunki ochiq kodli loyihalarga har kim to'g'ridan-to'g'ri push qila olmaydi — faqat loyiha egalari. Fork esa quyidagi imkonni beradi:</p>
 <ul><li>Loyihaning o'z nusxangizni olasiz va unga bemalol o'zgartirasiz;</li><li>O'zgarishlaringizni <strong>Pull Request</strong> orqali asl loyihaga taklif qilasiz;</li><li>Asl loyiha egalari sizning taklifingizni ko'rib chiqadi, muhokama qiladi va ma'qul bo'lsa qabul qiladi.</li></ul>
 <p>Fork qilish oson: GitHub'da loyiha sahifasining o'ng yuqorisidagi <strong>Fork</strong> tugmasini bosasiz. Bir necha soniyada nusxa <code>github.com/sizning-nomingiz/loyiha</code> manzilida paydo bo'ladi.</p>
-<h2>upstream va origin: ikki remote</h2>
+<h2 id="upstream-va-origin-ikki-remote">upstream va origin: ikki remote</h2>
 <p>Fork bilan ishlaganda ikki masofaviy ombor bilan aloqada bo'lasiz. Bu tushunchalar dastlab chalkash tuyulishi mumkin, shuning uchun aniq ajratamiz:</p>
 <ul><li><strong>origin</strong> — sizning fork'ingiz (<code>github.com/sizning-nomingiz/loyiha</code>). Bunga siz push qilasiz;</li><li><strong>upstream</strong> — asl (original) loyiha (<code>github.com/asl-muallif/loyiha</code>). Bundan siz yangilanishlarni olasiz, lekin push qila olmaysiz.</li></ul>
 <p>Fork'ingizni klonlaganingizdan so'ng, asl loyihani <code>upstream</code> nomi bilan qo'shasiz:</p>
@@ -621,16 +637,16 @@ origin    https://github.com/sizning-nomingiz/loyiha.git (push)
 upstream  https://github.com/asl-muallif/loyiha.git (fetch)
 upstream  https://github.com/asl-muallif/loyiha.git (push)</code></pre>
 <div class="note">Nomlarning ma'nosi: <em>origin</em> — "kelib chiqish joyi" (sizniki), <em>upstream</em> — "oqim boshlanadigan yuqori joy" (asosiy loyiha). Bu nomlar shartli kelishuv (konvensiya), lekin deyarli barcha loyihalarda shunday ishlatiladi.</div>
-<h2>Issue (muammo) yaratish</h2>
+<h2 id="issue-muammo-yaratish">Issue (muammo) yaratish</h2>
 <p><strong>Issue</strong> — bu loyihada biror muammoni, xatoni yoki takliﬂni muhokama qilish uchun ochiladigan yozuv. Kod yozishdan oldin ko'pincha issue orqali muammoni bayon qilish yaxshi odat — bu jamoaga nima ustida ishlayotganingizni bildiradi.</p>
 <p>Issue GitHub'ning <strong>Issues</strong> bo'limida yaratiladi. Yaxshi issue quyidagilarni o'z ichiga oladi:</p>
 <ul><li><strong>Aniq sarlavha</strong> — masalan "Login tugmasi mobil ekranda ko'rinmayapti";</li><li><strong>Muammoning tavsifi</strong> — nima kutilgan va nima sodir bo'lyapti;</li><li><strong>Takrorlash qadamlari</strong> — muammoni qanday qayta hosil qilish mumkin;</li><li><strong>Muhit</strong> — brauzer, operatsion tizim, versiya (agar tegishli bo'lsa).</li></ul>
 <div class="tip">Issue'lar shunchaki xatolar uchun emas. Ular yangi funksiya taklif qilish, savol berish yoki muhokama boshlash uchun ham ishlatiladi. Ko'p loyihalarda kod (PR) yozishdan oldin issue ochib, muallif bilan kelishib olish talab qilinadi.</div>
-<h2>Pull Request (PR) nima?</h2>
+<h2 id="pull-request-pr-nima">Pull Request (PR) nima?</h2>
 <p><strong>Pull Request</strong> (qisqacha <strong>PR</strong>) — bu "iltimos, mening o'zgarishlarimni loyihangizga qabul qiling" degan rasmiy so'rov. Siz o'z branch'ingizda kod yozasiz, uni fork'ingizga push qilasiz va GitHub'da asl loyihaga PR ochasiz.</p>
 <p>PR — jamoaviy ishning markaziy vositasi. U shunchaki kodni birlashtirish emas, balki:</p>
 <ul><li><strong>Muhokama maydoni</strong> — muallif va boshqalar o'zgarishlaringizni izohlaydi, savol beradi;</li><li><strong>Kod ko'rib chiqish (review)</strong> — tajribali dasturchilar kodni tekshiradi va yaxshilash taklif qiladi;</li><li><strong>Avtomatik tekshiruvlar</strong> — testlar va tekshiruvlar (CI) avtomatik ishga tushadi;</li><li><strong>Tarix</strong> — nima uchun, qachon va kim tomonidan o'zgartirilgani saqlanadi.</li></ul>
-<h2>PR ochish oqimi: to'liq bosqichma-bosqich</h2>
+<h2 id="pr-ochish-oqimi-to-liq-bosqichma-bosqich">PR ochish oqimi: to'liq bosqichma-bosqich</h2>
 <p>Endi butun jarayonni boshidan oxirigacha ko'ramiz. Faraz qilaylik, siz ochiq kodli loyihaga xato tuzatishini qo'shmoqchisiz:</p>
 <p><strong>1-qadam.</strong> Loyihani GitHub'da <strong>Fork</strong> qiling (fork tugmasini bosing).</p>
 <p><strong>2-qadam.</strong> Fork'ingizni kompyuteringizga klonlang va upstream'ni qo'shing:</p>
@@ -651,14 +667,14 @@ To https://github.com/sizning-nomingiz/loyiha.git
 <p><strong>6-qadam.</strong> GitHub'ga o'ting. Push'dan keyin GitHub odatda <strong>"Compare &amp; pull request"</strong> tugmasini ko'rsatadi. Uni bosing, PR uchun aniq sarlavha va tavsif yozing, so'ng <strong>Create pull request</strong> tugmasini bosing.</p>
 <p><strong>7-qadam.</strong> PR ochildi. Endi loyiha egalari uni ko'rib chiqadi. Ular izoh qoldirishi, o'zgartirish so'rashi yoki darhol qabul qilishi mumkin.</p>
 <div class="note">PR ochilgandan keyin ham unga qo'shimcha commitlar qo'sha olasiz. Xuddi shu branch'ga yangi commit push qilsangiz, ular avtomatik ravishda ochiq PR'ga qo'shiladi. Bu review davomida tuzatishlarni kiritishni qulay qiladi.</div>
-<h2>Kod ko'rib chiqish (code review)</h2>
+<h2 id="kod-ko-rib-chiqish-code-review">Kod ko'rib chiqish (code review)</h2>
 <p><strong>Code review</strong> (kod ko'rib chiqish) — bu PR'dagi kodni boshqa dasturchilar tomonidan tekshirilishi. Bu — sifatli dasturchilikning muhim qismi. Review paytida:</p>
 <ul><li>Ko'rib chiquvchi kodning har bir qatoriga izoh qoldira oladi;</li><li>Xatolar, yaxshilash imkoniyatlari yoki uslub muammolari ko'rsatiladi;</li><li>Muallif izohlarga javob beradi va kerakli tuzatishlarni kiritadi;</li><li>Hammasi joyida bo'lsa, ko'rib chiquvchi PR'ni <strong>Approve</strong> (ma'qullash) qiladi.</li></ul>
 <p>GitHub'da review uch xil xulosaga ega bo'ladi:</p>
 <ul><li><strong>Approve</strong> — kod yaxshi, birlashtirishga tayyor;</li><li><strong>Request changes</strong> — o'zgartirish kerak, birlashtirishdan oldin tuzatilsin;</li><li><strong>Comment</strong> — shunchaki fikr bildirish, aniq qaror bermasdan.</li></ul>
 <div class="tip">Yaxshi code review — bu tanqid emas, hamkorlik. Izohlarga xafa bo'lmang: ular kodni yaxshilash uchun. O'zingiz ham review qilganda muloyim va aniq bo'ling — muammoni ko'rsating va yaxshilash yo'lini taklif qiling.</div>
 <p>Review muvaffaqiyatli tugagach, muallif <strong>Merge pull request</strong> tugmasini bosadi va sizning kodingiz asl loyihaga qo'shiladi. Tabriklaymiz — siz loyihaga hissa qo'shdingiz!</p>
-<h2>upstream bilan sinxronlash</h2>
+<h2 id="upstream-bilan-sinxronlash">upstream bilan sinxronlash</h2>
 <p>Vaqt o'tishi bilan asl loyiha (upstream) rivojlanadi — boshqalar yangi kod qo'shadi. Sizning fork'ingiz esa eskiradi. Yangi ishga kirishishdan oldin fork'ingizni asl loyiha bilan sinxronlash muhim. Bu quyidagicha qilinadi:</p>
 <pre class="code"><code># 1. main branch'ga o'tamiz
 $ git switch main
@@ -674,7 +690,7 @@ $ git push origin main</code></pre>
 <p>Endi fork'ingizning <code>main</code>i asl loyiha bilan bir xil holatda. Yangi funksiya uchun branch ochishdan oldin doim shu sinxronlashni bajaring — bu keyingi konfliktlarni kamaytiradi.</p>
 <div class="warn">Yangi ish uchun branch'ni <strong>doim yangilangan main'dan</strong> oching. Eski main'dan ochilgan branch keyinchalik PR qilganda ko'p konfliktga sabab bo'ladi. To'g'ri tartib: upstream'dan sinxronlang &rarr; keyin <code>git switch -c yangi-branch</code>.</div>
 <div class="note">GitHub'da fork sahifasida <strong>"Sync fork"</strong> tugmasi ham bor — u brauzer orqali fork'ni upstream bilan sinxronlaydi. Bu terminaldan foydalanishga muqobil oson yo'l. Lekin terminal usulini bilish murakkabroq holatlarda foydali.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Fork</strong> — boshqa loyihaning o'z akkauntingizdagi to'liq nusxasi;</li><li><strong>origin</strong> — sizning fork'ingiz (push qilasiz), <strong>upstream</strong> — asl loyiha (yangilanish olasiz);</li><li><strong>Issue</strong> — muammo, xato yoki taklifni muhokama qilish uchun yozuv;</li><li><strong>Pull Request (PR)</strong> — o'zgarishlaringizni asl loyihaga qabul qilishni so'rovchi rasmiy taklif;</li><li><strong>Code review</strong> — kodni boshqalar tekshiradi: Approve, Request changes yoki Comment;</li><li>PR oqimi: fork &rarr; clone &rarr; yangi branch &rarr; commit &rarr; push &rarr; PR ochish &rarr; review &rarr; merge;</li><li><code>git fetch upstream</code> + <code>git merge upstream/main</code> — fork'ni asl loyiha bilan sinxronlash.</li></ul>
 <p>Jamoaviy ish oqimini o'rgandingiz — endi dunyodagi istalgan ochiq kodli loyihaga hissa qo'sha olasiz. Keyingi darsda Git'ning foydali vositalarini — .gitignore, undo va stash'ni o'rganamiz.</p>
 <nav class="lesson-nav">
@@ -689,6 +705,6 @@ $ git push origin main</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

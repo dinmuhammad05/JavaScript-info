@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xavfsizlik testlash: SAST, DAST va pentest — Kodla</title>
   <meta name="description" content="Statik va dinamik xavfsizlik tahlili, penetratsion testning etik chegaralari, mas'uliyatli oshkor qilish va legal mashq muhitlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Amaliy himoya va DevSecOps</div>
 <h1>Xavfsizlik testlash: SAST, DAST va pentest</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ikki-katta-yondashuv">Ikki katta yondashuv</a></li>
+<li class="lvl2"><a href="#sast-kodni-ichidan-tahlil-qilish">SAST — kodni ichidan tahlil qilish</a></li>
+<li class="lvl2"><a href="#dast-ishlayotgan-ilovani-sinash">DAST — ishlayotgan ilovani sinash</a></li>
+<li class="lvl2"><a href="#qaysi-biri-qachon">Qaysi biri, qachon</a></li>
+<li class="lvl2"><a href="#penetratsion-test-etik-va-ruxsat-bilan">Penetratsion test (etik va ruxsat bilan)</a></li>
+<li class="lvl2"><a href="#mas-uliyatli-oshkor-qilish">Mas'uliyatli oshkor qilish</a></li>
+<li class="lvl2"><a href="#legal-mashq-muhitlari">Legal mashq muhitlari</a></li>
+<li class="lvl2"><a href="#xavfsizlikni-ci-ga-qo-shish">Xavfsizlikni CI'ga qo'shish</a></li>
+  </ul>
+</details>
 <p class="lead">Kodni xavfsiz yozishga harakat qildingiz. Ammo qaydan bilasiz — u haqiqatan xavfsizmi? Umid — strategiya emas. Xavfsizlikni ham xuddi funksionallik kabi <em>test qilish</em> kerak. Buning bir necha bosqichi bor: kodni o'qib tekshirish, ishlayotgan ilovani sinash, va tayyor tizimga hujum qilib ko'rish. Har biri o'z o'rniga ega, va ular bir-birini to'ldiradi.</p>
-<h2>Ikki katta yondashuv</h2>
+<h2 id="ikki-katta-yondashuv">Ikki katta yondashuv</h2>
 <p>Avtomatlashtirilgan xavfsizlik testlashning ikki asosiy turi bor, ular kodga ikki xil nuqtai nazardan qaraydi:</p>
 <ul><li><strong>SAST</strong> (Static Application Security Testing) — <em>statik</em> tahlil: ilovani ishga tushirmasdan, kodning o'zini o'qib tahlil qiladi;</li><li><strong>DAST</strong> (Dynamic Application Security Testing) — <em>dinamik</em> tahlil: ishlayotgan ilovaga tashqaridan so'rovlar yuborib, uning xatti-harakatini sinaydi.</li></ul>
 <p>Sodda o'xshatish: SAST — bu binoning chizmasini stol ustida ko'zdan kechirib, "mana bu yerda devor yupqa" deyish. DAST — bu qurilgan binoning eshiklarini itarib ko'rib, qaysi biri ochiq qolganini topish.</p>
-<h2>SAST — kodni ichidan tahlil qilish</h2>
+<h2 id="sast-kodni-ichidan-tahlil-qilish">SAST — kodni ichidan tahlil qilish</h2>
 <p>SAST vositasi manba kodini o'qib, xavfli naqshlarni qidiradi: validatsiyasiz ishlatilgan foydalanuvchi kiritmasi, kodga yozib qo'yilgan parol, xavfli funksiya chaqiruvi va shu kabilar. Bu — kuchaytirilgan, xavfsizlikka ixtisoslashgan linter desak bo'ladi.</p>
 <p>G'oyani tushunish uchun oddiy misol: quyidagi "o'yinchoq" tekshiruvchi kodda shubhali naqshlarni qidiradi. Haqiqiy vositalar (masalan, <code>semgrep</code> kabi qoidaga asoslangan tahlilchilar) ancha murakkab, ammo mohiyati shu:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sast-goya.js</span></div><textarea spellcheck="false">// Oddiylashtirilgan "SAST" g'oyasi:
@@ -635,24 +651,24 @@ const namunaKod = [
 console.log(skaner(namunaKod));
 // [ 'Qator 2: Kodga yozilgan parol', 'Qator 3: eval() xavfli chaqiruvi' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>SAST'ning kuchi — u kodni to'liq ko'radi va ilovani ishga tushirishdan oldin, hatto CI bosqichidayoq ogohlantiradi. Kamchiligi — u ba'zan "yolg'on signal" (false positive) beradi: shubhali ko'ringan, aslida xavfsiz kodni ham belgilashi mumkin.</p>
-<h2>DAST — ishlayotgan ilovani sinash</h2>
+<h2 id="dast-ishlayotgan-ilovani-sinash">DAST — ishlayotgan ilovani sinash</h2>
 <p>DAST kodni umuman ko'rmaydi. U ilovaga xuddi hujumchi kabi tashqaridan qaraydi: turli so'rovlar, g'ayrioddiy kiritmalar yuboradi va javobga qarab zaiflik borligini aniqlashga urinadi. Masalan, formaga maxsus belgilar yuborib, ilova ularni to'g'ri qayta ishlayaptimi yoki xato beryaptimi kuzatadi.</p>
 <p>DAST'ning kuchi — u haqiqiy, ishlayotgan tizimning haqiqiy xulq-atvorini sinaydi; kod qanday yozilganidan qat'i nazar, natijani ko'radi. Kamchiligi — u ilova ishga tushib turishini talab qiladi va faqat tashqaridan yetib boradigan qismlarni sinay oladi.</p>
-<h2>Qaysi biri, qachon</h2>
+<h2 id="qaysi-biri-qachon">Qaysi biri, qachon</h2>
 <p>To'g'ri javob — ikkalasi ham. Ular bir-birini almashtirmaydi, to'ldiradi:</p>
 <ul><li>SAST'ni <em>erta</em> ishlating — kod yozilishi bilan, CI'da, muammoni arzon paytida ushlash uchun;</li><li>DAST'ni ilova ishga tushgach ishlating — real muhitda qoladigan zaifliklarni topish uchun;</li><li>Eng yaxshi natija — ikkalasini birga, doimiy jarayon sifatida qo'llaganda beriladi.</li></ul>
-<h2>Penetratsion test (etik va ruxsat bilan)</h2>
+<h2 id="penetratsion-test-etik-va-ruxsat-bilan">Penetratsion test (etik va ruxsat bilan)</h2>
 <p><strong>Penetratsion test</strong> (qisqacha pentest) — bu vakolatli mutaxassisning, egasining <em>yozma ruxsati bilan</em>, tizimga xuddi haqiqiy hujumchidek bostirib kirishga urinishi. Maqsad — zaiflikni yomon niyatli odamdan oldin topib, uni tuzatish. Bu — himoyaning eng ilg'or shakllaridan biri.</p>
 <p>Ammo bu yerda eng muhim so'z — <strong>ruxsat</strong>. Pentest'ni etik qiladigan narsa — texnikasi emas, balki ruxsati. Aynan bir xil harakat: ruxsat bilan bo'lsa — qadrli kasb; ruxsatsiz bo'lsa — jinoyat. Chegara mana shu yerda o'tadi.</p>
 <div class="warn">Faqat o'zingizga tegishli yoki egasidan yozma ruxsat olingan tizimni test qiling. Boshqaning tizimiga ruxsatsiz kirishga urinish — hatto "yordam bermoqchi edim" niyatida bo'lsa ham — ko'p mamlakatlarda jinoyat hisoblanadi. Niyat sizni himoya qilmaydi; ruxsat qiladi.</div>
-<h2>Mas'uliyatli oshkor qilish</h2>
+<h2 id="mas-uliyatli-oshkor-qilish">Mas'uliyatli oshkor qilish</h2>
 <p>Aytaylik, siz biror saytda tasodifan zaiflikni sezib qoldingiz. To'g'ri yo'l — <strong>mas'uliyatli oshkor qilish</strong> (responsible disclosure): zaiflikni ommaga e'lon qilmasdan, avval sekin va maxfiy tarzda tizim egasiga xabar berish, ularga tuzatish uchun vaqt berish. Ko'p kompaniyalar buning uchun maxsus dastur (bug bounty) va aloqa kanaliga ega.</p>
 <p>Zaiflikni ijtimoiy tarmoqda maqtanib e'lon qilish yoki suiiste'mol qilish — hujumchining yo'li. Uni tinchgina egasiga yetkazish — himoyachining yo'li. Farq — niyat va usulda.</p>
-<h2>Legal mashq muhitlari</h2>
+<h2 id="legal-mashq-muhitlari">Legal mashq muhitlari</h2>
 <p>Xavfsizlikni o'rganish uchun sizga mashq maydoni kerak — lekin uni birovning tizimida emas, <em>maxsus shu maqsad uchun yaratilgan</em> muhitlarda topasiz. Bor-yo'g'i "ataylab zaif" ilovalar bor: ular sizning kompyuteringizda, lokal, o'zingiznikida ishlaydi va o'rganish uchun qonuniy:</p>
 <ul><li><strong>DVWA</strong> (Damn Vulnerable Web Application) — o'rganish maqsadida ataylab zaif qilingan veb-ilova; lokal o'rnatib, xavfsizlik texnikalarini xavfsiz sinash mumkin;</li><li><strong>OWASP Juice Shop</strong> — zamonaviy, ataylab zaif ilova; ko'plab zaiflik turlarini o'z laboratoriyangizda mashq qilish uchun.</li></ul>
 <p>Bu ilovalarning butun mohiyati shundaki, ular <em>sizniki</em> va <em>lokal</em> ishlaydi. Ularda topgan har bir zaiflik — hech kimga zarar bermaydigan, sof ta'limiy mashq. Aynan shu — o'rganishning to'g'ri va qonuniy yo'li.</p>
-<h2>Xavfsizlikni CI'ga qo'shish</h2>
+<h2 id="xavfsizlikni-ci-ga-qo-shish">Xavfsizlikni CI'ga qo'shish</h2>
 <p>Xavfsizlik testlashning eng samarali joyi — CI/CD quvuri. Har bir kod yuborilganda avtomatik ravishda <code>npm audit</code>, SAST va boshqa tekshiruvlar ishga tushsa, muammo hali kichik va arzon paytida ushlanadi. Bu — "DevSecOps" g'oyasining yuragi: xavfsizlikni alohida bosqich emas, balki jarayonning har qadamidagi avtomatik odat qilish.</p>
 <div class="note">Bu bobdagi barcha texnikalar bir maqsadga xizmat qiladi: zaiflikni yomon niyatli odamdan oldin, o'zingiz topib tuzatish. Bu — hujum emas, himoya san'atidir.</div>
 <nav class="lesson-nav">
@@ -667,6 +683,6 @@ console.log(skaner(namunaKod));
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

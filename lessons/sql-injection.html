@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SQL injection va boshqa himoyalar — Kodla</title>
   <meta name="description" content="SQL injection qanday yuzaga keladi va undan himoya (parametrlangan so'rovlar, ORM), hamda boshqa muhim amaliyotlar: validatsiya, eng kam imtiyoz, sirlarni .env, rate limiting, xatolarni yashirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
 <h1>SQL injection va boshqa himoyalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#sql-injection-qanday-yuzaga-keladi">SQL injection qanday yuzaga keladi?</a></li>
+<li class="lvl2"><a href="#himoya-1-parametrlangan-so-rovlar-prepared-statements">Himoya 1: Parametrlangan so'rovlar (prepared statements)</a></li>
+<li class="lvl2"><a href="#himoya-2-orm-va-so-rov-quruvchilar">Himoya 2: ORM va so'rov quruvchilar</a></li>
+<li class="lvl2"><a href="#boshqa-himoya-1-kiritishni-validatsiya-qilish">Boshqa himoya 1: Kiritishni validatsiya qilish</a></li>
+<li class="lvl2"><a href="#boshqa-himoya-2-eng-kam-imtiyoz-tamoyili">Boshqa himoya 2: Eng kam imtiyoz tamoyili</a></li>
+<li class="lvl2"><a href="#boshqa-himoya-3-sirlarni-env-da-saqlash">Boshqa himoya 3: Sirlarni .env'da saqlash</a></li>
+<li class="lvl2"><a href="#boshqa-himoya-4-rate-limiting">Boshqa himoya 4: Rate limiting</a></li>
+<li class="lvl2"><a href="#boshqa-himoya-5-xatoliklarni-yashirish">Boshqa himoya 5: Xatoliklarni yashirish</a></li>
+<li class="lvl2"><a href="#yakuniy-nazorat-ro-yxati">Yakuniy nazorat ro'yxati</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Injection (kiritish) hujumlari OWASP ro'yxatida yillar davomida yuqori o'rinda turadi. Ular orasida eng mashhuri — <strong>SQL injection</strong>. Ushbu yakuniy darsda biz SQL injection qanday paydo bo'lishini va undan qanday himoyalanishni ko'rib chiqamiz, so'ng backend xavfsizligini mustahkamlaydigan bir qator muhim amaliyotlarni jamlaymiz.</p>
-<h2>SQL injection qanday yuzaga keladi?</h2>
+<h2 id="sql-injection-qanday-yuzaga-keladi">SQL injection qanday yuzaga keladi?</h2>
 <p>SQL injection zaifligi <strong>foydalanuvchi kiritmasi SQL so'rovi matniga to'g'ridan-to'g'ri qo'shilganda</strong> paydo bo'ladi. Muammoning ildizi shu: agar kiritma so'rov <em>matniga</em> aralashsa, brauzer/ma'lumotlar bazasi qayerda ma'lumot tugab, qayerda buyruq boshlanishini farqlay olmaydi.</p>
 <p>Xavfli naqsh — bu so'rovni satrlarni ulash (string concatenation) orqali qurish:</p>
 <pre class="code"><code>// XAVFLI: foydalanuvchi kiritmasi so'rov MATNIGA ulanmoqda
@@ -610,7 +628,7 @@ db.query(sorov);
 // Server buni ODDIY MATN emas, BUYRUQ deb talqin qiladi.</code></pre>
 <p>Xuddi XSS singari, bu yerdagi asosiy muammo bir xil: <strong>ma'lumot bilan kod aralashib ketmoqda</strong>. Himoyaning kaliti — ma'lumotni doim ma'lumot sifatida, koddan qat'iy ajratib ishlatish.</p>
 <div class="warn">Foydalanuvchi kiritmasini hech qachon SQL so'rovi matniga (yoki har qanday buyruq matniga: shell buyrug'i, NoSQL so'rovi, LDAP filtri) satr ulash orqali qo'shmang. Bu injection zaifligining asosiy sababidir.</div>
-<h2>Himoya 1: Parametrlangan so'rovlar (prepared statements)</h2>
+<h2 id="himoya-1-parametrlangan-so-rovlar-prepared-statements">Himoya 1: Parametrlangan so'rovlar (prepared statements)</h2>
 <p>Eng ishonchli himoya — <strong>parametrlangan so'rovlar</strong> (prepared statements). Bunda siz so'rov <em>tuzilmasini</em> alohida, <em>qiymatlarni</em> alohida beraytasiz. Ma'lumotlar bazasi qiymatlarni <strong>doim faqat ma'lumot deb qabul qiladi</strong>, hech qachon SQL buyruq deb emas — ular so'rov matniga aralashmaydi.</p>
 <pre class="code"><code>// XAVFSIZ: parametrlangan so'rov (?, $1 kabi placeholder'lar)
 // mysql2 kutubxonasi bilan misol:
@@ -629,7 +647,7 @@ const natija = await pool.query(
   [email, rol]
 );</code></pre>
 <div class="note">Placeholder (<code>?</code> yoki <code>$1</code>) — bu shunchaki matn almashtirish EMAS. Ma'lumotlar bazasi so'rov rejasini avval qiymatsiz tayyorlaydi, keyin qiymatlarni xavfsiz bog'laydi. Aynan shu ajratish injection'ni imkonsiz qiladi.</div>
-<h2>Himoya 2: ORM va so'rov quruvchilar</h2>
+<h2 id="himoya-2-orm-va-so-rov-quruvchilar">Himoya 2: ORM va so'rov quruvchilar</h2>
 <p>Zamonaviy loyihalarda ko'pincha <strong>ORM</strong> (Object-Relational Mapping) yoki so'rov quruvchi (query builder) ishlatiladi — masalan, <code>Prisma</code>, <code>Sequelize</code>, <code>Knex</code>, <code>TypeORM</code>. Ular so'rovlarni ichki tarzda <em>parametrlashtiradi</em>, shu sabab injection'dan tabiiy himoya beradi:</p>
 <pre class="code"><code>// Prisma bilan: qiymatlar avtomatik xavfsiz parametrlanadi
 const foydalanuvchi = await prisma.user.findUnique({
@@ -643,7 +661,7 @@ const foydalanuvchi2 = await User.findOne({
 
 // Ikkalasida ham 'email' xom SQL matniga aralashmaydi.</code></pre>
 <div class="warn">ORM ham panatseya emas. Agar ORM ichida <strong>xom SQL</strong> yozish imkoniyatidan foydalansangiz (masalan, <code>sequelize.query</code> yoki raw so'rov), o'sha yerda satr ulashdan qoching — parametrlangan variantini ishlating. ORM sizni faqat to'g'ri ishlatilgandagina himoya qiladi.</div>
-<h2>Boshqa himoya 1: Kiritishni validatsiya qilish</h2>
+<h2 id="boshqa-himoya-1-kiritishni-validatsiya-qilish">Boshqa himoya 1: Kiritishni validatsiya qilish</h2>
 <p>Injection'dan tashqari ham, har bir kiruvchi ma'lumotni <strong>server tomonida</strong> tekshiring: kutilgan turdami, formatdami, chegaradami? Bu "foydalanuvchiga ishonma" tamoyilining amaliy ko'rinishi. Validatsiya kutilmagan ma'lumotni erta rad etadi.</p>
 <pre class="code"><code>// Validatsiya kutubxonasi (masalan, zod) bilan misol
 const { z } = require('zod');
@@ -663,11 +681,11 @@ app.post('/royxat', (req, res) =&gt; {
   // ...
 });</code></pre>
 <div class="tip">Validatsiyada <strong>ruxsat berilganlar ro'yxati</strong> (allowlist) yondashuvini afzal ko'ring: "faqat shu qiymatlarga ruxsat" degan qoida "bu yomon qiymatlarni taqiqlayman" degandan ishonchliroq, chunki barcha yomon qiymatlarni oldindan bilib bo'lmaydi.</div>
-<h2>Boshqa himoya 2: Eng kam imtiyoz tamoyili</h2>
+<h2 id="boshqa-himoya-2-eng-kam-imtiyoz-tamoyili">Boshqa himoya 2: Eng kam imtiyoz tamoyili</h2>
 <p><strong>Eng kam imtiyoz</strong> (least privilege) — har bir komponent faqat o'z ishini bajarishga yetadigan huquqqa ega bo'lsin, ortiqchasiga emas. Bu zaiflik yuz berganda ham zararni cheklaydi:</p>
 <ul><li>Ilova ulanadigan ma'lumotlar bazasi foydalanuvchisiga faqat kerakli jadval va amallarga ruxsat bering (masalan, faqat <code>SELECT/INSERT</code>, agar <code>DROP</code> kerak bo'lmasa);</li><li>Har bir xizmat faqat o'ziga kerakli sirlar va resurslarga kirsin;</li><li>Admin huquqlarini faqat haqiqatan kerak bo'lganda bering.</li></ul>
 <div class="note">Eng kam imtiyoz — bu chuqurlashtirilgan himoyaning bir qismi. Agar bitta qatlam buzilsa ham (masalan, injection yuz bersa), cheklangan huquqlar tufayli zarar kichik bo'ladi.</div>
-<h2>Boshqa himoya 3: Sirlarni .env'da saqlash</h2>
+<h2 id="boshqa-himoya-3-sirlarni-env-da-saqlash">Boshqa himoya 3: Sirlarni .env'da saqlash</h2>
 <p>Maxfiy kalitlar (JWT siri, ma'lumotlar bazasi paroli, API kalitlari) hech qachon kodga yozilmasligi va git tarixiga tushmasligi kerak. Ularni muhit o'zgaruvchilarida saqlang va <code>.env</code> faylini <code>.gitignore</code>'ga qo'shing:</p>
 <pre class="code"><code>// .env fayli (BU FAYL git'ga QO'SHILMAYDI)
 // DATABASE_URL=postgres://user:parol@host:5432/baza
@@ -686,7 +704,7 @@ if (!JWT_SIR) {
 .env.local
 node_modules/</code></pre>
 <div class="warn">Agar sir bir marta git tarixiga tushib qolgan bo'lsa, uni <code>.gitignore</code>'ga qo'shish yetarli emas — u tarixda qoladi. Bunday holatda sirni <strong>darhol yangilang</strong> (rotate qiling), chunki uni fosh bo'lgan deb hisoblash kerak.</div>
-<h2>Boshqa himoya 4: Rate limiting</h2>
+<h2 id="boshqa-himoya-4-rate-limiting">Boshqa himoya 4: Rate limiting</h2>
 <p><strong>Rate limiting</strong> (so'rov chastotasini cheklash) — bir manbadan kelgan so'rovlar sonini vaqt oralig'ida cheklaydi. Bu parolni takror-takror urinib topishga urinishlar va xizmatni yuklama bilan bostirishga qarshi himoya (mavjudlik va autentifikatsiya himoyasi):</p>
 <pre class="code"><code>const rateLimit = require('express-rate-limit');
 
@@ -705,7 +723,7 @@ app.post('/login', loginCheklovi, loginHandler);
 const umumiyCheklov = rateLimit({ windowMs: 60 * 1000, max: 100 });
 app.use('/api/', umumiyCheklov);</code></pre>
 <div class="tip">Login, parol tiklash va ro'yxatdan o'tish kabi maxsus endpointlarga qattiqroq cheklov qo'ying. Bu avtomatlashtirilgan parol topish urinishlarini samarasiz qiladi.</div>
-<h2>Boshqa himoya 5: Xatoliklarni yashirish</h2>
+<h2 id="boshqa-himoya-5-xatoliklarni-yashirish">Boshqa himoya 5: Xatoliklarni yashirish</h2>
 <p>Batafsil xato xabarlari — ayniqsa stack trace, SQL xatosi matni, fayl yo'llari — foydalanuvchiga ko'rsatilsa, ular tizim tuzilishi haqida keraksiz ma'lumot beradi. Ishlab chiqarish (production) muhitida foydalanuvchiga umumiy xabar bering, batafsil xatoni esa faqat serverning ichki loglariga yozing:</p>
 <pre class="code"><code>// Markazlashtirilgan xato ishlovchi (Express)
 app.use((err, req, res, next) =&gt; {
@@ -716,10 +734,10 @@ app.use((err, req, res, next) =&gt; {
   res.status(500).json({ xato: 'Serverda xatolik yuz berdi' });
 });</code></pre>
 <div class="warn">Production'da <code>NODE_ENV=production</code> o'rnating. Ba'zi freymvorklar development rejimida batafsil xato sahifalarini ko'rsatadi — bu sahifalar tizim ichki tuzilishini fosh qilishi mumkin. Foydalanuvchiga hech qachon xom stack trace ko'rsatmang.</div>
-<h2>Yakuniy nazorat ro'yxati</h2>
+<h2 id="yakuniy-nazorat-ro-yxati">Yakuniy nazorat ro'yxati</h2>
 <p>Ushbu bobni yakunlab, backend xavfsizligining amaliy nazorat ro'yxatini jamlaymiz:</p>
 <ul><li>Barcha so'rovlar parametrlangan yoki ishonchli ORM orqali — <strong>satr ulash yo'q</strong>;</li><li>Har bir kiruvchi ma'lumot server tomonida validatsiya qilinadi;</li><li>Parollar <code>bcrypt</code> bilan hashlanadi, ochiq saqlanmaydi;</li><li>Sirlar <code>.env</code>'da, git'ga tushmaydi;</li><li>Cookie'lar <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code> bilan;</li><li>Chiqish eskeyplanadi (XSS), CSP o'rnatiladi;</li><li>Holatni o'zgartiruvchi so'rovlar CSRF'dan himoyalangan;</li><li>Login va boshqa muhim endpointlarda rate limiting;</li><li>Xato xabarlari yashiriladi, faqat loglarga yoziladi;</li><li>HTTPS majburiy, <code>helmet</code> sarlavhalari o'rnatilgan;</li><li>Bog'liqliklar <code>npm audit</code> bilan muntazam tekshiriladi;</li><li>Eng kam imtiyoz tamoyili har qatlamda qo'llaniladi.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>SQL injection</strong> foydalanuvchi kiritmasi so'rov matniga aralashganda paydo bo'ladi; birlamchi himoya — <strong>parametrlangan so'rovlar</strong>;</li><li>ORM'lar tabiiy himoya beradi, lekin xom SQL yozganda ehtiyot bo'ling;</li><li>Injection, XSS va CSRF'ning umumiy ildizi bitta: <strong>ma'lumot bilan kodni aralashtirmaslik</strong> va <strong>kiritmaga ishonmaslik</strong>;</li><li>Qo'shimcha amaliyotlar: validatsiya, eng kam imtiyoz, sirlarni <code>.env</code>'da, rate limiting, xatolarni yashirish;</li><li>Xavfsizlik — bir emas, ko'p qatlamli himoya (defense in depth); har qatlam boshqasini mustahkamlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="xss-csrf.html"><span class="dir">← Oldingi</span><span class="ttl">XSS va CSRF</span></a>
@@ -733,6 +751,6 @@ app.use((err, req, res, next) =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

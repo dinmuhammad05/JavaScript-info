@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FormData — Kodla</title>
   <meta name="description" content="FormData obyekti bilan forma ma'lumotlarini yuborish: HTML formadan yaratish, append/set/delete metodlari, fayl yuklash va fetch bilan jo'natish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Tarmoq so'rovlari</div>
 <h1>FormData</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#formdata-nima">FormData nima?</a></li>
+<li class="lvl2"><a href="#html-formadan-formdata-yaratish">HTML formadan FormData yaratish</a></li>
+<li class="lvl2"><a href="#maydonlarni-boshqarish-append-set-delete">Maydonlarni boshqarish: append, set, delete</a></li>
+<li class="lvl2"><a href="#fayl-yuborish">Fayl yuborish</a></li>
+<li class="lvl2"><a href="#dinamik-ravishda-blob-yaratib-yuborish">Dinamik ravishda Blob yaratib yuborish</a></li>
+<li class="lvl2"><a href="#formdata-ni-aylanib-chiqish">FormData'ni aylanib chiqish</a></li>
+<li class="lvl2"><a href="#to-liq-amaliy-misol-forma-yuborish">To'liq amaliy misol: forma yuborish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'pincha serverga oddiy ma'lumot emas, balki <strong>forma</strong> ma'lumotlarini yoki hatto <strong>fayllarni</strong> yuborish kerak bo'ladi. Buning uchun <code>FormData</code> maxsus obyekti mavjud. U forma maydonlarini tarmoqqa mos formatda avtomatik tayyorlaydi.</p>
-<h2>FormData nima?</h2>
+<h2 id="formdata-nima">FormData nima?</h2>
 <p><code>FormData</code> — bu forma maydonlari va ularning qiymatlarini saqlaydigan maxsus obyekt. Uni <code>fetch</code>ning <code>body</code>siga to'g'ridan-to'g'ri berish mumkin — brauzer avtomatik ravishda to'g'ri <code>Content-Type</code> (<code>multipart/form-data</code>) sarlavhasini qo'yadi.</p>
 <pre class="code"><code>let formData = new FormData([form]);</code></pre>
 <p>Argument sifatida HTML <code>&lt;form&gt;</code> elementini berish mumkin — u holda forma ichidagi barcha maydonlar avtomatik olinadi. Argumentsiz chaqirilsa, bo'sh <code>FormData</code> yaratiladi.</p>
-<h2>HTML formadan FormData yaratish</h2>
+<h2 id="html-formadan-formdata-yaratish">HTML formadan FormData yaratish</h2>
 <p>Agar sahifada forma bo'lsa, uni to'g'ridan-to'g'ri <code>FormData</code>ga uzatib, serverga yuborish mumkin:</p>
 <pre class="code"><code>// HTML: &lt;form id="myForm"&gt;
 //   &lt;input name="name" value="Ali"&gt;
@@ -616,7 +632,7 @@ let response = await fetch('https://api.example.com/submit', {
   body: formData
 });</code></pre>
 <div class="note">Diqqat: bu yerda <code>Content-Type</code> sarlavhasini <strong>o'zimiz qo'ymaymiz</strong>! <code>FormData</code> berilganda brauzer uni avtomatik <code>multipart/form-data</code> qilib, ichiga maxsus chegara (boundary) belgisini ham qo'shadi. Agar o'zimiz qo'ysak, bu buziladi.</div>
-<h2>Maydonlarni boshqarish: append, set, delete</h2>
+<h2 id="maydonlarni-boshqarish-append-set-delete">Maydonlarni boshqarish: append, set, delete</h2>
 <p><code>FormData</code> obyektiga maydonlarni dasturiy tarzda qo'shish va o'zgartirish mumkin:</p>
 <ul><li><code>formData.append(name, value)</code> — yangi maydon qo'shadi. Bir xil nomli maydon bir necha marta qo'shilishi mumkin;</li><li><code>formData.append(name, blob, fileName)</code> — fayl (Blob) qo'shadi va uning nomini belgilaydi;</li><li><code>formData.set(name, value)</code> — maydon o'rnatadi, agar shunday nom mavjud bo'lsa, barchasini o'chirib, bittasini qoldiradi;</li><li><code>formData.delete(name)</code> — berilgan nomdagi maydonni o'chiradi;</li><li><code>formData.get(name)</code> — maydon qiymatini oladi;</li><li><code>formData.has(name)</code> — shunday maydon bor-yo'qligini tekshiradi (true/false).</li></ul>
 <pre class="code"><code>let formData = new FormData();
@@ -633,7 +649,7 @@ console.log(formData.get('name')); // 'Salim'
 formData.delete('email');
 console.log(formData.has('email')); // false</code></pre>
 <div class="tip"><code>append</code> va <code>set</code> orasidagi farqni eslang: <code>append</code> bir xil nomdan <strong>bir nechta</strong> qo'shishga ruxsat beradi, <code>set</code> esa har doim faqat <strong>bittasini</strong> qoldiradi. Massiv shaklidagi ma'lumot yuborganda <code>append</code> qulay.</div>
-<h2>Fayl yuborish</h2>
+<h2 id="fayl-yuborish">Fayl yuborish</h2>
 <p><code>FormData</code>ning eng kuchli tomoni — fayllarni yuborish imkoniyati. Foydalanuvchi tanlagan faylni <code>&lt;input type="file"&gt;</code>dan olib yuborishimiz mumkin:</p>
 <pre class="code"><code>// HTML: &lt;input type="file" id="fileInput"&gt;
 
@@ -649,7 +665,7 @@ let response = await fetch('https://api.example.com/upload', {
   body: formData
 });</code></pre>
 <p>Bu yerda <code>fileInput.files[0]</code> — foydalanuvchi tanlagan birinchi fayl. U <code>File</code> obyekti bo'lib, <code>Blob</code>ning bir turi hisoblanadi.</p>
-<h2>Dinamik ravishda Blob yaratib yuborish</h2>
+<h2 id="dinamik-ravishda-blob-yaratib-yuborish">Dinamik ravishda Blob yaratib yuborish</h2>
 <p>Ba'zan faylni foydalanuvchidan olmasdan, kod ichida yaratib yuborish kerak bo'ladi. Masalan, canvas'dagi rasmni yoki matnli faylni:</p>
 <pre class="code"><code>// Matnli 'fayl' yaratib yuborish
 let content = 'Salom, bu fayl mazmuni!';
@@ -663,7 +679,7 @@ let response = await fetch('https://api.example.com/upload', {
   body: formData
 });</code></pre>
 <div class="note">Uchinchi argument (<code>'salom.txt'</code>) — fayl nomi. U server tomonida faylni saqlashda ishlatiladi. Blob yuborayotganda fayl nomini berish yaxshi amaliyot.</div>
-<h2>FormData'ni aylanib chiqish</h2>
+<h2 id="formdata-ni-aylanib-chiqish">FormData'ni aylanib chiqish</h2>
 <p><code>FormData</code> iteratsiyalanadi — barcha maydonlarni ko'rib chiqish mumkin:</p>
 <pre class="code"><code>let formData = new FormData();
 formData.append('name', 'Ali');
@@ -674,7 +690,7 @@ for (let [key, value] of formData) {
 }
 // name = Ali
 // age = 25</code></pre>
-<h2>To'liq amaliy misol: forma yuborish</h2>
+<h2 id="to-liq-amaliy-misol-forma-yuborish">To'liq amaliy misol: forma yuborish</h2>
 <p>Formani submit qilib, sahifani qayta yuklamasdan serverga yuborishning to'liq namunasi:</p>
 <pre class="code"><code>let form = document.getElementById('registerForm');
 
@@ -700,7 +716,7 @@ form.addEventListener('submit', async function (event) {
     console.log('Yuborishda xatolik: ' + error.message);
   }
 });</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>FormData</code> — forma maydonlari va fayllarni tarmoqqa mos formatda saqlaydigan obyekt;</li><li><code>new FormData(form)</code> — HTML formadan avtomatik maydonlarni oladi;</li><li><code>append</code> — maydon qo'shadi (takrorlanishi mumkin), <code>set</code> — bittaga almashtiradi, <code>delete</code> — o'chiradi;</li><li>Fayl yuborish uchun <code>append(name, file, fileName)</code> ishlatiladi;</li><li><code>FormData</code>ni <code>fetch</code>ning <code>body</code>siga bersak, <code>Content-Type</code>ni <strong>qo'lda qo'ymaslik</strong> kerak — brauzer o'zi to'g'ri qo'yadi;</li><li>Bu yondashuv sahifani qayta yuklamasdan forma va fayl yuborishga imkon beradi.</li></ul>
 <nav class="lesson-nav">
   <a href="fetch-json.html"><span class="dir">← Oldingi</span><span class="ttl">Fetch: so'rovlar va JSON</span></a>
@@ -714,6 +730,6 @@ form.addEventListener('submit', async function (event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

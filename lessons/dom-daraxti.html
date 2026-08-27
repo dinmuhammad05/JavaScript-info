@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DOM daraxti — Kodla</title>
   <meta name="description" content="HTML hujjat qanday qilib teglar daraxtiga aylanadi, element va matn tugunlari, avtomatik xatolarni tuzatish, tugun turlari va DevTools'da ko'rish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>DOM daraxti</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#misol-dom-daraxti">Misol DOM daraxti</a></li>
+<li class="lvl2"><a href="#bo-shliqlar-va-yangi-qatorlar">Bo'shliqlar va yangi qatorlar</a></li>
+<li class="lvl2"><a href="#avtomatik-tuzatish-autocorrection">Avtomatik tuzatish (autocorrection)</a></li>
+<li class="lvl2"><a href="#boshqa-tugun-turlari">Boshqa tugun turlari</a></li>
+<li class="lvl2"><a href="#devtools-da-dom-ni-ko-rish">DevTools'da DOM'ni ko'rish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">HTML hujjatning asosi — teglar. DOM (Document Object Model) modeliga ko'ra, har bir HTML tegi obyektga aylanadi. Ichma-ich joylashgan teglar tashqi teglarning "bolalari" bo'ladi. Teg ichidagi matn ham obyekt sanaladi. Bu obyektlarning barchasi bizga JavaScript orqali ochiq bo'lib, ular yordamida sahifani boshqaramiz. Ushbu darsda HTML'dan hosil bo'ladigan DOM daraxtini chuqur o'rganamiz.</p>
-<h2>Misol DOM daraxti</h2>
+<h2 id="misol-dom-daraxti">Misol DOM daraxti</h2>
 <p>Keling, oddiy bir hujjatni ko'raylik:</p>
 <pre class="code"><code>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -612,7 +626,7 @@
 <p>Elementlar ichidagi matn <strong>matn tugunlarini</strong> (text nodes) tashkil qiladi. Matn tuguni faqat satr (string) saqlaydi. Uning boshqa bolalari bo'la olmaydi va u har doim daraxtning "bargi" (leaf) hisoblanadi.</p>
 <p>Masalan, yuqoridagi hujjatda <code>&lt;title&gt;</code> ichida <code>"Bosh sahifa haqida"</code> matn tuguni bor, <code>&lt;body&gt;</code> ichida esa <code>"Salom, men bu sahifamanman"</code> matn tuguni joylashgan.</p>
 <div class="note">Daraxtda ikki turdagi asosiy tugunlar ishtirok etadi: <strong>element tugunlari</strong> (teglar) va <strong>matn tugunlari</strong> (matn bo'laklari). Ular birgalikda DOM tuzilishini hosil qiladi.</div>
-<h2>Bo'shliqlar va yangi qatorlar</h2>
+<h2 id="bo-shliqlar-va-yangi-qatorlar">Bo'shliqlar va yangi qatorlar</h2>
 <p>Muhim jihat: matn tugunlarida <strong>bo'shliqlar</strong> (spaces) va <strong>yangi qator</strong> (newline) belgilari ham hisobga olinadi. Ular ham to'liq huquqli belgilar bo'lib, matn tugunlarini hosil qiladi va DOM'ning bir qismi bo'ladi.</p>
 <p>Masalan, quyidagi HTML'da <code>&lt;head&gt;</code>dan oldin va matn ichida bo'shliq va yangi qatorlar bor — ular ham DOM'ga tushadi:</p>
 <pre class="code"><code>&lt;!DOCTYPE HTML&gt;
@@ -624,7 +638,7 @@
 <p>Biroq ikkita istisno bor:</p>
 <ol><li>Tarixiy sabablarga ko'ra, <code>&lt;head&gt;</code>dan oldingi bo'shliqlar va yangi qatorlar e'tiborga olinmaydi (ular tashlab yuboriladi);</li><li>Agar biror narsani <code>&lt;/body&gt;</code>dan keyin yozsak, brauzer uni avtomatik ravishda <code>body</code> ichiga ko'chiradi, chunki HTML spetsifikatsiyasiga ko'ra barcha mazmun <code>&lt;body&gt;</code> ichida bo'lishi kerak. Shuning uchun <code>&lt;/body&gt;</code>dan keyin bo'shliq bo'lmaydi.</li></ol>
 <div class="tip">Boshqa hollarda hamma narsa to'g'ridan-to'g'ri: agar hujjatda bo'shliqlar bo'lsa — ular DOM'da matn tugunlari sifatida ko'rinadi, agar olib tashlansak — ular yo'qoladi. Bu ba'zan JavaScript'da tugunlar bo'ylab harakatlanganda kutilmagan "bo'sh" matn tugunlariga duch kelishimizga sabab bo'ladi.</div>
-<h2>Avtomatik tuzatish (autocorrection)</h2>
+<h2 id="avtomatik-tuzatish-autocorrection">Avtomatik tuzatish (autocorrection)</h2>
 <p>Agar brauzer noto'g'ri (buzuq) HTML'ga duch kelsa, DOM'ni hosil qilishda uni avtomatik ravishda <strong>tuzatadi</strong>. Masalan, yuqoridagi hujjatda ochilish <code>&lt;html&gt;</code> tegi yo'q — bu muhim emas. Brauzer buni sezib, avtomatik qo'shadi, chunki bu tegga hujjat majburan ega bo'lishi kerak.</p>
 <p>Xuddi shunday, agar hujjatda umuman <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> yoki <code>&lt;body&gt;</code> teglari yozilmagan bo'lsa ham, DOM'da ular baribir mavjud bo'ladi. Brauzer ularni yaratadi:</p>
 <pre class="code"><code>// hatto matndan iborat oddiy HTML uchun ham
@@ -640,7 +654,7 @@
      avtomatik &lt;tbody&gt; qo'shadi --&gt;</code></pre>
 <div class="warn">Bu muhim! Jadval elementlari bo'ylab JavaScript'da harakatlanganda, <code>&lt;table&gt;</code>ning bevosita bolasi <code>&lt;tr&gt;</code> emas, balki <code>&lt;tbody&gt;</code> bo'ladi — hatto uni HTML'da yozmagan bo'lsak ham. Buni unutmaslik kerak, aks holda tugunlar bo'ylab harakatlanish kutilmagan natija berishi mumkin.</div>
 <p>Yopilmagan teglar, xato joylashgan atributlar — bularning hammasini brauzer DOM hosil qilishda "tuzatadi". Shu sababli, HTML' da xatolik bo'lsa ham, brauzer baribir biror-bir daraxt tuzadi.</p>
-<h2>Boshqa tugun turlari</h2>
+<h2 id="boshqa-tugun-turlari">Boshqa tugun turlari</h2>
 <p>Elementlar va matn tugunlaridan tashqari yana bir necha tugun turlari bor. Masalan, <strong>izohlar</strong> (comments):</p>
 <pre class="code"><code>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -654,7 +668,7 @@
 <p>Umuman olib qaraganda, 12 turdagi tugun mavjud. Amaliyotda biz asosan 4 tasi bilan ishlaymiz:</p>
 <ol><li><code>document</code> — DOM'ga "kirish nuqtasi", eng yuqori tugun;</li><li>element tugunlari — HTML teglari, daraxtni tashkil etuvchi asosiy bloklar;</li><li>matn tugunlari — matnni saqlaydi;</li><li>izohlar — ekranda ko'rinmaydi, ammo ma'lumot uchun DOM'ga qo'shiladi. Ular orqali JavaScript'ga "ko'rsatma" berish kabi hiylalar ham qilinadi.</li></ol>
 <div class="note">Har bir tugunning turini bildiruvchi son bor — <code>nodeType</code>. Bu haqda "Node xossalari" darsida batafsil to'xtalamiz. Hozircha esa asosiy 4 turni eslab qolish kifoya.</div>
-<h2>DevTools'da DOM'ni ko'rish</h2>
+<h2 id="devtools-da-dom-ni-ko-rish">DevTools'da DOM'ni ko'rish</h2>
 <p>DOM'ni amaliy o'rganish va u bilan ishlash uchun brauzerning ishlab chiquvchi vositalari (<strong>Developer Tools</strong>, qisqacha <em>DevTools</em>) juda qulay. Ularni <code>F12</code> tugmasi bilan ochib, <strong>Elements</strong> (Elementlar) bo'limiga o'ting. U yerda siz DOM daraxtini interaktiv holda ko'rasiz.</p>
 <ul><li>Istalgan elementga bosib, uni tanlashingiz mumkin;</li><li>Uchburchak (arrow) belgisi bilan tugunlarni yoyish/yig'ish mumkin;</li><li>O'ng tomonda tanlangan elementning uslublari (Styles), o'lchamlari va boshqa ma'lumotlari ko'rsatiladi;</li><li>Elementni ustiga sichqonchani olib borsangiz, u sahifada belgilanadi (highlight).</li></ul>
 <p>DevTools va JavaScript konsoli o'rtasida qulay o'zaro bog'lanish bor:</p>
@@ -664,7 +678,7 @@ inspect($0); // tanlangan elementni Elements'da ko'rsatadi
 
 // $0, $1, $2 ... — oxirgi tanlangan elementlar tarixi</code></pre>
 <div class="tip">DevTools — DOM bilan ishlaganda eng yaxshi do'stingiz. Har bir yangi metod yoki xossani o'rganganingizda, uni konsolda sinab ko'rish odatini shakllantiring. Bu materialni tezroq va chuqurroq o'zlashtirishga yordam beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>HTML hujjat teglardan iborat DOM daraxti sifatida ifodalanadi;</li><li>Teglar — element tugunlari, ular daraxt tuzilishini hosil qiladi;</li><li>Matn — matn tugunlari; bo'shliq va yangi qatorlar ham matn tugunlari sifatida hisobga olinadi;</li><li>Izohlar, DOCTYPE va boshqa maxsus ma'lumotlar ham DOM tugunlaridir;</li><li>Buzuq HTML'ni brauzer avtomatik tuzatadi (masalan, <code>&lt;tbody&gt;</code>ni qo'shadi, yopilmagan teglarni yopadi);</li><li>DOM'ni DevTools (Elements bo'limi) orqali interaktiv ko'rish va konsol bilan bog'lash mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="brauzer-muhiti.html"><span class="dir">← Oldingi</span><span class="ttl">Brauzer muhiti va spetsifikatsiyalar</span></a>
@@ -678,6 +692,6 @@ inspect($0); // tanlangan elementni Elements'da ko'rsatadi
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

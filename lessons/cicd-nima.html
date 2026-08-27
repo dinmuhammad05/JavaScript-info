@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CI/CD nima? — Kodla</title>
   <meta name="description" content="Uzluksiz integratsiya (CI) va uzluksiz yetkazib berish (CD): qo'lda jarayon muammosi, pipeline tushunchasi va vositalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,21 +599,33 @@
 <main class="content article">
 <div class="crumbs">CI/CD (GitHub Actions)</div>
 <h1>CI/CD nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#qo-lda-jarayonning-muammosi">Qo'lda jarayonning muammosi</a></li>
+<li class="lvl2"><a href="#ci-uzluksiz-integratsiya-continuous-integration">CI — uzluksiz integratsiya (Continuous Integration)</a></li>
+<li class="lvl2"><a href="#cd-uzluksiz-yetkazib-berish-va-deploy">CD — uzluksiz yetkazib berish va deploy</a></li>
+<li class="lvl2"><a href="#pipeline-quvur-tushunchasi">Pipeline (quvur) tushunchasi</a></li>
+<li class="lvl2"><a href="#vositalar-qaysi-birini-tanlash">Vositalar: qaysi birini tanlash?</a></li>
+<li class="lvl2"><a href="#ci-cd-ning-haqiqiy-foydasi">CI/CD ning haqiqiy foydasi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har safar kod yozganingizdan keyin uni qo'lda tekshirish, testlarni yugurtirish, build qilish va serverga qo'lda ko'chirish — bu zerikarli, sekin va xatoga moyil. <strong>CI/CD</strong> aynan shu jarayonlarni avtomatlashtiradi: siz kodni <code>git push</code> qilasiz, qolgan hammasini mashina bajaradi.</p>
-<h2>Qo'lda jarayonning muammosi</h2>
+<h2 id="qo-lda-jarayonning-muammosi">Qo'lda jarayonning muammosi</h2>
 <p>Tasavvur qiling: jamoada 5 dasturchi bor. Har biri o'z shoxchasida (branch) ishlaydi va haftada bir marta hamma o'zgarishlarni birlashtiradi. Birlashtirish paytida hamma narsa buziladi — kimningdir kodi boshqasinikiga zid keladi, testlar ishlamay qoladi, deploy paytida noto'g'ri fayl ko'chib ketadi.</p>
 <p>Qo'lda deploy odatda quyidagicha ko'rinadi:</p>
 <ul><li>Dasturchi lokal mashinasida <code>npm test</code> ni ishga tushiradi (ba'zan unutib qoldiradi).</li><li><code>npm run build</code> qiladi va natijani qo'lda serverga FTP orqali yuklaydi.</li><li>Serverda kerakli buyruqlarni qo'lda teradi (migratsiya, restart va h.k.).</li><li>Biror qadam esdan chiqsa — sayt ishlamay qoladi, sabab esa tunda topiladi.</li></ul>
 <div class="warn">Qo'lda jarayonda eng katta xavf — <strong>"menda ishlayapti-ku"</strong> muammosi. Kod dasturchining mashinasida ishlaydi, lekin serverda ishlamaydi, chunki muhitlar bir xil emas.</div>
-<h2>CI — uzluksiz integratsiya (Continuous Integration)</h2>
+<h2 id="ci-uzluksiz-integratsiya-continuous-integration">CI — uzluksiz integratsiya (Continuous Integration)</h2>
 <p><strong>CI</strong> — har bir <code>git push</code> yoki Pull Request paytida kodni <em>avtomatik</em> tekshirish amaliyoti. Toza, avtomatik muhitda kod yuklab olinadi, bog'liqliklar o'rnatiladi, linter, testlar va build ishga tushadi.</p>
 <ul><li><strong>Tez fikr-mulohaza:</strong> agar testlar buzilsa, dasturchi bir necha daqiqada bilib oladi, bir haftadan keyin emas.</li><li><strong>Kichik birlashuvlar:</strong> har kim tez-tez birlashtiradi, shuning uchun ziddiyatlar kichik bo'ladi.</li><li><strong>Ishonch:</strong> asosiy shoxcha (main) doim "yashil" — ya'ni testlardan o'tgan holatda turadi.</li></ul>
 <div class="note">CI'ning oltin qoidasi: <em>agar CI qizil bo'lsa (testlar buzilgan), hech narsa birlashtirilmaydi</em>. Bu asosiy shoxchani doim ishlaydigan holatda saqlaydi.</div>
-<h2>CD — uzluksiz yetkazib berish va deploy</h2>
+<h2 id="cd-uzluksiz-yetkazib-berish-va-deploy">CD — uzluksiz yetkazib berish va deploy</h2>
 <p>CD ikki ma'noda ishlatiladi va ularni farqlash muhim:</p>
 <ul><li><strong>Continuous Delivery (yetkazib berish):</strong> kod avtomatik tayyorlanadi va istalgan vaqtda deploy qilishga tayyor turadi, lekin oxirgi tugmani <em>odam</em> bosadi.</li><li><strong>Continuous Deployment (deploy):</strong> testlardan o'tgan har bir o'zgarish <em>avtomatik</em> ravishda ishlab chiqarish (production) serveriga chiqadi. Hech kim tugma bosmaydi.</li></ul>
 <p>Ko'p jamoalar avval Continuous Delivery bilan boshlaydi (xavfsizroq), ishonch ortgach Continuous Deployment ga o'tadi.</p>
-<h2>Pipeline (quvur) tushunchasi</h2>
+<h2 id="pipeline-quvur-tushunchasi">Pipeline (quvur) tushunchasi</h2>
 <p>CI/CD jarayoni odatda <strong>pipeline</strong> — ketma-ket bosqichlar quvuri sifatida tasvirlanadi. Har bir bosqich muvaffaqiyatli tugasagina keyingisi ishga tushadi:</p>
 <pre class="code"><code>  push / PR
      |
@@ -626,12 +641,12 @@
      |
   [ 6. Deploy   ]   &lt;- serverga chiqarish (faqat main)</code></pre>
 <p>Agar 4-bosqich (Test) buzilsa, 5 va 6 umuman ishga tushmaydi — buzuq kod hech qachon serverga chiqmaydi. Aynan shu narsa CI/CD ni kuchli qiladi.</p>
-<h2>Vositalar: qaysi birini tanlash?</h2>
+<h2 id="vositalar-qaysi-birini-tanlash">Vositalar: qaysi birini tanlash?</h2>
 <ul><li><strong>GitHub Actions</strong> — GitHub'ga to'g'ridan-to'g'ri o'rnatilgan, YAML fayl bilan sozlanadi. Ochiq repolar uchun bepul, o'rganish oson. Biz shu vositani o'rganamiz.</li><li><strong>GitLab CI/CD</strong> — GitLab'ga o'rnatilgan, <code>.gitlab-ci.yml</code> fayli bilan ishlaydi. Konsepsiyalar juda o'xshash.</li><li><strong>Jenkins</strong> — eski, kuchli, o'zingiz serverga o'rnatasiz. Katta korxonalarda ko'p uchraydi, lekin sozlash murakkabroq.</li><li><strong>CircleCI, Travis CI, Bitbucket Pipelines</strong> — boshqa mashhur bulutli xizmatlar.</li></ul>
 <div class="tip">Ularning barchasi bir xil g'oyaga asoslanadi: <em>hodisa yuz beradi (push) &rarr; toza muhitda bosqichlar ishga tushadi</em>. Bittasini o'rgansangiz, boshqalarini oson tushunasiz. GitHub Actions boshlash uchun eng qulay tanlov.</div>
-<h2>CI/CD ning haqiqiy foydasi</h2>
+<h2 id="ci-cd-ning-haqiqiy-foydasi">CI/CD ning haqiqiy foydasi</h2>
 <ul><li><strong>Kamroq xato:</strong> odam unutadigan qadamlarni mashina hech qachon unutmaydi.</li><li><strong>Tezlik:</strong> deploy daqiqalar ichida, tunlarcha qo'lda ishlashsiz.</li><li><strong>Ishonch:</strong> har bir o'zgarish bir xil, takrorlanadigan jarayondan o'tadi.</li><li><strong>Hujjatlashtirilgan jarayon:</strong> pipeline YAML fayli — bu jamoaning deploy jarayonining yagona haqiqat manbai.</li><li><strong>Xotirjamlik:</strong> "juma kuni deploy qilishdan qo'rqish" muammosi yo'qoladi.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>CI</strong> — har push/PR da kodni avtomatik tekshirish (lint, test, build).</li><li><strong>CD</strong> — kodni avtomatik yetkazish (Delivery) yoki avtomatik deploy qilish (Deployment).</li><li><strong>Pipeline</strong> — ketma-ket bosqichlar; buzuq bosqich keyingilarini to'xtatadi.</li><li>GitHub Actions, GitLab CI, Jenkins — vositalar; g'oya bir xil.</li><li>Foyda: kamroq xato, tezroq deploy, ko'proq ishonch.</li></ul>
 <nav class="lesson-nav">
   <a href="jest-amaliyot.html"><span class="dir">← Oldingi</span><span class="ttl">Coverage va yaxshi amaliyot</span></a>
@@ -645,6 +660,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

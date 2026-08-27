@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Docker Compose — Kodla</title>
   <meta name="description" content="Bir nechta konteynerni birga boshqarish, docker-compose.yml tuzilishi (services, ports, volumes, environment, depends_on), compose up/down va Node + Postgres namunasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,29 @@
 <main class="content article">
 <div class="crumbs">Docker</div>
 <h1>Docker Compose</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-bir-nechta-konteynerni-boshqarish">Muammo: bir nechta konteynerni boshqarish</a></li>
+<li class="lvl2"><a href="#yechim-docker-compose-yml">Yechim: docker-compose.yml</a></li>
+<li class="lvl2"><a href="#docker-compose-yml-tuzilishi">docker-compose.yml tuzilishi</a></li>
+<li class="lvl2"><a href="#asosiy-sozlamalar">Asosiy sozlamalar</a></li>
+<li class="lvl2"><a href="#to-liq-namuna-node-postgres">To'liq namuna: Node + Postgres</a></li>
+<li class="lvl2"><a href="#compose-up-va-down-buyruqlari">compose up va down buyruqlari</a></li>
+<li class="lvl2"><a href="#docker-compose-va-docker-compose">docker compose va docker-compose</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Real loyihalar odatda bir nechta xizmatdan iborat: veb-ilova, ma'lumotlar bazasi, kesh va boshqalar. Ularning har birini alohida <code>docker run</code> uzun buyruqlari bilan ishga tushirish noqulay va xatolarga to'la. <strong>Docker Compose</strong> aynan shu muammoni hal qiladi — bir nechta konteynerni bitta fayl orqali boshqaradi.</p>
-<h2>Muammo: bir nechta konteynerni boshqarish</h2>
+<h2 id="muammo-bir-nechta-konteynerni-boshqarish">Muammo: bir nechta konteynerni boshqarish</h2>
 <p>Tasavvur qiling, loyihangizda Node.js ilova va PostgreSQL ma'lumotlar bazasi bor. Ularni Docker'da ishga tushirish uchun ikkita uzun buyruq yozishingiz kerak:</p>
 <pre class="code"><code>docker run -d --name baza -e POSTGRES_PASSWORD=parol -v data:/var/lib/postgresql/data postgres:16
 docker run -d --name ilova -p 3000:3000 -e DB_HOST=baza mening-ilovam</code></pre>
 <p>Bu buyruqlar uzun, eslab qolish qiyin va har safar qo'lda yozish kerak. Bundan tashqari, ularni to'g'ri tartibda ishga tushirish, tarmoqni sozlash kabi qo'shimcha ishlar bor. Xizmatlar ko'paygan sari bu boshqarib bo'lmas holga keladi.</p>
-<h2>Yechim: docker-compose.yml</h2>
+<h2 id="yechim-docker-compose-yml">Yechim: docker-compose.yml</h2>
 <p><strong>Docker Compose</strong> — barcha xizmatlarni bitta <code>docker-compose.yml</code> fayli (YAML formatida) da tavsiflashga imkon beradi. So'ng bitta buyruq bilan hammasini birga ishga tushirasiz.</p>
 <div class="note"><strong>YAML</strong> — bu sozlamalar uchun ishlatiladigan oddiy matn formati. Unda <strong>chekinish (indentation, bo'sh joylar)</strong> juda muhim — u tuzilmani belgilaydi. Tab emas, <strong>bo'sh joy (probel)</strong> ishlating. Odatda ikki probel bilan chekinadi.</div>
-<h2>docker-compose.yml tuzilishi</h2>
+<h2 id="docker-compose-yml-tuzilishi">docker-compose.yml tuzilishi</h2>
 <p>Fayl asosan <code>services</code> (xizmatlar) bo'limidan iborat. Har bir xizmat — bu bitta konteyner. Sodda misol:</p>
 <pre class="code"><code>services:
   web:
@@ -613,10 +629,10 @@ docker run -d --name ilova -p 3000:3000 -e DB_HOST=baza mening-ilovam</code></pr
     ports:
       - "8080:80"</code></pre>
 <p>Bu <code>web</code> nomli xizmatni belgilaydi: u <code>nginx</code> image'idan yaratiladi va 8080-port 80-portga bog'lanadi. Bu <code>docker run -p 8080:80 nginx</code> buyrug'ining fayldagi ko'rinishi.</p>
-<h2>Asosiy sozlamalar</h2>
+<h2 id="asosiy-sozlamalar">Asosiy sozlamalar</h2>
 <p>Har bir xizmat uchun ishlatiladigan asosiy sozlamalar:</p>
 <ul><li><code>image</code> — ishlatiladigan tayyor image (masalan <code>postgres:16</code>);</li><li><code>build</code> — image'ni yaratish uchun Dockerfile yo'li (image o'rniga);</li><li><code>ports</code> — port bog'lash ro'yxati (<code>-p</code> bayrog'iga teng);</li><li><code>environment</code> — muhit o'zgaruvchilari (<code>-e</code> bayrog'iga teng);</li><li><code>volumes</code> — ma'lumot saqlash uchun ulanishlar (<code>-v</code> bayrog'iga teng);</li><li><code>depends_on</code> — bu xizmat qaysi boshqa xizmatlarga bog'liqligini bildiradi (ishga tushirish tartibi).</li></ul>
-<h2>To'liq namuna: Node + Postgres</h2>
+<h2 id="to-liq-namuna-node-postgres">To'liq namuna: Node + Postgres</h2>
 <p>Endi haqiqiy misol — Node.js ilova va PostgreSQL bazasidan iborat loyiha uchun to'liq <code>docker-compose.yml</code>:</p>
 <pre class="code"><code>services:
   web:
@@ -647,7 +663,7 @@ volumes:
 <p>Bu faylni bo'laklarga ajratamiz:</p>
 <ul><li><strong>web</strong> xizmati: joriy papkadagi Dockerfile'dan yaratiladi (<code>build: .</code>), 3000-port ochiladi, muhit o'zgaruvchilari beriladi va u <code>db</code> xizmatiga bog'liq;</li><li><strong>db</strong> xizmati: <code>postgres:16</code> image'idan, parol va baza nomi bilan, ma'lumot volume'da saqlanadi;</li><li>pastdagi <code>volumes:</code> bo'limi — nomli volume'ni e'lon qiladi (bu haqda keyingi darsda).</li></ul>
 <div class="tip">Diqqat qiling: <code>web</code> xizmatida <code>DB_HOST=db</code> deb yozdik — <strong>db</strong>! Bu ma'lumotlar bazasi xizmatining nomi. Compose xizmatlarni bir tarmoqqa ulaydi va ularni <strong>nomi orqali</strong> topish mumkin. IP manzil kerak emas — shunchaki xizmat nomini yozasiz.</div>
-<h2>compose up va down buyruqlari</h2>
+<h2 id="compose-up-va-down-buyruqlari">compose up va down buyruqlari</h2>
 <p>Fayl tayyor bo'lgach, barcha xizmatlarni <strong>birga</strong> ishga tushirish uchun:</p>
 <pre class="code"><code>docker compose up -d</code></pre>
 <p>Bu buyruq <code>docker-compose.yml</code>ni o'qib, barcha xizmatlarni to'g'ri tartibda ishga tushiradi. <code>-d</code> — fonda ishlash uchun. Compose kerak bo'lgan image'larni yuklaydi, tarmoqni yaratadi va konteynerlarni ishga tushiradi — hammasi bitta buyruq bilan.</p>
@@ -664,9 +680,9 @@ docker compose down
 # Volume'lar bilan birga o'chirish (ma'lumot ham o'chadi!)
 docker compose down -v</code></pre>
 <div class="warn"><code>docker compose down -v</code> — <code>-v</code> bayrog'i volume'larni ham o'chiradi, ya'ni ma'lumotlar bazasidagi <strong>barcha ma'lumot yo'qoladi</strong>. Oddiy <code>down</code> volume'ga tegmaydi. Ishlab turgan loyihada <code>-v</code>ni ehtiyotkorlik bilan ishlating.</div>
-<h2>docker compose va docker-compose</h2>
+<h2 id="docker-compose-va-docker-compose">docker compose va docker-compose</h2>
 <div class="note">Ikki xil yozuv uchraydi: yangi versiyalarda <code>docker compose</code> (ikki so'z, bo'sh joy bilan), eski versiyalarda <code>docker-compose</code> (chiziqcha bilan) ishlatiladi. Ikkalasi ham deyarli bir xil ishlaydi; zamonaviy tavsiya — <code>docker compose</code> (bo'sh joyli).</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Docker Compose</strong> bir nechta konteynerni bitta fayl orqali boshqaradi;</li><li><code>docker-compose.yml</code> — YAML formatidagi fayl, unda chekinish (bo'sh joy) muhim;</li><li>Har bir <code>services</code> ostidagi element — bitta konteyner (xizmat);</li><li>Asosiy sozlamalar: <code>image</code>/<code>build</code>, <code>ports</code>, <code>environment</code>, <code>volumes</code>, <code>depends_on</code>;</li><li>Xizmatlar bir-birini <strong>nomi orqali</strong> topadi (IP kerak emas) — masalan <code>DB_HOST=db</code>;</li><li><code>docker compose up -d</code> — hammasini ishga tushiradi, <code>docker compose down</code> — to'xtatib o'chiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="dockerfile.html"><span class="dir">← Oldingi</span><span class="ttl">Dockerfile va o'z image'ingizni yaratish</span></a>
@@ -680,6 +696,6 @@ docker compose down -v</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

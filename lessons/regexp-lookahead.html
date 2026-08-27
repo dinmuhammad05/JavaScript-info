@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lookahead va lookbehind — Kodla</title>
   <meta name="description" content="Oldinga qarash x(?=y), x(?!y) va orqaga qarash (?<=y)x, (?<!y)x; narxni ajratish misoli; bu vositalar qachon kerak bo'ladi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Lookahead va lookbehind</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ijobiy-lookahead-x-y">Ijobiy lookahead: x(?=y)</a></li>
+<li class="lvl2"><a href="#salbiy-lookahead-x-y">Salbiy lookahead: x(?!y)</a></li>
+<li class="lvl2"><a href="#ijobiy-lookbehind-y-x">Ijobiy lookbehind: (?&lt;=y)x</a></li>
+<li class="lvl2"><a href="#salbiy-lookbehind-y-x">Salbiy lookbehind: (?&lt;!y)x</a></li>
+<li class="lvl2"><a href="#amaliy-misol-narxni-formatlash">Amaliy misol: narxni formatlash</a></li>
+<li class="lvl2"><a href="#lookahead-ichida-guruhlar">Lookahead ichida guruhlar</a></li>
+<li class="lvl2"><a href="#qachon-kerak">Qachon kerak?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan biror belgini <em>faqat undan oldin yoki keyin ma'lum narsa bo'lsa</em> tutmoqchi bo'lamiz — lekin o'sha "kontekst"ni natijaga qo'shmaymiz. Aynan shuning uchun <strong>lookahead</strong> (oldinga qarash) va <strong>lookbehind</strong> (orqaga qarash) mavjud. Ular "nol kenglikdagi" tekshiruvlar: shartni tekshiradi, lekin matnni "yeb qo'ymaydi".</p>
-<h2>Ijobiy lookahead: x(?=y)</h2>
+<h2 id="ijobiy-lookahead-x-y">Ijobiy lookahead: x(?=y)</h2>
 <p><code>x(?=y)</code> — <code>x</code> ni <strong>faqat undan keyin <code>y</code> kelsa</strong> tutadi. Muhimi: <code>y</code> natijaga <strong>kirmaydi</strong>, u faqat shart sifatida tekshiriladi.</p>
 <p>Masalan, sonni <strong>faqat undan keyin "so'm" so'zi kelsa</strong> tutamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookahead-ijobiy.js</span></div><textarea spellcheck="false">let str = "5 kg, 100 so'm, 3 dona, 250 so'm";
@@ -605,7 +621,7 @@ let regexp = /\d+(?= so'm)/g;
 
 console.log(str.match(regexp));  // [ '100', '250' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Natijada faqat raqamlar bor — " so'm" qismi tutilmadi, u shunchaki shart bo'ldi. Agar oddiy <code>\d+ so'm</code> yozganimizda, natijada "so'm" ham bo'lardi.</p>
-<h2>Salbiy lookahead: x(?!y)</h2>
+<h2 id="salbiy-lookahead-x-y">Salbiy lookahead: x(?!y)</h2>
 <p><code>x(?!y)</code> — <code>x</code> ni <strong>faqat undan keyin <code>y</code> KELMASA</strong> tutadi. Bu ijobiy lookaheadning aksi.</p>
 <p>Endi "so'm" kelmagan raqamlarni tutamiz (masalan, o'lchov birligisiz sonlar):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookahead-salbiy.js</span></div><textarea spellcheck="false">let str = "5 kg, 100 so'm, 3 dona, 250 so'm";
@@ -613,7 +629,7 @@ let regexp = /\d+\b(?! so'm)/g;
 
 console.log(str.match(regexp));  // [ '5', '3' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Yuqorida <code>\b</code> (so'z chegarasi) qo'shildi, aks holda <code>100</code> dan <code>10</code> qismi tutilib qolardi (chunki <code>10</code> dan keyin "0 so'm" keladi, ya'ni " so'm" emas). <code>\b</code> sonni to'liq oxiriga bog'laydi.</div>
-<h2>Ijobiy lookbehind: (?<=y)x</h2>
+<h2 id="ijobiy-lookbehind-y-x">Ijobiy lookbehind: (?<=y)x</h2>
 <p><code>(?&lt;=y)x</code> — <code>x</code> ni <strong>faqat undan oldin <code>y</code> kelsa</strong> tutadi. Bu lookaheadning "orqaga qaragan" varianti. <code>y</code> yana natijaga kirmaydi.</p>
 <p>Masalan, dollar belgisidan keyingi summani tutamiz — <code>$</code> ni o'zini olmasdan:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookbehind-ijobiy.js</span></div><textarea spellcheck="false">let str = "$30 va 50 EUR va $100";
@@ -621,14 +637,14 @@ let regexp = /(?&lt;=\$)\d+/g;
 
 console.log(str.match(regexp));  // [ '30', '100' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>\$</code> eskeyplangan (dollar RegExp'da "satr oxiri" ma'nosini beradi), va u lookbehind ichida shart bo'lgani uchun natijaga <code>30</code> va <code>100</code> tushdi, <code>$</code> esa tushmadi.</p>
-<h2>Salbiy lookbehind: (?<!y)x</h2>
+<h2 id="salbiy-lookbehind-y-x">Salbiy lookbehind: (?<!y)x</h2>
 <p><code>(?&lt;!y)x</code> — <code>x</code> ni <strong>faqat undan oldin <code>y</code> KELMASA</strong> tutadi. Masalan, dollar belgisi bilan bog'lanmagan sonlarni ajratamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookbehind-salbiy.js</span></div><textarea spellcheck="false">let str = "$30 va 50 EUR va $100";
 let regexp = /(?&lt;!\$)\b\d+/g;
 
 console.log(str.match(regexp));  // [ '50' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">To'rt turni eslab qolish: <code>?=</code> va <code>?!</code> — <strong>oldinga</strong> (keyin nima keladi); <code>?&lt;=</code> va <code>?&lt;!</code> — <strong>orqaga</strong> (oldin nima kelgan). Undov <code>!</code> — inkor, teng <code>=</code> — tasdiq.</div>
-<h2>Amaliy misol: narxni formatlash</h2>
+<h2 id="amaliy-misol-narxni-formatlash">Amaliy misol: narxni formatlash</h2>
 <p>Kuchli misol — katta sonlarga uch xonadan ajratuvchi bo'sh joy qo'yish (<code>1234567</code> -> <code>1 234 567</code>). Buni lookahead bilan qilish mumkin: har bir raqam <strong>oldiga</strong> bo'sh joy qo'yamiz, agar undan keyin uchtalik guruhlar qolgan bo'lsa:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>narx-format.js</span></div><textarea spellcheck="false">let son = "1234567";
 
@@ -646,7 +662,7 @@ function ajrat(n) {
 console.log(ajrat(1000000));  // 1 000 000
 console.log(ajrat(500));      // 500
 console.log(ajrat(12345));    // 12 345</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Lookahead ichida guruhlar</h2>
+<h2 id="lookahead-ichida-guruhlar">Lookahead ichida guruhlar</h2>
 <p>Lookahead va lookbehind ichida to'liq ifodalar, jumladan guruhlar va alternatsiya bo'lishi mumkin. Masalan, parol tekshiruvida bir necha shartni birdan qo'yish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>lookahead-parol.js</span></div><textarea spellcheck="false">// Kamida bitta raqam VA kamida bitta katta harf borligini tekshirish
 let regexp = /^(?=.*\d)(?=.*[A-Z]).+$/;
@@ -655,12 +671,12 @@ console.log(regexp.test("parol"));    // false (raqam yo'q)
 console.log(regexp.test("Parol1"));   // true  (raqam + katta harf)
 console.log(regexp.test("parol1"));   // false (katta harf yo'q)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda ikkita lookahead ketma-ket ishlatilgan. Ular "nol kenglik" bo'lgani uchun ikkalasi ham satr boshidan tekshiradi va bir-biriga xalal bermaydi — bu birdan bir necha shartni qo'yishning klassik usuli.</p>
-<h2>Qachon kerak?</h2>
+<h2 id="qachon-kerak">Qachon kerak?</h2>
 <p>Lookahead/lookbehind quyidagi holatlarda juda foydali:</p>
 <ul><li>Biror belgini <strong>kontekst asosida</strong> tutish, lekin kontekstni natijaga qo'shmaslik (masalan, valyutadan oldingi/keyingi son);</li><li><code>replace</code> da faqat kerakli qismni almashtirish, atrofdagilarga tegmasdan;</li><li>Bir necha shartni birdan tekshirish (parol murakkabligi kabi);</li><li>"Bunday emas" mantig'i — masalan, ma'lum so'zdan keyin/oldin kelmagan holatlarni topish.</li></ul>
 <div class="note">Zamonaviy JavaScript dvigatellari (Node.js, brauzerlar) lookbehind'ni to'liq qo'llab-quvvatlaydi. Ilgari u faqat lookahead uchun mavjud edi, endi ikkalasi ham ishlatilaveradi.</div>
 <div class="warn">Lookahead/lookbehind <strong>joy egallamaydi</strong> — ular kursorni oldinga su[u]rmaydi. Shuning uchun natijada faqat asosiy <code>x</code> qismi bo'ladi, shart qismidagi belgilar keyingi mos kelishlarda qayta ishlatilishi mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>x(?=y)</code> — ijobiy lookahead: keyin <code>y</code> bo'lsa, <code>x</code> ni tut;</li><li><code>x(?!y)</code> — salbiy lookahead: keyin <code>y</code> BO'LMASA, <code>x</code> ni tut;</li><li><code>(?&lt;=y)x</code> — ijobiy lookbehind: oldin <code>y</code> bo'lsa, <code>x</code> ni tut;</li><li><code>(?&lt;!y)x</code> — salbiy lookbehind: oldin <code>y</code> BO'LMASA, <code>x</code> ni tut;</li><li>Shart qismi (<code>y</code>) natijaga <strong>kirmaydi</strong> — bu "nol kenglikli" tekshiruv;</li><li>Qo'llanilishi: kontekstga bog'liq tutish, narxni formatlash, parol tekshiruvi, aniq almashtirish.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-alternation.html"><span class="dir">← Oldingi</span><span class="ttl">Alternatsiya (yoki) |</span></a>
@@ -674,6 +690,6 @@ console.log(regexp.test("parol1"));   // false (katta harf yo'q)</textarea><div 
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

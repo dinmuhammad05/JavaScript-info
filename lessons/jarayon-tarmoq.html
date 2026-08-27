@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jarayonlar va tarmoq — Kodla</title>
   <meta name="description" content="ps, top/htop, kill, fon rejimi (&), jobs, systemctl; tarmoq buyruqlari ping, curl, wget; paket menejeri apt (install/update).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,31 @@
 <main class="content article">
 <div class="crumbs">Linux va terminal</div>
 <h1>Jarayonlar va tarmoq</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#jarayon-nima">Jarayon nima?</a></li>
+<li class="lvl2"><a href="#ps-jarayonlar-ro-yxati">ps — jarayonlar ro'yxati</a></li>
+<li class="lvl2"><a href="#top-va-htop-jonli-kuzatuv">top va htop — jonli kuzatuv</a></li>
+<li class="lvl2"><a href="#kill-jarayonni-to-xtatish">kill — jarayonni to'xtatish</a></li>
+<li class="lvl2"><a href="#fon-rejimi-va-jobs">Fon rejimi: &amp; va jobs</a></li>
+<li class="lvl2"><a href="#systemctl-tizim-xizmatlarini-boshqarish">systemctl — tizim xizmatlarini boshqarish</a></li>
+<li class="lvl2"><a href="#ping-tarmoqni-tekshirish">ping — tarmoqni tekshirish</a></li>
+<li class="lvl2"><a href="#curl-va-wget-tarmoqdan-ma-lumot-olish">curl va wget — tarmoqdan ma'lumot olish</a></li>
+<li class="lvl2"><a href="#apt-paket-menejeri">apt — paket menejeri</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har bir ishlab turgan dastur — bu <strong>jarayon</strong> (process). Bu darsda jarayonlarni ko'rish va boshqarishni, dasturlarni fon rejimida ishlatishni, tizim xizmatlarini boshqarishni hamda tarmoq va paketlar bilan ishlashni o'rganamiz.</p>
-<h2>Jarayon nima?</h2>
+<h2 id="jarayon-nima">Jarayon nima?</h2>
 <p><strong>Jarayon</strong> — bu ishlab turgan dasturning bir nusxasi. Brauzer, matn muharriri, web-server — har biri bitta yoki bir necha jarayon. Har bir jarayonning noyob <strong>PID</strong> (Process ID) raqami bor, u orqali jarayonni aniqlaymiz va boshqaramiz.</p>
-<h2>ps — jarayonlar ro'yxati</h2>
+<h2 id="ps-jarayonlar-ro-yxati">ps — jarayonlar ro'yxati</h2>
 <p><code>ps</code> (process status) ishlab turgan jarayonlarni ko'rsatadi. Odatda <code>aux</code> flaglari bilan barcha jarayonlarni chiqaramiz:</p>
 <pre class="code"><code>ps aux</code></pre>
 <p>Bu barcha foydalanuvchilarning barcha jarayonlarini PID, protsessor va xotira sarfini ko'rsatib chiqaradi. Ma'lum dasturni topish uchun <code>grep</code> bilan filtrlaymiz:</p>
 <pre class="code"><code>ps aux | grep node    # 'node' bor jarayonlarni topish</code></pre>
 <p>Bu qatorlar ichidan node dasturlarini va ularning PID raqamlarini topib beradi.</p>
-<h2>top va htop — jonli kuzatuv</h2>
+<h2 id="top-va-htop-jonli-kuzatuv">top va htop — jonli kuzatuv</h2>
 <p><code>top</code> jarayonlarni <strong>real vaqtda</strong>, jonli yangilanib turadigan jadval sifatida ko'rsatadi — protsessor va xotira eng ko'p iste'mol qilayotgan dasturlar tepada bo'ladi:</p>
 <pre class="code"><code>top</code></pre>
 <p>Chiqish uchun <code>q</code> tugmasini bosing. <code>top</code> tizim yuklamasini, umumiy xotira sarfini va har bir jarayon holatini ko'rsatadi.</p>
@@ -613,7 +631,7 @@
 <pre class="code"><code>sudo apt install htop
 htop</code></pre>
 <div class="tip"><code>htop</code>da sichqoncha ishlaydi, jarayonlarni rang bilan ajratadi va bevosita ichidan jarayonni "o'ldirish" mumkin (F9 tugmasi). Server sekinlashsa, birinchi ish — <code>htop</code> ochib, nima resursni yeb turganini ko'rish.</div>
-<h2>kill — jarayonni to'xtatish</h2>
+<h2 id="kill-jarayonni-to-xtatish">kill — jarayonni to'xtatish</h2>
 <p>Osilib qolgan yoki keraksiz jarayonni <code>kill</code> buyrug'i bilan uning PID raqami orqali to'xtatamiz:</p>
 <pre class="code"><code>kill 12345          # PID 12345 jarayonga to'xtash signali
 kill -9 12345       # majburiy to'xtatish (qaysar jarayonlar uchun)</code></pre>
@@ -621,7 +639,7 @@ kill -9 12345       # majburiy to'xtatish (qaysar jarayonlar uchun)</code></pre>
 <p>Nom bo'yicha to'xtatish uchun <code>pkill</code> qulay:</p>
 <pre class="code"><code>pkill node          # barcha 'node' jarayonlarini to'xtatish</code></pre>
 <div class="warn"><code>kill -9</code> jarayonga ishini xotirjam yakunlash imkonini bermaydi — saqlanmagan ma'lumot yo'qolishi mumkin. Doim avval oddiy <code>kill</code>ni sinang, faqat u ishlamaganda <code>-9</code>ga o'ting.</div>
-<h2>Fon rejimi: & va jobs</h2>
+<h2 id="fon-rejimi-va-jobs">Fon rejimi: & va jobs</h2>
 <p>Odatda buyruq ishlab bo'lguncha terminal band bo'ladi. Dasturni <strong>fonda</strong> (background) ishlatib, terminalni bo'shatish uchun buyruq oxiriga <code>&</code> qo'yiladi:</p>
 <pre class="code"><code>node server.js &amp;</code></pre>
 <p>Endi server fonda ishlaydi, terminaldan boshqa buyruqlar berishingiz mumkin. Fondagi ishlarni ko'rish va boshqarish uchun:</p>
@@ -630,7 +648,7 @@ kill -9 12345       # majburiy to'xtatish (qaysar jarayonlar uchun)</code></pre>
 fg          # oxirgi ishni oldinga qaytarish
 fg %1       # 1-raqamli ishni oldinga qaytarish</code></pre>
 <div class="note">Terminalni yopsangiz, <code>&</code> bilan ishga tushirilgan jarayonlar ham to'xtaydi. Serverni doimiy ishlatish uchun <code>nohup</code>, <code>tmux</code> yoki keyingi bo'limdagi <code>systemctl</code> xizmatlaridan foydalaniladi.</div>
-<h2>systemctl — tizim xizmatlarini boshqarish</h2>
+<h2 id="systemctl-tizim-xizmatlarini-boshqarish">systemctl — tizim xizmatlarini boshqarish</h2>
 <p>Web-serverlar, ma'lumotlar bazalari kabi doimiy ishlaydigan dasturlar <strong>xizmat</strong> (service) sifatida ishga tushiriladi. Ularni <code>systemctl</code> boshqaradi:</p>
 <pre class="code"><code>sudo systemctl start nginx      # xizmatni ishga tushirish
 sudo systemctl stop nginx       # to'xtatish
@@ -640,11 +658,11 @@ sudo systemctl status nginx     # holatini ko'rish</code></pre>
 <pre class="code"><code>sudo systemctl enable nginx     # avtoyuklashni yoqish
 sudo systemctl disable nginx    # avtoyuklashni o'chirish</code></pre>
 <div class="tip"><code>systemctl status</code> — muammoni tekshirishning birinchi qadami. U xizmat ishlayaptimi (active/failed), oxirgi log qatorlari va xato borligini bir joyda ko'rsatadi.</div>
-<h2>ping — tarmoqni tekshirish</h2>
+<h2 id="ping-tarmoqni-tekshirish">ping — tarmoqni tekshirish</h2>
 <p><code>ping</code> berilgan server bilan aloqa bor-yo'qligini tekshiradi — unga kichik paketlar yuborib, javob vaqtini o'lchaydi:</p>
 <pre class="code"><code>ping google.com</code></pre>
 <p>Har soniyada javob kelib turadi, javob vaqti millisekundlarda ko'rsatiladi. To'xtatish uchun <strong>Ctrl+C</strong> bosing. Agar javob kelmasa — internet yo'q yoki server ishlamayapti.</p>
-<h2>curl va wget — tarmoqdan ma'lumot olish</h2>
+<h2 id="curl-va-wget-tarmoqdan-ma-lumot-olish">curl va wget — tarmoqdan ma'lumot olish</h2>
 <p><code>curl</code> — tarmoq orqali so'rov yuboradigan universal vosita. U API bilan ishlash, web-sahifani olish, fayl yuklab olishda ishlatiladi:</p>
 <pre class="code"><code>curl https://example.com               # sahifa mazmunini ekranga chiqarish
 curl -O https://example.com/fayl.zip   # faylni saqlab olish
@@ -654,7 +672,7 @@ curl -I https://example.com            # faqat javob sarlavhalarini ko'rish</cod
 <p><code>wget</code> — asosan fayl yuklab olishga ixtisoslashgan, oddiyroq vosita:</p>
 <pre class="code"><code>wget https://example.com/dastur.tar.gz</code></pre>
 <p>Farqi: <code>curl</code> ko'p qirrali (API, so'rovlar), <code>wget</code> esa fayllarni, ayniqsa katta yuklamalarni (davom ettirish imkoni bilan) yuklab olishga qulay.</p>
-<h2>apt — paket menejeri</h2>
+<h2 id="apt-paket-menejeri">apt — paket menejeri</h2>
 <p>Linuxda dasturlar <strong>paket menejeri</strong> orqali o'rnatiladi — internetdan qidirib yuklab olishning hojati yo'q. Ubuntu/Debianda bu <code>apt</code>:</p>
 <pre class="code"><code>sudo apt update            # paketlar ro'yxatini yangilash
 sudo apt upgrade           # o'rnatilgan paketlarni yangilash
@@ -665,7 +683,7 @@ apt search redis           # paketni qidirish</code></pre>
 <pre class="code"><code>sudo apt update &amp;&amp; sudo apt install nodejs</code></pre>
 <p>Bu yerda <code>&&</code> ikki buyruqni bog'laydi: birinchisi muvaffaqiyatli tugasa, ikkinchisi ishlaydi.</p>
 <div class="note">Boshqa distributivlarda boshqa paket menejerlari bor: Fedora/CentOSda <code>dnf</code> yoki <code>yum</code>, Arch Linuxda <code>pacman</code>. Buyruqlar o'xshash mantiqda ishlaydi, faqat nomi farq qiladi. Ubuntu bilan ishlaganingiz uchun biz <code>apt</code>ga e'tibor qaratamiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Jarayon</strong> — ishlab turgan dastur, uning <strong>PID</strong> raqami bor;</li><li><code>ps aux</code> — jarayonlar ro'yxati; <code>top</code>/<code>htop</code> — jonli kuzatuv;</li><li><code>kill PID</code> — to'xtatish, <code>kill -9</code> — majburiy (faqat zarur bo'lsa);</li><li><code>&</code> — fonda ishga tushirish; <code>jobs</code>, <code>fg</code>, <code>bg</code> — fon ishlarini boshqarish;</li><li><code>systemctl start/stop/status/enable</code> — tizim xizmatlarini boshqaradi;</li><li><code>ping</code> — tarmoqni tekshirish; <code>curl</code> — so'rovlar/API, <code>wget</code> — fayl yuklab olish;</li><li><code>apt update</code> + <code>apt install</code> — paketlarni yangilash va o'rnatish.</li></ul>
 <nav class="lesson-nav">
   <a href="huquqlar.html"><span class="dir">← Oldingi</span><span class="ttl">Ruxsatlar va egalik</span></a>
@@ -679,6 +697,6 @@ apt search redis           # paketni qidirish</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

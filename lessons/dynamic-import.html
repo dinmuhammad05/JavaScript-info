@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dinamik importlar — Kodla</title>
   <meta name="description" content="import() ifodasi, uning promise qaytarishi, shartli va kechiktirilgan yuklash hamda statik importlardan farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Modullar</div>
 <h1>Dinamik importlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#statik-importlarning-cheklovlari">Statik importlarning cheklovlari</a></li>
+<li class="lvl2"><a href="#import-ifodasi">import() ifodasi</a></li>
+<li class="lvl2"><a href="#amaliy-misol-nomli-eksportlarni-olish">Amaliy misol: nomli eksportlarni olish</a></li>
+<li class="lvl2"><a href="#default-eksportni-dinamik-import-qilish">Default eksportni dinamik import qilish</a></li>
+<li class="lvl2"><a href="#shartli-va-kechiktirilgan-yuklash">Shartli va kechiktirilgan yuklash</a></li>
+<li class="lvl2"><a href="#dinamik-import-qaerda-ishlaydi">Dinamik import qaerda ishlaydi?</a></li>
+<li class="lvl2"><a href="#statik-va-dinamik-import-solishtirma">Statik va dinamik import: solishtirma</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Oldingi darslarda ko'rgan <code>import/export</code> — bu <strong>statik</strong> importlar. Ular kuchli, lekin bir necha cheklovlari bor. Ushbu darsda <strong>dinamik</strong> import — <code>import()</code> ifodasini o'rganamiz, u shu cheklovlardan xoli.</p>
-<h2>Statik importlarning cheklovlari</h2>
+<h2 id="statik-importlarning-cheklovlari">Statik importlarning cheklovlari</h2>
 <p>Hozirgacha ko'rgan sintaksisga <strong>statik</strong> import deyiladi. Uning quyidagi cheklovlari bor:</p>
 <p><strong>Birinchidan</strong>, modul yo'li dinamik bo'la olmaydi. <code>from</code> dan keyin faqat oddiy string turishi kerak — o'zgaruvchi yoki funksiya chaqiruvi emas:</p>
 <pre class="code"><code>import ... from getModuleName(); // Xatolik! Faqat "string" bo'lishi kerak</code></pre>
@@ -610,7 +626,7 @@
   import ...; // Xatolik! Import blok ichida bo'lmasligi kerak
 }</code></pre>
 <p>Buning sababi shundaki, <code>import/export</code> kodning <em>tuzilishini</em> (arxitekturasini) belgilashga mo'ljallangan. Bu juda yaxshi tomon — kod tuzilmasini tahlil qilish, modullarni yig'ish (bundling), ishlatilmaganlarini olib tashlash (tree-shaking) mumkin bo'ladi. Lekin ba'zan bizga moslashuvchanlik kerak bo'ladi.</p>
-<h2>import() ifodasi</h2>
+<h2 id="import-ifodasi">import() ifodasi</h2>
 <p><code>import(module)</code> ifodasi modulni yuklab, uning barcha eksportlarini o'z ichiga olgan modul obyektiga <strong>hal bo'ladigan (resolve) promise</strong> qaytaradi. Uni kodning istalgan joyida chaqirish mumkin:</p>
 <pre class="code"><code>let modulePath = prompt('Qaysi modulni yuklaymiz?');
 
@@ -624,7 +640,7 @@ import(modulePath)
 <p><code>import()</code> promise qaytargani uchun uni <code>await</code> bilan ham ishlatish mumkin (async funksiya ichida yoki modulning yuqori darajasida):</p>
 <pre class="code"><code>let module = await import(modulePath);</code></pre>
 <div class="note"><code>import(...)</code> funksiyaga o'xshab ko'rinsa-da, u <strong>oddiy funksiya emas</strong> — bu maxsus sintaksis (huddi <code>super()</code> kabi). Shuning uchun uni o'zgaruvchiga nusxalab bo'lmaydi (<code>let x = import</code> ishlamaydi) yoki <code>call</code>/<code>apply</code> bilan chaqirib bo'lmaydi.</div>
-<h2>Amaliy misol: nomli eksportlarni olish</h2>
+<h2 id="amaliy-misol-nomli-eksportlarni-olish">Amaliy misol: nomli eksportlarni olish</h2>
 <p>Faraz qilaylik, quyidagi eksportlarga ega modul bor:</p>
 <pre class="code"><code>// 📁 say.js
 export function hi() {
@@ -644,7 +660,7 @@ bye(); // Xayr!</code></pre>
 
 say.hi();  // Salom!
 say.bye(); // Xayr!</code></pre>
-<h2>Default eksportni dinamik import qilish</h2>
+<h2 id="default-eksportni-dinamik-import-qilish">Default eksportni dinamik import qilish</h2>
 <p>Modulda default eksport bo'lsa, u qaytarilgan obyektning <code>default</code> xossasi orqali olinadi:</p>
 <pre class="code"><code>// 📁 say.js
 export default function() {
@@ -657,7 +673,7 @@ let say = obj.default;
 let { default: say } = await import('./say.js');
 
 say(); // Default eksportdan salom!</code></pre>
-<h2>Shartli va kechiktirilgan yuklash</h2>
+<h2 id="shartli-va-kechiktirilgan-yuklash">Shartli va kechiktirilgan yuklash</h2>
 <p>Dinamik importning eng katta afzalligi — modulni <strong>faqat kerak bo'lganda</strong> yuklash imkoni. Bu boshlang'ich yuklash hajmini kamaytiradi va sahifani tezroq ochiladi.</p>
 <p>Masalan, foydalanuvchi tugmani bosgandagina og'ir modulni yuklaymiz:</p>
 <pre class="code"><code>button.addEventListener('click', async () =&gt; {
@@ -676,17 +692,17 @@ say(); // Default eksportdan salom!</code></pre>
   return messages.default;
 }</code></pre>
 <div class="tip">Bu naqsh ("lazy loading" — kechiktirilgan yuklash) katta veb-ilovalarda juda foydali. Foydalanuvchi ko'rmaydigan sahifa qismlari (masalan, admin panel yoki kamdan-kam ochiladigan modal oyna) kodi faqat kerak bo'lganda yuklanadi — bu boshlang'ich sahifa yuklanishini sezilarli tezlashtiradi.</div>
-<h2>Dinamik import qaerda ishlaydi?</h2>
+<h2 id="dinamik-import-qaerda-ishlaydi">Dinamik import qaerda ishlaydi?</h2>
 <p>Muhim jihat: <code>import()</code> ifodasi oddiy skriptlarda ham ishlaydi — undan foydalanish uchun <code>type="module"</code> shart emas:</p>
 <pre class="code"><code>&lt;!-- type="module" bo'lmasa ham import() ishlaydi --&gt;
 &lt;script&gt;
   import('./say.js').then(module =&gt; module.hi());
 &lt;/script&gt;</code></pre>
 <div class="note">Bu statik <code>import</code>dan yana bir farq: statik <code>import</code> faqat modul ichida (<code>type="module"</code>) ishlaydi, dinamik <code>import()</code> esa har qanday joyda ishlaydi.</div>
-<h2>Statik va dinamik import: solishtirma</h2>
+<h2 id="statik-va-dinamik-import-solishtirma">Statik va dinamik import: solishtirma</h2>
 <ul><li><strong>Statik import</strong> (<code>import ... from</code>): faqat fayl yuqori darajasida, blok/shart ichida ishlamaydi, yo'l — doim string konstanta. Modul boshqa hamma narsadan oldin yuklanadi. Kod tuzilmasini aniqlaydi, tahlil qilinadi, tree-shaking'ga qulay;</li><li><strong>Dinamik import</strong> (<code>import()</code>): istalgan joyda, shart va sikllar ichida, yo'l dinamik bo'lishi mumkin. Promise qaytaradi, <code>await</code>/<code>then</code> bilan ishlatiladi. Kechiktirilgan va shartli yuklash uchun ishlatiladi.</li></ul>
 <div class="warn">Dinamik importni oddiy import o'rniga <em>hamma joyda</em> ishlatishga shoshilmang. Statik importlar kod tuzilmasini ravshan qiladi va vositalar tomonidan yaxshiroq optimallashtiriladi. Dinamik importni faqat unga haqiqiy ehtiyoj bo'lganda — dinamik yo'l yoki kechiktirilgan/shartli yuklash kerak bo'lganda ishlating.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>import(module)</code> — modulni yuklab, eksportlar obyektiga hal bo'ladigan <strong>promise</strong> qaytaruvchi ifoda;</li><li>Uni kodning istalgan joyida chaqirish mumkin (shart, blok, funksiya ichida);</li><li><code>await import(...)</code> yoki <code>.then(...)</code> bilan natijani olamiz;</li><li>Default eksport <code>obj.default</code> orqali olinadi;</li><li>Statik <code>import</code>dan farqi: yo'l dinamik bo'lishi mumkin, <code>type="module"</code> talab qilmaydi, kod tuzilmasini emas — ish vaqtidagi (runtime) yuklashni belgilaydi;</li><li>Asosiy foyda — modullarni <strong>faqat kerak bo'lganda</strong> yuklab, ilovani tezlashtirish (lazy loading).</li></ul>
 <nav class="lesson-nav">
   <a href="export-import.html"><span class="dir">← Oldingi</span><span class="ttl">Eksport va Import</span></a>
@@ -700,6 +716,6 @@ say(); // Default eksportdan salom!</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

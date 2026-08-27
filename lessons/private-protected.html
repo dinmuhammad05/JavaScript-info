@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maxfiy va himoyalangan xossalar — Kodla</title>
   <meta name="description" content="protected konvensiyasi (_), private #maydonlar, getter/setter bilan himoya va inkapsulyatsiya.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Klasslar</div>
 <h1>Maxfiy va himoyalangan xossalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ichki-va-tashqi-interfeys">Ichki va tashqi interfeys</a></li>
+<li class="lvl2"><a href="#protected-konvensiya-old-qo-shimchasi">protected — konvensiya (_ old qo'shimchasi)</a></li>
+<li class="lvl2"><a href="#faqat-o-qish-uchun-read-only-xossalar">Faqat o'qish uchun (read-only) xossalar</a></li>
+<li class="lvl2"><a href="#private-maydonlar">private — # maydonlar</a></li>
+<li class="lvl2"><a href="#private-getter-setter-bilan-to-liq-himoya">private + getter/setter bilan to'liq himoya</a></li>
+<li class="lvl2"><a href="#private-maydonlar-meros-olinmaydi">private maydonlar meros olinmaydi</a></li>
+<li class="lvl2"><a href="#nima-uchun-inkapsulyatsiya-kerak">Nima uchun inkapsulyatsiya kerak?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Obyektga yo'naltirilgan dasturlashning eng muhim tamoyillaridan biri — <strong>inkapsulyatsiya</strong>: ichki tafsilotlarni tashqi kodda yashirish. Bu murakkablikni kamaytiradi va kodni xavfsizroq qiladi.</p>
-<h2>Ichki va tashqi interfeys</h2>
+<h2 id="ichki-va-tashqi-interfeys">Ichki va tashqi interfeys</h2>
 <p>Obyektga yo'naltirilgan dasturlashda xossa va metodlar ikki turga bo'linadi:</p>
 <ul><li><strong>Ichki interfeys</strong> — obyektning boshqa metodlaridan foydalaniladigan, tashqaridan ko'rinmasligi kerak bo'lgan qismlar;</li><li><strong>Tashqi interfeys</strong> — obyektdan tashqarida ishlatilishi mumkin bo'lgan metod va xossalar.</li></ul>
 <p>JavaScript'da a'zolikni belgilashning ikki asosiy usuli bor: <em>protected</em> (himoyalangan, konvensiya) va <em>private</em> (maxfiy, til darajasida). Ularni ko'rib chiqamiz.</p>
-<h2>protected — konvensiya (_ old qo'shimchasi)</h2>
+<h2 id="protected-konvensiya-old-qo-shimchasi">protected — konvensiya (_ old qo'shimchasi)</h2>
 <p>Himoyalangan (protected) xossalar odatda nom oldiga pastki chiziq <code>_</code> qo'yish orqali belgilanadi. Bu <strong>til darajasida majburiy emas</strong> — bu shunchaki dasturchilar orasidagi kelishuv (konvensiya).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>protected-water.js</span></div><textarea spellcheck="false">class CoffeeMachine {
   _waterAmount = 0; // himoyalangan (konvensiya)
@@ -625,7 +641,7 @@ machine.waterAmount = -10;
 console.log(machine.waterAmount);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>_waterAmount</code> — ichki holat, u <code>get</code>/<code>set</code> orqali nazorat qilinadi. Manfiy qiymatni o'rnatishga urinsak, u avtomatik 0 ga tenglashadi. Shu tariqa biz noto'g'ri holatdan himoyalanamiz.</p>
 <div class="note"><code>_</code> old qo'shimchasi — bu faqat kelishuv. Yaxshi dasturchi <code>_</code>li xossalarga tashqaridan tegmaydi. Ammo texnik jihatdan bunga hech narsa to'sqinlik qilmaydi — <code>machine._waterAmount = -10</code> deb yozish baribir mumkin.</div>
-<h2>Faqat o'qish uchun (read-only) xossalar</h2>
+<h2 id="faqat-o-qish-uchun-read-only-xossalar">Faqat o'qish uchun (read-only) xossalar</h2>
 <p>Ba'zi xossalarni yaratilgandan keyin o'zgartirib bo'lmaydigan qilishimiz mumkin. Buning uchun faqat <code>get</code> yozamiz, <code>set</code>ni esa yozmaymiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>protected-readonly.js</span></div><textarea spellcheck="false">class CoffeeMachine {
   constructor(power) {
@@ -647,7 +663,7 @@ try {
 } catch (e) {
   console.log("Xato: quvvatni o'zgartirib bo'lmaydi");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>private — # maydonlar</h2>
+<h2 id="private-maydonlar">private — # maydonlar</h2>
 <p>Zamonaviy JavaScript'da haqiqiy <strong>maxfiy (private)</strong> maydonlar mavjud. Ular nom oldiga <code>#</code> belgisi qo'yish orqali yaratiladi. Bunday maydonlar <em>faqat</em> shu klass ichidan ko'rinadi — bu til darajasida ta'minlanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>private-fields.js</span></div><textarea spellcheck="false">class CoffeeMachine {
   #waterLimit = 200; // maxfiy maydon
@@ -675,7 +691,7 @@ machine.#waterLimit = 1000;
 // SyntaxError: Private field '#waterLimit'
 // must be declared in an enclosing class</code></pre>
 <div class="warn">Maxfiy maydonlar odatdagi maydonlar bilan ziddiyatlashmaydi. Ya'ni bir klassda ham <code>#waterAmount</code> (maxfiy), ham <code>waterAmount</code> (oddiy) bo'lishi mumkin — ular butunlay alohida maydonlar.</div>
-<h2>private + getter/setter bilan to'liq himoya</h2>
+<h2 id="private-getter-setter-bilan-to-liq-himoya">private + getter/setter bilan to'liq himoya</h2>
 <p>Eng ishonchli usul — maxfiy maydonni <code>#</code> bilan e'lon qilib, unga faqat getter/setter orqali kirish. Shunda ma'lumot ham yashiringan, ham nazorat ostida bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>private-getset.js</span></div><textarea spellcheck="false">class CoffeeMachine {
   #waterAmount = 0;
@@ -701,7 +717,7 @@ try {
 } catch (e) {
   console.log("Ushlab qolindi: " + e.message);
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>private maydonlar meros olinmaydi</h2>
+<h2 id="private-maydonlar-meros-olinmaydi">private maydonlar meros olinmaydi</h2>
 <p>Muhim cheklov: maxfiy <code>#</code> maydonlar meros olgan klasslarda <strong>ko'rinmaydi</strong>. Agar himoyalangan, lekin merosxo'rlarga ochiq bo'lishini istasangiz, <code>_</code> konvensiyasidan foydalaning.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>private-inherit.js</span></div><textarea spellcheck="false">class Machine {
   #secret = "maxfiy";     // meros olinmaydi
@@ -716,11 +732,11 @@ class Robot extends Machine {
 }
 
 console.log(new Robot().reveal());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Nima uchun inkapsulyatsiya kerak?</h2>
+<h2 id="nima-uchun-inkapsulyatsiya-kerak">Nima uchun inkapsulyatsiya kerak?</h2>
 <p>Inkapsulyatsiyaning katta afzalliklari bor:</p>
 <ul><li><strong>Foydalanuvchini adashtirmaslik</strong> — kishilar faqat tashqi interfeys bilan ishlaydi, ichkarisini bilishi shart emas;</li><li><strong>Qo'llab-quvvatlash osonligi</strong> — ichki qismni istalgan vaqtda o'zgartirsangiz, tashqi kod buzilmaydi;</li><li><strong>Murakkablikni yashirish</strong> — kod ishonchli va toza bo'ladi.</li></ul>
 <div class="tip">Yangi loyihalarda haqiqiy maxfiylik uchun <code>#</code> maydonlarini ishlatish tavsiya etiladi. Eski kodlarni qo'llab-quvvatlashda esa <code>_</code> konvensiyasi hali ham keng tarqalgan.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Inkapsulyatsiya — ichki tafsilotlarni tashqi interfeysdan ajratish;</li><li><code>_</code> old qo'shimchasi — protected (himoyalangan) konvensiya, majburiy emas;</li><li><code>#</code> maydonlari — til darajasida haqiqiy private (maxfiy);</li><li><code>#</code> maydonlariga faqat shu klass ichidan kirish mumkin va ular meros olinmaydi;</li><li>getter/setter orqali xossalarni nazorat qilib, noto'g'ri holatdan himoyalanish mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="static-metodlar.html"><span class="dir">← Oldingi</span><span class="ttl">Statik xossa va metodlar</span></a>
@@ -734,6 +750,6 @@ console.log(new Robot().reveal());</textarea><div class="pg-actions"><button cla
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

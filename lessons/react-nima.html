@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>React nima? — Kodla</title>
   <meta name="description" content="React — foydalanuvchi interfeysi uchun kutubxona; komponentga asoslangan, deklarativ yondashuv, virtual DOM, SPA tushunchasi va Vite bilan o'rnatish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">React</div>
 <h1>React nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#react-nima-va-u-nima-uchun-kerak">React nima va u nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#deklarativ-yondashuv">Deklarativ yondashuv</a></li>
+<li class="lvl2"><a href="#komponentga-asoslangan-tuzilma">Komponentga asoslangan tuzilma</a></li>
+<li class="lvl2"><a href="#virtual-dom">Virtual DOM</a></li>
+<li class="lvl2"><a href="#spa-bir-sahifali-ilova">SPA — bir sahifali ilova</a></li>
+<li class="lvl2"><a href="#nega-react-shunchalik-mashhur">Nega React shunchalik mashhur?</a></li>
+<li class="lvl2"><a href="#react-ni-o-rnatish-vite-bilan">React'ni o'rnatish (Vite bilan)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Agar siz JavaScript'ni yaxshi bilsangiz, <strong>React</strong> — sizning keyingi qadamingiz bo'lishi mumkin. React — bugungi kunda frontend dunyosining eng mashhur vositalaridan biri. U yordamida <em>oddiy tugmadan</em> tortib, <em>butun boshli katta ilovagacha</em> qurish mumkin. Ushbu bobda biz React'ni JavaScript bilgan kishi nuqtai nazaridan, nol darajadan boshlab o'rganamiz.</p>
-<h2>React nima va u nima uchun kerak?</h2>
+<h2 id="react-nima-va-u-nima-uchun-kerak">React nima va u nima uchun kerak?</h2>
 <p><strong>React</strong> — bu Facebook (hozirgi Meta) tomonidan yaratilgan, <strong>foydalanuvchi interfeysini</strong> (User Interface, qisqacha UI) qurish uchun mo'ljallangan JavaScript <em>kutubxonasi</em>. Bu yerda "kutubxona" so'ziga e'tibor bering — React o'zini <em>freymvork</em> emas, aynan kutubxona deb ataydi.</p>
 <p>Nima uchun bu ajratish muhim? Oddiy JavaScript va DOM bilan katta ilova yozganingizda, quyidagi muammoga duch kelasiz: interfeysning har bir bo'lagini qo'lda yangilashingiz kerak. Foydalanuvchi biror tugmani bosdi — siz <code>document.querySelector</code> orqali kerakli elementni topib, uning matnini o'zgartirasiz, boshqa element ko'rinishini yashirasiz, ro'yxatga yangi element qo'shasiz. Ilova o'sgani sari, bu qo'lda boshqaruv chalkash va xatolarga to'la bo'lib ketadi.</p>
 <p>React ushbu muammoni tubdan boshqacha hal qiladi. Siz DOM'ni qo'lda o'zgartirmaysiz. Buning o'rniga, siz React'ga: <em>"Ma'lumot shu holatda bo'lsa, ekran shunday ko'rinishi kerak"</em> deb aytasiz. Qolganini React o'zi bajaradi.</p>
-<h2>Deklarativ yondashuv</h2>
+<h2 id="deklarativ-yondashuv">Deklarativ yondashuv</h2>
 <p>React'ning asosiy g'oyasi — <strong>deklarativlik</strong> (declarative). Buni tushunish uchun ikki yondashuvni solishtiramiz:</p>
 <ul><li><strong>Imperativ</strong> (imperative) yondashuv — siz <em>qadam-baqadam nima qilishni</em> yozasiz. "Elementni top, matnini o'zgartir, klassini qo'sh". Oddiy DOM bilan ishlash aynan shunday;</li><li><strong>Deklarativ</strong> (declarative) yondashuv — siz <em>natija qanday ko'rinishini</em> tasvirlaysiz. "Hisoblagich 5 bo'lsa, ekranda '5' yozilsin". Buni qanday amalga oshirishni React hal qiladi. React aynan shunday ishlaydi.</li></ul>
 <p>Masalan, oddiy DOM'da hisoblagich tugmasini yozish imperativ ko'rinishga ega:</p>
@@ -616,7 +632,7 @@ tugma.addEventListener("click", () =&gt; {
 });</code></pre>
 <p>React'da esa siz faqat <em>"holat qanday bo'lsa, ekran shunday ko'rinadi"</em> deb tasvirlaysiz. DOM'ni yangilashni butunlay React o'z zimmasiga oladi (bunga keyingi darslarda batafsil qaytamiz).</p>
 <div class="note">Deklarativlik — bu React falsafasining o'zagi. "Nima qilishni emas, nima ko'rinishini yozing" — bu jumlani esda saqlab qoling.</div>
-<h2>Komponentga asoslangan tuzilma</h2>
+<h2 id="komponentga-asoslangan-tuzilma">Komponentga asoslangan tuzilma</h2>
 <p>React'da butun interfeys <strong>komponentlar</strong>dan (components) quriladi. Komponent — bu interfeysning mustaqil, qayta ishlatiladigan bo'lagi. Tugma, forma, navigatsiya paneli, izohlar ro'yxati — bularning har biri alohida komponent bo'lishi mumkin.</p>
 <p>Katta ilova esa shu komponentlarning birlashmasidan iborat bo'ladi — xuddi Lego bo'laklaridan qurilgan konstruksiya kabi:</p>
 <ul><li>Har bir komponent o'zining <strong>ko'rinishi</strong> (markup) va <strong>mantig'ini</strong> (logic) bir joyda saqlaydi;</li><li>Komponentlar <strong>qayta ishlatiladi</strong> — bir marta yozib, ko'p joyda foydalanish mumkin;</li><li>Komponentlar bir-biriga <strong>joylashadi</strong> (nesting) — kattasi ichida kichigi bo'ladi;</li><li>Har bir komponent alohida test qilinadi va tuzatiladi — kod tartibli bo'ladi.</li></ul>
@@ -631,20 +647,20 @@ tugma.addEventListener("click", () =&gt; {
  |         |- Post
  |- Footer</code></pre>
 <div class="tip">Komponent — bu shunchaki JavaScript funksiyasi. Agar siz funksiyalarni bilsangiz, komponentlarni ham tez tushunasiz. Bu haqda keyingi darsda batafsil gaplashamiz.</div>
-<h2>Virtual DOM</h2>
+<h2 id="virtual-dom">Virtual DOM</h2>
 <p>React'ning tezligi ortida <strong>Virtual DOM</strong> texnologiyasi turadi. Uni tushunish uchun avval muammoni ko'raylik: haqiqiy DOM (brauzerdagi HTML elementlar daraxti) bilan ishlash <em>sekin</em>. Har safar DOM'ni o'zgartirganda, brauzer sahifani qayta hisoblab, qayta chizishi kerak bo'ladi.</p>
 <p>React esa hiyla ishlatadi. U xotirada haqiqiy DOM'ning yengil nusxasini — <strong>Virtual DOM</strong>ni (oddiy JavaScript obyektlaridan iborat daraxt) saqlaydi. Jarayon shunday kechadi:</p>
 <ol><li>Ma'lumot (holat) o'zgaradi;</li><li>React <strong>yangi</strong> Virtual DOM daraxtini tuzadi;</li><li>Uni <strong>eski</strong> Virtual DOM bilan solishtiradi — bu jarayon <em>reconciliation</em> (moslashtirish) deb ataladi;</li><li>Faqat <strong>o'zgargan qismlarni</strong> aniqlaydi;</li><li>Haqiqiy DOM'da faqat shu farqlarnigina yangilaydi — boshqa hech narsaga tegmaydi.</li></ol>
 <p>Natijada, siz butun ekranni qayta chizganingizda ham, React aslida haqiqiy DOM'ning faqat kerakli bo'lagini yangilaydi. Bu esa ilovani tez va samarali qiladi.</p>
 <div class="note">Siz Virtual DOM bilan to'g'ridan-to'g'ri ishlamaysiz — u "kaputning ostida" ishlaydi. Lekin nima uchun React tez ekanini bilish foydali.</div>
-<h2>SPA — bir sahifali ilova</h2>
+<h2 id="spa-bir-sahifali-ilova">SPA — bir sahifali ilova</h2>
 <p>React ko'pincha <strong>SPA</strong> (Single Page Application — bir sahifali ilova) qurish uchun ishlatiladi. Bu tushunchani an'anaviy saytlar bilan solishtiramiz:</p>
 <ul><li><strong>An'anaviy sayt.</strong> Siz havolani bosganingizda brauzer serverdan <em>butun yangi HTML sahifani</em> so'raydi. Sahifa oynasi "miltillab" qayta yuklanadi;</li><li><strong>SPA.</strong> Server bir marta bitta HTML sahifa yuboradi. So'ngra barcha o'zgarishlar (sahifadan sahifaga o'tish, ma'lumot yangilash) JavaScript orqali <em>sahifani qayta yuklamasdan</em> amalga oshadi. Foydalanuvchi uchun bu — tez va silliq, xuddi mobil ilovadagi kabi tajriba.</li></ul>
 <p>React'ning deklarativ va komponentga asoslangan tabiati aynan SPA qurish uchun juda qulay. Shu sababli u web-ilovalar (Gmail, Facebook, Trello va shu kabilar) yaratishda keng qo'llaniladi.</p>
-<h2>Nega React shunchalik mashhur?</h2>
+<h2 id="nega-react-shunchalik-mashhur">Nega React shunchalik mashhur?</h2>
 <p>React frontend dunyosining eng mashhur vositasi bo'lib qolishining bir necha sabablari bor:</p>
 <ul><li><strong>Katta hamjamiyat.</strong> Millionlab dasturchilar undan foydalanadi — muammoga yechim topish oson, tayyor kutubxonalar ko'p;</li><li><strong>Ish o'rinlari.</strong> Bozorda React biladigan dasturchilarga talab juda yuqori;</li><li><strong>Boy ekotizim.</strong> Marshrutlash (React Router), holat boshqaruvi (Redux, Zustand), UI kutubxonalari — hammasi tayyor;</li><li><strong>O'rganish materiali ko'p.</strong> Hujjatlar, videolar, kurslar — behisob;</li><li><strong>Meta qo'llab-quvvatlaydi.</strong> Kutubxona doimiy rivojlanadi va yaxshilanadi.</li></ul>
-<h2>React'ni o'rnatish (Vite bilan)</h2>
+<h2 id="react-ni-o-rnatish-vite-bilan">React'ni o'rnatish (Vite bilan)</h2>
 <p>React ilovasini noldan qo'lda sozlash murakkab. Shuning uchun tayyor asboblardan foydalanamiz. Bugungi kunda eng tez va zamonaviy vosita — <strong>Vite</strong> ("vit" deb o'qiladi). U yordamida yangi React loyihasini bir necha soniyada yaratish mumkin.</p>
 <p>Loyihani yaratish uchun terminalda quyidagi buyruqni yozamiz (Node.js o'rnatilgan bo'lishi kerak):</p>
 <pre class="code"><code>npm create vite@latest my-app</code></pre>
@@ -655,7 +671,7 @@ npm run dev</code></pre>
 <p>So'nggi buyruq mahalliy serverni ishga tushiradi (odatda <code>http://localhost:5173</code> manzilida). Brauzerda ushbu manzilni ochsangiz, React ilovangiz ishlayotganini ko'rasiz.</p>
 <div class="tip">Ilgari <code>create-react-app</code> vositasi mashhur edi, lekin u sekin va eskirgan hisoblanadi. Yangi loyihalarda <strong>Vite</strong> ishlatish tavsiya etiladi — u ancha tez.</div>
 <div class="note">Vite ishlab chiqish jarayonida <strong>HMR</strong> (Hot Module Replacement) beradi: kodni o'zgartirib saqlaganingizda, brauzer avtomatik yangilanadi — sahifani qo'lda qayta yuklash shart emas.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>React</strong> — foydalanuvchi interfeysini qurish uchun JavaScript <em>kutubxonasi</em>;</li><li>U <strong>deklarativ</strong>: siz natija qanday ko'rinishini tasvirlaysiz, DOM'ni yangilashni React hal qiladi;</li><li>Interfeys <strong>komponentlardan</strong> quriladi — mustaqil, qayta ishlatiladigan bo'laklar;</li><li><strong>Virtual DOM</strong> orqali React faqat o'zgargan qismlarni yangilaydi — bu tezlik beradi;</li><li>React ko'pincha <strong>SPA</strong> (bir sahifali ilova) qurishda ishlatiladi;</li><li>Yangi loyihani <strong>Vite</strong> bilan yaratamiz: <code>npm create vite@latest</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="ts-class.html"><span class="dir">← Oldingi</span><span class="ttl">Klasslar va konfiguratsiya</span></a>
@@ -669,6 +685,6 @@ npm run dev</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

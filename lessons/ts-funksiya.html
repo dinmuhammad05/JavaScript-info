@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Funksiyalar va generiklar — Kodla</title>
   <meta name="description" content="Parametr va qaytish turlari, ixtiyoriy va standart parametrlar, generiklar, generic interfeys va klass, cheklovlar (extends).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">TypeScript</div>
 <h1>Funksiyalar va generiklar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#parametr-va-qaytish-turlari">Parametr va qaytish turlari</a></li>
+<li class="lvl2"><a href="#ixtiyoriy-parametrlar">Ixtiyoriy parametrlar (?)</a></li>
+<li class="lvl2"><a href="#standart-default-parametrlar">Standart (default) parametrlar</a></li>
+<li class="lvl2"><a href="#generiklar-nima-uchun-kerak">Generiklar nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#generik-funksiyalar">Generik funksiyalar</a></li>
+<li class="lvl2"><a href="#bir-nechta-tur-parametri">Bir nechta tur parametri</a></li>
+<li class="lvl2"><a href="#generik-interfeys-va-klasslar">Generik interfeys va klasslar</a></li>
+<li class="lvl2"><a href="#generik-cheklovlar-extends">Generik cheklovlar (extends)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Funksiyalar — har qanday dasturning asosi. TypeScript funksiyalarga ikkita muhim narsa qo'shadi: <strong>parametr turlari</strong> va <strong>qaytish turi</strong>. Ushbu darsda biz bularni, hamda TypeScript'ning eng kuchli va boshda biroz murakkab tuyuladigan imkoniyati — <strong>generiklar</strong>ni chuqur o'rganamiz.</p>
-<h2>Parametr va qaytish turlari</h2>
+<h2 id="parametr-va-qaytish-turlari">Parametr va qaytish turlari</h2>
 <p>Funksiyada har bir parametrga tur beramiz, qaytish turini esa parametrlar qavsidan keyin, ikki nuqta orqali yozamiz:</p>
 <pre class="code"><code>function qoshish(a: number, b: number): number {
   return a + b;
@@ -614,7 +631,7 @@ qoshish(2, 3, 4);     // Xato: ortiqcha argument</code></pre>
 
 console.log(kopaytir(4, 5)); // 20</code></pre>
 <div class="tip">Qaytish turini ko'pincha yozmasa ham bo'ladi — TypeScript uni tur xulosasi orqali o'zi topadi. Lekin uni ochiq yozish kodni o'qishni osonlashtiradi va tasodifiy xatolardan himoya qiladi.</div>
-<h2>Ixtiyoriy parametrlar (?)</h2>
+<h2 id="ixtiyoriy-parametrlar">Ixtiyoriy parametrlar (?)</h2>
 <p>Ba'zi parametrlar majburiy bo'lmasligi mumkin. Ularni ixtiyoriy qilish uchun nomidan keyin <code>?</code> qo'yamiz. Ixtiyoriy parametr berilmasa, uning qiymati <code>undefined</code> bo'ladi:</p>
 <pre class="code"><code>function salom(ism: string, unvon?: string): string {
   if (unvon) {
@@ -626,7 +643,7 @@ console.log(kopaytir(4, 5)); // 20</code></pre>
 console.log(salom("Ali"));            // Salom, Ali
 console.log(salom("Ali", "janob"));  // Salom, janob Ali</code></pre>
 <div class="warn">Ixtiyoriy parametrlar har doim majburiy parametrlardan <strong>keyin</strong> kelishi shart. <code>function f(a?: string, b: number)</code> — xato, chunki ixtiyoriy parametr majburiydan oldin turibdi.</div>
-<h2>Standart (default) parametrlar</h2>
+<h2 id="standart-default-parametrlar">Standart (default) parametrlar</h2>
 <p>JavaScript'dagi kabi, parametrga <strong>standart qiymat</strong> berish mumkin. Argument berilmasa, shu qiymat ishlatiladi. Bunda tur ko'pincha standart qiymatdan avtomatik aniqlanadi:</p>
 <pre class="code"><code>function kutlash(ism: string, salom: string = "Salom"): string {
   return salom + ", " + ism + "!";
@@ -635,7 +652,7 @@ console.log(salom("Ali", "janob"));  // Salom, janob Ali</code></pre>
 console.log(kutlash("Ali"));                // Salom, Ali!
 console.log(kutlash("Vali", "Xush kelibsiz")); // Xush kelibsiz, Vali!</code></pre>
 <div class="note">Standart qiymatli parametr avtomatik ixtiyoriy hisoblanadi — unga alohida <code>?</code> qo'yish shart emas.</div>
-<h2>Generiklar nima uchun kerak?</h2>
+<h2 id="generiklar-nima-uchun-kerak">Generiklar nima uchun kerak?</h2>
 <p>Tasavvur qiling, siz massivning birinchi elementini qaytaradigan funksiya yozmoqchisiz. Turini qanday belgilaymiz? Agar <code>number[]</code> desak, faqat sonlar uchun ishlaydi. Agar <code>any[]</code> desak, tur xavfsizligini yo'qotamiz:</p>
 <pre class="code"><code>function birinchi(arr: any[]): any {
   return arr[0];
@@ -643,7 +660,7 @@ console.log(kutlash("Vali", "Xush kelibsiz")); // Xush kelibsiz, Vali!</code></p
 
 let n = birinchi([1, 2, 3]); // n turi — any (yomon!)</code></pre>
 <p>Bu yerda muammo: natija <code>any</code> bo'lib qoldi, ya'ni TypeScript endi <code>n</code>ning haqiqiy turini bilmaydi. Yechim — <strong>generiklar</strong>.</p>
-<h2>Generik funksiyalar</h2>
+<h2 id="generik-funksiyalar">Generik funksiyalar</h2>
 <p><strong>Generik</strong> — bu turni <em>parametr sifatida</em> qabul qiladigan funksiya. Turni burchak qavslar ichida, odatda <code>T</code> harfi bilan e'lon qilamiz. Bu "tur o'zgaruvchisi" chaqirilganda haqiqiy turga aylanadi:</p>
 <pre class="code"><code>function birinchi&lt;T&gt;(arr: T[]): T {
   return arr[0];
@@ -660,7 +677,7 @@ let matn = birinchi(["a", "b", "c"]); // matn turi — string</code></pre>
 let a = identity&lt;string&gt;("salom"); // T ni ochiq berdik: string
 let b = identity(42);              // T avtomatik: number</code></pre>
 <div class="note">Turni ochiq berish (<code>identity&lt;string&gt;(...)</code>) mumkin, lekin ko'pincha shart emas — TypeScript uni argumentdan o'zi aniqlaydi. <code>T</code> nomi shartli; <code>U</code>, <code>K</code>, <code>Element</code> kabi istalgan nom ishlatilishi mumkin.</div>
-<h2>Bir nechta tur parametri</h2>
+<h2 id="bir-nechta-tur-parametri">Bir nechta tur parametri</h2>
 <p>Generik funksiya bir nechta tur parametri qabul qilishi mumkin. Ularni vergul bilan ajratamiz. Masalan, ikkita turdan juftlik (pair) yasaydigan funksiya:</p>
 <pre class="code"><code>function juftlik&lt;K, V&gt;(kalit: K, qiymat: V): [K, V] {
   return [kalit, qiymat];
@@ -668,7 +685,7 @@ let b = identity(42);              // T avtomatik: number</code></pre>
 
 let p = juftlik("yosh", 25);
 // p turi — [string, number]</code></pre>
-<h2>Generik interfeys va klasslar</h2>
+<h2 id="generik-interfeys-va-klasslar">Generik interfeys va klasslar</h2>
 <p>Generiklar faqat funksiyalarda emas — interfeys va klasslarda ham ishlatiladi. Bu bir xil tuzilmani turli turlar bilan qayta ishlatishga imkon beradi. Generik interfeys:</p>
 <pre class="code"><code>interface Quti&lt;T&gt; {
   ichidagi: T;
@@ -701,7 +718,7 @@ let sonStek = new Stek&lt;number&gt;();
 sonStek.push(1);
 sonStek.push(2);
 console.log(sonStek.pop()); // 2</code></pre>
-<h2>Generik cheklovlar (extends)</h2>
+<h2 id="generik-cheklovlar-extends">Generik cheklovlar (extends)</h2>
 <p>Ba'zan generik turga <em>cheklov</em> qo'yish kerak — masalan, "T qanday tur bo'lishi mumkin, lekin unda albatta <code>length</code> xossasi bo'lsin". Buning uchun <code>extends</code> ishlatiladi:</p>
 <pre class="code"><code>interface Uzunlikli {
   length: number;
@@ -726,7 +743,7 @@ xossaOl(user, "ism");  // OK — turi string
 xossaOl(user, "yosh"); // OK — turi number
 xossaOl(user, "boo");  // Xato: 'boo' user kaliti emas</code></pre>
 <div class="tip"><code>keyof T</code> — obyekt <code>T</code>ning barcha kalitlaridan iborat union tur. <code>T[K]</code> esa "<code>T</code>ning <code>K</code> kalitidagi qiymatning turi" degani. Bu ikkalasi birga juda kuchli va aniq turlarni yozishga imkon beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Funksiya parametrlariga tur beramiz; qaytish turi qavsdan keyin <code>: tur</code> shaklida yoziladi;</li><li><code>?</code> — ixtiyoriy parametr (majburiylardan keyin turishi shart); <code>= qiymat</code> — standart parametr;</li><li><strong>Generiklar</strong> turni parametr sifatida qabul qiladi: <code>function identity&lt;T&gt;(x: T): T</code>;</li><li>Generiklar bir xil kodni turli turlar bilan xavfsiz qayta ishlatishga imkon beradi — <code>any</code>ga muqobil;</li><li>Interfeys va klasslar ham generik bo'lishi mumkin: <code>Quti&lt;T&gt;</code>, <code>Stek&lt;T&gt;</code>;</li><li><code>extends</code> orqali generik turga cheklov qo'yamiz: <code>T extends Uzunlikli</code>;</li><li><code>keyof</code> va <code>T[K]</code> obyekt kalitlari va qiymatlari bilan aniq ishlashga yordam beradi.</li></ul>
 <nav class="lesson-nav">
   <a href="ts-interface.html"><span class="dir">← Oldingi</span><span class="ttl">Interfeys va tip aliaslari</span></a>
@@ -740,6 +757,6 @@ xossaOl(user, "boo");  // Xato: 'boo' user kaliti emas</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

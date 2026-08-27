@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Element o'lchami va skroll — Kodla</title>
   <meta name="description" content="offsetWidth/Height, clientWidth/Height, scrollWidth/Height, scrollTop/Left, offsetParent va getBoundingClientRect qisqacha — elementning geometrik xossalari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,23 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Element o'lchami va skroll</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#namuna-element">Namuna element</a></li>
+<li class="lvl2"><a href="#offsetparent-offsetleft-offsettop">offsetParent, offsetLeft, offsetTop</a></li>
+<li class="lvl2"><a href="#offsetwidth-va-offsetheight">offsetWidth va offsetHeight</a></li>
+<li class="lvl2"><a href="#clienttop-clientleft">clientTop, clientLeft</a></li>
+<li class="lvl2"><a href="#clientwidth-va-clientheight">clientWidth va clientHeight</a></li>
+<li class="lvl2"><a href="#scrollwidth-va-scrollheight">scrollWidth va scrollHeight</a></li>
+<li class="lvl2"><a href="#scrolltop-va-scrollleft">scrollTop va scrollLeft</a></li>
+<li class="lvl2"><a href="#getboundingclientrect-qisqacha">getBoundingClientRect — qisqacha</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript bizga elementlarning kengligi, balandligi va boshqa geometrik xossalari haqida ma'lumot beruvchi ko'plab xususiyatlarni taqdim etadi. Ular elementlarni ko'chirish, joylashtirish yoki skroll holatini aniqlashda zarur. Ushbu darsda asosiy geometrik xossalarni chuqur o'rganamiz.</p>
 <div class="note">Barcha o'lcham xossalari <strong>sonlar</strong> (piksellarda, birliksiz) qaytaradi. Bu ulardan matematik amallarda foydalanishni osonlashtiradi. Bu geometrik kod faqat brauzerda ishlaydi, shuning uchun quyidagi misollar statik.</div>
-<h2>Namuna element</h2>
+<h2 id="namuna-element">Namuna element</h2>
 <p>Xossalarni tushuntirish uchun quyidagi namuna elementdan foydalanamiz. Uning ramkasi (border), otstupi (padding) va skrolli bor:</p>
 <pre class="code"><code>&lt;div id="example"&gt;
   ...Matn...
@@ -614,7 +631,7 @@
   }
 &lt;/style&gt;</code></pre>
 <p>Bu element ichida skroll paydo bo'lguncha matn bor. Ushbu "quti modeli" (box model) asosida geometrik xossalarni ko'rib chiqamiz: ramka, padding va skroll paneli (scrollbar).</p>
-<h2>offsetParent, offsetLeft, offsetTop</h2>
+<h2 id="offsetparent-offsetleft-offsettop">offsetParent, offsetLeft, offsetTop</h2>
 <p><code>offsetParent</code> — elementning eng yaqin CSS-joylashtirilgan (positioned) ajdodini qaytaradi. Bu quyidagilardan biri bo'lishi mumkin: eng yaqin <code>position</code> (absolute, relative, fixed, sticky) berilgan ajdod, yoki <code>&lt;td&gt;</code>, <code>&lt;th&gt;</code>, <code>&lt;table&gt;</code>, yoki <code>&lt;body&gt;</code>.</p>
 <p><code>offsetLeft</code> va <code>offsetTop</code> esa elementning <code>offsetParent</code>ga nisbatan gorizontal va vertikal x/y koordinatalarini beradi:</p>
 <pre class="code"><code>&lt;main style="position: relative" id="main"&gt;
@@ -631,7 +648,7 @@
   alert(example.offsetTop);  // 180
 &lt;/script&gt;</code></pre>
 <div class="note"><code>offsetParent</code> bir necha holatda <code>null</code> bo'ladi: element ko'rsatilmayotgan bo'lsa (<code>display: none</code> yoki hujjatda emas), yoki <code>&lt;body&gt;</code> va <code>&lt;html&gt;</code> uchun, yoki elementda <code>position: fixed</code> bo'lsa.</div>
-<h2>offsetWidth va offsetHeight</h2>
+<h2 id="offsetwidth-va-offsetheight">offsetWidth va offsetHeight</h2>
 <p>Bu ikki xossa elementning <strong>to'liq tashqi</strong> o'lchamini beradi: kenglik va balandlik, <strong>ramka (border) bilan birga</strong>.</p>
 <ul><li><code>offsetWidth = content + padding + border</code> (butun ko'rinadigan kenglik);</li><li><code>offsetHeight = content + padding + border</code> (butun ko'rinadigan balandlik).</li></ul>
 <pre class="code"><code>let example = document.getElementById('example');
@@ -642,13 +659,13 @@ alert(example.offsetWidth);  // 390
 // height:200 + padding:20*2 + border:25*2 = 290
 alert(example.offsetHeight); // 290</code></pre>
 <div class="warn">Yashirilgan elementlar (<code>display: none</code> yoki hujjatda bo'lmagan) uchun barcha geometrik xossalar <strong>nol</strong> (yoki <code>null</code> — <code>offsetParent</code> uchun) bo'ladi. Buni elementning ko'rinadigan-ko'rinmasligini tekshirish uchun ishlatish mumkin: agar <code>offsetWidth</code> va <code>offsetHeight</code> nol bo'lsa, element yashirin.</div>
-<h2>clientTop, clientLeft</h2>
+<h2 id="clienttop-clientleft">clientTop, clientLeft</h2>
 <p>Bu xossalar elementning ramka (border) qalinliklarini beradi — aniqrog'i, ichki tomondan ramka chegarasigacha bo'lgan masofa. Odatda ular yuqori va chap ramka kengligiga teng:</p>
 <pre class="code"><code>// yuqorida border: 25px berilgan edi
 alert(example.clientTop);  // 25
 alert(example.clientLeft); // 25</code></pre>
 <div class="note">Aniqrog'i, bular ramka o'lchami emas, balki ichki (content + padding) qismning tashqi qirrasidan elementning tashqi qirrasigacha bo'lgan masofa. Chapdan o'ngga yoziladigan tillar uchun ular chap/yuqori ramka kengligiga teng.</div>
-<h2>clientWidth va clientHeight</h2>
+<h2 id="clientwidth-va-clientheight">clientWidth va clientHeight</h2>
 <p>Bu xossalar ramka <strong>ichidagi</strong> maydon o'lchamini beradi — ya'ni <strong>content + padding</strong>, lekin skroll paneli (scrollbar) hisobga olinmaydi:</p>
 <ul><li><code>clientWidth = content kengligi + chap va o'ng padding</code> (skrollbar chiqmasa);</li><li><code>clientHeight = content balandligi + yuqori va pastki padding</code>.</li></ul>
 <pre class="code"><code>let example = document.getElementById('example');
@@ -661,7 +678,7 @@ alert(example.clientWidth);  // 340
 alert(example.clientHeight); // 240</code></pre>
 <div class="warn">Agar elementda vertikal skroll paneli mavjud bo'lsa, u <code>clientWidth</code>dan o'zining kengligini (odatda ~16px) "o'g'irlaydi", chunki skrollbar content uchun mavjud joyni egallaydi. Shuning uchun skrollbar chiqqanda <code>clientWidth</code> kutilganidan kichikroq bo'lishi mumkin.</div>
 <div class="tip">Ba'zan <code>clientWidth/Height</code> bo'sh maydonni o'lchash uchun ishlatiladi. <code>offsetWidth</code>dan farqi — u ramkani hisobga olmaydi va skrollbardan tashqari content'ga tegishli maydonni beradi.</div>
-<h2>scrollWidth va scrollHeight</h2>
+<h2 id="scrollwidth-va-scrollheight">scrollWidth va scrollHeight</h2>
 <p>Bu xossalar <code>clientWidth/clientHeight</code> kabidir, ammo skroll tufayli <strong>yashiringan (ko'rinmaydigan) qismni ham hisobga oladi</strong>:</p>
 <ul><li><code>scrollWidth</code> — content'ning to'liq ichki kengligi (skrollangan qism bilan);</li><li><code>scrollHeight</code> — content'ning to'liq ichki balandligi (skrollangan qism bilan).</li></ul>
 <pre class="code"><code>let example = document.getElementById('example');
@@ -675,7 +692,7 @@ alert(example.clientHeight); // 240 (faqat ko'rinadigan qism)</code></pre>
 // element balandligini to'liq content sig'adigan qilib kengaytiramiz
 element.style.height = element.scrollHeight + 'px';</code></pre>
 <div class="note">Agar <code>scrollHeight</code> <code>clientHeight</code>dan katta bo'lsa, demak elementda vertikal skroll bor — content ko'rinadigan maydondan uzun.</div>
-<h2>scrollTop va scrollLeft</h2>
+<h2 id="scrolltop-va-scrollleft">scrollTop va scrollLeft</h2>
 <p><code>scrollLeft</code> va <code>scrollTop</code> — elementning yashiringan, skroll qilib o'tkazilgan qismining kengligi/balandligini beradi. Boshqacha aytganda, <code>scrollTop</code> — bu "yuqoriga qancha skroll qilinganini" bildiradi.</p>
 <pre class="code"><code>let element = document.getElementById('element');
 
@@ -687,7 +704,7 @@ element.scrollTop = 0;   // elementni eng yuqoriga skroll qiladi
 element.scrollTop = 1e9; // katta son bersak — eng pastga skroll qiladi
 // (brauzer maksimal mumkin bo'lgan qiymatni oladi)</code></pre>
 <div class="tip"><code>scrollTop</code>ga juda katta son (masalan, <code>1e9</code> = milliard) berish — elementni eng pastgacha skroll qilishning ishonchli usuli. Brauzer bu qiymatni maksimal ruxsat etilgan darajaga qisqartiradi.</div>
-<h2>getBoundingClientRect — qisqacha</h2>
+<h2 id="getboundingclientrect-qisqacha">getBoundingClientRect — qisqacha</h2>
 <p>Yuqoridagi <code>offset*</code>/<code>client*</code>/<code>scroll*</code> xossalari elementning o'z ichki geometriyasi bilan ishlaydi. Elementning <strong>ekrandagi (oyna)</strong> joylashuvini aniq bilish uchun esa <code>getBoundingClientRect()</code> ishlatiladi:</p>
 <pre class="code"><code>let example = document.getElementById('example');
 let rect = example.getBoundingClientRect();
@@ -700,7 +717,7 @@ alert(rect.right);  // o'ng qirra (oyna chapidan)
 alert(rect.bottom); // pastki qirra (oyna tepasidan)</code></pre>
 <p>U <code>DOMRect</code> obyektini qaytaradi — bu obyekt elementni o'rab turgan minimal to'rtburchakning oynaga (viewport) nisbatan koordinatalarini o'z ichiga oladi. Bu haqda batafsil "Koordinatalar" darsida gaplashamiz.</p>
 <div class="note">Muhim farq: <code>offsetTop/Left</code> — <code>offsetParent</code>ga nisbatan, o'zgarmas (skrolldan mustaqil). <code>getBoundingClientRect</code> esa — <strong>oynaga (viewport)</strong> nisbatan, shuning uchun sahifani skroll qilsangiz, uning qiymatlari o'zgaradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Elementning asosiy geometrik xossalari:</p>
 <ul><li><code>offsetParent</code> — eng yaqin joylashtirilgan ajdod (yoki td/th/table/body);</li><li><code>offsetLeft/offsetTop</code> — <code>offsetParent</code> ichidagi x/y koordinata;</li><li><code>offsetWidth/offsetHeight</code> — elementning "tashqi" o'lchami (border bilan);</li><li><code>clientTop/clientLeft</code> — ramka qalinliklari (yuqori/chap);</li><li><code>clientWidth/clientHeight</code> — content + padding o'lchami (border va scrollbarsiz);</li><li><code>scrollWidth/scrollHeight</code> — content'ning to'liq o'lchami (yashiringan qismi bilan);</li><li><code>scrollLeft/scrollTop</code> — skroll qilib o'tkazilgan qismning kengligi/balandligi (o'zgartirsa bo'ladi).</li></ul>
 <p>Barcha xossalar sonlarda (piksel) qaytadi. Ekrandagi joylashuvni aniqlash uchun esa <code>getBoundingClientRect()</code>.</p>
@@ -716,6 +733,6 @@ alert(rect.bottom); // pastki qirra (oyna tepasidan)</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

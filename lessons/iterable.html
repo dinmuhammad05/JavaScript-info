@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iteratsiyalanuvchi obyektlar (iterable) — Kodla</title>
   <meta name="description" content="for..of qanday ishlaydi, Symbol.iterator, o'z iterable obyektingni yaratish, Array.from.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Iteratsiyalanuvchi obyektlar (iterable)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-o-z-obyektimizni-iterable-qilish">Muammo: o'z obyektimizni iterable qilish</a></li>
+<li class="lvl2"><a href="#symbol-iterator">Symbol.iterator</a></li>
+<li class="lvl2"><a href="#for-of-aslida-qanday-ishlaydi">for..of aslida qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#string-ham-iterable">String ham iterable</a></li>
+<li class="lvl2"><a href="#array-from-har-qanday-iterable-ni-massivga-aylantirish">Array.from — har qanday iterable'ni massivga aylantirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Iteratsiyalanuvchi (iterable) obyektlar — massiv tushunchasining umumlashtirilgan ko'rinishi. Bu <code>for..of</code> siklida ishlatib bo'ladigan har qanday obyekt. Massivlar, satrlar va boshqa ko'p tuzilmalar iterable hisoblanadi.</p>
-<h2>Muammo: o'z obyektimizni iterable qilish</h2>
+<h2 id="muammo-o-z-obyektimizni-iterable-qilish">Muammo: o'z obyektimizni iterable qilish</h2>
 <p>Aytaylik, bizda massiv emas, oddiy obyekt bor, lekin uni <code>for..of</code> bilan aylanib chiqmoqchimiz. Masalan, <code>from</code> dan <code>to</code> gacha sonlar diapazoni:</p>
 <pre class="code"><code>let range = {
   from: 1,
@@ -607,7 +621,7 @@
 // biz shuni istaymiz:
 // for (let num of range) ... 1, 2, 3, 4, 5</code></pre>
 <p>Buni ishlashi uchun obyektga maxsus metod — <code>Symbol.iterator</code> qo'shishimiz kerak.</p>
-<h2>Symbol.iterator</h2>
+<h2 id="symbol-iterator">Symbol.iterator</h2>
 <p><code>Symbol.iterator</code> — maxsus o'rnatilgan simvol. U obyektning iteratsiyasini boshqaradigan metod nomi bo'lib xizmat qiladi. Ushbu metod <strong>iterator</strong> deb ataladigan obyekt qaytarishi kerak — unda <code>next()</code> metodi bo'ladi.</p>
 <p><code>next()</code> chaqirilganda <code>{ value: ..., done: ... }</code> ko'rinishidagi obyekt qaytaradi. <code>done: false</code> — iteratsiya davom etadi, <code>done: true</code> — tugadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>iterator.js</span></div><textarea spellcheck="false">let range = {
@@ -637,7 +651,7 @@ for (let num of range) {
 }
 console.log(JSON.stringify(natija)); // [1, 2, 3, 4, 5]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Bu yerda <strong>vazifalar taqsimlanganiga</strong> e'tibor bering: <code>range</code> obyektining o'zida <code>next</code> yo'q. Uning o'rniga <code>Symbol.iterator</code> chaqiruvi bilan alohida iterator obyekt yaratiladi va aynan u iteratsiyani boshqaradi. Shu tufayli bir obyekt bo'yicha bir vaqtda bir nechta mustaqil <code>for..of</code> ishlashi mumkin.</div>
-<h2>for..of aslida qanday ishlaydi?</h2>
+<h2 id="for-of-aslida-qanday-ishlaydi">for..of aslida qanday ishlaydi?</h2>
 <p><code>for (let x of obj)</code> ishga tushganda quyidagilar sodir bo'ladi:</p>
 <ol><li><code>obj[Symbol.iterator]()</code> bir marta chaqiriladi — u iterator obyektni qaytaradi (bo'lmasa xatolik).</li><li>Keyin har bir qadamda iteratorning <code>next()</code> metodi chaqiriladi.</li><li><code>next()</code> qaytargan natijaning <code>value</code> qiymati <code>x</code> ga yoziladi.</li><li>Agar <code>done: true</code> bo'lsa, sikl to'xtaydi. Aks holda <code>value</code> ishlatiladi va keyingi <code>next()</code> chaqiriladi.</li></ol>
 <p>Iteratorni qo'lda ham chaqirsak bo'ladi, bu jarayonni oydinlashtiradi:</p>
@@ -659,7 +673,7 @@ console.log(JSON.stringify(iterator.next())); // {"done":false,"value":1}
 console.log(JSON.stringify(iterator.next())); // {"done":false,"value":2}
 console.log(JSON.stringify(iterator.next())); // {"done":false,"value":3}
 console.log(JSON.stringify(iterator.next())); // {"done":true}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>String ham iterable</h2>
+<h2 id="string-ham-iterable">String ham iterable</h2>
 <p>Massivlar va satrlar — eng ko'p ishlatiladigan o'rnatilgan iterable'lar. <code>for..of</code> satr bo'yicha harfma-harf yuradi va u <strong>surrogat juftliklar</strong> (masalan, ba'zi emoji va maxsus belgilar) bilan ham to'g'ri ishlaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>string-iter.js</span></div><textarea spellcheck="false">let str = 'salom';
 
@@ -668,7 +682,7 @@ for (let harf of str) {
   harflar.push(harf);
 }
 console.log(JSON.stringify(harflar)); // ['s','a','l','o','m']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Array.from — har qanday iterable'ni massivga aylantirish</h2>
+<h2 id="array-from-har-qanday-iterable-ni-massivga-aylantirish">Array.from — har qanday iterable'ni massivga aylantirish</h2>
 <p>Global metod <code>Array.from(obj)</code> iterable yoki <em>massivsimon</em> obyektni oladi va undan haqiqiy massiv yasaydi. Shundan so'ng unda barcha massiv metodlarini ishlatish mumkin.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>array-from.js</span></div><textarea spellcheck="false">let range = { from: 1, to: 5 };
 range[Symbol.iterator] = function() {
@@ -715,7 +729,7 @@ let arrayLike = {
 let arr = Array.from(arrayLike);
 console.log(JSON.stringify(arr)); // ['Salom', 'Dunyo']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Satrni harflar massiviga aylantirishning eng ishonchli usuli — <code>Array.from(str)</code>. U <code>str.split('')</code> dan farqli o'laroq murakkab Unicode belgilarni ham to'g'ri ajratadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Iterable</strong> — <code>Symbol.iterator</code> metodini amalga oshirgan obyekt; uni <code>for..of</code> bilan aylanib chiqish mumkin;</li><li><code>Symbol.iterator</code> <code>next()</code> metodiga ega <strong>iterator</strong> qaytaradi;</li><li><code>next()</code> har chaqiruvda <code>{ value, done }</code> qaytaradi; <code>done: true</code> — tugash belgisi;</li><li>Massiv va satr — o'rnatilgan iterable'lar; satr Unicode belgilarni to'g'ri aylanadi;</li><li><code>Array.from(obj)</code> iterable yoki massivsimon obyektni haqiqiy massivga aylantiradi (ixtiyoriy map funksiyasi bilan).</li></ul>
 <nav class="lesson-nav">
   <a href="massiv-metodlari.html"><span class="dir">← Oldingi</span><span class="ttl">Massiv metodlari</span></a>
@@ -729,6 +743,6 @@ console.log(JSON.stringify(arr)); // ['Salom', 'Dunyo']</textarea><div class="pg
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

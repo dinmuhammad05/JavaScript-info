@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Red team, Blue team va hujum hayotiy tsikli — Kodla</title>
   <meta name="description" content="Etik hujumchi va himoyachi jamoalari, hujumning umumiy bosqichlari (yuqori darajada), har bosqichdagi himoya, &quot;buzilgan deb faraz qilish&quot; tafakkuri.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,40 +599,58 @@
 <main class="content article">
 <div class="crumbs">Kiberxavfsizlik asoslari</div>
 <h1>Red team, Blue team va hujum hayotiy tsikli</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#xavfsizlik-jamoalari">Xavfsizlik jamoalari</a></li>
+<li class="lvl3"><a href="#red-team-qizil-jamoa">Red team (qizil jamoa)</a></li>
+<li class="lvl3"><a href="#blue-team-ko-k-jamoa">Blue team (ko'k jamoa)</a></li>
+<li class="lvl3"><a href="#purple-team-binafsha-jamoa">Purple team (binafsha jamoa)</a></li>
+<li class="lvl2"><a href="#nega-hujum-bosqichlarini-bilish-kerak">Nega hujum bosqichlarini bilish kerak?</a></li>
+<li class="lvl2"><a href="#hujumning-umumiy-bosqichlari">Hujumning umumiy bosqichlari</a></li>
+<li class="lvl3"><a href="#1-razvedka-reconnaissance">1. Razvedka (reconnaissance)</a></li>
+<li class="lvl3"><a href="#2-kirish-initial-access">2. Kirish (initial access)</a></li>
+<li class="lvl3"><a href="#3-mustahkamlanish-persistence">3. Mustahkamlanish (persistence)</a></li>
+<li class="lvl3"><a href="#4-maqsadga-erishish-objective">4. Maqsadga erishish (objective)</a></li>
+<li class="lvl2"><a href="#buzilgan-deb-faraz-qilish-tafakkuri">"Buzilgan deb faraz qilish" tafakkuri</a></li>
+<li class="lvl2"><a href="#amaliyot-kirishlarni-kuzatish">Amaliyot: kirishlarni kuzatish</a></li>
+<li class="lvl2"><a href="#log-va-monitoring-nega-muhim">Log va monitoring nega muhim?</a></li>
+  </ul>
+</details>
 <p class="lead">Yaxshi himoyachi hujumchi qanday fikrlashini tushunishi kerak — lekin buni hujum qilish uchun emas, balki hujumni oldindan kutib, to'xtatish uchun. Ushbu darsda biz xavfsizlik jamoalarini, hujumning umumiy bosqichlarini <strong>yuqori darajada, yo'riqnomasiz</strong> va har bosqichda himoyachi nima qilishi kerakligini o'rganamiz.</p>
 <div class="note">Ushbu darsdagi barcha bilim <strong>himoyani kuchaytirish</strong> uchun beriladi. Hujum bosqichlari faqat umumiy tushuncha darajasida, aniq vosita yoki buyruqsiz tavsiflanadi — himoyachi nimani kutishini bilishi uchun.</div>
-<h2>Xavfsizlik jamoalari</h2>
+<h2 id="xavfsizlik-jamoalari">Xavfsizlik jamoalari</h2>
 <p>Tashkilotlarni himoya qilishda turli rollar bir-birini to'ldiradi. Ular ko'pincha ranglar bilan nomlanadi:</p>
-<h3>Red team (qizil jamoa)</h3>
+<h3 id="red-team-qizil-jamoa">Red team (qizil jamoa)</h3>
 <p><strong>Red team</strong> — bu <em>etik hujumchilar</em>, ya'ni <strong>pentester</strong>lar (penetration tester). Ular tashkilotning <strong>yozma ruxsati bilan</strong> uning himoyasini sinaydi: zaifliklarni topib, ular haqida hisobot beradi. Maqsad — yomon niyatli hujumchidan oldin kamchilikni topib, tuzatish.</p>
-<h3>Blue team (ko'k jamoa)</h3>
+<h3 id="blue-team-ko-k-jamoa">Blue team (ko'k jamoa)</h3>
 <p><strong>Blue team</strong> — bu <em>himoyachilar</em>. Ular tizimlarni kuzatadi, hujum belgilarini aniqlaydi va hodisalarga javob beradi. Ko'pincha ular <strong>SOC</strong> (Security Operations Center — xavfsizlik operatsiyalari markazi) deb ataladigan bo'limda ishlaydi va kunu-tun tizimni nazorat qiladi.</p>
-<h3>Purple team (binafsha jamoa)</h3>
+<h3 id="purple-team-binafsha-jamoa">Purple team (binafsha jamoa)</h3>
 <p><strong>Purple team</strong> — qizil va ko'k ranglar aralashmasidek, bu ikki jamoa o'rtasidagi <em>hamkorlik</em>. Red team topgan zaifliklardan Blue team darhol o'rganadi va himoyani yaxshilaydi. Maqsad — raqobat emas, birgalikda kuchli himoya qurish.</p>
 <div class="tip">Ko'pchilik kiberxavfsizlik karyerasini Blue team'dan boshlaydi. Tizimni himoya qilish, loglarni tahlil qilish va hodisalarga javob berish — bu ko'nikmalar deyarli har qanday tashkilotga kerak.</div>
-<h2>Nega hujum bosqichlarini bilish kerak?</h2>
+<h2 id="nega-hujum-bosqichlarini-bilish-kerak">Nega hujum bosqichlarini bilish kerak?</h2>
 <p>Sport murabbiyi raqib jamoaning taktikasini o'rganganidek, himoyachi ham hujumning odatiy bosqichlarini bilishi kerak. Bu unga har bosqichda hujumni to'xtatish uchun "nima kutishni" o'rgatadi.</p>
 <div class="warn">Quyidagi bosqichlar faqat <strong>umumiy va nazariy</strong> tarzda tavsiflanadi. Bu — hujum qo'llanmasi emas, balki himoyachi tafakkurini shakllantiruvchi ramka. Ruxsatsiz har qanday sinov — qonunga xilof.</div>
-<h2>Hujumning umumiy bosqichlari</h2>
+<h2 id="hujumning-umumiy-bosqichlari">Hujumning umumiy bosqichlari</h2>
 <p>Ko'pchilik hujumlar taxminan bir xil bosqichlardan o'tadi. Biz ularni yuqori darajada, himoyachi nuqtai nazaridan ko'rib chiqamiz:</p>
-<h3>1. Razvedka (reconnaissance)</h3>
+<h3 id="1-razvedka-reconnaissance">1. Razvedka (reconnaissance)</h3>
 <p>Hujumchi nishon haqida ochiq ma'lumot yig'adi: qanday texnologiyalar ishlatiladi, kimlar ishlaydi, qanday xizmatlar ochiq. Bu bosqichda hali hech narsaga tegilmaydi.</p>
 <p><strong>Himoya:</strong> keraksiz ma'lumotni oshkor qilmaslik, ochiq portlarni kamaytirish, xodimlarni ijtimoiy tarmoqlarda ehtiyot bo'lishga o'rgatish.</p>
-<h3>2. Kirish (initial access)</h3>
+<h3 id="2-kirish-initial-access">2. Kirish (initial access)</h3>
 <p>Hujumchi topilgan zaiflik yoki phishing orqali tizimga birinchi qadam qo'yadi.</p>
 <p><strong>Himoya:</strong> yangilanishlarni o'rnatish, kuchli autentifikatsiya (2FA), phishingga qarshi tayyorgarlik, kiritmani tekshirish.</p>
-<h3>3. Mustahkamlanish (persistence)</h3>
+<h3 id="3-mustahkamlanish-persistence">3. Mustahkamlanish (persistence)</h3>
 <p>Hujumchi tizimda uzoqroq qolish uchun "o'rnashib" olishga urinadi — masalan, yashirin kirish yo'llarini yaratadi.</p>
 <p><strong>Himoya:</strong> tizim o'zgarishlarini kuzatish, ruxsatlarni cheklash, muntazam tekshiruv, g'ayrioddiy jarayonlarni aniqlash.</p>
-<h3>4. Maqsadga erishish (objective)</h3>
+<h3 id="4-maqsadga-erishish-objective">4. Maqsadga erishish (objective)</h3>
 <p>Hujumchi asosiy maqsadiga urinadi: ma'lumot o'g'irlash, tizimni buzish yoki to'lov talab qilish.</p>
 <p><strong>Himoya:</strong> ma'lumotni shifrlash, ma'lumot chiqib ketishini kuzatish (DLP), zaxira nusxalar, tez javob rejasi.</p>
 <div class="note">Ko'ryapsizmi: <strong>har bir bosqichda himoya imkoniyati bor</strong>. Hujum bir necha bosqichdan iborat bo'lgani uchun, himoyachiga uni to'xtatish uchun bir necha imkon beriladi. Bu — chuqurlashtirilgan himoyaning kuchi.</div>
-<h2>"Buzilgan deb faraz qilish" tafakkuri</h2>
+<h2 id="buzilgan-deb-faraz-qilish-tafakkuri">"Buzilgan deb faraz qilish" tafakkuri</h2>
 <p>Zamonaviy xavfsizlikda muhim aqliy o'zgarish bor: <strong>"assume breach"</strong> — ya'ni "biz allaqachon buzilganmiz deb faraz qilaylik". Eski yondashuv faqat "devor qurish"ga tayanardi. Yangi yondashuv esa savol beradi: "Agar hujumchi ichkariga kirib bo'lgan bo'lsa-chi? Uni qanday aniqlaymiz va zararni qanday cheklaymiz?"</p>
 <ul><li><strong>Eng kam imtiyoz:</strong> har bir foydalanuvchi va tizim faqat zarur huquqqa ega bo'lsin;</li><li><strong>Segmentatsiya:</strong> tarmoqni bo'laklarga ajratib, bir bo'lakdagi buzilish boshqasiga o'tmasin;</li><li><strong>Doimiy kuzatuv:</strong> g'ayrioddiy harakatni tezda aniqlash;</li><li><strong>Tez javob:</strong> buzilish yuz berganda zararni cheklash rejasi tayyor bo'lsin.</li></ul>
 <p>Bu tafakkur bizni mukammal himoya izlashdan (bu imkonsiz) tez aniqlash va tez javob berishga o'tkazadi.</p>
-<h2>Amaliyot: kirishlarni kuzatish</h2>
+<h2 id="amaliyot-kirishlarni-kuzatish">Amaliyot: kirishlarni kuzatish</h2>
 <p>Blue team ishining muhim qismi — loglarni tahlil qilib, g'ayrioddiy harakatni aniqlash. Quyidagi xavfsiz misol kirish urinishlarini ko'rib, bitta hisobga qisqa vaqtda juda ko'p muvaffaqiyatsiz urinish bo'lsa, ogohlantiradi. Bu — himoyaviy monitoring vositasi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>kirish-kuzat.js</span></div><textarea spellcheck="false">const kirishlar = [
   { foydalanuvchi: "ali", muvaffaqiyat: false },
@@ -675,7 +696,7 @@ console.log(ruxsatBormi("mehmon", "korish"));
 console.log(ruxsatBormi("mehmon", "ochirish"));
 console.log(ruxsatBormi("admin", "ochirish"));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Har bir muhim amaldan oldin shunday tekshiruv o'tkazish — buzilgan hisob orqali keladigan zararni cheklaydi. Bu "assume breach" tafakkurining amaliy ko'rinishidir.</p>
-<h2>Log va monitoring nega muhim?</h2>
+<h2 id="log-va-monitoring-nega-muhim">Log va monitoring nega muhim?</h2>
 <p>Loglar — bu tizimda nima sodir bo'lganining yozuvi. Ularsiz himoyachi ko'r bo'ladi: buzilishni na aniqlay oladi, na tekshira oladi.</p>
 <ul><li><strong>Aniqlash:</strong> g'ayrioddiy harakat log orqali ko'rinadi;</li><li><strong>Tekshiruv (forensics):</strong> hodisadan keyin nima bo'lganini qayta tiklash;</li><li><strong>Javob:</strong> qaysi tizim ta'sirlanganini aniqlab, tez chora ko'rish;</li><li><strong>Muvofiqlik:</strong> ko'p qonunlar loglarni saqlashni talab qiladi.</li></ul>
 <p>Muhim nuqta: log <em>faqat yozib qo'yilsa</em> yetarli emas. Kimdir uni <em>kuzatib turishi</em> yoki avtomatik tizim ogohlantirishi kerak. Yozilgan, lekin hech kim ko'rmagan log — foydasiz.</p>
@@ -693,6 +714,6 @@ console.log(ruxsatBormi("admin", "ochirish"));</textarea><div class="pg-actions"
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

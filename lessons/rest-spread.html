@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rest parametrlar va spread — Kodla</title>
   <meta name="description" content="...rest parametrlar, eski arguments obyekti, ...spread bilan yoyish va nusxa olish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Rest parametrlar va spread</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#rest-parametrlar-rest">Rest parametrlar ...rest</a></li>
+<li class="lvl2"><a href="#eski-usul-arguments-obyekti">Eski usul: "arguments" obyekti</a></li>
+<li class="lvl2"><a href="#spread-sintaksisi-spread">Spread sintaksisi ...spread</a></li>
+<li class="lvl2"><a href="#spread-bilan-massivlarni-yoyish-va-birlashtirish">Spread bilan massivlarni yoyish va birlashtirish</a></li>
+<li class="lvl2"><a href="#spread-bilan-nusxa-olish">Spread bilan nusxa olish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'p JavaScript funksiyalari <em>ixtiyoriy sondagi</em> argumentni qabul qila oladi — masalan <code>Math.max(1, 2, 3, 4)</code>. Bunday funksiyalarni yozish va massivlarni argumentlarga aylantirish uchun <strong>rest</strong> va <strong>spread</strong> sintaksisidan foydalanamiz. Ikkalasi ham uchta nuqta <code>...</code> bilan yoziladi.</p>
-<h2>Rest parametrlar ...rest</h2>
+<h2 id="rest-parametrlar-rest">Rest parametrlar ...rest</h2>
 <p>Funksiya e'lon qilinganidan ortiqcha argument bilan chaqirilsa, JavaScript xatolik bermaydi — ortiqcha argumentlarni oddiygina e'tiborsiz qoldiradi. Ammo biz ularning <em>hammasini</em> yig'ib olishimiz mumkin — buning uchun oxirgi parametr oldiga <code>...</code> qo'yamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sum-all.js</span></div><textarea spellcheck="false">function sumAll(...numbers) {
   // numbers — barcha argumentlardan iborat haqiqiy MASSIV
@@ -621,7 +635,7 @@ console.log(sumAll(1, 2, 3, 4, 5));</textarea><div class="pg-actions"><button cl
 
 showName('Julius', 'Caesar', 'Konsul', 'Imperator');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Rest parametr <strong>doim oxirgi</strong> bo'lishi shart. <code>function f(arg1, ...rest, arg2)</code> — bu xatolik (<code>SyntaxError</code>), chunki restdan keyin boshqa parametr bo'lishi mumkin emas.</div>
-<h2>Eski usul: "arguments" obyekti</h2>
+<h2 id="eski-usul-arguments-obyekti">Eski usul: "arguments" obyekti</h2>
 <p>Eski JavaScript'da (rest parametrlar paydo bo'lishidan oldin) barcha argumentlarni olishning yagona yo'li maxsus <code>arguments</code> obyekti edi. U funksiya ichida avtomatik mavjud bo'ladi va indeks bo'yicha barcha argumentlarni saqlaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>arguments.js</span></div><textarea spellcheck="false">function showArgs() {
   console.log(arguments.length);
@@ -632,7 +646,7 @@ showName('Julius', 'Caesar', 'Konsul', 'Imperator');</textarea><div class="pg-ac
 showArgs('Salom', 'Dunyo');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>arguments</code> — <strong>massivga o'xshaydi, lekin haqiqiy massiv emas</strong>. Unda <code>.map()</code>, <code>.filter()</code> kabi massiv metodlari yo'q. Shu sabab bugungi kunda deyarli har doim <strong>rest parametrlar</strong> afzal ko'riladi.</div>
 <div class="note">Yana bir muhim farq: <em>strelka funksiyalarida</em> (arrow functions) <code>arguments</code> obyekti umuman bo'lmaydi. Shu holatlarda ham rest parametrlar yagona to'g'ri yechim.</div>
-<h2>Spread sintaksisi ...spread</h2>
+<h2 id="spread-sintaksisi-spread">Spread sintaksisi ...spread</h2>
 <p>Rest parametr <em>argumentlarni massivga yig'ardi</em>. Spread esa buning aksi — u <strong>massiv (yoki boshqa iteratsiyalanuvchi)ni alohida elementlarga yoyadi</strong>.</p>
 <p>Klassik masala: <code>Math.max</code> alohida sonlarni kutadi, massivni emas. Massivdagi eng katta sonni topish uchun spread yordam beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>spread-max.js</span></div><textarea spellcheck="false">let arr = [3, 5, 1, 9, 2];
@@ -649,7 +663,7 @@ let arr2 = [8, 3, -8, 1];
 
 console.log(Math.max(...arr1, ...arr2, 25));
 // 1, -2, 3, 8, 3, -8, 1 va 25 orasidan eng kattasi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Spread bilan massivlarni yoyish va birlashtirish</h2>
+<h2 id="spread-bilan-massivlarni-yoyish-va-birlashtirish">Spread bilan massivlarni yoyish va birlashtirish</h2>
 <p>Spreadni yangi massiv literali ichida ham ishlatish mumkin — u massivni to'g'ridan-to'g'ri boshqa massivga "quyib" beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>spread-merge.js</span></div><textarea spellcheck="false">let birinchi = [1, 2, 3];
 let ikkinchi = [4, 5];
@@ -663,7 +677,7 @@ console.log(birlashgan);
 let chars = [...str];
 console.log(chars);
 // ['S', 'a', 'l', 'o', 'm']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Spread bilan nusxa olish</h2>
+<h2 id="spread-bilan-nusxa-olish">Spread bilan nusxa olish</h2>
 <p>Spread massiv va obyektning <strong>sayoz nusxasini</strong> (shallow copy) olishning eng qulay usuli. Bu yerda muhim jihat bor — massivni oddiygina boshqa o'zgaruvchiga tenglash <em>nusxa yaratmaydi</em>, faqat bir xil massivga ikkita nom beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>spread-copy.js</span></div><textarea spellcheck="false">let arr = [1, 2, 3];
 
@@ -682,7 +696,7 @@ console.log(user.age);   // 25 — asl obyekt o'zgarmadi
 console.log(clone.age);  // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Bu <strong>sayoz</strong> (shallow) nusxa: agar obyekt ichida yana obyekt yoki massiv bo'lsa, ular nusxalanmaydi — ikkala tomon bitta ichki obyektga ishora qiladi. Chuqur nusxa uchun boshqa usullar kerak (masalan <code>structuredClone</code>).</div>
 <div class="tip">Qoidani eslab qoling: <strong>rest</strong> — funksiya <em>parametrlarida</em> (argumentlarni yig'adi), <strong>spread</strong> — funksiya <em>chaqiruvida</em> yoki massiv/obyekt literalida (yoyadi). Sintaksis bir xil <code>...</code> bo'lsa-da, ular teskari ishlarni bajaradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Rest parametr</strong> <code>...name</code> — funksiya e'lonida qolgan barcha argumentlarni <em>haqiqiy massiv</em>ga yig'adi; doim oxirgi bo'ladi;</li><li>Eski <code>arguments</code> obyekti ham argumentlarni beradi, lekin u massiv emas va strelka funksiyalarda yo'q — hozir rest afzal;</li><li><strong>Spread</strong> <code>...arr</code> — iteratsiyalanuvchini alohida elementlarga yoyadi (masalan <code>Math.max(...arr)</code>);</li><li>Spread massiv/obyektlarni birlashtirish va <strong>nusxa olish</strong> uchun juda qulay (sayoz nusxa).</li></ul>
 <nav class="lesson-nav">
   <a href="rekursiya.html"><span class="dir">← Oldingi</span><span class="ttl">Rekursiya va stek</span></a>
@@ -696,6 +710,6 @@ console.log(clone.age);  // 30</textarea><div class="pg-actions"><button class="
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

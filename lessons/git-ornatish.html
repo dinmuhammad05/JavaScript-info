@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Git o'rnatish va sozlash — Kodla</title>
   <meta name="description" content="Git'ni Windows, macOS va Linux'ga o'rnatish; git --version orqali tekshirish; birinchi sozlash — git config bilan ism va elektron pochta; SSH kalit yaratish (ssh-keygen) va GitHub'ga qo'shish; git config --list.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,42 +599,62 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>Git o'rnatish va sozlash</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#git-o-rnatilganini-tekshirish">Git o'rnatilganini tekshirish</a></li>
+<li class="lvl2"><a href="#windows-ga-o-rnatish">Windows'ga o'rnatish</a></li>
+<li class="lvl2"><a href="#macos-ga-o-rnatish">macOS'ga o'rnatish</a></li>
+<li class="lvl2"><a href="#linux-ga-o-rnatish">Linux'ga o'rnatish</a></li>
+<li class="lvl3"><a href="#ubuntu-debian-oilasi">Ubuntu / Debian oilasi</a></li>
+<li class="lvl3"><a href="#fedora">Fedora</a></li>
+<li class="lvl3"><a href="#arch-linux-manjaro">Arch Linux / Manjaro</a></li>
+<li class="lvl3"><a href="#opensuse">openSUSE</a></li>
+<li class="lvl2"><a href="#birinchi-sozlash-ism-va-elektron-pochta">Birinchi sozlash: ism va elektron pochta</a></li>
+<li class="lvl2"><a href="#foydali-qo-shimcha-sozlamalar">Foydali qo'shimcha sozlamalar</a></li>
+<li class="lvl2"><a href="#ssh-kalit-nima-va-nega-kerak">SSH kalit nima va nega kerak?</a></li>
+<li class="lvl2"><a href="#ssh-kalit-yaratish-ssh-keygen">SSH kalit yaratish (ssh-keygen)</a></li>
+<li class="lvl2"><a href="#ochiq-kalitni-github-ga-qo-shish">Ochiq kalitni GitHub'ga qo'shish</a></li>
+<li class="lvl2"><a href="#barcha-sozlamalarni-ko-rish-git-config-list">Barcha sozlamalarni ko'rish: git config --list</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Git bilan ishlashni boshlashdan oldin uni kompyuteringizga <strong>o'rnatish</strong> va bir marta <strong>sozlash</strong> kerak. Bu darsda barcha operatsion tizimlar uchun o'rnatish yo'llarini, birinchi sozlamalarni va GitHub'ga xavfsiz ulanish uchun SSH kalitini yaratishni bosqichma-bosqich ko'rib chiqamiz.</p>
-<h2>Git o'rnatilganini tekshirish</h2>
+<h2 id="git-o-rnatilganini-tekshirish">Git o'rnatilganini tekshirish</h2>
 <p>Ba'zi tizimlarda (ayniqsa macOS va Linux'da) Git avvaldan o'rnatilgan bo'lishi mumkin. Shuning uchun avval tekshirib ko'ramiz. Terminal (buyruqlar qatori) oynasini oching va quyidagini yozing:</p>
 <pre class="code"><code>git --version</code></pre>
 <p>Agar Git o'rnatilgan bo'lsa, quyidagiga o'xshash javob chiqadi (raqamlar farq qilishi mumkin):</p>
 <pre class="code"><code>git version 2.43.0</code></pre>
 <p>Agar <em>"command not found"</em> yoki <em>"buyruq topilmadi"</em> kabi xato chiqsa, demak Git hali o'rnatilmagan — quyidagi bo'limlardan o'z tizimingizga mos yo'riqnomani bajaring.</p>
 <div class="note"><strong>Terminal</strong> — bu buyruqlarni matn ko'rinishida kiritadigan dastur. Windows'da "Command Prompt", "PowerShell" yoki Git bilan keladigan "Git Bash"; macOS'da "Terminal"; Linux'da esa "Terminal" deb ataladi.</div>
-<h2>Windows'ga o'rnatish</h2>
+<h2 id="windows-ga-o-rnatish">Windows'ga o'rnatish</h2>
 <p>Windows uchun eng oson yo'l — rasmiy o'rnatuvchini yuklab olish. <a href="https://git-scm.com/download/win">git-scm.com/download/win</a> manziliga kiring, o'rnatuvchi avtomatik yuklab olinadi. Uni ishga tushiring va bosqichlarni bajaring — aksariyat sozlamalarni standart holatida qoldirish mumkin ("Next" tugmasini bosaverib).</p>
 <p>O'rnatish tugagach, birga keladigan <strong>Git Bash</strong> dasturidan foydalanish qulay — u Linux'dagi kabi terminal muhitini beradi. Muqobil sifatida <em>winget</em> paket menejeri orqali ham o'rnatish mumkin:</p>
 <pre class="code"><code>winget install --id Git.Git -e --source winget</code></pre>
 <p>Yoki <em>Chocolatey</em> paket menejeri o'rnatilgan bo'lsa:</p>
 <pre class="code"><code>choco install git</code></pre>
 <div class="tip">O'rnatish jarayonida "Adjusting your PATH environment" bosqichida standart variant ("Git from the command line and also from 3rd-party software") tanlangan bo'lsin — shunda Git'ni istalgan terminaldan chaqira olasiz.</div>
-<h2>macOS'ga o'rnatish</h2>
+<h2 id="macos-ga-o-rnatish">macOS'ga o'rnatish</h2>
 <p>macOS'da Git'ni o'rnatishning bir necha yo'li bor. Eng oddiy usul — Xcode buyruqlar qatori vositalarini o'rnatishdir. Terminalda quyidagini yozing:</p>
 <pre class="code"><code>xcode-select --install</code></pre>
 <p>Ochilgan oynada "Install" tugmasini bosing. Bu Git bilan birga boshqa foydali dasturlash vositalarini ham o'rnatadi.</p>
 <p>Agar <strong>Homebrew</strong> paket menejeri o'rnatilgan bo'lsa (ko'pchilik dasturchilar ishlatadi), eng yangi Git versiyasini quyidagicha o'rnatishingiz mumkin:</p>
 <pre class="code"><code>brew install git</code></pre>
 <div class="note">Homebrew orqali o'rnatilgan Git odatda tizimdagidan yangiroq bo'ladi. Agar Homebrew hali o'rnatilmagan bo'lsa, <a href="https://brew.sh">brew.sh</a> saytidagi ko'rsatmalarga amal qiling.</div>
-<h2>Linux'ga o'rnatish</h2>
+<h2 id="linux-ga-o-rnatish">Linux'ga o'rnatish</h2>
 <p>Linux'da Git deyarli har doim tizimning paket menejeri orqali o'rnatiladi. Buyruq sizning distributivingizga bog'liq.</p>
-<h3>Ubuntu / Debian oilasi</h3>
+<h3 id="ubuntu-debian-oilasi">Ubuntu / Debian oilasi</h3>
 <pre class="code"><code>sudo apt update
 sudo apt install git</code></pre>
-<h3>Fedora</h3>
+<h3 id="fedora">Fedora</h3>
 <pre class="code"><code>sudo dnf install git</code></pre>
-<h3>Arch Linux / Manjaro</h3>
+<h3 id="arch-linux-manjaro">Arch Linux / Manjaro</h3>
 <pre class="code"><code>sudo pacman -S git</code></pre>
-<h3>openSUSE</h3>
+<h3 id="opensuse">openSUSE</h3>
 <pre class="code"><code>sudo zypper install git</code></pre>
 <p>Bu yerda <code>sudo</code> — buyruqni administrator huquqlari bilan bajarish uchun kerak; tizim sizdan parolingizni so'rashi mumkin.</p>
 <div class="note">O'rnatishdan so'ng barcha tizimlarda <code>git --version</code> buyrug'ini qayta bajarib, o'rnatish muvaffaqiyatli bo'lganiga ishonch hosil qiling.</div>
-<h2>Birinchi sozlash: ism va elektron pochta</h2>
+<h2 id="birinchi-sozlash-ism-va-elektron-pochta">Birinchi sozlash: ism va elektron pochta</h2>
 <p>Git o'rnatilgandan keyin qiladigan birinchi ishingiz — o'zingizni tanishtirish. Har bir commit'ga uni kim yaratganini bildiruvchi <strong>ism</strong> va <strong>elektron pochta</strong> yozib qo'yiladi. Buni bir marta sozlab qo'ysangiz, keyin har bir commit'da avtomatik ishlatiladi.</p>
 <pre class="code"><code>git config --global user.name "Ali Valiyev"
 git config --global user.email "ali@example.com"</code></pre>
@@ -640,7 +663,7 @@ git config --global user.email "ali@example.com"</code></pre>
 <div class="warn">Ismingizni va pochtangizni tirnoq ichida yozing, ayniqsa ismda probel bo'lsa. GitHub'da ro'yxatdan o'tgan pochtangizni ishlatish tavsiya etiladi — shunda commit'lar sizning GitHub profilingizga to'g'ri bog'lanadi.</div>
 <p>Alohida bir loyiha uchun boshqa ism/pochta kerak bo'lsa, <code>--global</code>siz, o'sha repozitoriy ichida ishga tushiring — u faqat shu loyihaga ta'sir qiladi:</p>
 <pre class="code"><code>git config user.email "ish.pochtam@company.com"</code></pre>
-<h2>Foydali qo'shimcha sozlamalar</h2>
+<h2 id="foydali-qo-shimcha-sozlamalar">Foydali qo'shimcha sozlamalar</h2>
 <p>Ba'zi sozlamalar ish qulayligini oshiradi. Ular majburiy emas, lekin tavsiya etiladi.</p>
 <p>Yangi repozitoriylarda asosiy tarmoq nomini <code>main</code> qilib belgilash (ba'zi eski Git versiyalari standart holatda <code>master</code> ishlatadi):</p>
 <pre class="code"><code>git config --global init.defaultBranch main</code></pre>
@@ -649,11 +672,11 @@ git config --global user.email "ali@example.com"</code></pre>
 <p>Matn muharririni sozlash — masalan, VS Code'ni Git uchun standart muharrir qilish:</p>
 <pre class="code"><code>git config --global core.editor "code --wait"</code></pre>
 <div class="tip">Windows va macOS/Linux o'rtasida fayllardagi qator oxiri belgilari (line endings) farq qiladi. Muammolarni oldini olish uchun Windows'da <code>git config --global core.autocrlf true</code>, macOS/Linux'da esa <code>git config --global core.autocrlf input</code> qo'yish tavsiya etiladi.</div>
-<h2>SSH kalit nima va nega kerak?</h2>
+<h2 id="ssh-kalit-nima-va-nega-kerak">SSH kalit nima va nega kerak?</h2>
 <p>GitHub'ga kod yuborishning ikki asosiy usuli bor: <strong>HTTPS</strong> va <strong>SSH</strong>. HTTPS'da har safar (yoki token orqali) parol so'raladi. <strong>SSH</strong> esa kompyuteringizni GitHub'ga bir marta ishonchli tarzda bog'lab qo'yadi — keyin har safar parol kiritish shart bo'lmaydi.</p>
 <p>SSH kaliti — <em>juftlik</em> ko'rinishida bo'ladi: <strong>maxfiy kalit</strong> (private key, kompyuteringizda qoladi, hech kimga bermaysiz) va <strong>ochiq kalit</strong> (public key, GitHub'ga qo'shasiz). Bular birgalikda sizni xavfsiz tanib olish imkonini beradi.</p>
 <div class="warn">Maxfiy (private) kalitni <strong>hech qachon</strong> hech kimga bermang va internetga joylamang. Faqat ochiq (public, <code>.pub</code> bilan tugaydigan) kalitni GitHub'ga qo'shasiz.</div>
-<h2>SSH kalit yaratish (ssh-keygen)</h2>
+<h2 id="ssh-kalit-yaratish-ssh-keygen">SSH kalit yaratish (ssh-keygen)</h2>
 <p>SSH kaliti yaratish uchun quyidagi buyruqdan foydalanamiz. Pochta manzilini o'zingiznikiga o'zgartiring — u shunchaki kalitga izoh (label) sifatida qo'shiladi:</p>
 <pre class="code"><code>ssh-keygen -t ed25519 -C "ali@example.com"</code></pre>
 <p>Buyruq qismlari:</p>
@@ -664,7 +687,7 @@ git config --global user.email "ali@example.com"</code></pre>
 <p>Yaratilgach, ikki fayl paydo bo'ladi: <code>id_ed25519</code> (maxfiy kalit) va <code>id_ed25519.pub</code> (ochiq kalit). Ochiq kalitni ekranga chiqarish uchun:</p>
 <pre class="code"><code>cat ~/.ssh/id_ed25519.pub</code></pre>
 <p>Natija <code>ssh-ed25519</code> bilan boshlanadi va sizning pochtangiz bilan tugaydi. Butun shu satrni (bir qatordagi hammasini) nusxa oling — u GitHub'ga qo'shiladigan ochiq kalitdir.</p>
-<h2>Ochiq kalitni GitHub'ga qo'shish</h2>
+<h2 id="ochiq-kalitni-github-ga-qo-shish">Ochiq kalitni GitHub'ga qo'shish</h2>
 <p>Endi ochiq kalitni GitHub hisobingizga qo'shamiz. Bu bosqich brauzerda bajariladi:</p>
 <ol><li>GitHub'ga kiring va o'ng yuqoridagi profil rasmiga bosing;</li><li><strong>Settings</strong> (Sozlamalar) bo'limiga o'ting;</li><li>Chap menyudan <strong>SSH and GPG keys</strong> ni tanlang;</li><li><strong>New SSH key</strong> tugmasini bosing;</li><li><em>Title</em> maydoniga kalitni tanib oladigan nom yozing (masalan, "Uy kompyuteri");</li><li><em>Key</em> maydoniga yuqorida nusxa olgan ochiq kalitni to'liq joylashtiring;</li><li><strong>Add SSH key</strong> tugmasini bosib saqlang.</li></ol>
 <p>Ulanish to'g'ri sozlanganini tekshirish uchun quyidagi buyruqni ishga tushiring:</p>
@@ -673,7 +696,7 @@ git config --global user.email "ali@example.com"</code></pre>
 <pre class="code"><code>Hi aliValiyev! You've successfully authenticated,
 but GitHub does not provide shell access.</code></pre>
 <div class="tip">Bu xabardagi "does not provide shell access" ("terminalga kirish bermaydi") qismi <em>xato emas</em> — bu normal holat. Muhim qismi "successfully authenticated" ("muvaffaqiyatli tasdiqlandi") degan iboradir.</div>
-<h2>Barcha sozlamalarni ko'rish: git config --list</h2>
+<h2 id="barcha-sozlamalarni-ko-rish-git-config-list">Barcha sozlamalarni ko'rish: git config --list</h2>
 <p>Qilingan barcha sozlamalarni bir joyda ko'rish uchun:</p>
 <pre class="code"><code>git config --list</code></pre>
 <p>Bu buyruq barcha faol sozlamalarni <code>kalit=qiymat</code> ko'rinishida chiqaradi:</p>
@@ -686,7 +709,7 @@ color.ui=auto</code></pre>
 <p>Global sozlamalar joylashgan faylni ko'rish uchun:</p>
 <pre class="code"><code>git config --list --show-origin</code></pre>
 <div class="note">Global sozlamalar aslida uy papkangizdagi <code>.gitconfig</code> nomli oddiy matnli faylda saqlanadi. Uni istalgan matn muharririda ochib, qo'lda ham tahrirlash mumkin — ammo yangi boshlovchilar uchun <code>git config</code> buyrug'idan foydalanish xavfsizroq.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Git o'rnatilganini <code>git --version</code> buyrug'i bilan tekshiriladi;</li><li>Windows'da git-scm.com yoki winget/choco orqali; macOS'da xcode-select yoki brew orqali; Linux'da paket menejeri (apt, dnf, pacman) orqali o'rnatiladi;</li><li>Birinchi ish — <code>git config --global user.name</code> va <code>user.email</code> orqali o'zingizni tanishtirish;</li><li><code>init.defaultBranch main</code> va <code>color.ui auto</code> kabi qo'shimcha sozlamalar ish qulayligini oshiradi;</li><li><strong>SSH kalit</strong> GitHub'ga parolsiz, xavfsiz ulanishni ta'minlaydi; u <code>ssh-keygen -t ed25519</code> bilan yaratiladi;</li><li>Faqat <strong>ochiq</strong> (<code>.pub</code>) kalit GitHub'ga qo'shiladi; maxfiy kalit hech qachon ulashilmaydi;</li><li><code>ssh -T git@github.com</code> ulanishni tekshiradi; <code>git config --list</code> barcha sozlamalarni ko'rsatadi.</li></ul>
 <nav class="lesson-nav">
   <a href="git-github-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Git va GitHub nima?</span></a>
@@ -700,6 +723,6 @@ color.ui=auto</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

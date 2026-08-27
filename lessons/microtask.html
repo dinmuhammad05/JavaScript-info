@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mikrovazifalar (microtasks) — Kodla</title>
   <meta name="description" content="Mikrovazifa navbati, .then callback'lari tartibi va setTimeout bilan farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Mikrovazifalar (microtasks)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#asinxron-bajarilish-tartibi">Asinxron bajarilish tartibi</a></li>
+<li class="lvl2"><a href="#mikrovazifa-navbati-microtask-queue">Mikrovazifa navbati (Microtask Queue)</a></li>
+<li class="lvl2"><a href="#makrovazifalar-va-settimeout">Makrovazifalar va setTimeout</a></li>
+<li class="lvl2"><a href="#hodisalar-tsikli-event-loop-qisqacha">Hodisalar tsikli (Event Loop) qisqacha</a></li>
+<li class="lvl2"><a href="#unhandled-rejection">Unhandled rejection</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Promise'lar callback'lari (<code>.then</code>, <code>.catch</code>, <code>.finally</code>) doim <strong>asinxron</strong> bajariladi. Lekin qanday tartibda? Buni tushunish uchun <em>mikrovazifa navbati</em> (microtask queue) tushunchasini o'rganamiz.</p>
-<h2>Asinxron bajarilish tartibi</h2>
+<h2 id="asinxron-bajarilish-tartibi">Asinxron bajarilish tartibi</h2>
 <p>Quyidagi kodni ko'rib chiqamiz:</p>
 <pre class="code"><code>let promise = Promise.resolve();
 
@@ -608,7 +622,7 @@ console.log('kod tugadi');</code></pre>
 <pre class="code"><code>kod tugadi
 promise tayyor!</code></pre>
 <p>Nima uchun? Chunki <code>.then</code> callback'i darhol emas, balki hozirgi kod to'liq tugagandan keyin ishga tushadi. Buning sababi — <strong>mikrovazifa navbati</strong>.</p>
-<h2>Mikrovazifa navbati (Microtask Queue)</h2>
+<h2 id="mikrovazifa-navbati-microtask-queue">Mikrovazifa navbati (Microtask Queue)</h2>
 <p>Asinxron vazifalar to'g'ri boshqarilishi kerak. ECMAScript standartida buning uchun ichki <strong>PromiseJobs</strong> navbati mavjud — spetsifikatsiyada u <em>"microtask queue"</em> deb ataladi (V8 termini).</p>
 <p>Navbat haqida asosiy tushunchalar:</p>
 <ul><li>Navbat <strong>FIFO</strong> (First In, First Out) — birinchi qo'shilgan vazifa birinchi bajariladi;</li><li>Vazifalar bajarilishi faqat <strong>hech qanday boshqa kod ishlamayotgan paytda</strong> boshlanadi.</li></ul>
@@ -627,7 +641,7 @@ console.log('sinxron kod');
 // birinchi
 // ikkinchi
 // uchinchi</code></pre>
-<h2>Makrovazifalar va setTimeout</h2>
+<h2 id="makrovazifalar-va-settimeout">Makrovazifalar va setTimeout</h2>
 <p>Mikrovazifalardan tashqari <strong>makrovazifalar</strong> (macrotasks) ham bor. <code>setTimeout</code>, tarmoq hodisalari, foydalanuvchi hodisalari — bularning hammasi makrovazifalar navbatiga tushadi.</p>
 <p>Muhim qoida: <strong>har bir makrovazifadan keyin dvigatel avval BARCHA mikrovazifalarni bajaradi</strong>, so'nggina keyingi makrovazifaga o'tadi (yoki qayta render qiladi). Ya'ni mikrovazifalar makrovazifalardan ustunroq.</p>
 <pre class="code"><code>setTimeout(() =&gt; console.log('setTimeout (makrovazifa)'), 0);
@@ -642,12 +656,12 @@ promise (mikrovazifa)
 setTimeout (makrovazifa)</code></pre>
 <p>E'tibor bering: <code>setTimeout(..., 0)</code> "0 soniyadan keyin" degani bo'lsa-da, u makrovazifa bo'lgani uchun promise callback'idan <strong>keyin</strong> ishga tushdi. Chunki sinxron kod tugagach, dvigatel avval mikrovazifa navbatini (promise) to'liq bo'shatadi, keyingina makrovazifaga (setTimeout) o'tadi.</p>
 <div class="warn">Ushbu misollar asinxron tartibni ko'rsatadi. Node.js va brauzerda ular kutilgan tartibda ishlaydi. Interaktiv maydonchada esa asinxron kodning natijasi darhol ko'rinmasligi mumkin — shuning uchun bu misollar statik <code>{code}</code> sifatida berilgan.</div>
-<h2>Hodisalar tsikli (Event Loop) qisqacha</h2>
+<h2 id="hodisalar-tsikli-event-loop-qisqacha">Hodisalar tsikli (Event Loop) qisqacha</h2>
 <p>Yuqoridagilarni birlashtiruvchi mexanizm — <strong>hodisalar tsikli</strong> (event loop). U cheksiz aylanuvchi jarayon bo'lib, quyidagicha ishlaydi:</p>
 <ol><li>Makrovazifa navbatidan eng eski vazifani oladi va bajaradi (masalan, hozirgi skript);</li><li>So'ng <strong>barcha</strong> mikrovazifalarni bajaradi (promise callback'lari);</li><li>Kerak bo'lsa brauzer sahifani qayta render qiladi;</li><li>Agar makrovazifa navbatida yana vazifa bo'lsa — 1-qadamga qaytadi; aks holda yangi hodisani kutadi.</li></ol>
 <p>Ushbu ketma-ketlik nima uchun promise callback'lari <code>setTimeout</code>dan oldin ishlashini tushuntiradi: har bir makrovazifadan keyin mikrovazifa navbati to'liq bo'shatiladi.</p>
 <div class="tip">Amaliy natija: agar biror kodni sinxron ishlar tugaganidan <em>keyin</em>, lekin brauzer render qilishidan <em>oldin</em> bajarmoqchi bo'lsangiz — <code>Promise.resolve().then(...)</code> ishlating (mikrovazifa). Agar renderdan keyin bo'lishini xohlasangiz — <code>setTimeout</code> (makrovazifa).</div>
-<h2>Unhandled rejection</h2>
+<h2 id="unhandled-rejection">Unhandled rejection</h2>
 <p>Mikrovazifa navbati tushunchasi "ushlanmagan rejection" (unhandled rejection) qachon yuzaga kelishini ham tushuntiradi. Agar promise reject bo'lsa-yu, <strong>mikrovazifa navbati bo'shaganda</strong> unga <code>.catch</code> qo'shilmagan bo'lsa — dvigatel "unhandled rejection" xatosini beradi.</p>
 <pre class="code"><code>let promise = Promise.reject(new Error('Xatolik!'));
 // .catch qo'shilmadi
@@ -661,7 +675,7 @@ setTimeout(() =&gt; promise.catch(err =&gt; console.log('ushlandi')), 1000);
 // Bu holda:
 // Error: Xatolik! (avval, navbat bo'shagach)
 // ushlandi (1 soniyadan keyin)</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Promise callback'lari (<code>.then/.catch/.finally</code>) doim <strong>asinxron</strong>, mikrovazifa navbati orqali bajariladi;</li><li>Navbat <strong>FIFO</strong> tartibda ishlaydi va faqat hozirgi kod tugagach boshlanadi;</li><li><code>setTimeout</code> — <strong>makrovazifa</strong>, u mikrovazifalardan <em>keyin</em> ishlaydi;</li><li>Har bir makrovazifadan so'ng dvigatel <strong>barcha</strong> mikrovazifalarni bajaradi;</li><li>Bu mexanizm <strong>hodisalar tsikli</strong> (event loop) deb ataladi.</li></ul>
 <nav class="lesson-nav">
   <a href="promisification.html"><span class="dir">← Oldingi</span><span class="ttl">Promisifikatsiya</span></a>
@@ -675,6 +689,6 @@ setTimeout(() =&gt; promise.catch(err =&gt; console.log('ushlandi')), 1000);
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

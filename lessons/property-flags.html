@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xossa bayroqlari va deskriptorlari — Kodla</title>
   <meta name="description" content="Obyekt xossalari faqat qiymatdan iborat emas — ular writable, enumerable va configurable bayroqlariga ega. Ularni qanday o'qish va o'zgartirish mumkin.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,28 @@
 <main class="content article">
 <div class="crumbs">Obyekt xossalari konfiguratsiyasi</div>
 <h1>Xossa bayroqlari va deskriptorlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#xossa-bayroqlari-nima">Xossa bayroqlari nima?</a></li>
+<li class="lvl2"><a href="#object-getownpropertydescriptor">Object.getOwnPropertyDescriptor</a></li>
+<li class="lvl2"><a href="#object-defineproperty">Object.defineProperty</a></li>
+<li class="lvl2"><a href="#writable-faqat-o-qish-uchun-xossa">writable — faqat o'qish uchun xossa</a></li>
+<li class="lvl2"><a href="#enumerable-sanashdan-yashirish">enumerable — sanashdan yashirish</a></li>
+<li class="lvl2"><a href="#configurable-o-zgarmas-xossa">configurable — o'zgarmas xossa</a></li>
+<li class="lvl2"><a href="#object-defineproperties">Object.defineProperties</a></li>
+<li class="lvl2"><a href="#object-getownpropertydescriptors">Object.getOwnPropertyDescriptors</a></li>
+<li class="lvl2"><a href="#butun-obyektni-himoyalash">Butun obyektni himoyalash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Biz obyekt xossalarini oddiy "kalit: qiymat" juftliklari deb bilamiz. Aslida esa xossa — bu ancha moslashuvchan va boshqariladigan narsa. Ushbu darsda xossalarning yashirin <strong>bayroqlari</strong> (flags) bilan tanishamiz va ularni deskriptorlar orqali qanday sozlashni o'rganamiz.</p>
-<h2>Xossa bayroqlari nima?</h2>
+<h2 id="xossa-bayroqlari-nima">Xossa bayroqlari nima?</h2>
 <p>Obyekt xossalari qiymatdan tashqari yana uchta maxsus atribut — <strong>bayroq</strong> (flag)ga ega. Ular <code>true</code> yoki <code>false</code> qiymat oladi:</p>
 <ul><li><strong>writable</strong> — agar <code>true</code> bo'lsa, xossa qiymatini o'zgartirish mumkin; aks holda u faqat o'qish uchun (read-only) bo'ladi;</li><li><strong>enumerable</strong> — agar <code>true</code> bo'lsa, xossa sikllarda (masalan, <code>for..in</code>) sanab o'tiladi; aks holda "yashirin" bo'ladi;</li><li><strong>configurable</strong> — agar <code>true</code> bo'lsa, xossani o'chirish va uning bayroqlarini o'zgartirish mumkin; aks holda bu taqiqlanadi.</li></ul>
 <p>Biz xossani odatdagidek yaratganimizda, bu uchala bayroq avtomatik ravishda <code>true</code> qiymatini oladi. Shuning uchun biz ularni odatda sezmaymiz — hamma narsa "erkin" ishlaydi.</p>
 <div class="note">Bu darsda ko'rib chiqiladigan bayroqlar faqat <strong>ma'lumot xossalari</strong> (data properties) uchun amal qiladi. Keyingi darsda ko'radigan getter/setter aksessor xossalari boshqacha atributlarga ega.</div>
-<h2>Object.getOwnPropertyDescriptor</h2>
+<h2 id="object-getownpropertydescriptor">Object.getOwnPropertyDescriptor</h2>
 <p>Xossa haqidagi <em>to'liq</em> ma'lumotni — qiymati va barcha bayroqlarini — bilish uchun <code>Object.getOwnPropertyDescriptor</code> metodidan foydalanamiz. Sintaksisi quyidagicha:</p>
 <pre class="code"><code>let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);</code></pre>
 <ul><li><code>obj</code> — ma'lumot olinadigan obyekt;</li><li><code>propertyName</code> — xossa nomi (satr ko'rinishida).</li></ul>
@@ -615,7 +633,7 @@ let descriptor = Object.getOwnPropertyDescriptor(user, "name");
 
 console.log( JSON.stringify(descriptor, null, 2) );</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rib turganingizdek, oddiy usulda yaratilgan xossada <code>value</code>, <code>writable</code>, <code>enumerable</code> va <code>configurable</code>ning hammasi <code>true</code>ga teng.</p>
-<h2>Object.defineProperty</h2>
+<h2 id="object-defineproperty">Object.defineProperty</h2>
 <p>Bayroqlarni o'zgartirish uchun <code>Object.defineProperty</code> metodidan foydalanamiz:</p>
 <pre class="code"><code>Object.defineProperty(obj, propertyName, descriptor);</code></pre>
 <ul><li><code>obj</code>, <code>propertyName</code> — obyekt va xossa nomi;</li><li><code>descriptor</code> — qo'llaniladigan deskriptor obyekti.</li></ul>
@@ -630,7 +648,7 @@ let descriptor = Object.getOwnPropertyDescriptor(user, "name");
 
 console.log( JSON.stringify(descriptor, null, 2) );</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Diqqat qiling: yuqoridagi misolda xossa <code>defineProperty</code> orqali yaratildi, lekin bayroqlar aniq ko'rsatilmadi. Shuning uchun <code>writable</code>, <code>enumerable</code> va <code>configurable</code> avtomatik <code>false</code> bo'lib qoladi — bu oddiy <code>user.name = "Jasur"</code>dan tubdan farq qiladi!</div>
-<h2>writable — faqat o'qish uchun xossa</h2>
+<h2 id="writable-faqat-o-qish-uchun-xossa">writable — faqat o'qish uchun xossa</h2>
 <p><code>name</code> xossasini faqat o'qish uchun (read-only) qilib qo'yamiz. Buning uchun <code>writable</code>ni <code>false</code>ga o'zgartiramiz. Endi hech kim uning qiymatini o'zgartira olmaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>writable.js</span></div><textarea spellcheck="false">let user = {
   name: "Jasur"
@@ -660,7 +678,7 @@ try {
   console.log("Xato yuz berdi: " + err.name);
   // TypeError: Cannot assign to read only property 'name'
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>enumerable — sanashdan yashirish</h2>
+<h2 id="enumerable-sanashdan-yashirish">enumerable — sanashdan yashirish</h2>
 <p>Endi obyektga maxsus <code>toString</code> metodini qo'shamiz. Odatda obyektlardagi barcha xossalar <code>for..in</code> siklida ko'rinadi, bu esa har doim ham kerak emas. <code>enumerable: false</code> qilib, xossani sikllardan va <code>Object.keys</code>dan yashiramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>enumerable.js</span></div><textarea spellcheck="false">let user = {
   name: "Jasur",
@@ -681,7 +699,7 @@ for (let key in user) console.log("Keyin: " + key);
 
 console.log("Object.keys: " + Object.keys(user));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Enumerable bo'lmagan xossalar <code>Object.keys()</code>, <code>Object.values()</code> va <code>for..in</code> natijasidan tushib qoladi, lekin ular baribir mavjud — ularga to'g'ridan-to'g'ri (<code>user.toString</code>) murojaat qilsa bo'ladi.</div>
-<h2>configurable — o'zgarmas xossa</h2>
+<h2 id="configurable-o-zgarmas-xossa">configurable — o'zgarmas xossa</h2>
 <p><code>configurable: false</code> bayrog'i ba'zi muhim ichki xossalarga o'rnatilgan bo'ladi. Bunday xossani <code>delete</code> orqali o'chirib bo'lmaydi va uning bayroqlarini <code>defineProperty</code> orqali o'zgartirib ham bo'lmaydi.</p>
 <p>Masalan, <code>Math.PI</code> faqat o'qiladigan, sanalmaydigan va sozlanmaydigan (non-configurable) xossadir. Buni tekshiramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>configurable-mathpi.js</span></div><textarea spellcheck="false">let descriptor = Object.getOwnPropertyDescriptor(Math, "PI");
@@ -705,7 +723,7 @@ try {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>configurable: false</code> — bu bir tomonlama harakat. Xossani sozlanmas qilib qo'ygandan so'ng, uni <code>defineProperty</code> orqali qaytadan sozlanadigan (<code>configurable: true</code>) qilib bo'lmaydi. Bu qaytmas amaldir.</div>
 <div class="note">Muhim istisno: agar <code>configurable</code> <code>false</code>, lekin <code>writable</code> <code>true</code> bo'lsa, qiymatni hali ham o'zgartirish mumkin, shuningdek <code>writable</code>ni <code>true</code>dan <code>false</code>ga o'zgartirish ham ruxsat etiladi (aksincha emas).</div>
-<h2>Object.defineProperties</h2>
+<h2 id="object-defineproperties">Object.defineProperties</h2>
 <p>Bir vaqtning o'zida bir nechta xossani e'lon qilish uchun <code>Object.defineProperties</code> qulay:</p>
 <pre class="code"><code>Object.defineProperties(obj, {
   prop1: descriptor1,
@@ -723,7 +741,7 @@ Object.defineProperties(user, {
 console.log(user.name + " " + user.surname);
 console.log("Ko'rinadigan kalitlar: " + Object.keys(user));
 // age enumerable: false bo'lgani uchun ro'yxatga tushmaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Object.getOwnPropertyDescriptors</h2>
+<h2 id="object-getownpropertydescriptors">Object.getOwnPropertyDescriptors</h2>
 <p>Barcha xossalarning deskriptorlarini bir vaqtda olish uchun <code>Object.getOwnPropertyDescriptors(obj)</code> ishlatiladi. U <code>Object.defineProperties</code> bilan birga obyektni <strong>bayroqlari bilan birga</strong> nusxalash uchun juda foydali:</p>
 <pre class="code"><code>let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));</code></pre>
 <p>Odatdagi <code>for..in</code> yoki <code>Object.assign</code> nusxalashi bayroqlarni ko'chirmaydi va sanalmaydigan (non-enumerable) xossalarni tashlab ketadi. Yuqoridagi usul esa xossani <em>to'liq</em>, barcha bayroqlari bilan ko'chiradi:</p>
@@ -741,7 +759,7 @@ let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(source)
 console.log("secret: " + clone.secret);          // 42 — yashirin xossa ham ko'chdi
 let d = Object.getOwnPropertyDescriptor(clone, "secret");
 console.log("enumerable: " + d.enumerable);      // false — bayroq ham saqlandi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Butun obyektni himoyalash</h2>
+<h2 id="butun-obyektni-himoyalash">Butun obyektni himoyalash</h2>
 <p>Yuqoridagi metodlar bitta xossaga ta'sir qiladi. Butun obyektni cheklovchi uchta "global" metod ham bor:</p>
 <ul><li><strong>Object.preventExtensions(obj)</strong> — obyektga yangi xossa qo'shishni taqiqlaydi (mavjudlarini o'zgartirsa bo'ladi);</li><li><strong>Object.seal(obj)</strong> — yangi xossa qo'shishni taqiqlaydi va barcha mavjud xossalarni <code>configurable: false</code> qiladi (qiymatni o'zgartirish mumkin, lekin o'chirib bo'lmaydi);</li><li><strong>Object.freeze(obj)</strong> — eng qattiq: yangi xossa qo'shish, o'chirish va qiymatlarni o'zgartirishni ham taqiqlaydi (barcha xossalarni <code>configurable: false</code> va <code>writable: false</code> qiladi).</li></ul>
 <p>Ular uchun mos tekshiruv metodlari mavjud: <code>Object.isExtensible(obj)</code>, <code>Object.isSealed(obj)</code> va <code>Object.isFrozen(obj)</code>.</p>
@@ -756,7 +774,7 @@ delete user.name;   // o'chirib bo'lmaydi
 console.log(JSON.stringify(user));       // {"name":"Jasur","age":25}
 console.log("Muzlatilgan? " + Object.isFrozen(user)); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Amaliyotda bu global metodlar juda kam ishlatiladi. Ular obyektni chindan ham o'zgarmas qilish kerak bo'lgan maxsus holatlarda foydali.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Har bir ma'lumot xossasi qiymatdan tashqari uchta bayroqqa ega: <strong>writable</strong>, <strong>enumerable</strong>, <strong>configurable</strong>;</li><li>Oddiy usulda yaratilganda ularning hammasi <code>true</code> bo'ladi;</li><li><code>Object.getOwnPropertyDescriptor(obj, prop)</code> — bitta xossa deskriptorini o'qiydi;</li><li><code>Object.defineProperty(obj, prop, descriptor)</code> — xossa va uning bayroqlarini o'rnatadi (ko'rsatilmagan bayroq <code>false</code>);</li><li><code>Object.defineProperties</code> va <code>Object.getOwnPropertyDescriptors</code> — ko'p xossa bilan ishlaydi va to'liq nusxalash uchun ideal;</li><li><code>Object.preventExtensions / seal / freeze</code> — butun obyektni turli darajada himoyalaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="strelka-qayta.html"><span class="dir">← Oldingi</span><span class="ttl">Strelka funksiyalari (qayta ko'rib chiqish)</span></a>
@@ -770,6 +788,6 @@ console.log("Muzlatilgan? " + Object.isFrozen(user)); // true</textarea><div cla
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fayllar bilan ishlash — Kodla</title>
   <meta name="description" content="touch, cp, mv, rm (ehtiyotkorlik bilan), cat, less, head, tail, nano/vim, find, grep, wc va oqimlarni yo'naltirish (>, >>, |).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,31 @@
 <main class="content article">
 <div class="crumbs">Linux va terminal</div>
 <h1>Fayllar bilan ishlash</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#touch-bo-sh-fayl-yaratish">touch — bo'sh fayl yaratish</a></li>
+<li class="lvl2"><a href="#cp-fayl-nusxalash">cp — fayl nusxalash</a></li>
+<li class="lvl2"><a href="#mv-ko-chirish-va-qayta-nomlash">mv — ko'chirish va qayta nomlash</a></li>
+<li class="lvl2"><a href="#rm-fayl-o-chirish-ehtiyotkorlik-bilan">rm — fayl o'chirish (ehtiyotkorlik bilan!)</a></li>
+<li class="lvl2"><a href="#cat-less-fayl-mazmunini-o-qish">cat, less — fayl mazmunini o'qish</a></li>
+<li class="lvl2"><a href="#head-tail-boshi-va-oxiri">head, tail — boshi va oxiri</a></li>
+<li class="lvl2"><a href="#nano-va-vim-matn-muharrirlari">nano va vim — matn muharrirlari</a></li>
+<li class="lvl2"><a href="#find-fayllarni-qidirish">find — fayllarni qidirish</a></li>
+<li class="lvl2"><a href="#grep-matn-ichidan-qidirish">grep — matn ichidan qidirish</a></li>
+<li class="lvl2"><a href="#wc-sanash">wc — sanash</a></li>
+<li class="lvl2"><a href="#oqimlarni-yo-naltirish">Oqimlarni yo'naltirish: &gt; &gt;&gt; |</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi papkalar ichida navigatsiya qilishni bilamiz. Bu darsda fayllarning o'zi bilan ishlashni o'rganamiz: yaratish, nusxalash, ko'chirish, o'chirish, mazmunini o'qish, qidirish va — eng qizig'i — buyruqlarni bir-biriga ulash (oqimlarni yo'naltirish).</p>
-<h2>touch — bo'sh fayl yaratish</h2>
+<h2 id="touch-bo-sh-fayl-yaratish">touch — bo'sh fayl yaratish</h2>
 <p><code>touch</code> buyrug'i bo'sh fayl yaratadi (yoki mavjud faylning vaqt belgisini yangilaydi):</p>
 <pre class="code"><code>touch hujjat.txt</code></pre>
 <p>Bir necha faylni birdaniga yaratish mumkin:</p>
 <pre class="code"><code>touch a.txt b.txt c.txt</code></pre>
 <div class="note"><code>touch</code> asosan test uchun tez bo'sh fayl yaratishga ishlatiladi. Ichiga matn yozadigan fayl kerak bo'lsa, matn muharriri (nano) yoki oqim yo'naltirish (<code>&gt;</code>) qulayroq — ular haqida quyida gaplashamiz.</div>
-<h2>cp — fayl nusxalash</h2>
+<h2 id="cp-fayl-nusxalash">cp — fayl nusxalash</h2>
 <p><code>cp</code> (copy) fayl nusxasini yaratadi. Sintaksis: <code>cp manba maqsad</code>:</p>
 <pre class="code"><code>cp hujjat.txt nusxa.txt</code></pre>
 <p>Faylni boshqa papkaga nusxalash:</p>
@@ -611,14 +631,14 @@
 <p><strong>Papkani</strong> (ichidagi hamma narsa bilan) nusxalash uchun <code>-r</code> (recursive) flagi kerak:</p>
 <pre class="code"><code>cp -r loyiha loyiha-zaxira</code></pre>
 <p>Bu "loyiha" papkasini butun mazmuni bilan "loyiha-zaxira" nomi ostida nusxalaydi.</p>
-<h2>mv — ko'chirish va qayta nomlash</h2>
+<h2 id="mv-ko-chirish-va-qayta-nomlash">mv — ko'chirish va qayta nomlash</h2>
 <p><code>mv</code> (move) faylni boshqa joyga ko'chiradi. Qiziq jihati: agar manba va maqsad bir papkada bo'lsa, bu aslida <strong>qayta nomlash</strong>ga aylanadi:</p>
 <pre class="code"><code>mv eski-nom.txt yangi-nom.txt    # qayta nomlash
 mv hujjat.txt ~/arxiv/            # ko'chirish</code></pre>
 <p><code>cp</code> dan farqli, <code>mv</code> papkalar uchun <code>-r</code> talab qilmaydi — u har qanday narsani (fayl yoki papka) bir joydan ikkinchisiga bemalol ko'chiradi:</p>
 <pre class="code"><code>mv eski-papka yangi-papka</code></pre>
 <div class="tip">Nusxa qoldirmasdan faqat nomini o'zgartirmoqchi bo'lsangiz — <code>mv</code> ishlating (<code>cp</code> emas). <code>cp</code> ikkita nusxa qoldiradi, <code>mv</code> esa bittani ko'chiradi/nomlaydi.</div>
-<h2>rm — fayl o'chirish (ehtiyotkorlik bilan!)</h2>
+<h2 id="rm-fayl-o-chirish-ehtiyotkorlik-bilan">rm — fayl o'chirish (ehtiyotkorlik bilan!)</h2>
 <p><code>rm</code> (remove) faylni o'chiradi:</p>
 <pre class="code"><code>rm keraksiz.txt</code></pre>
 <p>Papkani ichidagi hamma narsa bilan o'chirish uchun <code>-r</code> (recursive):</p>
@@ -627,13 +647,13 @@ mv hujjat.txt ~/arxiv/            # ko'chirish</code></pre>
 <pre class="code"><code>rm -rf vaqtinchalik</code></pre>
 <div class="warn"><code>rm</code> bilan o'chirilgan fayl <strong>Savatga tushmaydi</strong> — u butunlay yo'qoladi va qaytarib bo'lmaydi! Ayniqsa <code>rm -rf /</code> kabi buyruq butun tizimni o'chirib yuborishi mumkin. Har doim yo'lni ikki-uch marta tekshiring. Xavfsizlik uchun <code>rm -i</code> (interaktiv) har bir fayldan oldin tasdiq so'raydi.</div>
 <pre class="code"><code>rm -i muhim.txt    # 'o'chirilsinmi?' deb so'raydi</code></pre>
-<h2>cat, less — fayl mazmunini o'qish</h2>
+<h2 id="cat-less-fayl-mazmunini-o-qish">cat, less — fayl mazmunini o'qish</h2>
 <p><code>cat</code> (concatenate) fayl mazmunini to'liq ekranga chiqaradi:</p>
 <pre class="code"><code>cat hujjat.txt</code></pre>
 <p>Kichik fayllar uchun qulay. Lekin fayl katta bo'lsa, hammasi ekrandan o'tib ketadi. Bunday holatda <code>less</code> ishlatiladi — u faylni sahifalab, aylantirib ko'rish imkonini beradi:</p>
 <pre class="code"><code>less katta-log.txt</code></pre>
 <p><code>less</code> ichida boshqaruv: strelkalar bilan aylantirasiz, <code>/</code> bilan qidirasiz, <code>q</code> tugmasi bilan chiqasiz. Bu — katta fayllarni o'qishning eng qulay usuli.</p>
-<h2>head, tail — boshi va oxiri</h2>
+<h2 id="head-tail-boshi-va-oxiri">head, tail — boshi va oxiri</h2>
 <p>Katta faylning butunini emas, faqat boshini yoki oxirini ko'rish kerak bo'lganda:</p>
 <pre class="code"><code>head hujjat.txt        # birinchi 10 qator
 tail hujjat.txt        # oxirgi 10 qator</code></pre>
@@ -643,7 +663,7 @@ tail -n 20 hujjat.txt  # oxirgi 20 qator</code></pre>
 <p><code>tail</code> ning eng foydali flagi — <code>-f</code> (follow). U faylni "jonli" kuzatadi: fayl oxiriga yangi qatorlar qo'shilsa, ular darhol ekranda paydo bo'ladi. Bu server log'larini real vaqtda kuzatishda bebaho:</p>
 <pre class="code"><code>tail -f /var/log/nginx/access.log</code></pre>
 <div class="tip">Web-server yoki dasturingiz log'ini <code>tail -f</code> bilan kuzatib turing — har bir so'rov yoki xato darhol ko'rinadi. To'xtatish uchun <strong>Ctrl+C</strong> bosing.</div>
-<h2>nano va vim — matn muharrirlari</h2>
+<h2 id="nano-va-vim-matn-muharrirlari">nano va vim — matn muharrirlari</h2>
 <p>Terminalda faylni tahrirlash uchun matn muharriri kerak. Ikki mashhur variant bor:</p>
 <p><strong>nano</strong> — yangi boshlovchi uchun eng oson. Ochish:</p>
 <pre class="code"><code>nano hujjat.txt</code></pre>
@@ -653,7 +673,7 @@ tail -n 20 hujjat.txt  # oxirgi 20 qator</code></pre>
 <p>vimning eng muhim tugmalari (yangi boshlovchi uchun minimum):</p>
 <ul><li><code>i</code> — yozish rejimiga o'tish (insert);</li><li><strong>Esc</strong> — yozish rejimidan chiqish (buyruq rejimiga);</li><li><code>:w</code> — saqlash (write);</li><li><code>:q</code> — chiqish (quit);</li><li><code>:wq</code> — saqlab chiqish;</li><li><code>:q!</code> — o'zgarishlarni saqlamay majburan chiqish.</li></ul>
 <div class="note">Ko'plab yangi foydalanuvchilar vimdan "chiqolmay" qoladi — bu mashhur hazil. Agar qamalib qolsangiz: <strong>Esc</strong> bosing, keyin <code>:q!</code> yozib Enter bosing. Boshda esa nanodan foydalaning — u ancha oson.</div>
-<h2>find — fayllarni qidirish</h2>
+<h2 id="find-fayllarni-qidirish">find — fayllarni qidirish</h2>
 <p><code>find</code> berilgan papka ichidan (rekursiv) fayllarni qidiradi. Sintaksis: <code>find qayerda -shart</code>:</p>
 <pre class="code"><code>find . -name hujjat.txt</code></pre>
 <p>Bu joriy papkadan (<code>.</code>) boshlab "hujjat.txt" nomli faylni qidiradi. Namunalar bilan qidirish uchun tirnoq ichida <code>*</code> ishlatiladi:</p>
@@ -661,7 +681,7 @@ tail -n 20 hujjat.txt  # oxirgi 20 qator</code></pre>
 find /home -name '*.log'     # /home ichidagi barcha log fayllar
 find . -type d -name src     # 'src' nomli faqat papkalar</code></pre>
 <p>Foydali shartlar: <code>-type f</code> — faqat fayllar, <code>-type d</code> — faqat papkalar, <code>-size +10M</code> — 10 megabaytdan katta fayllar.</p>
-<h2>grep — matn ichidan qidirish</h2>
+<h2 id="grep-matn-ichidan-qidirish">grep — matn ichidan qidirish</h2>
 <p><code>grep</code> fayl(lar) ichidan berilgan matnni o'z ichiga olgan qatorlarni topadi. Bu — dasturchining eng ko'p ishlatadigan vositalaridan biri:</p>
 <pre class="code"><code>grep 'xato' log.txt</code></pre>
 <p>Bu "xato" so'zi bor barcha qatorlarni chiqaradi. Muhim flaglar:</p>
@@ -669,14 +689,14 @@ find . -type d -name src     # 'src' nomli faqat papkalar</code></pre>
 <pre class="code"><code>grep -rn 'TODO' .        # loyihadagi barcha TODO izohlarni topish
 grep -i 'error' log.txt  # 'error', 'Error', 'ERROR' — hammasini</code></pre>
 <div class="tip"><code>grep -rn</code> — kod ichidan biror funksiya yoki o'zgaruvchi qayerda ishlatilganini topishning eng tez usuli. Masalan, <code>grep -rn 'getUserData' src/</code> shu funksiya nomi uchraydigan barcha joyni qator raqami bilan ko'rsatadi.</div>
-<h2>wc — sanash</h2>
+<h2 id="wc-sanash">wc — sanash</h2>
 <p><code>wc</code> (word count) fayldagi qatorlar, so'zlar va belgilar sonini sanaydi:</p>
 <pre class="code"><code>wc hujjat.txt</code></pre>
 <p>Natija: <code>qatorlar so'zlar belgilar fayl-nomi</code> tartibida chiqadi. Alohida ko'rsatkichlar:</p>
 <pre class="code"><code>wc -l hujjat.txt    # faqat qatorlar soni
 wc -w hujjat.txt    # faqat so'zlar soni
 wc -c hujjat.txt    # faqat belgilar (baytlar) soni</code></pre>
-<h2>Oqimlarni yo'naltirish: > >> |</h2>
+<h2 id="oqimlarni-yo-naltirish">Oqimlarni yo'naltirish: > >> |</h2>
 <p>Bu — terminalning eng kuchli imkoniyati. Odatda buyruq natijasi ekranga chiqadi. Lekin uni <strong>faylga</strong> yozish yoki <strong>boshqa buyruqqa</strong> uzatish mumkin.</p>
 <p><strong>&gt;</strong> — natijani faylga yozadi (fayl <em>ustiga</em> yozadi, eski mazmun o'chadi):</p>
 <pre class="code"><code>ls -l &gt; royxat.txt        # ls natijasini faylga saqlash
@@ -689,7 +709,7 @@ ls -l | wc -l                     # papkadagi fayllar sonini sanash
 cat log.txt | grep 'xato' | wc -l # 'xato' bor qatorlar sonini sanash</code></pre>
 <p>Oxirgi misolni o'qib chiqaylik: <code>cat</code> faylni o'qiydi, natijani <code>grep</code>ga uzatadi (u faqat "xato"li qatorlarni qoldiradi), keyin <code>wc -l</code> ularni sanaydi. Uch buyruq bitta zanjirda ishladi.</p>
 <div class="warn"><code>&gt;</code> va <code>&gt;&gt;</code> ni aralashtirib yubormang! <code>&gt;</code> mavjud faylni butunlay <strong>o'chirib</strong>, ustiga yozadi. Muhim faylga <code>&gt;</code> yozib yuborsangiz, uning eski mazmuni yo'qoladi. Qo'shimcha yozish uchun <strong>doim</strong> <code>&gt;&gt;</code> ishlating.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>touch</code> — bo'sh fayl yaratish; <code>cp</code> — nusxalash (papka uchun <code>-r</code>); <code>mv</code> — ko'chirish yoki qayta nomlash;</li><li><code>rm</code> — o'chirish (Savatga tushmaydi!); <code>rm -r</code> papka uchun, <code>rm -i</code> tasdiq so'rab;</li><li><code>cat</code> — kichik fayl, <code>less</code> — katta fayl; <code>head</code>/<code>tail</code> — boshi/oxiri, <code>tail -f</code> — jonli kuzatish;</li><li><code>nano</code> — oson muharrir, <code>vim</code> — kuchli (chiqish: <code>:q!</code>);</li><li><code>find</code> — nom bo'yicha fayl qidirish; <code>grep -rn</code> — matn ichidan qidirish;</li><li><code>wc -l</code> — qatorlarni sanash;</li><li><code>&gt;</code> faylga yozadi (ustiga), <code>&gt;&gt;</code> qo'shadi, <code>|</code> buyruqlarni zanjirga ulaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="fayl-tizimi.html"><span class="dir">← Oldingi</span><span class="ttl">Fayl tizimi va navigatsiya</span></a>
@@ -703,6 +723,6 @@ cat log.txt | grep 'xato' | wc -l # 'xato' bor qatorlar sonini sanash</code></pr
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

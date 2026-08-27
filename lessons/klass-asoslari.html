@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Klass asosiy sintaksisi — Kodla</title>
   <meta name="description" content="class kalit so'zi, constructor, metodlar, getter/setter, hisoblangan nomlar va class ifodasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Klasslar</div>
 <h1>Klass asosiy sintaksisi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#class-sintaksisi">"class" sintaksisi</a></li>
+<li class="lvl2"><a href="#class-bu-funksiya">class — bu funksiya</a></li>
+<li class="lvl2"><a href="#class-shunchaki-shirin-sintaksis-emas">Class shunchaki "shirin sintaksis" emas</a></li>
+<li class="lvl2"><a href="#class-ifodasi-class-expression">Class ifodasi (Class Expression)</a></li>
+<li class="lvl2"><a href="#getter-va-setter-lar">Getter va setter'lar</a></li>
+<li class="lvl2"><a href="#hisoblangan-nomlar">Hisoblangan nomlar [...]</a></li>
+<li class="lvl2"><a href="#class-maydonlari-class-fields">Class maydonlari (Class fields)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Amaliyotda biz ko'pincha bir turdagi ko'plab obyektlarni yaratishga muhtoj bo'lamiz — masalan, foydalanuvchilar, tovarlar yoki hujjatlar. Buni <code>new function</code> orqali ham qilish mumkin, ammo zamonaviy JavaScript'da buning uchun ancha qulay va kuchli <strong>class</strong> (klass) sintaksisi mavjud.</p>
-<h2>"class" sintaksisi</h2>
+<h2 id="class-sintaksisi">"class" sintaksisi</h2>
 <p>Asosiy sintaksis quyidagicha ko'rinadi:</p>
 <pre class="code"><code>class MyClass {
   // metodlar
@@ -624,7 +640,7 @@ console.log(user.sayHi());</textarea><div class="pg-actions"><button class="pg-r
 <p>Bu yerda nima sodir bo'lyapti:</p>
 <ol><li><code>new User("Ali")</code> chaqirilganda yangi obyekt yaratiladi;</li><li><code>constructor</code> ishga tushadi, unga <code>"Ali"</code> argument sifatida uzatiladi va u <code>this.name</code>ni o'rnatadi;</li><li>Endi biz obyekt metodlarini, masalan <code>user.sayHi()</code>ni, chaqira olamiz.</li></ol>
 <div class="note">Klass metodlari orasiga vergul <strong>qo'yilmaydi</strong>. Bu ko'p yangi boshlovchilar yo'l qo'yadigan xato. Klass ichidagi yozuv obyekt literalidan farq qiladi: bu yerda vergul emas, metodlar ketma-ket yoziladi.</div>
-<h2>class — bu funksiya</h2>
+<h2 id="class-bu-funksiya">class — bu funksiya</h2>
 <p>Aslida JavaScript'da <code>class</code> — bu alohida, mutlaqo yangi tushuncha emas. U aslida <strong>funksiya</strong> turining bir ko'rinishi. Keling, tekshirib ko'ramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-typeof.js</span></div><textarea spellcheck="false">class User {
   constructor(name) { this.name = name; }
@@ -645,11 +661,11 @@ console.log(typeof User);</textarea><div class="pg-actions"><button class="pg-ru
 console.log(User.prototype.sayHi);
 // prototip konstruktori — klassning o'zi:
 console.log(User.prototype.constructor === User);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Class shunchaki "shirin sintaksis" emas</h2>
+<h2 id="class-shunchaki-shirin-sintaksis-emas">Class shunchaki "shirin sintaksis" emas</h2>
 <p>Ba'zan <code>class</code> — bu "syntactic sugar" (sintaksik shakar), ya'ni faqat yozuvni chiroyli qiladigan bezak deyishadi. Lekin bu to'liq to'g'ri emas, chunki class'ning muhim farqlari bor:</p>
 <ul><li>Class orqali yaratilgan funksiya maxsus ichki <code>[[IsClassConstructor]]: true</code> belgisiga ega. Uni <code>new</code>siz chaqirsangiz, xatolik chiqadi;</li><li>Klass metodlari <em>sanab bo'lmaydigan</em> (non-enumerable) bo'ladi — ya'ni <code>for..in</code> tsikli ularni o'tkazib yuboradi;</li><li>Klasslar har doim <code>"use strict"</code> qat'iy rejimida ishlaydi — klass ichidagi butun kod avtomatik qat'iy rejimda bajariladi.</li></ul>
 <div class="warn">Klassni <code>new</code>siz oddiy funksiya kabi chaqirish mumkin emas. Masalan, <code>User()</code> (yangilamasdan) — <em>"Class constructor User cannot be invoked without 'new'"</em> xatosini beradi.</div>
-<h2>Class ifodasi (Class Expression)</h2>
+<h2 id="class-ifodasi-class-expression">Class ifodasi (Class Expression)</h2>
 <p>Funksiyalar kabi, klasslarni ham boshqa ifoda ichida aniqlash, o'zgaruvchiga berish yoki qaytarish mumkin. Bu <strong>class ifodasi</strong> deyiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-expression.js</span></div><textarea spellcheck="false">let User = class {
   sayHi() {
@@ -683,7 +699,7 @@ try {
 
 let User = makeClass("Salom!");
 console.log(new User().sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Getter va setter'lar</h2>
+<h2 id="getter-va-setter-lar">Getter va setter'lar</h2>
 <p>Oddiy obyektlar kabi, klasslar ham <code>get</code>/<code>set</code> orqali hisoblanadigan xossalarni qo'llab-quvvatlaydi. Ular <code>obj.prop</code>ni o'qish yoki yozishda avtomatik chaqiriladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-getset.js</span></div><textarea spellcheck="false">class User {
   constructor(name) {
@@ -710,7 +726,7 @@ console.log(user.name); // getter chaqiriladi
 user = new User(""); // setter: juda qisqa
 console.log(user.name);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Texnik jihatdan bunday getter/setter <code>User.prototype</code>da yaratiladi. <code>_name</code> — bu ichki qiymatni saqlash uchun "maxfiy" xossa (bu haqda keyingi darslarda batafsil to'xtalamiz).</p>
-<h2>Hisoblangan nomlar [...]</h2>
+<h2 id="hisoblangan-nomlar">Hisoblangan nomlar [...]</h2>
 <p>Metod nomini kvadrat qavslar <code>[...]</code> ichida hisoblab olish mumkin. Bu obyekt literalidagi hisoblangan xossalarga o'xshaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-computed.js</span></div><textarea spellcheck="false">let methodName = "sayHi";
 
@@ -721,7 +737,7 @@ class User {
 }
 
 console.log(new User().sayHi());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Class maydonlari (Class fields)</h2>
+<h2 id="class-maydonlari-class-fields">Class maydonlari (Class fields)</h2>
 <p>Zamonaviy JavaScript'da klassga to'g'ridan-to'g'ri xossa (maydon) qo'shish mumkin. Buning uchun <code>constructor</code> shart emas:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>klass-fields.js</span></div><textarea spellcheck="false">class User {
   name = "Mehmon";
@@ -737,7 +753,7 @@ console.log(user.sayHi());
 console.log(user.name);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Muhim farq: klass maydonlari <code>prototype</code>da emas, balki har bir <strong>obyektning o'zida</strong> o'rnatiladi. Ya'ni <code>name</code> — <code>user</code> obyektiga tegishli, <code>User.prototype</code>ga emas.</p>
 <div class="tip">Klass maydonlari <code>this</code>ni bog'lash muammosini hal qilish uchun ham juda foydali — maydon sifatida yozilgan strelka funksiya har doim o'z obyektiga bog'lanib qoladi. Bu haqda funksiyalar bo'limida batafsil to'xtalamiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>class</code> — bir turdagi obyektlarni yaratish uchun qulay sintaksis;</li><li>Ichki jihatdan <code>class</code> — bu funksiya, metodlar esa <code>prototype</code>da saqlanadi;</li><li><code>constructor</code> — <code>new</code> paytida avtomatik chaqiriladigan metod;</li><li>Metodlar sanab bo'lmaydi (non-enumerable) va kod qat'iy rejimda ishlaydi;</li><li>Klasslar ifoda sifatida ham yoziladi, <code>get</code>/<code>set</code>, hisoblangan nomlar <code>[...]</code> va maydonlarni qo'llab-quvvatlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="prototip-metodlari.html"><span class="dir">← Oldingi</span><span class="ttl">Prototip metodlari, __proto__siz obyektlar</span></a>
@@ -751,6 +767,6 @@ console.log(user.name);</textarea><div class="pg-actions"><button class="pg-run"
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

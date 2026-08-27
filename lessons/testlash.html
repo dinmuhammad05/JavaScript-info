@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Avtomatlashtirilgan testlar (Mocha) — Kodla</title>
   <meta name="description" content="Nega test kerak; BDD; describe/it/assert; TDD jarayoni.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,26 @@
 <main class="content article">
 <div class="crumbs">Kod sifati</div>
 <h1>Avtomatlashtirilgan testlar (Mocha)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-qo-lda-sinash-yetarli-emas">Nega qo'lda sinash yetarli emas?</a></li>
+<li class="lvl2"><a href="#bdd-testlar-spetsifikatsiya-sifatida">BDD — testlar spetsifikatsiya sifatida</a></li>
+<li class="lvl2"><a href="#test-tuzilishi-describe-va-it">Test tuzilishi: describe va it</a></li>
+<li class="lvl2"><a href="#assert-modulidan-foydalanish">assert modulidan foydalanish</a></li>
+<li class="lvl2"><a href="#tdd-jarayoni">TDD jarayoni</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Avtomatlashtirilgan testlar — bu bizning kodimiz to'g'ri ishlashini avtomatik tekshiradigan maxsus kod. Ularsiz har o'zgarishdan keyin kodni qo'lda sinash kerak bo'ladi, bu esa juda ko'p vaqt oladi va xatolarni yo'qotib qo'yadi.</p>
 <div class="note">Mocha va assert kutubxonalari bu maydonchada (playground) ishlamaydi. Shuning uchun bu darsda test kodlari statik ko'rinishda beriladi — ularni haqiqiy Node.js muhitida ishga tushiring.</div>
-<h2>Nega qo'lda sinash yetarli emas?</h2>
+<h2 id="nega-qo-lda-sinash-yetarli-emas">Nega qo'lda sinash yetarli emas?</h2>
 <p>Aytaylik, biz <code>pow(x, n)</code> — darajaga ko'tarish funksiyasini yozdik. Uni yozayotganda, biz konsolda <code>pow(2, 3)</code> ni tekshirib ko'ramiz. Natija <code>8</code> — to'g'ri.</p>
 <p>Ammo keyinroq kodni takomillashtirsak, uni yana qo'lda sinashimiz kerak. Bir nechta holatni har safar qo'lda tekshirish — zerikarli va ishonchsiz. Odam bir holatni tekshirib, boshqasini unutib qo'yadi.</p>
 <div class="warn">Qo'lda sinashning asosiy muammosi: kodni har o'zgartirganda, avval ishlagan qismlar buzilmaganini tekshirish qiyin. Avtomatik testlar aynan shu muammoni hal qiladi.</div>
-<h2>BDD — testlar spetsifikatsiya sifatida</h2>
+<h2 id="bdd-testlar-spetsifikatsiya-sifatida">BDD — testlar spetsifikatsiya sifatida</h2>
 <p><strong>BDD</strong> (Behavior Driven Development — xatti-harakatga asoslangan ishlab chiqarish) uchtta narsani birlashtiradi: <em>testlar</em>, <em>hujjat</em> va <em>misollar</em>. BDD'da test kodi bir vaqtning o'zida funksiya nima qilishini ham tavsiflaydi.</p>
-<h2>Test tuzilishi: describe va it</h2>
+<h2 id="test-tuzilishi-describe-va-it">Test tuzilishi: describe va it</h2>
 <p>Mocha kutubxonasida testlar <code>describe</code> va <code>it</code> funksiyalari yordamida tuziladi:</p>
 <ul><li><code>describe("nom", function() { ... })</code> — biz tavsiflayotgan funksionallik. Testlarni guruhlaydi;</li><li><code>it("holat tavsifi", function() { ... })</code> — aniq bir foydalanish holatining tavsifi va tekshiruvi;</li><li><code>assert.equal(a, b)</code> — <code>a</code> va <code>b</code> teng ekanini tekshiradi. Teng bo'lmasa, test xato beradi.</li></ul>
 <pre class="code"><code>describe("pow", function() {
@@ -619,7 +633,7 @@
 
 });</code></pre>
 <p>Bu yerda <code>it</code> ichidagi matn — ingliz yoki o'zbek tilida yozilgan tavsif. Test bajarilganda u shu tavsif bilan ko'rsatiladi, shuning uchun natijani o'qish oson bo'ladi.</p>
-<h2>assert modulidan foydalanish</h2>
+<h2 id="assert-modulidan-foydalanish">assert modulidan foydalanish</h2>
 <p>Node.js'da <code>assert</code> moduli o'rnatilgan. Uning eng ko'p ishlatiladigan metodlari:</p>
 <ul><li><code>assert.equal(a, b)</code> — <code>a == b</code> ekanini tekshiradi;</li><li><code>assert.strictEqual(a, b)</code> — <code>a === b</code> (qat'iy tenglik);</li><li><code>assert.notEqual(a, b)</code> — teng emasligini tekshiradi;</li><li><code>assert.deepEqual(a, b)</code> — obyekt/massivlarni chuqur solishtiradi.</li></ul>
 <pre class="code"><code>const assert = require('assert');
@@ -627,7 +641,7 @@
 assert.equal(2 + 2, 4);          // OK, hech narsa chiqarmaydi
 assert.strictEqual(1 + 1, 2);    // OK
 // assert.equal(1, 2);           // xato: AssertionError</code></pre>
-<h2>TDD jarayoni</h2>
+<h2 id="tdd-jarayoni">TDD jarayoni</h2>
 <p><strong>TDD</strong> (Test Driven Development — testga asoslangan ishlab chiqarish) — bu kodni yozishdan <em>oldin</em> test yozish usuli. Jarayon shunday:</p>
 <ol><li>Avval test yoziladi (funksiya hali yo'q — test xato beradi);</li><li>So'ng testni o'tkazadigan minimal kod yoziladi;</li><li>Test o'tsa — keyingi holat uchun yangi test qo'shiladi;</li><li>Kod takomillashtiriladi, testlar esa hech narsa buzilmaganini kafolatlaydi (bu "refactoring" bosqichi).</li></ol>
 <p>Masalan, avval bir necha test yozamiz, keyin ularni o'tkazadigan funksiyani:</p>
@@ -648,7 +662,7 @@ function pow(x, n) {
 }</code></pre>
 <div class="note">TDD'ning kuchi shundaki: har bir yangi holat uchun test yozib, funksiyani asta-sekin mustahkamlaysiz. Testlar to'plami kod ustida ishonchli "himoya to'ri" bo'lib qoladi.</div>
 <div class="tip">Kichik funksiyalarni ham test bilan qoplang. Kod qanchalik ko'p test bilan qoplansa, uni o'zgartirish shunchalik xavfsiz bo'ladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Avtomatik testlar kodni har o'zgartirishda qo'lda sinashdan qutqaradi;</li><li><strong>BDD</strong> — testlar bir vaqtda hujjat va misol vazifasini bajaradi;</li><li>Mocha'da <code>describe</code> guruhlaydi, <code>it</code> holatni tavsiflaydi, <code>assert</code> tekshiradi;</li><li><strong>TDD</strong> — avval test, keyin kod yozish usuli; testlar refactoringni xavfsiz qiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="izohlar.html"><span class="dir">← Oldingi</span><span class="ttl">Izohlar</span></a>
@@ -662,6 +676,6 @@ function pow(x, n) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

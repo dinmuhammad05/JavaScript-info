@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nmap bilan tarmoqni kashf qilish — Kodla</title>
   <meta name="description" content="Nmap nima va nega kerak, host discovery, port skanerlash, xizmat va versiya aniqlash, OS taxmini, NSE skriptlari hamda chiqishni himoyachi nuqtai nazaridan o'qish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,31 @@
 <main class="content article">
 <div class="crumbs">Amaliy vositalar (lab muhitida)</div>
 <h1>Nmap bilan tarmoqni kashf qilish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nmap-nima">Nmap nima</a></li>
+<li class="lvl2"><a href="#nega-bu-kerak">Nega bu kerak</a></li>
+<li class="lvl2"><a href="#xostlarni-topish-host-discovery">Xostlarni topish (host discovery)</a></li>
+<li class="lvl2"><a href="#portlarni-skanerlash">Portlarni skanerlash</a></li>
+<li class="lvl2"><a href="#chiqishni-o-qish-port-holatlari">Chiqishni o'qish: port holatlari</a></li>
+<li class="lvl2"><a href="#xizmat-va-versiyani-aniqlash">Xizmat va versiyani aniqlash</a></li>
+<li class="lvl2"><a href="#os-taxmini-va-port-tanlash">OS taxmini va port tanlash</a></li>
+<li class="lvl2"><a href="#nse-skriptlari-qisqacha">NSE skriptlari — qisqacha</a></li>
+<li class="lvl2"><a href="#himoyachi-nuqtai-nazari">Himoyachi nuqtai nazari</a></li>
+<li class="lvl2"><a href="#skan-tezligi-va-shovqin">Skan tezligi va "shovqin"</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Tarmoqni himoya qilish uchun avvalo u yerda nima borligini bilishingiz kerak: qaysi kompyuterlar ishlayapti, ularda qaysi xizmatlar ochiq, qaysi portlar tashqariga qarab turibdi. <strong>Nmap</strong> — aynan shu savollarga javob beradigan klassik vosita. Uni ham himoyachilar (o'z tarmog'ini tekshirish uchun), ham auditorlar ishlatadi. Bu darsda uni o'z laboratoriyangizda va rasman ruxsat berilgan test xostida ishlatishni o'rganamiz.</p>
-<h2>Nmap nima</h2>
+<h2 id="nmap-nima">Nmap nima</h2>
 <p><strong>Nmap</strong> (<em>Network Mapper</em>) — tarmoq va port skaneri. U tarmoqqa maxsus paketlar yuborib, javoblarni tahlil qiladi va shu asosda "xaritachi" kabi tarmoq manzarasini chizadi: qaysi xostlar tirik, qaysi portlar ochiq, ular ortida qanday xizmat ishlayotgani.</p>
 <p>Nmap — neytral vosita. Uni tizim administratori o'z serverlarini nazorat qilish uchun, xavfsizlik jamoasi esa keraksiz ochiq portlarni topib yopish uchun ishlatadi. Biz uni himoyachi va o'rganuvchi ko'zi bilan qo'llaymiz.</p>
 <div class="warn">Ruxsatsiz tizimni skanerlash — JINOYAT. Faqat o'z tarmog'ingizni yoki <code>scanme.nmap.org</code> kabi Nmap rasman test uchun ochgan xostni skanerlang. Boshqa hech qanday domen yoki IP'ni nishon qilmang.</div>
-<h2>Nega bu kerak</h2>
+<h2 id="nega-bu-kerak">Nega bu kerak</h2>
 <p>Tasavvur qiling, siz kichik serveringizni boshqaryapsiz. Vaqt o'tishi bilan unda turli dasturlar o'rnatilgan, ba'zilari portni ochiq qoldirgan bo'lishi mumkin — siz esa buni bilmaysiz. Har bir keraksiz ochiq port — potensial kirish nuqtasi. Nmap bilan o'z serveringizni skanerlab, "tashqaridan qanday ko'rinaman?" degan savolga aniq javob olasiz.</p>
 <p>Himoyaning oltin qoidasi: <strong>keraksiz narsani yoping</strong>. Nmap sizga nima ochiqligini ko'rsatadi, siz esa kerak bo'lmaganini yopib, hujum yuzasini (attack surface) qisqartirasiz.</p>
-<h2>Xostlarni topish (host discovery)</h2>
+<h2 id="xostlarni-topish-host-discovery">Xostlarni topish (host discovery)</h2>
 <p>Skanerlashni har doim tirik xostlarni topishdan boshlang. <code>-sn</code> bayrog'i "ping skanerlash" bajaradi: portlarga tegmaydi, faqat qaysi manzillar javob berayotganini aniqlaydi. Bu tez va "shovqinsiz" birinchi qadam:</p>
 <pre class="code"><code># Butun lab tarmog'idagi tirik xostlarni topish:
 nmap -sn 192.168.56.0/24
@@ -617,7 +636,7 @@ nmap -sn 192.168.56.0/24
 # Nmap done: 256 IP addresses (2 hosts up) scanned</code></pre>
 <p>Bu yerda <code>192.168.56.0/24</code> — butun lab tarmog'i (256 ta manzil). Nmap ularning barchasini so'roqlab, faqat ikkitasi tirik ekanini ko'rsatdi: bizning Kali va nishon mashinalarimiz.</p>
 <div class="tip">Avval doim <code>-sn</code> bilan xostlarni toping. Butun tarmoqning har bir portini skanerlashdan ko'ra, avval kim tirik ekanini bilib, keyin faqat o'shalarni chuqurroq tekshirish tezroq va mantiqiyroq.</div>
-<h2>Portlarni skanerlash</h2>
+<h2 id="portlarni-skanerlash">Portlarni skanerlash</h2>
 <p>Tirik xostni topgach, uning qaysi portlari ochiq ekanini ko'rasiz. Eng oddiy skanerlash — shunchaki IP'ni berish. Nmap eng ko'p ishlatiladigan 1000 ta portni tekshiradi:</p>
 <pre class="code"><code># Nishon xostning ochiq portlarini skanerlash:
 nmap 192.168.56.101
@@ -634,11 +653,11 @@ nmap scanme.nmap.org
 
 # Eslatma: scanme.nmap.org — Nmap loyihasi mashq uchun
 # maxsus ochgan yagona ochiq test xosti. Uni skanerlash legal.</code></pre>
-<h2>Chiqishni o'qish: port holatlari</h2>
+<h2 id="chiqishni-o-qish-port-holatlari">Chiqishni o'qish: port holatlari</h2>
 <p>Nmap chiqishidagi eng muhim ustun — <code>STATE</code> (holat). Uni to'g'ri o'qishni bilish — vositani tushunishning yarmi:</p>
 <ul><li><strong>open</strong> — port ochiq, ortida biror xizmat javob bermoqda. Diqqat markazi shu portlar;</li><li><strong>closed</strong> — port yopiq, xost javob berdi lekin bu portda xizmat yo'q;</li><li><strong>filtered</strong> — Nmap javob ololmadi, ehtimol oldida <code>firewall</code> paketni to'sib turibdi. Ochiqmi yoki yopiqmi — noaniq.</li></ul>
 <p>Himoyachi uchun mantiq oddiy: har bir <code>open</code> port — javob berilishi kerak bo'lgan savol. "Bu port haqiqatan ochiq bo'lishi kerakmi? Ortidagi xizmat yangilanganmi? U tashqariga qarab turishi shartmi?" Kerak bo'lmagani — yopiladi.</p>
-<h2>Xizmat va versiyani aniqlash</h2>
+<h2 id="xizmat-va-versiyani-aniqlash">Xizmat va versiyani aniqlash</h2>
 <p>Port ochiqligini bilish yetarli emas — ortida qanday dastur va qaysi versiyasi ishlayotgani ham muhim. <code>-sV</code> bayrog'i aynan shuni aniqlaydi. Versiya axboroti muhim, chunki eski versiyalarda ko'pincha ma'lum zaifliklar bo'ladi:</p>
 <pre class="code"><code># Xizmat va versiyalarini aniqlash:
 nmap -sV 192.168.56.102
@@ -649,7 +668,7 @@ nmap -sV 192.168.56.102
 # 22/tcp open  ssh     OpenSSH 4.7p1
 # 80/tcp open  http    Apache httpd 2.2.8</code></pre>
 <p>Bu chiqish himoyachi uchun oltin: <code>vsftpd 2.3.4</code> — bu juda eski versiya. Himoyachi darhol "bu versiyada ma'lum zaiflik bormi, yangilash kerakmi?" degan savolni beradi va patch (yamoq) prioritetini belgilaydi.</p>
-<h2>OS taxmini va port tanlash</h2>
+<h2 id="os-taxmini-va-port-tanlash">OS taxmini va port tanlash</h2>
 <p><code>-O</code> bayrog'i operatsion tizimni taxmin qilishga urinadi (paketlarning o'ziga xos xususiyatlariga qarab). <code>-p</code> bayrog'i esa qaysi portlarni tekshirishni aniq belgilaydi:</p>
 <pre class="code"><code># Operatsion tizimni taxmin qilish (root huquqi kerak):
 sudo nmap -O 192.168.56.102
@@ -660,7 +679,7 @@ nmap -p 22,80,443 192.168.56.101
 # Barcha 65535 portni tekshirish (sekinroq, to'liqroq):
 nmap -p- 192.168.56.101</code></pre>
 <div class="note">Odatiy skan faqat ommabop 1000 portni ko'radi. Xizmat noodatiy (yuqori) portda yashirilgan bo'lsa, uni topish uchun <code>-p-</code> bilan to'liq skan kerak. Bu sekinroq, lekin hech narsani o'tkazib yubormaydi.</div>
-<h2>NSE skriptlari — qisqacha</h2>
+<h2 id="nse-skriptlari-qisqacha">NSE skriptlari — qisqacha</h2>
 <p>Nmap'da <strong>NSE</strong> (<em>Nmap Scripting Engine</em>) degan kuchli qism bor: bu — turli qo'shimcha tekshiruvlarni bajaradigan tayyor skriptlar to'plami. Eng oddiy va foydali variant — <code>-sC</code>, ya'ni standart, xavfsiz skriptlar to'plamini ishga tushirish:</p>
 <pre class="code"><code># Standart skriptlar + versiya aniqlash birga:
 nmap -sC -sV 192.168.56.101
@@ -669,14 +688,14 @@ nmap -sC -sV 192.168.56.101
 # | http-title: Welcome to DVWA
 # | ssh-hostkey: 2048 ... (kalit izi)</code></pre>
 <p>NSE skriptlari xizmat haqida ko'proq kontekst beradi. Boshlovchi uchun <code>-sC</code> yetarli — u "xavfsiz" toifadagi, tizimga zarar yetkazmaydigan skriptlarni ishga tushiradi.</p>
-<h2>Himoyachi nuqtai nazari</h2>
+<h2 id="himoyachi-nuqtai-nazari">Himoyachi nuqtai nazari</h2>
 <p>Nmap'ning eng qadrli tomoni — u sizga tizimingiz "tashqaridan qanday ko'rinishini" ko'rsatadi. Skan natijasini qo'lingizga olib, quyidagilarni qiling:</p>
 <ol><li>Har bir <code>open</code> port ro'yxatini ko'zdan kechiring;</li><li>"Bu port kerakmi?" deb so'rang — kerak bo'lmasa, xizmatni o'chiring yoki firewall bilan yoping;</li><li><code>-sV</code> ko'rsatgan versiyalarni tekshiring — eskilarini yangilang;</li><li>Faqat ishonchli manzillardan kirish kerak bo'lgan portlarni firewall bilan cheklang.</li></ol>
 <p>Shu tarzda Nmap hujum vositasi emas, balki mudofaa vositasiga aylanadi: siz zaiflikni hujumchidan oldin topib, uni yopasiz.</p>
-<h2>Skan tezligi va "shovqin"</h2>
+<h2 id="skan-tezligi-va-shovqin">Skan tezligi va "shovqin"</h2>
 <p>Nmap turli tezlikda skanerlashi mumkin. Tez skan darrov natija beradi, lekin ko'proq "shovqin" chiqaradi — ya'ni tarmoqni kuzatayotgan tizimlarga sezilarli bo'ladi. Sekinroq skan esa e'tiborni kamroq tortadi. O'z laboratoriyangizda tezlik erkin, chunki hech kimga xalaqit bermaysiz.</p>
 <p>Amaliy maslahat: avval tez, yuzaki skan bilan umumiy manzarani oling, so'ng faqat qiziqarli xostlarga chuqurroq skan (<code>-sV</code>, <code>-sC</code>) qiling. Bu vaqtni tejaydi va natijani boshqarish osonroq bo'ladi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Nmap — tarmoqni kashf qilishning asosiy vositasi. <code>-sn</code> bilan xostlarni toping, oddiy skan bilan portlarni ko'ring, <code>-sV</code> bilan versiyalarni aniqlang, <code>-sC</code> bilan qo'shimcha kontekst oling. Eng muhimi — chiqishni himoyachi ko'zi bilan o'qing va topilgan har bir ochiq portni savol ostiga qo'ying.</p>
 <div class="warn">Yana bir bor: faqat o'z tarmog'ingiz yoki <code>scanme.nmap.org</code>. Nmap — kuchli asbob, uni faqat o'zingizga tegishli yoki rasman ruxsat berilgan nishonga qarating.</div>
 <nav class="lesson-nav">
@@ -691,6 +710,6 @@ nmap -sC -sV 192.168.56.101
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tug'ma klasslarni kengaytirish — Kodla</title>
   <meta name="description" content="Array, Error kabi tug'ma klasslarni extends qilish va Symbol.species tushunchasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Klasslar</div>
 <h1>Tug'ma klasslarni kengaytirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#array-ni-kengaytirish">Array'ni kengaytirish</a></li>
+<li class="lvl2"><a href="#qiziq-narsa-yangi-obyekt-turi">Qiziq narsa: yangi obyekt turi</a></li>
+<li class="lvl2"><a href="#symbol-species">Symbol.species</a></li>
+<li class="lvl2"><a href="#error-ni-kengaytirish">Error'ni kengaytirish</a></li>
+<li class="lvl2"><a href="#statik-xossalar-meros-olinmasligiga-eslatma">Statik xossalar meros olinmasligiga eslatma</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Array, Map, Error kabi <strong>tug'ma (built-in)</strong> klasslarni ham <code>extends</code> orqali kengaytirish mumkin. Bu bizga ularning imkoniyatlarini saqlab qolgan holda o'z metodlarimizni qo'shish imkonini beradi.</p>
-<h2>Array'ni kengaytirish</h2>
+<h2 id="array-ni-kengaytirish">Array'ni kengaytirish</h2>
 <p>Aytaylik, bizga oddiy massivga o'xshash, lekin qo'shimcha metodlarga ega bo'lgan tur kerak. Masalan, <code>isEmpty()</code> metodini qo'shamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>builtin-array.js</span></div><textarea spellcheck="false">class PowerArray extends Array {
   isEmpty() {
@@ -612,7 +626,7 @@ let filtered = arr.filter(item =&gt; item &gt;= 10);
 console.log(filtered);
 console.log(filtered.isEmpty()); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering — <code>PowerArray</code> odatdagi massivning barcha metodlariga (<code>push</code>, <code>filter</code>, <code>length</code> va h.k.) ega. Bundan tashqari, o'zimizning <code>isEmpty()</code>miz ham bor.</p>
-<h2>Qiziq narsa: yangi obyekt turi</h2>
+<h2 id="qiziq-narsa-yangi-obyekt-turi">Qiziq narsa: yangi obyekt turi</h2>
 <p>Yuqoridagi misolda diqqatga sazovor jihat bor: <code>filter</code>, <code>map</code> kabi tug'ma metodlar <strong>o'sha meros olgan turdagi</strong> yangi obyektlarni qaytaradi, oddiy <code>Array</code> emas! Ular ichki jihatdan obyektning <code>constructor</code> xossasidan foydalanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>builtin-species.js</span></div><textarea spellcheck="false">class PowerArray extends Array {
   isEmpty() { return this.length === 0; }
@@ -624,7 +638,7 @@ let filtered = arr.filter(item =&gt; item &gt;= 10);
 // filtered ham PowerArray:
 console.log(filtered instanceof PowerArray); // true
 console.log(filtered.isEmpty()); // metod ishlaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Symbol.species</h2>
+<h2 id="symbol-species">Symbol.species</h2>
 <p>Agar biz <code>filter</code>, <code>map</code> kabi metodlar oddiy <code>Array</code> qaytarishini xohlasak, maxsus statik getter <code>Symbol.species</code>ni belgilaymiz. U qanday konstruktor ishlatilishini boshqaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>builtin-species2.js</span></div><textarea spellcheck="false">class PowerArray extends Array {
   isEmpty() { return this.length === 0; }
@@ -642,7 +656,7 @@ let filtered = arr.filter(item =&gt; item &gt;= 10);
 console.log(filtered instanceof PowerArray); // false
 console.log(filtered instanceof Array); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>Symbol.species</code> — bu Map, Set kabi boshqa tug'ma kolleksiyalar uchun ham ishlaydi. U "ichki metodlar qanday obyekt yaratsin" degan savolga javob beradi.</div>
-<h2>Error'ni kengaytirish</h2>
+<h2 id="error-ni-kengaytirish">Error'ni kengaytirish</h2>
 <p>Amaliyotda eng ko'p kengaytiriladigan tug'ma klasslardan biri — <code>Error</code>. Bu bizga o'ziga xos xato turlarini yaratish imkonini beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>builtin-error.js</span></div><textarea spellcheck="false">class ValidationError extends Error {
   constructor(message) {
@@ -669,7 +683,7 @@ try {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>super(message)</code> ota <code>Error</code> konstruktorini chaqirib, <code>message</code>ni o'rnatadi. So'ng biz <code>this.name</code>ni o'zgartirib, xatoni aniq turlab olamiz. <code>err instanceof Error</code> ham <code>true</code> — ya'ni bizning xatomiz haqiqiy <code>Error</code>.</p>
 <div class="tip">O'z xato klasslaringizni yaratish katta loyihalarda juda foydali — turli xato turlarini <code>catch</code> blokida <code>instanceof</code> orqali ajratib, har biriga alohida munosabatda bo'lish mumkin.</div>
-<h2>Statik xossalar meros olinmasligiga eslatma</h2>
+<h2 id="statik-xossalar-meros-olinmasligiga-eslatma">Statik xossalar meros olinmasligiga eslatma</h2>
 <p>Muhim tafsilot: tug'ma klasslarni kengaytirganda oddiy metod va konstruktorlar meros olinadi, ammo tug'ma klasslarning ba'zi <strong>statik metodlari</strong> meros olinmaydi. Masalan, <code>Array.isArray</code> — u <code>Array</code>ning statik metodi bo'lib, meros olgan klassdan chaqirilganda ehtiyot bo'lish kerak.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>builtin-static.js</span></div><textarea spellcheck="false">class PowerArray extends Array {}
 
@@ -680,7 +694,7 @@ console.log(Array.isArray(arr)); // true
 
 // PowerArray ham Array'dan statik metodni oladi:
 console.log(typeof PowerArray.isArray);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>Array</code>, <code>Error</code>, <code>Map</code> kabi tug'ma klasslarni <code>extends</code> qilish mumkin;</li><li>Meros olgan tur tug'ma metodlarni to'liq saqlaydi va o'z metodlarini qo'shadi;</li><li><code>filter</code>, <code>map</code> kabi metodlar standart holatda meros olgan turdagi obyekt qaytaradi;</li><li><code>Symbol.species</code> orqali qaytariladigan obyekt turini boshqarish mumkin;</li><li><code>Error</code>ni kengaytirib, o'ziga xos xato turlarini yaratish keng tarqalgan amaliyot.</li></ul>
 <nav class="lesson-nav">
   <a href="private-protected.html"><span class="dir">← Oldingi</span><span class="ttl">Maxfiy va himoyalangan xossalar</span></a>
@@ -694,6 +708,6 @@ console.log(typeof PowerArray.isArray);</textarea><div class="pg-actions"><butto
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

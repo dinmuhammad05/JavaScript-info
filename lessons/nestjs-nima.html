@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NestJS nima? — Kodla</title>
   <meta name="description" content="TypeScript uchun yaratilgan zamonaviy backend framework: Express ustida ishlaydigan, modulli va Angular'dan ilhomlangan arxitektura, nega u kerak va uni qanday o'rnatish mumkin.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,21 +599,35 @@
 <main class="content article">
 <div class="crumbs">NestJS</div>
 <h1>NestJS nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nestjs-nima-va-u-qanday-muammoni-hal-qiladi">NestJS nima va u qanday muammoni hal qiladi?</a></li>
+<li class="lvl2"><a href="#nestjs-express-ustida-qanday-ishlaydi">NestJS Express ustida qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#angular-dan-ilhom-nega-bu-muhim">Angular'dan ilhom: nega bu muhim?</a></li>
+<li class="lvl2"><a href="#node-js-cli-orqali-o-rnatish">Node.js CLI orqali o'rnatish</a></li>
+<li class="lvl2"><a href="#loyihaning-boshlang-ich-tuzilishi">Loyihaning boshlang'ich tuzilishi</a></li>
+<li class="lvl2"><a href="#nestjs-qachon-kerak-va-qachon-ortiqcha">NestJS qachon kerak va qachon ortiqcha?</a></li>
+<li class="lvl3"><a href="#nestjs-mos-keladigan-holatlar">NestJS mos keladigan holatlar</a></li>
+<li class="lvl3"><a href="#nestjs-ortiqcha-bo-lishi-mumkin-bo-lgan-holatlar">NestJS ortiqcha bo'lishi mumkin bo'lgan holatlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Agar siz Node.js va Express bilan bir necha loyiha yozgan bo'lsangiz, ehtimol bitta muammoga duch kelgansiz: loyiha kattalashgani sari kod tartibsiz bo'lib boradi. Route'lar, biznes-logika va ma'lumotlar bazasi so'rovlari bir joyga aralashib ketadi. <strong>NestJS</strong> aynan shu muammoni hal qilish uchun yaratilgan — u sizga qat'iy va tushunarli arxitektura, TypeScript'ning to'liq kuchi va tayyor infratuzilma beradi.</p>
 <div class="note">Ushbu bob siz allaqachon <strong>Node.js</strong>, <strong>Express</strong> va <strong>TypeScript</strong> asoslarini bilasiz deb faraz qiladi. NestJS bularning ustiga qurilgan, shuning uchun ularni tushunmasangiz, oldingi boblarga qaytib o'tishni tavsiya qilamiz.</div>
-<h2>NestJS nima va u qanday muammoni hal qiladi?</h2>
+<h2 id="nestjs-nima-va-u-qanday-muammoni-hal-qiladi">NestJS nima va u qanday muammoni hal qiladi?</h2>
 <p><strong>NestJS</strong> (odatda shunchaki <em>Nest</em> deb ataladi) — bu Node.js muhitida server tomonidagi ilovalarni yaratish uchun mo'ljallangan framework. U TypeScript'da yozilgan va TypeScript bilan ishlashga to'liq moslashtirilgan (garchi sof JavaScript'da ham yozish mumkin bo'lsa-da).</p>
 <p>Express o'zi juda <em>minimalist</em> — u sizga faqat route va middleware beradi, qolgani sizning ixtiyoringizda. Bu erkinlik kichik loyihalar uchun yaxshi, lekin katta jamoada har kim o'z uslubida yozsa, loyiha boshqarib bo'lmas holga keladi. NestJS esa qarama-qarshi yondashuvni tanlaydi: u <strong>fikrli</strong> (opinionated) framework — ya'ni kodni qanday tashkil qilishni aniq belgilaydi.</p>
 <ul><li><strong>Modulli arxitektura:</strong> kod mantiqiy modullarga bo'linadi, har biri o'z mas'uliyat sohasiga ega;</li><li><strong>Dependency Injection (DI):</strong> obyektlar orasidagi bog'liqliklar avtomatik boshqariladi;</li><li><strong>Dekoratorlar:</strong> <code>@Controller</code>, <code>@Get</code>, <code>@Injectable</code> kabi qulay belgilar orqali kod deklarativ yoziladi;</li><li><strong>Tayyor infratuzilma:</strong> validatsiya, guard, interceptor, exception filter, testlash — hammasi qutidan chiqadi;</li><li><strong>Platformadan mustaqillik:</strong> ostida Express yoki Fastify ishlashi mumkin, kodingiz o'zgarmaydi.</li></ul>
-<h2>NestJS Express ustida qanday ishlaydi?</h2>
+<h2 id="nestjs-express-ustida-qanday-ishlaydi">NestJS Express ustida qanday ishlaydi?</h2>
 <p>Bu tushunish uchun juda muhim nuqta: NestJS Express'ni <strong>almashtirmaydi</strong>, balki uning ustiga qurilgan qatlamdir. Standart holatda NestJS ichida haqiqiy Express ilovasi ishlaydi. Ya'ni siz yozgan controller'lar oxir-oqibat Express route'lariga aylanadi, guard'lar va interceptor'lar esa Express middleware'lariga o'xshab ishlaydi.</p>
 <p>Bu shuni anglatadiki, Express ekotizimidagi ko'plab paketlar (masalan, <code>helmet</code>, <code>cookie-parser</code>) NestJS bilan ham ishlaydi. Kerak bo'lsa, siz hatto asosiy Express <code>request</code> va <code>response</code> obyektlariga to'g'ridan-to'g'ri kirishingiz mumkin.</p>
 <p>NestJS shuningdek Express o'rniga <strong>Fastify</strong> adapterini ishlatishga imkon beradi — bu tezroq HTTP kutubxona. Muhimi: sizning controller va service kodingiz o'zgarmaydi, faqat pastdagi "dvigatel" almashadi. Bu abstraksiya NestJS'ning kuchli tomonlaridan biri.</p>
 <div class="note">Shunday qilib NestJS'ni Express uchun <strong>tuzilma va qoidalar to'plami</strong> deb tasavvur qiling. U sizga "qanday yozish kerak"ligini aytadi, lekin ostida siz bilgan Express texnologiyasi ishlaydi.</div>
-<h2>Angular'dan ilhom: nega bu muhim?</h2>
+<h2 id="angular-dan-ilhom-nega-bu-muhim">Angular'dan ilhom: nega bu muhim?</h2>
 <p>NestJS'ning arxitekturasi <strong>Angular</strong> (frontend framework) ta'sirida shakllangan. Agar siz Angular bilan tanish bo'lsangiz, NestJS'dagi modul, servis, dekorator va Dependency Injection tushunchalari juda tanish tuyuladi.</p>
 <p>Bu tanlov tasodifiy emas. Angular yirik jamoalarda katta ilovalarni yillar davomida barqaror tarzda rivojlantirish uchun mo'ljallangan. Xuddi shu maqsad NestJS oldida ham turadi — backend tomonda uzoq muddatli, kengaytiriladigan va sinovdan o'tkaziladigan kod yozish. Frontend va backend bir xil arxitektura tamoyillariga tayangani jamoa uchun bilim almashishni osonlashtiradi.</p>
-<h2>Node.js CLI orqali o'rnatish</h2>
+<h2 id="node-js-cli-orqali-o-rnatish">Node.js CLI orqali o'rnatish</h2>
 <p>NestJS bilan ishlashning eng qulay yo'li — uning rasmiy buyruq qatori vositasi, ya'ni <strong>Nest CLI</strong> orqali. U yangi loyihani tayyor tuzilma bilan yaratadi va kod generatsiya qilishni osonlashtiradi. Uni global o'rnatamiz:</p>
 <pre class="code"><code># Nest CLI'ni global o'rnatish:
 npm install -g @nestjs/cli
@@ -628,7 +645,7 @@ cd mening-ilovam
 npm run start:dev</code></pre>
 <p><code>start:dev</code> rejimi <strong>watch</strong> bilan ishlaydi: siz faylni saqlagan zahoti server avtomatik qayta yuklanadi. Ilova standart holatda <code>http://localhost:3000</code> manzilida ochiladi. Brauzerda ushbu manzilni ochsangiz, oddiy "Hello World!" javobini ko'rasiz.</p>
 <div class="tip">Nest CLI faqat loyiha yaratish uchun emas. Keyingi darslarda ko'ramizki, u <code>nest generate</code> (qisqacha <code>nest g</code>) orqali modul, controller, service kabi qismlarni bir buyruq bilan yaratib beradi va ularni loyihaga avtomatik ulaydi.</div>
-<h2>Loyihaning boshlang'ich tuzilishi</h2>
+<h2 id="loyihaning-boshlang-ich-tuzilishi">Loyihaning boshlang'ich tuzilishi</h2>
 <p><code>nest new</code> yaratgan loyihada eng muhim fayllar <code>src/</code> papkasida joylashadi. Ular bilan keyingi darslarda batafsil tanishamiz, lekin hozircha umumiy manzarani ko'ramiz:</p>
 <pre class="code"><code>mening-ilovam/
   src/
@@ -655,14 +672,14 @@ async function bootstrap() {
 }
 bootstrap();</code></pre>
 <p>E'tibor bering: Express'da biz <code>express()</code> chaqirib, so'ng route'larni qo'lda qo'shardik. NestJS'da esa biz faqat <strong>ildiz modul</strong>ni (<code>AppModule</code>) beramiz, qolgani avtomatik yig'iladi. Bu modulli arxitekturaning birinchi ko'rinishi.</p>
-<h2>NestJS qachon kerak va qachon ortiqcha?</h2>
+<h2 id="nestjs-qachon-kerak-va-qachon-ortiqcha">NestJS qachon kerak va qachon ortiqcha?</h2>
 <p>NestJS kuchli vosita, lekin har bir loyiha uchun to'g'ri tanlov emas. Uni tanlashda quyidagilarni hisobga oling:</p>
-<h3>NestJS mos keladigan holatlar</h3>
+<h3 id="nestjs-mos-keladigan-holatlar">NestJS mos keladigan holatlar</h3>
 <ul><li>Katta yoki o'sib boradigan loyihalar — ko'p modul, ko'p endpoint;</li><li>Jamoa bilan ishlash — qat'iy tuzilma har kimga bir xil qoidalar beradi;</li><li>Murakkab biznes-logika, ma'lumotlar bazasi, autentifikatsiya, mikroservislar;</li><li>TypeScript'ni to'liq ishlatmoqchi bo'lganingizda;</li><li>Uzoq muddatli qo'llab-quvvatlanadigan korporativ ilovalar.</li></ul>
-<h3>NestJS ortiqcha bo'lishi mumkin bo'lgan holatlar</h3>
+<h3 id="nestjs-ortiqcha-bo-lishi-mumkin-bo-lgan-holatlar">NestJS ortiqcha bo'lishi mumkin bo'lgan holatlar</h3>
 <ul><li>Bir-ikki endpoint'li juda kichik skript yoki prototip;</li><li>Tez sinab ko'rish uchun yozilgan bir martalik kod;</li><li>Jamoa Express'ni yaxshi biladi va qo'shimcha o'rganishga vaqt yo'q bo'lganda.</li></ul>
 <div class="warn">NestJS'da o'rganish egri chizig'i (learning curve) mavjud: dekoratorlar, DI va modullar tushunchalarini o'zlashtirish vaqt oladi. Kichik loyiha uchun bu ortiqcha murakkablik bo'lishi mumkin. Lekin loyiha o'sishi ehtimoli bo'lsa, boshidanoq NestJS tanlash keyinchalik qayta yozishdan qutqaradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>NestJS</strong> — Node.js uchun modulli va fikrli backend framework, TypeScript uchun mo'ljallangan;</li><li>U <strong>Express ustida</strong> ishlaydi (yoki Fastify), lekin qat'iy arxitektura va tayyor infratuzilma qo'shadi;</li><li>Arxitekturasi <strong>Angular'dan ilhomlangan</strong>: modullar, service'lar, dekoratorlar, Dependency Injection;</li><li>O'rnatish <code>npm install -g @nestjs/cli</code> va <code>nest new</code> orqali amalga oshadi;</li><li>Kirish nuqtasi <code>main.ts</code>, ildiz modul esa <code>AppModule</code>;</li><li>NestJS <strong>katta va o'sib boradigan</strong> loyihalar uchun ideal, juda kichik skriptlar uchun esa ortiqcha bo'lishi mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="sql-injection.html"><span class="dir">← Oldingi</span><span class="ttl">SQL injection va boshqa himoyalar</span></a>
@@ -676,6 +693,6 @@ bootstrap();</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

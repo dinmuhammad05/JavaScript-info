@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XSS (Cross-Site Scripting) chuqur — Kodla</title>
   <meta name="description" content="XSS nima, reflected/stored/DOM-based turlari, xavfliligi, escaping, textContent vs innerHTML, CSP, sanitizatsiya va HttpOnly cookie.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,25 +599,41 @@
 <main class="content article">
 <div class="crumbs">Web ilova xavfsizligi (OWASP Top 10)</div>
 <h1>XSS (Cross-Site Scripting) chuqur</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#xss-nima">XSS nima?</a></li>
+<li class="lvl2"><a href="#xss-turlari">XSS turlari</a></li>
+<li class="lvl3"><a href="#1-reflected-xss-aks-etuvchi">1. Reflected XSS (aks etuvchi)</a></li>
+<li class="lvl3"><a href="#2-stored-xss-saqlanuvchi">2. Stored XSS (saqlanuvchi)</a></li>
+<li class="lvl3"><a href="#3-dom-based-xss">3. DOM-based XSS</a></li>
+<li class="lvl2"><a href="#nima-uchun-xss-xavfli">Nima uchun XSS xavfli?</a></li>
+<li class="lvl2"><a href="#asosiy-himoya-chiqishni-escape-qilish">Asosiy himoya: chiqishni escape qilish</a></li>
+<li class="lvl2"><a href="#textcontent-vs-innerhtml">textContent vs innerHTML</a></li>
+<li class="lvl2"><a href="#html-escaping-va-xavfsiz-dom-yozishni-modellashtirish">HTML escaping va xavfsiz DOM yozishni modellashtirish</a></li>
+<li class="lvl2"><a href="#csp-content-security-policy">CSP — Content Security Policy</a></li>
+<li class="lvl2"><a href="#qo-shimcha-himoya-qatlamlari">Qo'shimcha himoya qatlamlari</a></li>
+  </ul>
+</details>
 <p class="lead">Foydalanuvchi kiritgan matn brauzerda oddiy yozuv sifatida ko'rinishi kerak edi — lekin u to'satdan <em>kod</em> sifatida ishga tushib ketsa-chi? Aynan shu XSS — Cross-Site Scripting zaifligining mohiyati. Bu darsda biz begona skript brauzerda qanday paydo bo'lishini konseptual tushunamiz va, eng muhimi, uni to'xtatuvchi himoya usullarini — escaping, CSP va to'g'ri DOM ishlatishni — o'rganamiz.</p>
-<h2>XSS nima?</h2>
+<h2 id="xss-nima">XSS nima?</h2>
 <p><strong>XSS</strong> (Cross-Site Scripting) — bu zaiflik bo'lib, unda hujumchi web sahifaga o'z JavaScript kodini kiritishga muvaffaq bo'ladi va bu kod boshqa foydalanuvchilarning brauzerida bajariladi. Muammoning ildizi bitta — <strong>ishonchsiz ma'lumot sahifaga kod sifatida joylashtirilishi</strong>.</p>
 <p>Masalan, dastur foydalanuvchi kiritgan izohni to'g'ridan-to'g'ri HTMLga qo'ysa va bu izoh ichida skript bo'lsa, u skript sahifani ochgan har bir kishining brauzerida ishlaydi.</p>
-<h2>XSS turlari</h2>
+<h2 id="xss-turlari">XSS turlari</h2>
 <p>XSS uch asosiy ko'rinishda uchraydi:</p>
-<h3>1. Reflected XSS (aks etuvchi)</h3>
+<h3 id="1-reflected-xss-aks-etuvchi">1. Reflected XSS (aks etuvchi)</h3>
 <p>Zararli kiritma so'rov bilan serverga boradi va server javobida <em>darhol</em> qaytariladi (masalan, qidiruv natijasi sahifasida). Bu odatda maxsus tayyorlangan havola orqali qurbonga yetkaziladi.</p>
-<h3>2. Stored XSS (saqlanuvchi)</h3>
+<h3 id="2-stored-xss-saqlanuvchi">2. Stored XSS (saqlanuvchi)</h3>
 <p>Eng xavfli turi. Zararli kiritma serverda <strong>saqlanadi</strong> (masalan, izoh yoki profil maydonida) va uni ko'rgan <em>har bir</em> foydalanuvchi zarar ko'radi. Bitta joylashtirilgan kod ko'plab qurbonga ta'sir qiladi.</p>
-<h3>3. DOM-based XSS</h3>
+<h3 id="3-dom-based-xss">3. DOM-based XSS</h3>
 <p>Bu holatda muammo server emas, <strong>mijoz tomonidagi JavaScript</strong>da. Sahifadagi skript URL yoki boshqa manbadan olingan ma'lumotni tekshirmasdan DOMga yozganda yuzaga keladi. Server javobi o'zgarmasa ham zaiflik mavjud bo'ladi.</p>
-<h2>Nima uchun XSS xavfli?</h2>
+<h2 id="nima-uchun-xss-xavfli">Nima uchun XSS xavfli?</h2>
 <p>Begona skript qurbonning brauzerida, uning nomidan ishlagani uchun jiddiy zarar keltirishi mumkin:</p>
 <ul><li><strong>Sessiya o'g'irlash:</strong> agar cookie himoyalanmagan bo'lsa, skript uni o'qib, foydalanuvchi hisobiga kirishga imkon berishi mumkin;</li><li><strong>Soxta amallar:</strong> foydalanuvchi nomidan so'rovlar yuborish (masalan, sozlamani o'zgartirish);</li><li><strong>Fishing:</strong> sahifaga soxta forma qo'yib, parol so'rash;</li><li><strong>Sahifani buzish:</strong> mazmunni o'zgartirish, foydalanuvchini boshqa saytga yo'naltirish.</li></ul>
-<h2>Asosiy himoya: chiqishni escape qilish</h2>
+<h2 id="asosiy-himoya-chiqishni-escape-qilish">Asosiy himoya: chiqishni escape qilish</h2>
 <p>XSSga qarshi eng muhim himoya — <strong>chiqishni (output) escape qilish</strong>. Bu shuni anglatadiki, ma'lumotni sahifaga chiqarishdan oldin uning ichidagi maxsus HTML belgilarini (<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>, tirnoqlar) xavfsiz ko'rinishga aylantirasiz. Shunda brauzer ularni belgi (matn) deb qabul qiladi, teg deb emas.</p>
 <p>Muhim nuqta — escaping <strong>kontekstga bog'liq</strong> (context-aware) bo'lishi kerak. HTML matni ichida, HTML atributida, JavaScript ichida va URLda escaping qoidalari boshqacha. Shu sabab ishonchli shablon dvigatellari (masalan, React JSX) buni avtomatik va kontekstga mos bajaradi.</p>
-<h2>textContent vs innerHTML</h2>
+<h2 id="textcontent-vs-innerhtml">textContent vs innerHTML</h2>
 <p>DOM bilan ishlaganda XSSning eng ko'p uchraydigan sababi — foydalanuvchi ma'lumotini <code>innerHTML</code> orqali yozish. <code>innerHTML</code> berilgan satrni <strong>HTML sifatida talqin qiladi</strong>, ya'ni undagi teglar va skriptlar ishlaydi.</p>
 <p>Yechim oddiy: matn ko'rsatish kerak bo'lsa, <code>textContent</code> ishlating. U berilgan qiymatni <strong>faqat matn</strong> deb qabul qiladi va hech qanday HTMLni bajarmaydi:</p>
 <pre class="code"><code>// ZAIF: innerHTML kiritmani HTML deb talqin qiladi
@@ -623,7 +642,7 @@ element.innerHTML = foydalanuvchiIzohi; // xavfli!
 // XAVFSIZ: textContent kiritmani faqat matn deb oladi
 element.textContent = foydalanuvchiIzohi; // xavfsiz</code></pre>
 <div class="warn">Foydalanuvchi kiritmasini hech qachon <code>innerHTML</code> ga (yoki xom HTML quruvchi boshqa usulga) to'g'ridan-to'g'ri qo'ymang. Agar matn kerak bo'lsa — <code>textContent</code>; agar boyitilgan HTML kerak bo'lsa — ishonchli sanitizatsiya kutubxonasidan o'tkazing.</div>
-<h2>HTML escaping va xavfsiz DOM yozishni modellashtirish</h2>
+<h2 id="html-escaping-va-xavfsiz-dom-yozishni-modellashtirish">HTML escaping va xavfsiz DOM yozishni modellashtirish</h2>
 <p>Quyidagi misolda biz oddiy HTML escaping funksiyasini yozamiz va xavfli hamda xavfsiz yondashuvni solishtiramiz. Bu sof mantiqiy misol — u brauzersiz, satrlar ustida ishlaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>html-escape.js</span></div><textarea spellcheck="false">// Kontekst: HTML matni ichida escaping
 function htmlEscape(matn) {
@@ -646,12 +665,12 @@ const xavfsiz = '&lt;p&gt;' + htmlEscape(foydalanuvchiKiritmasi) + '&lt;/p&gt;';
 console.log('Xavfsiz:', xavfsiz);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Natijaga qarang: xavfsiz variantda <code>&lt;b&gt;</code> teg emas, oddiy matn bo'lib qoladi. Brauzer uni ko'rsatganda foydalanuvchi <code>&lt;b&gt;salom&lt;/b&gt;</code> degan yozuvni ko'radi, skript esa ishlamaydi.</p>
 <div class="note">Amaliyotda o'z escaping funksiyangizni yozishdan ko'ra sinovdan o'tgan kutubxonalarga (yoki React kabi avtomatik escaping qiladigan freymvorklarga) tayanish afzal. Yuqoridagi misol tamoyilni <em>tushunish</em> uchun keltirilgan.</div>
-<h2>CSP — Content Security Policy</h2>
+<h2 id="csp-content-security-policy">CSP — Content Security Policy</h2>
 <p><strong>CSP</strong> (Content Security Policy) — bu qo'shimcha himoya qatlami bo'lib, brauzerga qaysi manbalardan skript, stil va boshqa resurslar yuklashga ruxsat borligini aytadi. Maxsus HTTP sarlavhasi orqali o'rnatiladi.</p>
 <p>CSP to'g'ri sozlansa, hatto XSS zaifligi qolib ketgan taqdirda ham, u begona skriptning bajarilishiga to'sqinlik qilishi mumkin:</p>
 <ul><li><strong>Inline skriptni cheklaydi:</strong> sahifaga bevosita joylangan <code>&lt;script&gt;</code> bloklarini bloklash mumkin;</li><li><strong>Manbalarni cheklaydi:</strong> faqat ishonchli domenlardan resurs yuklashga ruxsat berish;</li><li><strong>Chuqurlashtirilgan himoya:</strong> CSP — asosiy himoya emas, balki qo'shimcha qatlam; escaping baribir shart.</li></ul>
 <div class="tip">CSPni "yagona yechim" deb qaramang. U kuchli qatlam, lekin uni to'g'ri escaping va sanitizatsiya bilan <strong>birga</strong> ishlatish kerak. Bitta qatlamga tayanmang.</div>
-<h2>Qo'shimcha himoya qatlamlari</h2>
+<h2 id="qo-shimcha-himoya-qatlamlari">Qo'shimcha himoya qatlamlari</h2>
 <ul><li><strong>Input sanitizatsiya:</strong> agar foydalanuvchidan boyitilgan HTML qabul qilish zarur bo'lsa (masalan, matn muharriri), uni ishonchli sanitizatsiya kutubxonasidan o'tkazib, faqat xavfsiz teglarga ruxsat bering;</li><li><strong>HttpOnly cookie:</strong> sessiya cookie'sini <code>HttpOnly</code> bilan belgilang — shunda JavaScript unga umuman kira olmaydi, bu sessiya o'g'irlanishini qiyinlashtiradi;</li><li><strong>Secure va SameSite:</strong> cookie'ni <code>Secure</code> (faqat HTTPS) va <code>SameSite</code> bilan qo'shimcha himoyalang;</li><li><strong>Freymvorkka ishoning:</strong> React, Vue, Angular kabi zamonaviy freymvorklar standart holatda chiqishni escape qiladi — ularning himoyasini <code>dangerouslySetInnerHTML</code> kabi usullar bilan chetlab o'tmang.</li></ul>
 <p>Yakuniy fikr: XSSga qarshi kurashning kaliti — <strong>ma'lumotni doim ma'lumot deb ushlab turish</strong> va uni hech qachon kod sifatida talqin qilinishiga yo'l qo'ymaslikdir.</p>
 <nav class="lesson-nav">
@@ -666,6 +685,6 @@ console.log('Xavfsiz:', xavfsiz);</textarea><div class="pg-actions"><button clas
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Semantik HTML — Kodla</title>
   <meta name="description" content="Nega semantik teglar muhim; sahifa tuzilishi teglari (header, nav, main, section, article, aside, footer); foydalanish qulayligi (a11y) asoslari; SEO uchun foydasi va &quot;div sho'rvasi&quot;dan qochish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,28 @@
 <main class="content article">
 <div class="crumbs">HTML</div>
 <h1>Semantik HTML</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#semantika-nima-va-nega-muhim">Semantika nima va nega muhim?</a></li>
+<li class="lvl2"><a href="#asosiy-semantik-teglar">Asosiy semantik teglar</a></li>
+<li class="lvl3"><a href="#header-sahifa-yoki-bo-lim-boshi">header — sahifa yoki bo'lim boshi</a></li>
+<li class="lvl3"><a href="#nav-navigatsiya-menyu">nav — navigatsiya (menyu)</a></li>
+<li class="lvl3"><a href="#main-asosiy-mazmun">main — asosiy mazmun</a></li>
+<li class="lvl3"><a href="#section-mantiqiy-bo-lim">section — mantiqiy bo'lim</a></li>
+<li class="lvl3"><a href="#article-mustaqil-kontent">article — mustaqil kontent</a></li>
+<li class="lvl3"><a href="#aside-yon-mazmun">aside — yon mazmun</a></li>
+<li class="lvl3"><a href="#footer-sahifa-yoki-bo-lim-oxiri">footer — sahifa yoki bo'lim oxiri</a></li>
+<li class="lvl2"><a href="#to-liq-semantik-sahifa-tuzilishi">To'liq semantik sahifa tuzilishi</a></li>
+<li class="lvl2"><a href="#foydalanish-qulayligi-a11y-asoslari">Foydalanish qulayligi (a11y) asoslari</a></li>
+<li class="lvl2"><a href="#seo-uchun-foydasi">SEO uchun foydasi</a></li>
+<li class="lvl2"><a href="#div-sho-rvasi-dan-qochish">"div sho'rvasi"dan qochish</a></li>
+<li class="lvl2"><a href="#amaliy-maslahatlar">Amaliy maslahatlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi teglarni bilamiz. Lekin ularni <strong>to'g'ri</strong> ishlatish ham muhim. <strong>Semantik HTML</strong> — bu har bir teg o'zining <strong>ma'nosiga</strong> mos ishlatilishi. Ushbu darsda semantik teglar nima, nega ular muhim va sahifani qanday to'g'ri tuzishni o'rganamiz.</p>
-<h2>Semantika nima va nega muhim?</h2>
+<h2 id="semantika-nima-va-nega-muhim">Semantika nima va nega muhim?</h2>
 <p>"Semantika" — bu <strong>ma'no</strong> degani. Semantik HTML — bu teglarni faqat ko'rinishi uchun emas, balki <strong>mazmuniga qarab</strong> tanlash. Masalan, sarlavha uchun <code>&lt;h1&gt;</code> ishlatiladi, chunki u <strong>sarlavha</strong> ma'nosini bildiradi — nafaqat matnni kattalashtiradi.</p>
 <p>Taqqoslash uchun ikkita variantni ko'ring. Birinchisi — <strong>nosemantik</strong> (hamma joyda <code>div</code>):</p>
 <pre class="code"><code>&lt;div class="header"&gt;
@@ -618,28 +641,28 @@
 &lt;/main&gt;
 &lt;footer&gt;© 2026&lt;/footer&gt;</code></pre>
 <p>Ikkala variant ekranda <strong>bir xil</strong> ko'rinadi. Lekin ikkinchisi — brauzerga, qidiruv tizimlariga va ekran o'quvchi dasturlarga har bir bo'lak <strong>nima ekanini</strong> aytadi. Bu — katta farq.</p>
-<h2>Asosiy semantik teglar</h2>
+<h2 id="asosiy-semantik-teglar">Asosiy semantik teglar</h2>
 <p>HTML5 sahifaning turli qismlari uchun maxsus teglar taqdim etadi. Ular bir sahifaning odatiy tuzilishini tasvirlaydi:</p>
-<h3>header — sahifa yoki bo'lim boshi</h3>
+<h3 id="header-sahifa-yoki-bo-lim-boshi">header — sahifa yoki bo'lim boshi</h3>
 <p><code>&lt;header&gt;</code> — sahifaning yoki alohida bo'limning yuqori qismi. Odatda logotip, sayt nomi va asosiy menyu shu yerda bo'ladi:</p>
 <pre class="code"><code>&lt;header&gt;
   &lt;h1&gt;Mening blogim&lt;/h1&gt;
   &lt;p&gt;Dasturlash haqida maqolalar&lt;/p&gt;
 &lt;/header&gt;</code></pre>
-<h3>nav — navigatsiya (menyu)</h3>
+<h3 id="nav-navigatsiya-menyu">nav — navigatsiya (menyu)</h3>
 <p><code>&lt;nav&gt;</code> — sahifadagi asosiy <strong>navigatsiya havolalari</strong> (menyu) uchun. Ekran o'quvchi dasturlar foydalanuvchiga to'g'ridan-to'g'ri menyuga o'tish imkonini beradi:</p>
 <pre class="code"><code>&lt;nav&gt;
   &lt;a href="/"&gt;Bosh sahifa&lt;/a&gt;
   &lt;a href="/about"&gt;Biz haqimizda&lt;/a&gt;
   &lt;a href="/contact"&gt;Aloqa&lt;/a&gt;
 &lt;/nav&gt;</code></pre>
-<h3>main — asosiy mazmun</h3>
+<h3 id="main-asosiy-mazmun">main — asosiy mazmun</h3>
 <p><code>&lt;main&gt;</code> — sahifaning <strong>asosiy, noyob</strong> mazmuni. Har bir sahifada <strong>faqat bitta</strong> <code>&lt;main&gt;</code> bo'lishi kerak. Unga menyu, footer kabi har sahifada takrorlanadigan narsalar kirmaydi:</p>
 <pre class="code"><code>&lt;main&gt;
   &lt;h1&gt;Maqola sarlavhasi&lt;/h1&gt;
   &lt;p&gt;Sahifaning asosiy matni shu yerda.&lt;/p&gt;
 &lt;/main&gt;</code></pre>
-<h3>section — mantiqiy bo'lim</h3>
+<h3 id="section-mantiqiy-bo-lim">section — mantiqiy bo'lim</h3>
 <p><code>&lt;section&gt;</code> — mazmunning bir <strong>mantiqiy bo'limi</strong>. Har bir section odatda o'z sarlavhasiga ega bo'ladi:</p>
 <pre class="code"><code>&lt;section&gt;
   &lt;h2&gt;Bizning xizmatlarimiz&lt;/h2&gt;
@@ -649,7 +672,7 @@
   &lt;h2&gt;Mijozlar fikri&lt;/h2&gt;
   &lt;p&gt;Sharhlar...&lt;/p&gt;
 &lt;/section&gt;</code></pre>
-<h3>article — mustaqil kontent</h3>
+<h3 id="article-mustaqil-kontent">article — mustaqil kontent</h3>
 <p><code>&lt;article&gt;</code> — <strong>mustaqil</strong>, o'zicha ma'noga ega kontent bo'lagi. Uni kontekstdan ajratib olsa ham mantiqiy bo'ladi. Masalan: blog posti, yangilik, mahsulot kartochkasi, foydalanuvchi izohi:</p>
 <pre class="code"><code>&lt;article&gt;
   &lt;h2&gt;HTML nima?&lt;/h2&gt;
@@ -657,7 +680,7 @@
   &lt;p&gt;Muallif: Ali Valiyev&lt;/p&gt;
 &lt;/article&gt;</code></pre>
 <div class="note"><strong>section</strong> va <strong>article</strong> farqi: <em>article</em> — o'zicha to'liq ma'noga ega (yolg'iz o'zi ham tushunarli, masalan bitta yangilik). <em>section</em> — kattaroq narsaning bir qismi (masalan, saytning "Biz haqimizda" bo'limi). Agar bo'lakni RSS'ga qo'shsa yoki boshqa joyga ko'chirsa mantiqli bo'lsa — bu article.</div>
-<h3>aside — yon mazmun</h3>
+<h3 id="aside-yon-mazmun">aside — yon mazmun</h3>
 <p><code>&lt;aside&gt;</code> — asosiy mazmun bilan bog'liq, lekin <strong>ikkinchi darajali</strong> kontent: yon panel (sidebar), reklama, tegishli havolalar:</p>
 <pre class="code"><code>&lt;aside&gt;
   &lt;h3&gt;Tegishli maqolalar&lt;/h3&gt;
@@ -666,12 +689,12 @@
     &lt;li&gt;&lt;a href="#"&gt;JavaScript kirish&lt;/a&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/aside&gt;</code></pre>
-<h3>footer — sahifa yoki bo'lim oxiri</h3>
+<h3 id="footer-sahifa-yoki-bo-lim-oxiri">footer — sahifa yoki bo'lim oxiri</h3>
 <p><code>&lt;footer&gt;</code> — sahifaning yoki bo'limning pastki qismi. Odatda mualliflik huquqi, aloqa ma'lumotlari va qo'shimcha havolalar shu yerda bo'ladi:</p>
 <pre class="code"><code>&lt;footer&gt;
   &lt;p&gt;© 2026 Mening saytim. Barcha huquqlar himoyalangan.&lt;/p&gt;
 &lt;/footer&gt;</code></pre>
-<h2>To'liq semantik sahifa tuzilishi</h2>
+<h2 id="to-liq-semantik-sahifa-tuzilishi">To'liq semantik sahifa tuzilishi</h2>
 <p>Barcha semantik teglar birlashganda, tipik sahifa quyidagicha ko'rinadi:</p>
 <pre class="code"><code>&lt;body&gt;
   &lt;header&gt;
@@ -698,18 +721,18 @@
     &lt;p&gt;© 2026 Mening saytim&lt;/p&gt;
   &lt;/footer&gt;
 &lt;/body&gt;</code></pre>
-<h2>Foydalanish qulayligi (a11y) asoslari</h2>
+<h2 id="foydalanish-qulayligi-a11y-asoslari">Foydalanish qulayligi (a11y) asoslari</h2>
 <p><strong>A11y</strong> — bu "accessibility" so'zining qisqartmasi (a + 11 harf + y). U saytni <strong>nogironligi bor</strong> odamlar ham qulay ishlata olishini anglatadi. Masalan, ko'zi ojiz foydalanuvchilar <strong>ekran o'quvchi (screen reader)</strong> dasturlar orqali saytni "eshitadi".</p>
 <p>Semantik teglar a11y'ga bevosita yordam beradi:</p>
 <ul><li>Ekran o'quvchi <code>&lt;nav&gt;</code> ni topib, foydalanuvchini to'g'ridan-to'g'ri menyuga o'tkazadi;</li><li><code>&lt;main&gt;</code> yordamida foydalanuvchi menyularni tashlab, darrov asosiy matnga o'tadi;</li><li>To'g'ri sarlavhalar (<code>h1</code>-<code>h6</code>) sahifa tuzilishini "eshitib" tushunish imkonini beradi.</li></ul>
 <p>Boshqa muhim a11y qoidalari:</p>
 <ul><li>Har bir <code>&lt;img&gt;</code> ga mazmunli <code>alt</code> yozing;</li><li>Har bir forma maydoniga <code>&lt;label&gt;</code> bog'lang;</li><li>Havola matni tushunarli bo'lsin ("bu yerni bosing" emas, "narxlar ro'yxatini yuklab olish");</li><li>Ranglar orasida yetarli kontrast bo'lsin (bu ko'proq CSS bilan bog'liq).</li></ul>
 <div class="tip">A11y — bu nafaqat nogironlar uchun. Yaxshi a11y hamma uchun saytni qulayroq qiladi: klaviatura bilan navigatsiya, sekin internetda ham ishlaydigan alt matnlar va aniq tuzilish barcha foydalanuvchilarga foyda keltiradi.</div>
-<h2>SEO uchun foydasi</h2>
+<h2 id="seo-uchun-foydasi">SEO uchun foydasi</h2>
 <p><strong>SEO</strong> (Search Engine Optimization) — saytni qidiruv tizimlarida (Google, Yandex) yuqori o'ringa chiqarish. Google robotlari sahifani o'qiganda, semantik teglar ularga mazmunni <strong>tushunishga</strong> yordam beradi:</p>
 <ul><li><code>&lt;h1&gt;</code> — sahifaning asosiy mavzusi nima ekanini bildiradi;</li><li><code>&lt;article&gt;</code> — bu yerda mustaqil, qimmatli kontent borligini ko'rsatadi;</li><li><code>&lt;nav&gt;</code> va <code>&lt;main&gt;</code> — sayt tuzilishini aniq ajratib beradi.</li></ul>
 <p>Natijada semantik jihatdan yaxshi tuzilgan sahifa qidiruv natijalarida yuqoriroq chiqishi mumkin. Nosemantik, faqat <code>div</code>'lardan iborat sahifada esa robot mazmunni tushunishga qiynaladi.</p>
-<h2>"div sho'rvasi"dan qochish</h2>
+<h2 id="div-sho-rvasi-dan-qochish">"div sho'rvasi"dan qochish</h2>
 <p><strong>"Div sho'rvasi" (div soup)</strong> — bu butun sahifa faqat <code>&lt;div&gt;</code> teglaridan iborat bo'lgan holat. Bunday kodni o'qish qiyin, u a11y va SEO uchun yomon:</p>
 <pre class="code"><code>&lt;div class="page"&gt;
   &lt;div class="top"&gt;
@@ -727,10 +750,10 @@
   &lt;/nav&gt;
 &lt;/header&gt;</code></pre>
 <div class="warn"><code>&lt;div&gt;</code> yomon teg emas! U hali ham kerak — <strong>sof bezak yoki joylashuv</strong> uchun (masalan, CSS bilan bir necha elementni guruhlash). Lekin agar bo'lak uchun <strong>mos semantik teg mavjud</strong> bo'lsa (header, nav, article...), o'shani ishlating. <code>div</code> — bu "boshqa hech narsa mos kelmaganda" tanlanadigan zaxira variant.</div>
-<h2>Amaliy maslahatlar</h2>
+<h2 id="amaliy-maslahatlar">Amaliy maslahatlar</h2>
 <p>Sahifa yozayotganda o'zingizga savol bering: "Bu bo'lak <strong>nima</strong>?":</p>
 <ul><li>Bu — sahifa boshi (logotip, menyu)? → <code>&lt;header&gt;</code>;</li><li>Bu — havolalar to'plami (menyu)? → <code>&lt;nav&gt;</code>;</li><li>Bu — sahifaning asosiy mazmuni? → <code>&lt;main&gt;</code>;</li><li>Bu — mustaqil maqola yoki post? → <code>&lt;article&gt;</code>;</li><li>Bu — mantiqiy bo'lim? → <code>&lt;section&gt;</code>;</li><li>Bu — yordamchi/yon mazmun? → <code>&lt;aside&gt;</code>;</li><li>Bu — sahifa oxiri (mualliflik, aloqa)? → <code>&lt;footer&gt;</code>;</li><li>Hech biri mos kelmasa (faqat guruhlash kerak)? → <code>&lt;div&gt;</code>.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Semantik HTML</strong> — teglarni ko'rinishi uchun emas, <strong>ma'nosiga</strong> qarab tanlash;</li><li><code>&lt;header&gt;</code> (bosh), <code>&lt;nav&gt;</code> (menyu), <code>&lt;main&gt;</code> (asosiy mazmun, bittadan), <code>&lt;footer&gt;</code> (oxir);</li><li><code>&lt;section&gt;</code> (mantiqiy bo'lim), <code>&lt;article&gt;</code> (mustaqil kontent), <code>&lt;aside&gt;</code> (yon mazmun);</li><li>Semantik teglar <strong>a11y</strong> (ekran o'quvchilar) va <strong>SEO</strong> (qidiruv tizimlari) uchun bevosita foyda beradi;</li><li>"<strong>Div sho'rvasi</strong>"dan qoching — mos semantik teg bo'lsa, o'shani ishlating;</li><li><code>&lt;div&gt;</code> hali ham kerak, lekin faqat sof guruhlash/bezak uchun zaxira variant sifatida.</li></ul>
 <nav class="lesson-nav">
   <a href="html-form.html"><span class="dir">← Oldingi</span><span class="ttl">Formalar</span></a>
@@ -744,6 +767,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

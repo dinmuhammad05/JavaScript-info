@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Primitivlar metodlari — Kodla</title>
   <meta name="description" content="Primitiv qiymatlar (satr, son, mantiqiy) ustida ham metod chaqirish mumkin. Bu qanday ishlaydi va &quot;obyekt o'ramchasi&quot; nima?">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Primitivlar metodlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#primitiv-va-obyekt-farqi">Primitiv va obyekt farqi</a></li>
+<li class="lvl2"><a href="#muammo-primitivda-ham-metod-kerak">Muammo: primitivda ham metod kerak</a></li>
+<li class="lvl2"><a href="#obyekt-o-ramchasi-wrapper-qanday-ishlaydi">Obyekt o'ramchasi (wrapper) qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#sonlarda-ham-metodlar-bor">Sonlarda ham metodlar bor</a></li>
+<li class="lvl2"><a href="#null-va-undefined-da-metod-yo-q">null va undefined'da metod yo'q</a></li>
+<li class="lvl2"><a href="#o-ramchi-obyektni-qo-lda-yaratmang">O'ramchi obyektni qo'lda yaratmang</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript primitivlar (satrlar, sonlar) bilan xuddi ular obyektdek ishlashga imkon beradi: ularda metodlar chaqirish mumkin. Ushbu darsda buning sirini — "obyekt o'ramchasi" (wrapper) g'oyasini o'rganamiz.</p>
-<h2>Primitiv va obyekt farqi</h2>
+<h2 id="primitiv-va-obyekt-farqi">Primitiv va obyekt farqi</h2>
 <p>Avval ikki tushunchani aniq ajratamiz. <strong>Primitiv</strong> — bu bitta oddiy qiymat. JavaScript'da 7 ta primitiv tur bor: <code>string</code>, <code>number</code>, <code>bigint</code>, <code>boolean</code>, <code>symbol</code>, <code>null</code> va <code>undefined</code>.</p>
 <p><strong>Obyekt</strong> — bu bir nechta qiymatni xususiyatlar (properties) sifatida saqlay oladigan murakkab tuzilma. U jingalak qavslar <code>{...}</code> yordamida yaratiladi va ichida metodlar (funksiya bo'lgan xususiyatlar) saqlashi mumkin.</p>
 <pre class="code"><code>// obyekt — ichida ma'lumot va metod bor
@@ -611,12 +626,12 @@ let foydalanuvchi = {
 // obyektning metodini chaqiramiz
 foydalanuvchi.salom();  // "Salom!"</code></pre>
 <p>Obyektlar primitivlarga qaraganda "og'irroq" — ular xotirada ko'proq joy egallaydi va ularni boshqarish uchun ichki mexanizmlar kerak bo'ladi.</p>
-<h2>Muammo: primitivda ham metod kerak</h2>
+<h2 id="muammo-primitivda-ham-metod-kerak">Muammo: primitivda ham metod kerak</h2>
 <p>Til yaratuvchilari qiyin masalaga duch kelishgan. Bir tomondan, satrlar yoki sonlar bilan ko'p foydali amallar bajarish qulay bo'lardi. Masalan, satrni katta harflarga o'girish yoki uning uzunligini bilish. Bu amallar metodlar orqali ifodalansa juda qulay.</p>
 <p>Ikkinchi tomondan, primitivlar imkon qadar tez va yengil bo'lishi kerak. Agar har bir son yoki satr og'ir obyekt bo'lsa, dastur juda sekinlashib qolardi.</p>
 <p>Yechim ancha nafis. Mana uning mohiyati:</p>
 <ol><li>Primitivlar oddiy va yengil qiymatlar bo'lib qolaveradi;</li><li>Til esa satr, son, mantiqiy qiymat va symbol'lar uchun metod hamda xususiyatlarga kirishga ruxsat beradi;</li><li>Buning ishlashi uchun primitivda metod chaqirilganida, maxsus "obyekt o'ramchasi" (wrapper) yaratiladi. U kerakli funksionallikni beradi va shundan keyin yo'q qilinadi.</li></ol>
-<h2>Obyekt o'ramchasi (wrapper) qanday ishlaydi?</h2>
+<h2 id="obyekt-o-ramchasi-wrapper-qanday-ishlaydi">Obyekt o'ramchasi (wrapper) qanday ishlaydi?</h2>
 <p>"O'ramchi obyektlar" har bir primitiv tur uchun mavjud va ular quyidagicha nomlanadi: <code>String</code>, <code>Number</code>, <code>Boolean</code>, <code>BigInt</code> va <code>Symbol</code>. Ular turli xil metodlar to'plamini taqdim etadi.</p>
 <p>Masalan, satr uchun <code>str.toUpperCase()</code> metodi mavjud — u satrni katta harflarga o'giradi. Uni chaqirganingizda nima ro'y beradi:</p>
 <ol><li><code>str</code> — bu primitiv satr. Unga murojaat qilingan payt maxsus obyekt yaratiladi, u satr qiymatini va <code>toUpperCase()</code> kabi foydali metodlarni biladi;</li><li>Metod bajariladi va yangi satr qaytaradi (buni konsol ko'rsatadi);</li><li>Maxsus obyekt yo'q qilinadi, primitiv <code>str</code> esa o'zgarmasdan qoladi.</li></ol>
@@ -633,7 +648,7 @@ console.log(matn.toLowerCase());  // salom dunyo
 // asl satr o'zgarmagan!
 console.log(matn);  // Salom Dunyo</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Diqqat qiling: <code>toUpperCase()</code> asl satrni o'zgartirmaydi, balki <strong>yangi</strong> satr qaytaradi. Primitivlar o'zgarmas (immutable) — ularni tahrirlab bo'lmaydi, faqat yangi qiymat yaratish mumkin.</div>
-<h2>Sonlarda ham metodlar bor</h2>
+<h2 id="sonlarda-ham-metodlar-bor">Sonlarda ham metodlar bor</h2>
 <p>Sonlar ham primitiv, lekin ularda ham metodlar mavjud. Masalan, <code>toFixed(n)</code> — sonni kasr qismidagi belgilar sonini <code>n</code> ga qadar yaxlitlaydi va satr qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>primitiv-son.js</span></div><textarea spellcheck="false">let narx = 12.34567;
 
@@ -644,14 +659,14 @@ console.log(narx.toFixed(2));  // 12.35
 let rost = true;
 console.log(rost.toString());  // "true"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Butun sonda to'g'ridan-to'g'ri metod chaqirmoqchi bo'lsangiz, ikki nuqta qo'ying yoki qavsdan foydalaning. Masalan, <code>123456..toString()</code> yoki <code>(123456).toString()</code>. Chunki bitta nuqta <code>123456.toString()</code>'da JavaScript nuqtani o'nlik kasr deb o'ylab, xatoga yo'l qo'yishi mumkin.</div>
-<h2>null va undefined'da metod yo'q</h2>
+<h2 id="null-va-undefined-da-metod-yo-q">null va undefined'da metod yo'q</h2>
 <p>Ikkita alohida primitiv — <code>null</code> va <code>undefined</code> — bu qoidadan istisno. Ular o'ramchi obyektga ega emas va hech qanday metod bermaydi. Ular "eng bo'sh" primitivlar hisoblanadi.</p>
 <pre class="code"><code>// bu XATO beradi!
 null.test;       // TypeError
 undefined.test;  // TypeError</code></pre>
 <p>Agar <code>null</code> yoki <code>undefined</code>'da metod yoki xususiyatga murojaat qilsangiz, dastur <code>TypeError</code> xatosi bilan to'xtaydi. Shu sabab qiymat bilan ishlashdan oldin uning <code>null</code>/<code>undefined</code> emasligiga ishonch hosil qilish muhim.</p>
 <div class="tip">Amalda ko'p xatolar aynan <code>null</code> yoki <code>undefined</code>'da metod chaqirishdan kelib chiqadi. Masalan, mavjud bo'lmagan obyekt xususiyatidan qiymat olmoqchi bo'lganda. Bunga e'tibor bering.</div>
-<h2>O'ramchi obyektni qo'lda yaratmang</h2>
+<h2 id="o-ramchi-obyektni-qo-lda-yaratmang">O'ramchi obyektni qo'lda yaratmang</h2>
 <p>Nazariy jihatdan <code>new Number(5)</code> yoki <code>new String("salom")</code> orqali o'ramchi obyektni qo'lda yaratish mumkin, lekin buni <strong>hech qachon qilmang</strong>. Bu chalkashlik va kutilmagan xatolarga olib keladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>wrapper-xato.js</span></div><textarea spellcheck="false">// new bilan yaratilgan "son" aslida OBYEKT
 let son = new Number(0);
@@ -663,7 +678,7 @@ if (son) {
 
 console.log(typeof son);  // "object", "number" emas!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>new String</code>, <code>new Number</code>, <code>new Boolean</code>'ni <strong>hech qachon</strong> ishlatmang. Lekin <code>new</code>siz oddiy funksiya sifatida chaqirish (masalan <code>Number("123")</code>) — bu boshqa narsa va foydali, u qiymatni tegishli turga o'giradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Primitivlar (<code>null</code> va <code>undefined</code>dan tashqari) metodlarga ega bo'la oladi;</li><li>Metod chaqirilganda vaqtinchalik <strong>o'ramchi obyekt</strong> (wrapper) yaratiladi, ish tugagach yo'q qilinadi;</li><li>Primitivlar <strong>o'zgarmas</strong> (immutable) — metodlar yangi qiymat qaytaradi, aslini o'zgartirmaydi;</li><li><code>null</code> va <code>undefined</code>'da metod yo'q — ularda murojaat <code>TypeError</code> beradi;</li><li><code>new String</code>, <code>new Number</code>, <code>new Boolean</code>'ni ishlatmang — bu obyekt yaratadi va chalkashlik keltiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="obyekt-primitiv.html"><span class="dir">← Oldingi</span><span class="ttl">Obyektni primitivga o'girish</span></a>
@@ -677,6 +692,6 @@ console.log(typeof son);  // "object", "number" emas!</textarea><div class="pg-a
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

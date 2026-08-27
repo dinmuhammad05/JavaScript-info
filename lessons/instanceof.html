@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>instanceof tekshiruvi — Kodla</title>
   <meta name="description" content="instanceof operatori, prototip zanjiri orqali tekshiruv, Symbol.hasInstance va Object.prototype.toString.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Klasslar</div>
 <h1>instanceof tekshiruvi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#instanceof-operatori">instanceof operatori</a></li>
+<li class="lvl2"><a href="#instanceof-meros-bilan">instanceof meros bilan</a></li>
+<li class="lvl2"><a href="#u-qanday-ishlaydi-prototip-zanjiri">U qanday ishlaydi? Prototip zanjiri</a></li>
+<li class="lvl2"><a href="#symbol-hasinstance">Symbol.hasInstance</a></li>
+<li class="lvl2"><a href="#object-prototype-tostring-bilan-tur-aniqlash">Object.prototype.toString bilan tur aniqlash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>instanceof</code> operatori obyekt ma'lum bir klassga tegishli yoki yo'qligini tekshiradi. U merosni ham hisobga oladi, shuning uchun ko'p hollarda juda foydali.</p>
-<h2>instanceof operatori</h2>
+<h2 id="instanceof-operatori">instanceof operatori</h2>
 <p>Sintaksis oddiy: <code>obj instanceof Class</code>. Agar <code>obj</code> <code>Class</code>ga (yoki undan meros olgan klassga) tegishli bo'lsa, <code>true</code> qaytadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instanceof-basic.js</span></div><textarea spellcheck="false">class Rabbit {}
 let rabbit = new Rabbit();
@@ -609,7 +623,7 @@ let arr = [1, 2, 3];
 console.log(arr instanceof Array);  // true
 console.log(arr instanceof Object); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Oxirgi misolda <code>arr instanceof Object</code> ham <code>true</code>, chunki <code>Array</code> prototipik jihatdan <code>Object</code>dan meros oladi.</p>
-<h2>instanceof meros bilan</h2>
+<h2 id="instanceof-meros-bilan">instanceof meros bilan</h2>
 <p><code>instanceof</code>ning kuchi shundaki, u prototip zanjiri bo'ylab qaraydi. Ya'ni meros olgan obyekt ham ota klassning "nusxasi" hisoblanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instanceof-inherit.js</span></div><textarea spellcheck="false">class Animal {}
 class Rabbit extends Animal {}
@@ -619,7 +633,7 @@ let rabbit = new Rabbit();
 console.log(rabbit instanceof Rabbit); // true
 console.log(rabbit instanceof Animal); // true — meros!
 console.log(rabbit instanceof Object); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>U qanday ishlaydi? Prototip zanjiri</h2>
+<h2 id="u-qanday-ishlaydi-prototip-zanjiri">U qanday ishlaydi? Prototip zanjiri</h2>
 <p>Aslida <code>obj instanceof Class</code> quyidagi algoritm bo'yicha ishlaydi: u <code>obj</code>ning prototip zanjirini birma-bir tekshiradi va zanjirda <code>Class.prototype</code> uchraydimi yoki yo'qmi ko'radi.</p>
 <ol><li><code>obj.__proto__</code> === <code>Class.prototype</code> ? Ha bo'lsa <code>true</code>;</li><li>Yo'q bo'lsa, <code>obj.__proto__.__proto__</code>ni tekshiradi;</li><li>Zanjir oxirigacha (<code>null</code>ga yetguncha) davom etadi.</li></ol>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instanceof-chain.js</span></div><textarea spellcheck="false">class Animal {}
@@ -633,7 +647,7 @@ console.log(
   Object.getPrototypeOf(Object.getPrototypeOf(rabbit)) === Animal.prototype
 ); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Aynan shu sabab <code>instanceof</code> merosni to'g'ri hisobga oladi: u prototip zanjirining istalgan bosqichida <code>Class.prototype</code>ni topsa yetarli.</div>
-<h2>Symbol.hasInstance</h2>
+<h2 id="symbol-hasinstance">Symbol.hasInstance</h2>
 <p><code>instanceof</code>ning xatti-harakatini sozlash mumkin. Agar klassda maxsus statik metod <code>Symbol.hasInstance</code> bo'lsa, <code>instanceof</code> aynan uni chaqiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instanceof-hasinstance.js</span></div><textarea spellcheck="false">class Animal {
   // 'canEat' xossasi bor obyektlar Animal deb hisoblansin:
@@ -649,7 +663,7 @@ let stone = { canEat: false };
 console.log(stone instanceof Animal); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>obj</code> <code>Animal</code>dan meros olmagan bo'lsa ham, uning <code>canEat</code> xossasi <code>true</code> bo'lgani uchun <code>instanceof</code> <code>true</code> qaytardi. Ya'ni biz "tegishlilik" mezonini o'zimiz belgiladik.</p>
 <div class="warn"><code>Symbol.hasInstance</code> juda kuchli, ammo kamdan-kam ishlatiladi. Uni faqat maxsus mantiq zarur bo'lganda ishlatish tavsiya etiladi, aks holda kod chalkash bo'lib qoladi.</div>
-<h2>Object.prototype.toString bilan tur aniqlash</h2>
+<h2 id="object-prototype-tostring-bilan-tur-aniqlash">Object.prototype.toString bilan tur aniqlash</h2>
 <p><code>typeof</code> operatori cheklangan — u massiv, sana yoki <code>null</code>ni ajrata olmaydi. <code>instanceof</code> esa klasslar bilan ishlaydi. Yana bir kuchli usul — <code>Object.prototype.toString</code> orqali obyektning aniq turini olish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instanceof-tostring.js</span></div><textarea spellcheck="false">let objectToString = Object.prototype.toString;
 
@@ -670,7 +684,7 @@ console.log(getType([1, 2]));  // Array
 console.log(getType(null));    // Null
 console.log(getType(new Date())); // Date</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>Object.prototype.toString.call(value).slice(8, -1)</code> — bu "tur aniqlash"ning eng ishonchli usuli. U <code>typeof</code>dan aniqroq va tug'ma turlar bilan mukammal ishlaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>obj instanceof Class</code> — obyekt klassga tegishli (yoki undan meros olganini) tekshiradi;</li><li>U prototip zanjiri bo'ylab qidirib, <code>Class.prototype</code>ni topsa <code>true</code> qaytaradi;</li><li>Merosni to'g'ri hisobga oladi: <code>rabbit instanceof Animal</code> ham <code>true</code>;</li><li><code>Symbol.hasInstance</code> orqali <code>instanceof</code> mantiqini sozlash mumkin;</li><li><code>Object.prototype.toString.call(...)</code> — <code>typeof</code>dan aniqroq tur aniqlash usuli.</li></ul>
 <nav class="lesson-nav">
   <a href="built-in-extend.html"><span class="dir">← Oldingi</span><span class="ttl">Tug'ma klasslarni kengaytirish</span></a>
@@ -684,6 +698,6 @@ console.log(getType(new Date())); // Date</textarea><div class="pg-actions"><but
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

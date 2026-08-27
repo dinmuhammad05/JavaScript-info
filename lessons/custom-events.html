@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maxsus hodisalar — Kodla</title>
   <meta name="description" content="new Event, CustomEvent (detail bilan), dispatchEvent, bubbles/cancelable, ichma-ich hodisalar va o'z komponentlaringda maxsus hodisalar bilan ishlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,26 @@
 <main class="content article">
 <div class="crumbs">Hodisalarga kirish</div>
 <h1>Maxsus hodisalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#event-konstruktori">Event konstruktori</a></li>
+<li class="lvl2"><a href="#dispatchevent">dispatchEvent</a></li>
+<li class="lvl2"><a href="#maxsus-hodisalar-ham-ko-tariladi">Maxsus hodisalar ham ko'tariladi</a></li>
+<li class="lvl2"><a href="#customevent-va-detail">CustomEvent va detail</a></li>
+<li class="lvl2"><a href="#maxsus-hodisalarni-bekor-qilish">Maxsus hodisalarni bekor qilish</a></li>
+<li class="lvl2"><a href="#ichma-ich-hodisalar-sinxrondir">Ichma-ich hodisalar sinxrondir</a></li>
+<li class="lvl2"><a href="#o-z-komponentlaringda-maxsus-hodisalar">O'z komponentlaringda maxsus hodisalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Nafaqat brauzer, biz ham o'z <strong>maxsus hodisalarimizni</strong> (custom events) yaratib, ularni istalgan elementda ishga tushira olamiz. Bu, ayniqsa, o'z komponentlaringni yozganda foydali: komponent "tashqi dunyoga" biror voqea yuz berganini hodisa orqali xabar qiladi.</p>
-<h2>Event konstruktori</h2>
+<h2 id="event-konstruktori">Event konstruktori</h2>
 <p>Yangi hodisa obyekti <code>Event</code> ichki (built-in) konstruktori orqali yaratiladi:</p>
 <pre class="code"><code>let event = new Event(type, options);</code></pre>
 <ul><li><code>type</code> — hodisa turi, string. Bu standart (<code>'click'</code>) yoki o'zimiz o'ylab topgan (<code>'my-event'</code>) bo'lishi mumkin;</li><li><code>options</code> — ikki ixtiyoriy xossaga ega obyekt: <code>bubbles: true/false</code> (agar <code>true</code> bo'lsa, hodisa ko'tariladi) va <code>cancelable: true/false</code> (agar <code>true</code> bo'lsa, standart harakatni <code>preventDefault()</code> bilan to'xtatib bo'ladi).</li></ul>
 <div class="note">Standart bo'yicha ikkovi ham <code>false</code>: <code>{ bubbles: false, cancelable: false }</code>. Ya'ni maxsus hodisa aytmasangiz ko'tarilmaydi va bekor qilinmaydi.</div>
-<h2>dispatchEvent</h2>
+<h2 id="dispatchevent">dispatchEvent</h2>
 <p>Hodisa obyektini yaratgach, uni elementda "ishga tushirish" (fire) uchun <code>elem.dispatchEvent(event)</code> chaqiriladi. So'ng ishlovchilar go'yo bu haqiqiy brauzer hodisasidek javob beradi:</p>
 <pre class="code"><code>&lt;button id="elem" onclick="alert('Klik!');"&gt;Avtoklik&lt;/button&gt;
 
@@ -612,7 +628,7 @@
 &lt;/script&gt;</code></pre>
 <p>Bu yerda hech kim tugmani bosmasa ham, biz <code>'click'</code> hodisasini dasturiy tarzda yaratib yubordik — shuning uchun <code>onclick</code> ishlovchisi ishga tushadi va "Klik!" ko'rsatiladi.</p>
 <div class="note"><code>event.isTrusted</code> xossasi hodisa haqiqiy foydalanuvchi harakatidanmi (<code>true</code>) yoki skript orqali yaratilganmi (<code>false</code>) ekanini ajratadi. Skript orqali <code>dispatchEvent</code> qilingan hodisalarda u <code>false</code> bo'ladi.</div>
-<h2>Maxsus hodisalar ham ko'tariladi</h2>
+<h2 id="maxsus-hodisalar-ham-ko-tariladi">Maxsus hodisalar ham ko'tariladi</h2>
 <p>O'z nomi bilan hodisa yaratib, uni ko'tariladigan qilishimiz mumkin. Buning uchun <code>bubbles: true</code> beramiz:</p>
 <pre class="code"><code>&lt;h1 id="elem"&gt;Salom, dunyodan&lt;/h1&gt;
 
@@ -629,7 +645,7 @@
 <p>Muhim jihatlar:</p>
 <ul><li>Maxsus hodisalar ko'tarilishi uchun <code>{ bubbles: true }</code> aniq berilishi shart;</li><li>Standart hodisalar (<code>click</code>) va maxsus hodisalarni bir xil tarzda — <code>addEventListener</code> bilan tinglaymiz. Nom istalgancha bo'lishi mumkin (<code>'hello'</code>, <code>'my-event'</code> va hokazo).</li></ul>
 <div class="note">Yangi hodisa nomlarini o'ylab topsak ham, standart hodisa nomlaridan (masalan, <code>'click'</code>) foydalanmaslik yaxshi — chalkashlik va kutilmagan xatti-harakatlar oldini olish uchun ko'pincha o'z prefiksli nomlar (masalan, <code>'menu-open'</code>) ishlatiladi.</div>
-<h2>CustomEvent va detail</h2>
+<h2 id="customevent-va-detail">CustomEvent va detail</h2>
 <p>Maxsus hodisaga <strong>qo'shimcha ma'lumot</strong> biriktirish uchun <code>Event</code> o'rniga maxsus <code>CustomEvent</code> konstruktori ishlatiladi. Uning <code>detail</code> degan qo'shimcha xossasi bor — istalgan ma'lumotni shu orqali uzatamiz:</p>
 <pre class="code"><code>&lt;h1 id="elem"&gt;Salom Ali uchun&lt;/h1&gt;
 
@@ -644,7 +660,7 @@
 &lt;/script&gt;</code></pre>
 <p><code>detail</code> xossasi istalgan turdagi qiymat bo'lishi mumkin: string, obyekt, massiv va hokazo. Ishlovchi ichida u <code>event.detail</code> orqali olinadi.</p>
 <div class="tip">Texnik jihatdan <code>CustomEvent</code> deyarli <code>Event</code> bilan bir xil, bitta farqi bor: ikkinchi argumentda <code>detail</code> xossasini qabul qiladi. Nima uchun oddiy <code>Event</code>ga o'z xossalarini qo'shmaymiz? Chunki <code>CustomEvent</code> nomi kodni o'qiganlarga bu maxsus hodisa ekanini va unda qanaqadir qo'shimcha ma'lumot borligini <strong>aniq bildiradi</strong> — bu yaxshi kelishuv (konvensiya).</div>
-<h2>Maxsus hodisalarni bekor qilish</h2>
+<h2 id="maxsus-hodisalarni-bekor-qilish">Maxsus hodisalarni bekor qilish</h2>
 <p>Maxsus hodisalarda ham "standart harakat" tushunchasini yaratish mumkin. Buning uchun hodisani <code>cancelable: true</code> bilan yaratamiz, ishlovchi <code>preventDefault()</code> chaqirsa, <code>dispatchEvent</code> <code>false</code> qaytaradi:</p>
 <pre class="code"><code>&lt;pre id="rabbit"&gt;Quyoncha&lt;/pre&gt;
 &lt;button onclick="hide()"&gt;Yashir()&lt;/button&gt;
@@ -670,7 +686,7 @@
 &lt;/script&gt;</code></pre>
 <p>Bu yerda "hide" hodisasini tinglagan kod uni bekor qila oladi. <code>dispatchEvent</code> agar biror ishlovchi <code>preventDefault()</code> chaqirgan bo'lsa <code>false</code>, aks holda <code>true</code> qaytaradi — shu orqali harakatni davom ettirish yoki to'xtatishni hal qilamiz.</p>
 <div class="warn"><code>preventDefault()</code> faqat hodisa <code>cancelable: true</code> bilan yaratilgan bo'lsa ishlaydi. Aks holda uni chaqirish e'tiborsiz qoldiriladi.</div>
-<h2>Ichma-ich hodisalar sinxrondir</h2>
+<h2 id="ichma-ich-hodisalar-sinxrondir">Ichma-ich hodisalar sinxrondir</h2>
 <p>Odatda hodisalar navbatda (queue) qayta ishlanadi. Masalan, brauzer <code>onclick</code>ni ishlab turgan payt yangi <code>mousemove</code> yuz bersa, uning ishlovchisi <code>onclick</code> tugagach chaqiriladi.</p>
 <p>Ammo bir istisno bor: agar hodisa boshqa hodisa ichida <code>dispatchEvent</code> bilan ishga tushirilsa, u <strong>navbatni kutmaydi</strong>, balki darhol <strong>sinxron</strong> qayta ishlanadi. Ya'ni yangi hodisa ishlovchisi bajarilib bo'lgach, boshqaruv tashqi kodga qaytadi.</p>
 <pre class="code"><code>&lt;button id="menu"&gt;Menyu (chertib ko'ring)&lt;/button&gt;
@@ -689,7 +705,7 @@
 &lt;/script&gt;</code></pre>
 <p>Chiqish tartibi: <strong>1 &rarr; ichki &rarr; 2</strong>. Ya'ni <code>dispatchEvent</code> ichma-ich hodisani darhol, tashqi kod davom etishidan <em>oldin</em> ishlab bo'ladi.</p>
 <div class="tip">Agar ichma-ich hodisa sinxron bo'lishini istamasangiz (masalan, cheksiz aylanish yoki chalkashlikni oldini olish uchun), uni <code>dispatchEvent</code>dan keyin nol-kechikishli <code>setTimeout(() =&gt; elem.dispatchEvent(event), 0)</code> ichida chaqirish mumkin — shunda u navbatga tushib, joriy kod tugagach ishlaydi.</div>
-<h2>O'z komponentlaringda maxsus hodisalar</h2>
+<h2 id="o-z-komponentlaringda-maxsus-hodisalar">O'z komponentlaringda maxsus hodisalar</h2>
 <p>Maxsus hodisalar mustaqil komponentlar yaratishda juda foydali. Komponent "tashqariga" o'z ichki holatidagi o'zgarishlarni maxsus hodisa orqali xabar qiladi, tashqi kod esa unga obuna bo'ladi. Bu komponentni tashqi koddan <strong>ajratib</strong> (decoupling) turadi — komponent kim tinglayotganini bilmaydi.</p>
 <pre class="code"><code>// Komponent ichida (masalan, o'z galereyangiz):
 function goNext(slider) {
@@ -707,7 +723,7 @@ sliderElem.addEventListener('slide-changed', function(event) {
   console.log('Yangi slayd: ' + event.detail.index);
 });</code></pre>
 <div class="note">Bu naqsh brauzerning o'zi ishlatadigan usulga o'xshaydi: <code>&lt;input&gt;</code> <code>input</code>/<code>change</code> hodisalarini, <code>&lt;video&gt;</code> <code>play</code>/<code>pause</code> hodisalarini yuboradi. Siz ham o'z komponentlaringni shu uslubda yozib, uni "ekotizimga" tabiiy moslashtira olasiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Maxsus hodisa <code>new Event(type, { bubbles, cancelable })</code> yoki qo'shimcha ma'lumotli <code>new CustomEvent(type, { detail, bubbles, cancelable })</code> bilan yaratiladi;</li><li>Uni <code>elem.dispatchEvent(event)</code> orqali elementda ishga tushiramiz;</li><li><code>bubbles: true</code> — hodisa ko'tariladi; <code>cancelable: true</code> — <code>preventDefault()</code> orqali bekor qilinishi mumkin;</li><li>Qo'shimcha ma'lumot <code>CustomEvent</code>ning <code>detail</code> xossasida uzatiladi va ishlovchida <code>event.detail</code> orqali olinadi;</li><li><code>dispatchEvent</code> ichida ishga tushgan hodisalar <strong>sinxron</strong> qayta ishlanadi (navbatni kutmaydi);</li><li>Maxsus hodisalar mustaqil, bir-biridan ajralgan komponentlar yaratishda — komponent tashqi dunyoga voqealarni xabar qilishida juda foydali.</li></ul>
 <nav class="lesson-nav">
   <a href="default-actions.html"><span class="dir">← Oldingi</span><span class="ttl">Brauzerning standart harakatlari</span></a>
@@ -721,6 +737,6 @@ sliderElem.addEventListener('slide-changed', function(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ma'lumot turlari — Kodla</title>
   <meta name="description" content="JavaScript'ning 8 ta ma'lumot turi va typeof operatori.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,30 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Ma'lumot turlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#javascript-dinamik-tildir">JavaScript — dinamik tildir</a></li>
+<li class="lvl2"><a href="#1-number-son">1. Number (son)</a></li>
+<li class="lvl2"><a href="#2-bigint-katta-butun-son">2. BigInt (katta butun son)</a></li>
+<li class="lvl2"><a href="#3-string-matn">3. String (matn)</a></li>
+<li class="lvl2"><a href="#4-boolean-mantiqiy-tur">4. Boolean (mantiqiy tur)</a></li>
+<li class="lvl2"><a href="#5-null-bo-sh-qiymat">5. null (bo'sh qiymat)</a></li>
+<li class="lvl2"><a href="#6-undefined-aniqlanmagan">6. undefined (aniqlanmagan)</a></li>
+<li class="lvl2"><a href="#7-object-obyekt">7. Object (obyekt)</a></li>
+<li class="lvl2"><a href="#8-symbol-simvol">8. Symbol (simvol)</a></li>
+<li class="lvl2"><a href="#typeof-operatori">typeof operatori</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da qiymatlar har doim ma'lum bir <strong>turga</strong> (type) tegishli bo'ladi. Masalan, matn yoki son. Jami 8 ta asosiy ma'lumot turi mavjud. Ushbu darsda ular bilan umumiy tanishamiz.</p>
-<h2>JavaScript — dinamik tildir</h2>
+<h2 id="javascript-dinamik-tildir">JavaScript — dinamik tildir</h2>
 <p>JavaScript'da bir o'zgaruvchi vaqt o'tishi bilan turli tipdagi ma'lumotlarni saqlashi mumkin. Bunday tillar <strong>dinamik tipli</strong> (dynamically typed) deb ataladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>dinamik.js</span></div><textarea spellcheck="false">let message = "Salom"; // string (matn)
 message = 123456;      // endi number (son)
 console.log(message);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>message</code> avval matn, keyin son bo'ldi — hech qanday xatosiz. Endi 8 ta turni birma-bir ko'rib chiqamiz.</p>
-<h2>1. Number (son)</h2>
+<h2 id="1-number-son">1. Number (son)</h2>
 <p><strong>number</strong> turi butun va kasr sonlarni ifodalaydi. Sonlar ustida ko'plab amallar bajarish mumkin: qo'shish (<code>+</code>), ayirish (<code>-</code>), ko'paytirish (<code>*</code>), bo'lish (<code>/</code>) va boshqalar.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>number.js</span></div><textarea spellcheck="false">let n = 123;
 console.log(n);
@@ -616,12 +635,12 @@ console.log(5 * 3);</textarea><div class="pg-actions"><button class="pg-run">▶
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>maxsus-son.js</span></div><textarea spellcheck="false">console.log(1 / 0);         // Infinity
 console.log("matn" * 2);    // NaN
 console.log(NaN + 5);       // NaN (NaN har qanday amalda NaN qoladi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>2. BigInt (katta butun son)</h2>
+<h2 id="2-bigint-katta-butun-son">2. BigInt (katta butun son)</h2>
 <p>Oddiy <code>number</code> turi juda katta sonlarni aniq saqlay olmaydi (taxminan 2 dan 53-darajagacha bo'lgan chegara bor). Bunday hollarda <strong>bigint</strong> turi ishlatiladi. BigInt qiymati son oxiriga <code>n</code> qo'yish orqali yaratiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint.js</span></div><textarea spellcheck="false">const katta = 1234567890123456789012345678901234567890n;
 console.log(katta);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">BigInt kundalik dasturlashda kamdan-kam kerak bo'ladi. U kriptografiya yoki juda aniq katta sonlar bilan ishlash kabi maxsus vazifalarda ishlatiladi.</div>
-<h2>3. String (matn)</h2>
+<h2 id="3-string-matn">3. String (matn)</h2>
 <p><strong>string</strong> — bu matn. U tirnoqlar ichiga olinadi. JavaScript'da uch xil tirnoq bor:</p>
 <ul><li>Ikki tirnoq: <code>"Salom"</code>;</li><li>Bitta tirnoq: <code>'Salom'</code>;</li><li>Teskari tirnoq (backtick): matn ichiga o'zgaruvchi qo'shishga imkon beradi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>string.js</span></div><textarea spellcheck="false">let str = "Salom";
@@ -633,24 +652,24 @@ console.log(str);
 console.log(str2);
 console.log(salom);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Ikki va bitta tirnoq orasida amalda hech qanday farq yo'q. Teskari tirnoqlar esa qo'shimcha imkoniyat beradi — ular ichida <code>${...}</code> orqali o'zgaruvchi va ifodalar joylashtiriladi. Buni keyingi boblarda ko'ramiz.</div>
-<h2>4. Boolean (mantiqiy tur)</h2>
+<h2 id="4-boolean-mantiqiy-tur">4. Boolean (mantiqiy tur)</h2>
 <p><strong>boolean</strong> turining faqat ikkita qiymati bor: <code>true</code> (rost) va <code>false</code> (yolg'on). U odatda "ha/yo'q" tipidagi qiymatlarni saqlash uchun ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>boolean.js</span></div><textarea spellcheck="false">let nameFieldChecked = true;  // ha, belgilangan
 let ageFieldChecked = false;  // yo'q, belgilanmagan
 
 console.log(nameFieldChecked);
 console.log(4 &gt; 1);  // taqqoslash natijasi ham boolean bo'ladi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>5. null (bo'sh qiymat)</h2>
+<h2 id="5-null-bo-sh-qiymat">5. null (bo'sh qiymat)</h2>
 <p><strong>null</strong> turi faqat bitta <code>null</code> qiymatiga ega. U "hech narsa", "bo'sh" yoki "noma'lum qiymat" ma'nosini bildiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>null.js</span></div><textarea spellcheck="false">let age = null;
 console.log(age); // null — yoshi hozircha noma'lum yoki yo'q</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">JavaScript'da <code>null</code> boshqa tillardagi kabi "mavjud bo'lmagan obyektga havola" emas. Bu shunchaki "bo'sh" yoki "qiymat yo'q" degan maxsus qiymat.</div>
-<h2>6. undefined (aniqlanmagan)</h2>
+<h2 id="6-undefined-aniqlanmagan">6. undefined (aniqlanmagan)</h2>
 <p><strong>undefined</strong> turi ham faqat bitta <code>undefined</code> qiymatiga ega. U "qiymat berilmagan" degan ma'noni bildiradi. Agar o'zgaruvchi e'lon qilinsa-yu, unga qiymat berilmasa, uning qiymati avtomatik <code>undefined</code> bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>undefined.js</span></div><textarea spellcheck="false">let x;
 console.log(x); // undefined — hali qiymat berilmagan</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>null</code> — dasturchi tomonidan qo'yiladigan "bo'sh" qiymat. <code>undefined</code> — esa "umuman qiymat berilmagan" degani. Odatda o'zgaruvchiga <code>undefined</code> ni qo'lda bermaymiz — bo'shligini bildirish uchun <code>null</code> ishlatamiz.</div>
-<h2>7. Object (obyekt)</h2>
+<h2 id="7-object-obyekt">7. Object (obyekt)</h2>
 <p>Yuqoridagi turlarning barchasi <strong>oddiy (primitive)</strong> deb ataladi, chunki ularning qiymatlari bitta narsani saqlaydi. <strong>object</strong> turi esa boshqacha — u ma'lumotlar to'plamini va murakkabroq tuzilmalarni saqlaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>object.js</span></div><textarea spellcheck="false">let user = {
   ism: "Ali",
@@ -660,11 +679,11 @@ console.log(x); // undefined — hali qiymat berilmagan</textarea><div class="pg
 console.log(user.ism);
 console.log(user.yosh);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Obyektlar shu qadar muhim va keng qamrovliki, ularga alohida boblar bag'ishlangan. Hozircha shuni bilib qo'ying: obyekt — bu nomlangan qiymatlar to'plami.</p>
-<h2>8. Symbol (simvol)</h2>
+<h2 id="8-symbol-simvol">8. Symbol (simvol)</h2>
 <p><strong>symbol</strong> turi obyektlar uchun noyob va yashirin identifikatorlar yaratishda ishlatiladi. Bu ilg'or mavzu bo'lib, hozircha uni faqat ro'yxatni to'liq qilish uchun eslab qo'yamiz:</p>
 <pre class="code"><code>let id = Symbol("id");</code></pre>
 <div class="note">Symbol kundalik boshlang'ich kodda kam ishlatiladi. U kutubxonalar va murakkab tuzilmalarda noyob kalitlar kerak bo'lganda qo'l keladi.</div>
-<h2>typeof operatori</h2>
+<h2 id="typeof-operatori">typeof operatori</h2>
 <p><code>typeof</code> operatori argumentning turini <strong>matn</strong> ko'rinishida qaytaradi. Bu o'zgaruvchi ichida qanday tur borligini tekshirish uchun juda foydali:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>typeof-1.js</span></div><textarea spellcheck="false">console.log(typeof 123);        // "number"
 console.log(typeof 123n);       // "bigint"
@@ -678,7 +697,7 @@ console.log(typeof Symbol("id")); // "symbol"
 console.log(typeof console.log);  // "function"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>typeof null</code> natijasi <code>"object"</code> — bu JavaScript'ning rasmiy tan olingan <strong>xatosi</strong>! Aslida <code>null</code> obyekt emas, alohida tur. Bu xato orqaga moslik uchun tuzatilmagan. Buni shunchaki eslab qoling.</div>
 <div class="note"><code>typeof</code> funksiyalar uchun <code>"function"</code> qaytaradi, garchi JavaScript'da alohida "function" turi yo'q bo'lsa ham. Funksiyalar texnik jihatdan obyektlarga tegishli, lekin <code>typeof</code> ularni alohida ajratadi — bu amalda qulay.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>JavaScript'da 8 ta ma'lumot turi bor: <code>number</code>, <code>bigint</code>, <code>string</code>, <code>boolean</code>, <code>null</code>, <code>undefined</code>, <code>object</code>, <code>symbol</code>;</li><li>Birinchi 7 tasi <strong>oddiy (primitive)</strong>, <code>object</code> esa alohida — u to'plamlarni saqlaydi;</li><li>JavaScript dinamik tipli — bir o'zgaruvchi turli tipdagi qiymatlarni saqlashi mumkin;</li><li><code>typeof</code> operatori qiymat turini matn sifatida qaytaradi;</li><li><code>typeof null</code> noto'g'ri — <code>"object"</code> qaytaradi, bu tarixiy xato.</li></ul>
 <nav class="lesson-nav">
   <a href="ozgaruvchilar.html"><span class="dir">← Oldingi</span><span class="ttl">O'zgaruvchilar</span></a>
@@ -692,6 +711,6 @@ console.log(typeof console.log);  // "function"</textarea><div class="pg-actions
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

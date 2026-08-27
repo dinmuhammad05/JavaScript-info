@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Global obyekt — Kodla</title>
   <meta name="description" content="globalThis, window/global, global funksiyalar va nega global o'zgaruvchidan qochish kerak.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,23 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Global obyekt</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#global-obyekt-nima">Global obyekt nima?</a></li>
+<li class="lvl2"><a href="#globalthis-yagona-standart-nom">globalThis — yagona standart nom</a></li>
+<li class="lvl2"><a href="#global-funksiya-va-o-zgaruvchilar">Global funksiya va o'zgaruvchilar</a></li>
+<li class="lvl2"><a href="#global-obyektdan-qanday-to-g-ri-foydalanish">Global obyektdan qanday to'g'ri foydalanish</a></li>
+<li class="lvl2"><a href="#nega-global-o-zgaruvchidan-qochish-kerak">Nega global o'zgaruvchidan qochish kerak?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Global obyekt — tilning butun dastur bo'ylab mavjud bo'lgan o'zgaruvchi va funksiyalarni saqlaydigan maxsus obyekt. U tarixiy sabablarga ko'ra turli muhitlarda turlicha nomlanadi, endi esa yagona standart nom bor: <code>globalThis</code>.</p>
-<h2>Global obyekt nima?</h2>
+<h2 id="global-obyekt-nima">Global obyekt nima?</h2>
 <p>Global obyekt tilning eng "tashqi" muhitini ifodalaydi. Unda beriladigan xususiyatlar dasturning istalgan joyidan ko'rinadi. Uning nomi muhitga bog'liq:</p>
 <ul><li>Brauzerda — <code>window</code>;</li><li>Node.js'da — <code>global</code>;</li><li>Boshqa muhitlarda — yana boshqacha bo'lishi mumkin.</li></ul>
 <p>Bu farqlar kodni bir muhitdan ikkinchisiga ko'chirishni qiyinlashtirardi. Shu sabab standart yagona nom kiritildi.</p>
-<h2>globalThis — yagona standart nom</h2>
+<h2 id="globalthis-yagona-standart-nom">globalThis — yagona standart nom</h2>
 <p><strong><code>globalThis</code></strong> — global obyektga murojaat qilishning zamonaviy, standart usuli. U <em>barcha muhitlarda</em> ishlaydi: brauzer, Node.js va boshqalarda. Endi muhitni tekshirib o'tirish shart emas:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>globalthis.js</span></div><textarea spellcheck="false">// Bu Node.js va brauzerda bir xil ishlaydi:
 console.log(typeof globalThis);   // 'object'
@@ -611,7 +625,7 @@ globalThis.myAppName = 'Mening ilovam';
 console.log(globalThis.myAppName);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Ilgari kod har bir muhit uchun alohida <code>window</code> yoki <code>global</code> ni tekshirishga majbur edi. <code>globalThis</code> bu muammoni butunlay hal qildi — yangi kodda faqat shu nomni ishlating.</div>
 <div class="tip">Node.js muhitida <code>globalThis</code> aynan <code>global</code> ga, brauzerda esa <code>window</code> ga teng. Ya'ni <code>globalThis === global</code> (Node.js'da) rost qaytaradi.</div>
-<h2>Global funksiya va o'zgaruvchilar</h2>
+<h2 id="global-funksiya-va-o-zgaruvchilar">Global funksiya va o'zgaruvchilar</h2>
 <p>Ba'zi funksiyalar til tomonidan har joyda tayyor beriladi — ular ham amalda global obyekt orqali mavjud. Masalan <code>parseInt</code>, <code>setTimeout</code>, <code>isNaN</code> va boshqalar:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>global-funcs.js</span></div><textarea spellcheck="false">console.log(parseInt('42 soat'));   // 42
 console.log(isNaN('salom'));        // true
@@ -620,7 +634,7 @@ console.log(Math.round(3.7));       // 4
 // Bular hamma joyda tayyor — global funksiyalar
 console.log(Number.isInteger(10));  // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Muhim tafsilot: brauzerda <code>var</code> orqali eng tashqi (skript) darajasida e'lon qilingan o'zgaruvchi <code>window</code> obyektiga xususiyat sifatida qo'shilib qolardi. <code>let</code>/<code>const</code> esa bunday qilmaydi. Bu ham <code>let</code>/<code>const</code> afzalligining yana bir sababi.</div>
-<h2>Global obyektdan qanday to'g'ri foydalanish</h2>
+<h2 id="global-obyektdan-qanday-to-g-ri-foydalanish">Global obyektdan qanday to'g'ri foydalanish</h2>
 <p>Odatda global obyektga qo'lda qiymat qo'shish <strong>tavsiya etilmaydi</strong>. Ammo ba'zan haqiqatan kerak bo'ladi — masalan, butun ilova uchun bitta muhim sozlama yoki o'zgaruvchi kerak bo'lganda. Bunday holda uni ochiq-oydin <code>globalThis</code> orqali qo'shish tavsiya etiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>global-config.js</span></div><textarea spellcheck="false">// Butun ilova uchun bitta sozlama:
 globalThis.appConfig = {
@@ -635,7 +649,7 @@ function showVersion() {
 
 showVersion();</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Bunday holatlar juda kam bo'lishi kerak. Ko'p hollarda ma'lumotni funksiyalarga <em>argument</em> sifatida uzatish yoki modullar orqali ulashish ancha toza yechim.</div>
-<h2>Nega global o'zgaruvchidan qochish kerak?</h2>
+<h2 id="nega-global-o-zgaruvchidan-qochish-kerak">Nega global o'zgaruvchidan qochish kerak?</h2>
 <p>Global o'zgaruvchilar qulay ko'rinadi — ular har joyda mavjud. Lekin aynan shu "har joyda mavjudlik" jiddiy muammolar tug'diradi:</p>
 <ul><li><strong>Nom to'qnashuvi</strong> — ikki turli qism bir xil global nomni ishlatib, bir-birining qiymatini bilmasdan buzib qo'yishi mumkin;</li><li><strong>Yashirin bog'liqlik</strong> — funksiya global o'zgaruvchiga bog'lansa, uni tushunish qiyinlashadi: kirish argumentlaridan uning nimaga bog'liqligi ko'rinmaydi;</li><li><strong>Test qilish qiyinlashadi</strong> — global holatga bog'liq kodni alohida sinash mushkul;</li><li><strong>Kuzatib bo'lmaydigan o'zgarishlar</strong> — dasturning istalgan joyi global qiymatni o'zgartirishi mumkin, xatoni topish qiyinlashadi.</li></ul>
 <p>To'g'ri yondashuv — ma'lumotni <strong>argument orqali uzatish</strong> va <strong>funksiya qiymatini qaytarish</strong>. Solishtiring:</p>
@@ -657,7 +671,7 @@ sum = addGood(sum, 5);
 sum = addGood(sum, 3);
 console.log(sum);  // 8, oqim aniq va tushunarli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Umumiy qoida: <strong>o'zgaruvchini imkon qadar tor ko'lamda saqlang</strong>. Faqat funksiya ichida kerak bo'lsa — lokal qiling; bir necha funksiya ulashsa — modulda; global esa deyarli hech qachon. Bu kodni ishonchli va tushunarli qiladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Global obyekt</strong> — butun dastur bo'ylab mavjud o'zgaruvchi va funksiyalarni saqlaydi;</li><li>Uning nomi muhitga bog'liq: brauzerda <code>window</code>, Node.js'da <code>global</code>;</li><li><strong><code>globalThis</code></strong> — barcha muhitlarda ishlaydigan yagona standart nom, yangi kodda shuni ishlating;</li><li><code>parseInt</code>, <code>setTimeout</code> kabi global funksiyalar hamma joyda tayyor;</li><li><strong>Global o'zgaruvchidan qoching</strong> — ma'lumotni argument va return orqali uzatish ancha xavfsiz va tushunarli.</li></ul>
 <nav class="lesson-nav">
   <a href="eski-var.html"><span class="dir">← Oldingi</span><span class="ttl">Eski "var"</span></a>
@@ -671,6 +685,6 @@ console.log(sum);  // 8, oqim aniq va tushunarli</textarea><div class="pg-action
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

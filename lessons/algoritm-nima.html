@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Algoritm nima va nega o'rganamiz — Kodla</title>
   <meta name="description" content="Algoritm tushunchasi, kundalik hayotdan misollar, yaxshi algoritm mezonlari, ma'lumotlar tuzilmasi bilan bog'liqligi va nega intervyularda so'raladi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,22 +599,35 @@
 <main class="content article">
 <div class="crumbs">Algoritm asoslari</div>
 <h1>Algoritm nima va nega o'rganamiz</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#algoritm-nima">Algoritm nima?</a></li>
+<li class="lvl2"><a href="#kundalik-hayotdan-misollar">Kundalik hayotdan misollar</a></li>
+<li class="lvl2"><a href="#algoritmning-asosiy-xossalari">Algoritmning asosiy xossalari</a></li>
+<li class="lvl2"><a href="#bir-masala-ko-p-yechim">Bir masala - ko'p yechim</a></li>
+<li class="lvl2"><a href="#to-g-ri-va-samarali-farqi">"To'g'ri" va "samarali" farqi</a></li>
+<li class="lvl2"><a href="#ma-lumotlar-tuzilmasi-nima">Ma'lumotlar tuzilmasi nima?</a></li>
+<li class="lvl2"><a href="#nega-buni-o-rganish-muhim">Nega buni o'rganish muhim?</a></li>
+<li class="lvl2"><a href="#bu-bo-limda-nimalarni-o-rganamiz">Bu bo'limda nimalarni o'rganamiz</a></li>
+  </ul>
+</details>
 <p class="lead">Har kuni, hatto sezmagan holda, biz algoritmlar bilan yashaymiz. Ertalab choy damlash, uyga eng qisqa yo'lni tanlash, telefon kontaktlaridan kerakli ismni topish - bularning hammasi ortida aniq qadamlar ketma-ketligi turadi. Dasturlashda ham xuddi shunday: kompyuterga masalani yechishni o'rgatish uchun unga aniq, tushunarli va tugaydigan ko'rsatmalar berishimiz kerak. Ana shu ko'rsatmalar to'plami <strong>algoritm</strong> deb ataladi. Bu darsda algoritm nima ekanini, uni nima yaxshi qilishini va nega har bir dasturchi buni chuqur o'rganishi kerakligini ko'rib chiqamiz.</p>
-<h2>Algoritm nima?</h2>
+<h2 id="algoritm-nima">Algoritm nima?</h2>
 <p><strong>Algoritm</strong> (algorithm) - bu biror masalani yechish yoki maqsadga erishish uchun bajariladigan aniq qadamlar ketma-ketligi. Har bir qadam tushunarli, bir ma'noli va bajarilishi mumkin bo'lishi shart. Algoritm biror kirish ma'lumotini (input) oladi, uni qayta ishlaydi va natija (output) qaytaradi.</p>
 <p>Bu so'z IX asrda yashagan buyuk matematik Muhammad al-Xorazmiy nomidan kelib chiqqan. Uning asarlari Yevropaga tarjima qilinganda, hisoblash usullari "algorizmi" deb atalgan va vaqt o'tib bu so'z "algoritm" shakliga kelgan.</p>
 <p>Muhim narsa shuki, algoritm faqat kompyuterlarga tegishli emas. Algoritm - bu fikrlash usuli. Biz avval masalani miyamizda qadamlarga ajratamiz, keyin uni kodga aylantiramiz.</p>
-<h2>Kundalik hayotdan misollar</h2>
+<h2 id="kundalik-hayotdan-misollar">Kundalik hayotdan misollar</h2>
 <p>Algoritmni tushunishning eng oson yo'li - uni oddiy hayotiy misollar orqali ko'rish. Masalan, choy damlash retseptini olaylik. Bu ham algoritm:</p>
 <ol><li>Choynakka suv quy.</li><li>Suvni qaynat.</li><li>Choynakka choy barglarini sol.</li><li>Ustiga qaynagan suv quy.</li><li>Besh daqiqa kutib, damlanishini kut.</li><li>Piyolaga quyib, ich.</li></ol>
 <p>E'tibor bering: qadamlar aniq tartibda joylashgan. Agar tartibni buzsak (masalan, suvni qaynatmasdan choy solsak), natija boshqacha bo'ladi. Algoritmda <strong>tartib muhim</strong>.</p>
 <p>Yana bir misol - noma'lum manzilga borish. Navigator sizga: "To'g'riga yur, ikkinchi chorrahadan o'ngga bur, 200 metr yur, manzil o'ng tomonda" deydi. Bu ham qadamma-qadam ko'rsatma, ya'ni algoritm.</p>
 <div class="tip">Agar biror ishni boshqa odamga tushuntirib bera olsangiz - "avval buni qil, keyin buni" - demak siz o'sha ish uchun algoritm tuza olasiz. Dasturlash aynan shu ko'nikmani kompyuter tiliga ko'chirishdir.</div>
-<h2>Algoritmning asosiy xossalari</h2>
+<h2 id="algoritmning-asosiy-xossalari">Algoritmning asosiy xossalari</h2>
 <p>Har qanday to'g'ri algoritm bir nechta muhim xossaga ega bo'lishi kerak. Bu xossalar algoritmni oddiy "tavsiya"dan ajratib turadi:</p>
 <ul><li><strong>Aniqlik (definiteness)</strong> - har bir qadam bir ma'noli va tushunarli bo'lishi kerak. "Bir ozgina tuz sol" - bu aniq emas; "5 gramm tuz sol" - bu aniq.</li><li><strong>Cheklilik (finiteness)</strong> - algoritm cheklangan qadamlardan keyin albatta tugashi kerak. Cheksiz davom etadigan narsa algoritm emas.</li><li><strong>Kirish (input)</strong> - algoritm nol yoki undan ko'p kirish ma'lumotini oladi.</li><li><strong>Chiqish (output)</strong> - algoritm kamida bitta natija qaytaradi.</li><li><strong>Bajarilishi mumkinligi (effectiveness)</strong> - har bir qadam amalda bajarib bo'ladigan bo'lishi kerak.</li></ul>
 <div class="note">Cheklilik juda muhim. Agar sikl (loop) hech qachon to'xtamasa, dastur "muzlab" qoladi. Har doim algoritmingiz qachon va qanday tugashini bilishingiz kerak.</div>
-<h2>Bir masala - ko'p yechim</h2>
+<h2 id="bir-masala-ko-p-yechim">Bir masala - ko'p yechim</h2>
 <p>Eng qiziq tomoni shuki, bitta masalani turli algoritmlar bilan yechish mumkin. Ular bir xil natija beradi, lekin har xil yo'l bilan, har xil tezlikda ishlaydi.</p>
 <p>Misol qilib, 1 dan n gacha bo'lgan sonlarning yig'indisini hisoblashni olaylik. Buni ikki xil yo'l bilan yechamiz. Birinchisi - oddiy sikl bilan har bir sonni birma-bir qo'shish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yigindi-sikl.js</span></div><textarea spellcheck="false">function yigindiSikl(n) {
@@ -649,22 +665,22 @@ console.log("Sikl:", sikl(n));       // 500500
 console.log("Formula:", formula(n)); // 500500
 // Ikkovi ham to'g'ri - lekin formula 1 qadamda!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Bu yerda muhim saboq bor: ba'zan eng yaxshi "algoritm" - umuman sikl ishlatmaslik, balki masalaning matematik naqshini payqashdir. Yaxshi dasturchi kod yozishdan oldin biroz o'ylaydi.</div>
-<h2>"To'g'ri" va "samarali" farqi</h2>
+<h2 id="to-g-ri-va-samarali-farqi">"To'g'ri" va "samarali" farqi</h2>
 <p>Ko'p yangi dasturchilar shunday o'ylaydi: "Kodim ishlayaptimi? Demak bo'ldi." Bu qisman to'g'ri, lekin kifoya emas. Kod ikki mezon bilan baholanadi:</p>
 <ul><li><strong>To'g'rilik (correctness)</strong> - kod barcha holatlarda kutilgan to'g'ri natijani beradimi?</li><li><strong>Samaradorlik (efficiency)</strong> - kod buni qanchalik tez va kam resurs bilan bajaradi?</li></ul>
 <p>Kichik ma'lumotlarda ikkala algoritm ham bir xil tez ishlayotgandek tuyuladi. Lekin ma'lumot hajmi o'sganda farq keskin ko'rinadi. Millionlab foydalanuvchisi bor ilovada sekin algoritm ilovani ishlamaydigan qilib qo'yishi mumkin.</p>
 <div class="warn">"Avval ishlaydigan qil, keyin tezlashtir" degan yaxshi maslahat bor. Lekin "tez" haqida hech o'ylamaslik - keyin katta muammoga aylanadi. Samaradorlikni boshidanoq his qilib turish kerak.</div>
-<h2>Ma'lumotlar tuzilmasi nima?</h2>
+<h2 id="ma-lumotlar-tuzilmasi-nima">Ma'lumotlar tuzilmasi nima?</h2>
 <p>Algoritmlar ma'lumotlar bilan ishlaydi. Bu ma'lumotlarni qanday saqlash va tartibga solish esa <strong>ma'lumotlar tuzilmasi</strong> (data structure) deyiladi. Massiv (array), obyekt (object), stek (stack), navbat (queue), daraxt (tree) - bularning barchasi ma'lumotlar tuzilmalari.</p>
 <p>Algoritm va ma'lumotlar tuzilmasi bir-biriga chambarchas bog'liq. To'g'ri tuzilma tanlash algoritmni bir necha barobar tezlashtirishi mumkin. Masalan, biror elementni topish uchun:</p>
 <ul><li>Oddiy massivda qidirish - har bir elementni tekshirish kerak bo'lishi mumkin (sekin).</li><li>Obyekt (yoki hash-jadval) da kalit orqali topish - deyarli bir zumda (tez).</li></ul>
 <p>Shuning uchun dasturchi nafaqat "qanday yechish"ni, balki "ma'lumotni qanday saqlash"ni ham o'ylashi kerak. Bu ikkalasi birgalikda dasturning yuragini tashkil qiladi.</p>
-<h2>Nega buni o'rganish muhim?</h2>
+<h2 id="nega-buni-o-rganish-muhim">Nega buni o'rganish muhim?</h2>
 <p>Algoritmlarni o'rganishning ikki katta sababi bor:</p>
 <p><strong>Birinchisi - samarali kod yozish.</strong> Zamonaviy ilovalar katta hajmdagi ma'lumot bilan ishlaydi. Qidiruv, saralash, filtrlash - bularning tez ishlashi foydalanuvchi tajribasini belgilaydi. Algoritmik fikrlash sizga sekin kodni tez kodga aylantirishni o'rgatadi.</p>
 <p><strong>Ikkinchisi - ishga qabul intervyulari.</strong> Deyarli barcha yaxshi texnologiya kompaniyalari texnik intervyularda algoritmik masalalar beradi. Ular sizning kodni yodlaganingizni emas, <strong>fikrlash usulingizni</strong> ko'rmoqchi. Masalani qanday qismlarga bo'lasiz, qaysi yechimni tanlaysiz, murakkabligini bahalay olasizmi - bularning barchasi shu bilim orqali sinaladi.</p>
 <div class="tip">Algoritmlar - bu "matematika olimpiadasi" emas. Bu - fikrlash mashqi. Har bir yechilgan masala miyangizni yangi naqshlarni ko'rishga o'rgatadi va vaqt o'tib bu tabiiy ko'nikmaga aylanadi.</div>
-<h2>Bu bo'limda nimalarni o'rganamiz</h2>
+<h2 id="bu-bo-limda-nimalarni-o-rganamiz">Bu bo'limda nimalarni o'rganamiz</h2>
 <p>Keyingi darslarda quyidagilarni qadamma-qadam ko'rib chiqamiz:</p>
 <ol><li><strong>Big O notatsiyasi</strong> - algoritm tezligini o'lchashning universal tili.</li><li><strong>Keng tarqalgan murakkabliklar</strong> - O(1) dan O(n!) gacha, har birini misol bilan.</li><li><strong>Rekursiya</strong> - funksiya o'zini chaqirishi va u bilan masala yechish.</li></ol>
 <p>Bu asoslarni o'zlashtirsangiz, kelgusi bo'limlardagi qidiruv, saralash va ma'lumotlar tuzilmalari mavzulari siz uchun ancha oson va tushunarli bo'ladi. Keling, yo'lni boshlaymiz.</p>
@@ -680,6 +696,6 @@ console.log("Formula:", formula(n)); // 500500
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Obyekt havolalari va nusxalash — Kodla</title>
   <meta name="description" content="Obyektlar havola (reference) orqali saqlanadi va ko'chiriladi. = obyektni nusxalamaydi. Object.assign, sayoz nusxa va structuredClone.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Obyektlar: asoslar</div>
 <h1>Obyekt havolalari va nusxalash</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#primitivlar-nusxalanadi">Primitivlar nusxalanadi</a></li>
+<li class="lvl2"><a href="#obyektlar-havola-orqali-saqlanadi">Obyektlar havola orqali saqlanadi</a></li>
+<li class="lvl2"><a href="#havolani-nusxalash">Havolani nusxalash</a></li>
+<li class="lvl2"><a href="#havola-orqali-taqqoslash">Havola orqali taqqoslash</a></li>
+<li class="lvl2"><a href="#object-assign-bilan-nusxalash">Object.assign bilan nusxalash</a></li>
+<li class="lvl2"><a href="#sayoz-nusxa-shallow-copy-muammosi">Sayoz nusxa (shallow copy) muammosi</a></li>
+<li class="lvl2"><a href="#chuqur-nusxa-structuredclone">Chuqur nusxa: structuredClone</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Obyektlar va primitivlar o'rtasidagi eng muhim farqlardan biri — ular saqlanish va ko'chirilish usulida. Primitivlar to'liq qiymat bilan, obyektlar esa <em>havola</em> (reference) bilan ishlaydi. Bu farqni tushunmaslik ko'plab "g'alati" xatolarga sabab bo'ladi.</p>
-<h2>Primitivlar nusxalanadi</h2>
+<h2 id="primitivlar-nusxalanadi">Primitivlar nusxalanadi</h2>
 <p>Primitiv turdagi o'zgaruvchi (satr, son, boolean) o'z qiymatini to'liq saqlaydi. Uni boshqa o'zgaruvchiga tenglashtirsak, <strong>qiymatning nusxasi</strong> ko'chiriladi — ikki mustaqil qiymat hosil bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>primitiv.js</span></div><textarea spellcheck="false">let message = "Salom!";
 let phrase = message; // qiymat nusxalandi
@@ -606,7 +622,7 @@ phrase = "O'zgardi";  // faqat phrase o'zgardi
 
 console.log(message); // Salom! (o'zgarmadi)
 console.log(phrase);  // O'zgardi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Obyektlar havola orqali saqlanadi</h2>
+<h2 id="obyektlar-havola-orqali-saqlanadi">Obyektlar havola orqali saqlanadi</h2>
 <p>Obyekt o'zgaruvchisi obyektning o'zini emas, balki uning xotiradagi <strong>manzilini</strong> — ya'ni "havola"ni saqlaydi. Buni quyidagicha tasavvur qiling: obyekt — bir qutida, o'zgaruvchi esa — o'sha qutiga yopishtirilgan qog'oz (manzil, kalit).</p>
 <pre class="code"><code>let user = {
   name: "Jaloliddin"
@@ -614,7 +630,7 @@ console.log(phrase);  // O'zgardi</textarea><div class="pg-actions"><button clas
 // user o'zgaruvchisi obyektning "manzilini" saqlaydi,
 // obyektning o'zini emas.</code></pre>
 <p>Xossaga murojaat qilganda (<code>user.name</code>), JavaScript avval havola bo'yicha obyektni topadi, keyin uning ichidagi xossani o'qiydi.</p>
-<h2>Havolani nusxalash</h2>
+<h2 id="havolani-nusxalash">Havolani nusxalash</h2>
 <p>Obyekt o'zgaruvchisini nusxalasak, obyekt EMAS, balki <strong>havola nusxalanadi</strong>. Natijada ikkala o'zgaruvchi ham <em>bitta va o'sha</em> obyektga ishora qiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>havola.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin" };
 
@@ -625,7 +641,7 @@ admin.name = "O'zgardi"; // admin orqali o'zgartirdik
 console.log(user.name); // O'zgardi — chunki user ham SHU obyektga ishora qiladi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu "ikkita kaliti bor bitta shkaf"ga o'xshaydi: bittasi bilan ochib narsa qo'ysak, ikkinchi kalit egasi ham o'sha narsani ko'radi. Obyekt bitta, unga ikkita havola bor.</p>
 <div class="warn">Bu — eng ko'p yangi xatoga sabab bo'ladigan nuqtalardan biri. <code>let b = a</code> obyektni nusxalamaydi; u faqat yana bitta havola yaratadi.</div>
-<h2>Havola orqali taqqoslash</h2>
+<h2 id="havola-orqali-taqqoslash">Havola orqali taqqoslash</h2>
 <p><code>==</code> va <code>===</code> operatorlari ikkita obyekt uchun <strong>bir xil ishlaydi</strong>: ular faqat ikkala havola <em>bitta va o'sha</em> obyektga ishora qilsagina <code>true</code> qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tenglik1.js</span></div><textarea spellcheck="false">let a = {};
 let b = a; // b va a bir obyektga ishora qiladi
@@ -639,7 +655,7 @@ let b = {}; // ikki mustaqil (alohida) obyekt
 console.log(a == b);  // false
 console.log(a === b); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Ular ko'rinishi "bo'sh va bir xil" bo'lsa-da, xotirada ikki alohida obyekt — shuning uchun teng emas.</div>
-<h2>Object.assign bilan nusxalash</h2>
+<h2 id="object-assign-bilan-nusxalash">Object.assign bilan nusxalash</h2>
 <p>Chinakam nusxa — mustaqil, alohida obyekt — kerak bo'lsa-chi? Buning uchun barcha xossalarni yangi obyektga ko'chirish kerak. Buni qo'lda <code>for..in</code> bilan qilsa bo'ladi, ammo tayyor usul bor: <code>Object.assign</code>.</p>
 <p>Sintaksis: <code>Object.assign(dest, ...sources)</code>. U <code>sources</code>dagi barcha xossalarni <code>dest</code>ga ko'chiradi va <code>dest</code>ni qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>assign.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin", age: 30 };
@@ -661,7 +677,7 @@ console.log(user.name);    // Jaloliddin
 console.log(user.canView); // true
 console.log(user.canEdit); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Nusxa olishning yana bir keng tarqalgan usuli — <em>spread</em> sintaksisi: <code>let clone = {...user};</code>. U ham xuddi shunday sayoz nusxa yaratadi.</div>
-<h2>Sayoz nusxa (shallow copy) muammosi</h2>
+<h2 id="sayoz-nusxa-shallow-copy-muammosi">Sayoz nusxa (shallow copy) muammosi</h2>
 <p><code>Object.assign</code> (va spread) faqat <strong>bir daraja</strong> chuqurlikda nusxalaydi. Agar xossa qiymati o'zi obyekt bo'lsa, u nusxalanmaydi — uning havolasi ko'chiriladi. Bunga <strong>sayoz nusxa</strong> (shallow copy) deyiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sayoz.js</span></div><textarea spellcheck="false">let user = {
   name: "Jaloliddin",
@@ -680,7 +696,7 @@ clone.sizes.width = 60; // clone orqali ichki obyektni o'zgartirdik
 
 console.log(user.sizes.width); // 60 — asl obyekt ham o'zgardi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Sayoz nusxada tashqi obyekt yangi, ammo ichki obyektlar hamon ulashilgan. Bittasini o'zgartirsak, ikkinchisi ham o'zgaradi.</div>
-<h2>Chuqur nusxa: structuredClone</h2>
+<h2 id="chuqur-nusxa-structuredclone">Chuqur nusxa: structuredClone</h2>
 <p>Bunday muammoni bartaraf qilish uchun <strong>chuqur nusxa</strong> (deep clone) kerak — barcha darajadagi ichki obyektlar ham nusxalanadi. Zamonaviy JavaScript'da buning uchun ichki <code>structuredClone</code> funksiyasi bor:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>structured.js</span></div><textarea spellcheck="false">let user = {
   name: "Jaloliddin",
@@ -697,7 +713,7 @@ clone.sizes.width = 60;
 console.log(user.sizes.width); // 50 — asl obyekt tegilmadi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>structuredClone</code> istalgan chuqurlikdagi obyektlarni, hatto o'z-o'ziga ishora qiluvchi (siklik) obyektlarni ham to'g'ri nusxalay oladi.</p>
 <div class="note"><code>structuredClone</code> funksiya (metod) qiymatlarini nusxalay olmaydi — bunday obyektni uzatsangiz xato beradi. Bunday murakkab hollarda tashqi kutubxonalar (masalan, lodash'ning <code>_.cloneDeep</code>) yordam beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Primitivlar <strong>qiymat</strong> bilan, obyektlar <strong>havola</strong> bilan saqlanadi;</li><li><code>let b = a</code> obyekt uchun faqat havolani nusxalaydi — obyekt bitta bo'lib qoladi;</li><li><code>==</code> va <code>===</code> obyektlar uchun faqat bir xil havolani teng deb hisoblaydi;</li><li><code>Object.assign({}, obj)</code> yoki <code>{...obj}</code> — <strong>sayoz</strong> nusxa yaratadi;</li><li>Sayoz nusxada ichki obyektlar hamon ulashilgan;</li><li><code>structuredClone(obj)</code> — <strong>chuqur</strong> nusxa yaratadi, barcha darajalarni mustaqil qiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="obyektlar.html"><span class="dir">← Oldingi</span><span class="ttl">Obyektlar</span></a>
@@ -711,6 +727,6 @@ console.log(user.sizes.width); // 50 — asl obyekt tegilmadi!</textarea><div cl
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

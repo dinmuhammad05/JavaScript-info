@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sichqoncha hodisalari — Kodla</title>
   <meta name="description" content="mousedown/up, click, dblclick, contextmenu tartibi; qaysi tugma bosilgani (button), koordinatalar clientX/Y va pageX/Y, hamda shiftKey, ctrlKey, altKey, metaKey modifikator tugmalari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,18 +599,32 @@
 <main class="content article">
 <div class="crumbs">UI hodisalari</div>
 <h1>Sichqoncha hodisalari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#sichqonchaning-asosiy-hodisalari">Sichqonchaning asosiy hodisalari</a></li>
+<li class="lvl3"><a href="#oddiy-hodisalar">Oddiy hodisalar</a></li>
+<li class="lvl2"><a href="#hodisalar-tartibi">Hodisalar tartibi</a></li>
+<li class="lvl2"><a href="#qaysi-tugma-bosildi-button">Qaysi tugma bosildi: button</a></li>
+<li class="lvl3"><a href="#buttons-xossasi">buttons xossasi</a></li>
+<li class="lvl2"><a href="#koordinatalar-clientx-y-pagex-y">Koordinatalar: clientX/Y, pageX/Y</a></li>
+<li class="lvl2"><a href="#matn-belgilanishini-oldini-olish">Matn belgilanishini oldini olish</a></li>
+<li class="lvl2"><a href="#modifikator-tugmalar-shift-alt-ctrl-meta">Modifikator tugmalar: shift, alt, ctrl, meta</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Sichqoncha hodisalari nafaqat haqiqiy sichqoncha (mouse) uchun, balki sensorli ekranlar va planshetlar uchun ham ishlaydi — u yerda ular moslashtirilgan tarzda emulyatsiya qilinadi. Ushbu darsda sichqonchaning asosiy hodisalarini, ular qaysi tartibda yuzaga kelishini va har birida qanday ma'lumot borligini chuqur o'rganamiz.</p>
 <div class="warn">Diqqat: bu bo'limdagi UI/DOM hodisalari kurs sahifasidagi interaktiv maydonchada (playground) ishlamaydi. Sabab: bu yerda haqiqiy DOM va brauzer oynasi yo'q. Shuning uchun quyidagi barcha misollar <strong>statik</strong> — ularni o'zingizning HTML faylingizda sinab ko'rishingiz kerak.</div>
-<h2>Sichqonchaning asosiy hodisalari</h2>
+<h2 id="sichqonchaning-asosiy-hodisalari">Sichqonchaning asosiy hodisalari</h2>
 <p>Sichqoncha bilan bog'liq eng ko'p ishlatiladigan hodisalarni ikki guruhga bo'lish mumkin.</p>
-<h3>Oddiy hodisalar</h3>
+<h3 id="oddiy-hodisalar">Oddiy hodisalar</h3>
 <ul><li><code>mousedown</code> / <code>mouseup</code> — element ustida sichqoncha tugmasi bosildi / qo'yib yuborildi.</li><li><code>mouseover</code> / <code>mouseout</code> — sichqoncha kursori element ustiga keldi / undan chiqib ketdi.</li><li><code>mousemove</code> — element ustida sichqonchaning har bir harakati bu hodisani chaqiradi.</li><li><code>click</code> — bir xil element ustida <code>mousedown</code>, so'ng <code>mouseup</code> chap tugma bilan sodir bo'lgach ishga tushadi.</li><li><code>dblclick</code> — bir element ustida qisqa vaqt ichida ikki marta bosilganda ishga tushadi.</li><li><code>contextmenu</code> — o'ng tugma bosilganda ishga tushadi. Boshqa usullar bilan ham (masalan, klaviaturaning maxsus tugmasi) menyu chaqirilishi mumkin, shuning uchun bu aynan sichqoncha hodisasi emas.</li></ul>
 <p>Bu hodisalar orasida ikkitasi — <code>click</code> va <code>dblclick</code> — <strong>murakkab (composite)</strong> hodisalar, ya'ni ular boshqa oddiy hodisalar ketma-ketligidan tashkil topadi.</p>
-<h2>Hodisalar tartibi</h2>
+<h2 id="hodisalar-tartibi">Hodisalar tartibi</h2>
 <p>Bir amal bir nechta hodisani yuzaga keltirishi mumkin. Masalan, chap tugmani bosish avval <code>mousedown</code>ni (tugma pastga tushganda), so'ng <code>mouseup</code> va <code>click</code>ni (tugma yuqoriga qaytganda) chaqiradi.</p>
 <p>Bitta amaldan bir nechta hodisa kelib chiqsa, ularning tartibi qat'iy belgilangan. Ya'ni ishlov beruvchilar (handler) quyidagi tartibda chaqiriladi: <code>mousedown</code> → <code>mouseup</code> → <code>click</code>.</p>
 <div class="note">Har bir hodisa alohida ishlov beruvchida qayta ishlanadi, lekin ularning ketma-ketligi barqaror. Shu sabab, agar tugmani bosish jarayonini kuzatmoqchi bo'lsangiz, <code>mousedown</code> va <code>mouseup</code>ni ishlating; "bosildi" degan yakuniy amal uchun esa <code>click</code>ni afzal ko'ring.</div>
-<h2>Qaysi tugma bosildi: button</h2>
+<h2 id="qaysi-tugma-bosildi-button">Qaysi tugma bosildi: button</h2>
 <p>Sichqoncha bilan bog'liq hodisalarda qaysi tugma bosilganini bilish uchun <code>event.button</code> xossasi ishlatiladi. Odatda bu bizga <code>click</code> va <code>contextmenu</code> uchun kerak bo'lmaydi — chunki chap tugma <code>click</code>ni, o'ng tugma esa <code>contextmenu</code>ni chaqiradi. Lekin <code>mousedown</code> va <code>mouseup</code> ishlov beruvchilarida bu zarur bo'lishi mumkin.</p>
 <p><code>event.button</code> ning mumkin bo'lgan qiymatlari:</p>
 <ul><li><code>0</code> — chap tugma (asosiy tugma).</li><li><code>1</code> — o'rta tugma (g'ildirak).</li><li><code>2</code> — o'ng tugma (ikkilamchi tugma).</li><li><code>3</code> — X1 tugmasi (odatda "orqaga" tugmasi).</li><li><code>4</code> — X2 tugmasi (odatda "oldinga" tugmasi).</li></ul>
@@ -621,9 +638,9 @@
   }
 };</code></pre>
 <div class="warn">Eski qo'llanmalarda <code>event.which</code> xossasini uchratishingiz mumkin: <code>1</code> — chap, <code>2</code> — o'rta, <code>3</code> — o'ng. <code>event.which</code> eskirgan (deprecated) hisoblanadi va endi ishlatilmasligi kerak. Uning o'rniga <code>event.button</code>dan foydalaning.</div>
-<h3>buttons xossasi</h3>
+<h3 id="buttons-xossasi">buttons xossasi</h3>
 <p>Bundan tashqari <code>event.buttons</code> xossasi ham bor — u ayni damda <strong>bosib turilgan barcha tugmalarni</strong> bit-maska (bitmask) sifatida saqlaydi. Chap tugma uchun 1, o'ng uchun 2, o'rta uchun 4. Bir vaqtning o'zida bir nechta tugma bosilsa, ularning yig'indisi qaytadi. Bu kamdan-kam ishlatiladi.</p>
-<h2>Koordinatalar: clientX/Y, pageX/Y</h2>
+<h2 id="koordinatalar-clientx-y-pagex-y">Koordinatalar: clientX/Y, pageX/Y</h2>
 <p>Barcha sichqoncha hodisalari ikki xil koordinata to'plamini beradi:</p>
 <ul><li>Oynaga nisbatan (window-relative): <code>clientX</code> va <code>clientY</code>. Bular kursorning brauzer ko'rinadigan sohasi (viewport) yuqori chap burchagiga nisbatan koordinatalari. Sahifa skroll qilinsa ham ular o'zgarmaydi.</li><li>Hujjatga nisbatan (document-relative): <code>pageX</code> va <code>pageY</code>. Bular butun hujjatning yuqori chap burchagiga nisbatan koordinatalar. Sahifa skroll qilinganda ular skroll miqdoriga qo'shiladi.</li></ul>
 <p>Masalan, agar oyna 500x500 o'lchamda bo'lib, kursor chap yuqori burchakda tursa, <code>clientX</code> va <code>clientY</code> ikkalasi ham 0 bo'ladi. Agar kursor markazda bo'lsa, ular 250 ni ko'rsatadi — sahifa qancha skroll qilingan bo'lishidan qat'i nazar.</p>
@@ -632,7 +649,7 @@
   console.log('Hujjatga nisbatan: ' + event.pageX + ', ' + event.pageY);
 };</code></pre>
 <div class="tip">Odatda "suzib yuruvchi" (fixed) elementni kursor yoniga qo'ymoqchi bo'lsangiz — masalan, maslahat oynasini (tooltip) — <code>clientX/Y</code> va <code>position: fixed</code> ishlating. Agar element sahifa bilan birga skroll qilinishi kerak bo'lsa — <code>pageX/Y</code> va <code>position: absolute</code>.</div>
-<h2>Matn belgilanishini oldini olish</h2>
+<h2 id="matn-belgilanishini-oldini-olish">Matn belgilanishini oldini olish</h2>
 <p>Sichqonchani ikki marta bosish ko'pincha matnni belgilaydi, bu esa interfeysga xalaqit berishi mumkin. Masalan, tugmada dblclick bo'lsa, tugma matni belgilanib qolishi mumkin. Buni oldini olish uchun brauzerning standart harakatini bekor qilamiz.</p>
 <p>Muammo shundaki, matn belgilanishi <code>mousedown</code> paytida boshlanadi. Shuning uchun standart harakatni aynan <code>mousedown</code>da bekor qilish kerak:</p>
 <pre class="code"><code>&lt;b ondblclick="alert('dblclick')" onmousedown="return false"&gt;
@@ -640,7 +657,7 @@
 &lt;/b&gt;</code></pre>
 <p>Endi qalin (bold) matn ikki marta bosilganda belgilanmaydi, o'ng tugmani bosish esa CSS orqali ham nazorat qilinishi mumkin (<code>user-select: none</code>). Lekin ba'zan foydalanuvchi baribir matnni nusxalab olishi kerak bo'ladi, shuning uchun bu texnikadan ehtiyotkorlik bilan foydalaning.</p>
 <div class="warn">Standart harakatni bekor qilish (<code>return false</code> yoki <code>event.preventDefault()</code>) foydalanuvchi tajribasiga ta'sir qilishi mumkin. Faqat haqiqatan zarur bo'lganda ishlating.</div>
-<h2>Modifikator tugmalar: shift, alt, ctrl, meta</h2>
+<h2 id="modifikator-tugmalar-shift-alt-ctrl-meta">Modifikator tugmalar: shift, alt, ctrl, meta</h2>
 <p>Barcha sichqoncha hodisalari qaysi "modifikator" (o'zgartiruvchi) tugmalari ushlab turilganini aks ettiruvchi mantiqiy (boolean) xossalarni o'z ichiga oladi:</p>
 <ul><li><code>event.shiftKey</code> — <code>Shift</code> tugmasi bosib turilganmi.</li><li><code>event.altKey</code> — <code>Alt</code> tugmasi (yoki Mac'da <code>Opt</code>).</li><li><code>event.ctrlKey</code> — <code>Ctrl</code> tugmasi.</li><li><code>event.metaKey</code> — <code>Cmd</code> tugmasi (Mac'da) yoki <code>Win</code> tugmasi (Windows'da).</li></ul>
 <p>Masalan, quyidagi tugma faqat <code>Alt</code>+<code>Shift</code>+bosish bilan ishlaydi:</p>
@@ -654,7 +671,7 @@
   // Windows/Linux'da Ctrl, Mac'da Cmd
 }</code></pre>
 <div class="note">Modifikator tugmalarga tayanadigan qulayliklar (shortcut) uchun har doim muqobil yo'l ham qoldiring. Ba'zi foydalanuvchilar sensorli qurilmadan foydalanadi yoki jismoniy imkoniyatlari cheklangan bo'lishi mumkin — ular modifikator+bosishni bajara olmasligi ehtimol.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Sichqoncha hodisalari quyidagi xossalarga ega:</p>
 <ul><li>Tugma: <code>event.button</code> (0 — chap, 1 — o'rta, 2 — o'ng).</li><li>Modifikator tugmalar: <code>shiftKey</code>, <code>altKey</code>, <code>ctrlKey</code>, <code>metaKey</code>.</li><li>Koordinatalar: oynaga nisbatan <code>clientX/clientY</code>, hujjatga nisbatan <code>pageX/pageY</code>.</li></ul>
 <p>Bir amaldan bir nechta hodisa kelib chiqsa, ular qat'iy tartibda yuzaga keladi: <code>mousedown</code> → <code>mouseup</code> → <code>click</code>. Matn belgilanishini oldini olish uchun <code>mousedown</code>da standart harakatni bekor qiling.</p>
@@ -670,6 +687,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

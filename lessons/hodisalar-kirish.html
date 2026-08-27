@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brauzer hodisalariga kirish — Kodla</title>
   <meta name="description" content="Hodisa nima, uni tinglashning uch usuli: HTML atribut (onclick), DOM xossa (elem.onclick), addEventListener/removeEventListener; event obyekti, this va handleEvent bilan obyekt-ishlovchi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Hodisalarga kirish</div>
 <h1>Brauzer hodisalariga kirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#hodisa-nima">Hodisa nima?</a></li>
+<li class="lvl2"><a href="#ishlovchi-handler-nima">Ishlovchi (handler) nima?</a></li>
+<li class="lvl2"><a href="#1-usul-html-atributi-onclick">1-usul: HTML atributi (onclick)</a></li>
+<li class="lvl2"><a href="#2-usul-dom-xossasi-elem-onclick">2-usul: DOM xossasi (elem.onclick)</a></li>
+<li class="lvl3"><a href="#onclick-faqat-bitta-bo-la-oladi">onclick faqat bitta bo'la oladi</a></li>
+<li class="lvl2"><a href="#3-usul-addeventlistener">3-usul: addEventListener</a></li>
+<li class="lvl3"><a href="#bir-nechta-ishlovchi">Bir nechta ishlovchi</a></li>
+<li class="lvl2"><a href="#hodisa-obyekti-event-object">Hodisa obyekti (event object)</a></li>
+<li class="lvl2"><a href="#this-ishlovchi-ichida">this ishlovchi ichida</a></li>
+<li class="lvl2"><a href="#obyekt-ishlovchi-va-handleevent">Obyekt-ishlovchi va handleEvent</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Hodisa</strong> (event) — bu biror voqea sodir bo'lgani haqidagi "signal". Barcha DOM tugunlari bunday signallarni yuboradi (garchi hodisalar faqat DOM bilan cheklanmasa ham). Ushbu darsda hodisalarning umumiy tamoyillari va ularga qanday ishlov berishni chuqur o'rganamiz.</p>
-<h2>Hodisa nima?</h2>
+<h2 id="hodisa-nima">Hodisa nima?</h2>
 <p>Foydalanuvchi sahifa bilan o'zaro aloqada bo'lganda yoki brauzer ichida biror voqea yuz berganda hodisa <em>ishga tushadi</em> (fire/trigger). Eng ko'p uchraydigan DOM hodisalarining ba'zilari:</p>
 <p><strong>Sichqoncha hodisalari:</strong></p>
 <ul><li><code>click</code> — element ustida sichqoncha bosilganda (yoki sensorli ekranda tegilganda);</li><li><code>contextmenu</code> — element ustida o'ng tugma bosilganda;</li><li><code>mouseover</code> / <code>mouseout</code> — sichqoncha element ustiga kelganda / ketganda;</li><li><code>mousedown</code> / <code>mouseup</code> — sichqoncha tugmasi bosilganda / qo'yib yuborilganda;</li><li><code>mousemove</code> — sichqoncha harakatlanganda.</li></ul>
@@ -610,9 +629,9 @@
 <p><strong>CSS hodisalari:</strong></p>
 <ul><li><code>transitionend</code> — CSS-animatsiya tugaganda.</li></ul>
 <div class="note">Bu ro'yxat to'liq emas — hodisalar juda ko'p. Hozircha eng muhimi shuni tushunish: har qanday voqeaga <strong>ishlovchi</strong> (handler) — ya'ni hodisa sodir bo'lganda ishga tushadigan funksiya biriktirish mumkin.</div>
-<h2>Ishlovchi (handler) nima?</h2>
+<h2 id="ishlovchi-handler-nima">Ishlovchi (handler) nima?</h2>
 <p>Hodisalarga ishlov berish uchun <strong>ishlovchi</strong> — hodisa sodir bo'lganda ishlaydigan funksiya biriktiramiz. Ishlovchilar foydalanuvchi harakatiga JavaScript kodi bilan javob berishning asosiy usulidir. Ishlovchini biriktirishning bir necha yo'li bor. Ularni oddiydan murakkabga qarab ko'rib chiqamiz.</p>
-<h2>1-usul: HTML atributi (onclick)</h2>
+<h2 id="1-usul-html-atributi-onclick">1-usul: HTML atributi (onclick)</h2>
 <p>Ishlovchini to'g'ridan-to'g'ri HTML ichida <code>on&lt;hodisa&gt;</code> ko'rinishidagi atribut bilan berish mumkin. Masalan, <code>click</code> hodisasi uchun <code>onclick</code> atributini yozamiz:</p>
 <pre class="code"><code>&lt;input value="Bosing!" onclick="alert('Salom!')" type="button"&gt;</code></pre>
 <p>Sichqoncha bosilganda <code>onclick</code> ichidagi kod ishga tushadi. Atribut ichiga to'g'ridan-to'g'ri kod yozilganiga e'tibor bering — bu yerda <code>alert('Salom!')</code> chaqiriladi.</p>
@@ -629,7 +648,7 @@
 &lt;input type="button" onclick="countRabbits()" value="Quyonchalarni sana!"&gt;</code></pre>
 <div class="warn">HTML atributlari harf katta-kichikligiga sezgir emas, shuning uchun <code>ONCLICK</code> ham, <code>onClick</code> ham, <code>onclick</code> ham ishlaydi. Lekin odatda atributlar kichik harflar bilan yoziladi: <code>onclick</code>.</div>
 <div class="note">HTML atributi orqali ishlov berish qulay ko'rinsa-da, kamdan-kam ishlatiladi. Sababi: HTML va JavaScript aralashib ketadi, kod uzun bo'lsa o'qib bo'lmaydigan holga keladi. Odatda ishlovchilar JavaScript ichida biriktiriladi.</div>
-<h2>2-usul: DOM xossasi (elem.onclick)</h2>
+<h2 id="2-usul-dom-xossasi-elem-onclick">2-usul: DOM xossasi (elem.onclick)</h2>
 <p>Ishlovchini DOM xossasi <code>on&lt;hodisa&gt;</code> orqali ham biriktirish mumkin. Masalan, <code>elem.onclick</code>ga funksiya tayinlaymiz:</p>
 <pre class="code"><code>&lt;input id="elem" type="button" value="Bosing!"&gt;
 
@@ -640,7 +659,7 @@
 &lt;/script&gt;</code></pre>
 <p>Endi element bosilsa, funksiya ishga tushadi. Diqqat: ishlovchi <code>elem.onclick = ...</code> ko'rinishida <strong>tayinlanadi</strong>, chaqirilmaydi. Ya'ni funksiyaning o'zini beramiz (nomidan keyin qavs qo'ymaymiz), uni brauzerning o'zi kerakli paytda chaqiradi.</p>
 <p>Agar ishlovchi HTML atributi orqali berilsa, brauzer atribut mazmunidan avtomatik funksiya yaratib, uni <code>elem.onclick</code>ga tayinlaydi. Ya'ni bu ikki usul aslida bir xil natijaga olib keladi.</p>
-<h3>onclick faqat bitta bo'la oladi</h3>
+<h3 id="onclick-faqat-bitta-bo-la-oladi">onclick faqat bitta bo'la oladi</h3>
 <p>DOM xossasi orqali biriktirilganda <strong>faqat bitta</strong> ishlovchi bo'lishi mumkin. Yangi ishlovchi tayinlansa, u eskisini o'chirib tashlaydi (ustidan yozadi):</p>
 <pre class="code"><code>elem.onclick = function() { alert(1); };
 // ...
@@ -648,7 +667,7 @@ elem.onclick = function() { alert(2); }; // eski ishlovchi almashtiriladi
 // endi faqat 2 ko'rsatiladi</code></pre>
 <p>Ishlovchini olib tashlash uchun <code>elem.onclick = null</code> qilamiz.</p>
 <div class="tip">Ishlovchini tashqarida e'lon qilingan nomli funksiyaga ham tayinlash mumkin: <code>elem.onclick = sayThanks;</code>. Bu yerda ham funksiya nomidan keyin qavs qo'yilmaydi — aks holda (<code>sayThanks()</code>) funksiyaning natijasi tayinlanadi, funksiyaning o'zi emas.</div>
-<h2>3-usul: addEventListener</h2>
+<h2 id="3-usul-addeventlistener">3-usul: addEventListener</h2>
 <p>HTML atributi va DOM xossasining asosiy kamchiligi — bitta hodisaga <strong>bir nechta</strong> ishlovchi biriktirib bo'lmasligi. Masalan, bir kod tugma bosilganda reklamani yoritmoqchi, boshqasi esa xabar chiqarmoqchi bo'lsa, ikkovi ham kerak. Lekin yangi <code>onclick</code> eskisini o'chiradi.</p>
 <p>Shu muammoni hal qilish uchun maxsus <code>addEventListener</code> va <code>removeEventListener</code> metodlari mavjud. Ular DOM xossasining cheklovlaridan xoli va zamonaviy amaliyotda <strong>afzal</strong> ko'riladi.</p>
 <p>Sintaksis:</p>
@@ -673,7 +692,7 @@ elem.removeEventListener('click', () =&gt; alert('Rahmat!')); // ISHLAMAYDI
 elem.addEventListener('click', handler);
 // ...
 elem.removeEventListener('click', handler); // endi ishlaydi</code></pre>
-<h3>Bir nechta ishlovchi</h3>
+<h3 id="bir-nechta-ishlovchi">Bir nechta ishlovchi</h3>
 <p><code>addEventListener</code>ning asosiy kuchi — bir hodisaga ko'p ishlovchi biriktirish imkoni:</p>
 <pre class="code"><code>&lt;input id="elem" type="button" value="Bosing!"&gt;
 
@@ -692,7 +711,7 @@ elem.removeEventListener('click', handler); // endi ishlaydi</code></pre>
 &lt;/script&gt;</code></pre>
 <p>Yuqoridagi misolda bosish natijasida uchala ishlovchi ham ishga tushadi: <code>onclick</code> orqali biriktirilgani va <code>addEventListener</code> orqali biriktirilgan ikkitasi. Ya'ni <code>onclick</code> va <code>addEventListener</code> bir-biriga xalaqit bermaydi.</p>
 <div class="note">Ba'zi hodisalarni <strong>faqat</strong> <code>addEventListener</code> orqali biriktirish mumkin, DOM xossasi orqali emas. Masalan, <code>DOMContentLoaded</code> hodisasi (hujjat yuklanib, DOM tayyor bo'lganda ishga tushadi). Uning <code>document.onDOMContentLoaded</code> degan xossasi yo'q — faqat <code>document.addEventListener('DOMContentLoaded', ...)</code> ishlaydi.</div>
-<h2>Hodisa obyekti (event object)</h2>
+<h2 id="hodisa-obyekti-event-object">Hodisa obyekti (event object)</h2>
 <p>Hodisani to'g'ri qayta ishlash uchun ko'pincha nima sodir bo'lgani haqida ko'proq ma'lumot kerak: qaysi tugma bosildi, sichqoncha koordinatalari qanaqa va hokazo. Hodisa sodir bo'lganda brauzer <strong>hodisa obyektini</strong> (event object) yaratib, uni ishlovchiga birinchi argument sifatida uzatadi.</p>
 <pre class="code"><code>&lt;input type="button" value="Meni bosing" id="elem"&gt;
 
@@ -708,12 +727,12 @@ elem.removeEventListener('click', handler); // endi ishlaydi</code></pre>
 <ul><li><code>event.type</code> — hodisa turi, bu yerda <code>'click'</code>;</li><li><code>event.currentTarget</code> — hodisaga ishlov berayotgan element. Bu odatda <code>this</code> bilan bir xil, lekin ishlovchi strelka funksiyasi (arrow) bo'lsa yoki <code>bind</code> qilingan bo'lsa foydali;</li><li><code>event.clientX</code> / <code>event.clientY</code> — sichqoncha hodisalari uchun kursorning oynadagi (window) koordinatalari.</li></ul>
 <div class="tip">Hodisa obyektining boshqa ko'plab xossalari ham bor va ular hodisa turiga bog'liq. Masalan, klaviatura hodisalarida bosilgan tugma haqida ma'lumot, sichqoncha hodisalarida koordinatalar bo'ladi. Ularni keyinroq maxsus darslarda o'rganamiz. Hozircha muhimi: <strong>ishlovchi birinchi argument sifatida hodisa obyektini oladi.</strong></div>
 <div class="note">HTML atribut orqali berilgan ishlovchida ham hodisa obyekti <code>event</code> nomi bilan mavjud: <code>&lt;input onclick="alert(event.type)"&gt;</code>. Brauzer atributdan funksiya yaratganda, uning birinchi argumentini <code>event</code> deb nomlaydi.</div>
-<h2>this ishlovchi ichida</h2>
+<h2 id="this-ishlovchi-ichida">this ishlovchi ichida</h2>
 <p>Ishlovchi ichida <code>this</code> — bu ishlovchi biriktirilgan elementga havola qiladi. Quyidagi misolda tugma bosilganda o'zining <code>value</code>si (matni) ko'rsatiladi:</p>
 <pre class="code"><code>&lt;button onclick="alert(this.innerHTML)"&gt;Meni bosing&lt;/button&gt;</code></pre>
 <p>Bu yerda <code>this.innerHTML</code> — tugmaning ichidagi matn, ya'ni <code>'Meni bosing'</code>. Xuddi shu narsa DOM xossasi va <code>addEventListener</code> orqali biriktirilgan oddiy funksiyalarda ham ishlaydi.</p>
 <div class="warn"><strong>Strelka funksiyalarida</strong> (arrow functions) o'z <code>this</code>si yo'q — u tashqi ko'lamdan olinadi. Shuning uchun ishlovchida <code>this</code> orqali elementga murojaat qilmoqchi bo'lsangiz, strelka funksiya emas, oddiy funksiya ishlating. Strelka ishlatilsa, <code>this</code> element emas, tashqi (masalan, global) qiymat bo'ladi. Bunday holda <code>event.currentTarget</code>dan foydalaning.</div>
-<h2>Obyekt-ishlovchi va handleEvent</h2>
+<h2 id="obyekt-ishlovchi-va-handleevent">Obyekt-ishlovchi va handleEvent</h2>
 <p><code>addEventListener</code> ishlovchi sifatida nafaqat funksiya, balki <strong>obyekt</strong> ham qabul qila oladi. Hodisa sodir bo'lganda, obyektning <code>handleEvent</code> metodi chaqiriladi:</p>
 <pre class="code"><code>&lt;button id="elem"&gt;Meni bosing&lt;/button&gt;
 
@@ -750,7 +769,7 @@ elem.removeEventListener('click', handler); // endi ishlaydi</code></pre>
 &lt;/script&gt;</code></pre>
 <p>Bu yerda bitta <code>menu</code> obyekti ikki xil hodisaga ishlov beradi. <code>handleEvent</code> ichida <code>event.type</code> orqali qaysi hodisa kelganini ajratamiz.</p>
 <div class="note"><code>handleEvent</code> metodi ishlovni to'liq o'zi bajarishi shart emas — u faqat boshqa metodlarni chaqirishi ham mumkin. Bu hodisalarga obyektga yo'naltirilgan (OOP) usulda ishlov berish imkonini beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Ishlovchi biriktirishning uch usuli:</p>
 <ul><li>HTML atributi: <code>onclick="..."</code> — kamdan-kam ishlatiladi (HTML va JS aralashib ketadi);</li><li>DOM xossasi: <code>elem.onclick = function</code> — sodda, lekin faqat bitta ishlovchi bo'la oladi;</li><li><code>elem.addEventListener('click', handler, options)</code> — eng zamonaviy va moslashuvchan usul; bir nechta ishlovchi biriktirsa bo'ladi; o'chirish uchun <code>removeEventListener</code> aynan o'sha funksiyani talab qiladi.</li></ul>
 <ul><li>Ishlovchi birinchi argument sifatida <strong>hodisa obyektini</strong> (<code>event</code>) oladi. Undan hodisa turi (<code>event.type</code>), element (<code>event.currentTarget</code>) va boshqa ma'lumotlar olinadi;</li><li>Oddiy funksiya ishlovchisida <code>this</code> — hodisa biriktirilgan elementga havola qiladi (strelka funksiyada emas);</li><li>Ishlovchi funksiya o'rniga <code>handleEvent</code> metodli <strong>obyekt</strong> ham berish mumkin.</li></ul>
@@ -766,6 +785,6 @@ elem.removeEventListener('click', handler); // endi ishlaydi</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

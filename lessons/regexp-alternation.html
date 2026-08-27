@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alternatsiya (yoki) | — Kodla</title>
   <meta name="description" content="Vertikal chiziq | bilan bir necha variantdan birini tanlash; qavs bilan chegaralash; sana va vaqt misollari; tez-tez uchraydigan tuzoqlar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Alternatsiya (yoki) |</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#oddiy-alternatsiya">Oddiy alternatsiya</a></li>
+<li class="lvl2"><a href="#qavs-bilan-chegaralash">Qavs bilan chegaralash</a></li>
+<li class="lvl2"><a href="#tutmaydigan-guruh-bilan">Tutmaydigan guruh bilan</a></li>
+<li class="lvl2"><a href="#amaliy-misol-vaqt-soat-daqiqa">Amaliy misol: vaqt (soat:daqiqa)</a></li>
+<li class="lvl2"><a href="#amaliy-misol-sanani-tekshirish">Amaliy misol: sanani tekshirish</a></li>
+<li class="lvl2"><a href="#alternatsiya-tuzoqlari">Alternatsiya tuzoqlari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Alternatsiya</strong> (alternation) — muntazam ifodada "buni <em>yoki</em> uni" degan mantiqni ifodalash usuli. U vertikal chiziq <code>|</code> belgisi bilan yoziladi. Masalan, <code>gul|lola|atirgul</code> — uch guldan istalgan birini tutadi.</p>
-<h2>Oddiy alternatsiya</h2>
+<h2 id="oddiy-alternatsiya">Oddiy alternatsiya</h2>
 <p><code>|</code> chapdagi va o'ngdagi variantlardan <strong>birortasini</strong> tanlaydi. Dvigatel chapdan o'ngga tekshiradi va birinchi mos kelganini oladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>alt-oddiy.js</span></div><textarea spellcheck="false">let str = "Menga lola va atirgul yoqadi";
 let regexp = /lola|atirgul|chinnigul/g;
@@ -609,7 +624,7 @@ console.log("a b c".match(/[ab]/g));  // [ 'a', 'b' ]
 
 // gul|olma -&gt; 'gul' yoki 'olma' (butun so'z)
 console.log("gul olma".match(/gul|olma/g));  // [ 'gul', 'olma' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qavs bilan chegaralash</h2>
+<h2 id="qavs-bilan-chegaralash">Qavs bilan chegaralash</h2>
 <p>Bu — alternatsiyaning eng muhim nozikligi. <code>|</code> ning "ta'sir doirasi" juda keng — u o'zidan chapdagi va o'ngdagi <strong>hamma narsani</strong> qamrab oladi. Variantni cheklash uchun uni qavsga olamiz.</p>
 <p>Masalan, "Toshkent shahri" yoki "Samarqand shahri" ni tutmoqchimiz. Qavssiz xato bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>alt-xato.js</span></div><textarea spellcheck="false">let str = "Samarqand shahri";
@@ -624,14 +639,14 @@ console.log("Toshkent shahri".match(xato)[0]);  // Toshkent (shahri tushib qoldi
 console.log("Toshkent shahri".match(regexp)[0]);   // Toshkent shahri
 console.log("Samarqand shahri".match(regexp)[0]);  // Samarqand shahri</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Eng ko'p yo'l qo'yiladigan xato — <code>|</code> ni qavssiz ishlatish. Yodda tuting: <code>abc|def</code> = <code>abc</code> yoki <code>def</code>, lekin <code>a(bc|de)f</code> = <code>abcf</code> yoki <code>adef</code>.</div>
-<h2>Tutmaydigan guruh bilan</h2>
+<h2 id="tutmaydigan-guruh-bilan">Tutmaydigan guruh bilan</h2>
 <p>Agar alternatsiya uchun qavs kerak-u, lekin uning mazmunini saqlash shart bo'lmasa, tutmaydigan guruh <code>(?:...)</code> ni ishlatgan ma'qul:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>alt-tutmaydigan.js</span></div><textarea spellcheck="false">let str = "olma, banan va uzum";
 let regexp = /(?:olma|uzum)/g;
 
 console.log(str.match(regexp));  // [ 'olma', 'uzum' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Tutmaydigan guruh <code>(?:...)</code> keraksiz tutib olishlarni oldini oladi. Bu, ayniqsa, keyin <code>match</code> guruhlarini raqam bo'yicha o'qiganda chalkashlikni kamaytiradi.</div>
-<h2>Amaliy misol: vaqt (soat:daqiqa)</h2>
+<h2 id="amaliy-misol-vaqt-soat-daqiqa">Amaliy misol: vaqt (soat:daqiqa)</h2>
 <p>Vaqtni <code>hh:mm</code> formatida tutamiz. Soat 00 dan 23 gacha, daqiqa 00 dan 59 gacha. Alternatsiya bilan soatning ikki holatini ifodalaymiz:</p>
 <ul><li><code>[01]\d</code> — 00 dan 19 gacha (birinchi raqam 0 yoki 1, ikkinchisi istalgan);</li><li><code>2[0-3]</code> — 20 dan 23 gacha.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>alt-vaqt.js</span></div><textarea spellcheck="false">// Soat: (00..19) yoki (20..23), keyin :, keyin daqiqa (00..59)
@@ -640,7 +655,7 @@ let regexp = /([01]\d|2[0-3]):[0-5]\d/g;
 let str = "Uchrashuv 09:30 da, tushlik 13:45 da, kechki 23:59 da.";
 console.log(str.match(regexp));  // [ '09:30', '13:45', '23:59' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering, daqiqa qismi oddiy: <code>[0-5]\d</code> — birinchi raqam 0..5, ikkinchisi istalgan, ya'ni 00..59.</p>
-<h2>Amaliy misol: sanani tekshirish</h2>
+<h2 id="amaliy-misol-sanani-tekshirish">Amaliy misol: sanani tekshirish</h2>
 <p><code>kun.oy.yil</code> ko'rinishidagi sanani soddaroq tekshiramiz. Bu yerda alternatsiya kun va oy oralig'ini ifodalashda yordam beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>alt-sana.js</span></div><textarea spellcheck="false">// kun: 01..31, oy: 01..12, yil: 4 raqam
 let regexp = /(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}/g;
@@ -649,14 +664,14 @@ let str = "01.07.2026 va 31.12.1999 va 40.13.2000";
 console.log(str.match(regexp));  // [ '01.07.2026', '31.12.1999' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu shablon <code>40.13.2000</code> ni rad etadi, chunki 40 kun ham, 13 oy ham oraliqqa kirmaydi. E'tibor bering, nuqta <code>\.</code> deb eskeyplangan — aks holda u "istalgan belgi" ma'nosini beradi.</p>
 <div class="warn">Bunday tekshiruv faqat <em>shakl</em>ni tekshiradi, mantiqni emas. Masalan, <code>31.02.2026</code> (fevralda 31-kun yo'q) shablon uchun to'g'ri ko'rinadi. Haqiqiy kalendar tekshiruvini <code>Date</code> obyekti bilan alohida qilish kerak.</div>
-<h2>Alternatsiya tuzoqlari</h2>
+<h2 id="alternatsiya-tuzoqlari">Alternatsiya tuzoqlari</h2>
 <p>Bir necha nozik holatni bilib qo'ying:</p>
 <ul><li><strong>Tartib muhim</strong>: dvigatel chapdan o'ngga tekshiradi va birinchi mos kelganini oladi. <code>Jon|Jonon</code> "Jonon" so'zida faqat "Jon"ni tutadi — uzunroq variantni oldinga qo'ying: <code>Jonon|Jon</code>;</li><li><strong>Bo'sh variant</strong>: <code>(a|)</code> ikkinchi variant bo'sh, ya'ni "a yoki hech nima" — bu ba'zan kutilmagan bo'sh mos kelishlar beradi;</li><li><strong>Anchorlar bilan</strong>: <code>^gul|lola$</code> = (satr boshida "gul") yoki (satr oxirida "lola"). Butun satrni cheklash uchun <code>^(gul|lola)$</code> yozing.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>alt-tartib.js</span></div><textarea spellcheck="false">// Tartib muhim: uzun variant oldinda bo'lishi kerak
 console.log("Jonon".match(/Jon|Jonon/)[0]);   // Jon   (qisqasi tutildi)
 console.log("Jonon".match(/Jonon|Jon/)[0]);   // Jonon (to'g'ri)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Amaliy qoida: alternatsiya variantlarini yozishda <strong>eng uzun (aniqroq) variantni oldinga</strong> qo'ying, shunda dvigatel qisqa variantda erta to'xtab qolmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>|</code> — "yoki": bir necha variantdan birini tanlaydi;</li><li><code>|</code> ning ta'sir doirasi keng, shuning uchun variantni ko'pincha qavs bilan cheklash kerak;</li><li>Mazmuni kerak bo'lmasa, <code>(?:...)</code> — tutmaydigan guruhni ishlating;</li><li>Alternatsiya sana, vaqt, shaharlar ro'yxati kabi cheklangan variantlarni tutishda ideal;</li><li>Tartib muhim — uzun/aniq variantni oldinga qo'ying;</li><li>Anchor (<code>^</code>, <code>$</code>) bilan ishlashda butun ifodani <code>^(...)$</code> ga o'rang.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-groups.html"><span class="dir">← Oldingi</span><span class="ttl">Guruhlash va tutish</span></a>
@@ -670,6 +685,6 @@ console.log("Jonon".match(/Jonon|Jon/)[0]);   // Jonon (to'g'ri)</textarea><div 
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

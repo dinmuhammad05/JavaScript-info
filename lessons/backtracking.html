@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Backtracking (orqaga qaytish) — Kodla</title>
   <meta name="description" content="Barcha variantlarni tizimli sinab, boshi berk ko'chadan orqaga qaytish: kombinatsiyalar, o'rin almashtirishlar va klassik masalalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,29 @@
 <main class="content article">
 <div class="crumbs">Ilg'or texnikalar</div>
 <h1>Backtracking (orqaga qaytish)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#g-oyaning-mohiyati">G'oyaning mohiyati</a></li>
+<li class="lvl2"><a href="#qaror-daraxti-decision-tree">Qaror daraxti (decision tree)</a></li>
+<li class="lvl2"><a href="#umumiy-shablon-choose-explore-unchoose">Umumiy shablon: choose, explore, unchoose</a></li>
+<li class="lvl2"><a href="#misol-qism-to-plamlar-subsets">Misol: qism to'plamlar (subsets)</a></li>
+<li class="lvl2"><a href="#misol-o-rin-almashtirishlar-permutations">Misol: o'rin almashtirishlar (permutations)</a></li>
+<li class="lvl2"><a href="#misol-to-g-ri-qavslar-generatsiyasi">Misol: to'g'ri qavslar generatsiyasi</a></li>
+<li class="lvl2"><a href="#pruning-keraksiz-shoxlarni-kesish">Pruning: keraksiz shoxlarni kesish</a></li>
+<li class="lvl2"><a href="#murakkablik-va-yana-bir-bor-n-queens">Murakkablik va yana bir bor N-Queens</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan masalada bitta to'g'ri javob emas, balki barcha mumkin bo'lgan variantlarni topish so'raladi. Backtracking — bu yechimni bosqichma-bosqich qurib, agar boshi berk ko'chaga kirib qolsak, bir qadam orqaga qaytib boshqa yo'lni sinaydigan sabrli qidiruv uslubi. Keling, bu chiroyli g'oyani birga o'rganamiz.</p>
-<h2>G'oyaning mohiyati</h2>
+<h2 id="g-oyaning-mohiyati">G'oyaning mohiyati</h2>
 <p>Backtracking so'zma-so'z <strong>orqaga qaytish</strong> degani. Biz yechimni bir bo'lakdan boshlab quramiz: bitta qaror qabul qilamiz, keyingisini, yana keyingisini. Agar biror joyda tanlovimiz masalaning shartlarini buzsa yoki hech qanday davomi qolmasa, biz oxirgi qarorni bekor qilib, boshqa variantni sinaymiz.</p>
 <p>Bu xuddi labirintda yurishga o'xshaydi: bir yo'lni tanlaysan, devorga borib taqalsang, kelgan joyingga qaytib boshqa burilishni sinaysan. Hech qanday yo'lni nazardan qochirmaysan, lekin baribir tartib bilan harakat qilasan.</p>
 <p>Backtracking uch klassik masalada eng ko'p uchraydi: <strong>qism to'plamlar</strong> (subsets), <strong>o'rin almashtirishlar</strong> (permutations) va <strong>kombinatsiyalar</strong>. Ularning barchasi bir xil skelet ustiga qurilgan.</p>
-<h2>Qaror daraxti (decision tree)</h2>
+<h2 id="qaror-daraxti-decision-tree">Qaror daraxti (decision tree)</h2>
 <p>Backtracking jarayonini <strong>qaror daraxti</strong> sifatida tasavvur qilish juda foydali. Daraxtning har bir tugunida biz bitta tanlov qilamiz, har bir shox esa alohida variantga olib boradi. Barglar (eng pastdagi tugunlar) — bu tayyor yechimlar.</p>
 <p>Masalan, <code>[1, 2, 3]</code> massivi uchun o'rin almashtirishlarni qurayotganda: birinchi qadamda 1, 2 yoki 3 ni tanlaymiz — daraxtning uch shoxi. Keyin qolganlaridan yana birini, va hokazo. Har bir to'liq yo'l bitta o'rin almashtirishni beradi.</p>
 <p>Daraxt bo'ylab <strong>chuqurlikka qarab</strong> (depth-first) yuramiz: bir yo'lni oxirigacha borib, keyin orqaga qaytib qo'shni shoxga o'tamiz. Aynan shu "oxirigacha bor, keyin qayt" harakati backtracking deb ataladi.</p>
-<h2>Umumiy shablon: choose, explore, unchoose</h2>
+<h2 id="umumiy-shablon-choose-explore-unchoose">Umumiy shablon: choose, explore, unchoose</h2>
 <p>Deyarli barcha backtracking yechimlari bir xil uch qadamli ritmga bo'ysunadi. Buni yodda tutsangiz, yangi masalani ham osongina yechasiz:</p>
 <ol><li><strong>Choose (tanla)</strong> — hozirgi holatga bitta element qo'sh yoki qaror qabul qil.</li><li><strong>Explore (o'rgan)</strong> — shu tanlov bilan rekursiya orqali chuqurroq kir.</li><li><strong>Unchoose (bekor qil)</strong> — qaytib kelganda tanlovni orqaga ol, holatni avvalgi ko'rinishga qaytar.</li></ol>
 <pre class="code"><code>function backtrack(holat, natijalar) {
@@ -620,7 +636,7 @@
   }
 }</code></pre>
 <div class="warn">Yechimni saqlaganda albatta uning <strong>nusxasini</strong> oling (masalan <code>holat.slice()</code>). Aks holda keyin <code>pop()</code> bilan o'zgartiradigan bir xil massivga havolani saqlab qo'yasiz va oxirida hammasi bo'sh yoki noto'g'ri chiqadi.</div>
-<h2>Misol: qism to'plamlar (subsets)</h2>
+<h2 id="misol-qism-to-plamlar-subsets">Misol: qism to'plamlar (subsets)</h2>
 <p>Berilgan massivning barcha qism to'plamlarini topaylik. Har bir element uchun ikki yo'l bor: uni <strong>olamiz</strong> yoki <strong>olmaymiz</strong>. Shu ikki tanlov qaror daraxtini hosil qiladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>subsets.js</span></div><textarea spellcheck="false">function subsets(nums) {
   const natija = [];
@@ -646,7 +662,7 @@ for (const t of barchasi) {
   console.log('[' + t.join(', ') + ']');
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>n</code> ta elementli massivda aynan <code>2^n</code> ta qism to'plam bor (chunki har biri uchun ikki tanlov). <code>[1, 2, 3]</code> uchun bu 8 ta — jumladan bo'sh to'plam va to'liq to'plam.</p>
-<h2>Misol: o'rin almashtirishlar (permutations)</h2>
+<h2 id="misol-o-rin-almashtirishlar-permutations">Misol: o'rin almashtirishlar (permutations)</h2>
 <p>Endi massivning barcha <strong>o'rin almashtirishlarini</strong> — elementlarning barcha tartiblarini — quramiz. Bu yerda har bir yechimda hamma element qatnashadi, faqat tartibi farq qiladi. Shuning uchun qaysi elementlar allaqachon ishlatilganini belgilab boramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>permutations.js</span></div><textarea spellcheck="false">function permutations(nums) {
   const natija = [];
@@ -678,7 +694,7 @@ for (const p of hammasi) {
   console.log(p.join(' '));
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>n</code> ta elementning o'rin almashtirishlari soni <code>n!</code> (n faktorial) ga teng: birinchi joyga <code>n</code> ta nomzod, ikkinchisiga <code>n-1</code>, va hokazo. <code>[1, 2, 3]</code> uchun bu <code>3! = 6</code>.</p>
-<h2>Misol: to'g'ri qavslar generatsiyasi</h2>
+<h2 id="misol-to-g-ri-qavslar-generatsiyasi">Misol: to'g'ri qavslar generatsiyasi</h2>
 <p>Yana bir klassik masala: <code>n</code> juft qavs bilan barcha <strong>to'g'ri joylashgan</strong> qavs ketma-ketliklarini yaratish. Bu yerda backtracking pruning bilan chiroyli birlashadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>qavslar.js</span></div><textarea spellcheck="false">function qavslar(n) {
   const natija = [];
@@ -705,11 +721,11 @@ const q = qavslar(3);
 console.log('Jami:', q.length);
 for (const s of q) console.log(s);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Diqqat qiling: biz <code>)</code> ni faqat ochilgan qavslar hali yopilmaganidagina qo'shamiz. Shu bilan noto'g'ri variantlar umuman qurilmaydi — bu <strong>pruning</strong>.</p>
-<h2>Pruning: keraksiz shoxlarni kesish</h2>
+<h2 id="pruning-keraksiz-shoxlarni-kesish">Pruning: keraksiz shoxlarni kesish</h2>
 <p><strong>Pruning</strong> (butash) — bu qaror daraxtining aniq foydasiz shoxlarini oldindan kesib tashlash. Agar biz hozirning o'zida yechim bo'la olmasligini bilsak, o'sha yo'lni umuman o'rganmaymiz. Bu backtracking tezligini keskin oshiradi.</p>
 <p>Qavslar misolida <code>yopilgan &lt; ochilgan</code> shartisiz biz avval barcha <code>2^(2n)</code> ketma-ketlikni qurib, keyin noto'g'rilarni tashlab yuborardik. Pruning bilan esa faqat haqiqiy nomzodlar quriladi.</p>
 <div class="tip">Har safar tanlov qilishdan oldin o'zingizga savol bering: "Bu shoxda umuman yechim bo'lishi mumkinmi?" Agar javob yo'q bo'lsa — shoxni keskin. Bu ko'pincha eksponensial ishni amalda juda tez qiladi.</div>
-<h2>Murakkablik va yana bir bor N-Queens</h2>
+<h2 id="murakkablik-va-yana-bir-bor-n-queens">Murakkablik va yana bir bor N-Queens</h2>
 <p>Backtracking tabiatan barcha variantlarni sinagani uchun uning murakkabligi odatda <strong>eksponensial</strong> bo'ladi. Qism to'plamlar uchun <code>O(2^n)</code>, o'rin almashtirishlar uchun <code>O(n!)</code>. Pruning bularni amalda tezlashtiradi, lekin nazariy chegara o'zgarmaydi.</p>
 <p>Mashhur <strong>N-Queens</strong> (shohmot taxtasiga bir-birini urmaydigan N ta farzin joylash) va <strong>Sudoku yechuvchi</strong> masalalari ham xuddi shu shablon ustiga qurilgan: har katakka nomzod qo'yib ko'r, agar qoidani buzsa — orqaga qayt. Bu yerda ularni faqat mashhur misol sifatida eslatib o'tamiz — mohiyat esa bir xil choose-explore-unchoose.</p>
 <div class="warn">Eksponensial murakkablik tufayli backtracking faqat <strong>kichik n</strong> uchun amaliy. <code>n = 20</code> da <code>2^20</code> ~ million, bu qiyin emas. Lekin <code>n = 50</code> da <code>2^50</code> allaqachon amalda hisoblab bo'lmaydigan katta son. Katta n uchun boshqa texnika (masalan dinamik dasturlash) izlang.</div>
@@ -726,6 +742,6 @@ for (const s of q) console.log(s);</textarea><div class="pg-actions"><button cla
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

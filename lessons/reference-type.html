@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reference Type — Kodla</title>
   <meta name="description" content="Nega obj.method() this'ni to'g'ri oladi-yu, (obj.method)() yoki metodni o'zgaruvchiga ko'chirish this'ni yo'qotadi — ichki Reference Type mexanizmi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,18 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>Reference Type</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-yo-qolgan-this">Muammo: yo'qolgan this</a></li>
+<li class="lvl2"><a href="#nuqta-amali-nima-qaytaradi">Nuqta amali nima qaytaradi?</a></li>
+<li class="lvl2"><a href="#chaqiruv-qanday-ishlaydi">Chaqiruv qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#yechim-this-ni-qotirish">Yechim: this'ni qotirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan metod chaqiruvi kutilmaganda <code>this</code>ni yo'qotadi. Buning sababi — JavaScript ichida yashiringan <em>Reference Type</em> ("ma'lumotnoma turi") deb ataluvchi maxsus qiymat turi. Uni tushunsak, chalkash holatlar aniq bo'ladi.</p>
-<h2>Muammo: yo'qolgan this</h2>
+<h2 id="muammo-yo-qolgan-this">Muammo: yo'qolgan this</h2>
 <p>Quyidagi kodda oddiy chaqiruv ishlaydi, lekin metodni oldin ajratib, keyin chaqirsak — <code>this</code> yo'qoladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ref-muammo.js</span></div><textarea spellcheck="false">let user = {
   name: "Ali",
@@ -629,20 +642,20 @@ try {
 } catch (e) {
   console.log("Xato: bu holatda this yo'qoladi");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Nuqta amali nima qaytaradi?</h2>
+<h2 id="nuqta-amali-nima-qaytaradi">Nuqta amali nima qaytaradi?</h2>
 <p>Sir shundaki, <code>user.salom</code> ifodasi oddiy funksiyani emas, balki maxsus <strong>Reference Type</strong> qiymatini qaytaradi. Bu til ichidagi qiymat bo'lib, uch narsani birlashtiradi:</p>
 <ul><li><code>base</code> — obyektning o'zi (<code>user</code>);</li><li><code>name</code> — xususiyat nomi (<code>"salom"</code>);</li><li><code>strict</code> — qat'iy rejim yoqilganmi (bayroq).</li></ul>
 <p>Ya'ni <code>user.salom</code> mantiqan quyidagicha:</p>
 <pre class="code"><code>// (base, name, strict) uchligi
 (user, "salom", true)</code></pre>
 <div class="note">Reference Type — bu tilning <strong>ichki, oraliq</strong> turi. Uni to'g'ridan-to'g'ri o'zgaruvchiga saqlab bo'lmaydi; u faqat nuqta amali natijasi sifatida qisqa vaqt yashaydi.</div>
-<h2>Chaqiruv qanday ishlaydi?</h2>
+<h2 id="chaqiruv-qanday-ishlaydi">Chaqiruv qanday ishlaydi?</h2>
 <p><code>()</code> chaqiruv operatori o'zidan oldingi qiymatni ko'radi:</p>
 <ul><li>Agar bu <strong>Reference Type</strong> bo'lsa — <code>()</code> uning <code>base</code>ini <code>this</code> qilib oladi. Shu sabab <code>user.salom()</code>da <code>this = user</code>;</li><li>Agar bu <strong>oddiy funksiya</strong> bo'lsa (Reference Type emas) — <code>this = undefined</code> (qat'iy rejimda).</li></ul>
 <p>Endi hamma narsa tushunarli:</p>
 <ul><li><code>user.salom()</code> — <code>user.salom</code> Reference Type qaytaradi, <code>()</code> undan <code>base</code>ni oladi. <code>this = user</code>;</li><li><code>let f = user.salom; f()</code> — o'zgaruvchiga yozishda Reference Type <strong>yo'qoladi</strong>, faqat funksiyaning o'zi ko'chadi. <code>this = undefined</code>;</li><li><code>(user.salom || null)()</code> — <code>||</code> operatori Reference Typeni oddiy funksiyaga aylantiradi. <code>this = undefined</code>.</li></ul>
 <div class="warn">Reference Type faqat <strong>nuqta yoki kvadrat qavsdan bevosita keyin</strong> chaqiruv qilinganda saqlanadi: <code>obj.method()</code> yoki <code>obj["method"]()</code>. Har qanday oraliq amal (o'zgaruvchiga yozish, <code>||</code>, qavsda saqlash) uni yo'qotadi.</div>
-<h2>Yechim: this'ni qotirish</h2>
+<h2 id="yechim-this-ni-qotirish">Yechim: this'ni qotirish</h2>
 <p>Agar metodni ajratib olib, alohida uzatishimiz kerak bo'lsa, <code>this</code>ni <code>bind</code> orqali qotiramiz yoki o'q funksiyaga o'raymiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ref-yechim.js</span></div><textarea spellcheck="false">let user = {
   name: "Ali",
@@ -657,7 +670,7 @@ console.log(f());  // Salom, Ali
 let g = () =&gt; user.salom();
 console.log(g());  // Salom, Ali</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Metodni callback sifatida uzatayotganda (masalan <code>setTimeout(user.salom)</code>) doim <code>this</code>ni <code>bind</code> qiling yoki <code>() =&gt; user.salom()</code> deb o'rang.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>obj.method</code> ifodasi oddiy funksiya emas, ichki <em>Reference Type</em> qiymatini qaytaradi;</li><li>Reference Type <code>base</code>, <code>name</code> va <code>strict</code>ni birlashtiradi;</li><li><code>()</code> chaqiruvi Reference Typedan <code>base</code>ni olib, <code>this</code> qiladi;</li><li>O'zgaruvchiga yozish, <code>||</code>, qavs kabi oraliq amallar Reference Typeni yo'qotadi -> <code>this</code> yo'qoladi;</li><li>Yechim: <code>bind</code> yoki o'q funksiya bilan o'rash.</li></ul>
 <nav class="lesson-nav">
   <a href="currying.html"><span class="dir">← Oldingi</span><span class="ttl">Karrilash (Currying)</span></a>
@@ -671,6 +684,6 @@ console.log(g());  // Salom, Ali</textarea><div class="pg-actions"><button class
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

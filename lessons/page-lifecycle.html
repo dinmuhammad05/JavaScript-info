@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sahifa: DOMContentLoaded, load, beforeunload, unload — Kodla</title>
   <meta name="description" content="HTML sahifaning hayot sikli: DOMContentLoaded, load, beforeunload va unload hodisalari qachon yuz beradi, readyState, sahifadan chiqishdan oldin ogohlantirish va sendBeacon.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,25 @@
 <main class="content article">
 <div class="crumbs">Hujjat va resurs yuklanishi</div>
 <h1>Sahifa: DOMContentLoaded, load, beforeunload, unload</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#domcontentloaded">DOMContentLoaded</a></li>
+<li class="lvl2"><a href="#domcontentloaded-va-skriptlar">DOMContentLoaded va skriptlar</a></li>
+<li class="lvl2"><a href="#domcontentloaded-va-stillar">DOMContentLoaded va stillar</a></li>
+<li class="lvl2"><a href="#brauzerning-avto-to-ldirishi-autofill">Brauzerning avto-to'ldirishi (autofill)</a></li>
+<li class="lvl2"><a href="#load-unload-va-readystate">load, unload va readyState</a></li>
+<li class="lvl3"><a href="#window-onload">window.onload</a></li>
+<li class="lvl3"><a href="#window-onunload">window.onunload</a></li>
+<li class="lvl3"><a href="#document-readystate">document.readyState</a></li>
+<li class="lvl2"><a href="#beforeunload-bilan-ogohlantirish">beforeunload bilan ogohlantirish</a></li>
+<li class="lvl2"><a href="#navigator-sendbeacon">navigator.sendBeacon</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">HTML sahifaning hayot sikli (lifecycle) uchta muhim hodisaga ega: <code>DOMContentLoaded</code> — brauzer HTML'ni to'liq yuklab, DOM daraxtini qurganida; <code>load</code> — nafaqat HTML, balki barcha tashqi resurslar (rasm, stil, skript) yuklanganida; <code>beforeunload</code> va <code>unload</code> — foydalanuvchi sahifani tark etayotganida. Har bir hodisa foydali bo'lishi mumkin: <code>DOMContentLoaded</code> — DOM tayyor bo'lgach initsializatsiya qilish uchun, <code>load</code> — barcha resurslar yuklanganini tekshirish uchun, <code>beforeunload/unload</code> — foydalanuvchi ketayotganda o'zgarishlarni saqlash uchun. Bu darsda ularni chuqur o'rganamiz.</p>
 <div class="warn">Bu bo'limdagi barcha misollar brauzer muhitiga (DOM, <code>document</code>, <code>window</code>) tegishli. Kurs sahifasidagi interaktiv maydoncha Node.js muhitida ishlaydi va DOM'ga ega emas — shu sabab bu darsdagi kod misollari <strong>statik</strong> bo'lib, faqat o'qib o'rganish uchun keltiriladi. Ularni ishga tushirib bo'lmaydi.</div>
-<h2>DOMContentLoaded</h2>
+<h2 id="domcontentloaded">DOMContentLoaded</h2>
 <p><code>DOMContentLoaded</code> hodisasi <code>document</code> obyektida yuz beradi. Uni kuzatish uchun albatta <code>addEventListener</code>dan foydalanish kerak:</p>
 <pre class="code"><code>document.addEventListener('DOMContentLoaded', ready);
 // funksiya sifatida yozamiz, chaqirmaymiz: ready() emas, balki ready</code></pre>
@@ -618,7 +637,7 @@
 &lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;cache=0"&gt;</code></pre>
 <p>Bu misolda <code>DOMContentLoaded</code> ishlaganida hujjat butunlay yuklangan — brauzer barcha HTML elementlarni ko'rgan va ularga qo'l uzata oladi. Lekin rasm (<code>&lt;img&gt;</code>) hali yuklanib ulgurmagan bo'lishi mumkin, shuning uchun uning o'lchami ko'pincha <code>0x0</code> chiqadi.</p>
 <div class="note"><code>DOMContentLoaded</code> — bu <strong>DOM daraxti tayyor</strong> degani, resurslar tayyor emas. Rasm va boshqa tashqi fayllar hali yuklanayotgan bo'lishi mumkin. Agar sizga faqat DOM elementlari kerak bo'lsa (masalan, tugmaga hodisa biriktirish), bu hodisadan foydalanish eng to'g'ri yechim.</div>
-<h2>DOMContentLoaded va skriptlar</h2>
+<h2 id="domcontentloaded-va-skriptlar">DOMContentLoaded va skriptlar</h2>
 <p>Brauzer HTML'ni qayta ishlaganda, agar <code>&lt;script&gt;</code> tegiga duch kelsa, DOM qurishni <strong>to'xtatib</strong>, uni bajarishi shart. Buning sababi bor: skript DOM'ni o'zgartirishi yoki hatto <code>document.write</code> orqali yangi HTML qo'shishi mumkin, shuning uchun brauzer skript tugaguncha kutadi.</p>
 <p>Demak, <code>DOMContentLoaded</code> hodisasi <strong>skriptlar bajarilib bo'lgach</strong> sodir bo'ladi:</p>
 <pre class="code"><code>&lt;script&gt;
@@ -634,7 +653,7 @@
 &lt;/script&gt;</code></pre>
 <p>Bu misolda avval "Kutubxona yuklandi", so'ng "DOM tayyor!" ko'rsatiladi. Ya'ni <code>DOMContentLoaded</code> barcha skriptlar bajarilishini kutadi.</p>
 <div class="warn">Yuqoridagi qoidaning ikkita <strong>istisnosi</strong> bor. Bular <code>DOMContentLoaded</code>ni bloklamaydi: <code>async</code> atributiga ega skriptlar va <code>document.createElement('script')</code> orqali dinamik qo'shilgan skriptlar. Ular mustaqil yuklanadi va DOM qurilishini kutmaydi. Bularni keyingi darslarda batafsil ko'rib chiqamiz.</div>
-<h2>DOMContentLoaded va stillar</h2>
+<h2 id="domcontentloaded-va-stillar">DOMContentLoaded va stillar</h2>
 <p>Tashqi stil jadvallari (<code>&lt;link rel="stylesheet"&gt;</code>) DOM'ga ta'sir qilmaydi, shuning uchun <code>DOMContentLoaded</code> ularni kutmaydi.</p>
 <p>Lekin bir nozik holat bor: agar stildan <strong>keyin</strong> skript kelsa, u skript stil yuklanguncha kutadi:</p>
 <pre class="code"><code>&lt;link type="text/css" rel="stylesheet" href="style.css"&gt;
@@ -643,12 +662,12 @@
   alert(getComputedStyle(document.body).marginTop);
 &lt;/script&gt;</code></pre>
 <p>Sababi shundaki: skript elementlarning haqiqiy koordinatalari va boshqa stilga bog'liq xossalarini o'qishga muhtoj bo'lishi mumkin. Shu sababdan skript oldidagi stil to'liq yuklanishini kutadi. Bu esa o'z navbatida <code>DOMContentLoaded</code>ni ham kechiktiradi.</p>
-<h2>Brauzerning avto-to'ldirishi (autofill)</h2>
+<h2 id="brauzerning-avto-to-ldirishi-autofill">Brauzerning avto-to'ldirishi (autofill)</h2>
 <p>Firefox, Chrome va Opera <code>DOMContentLoaded</code> hodisasida formalarni avtomatik to'ldiradi (autofill). Masalan, agar sahifada login/parol formasi bo'lsa va foydalanuvchi qiymatlarini saqlagan bo'lsa, brauzer <code>DOMContentLoaded</code>da ularni qo'yib chiqadi.</p>
 <p>Shuning uchun agar sahifada ko'p yuklanadigan skriptlar tufayli <code>DOMContentLoaded</code> kechiksa, avto-to'ldirish ham kechikadi. Buni foydalanuvchilar sahifa "sekin" ochilayotgandek his qilishi mumkin.</p>
-<h2>load, unload va readyState</h2>
+<h2 id="load-unload-va-readystate">load, unload va readyState</h2>
 <p>Endi qolgan hodisalarni ko'rib chiqamiz.</p>
-<h3>window.onload</h3>
+<h3 id="window-onload">window.onload</h3>
 <p><code>load</code> hodisasi <code>window</code> obyektida yuz beradi va u <strong>barcha resurslar</strong> — rasm, stil, skriptlar — yuklanib bo'lgach ishga tushadi:</p>
 <pre class="code"><code>&lt;script&gt;
   window.onload = function() {
@@ -661,13 +680,13 @@
 
 &lt;img id="img" src="https://en.js.cx/clipart/train.gif?speed=1&amp;cache=0"&gt;</code></pre>
 <p>Bu yerda <code>DOMContentLoaded</code>dan farqli o'laroq, rasm yuklangan va uning to'g'ri o'lchamlari ko'rsatiladi.</p>
-<h3>window.onunload</h3>
+<h3 id="window-onunload">window.onunload</h3>
 <p>Foydalanuvchi sahifadan ketganda <code>window</code> obyektida <code>unload</code> hodisasi ishga tushadi. Bu yerda pop-up oynalar ochish kabi kechiktirishga imkon bermaydigan ishlar mumkin emas, lekin analitika ma'lumotlarini yuborish uchun ishlatiladi:</p>
 <pre class="code"><code>window.addEventListener('unload', function() {
   // ma'lumotni ketishdan oldin yuborish
 });</code></pre>
 <p>Amaliyotda <code>unload</code>da tarmoq so'rovlarini yuborish qiyin, chunki sahifa yopilib qolishi mumkin. Buning uchun maxsus <code>navigator.sendBeacon</code> metodi mavjud (quyida ko'ramiz).</p>
-<h3>document.readyState</h3>
+<h3 id="document-readystate">document.readyState</h3>
 <p><code>document.readyState</code> xossasi hujjatning joriy yuklanish holatini bildiradi. Uning uchta qiymati bor:</p>
 <ul><li><code>'loading'</code> — hujjat hali yuklanmoqda;</li><li><code>'interactive'</code> — hujjat to'liq o'qildi, DOM tayyor (bu <code>DOMContentLoaded</code> bilan bir vaqtga to'g'ri keladi);</li><li><code>'complete'</code> — hujjat va barcha resurslar to'liq yuklandi (bu <code>window.onload</code> bilan bir vaqtga to'g'ri keladi).</li></ul>
 <p>Uni tekshirib, holatga qarab ish yuritishimiz mumkin. Ba'zan skript kechroq ishga tushadi va <code>DOMContentLoaded</code> allaqachon o'tib ketgan bo'ladi. Bunday holda hodisani kutish behuda bo'ladi, shuning uchun <code>readyState</code>ni tekshirish kerak:</p>
@@ -689,7 +708,7 @@ document.addEventListener('readystatechange', () =&gt; {
   console.log(document.readyState);
 });</code></pre>
 <div class="note">Hodisalarning odatiy ketma-ketligi: <code>readyState:loading</code> → <code>readyState:interactive</code> → <code>DOMContentLoaded</code> → (rasm/resurslar yuklanadi) → <code>readyState:complete</code> → <code>window.onload</code>. Ya'ni <code>interactive</code> <code>DOMContentLoaded</code>dan biroz oldin, <code>complete</code> esa <code>load</code>dan biroz oldin belgilanadi.</div>
-<h2>beforeunload bilan ogohlantirish</h2>
+<h2 id="beforeunload-bilan-ogohlantirish">beforeunload bilan ogohlantirish</h2>
 <p>Agar foydalanuvchi sahifadan ketmoqchi bo'lsa yoki oynani yopmoqchi bo'lsa, <code>beforeunload</code> ishlovchisi qo'shimcha tasdiqni so'rashi mumkin. Bu ayniqsa foydalanuvchi to'ldirilmagan formani tashlab ketayotganda foydali — "O'zgarishlar saqlanmagan, chindan ham ketmoqchimisiz?" degan savol chiqarish uchun.</p>
 <p>Agar biz <code>beforeunload</code> hodisasini bekor qilsak, brauzer foydalanuvchidan tasdiq so'raydi:</p>
 <pre class="code"><code>window.addEventListener('beforeunload', function(event) {
@@ -700,7 +719,7 @@ document.addEventListener('readystatechange', () =&gt; {
 });</code></pre>
 <div class="warn">Zamonaviy brauzerlarda <code>event.returnValue</code>ga qo'ygan matningizni ko'rsatib bo'lmaydi — brauzer o'zining standart xabarini chiqaradi (masalan, "Ushbu sahifani tark etmoqchimisiz?"). Bu foydalanuvchini yolg'on xabarlar bilan aldashning oldini olish uchun qilingan. Shu sabab matnni maxsuslashtirishga urinmang — u baribir ko'rinmaydi.</div>
 <p>Muhim nozik jihat: bu ishlovchi faqat foydalanuvchi sahifa bilan <strong>o'zaro aloqada bo'lgan</strong> (bosgan, matn kiritgan) holatda ishlaydi. Agar foydalanuvchi sahifa bilan hech qanday muloqot qilmasa, ba'zi brauzerlar ogohlantirishni ko'rsatmaydi.</p>
-<h2>navigator.sendBeacon</h2>
+<h2 id="navigator-sendbeacon">navigator.sendBeacon</h2>
 <p>Foydalanuvchi sahifadan ketayotganda ko'pincha serverga analitika yoki statistika ma'lumotlarini yuborishimiz kerak bo'ladi. Muammo shundaki, <code>unload</code>da oddiy <code>fetch</code> yoki <code>XMLHttpRequest</code> so'rovi ko'pincha bekor qilinadi, chunki sahifa yopilib qolyapti.</p>
 <p>Bu vazifa uchun maxsus <code>navigator.sendBeacon(url, data)</code> metodi mavjud. U ma'lumotni fon rejimida yuboradi va sahifa yopilsa ham so'rovni yakunlaydi:</p>
 <pre class="code"><code>let analyticsData = { /* ma'lumotlar obyekti */ };
@@ -710,7 +729,7 @@ window.addEventListener('unload', function() {
 });</code></pre>
 <ul><li>So'rov <strong>POST</strong> metodi bilan yuboriladi;</li><li>Nafaqat satr, balki forma va boshqa formatlarni ham yuborish mumkin, lekin odatda satrli obyekt yuboriladi;</li><li>Ma'lumot hajmi 64 KB dan oshmasligi kerak;</li><li>So'rov tugaganini kutib bo'lmaydi — <code>sendBeacon</code> hech qanday javob (response) qaytarmaydi va <code>unload</code>da javobni kutib bo'lmaydi ham.</li></ul>
 <div class="tip"><code>sendBeacon</code> yuborilgach, brauzer sahifa yopilgan taqdirda ham so'rovni yakunlashga harakat qiladi. Shu sababdan ketish paytida analitika yuborishning eng ishonchli usuli aynan shu. Zamonaviy alternativa: <code>fetch(url, { keepalive: true })</code> ham xuddi shunday vazifani bajaradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Sahifa hayot sikli hodisalari:</p>
 <ul><li><code>DOMContentLoaded</code> (<code>document</code>da) — DOM tayyor, lekin rasm/stillar hali yuklanmagan bo'lishi mumkin. Skriptlarni kutadi (<code>async</code> va dinamik skriptlardan tashqari). Element bilan ishlashni shu yerda boshlash mumkin;</li><li><code>load</code> (<code>window</code>da) — nafaqat DOM, balki barcha tashqi resurslar (rasm, stil) yuklandi. Endi o'lchamlar aniq;</li><li><code>beforeunload</code> (<code>window</code>da) — foydalanuvchi ketmoqchi. Bekor qilinsa, brauzer tasdiq so'raydi (matnni maxsuslashtirib bo'lmaydi);</li><li><code>unload</code> (<code>window</code>da) — foydalanuvchi deyarli ketdi. Faqat oddiy amallar, ketish ma'lumotini <code>navigator.sendBeacon</code> orqali yuborish mumkin.</li></ul>
 <p><code>document.readyState</code> orqali istalgan paytda holatni tekshirish mumkin: <code>loading</code>, <code>interactive</code> yoki <code>complete</code>. Bu skript kech ishga tushganda <code>DOMContentLoaded</code> o'tib ketgan-ketmaganini bilishga yordam beradi.</p>
@@ -726,6 +745,6 @@ window.addEventListener('unload', function() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

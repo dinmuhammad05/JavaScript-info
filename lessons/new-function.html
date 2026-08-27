@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>new Function sintaksisi — Kodla</title>
   <meta name="description" content="Satrdan funksiya yaratish: new Function('a', 'b', 'return a + b'), uning qo'llanishi va cheklovlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,18 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>new Function sintaksisi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#sintaksis">Sintaksis</a></li>
+<li class="lvl2"><a href="#asosiy-farqi-satrdan-kod-olish">Asosiy farqi: satrdan kod olish</a></li>
+<li class="lvl2"><a href="#closure-va-new-function">Closure va new Function</a></li>
+<li class="lvl2"><a href="#qachon-ishlatiladi">Qachon ishlatiladi?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Funksiya yaratishning yana bir, kamdan-kam uchraydigan usuli bor — <code>new Function</code>. U funksiyani <strong>satr (string)</strong> ko'rinishidagi koddan yaratishga imkon beradi. Bu maxsus vaziyatlarda juda foydali.</p>
-<h2>Sintaksis</h2>
+<h2 id="sintaksis">Sintaksis</h2>
 <p>Umumiy shakli quyidagicha:</p>
 <pre class="code"><code>let func = new Function([arg1, arg2, ...argN], funcBody);</code></pre>
 <p>Funksiya <code>arg1...argN</code> argumentlari (parametrlar nomlari) va so'nggi <code>funcBody</code> (funksiya tanasi — kod satri) bilan yaratiladi. Barchasi <strong>satr</strong> ko'rinishida beriladi.</p>
@@ -608,7 +621,7 @@ console.log(sum(10, 20)); // 30</textarea><div class="pg-actions"><button class=
 <p>Argumentsiz funksiya ham yaratish mumkin — bunda faqat tana beriladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>new-function-salom.js</span></div><textarea spellcheck="false">let salom = new Function('return "Salom, dunyo!"');
 console.log(salom()); // Salom, dunyo!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Asosiy farqi: satrdan kod olish</h2>
+<h2 id="asosiy-farqi-satrdan-kod-olish">Asosiy farqi: satrdan kod olish</h2>
 <p>Oddiy funksiyalar kod yozilish paytida (yozuvchi tomonidan) belgilanadi. <code>new Function</code> esa funksiyani <strong>ishlash vaqtida (runtime)</strong>, istalgan satrdan yaratishga imkon beradi.</p>
 <p>Bu shuni anglatadiki, funksiya kodini serverdan olib yoki dinamik ravishda shakllantirib, keyin uni bajariladigan funksiyaga aylantirish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>new-function-dinamik.js</span></div><textarea spellcheck="false">let ifoda = 'a * b + 5';
@@ -617,7 +630,7 @@ let hisobla = new Function('a', 'b', 'return ' + ifoda);
 console.log(hisobla(2, 3)); // 11  (2*3+5)
 console.log(hisobla(4, 5)); // 25  (4*5+5)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Argumentlarni bitta satrda vergul bilan ajratib ham berish mumkin: <code>new Function('a, b', 'return a + b')</code> — bu ham to'g'ri ishlaydi.</div>
-<h2>Closure va new Function</h2>
+<h2 id="closure-va-new-function">Closure va new Function</h2>
 <p>Bu yerda muhim va nozik jihat bor. Odatdagi funksiyalar o'zi yaratilgan joydagi tashqi o'zgaruvchanlarni "eslab qoladi" (closure). Ammo <code>new Function</code> orqali yaratilgan funksiya bunday emas — uning <code>[[Environment]]</code> (leksik muhiti) <strong>global muhitga</strong> ishora qiladi, o'zi yaratilgan joyga emas.</p>
 <p>Shuning uchun bunday funksiya tashqi lokal o'zgaruvchanlardan foydalana olmaydi — faqat global va o'ziga uzatilgan argumentlarni ko'radi:</p>
 <pre class="code"><code>function getFunc() {
@@ -632,12 +645,12 @@ console.log(hisobla(4, 5)); // 25  (4*5+5)</textarea><div class="pg-actions"><bu
 // getFunc()(); // XATOLIK: qiymat is not defined</code></pre>
 <div class="warn">Agar oddiy funksiyada <code>return function() { return qiymat; }</code> yozganimizda, u lokal <code>qiymat</code>ni ko'rgan bo'lardi. <code>new Function</code> esa faqat globalni ko'radi. Bu — ataylab qilingan tarhli qaror.</div>
 <p>Nega shunday? Chunki agar <code>new Function</code> lokal o'zgaruvchanlarni ko'ra olganida, minifikatsiya (kodni siqib, o'zgaruvchan nomlarini <code>a</code>, <code>b</code> kabi qisqartirish) paytida satr ichidagi nomlar mos kelmay, kod buzilar edi. Global muhit bilan cheklash bu xavfni yo'q qiladi.</p>
-<h2>Qachon ishlatiladi?</h2>
+<h2 id="qachon-ishlatiladi">Qachon ishlatiladi?</h2>
 <p><code>new Function</code> juda kam hollarda kerak bo'ladi, lekin ba'zi vaziyatlarda bebaho:</p>
 <ul><li>Serverdan <strong>kod satri</strong> sifatida olingan mantiqni bajariladigan funksiyaga aylantirish;</li><li>Shablon (template) dvigatellari — foydalanuvchi kiritgan ifodalarni funksiyaga o'girish;</li><li>Dinamik hisob-kitob — matematik ifodalarni matndan olib bajarish.</li></ul>
 <div class="tip">Kundalik dasturlashda <code>new Function</code>ga deyarli murojaat qilinmaydi. U <em>maxsus vosita</em> — faqat koddan dinamik funksiya yasash zarur bo'lganda tanlanadi.</div>
 <div class="warn">Foydalanuvchidan olingan ishonchsiz satrni <code>new Function</code>ga (yoki <code>eval</code>ga) uzatish — <strong>xavfli</strong>. Bu zararli kod bajarilishiga olib kelishi mumkin. Faqat ishonchli manbadagi kod bilan ishlang.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>new Function(args, body)</code> — funksiyani <strong>satrdan</strong> yaratadi;</li><li>Argumentlar va tana — barchasi satr ko'rinishida beriladi;</li><li>Yaratilgan funksiya <strong>global muhitga</strong> bog'lanadi, lokal o'zgaruvchanlarni ko'rmaydi;</li><li>Bu minifikatsiya bilan mos ishlash uchun qilingan;</li><li>Asosan koddan dinamik funksiya yasash kerak bo'lganda ishlatiladi — ishonchsiz satrga ehtiyot bo'ling.</li></ul>
 <nav class="lesson-nav">
   <a href="funksiya-obyekti.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiya obyekti, NFE</span></a>
@@ -651,6 +664,6 @@ console.log(hisobla(4, 5)); // 25  (4*5+5)</textarea><div class="pg-actions"><bu
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

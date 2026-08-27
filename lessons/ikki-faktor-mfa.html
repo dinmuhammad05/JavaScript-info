@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2FA, MFA va zamonaviy autentifikatsiya — Kodla</title>
   <meta name="description" content="Nega parol yetarli emas; autentifikatsiya omillari (bilaman/bor/o'zimman); 2FA va MFA turlari (SMS, TOTP, apparat kalit/FIDO2, biometrika); TOTP qanday ishlaydi; passkey va parolsiz kelajak.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,27 +599,43 @@
 <main class="content article">
 <div class="crumbs">Kriptografiya asoslari</div>
 <h1>2FA, MFA va zamonaviy autentifikatsiya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-parol-yetarli-emas">Nega parol yetarli emas?</a></li>
+<li class="lvl2"><a href="#autentifikatsiya-omillari">Autentifikatsiya omillari</a></li>
+<li class="lvl2"><a href="#2fa-mfa-turlari">2FA/MFA turlari</a></li>
+<li class="lvl3"><a href="#sms-orqali-kod-zaif">SMS orqali kod — zaif</a></li>
+<li class="lvl3"><a href="#totp-ilovasi-yaxshi">TOTP ilovasi — yaxshi</a></li>
+<li class="lvl3"><a href="#apparat-kalit-fido2-eng-kuchli">Apparat kalit (FIDO2) — eng kuchli</a></li>
+<li class="lvl3"><a href="#biometrika">Biometrika</a></li>
+<li class="lvl2"><a href="#totp-qanday-ishlaydi">TOTP qanday ishlaydi</a></li>
+<li class="lvl2"><a href="#passkey-va-parolsiz-kelajak">Passkey va parolsiz kelajak</a></li>
+<li class="lvl2"><a href="#amaliy-maslahatlar">Amaliy maslahatlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Parol qanchalik kuchli bo'lmasin, u yolg'iz o'zi ko'pincha yetarli emas. Fishing, ma'lumot sizishi, qayta ishlatilgan parollar — bularning barchasi bitta parolga tayanishni xavfli qiladi. Ushbu darsda nega parol yetarli emasligini, autentifikatsiya omillarini va 2FA/MFA, TOTP hamda passkey kabi zamonaviy yechimlarni o'rganamiz.</p>
-<h2>Nega parol yetarli emas?</h2>
+<h2 id="nega-parol-yetarli-emas">Nega parol yetarli emas?</h2>
 <p>Parol — bu "biror narsani bilish"ga asoslangan yagona to'siq. Uning zaif tomonlari:</p>
 <ul><li><strong>Fishing:</strong> soxta sahifa foydalanuvchini aldab parolini o'g'irlaydi;</li><li><strong>Ma'lumot sizishi:</strong> boshqa saytdan sizgan parolni odamlar ko'p joyda takrorlagani uchun ishlaydi;</li><li><strong>Zaif parollar:</strong> ko'p odamlar oson topiladigan parol tanlaydi;</li><li><strong>Sizish sezilmaydi:</strong> parol o'g'irlansa ham, egasi buni bilmasligi mumkin.</li></ul>
 <p>Yechim — bitta emas, <em>bir nechta mustaqil</em> to'siqni birlashtirish. Agar bittasi buzilsa, qolganlari himoyani ushlab turadi. Bu — <strong>ko'p faktorli autentifikatsiya</strong> g'oyasi.</p>
-<h2>Autentifikatsiya omillari</h2>
+<h2 id="autentifikatsiya-omillari">Autentifikatsiya omillari</h2>
 <p>Autentifikatsiya omillari uch asosiy turga bo'linadi:</p>
 <ul><li><strong>Bilaman (something you know):</strong> parol, PIN-kod, maxfiy savol;</li><li><strong>Bor (something you have):</strong> telefon, apparat kalit, smart-karta;</li><li><strong>O'zimman (something you are):</strong> barmoq izi, yuz, ovoz — biometrika.</li></ul>
 <p><strong>Ikki faktorli autentifikatsiya (2FA)</strong> — bu <em>ikki xil turdagi</em> omilni birlashtirish. Masalan, parol (bilaman) + telefondagi kod (bor). <strong>MFA</strong> (ko'p faktorli) — ikki yoki undan ortiq omil.</p>
 <div class="note">Muhim nozik jihat: ikkita <em>bir xil turdagi</em> narsa — masalan parol va maxfiy savol — bu haqiqiy 2FA emas, chunki ikkalasi ham "bilaman" toifasida. Haqiqiy 2FA <em>turlicha</em> omillarni talab qiladi.</div>
-<h2>2FA/MFA turlari</h2>
+<h2 id="2fa-mfa-turlari">2FA/MFA turlari</h2>
 <p>Ikkinchi omilni yetkazishning bir necha usuli bor, lekin ular <em>xavfsizlik darajasi bilan farq qiladi</em>:</p>
-<h3>SMS orqali kod — zaif</h3>
+<h3 id="sms-orqali-kod-zaif">SMS orqali kod — zaif</h3>
 <p>Telefon raqamiga SMS kodi yuboriladi. Bu hech qanday 2FA'dan yaxshiroq, lekin eng zaif variant: SIM-karta o'g'irlash (SIM-swap) hujumlari va SMS'ni ushlab olish mumkin. Iloji bo'lsa, SMS'dan yaxshiroq usulga o'ting.</p>
-<h3>TOTP ilovasi — yaxshi</h3>
+<h3 id="totp-ilovasi-yaxshi">TOTP ilovasi — yaxshi</h3>
 <p>Google Authenticator, Authy kabi ilovalar har 30 soniyada yangilanadigan kod ko'rsatadi. Kodlar telefonda mahalliy hosil bo'ladi — internet yoki SMS shart emas, ushlab olish qiyin. Bu ko'pchilik uchun yaxshi tanlov.</p>
-<h3>Apparat kalit (FIDO2) — eng kuchli</h3>
+<h3 id="apparat-kalit-fido2-eng-kuchli">Apparat kalit (FIDO2) — eng kuchli</h3>
 <p>YubiKey kabi jismoniy kalitlar (FIDO2/WebAuthn standarti) eng kuchli himoya beradi. Ular fishing'ga <em>chidamli</em>: kalit qaysi saytga ulanayotganini tekshiradi, shuning uchun soxta sahifa ishlamaydi.</p>
-<h3>Biometrika</h3>
+<h3 id="biometrika">Biometrika</h3>
 <p>Barmoq izi yoki yuz — qulay, lekin odatda qurilmani ochish uchun ishlatiladi. Biometrik ma'lumotni o'zgartirib bo'lmaydi (parolni almashtirasiz, lekin barmog'ingizni yo'q), shuning uchun u ko'pincha boshqa omillar bilan birga ishlatiladi.</p>
-<h2>TOTP qanday ishlaydi</h2>
+<h2 id="totp-qanday-ishlaydi">TOTP qanday ishlaydi</h2>
 <p><strong>TOTP</strong> (Time-based One-Time Password) juda nafis g'oyaga asoslanadi. Sozlashda server va sizning ilovangiz <em>bitta umumiy sirni</em> (secret) baham ko'radi (odatda QR-kod orqali). Keyin kod ikki narsadan hosil bo'ladi:</p>
 <ul><li><strong>Umumiy sir</strong> — faqat siz va serverda bor;</li><li><strong>Joriy vaqt</strong> — odatda 30 soniyalik oynalarga bo'linadi.</li></ul>
 <p>Sir va vaqt hash orqali qo'shilib, qisqa raqamli kod hosil qilinadi. Server ham o'zida <em>xuddi shu hisobni</em> bajaradi. Ikkalasi bir xil sir va bir xil vaqtga ega bo'lgani uchun bir xil kod chiqadi — internetda hech narsa almashmasdan! Vaqt o'tgani sari kod avtomatik o'zgaradi.</p>
@@ -646,17 +665,17 @@ console.log('Server kodi:', totpKod(umumiySir, hozir));
 // vaqt o'tgach (boshqa oyna) -&gt; kod o'zgaradi
 console.log('30s keyin: ', totpKod(umumiySir, hozir + 30));</code></pre>
 <div class="warn">Bu demo faqat g'oyani ko'rsatadi. Real TOTP (RFC 6238) HMAC-SHA1, aniq bayt kodlash va vaqt oynasi bardoshini ishlatadi. O'zingiz yozmang — <code>otplib</code> kabi sinovdan o'tgan kutubxonadan foydalaning.</div>
-<h2>Passkey va parolsiz kelajak</h2>
+<h2 id="passkey-va-parolsiz-kelajak">Passkey va parolsiz kelajak</h2>
 <p>Sohaning yo'nalishi — <strong>parollardan butunlay voz kechish</strong>. <strong>Passkey</strong>lar (FIDO2/WebAuthn asosidagi) shu yo'ldagi katta qadam. Ular asimmetrik kriptografiyaga tayanadi:</p>
 <ul><li>Qurilmangizda maxfiy kalit yaratiladi va saqlanadi (ko'pincha xavfsiz apparat ichida);</li><li>Sayt faqat sizning ochiq kalitingizni saqlaydi — sizadigan "parol" umuman yo'q;</li><li>Kirish qurilmani ochish (barmoq izi, yuz, PIN) bilan tasdiqlanadi;</li><li>Fishing'ga chidamli — passkey faqat to'g'ri domen bilan ishlaydi.</li></ul>
 <p>Passkey'da eslab qoladigan parol yo'q, sizadigan sir yo'q, fishing qilinadigan narsa yo'q. Shuning uchun ular kelajakning asosiy autentifikatsiya usuli bo'lib bormoqda.</p>
-<h2>Amaliy maslahatlar</h2>
+<h2 id="amaliy-maslahatlar">Amaliy maslahatlar</h2>
 <p><strong>Foydalanuvchi sifatida:</strong></p>
 <ul><li>Muhim akkauntlarga (email, bank, ish) 2FA'ni albatta yoqing;</li><li>Iloji bo'lsa SMS o'rniga TOTP ilovasi yoki apparat kalit tanlang;</li><li>Parol menejeridan foydalaning — har sayt uchun noyob, kuchli parol;</li><li>Zaxira kodlarini xavfsiz joyda saqlang.</li></ul>
 <p><strong>Dasturchi sifatida:</strong></p>
 <ul><li>2FA'ni imkoniyat sifatida taklif qiling, muhim tizimlarda majburiy qiling;</li><li>TOTP va WebAuthn uchun sinovdan o'tgan kutubxonalardan foydalaning;</li><li>Zaxira/tiklash kodlarini xavfsiz (hashlab) saqlang;</li><li>Kirish urinishlarini cheklang (rate limiting) va shubhali kirishlarni loglang.</li></ul>
 <div class="tip">Amaliy maslahat: eng muhim akkauntlaringizga — birinchi navbatda asosiy email va bank — <strong>TOTP ilovasi yoki apparat kalit</strong> yoqing. Email ko'pincha boshqa hammasini tiklash kaliti bo'lgani uchun, uni himoyalash birinchi darajali.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Parol yolg'iz o'zi yetarli emas: fishing, sizish, qayta ishlatish uni zaif qiladi;</li><li>Autentifikatsiya omillari: <strong>bilaman</strong> (parol), <strong>bor</strong> (telefon/kalit), <strong>o'zimman</strong> (biometrika);</li><li><strong>2FA/MFA</strong> — turlicha omillarni birlashtiradi; bitta buzilsa, qolgani ushlab turadi;</li><li>Turlar xavfsizlik bo'yicha: SMS (zaif) &lt; TOTP ilovasi (yaxshi) &lt; apparat kalit/FIDO2 (eng kuchli);</li><li><strong>TOTP</strong> umumiy sir va joriy vaqtdan mahalliy kod hosil qiladi — internetda hech narsa almashmaydi;</li><li><strong>Passkey</strong>lar parolsiz, fishing'ga chidamli kelajak; muhim akkauntlarga TOTP yoki apparat kalit yoqing.</li></ul>
 <nav class="lesson-nav">
   <a href="raqamli-imzo.html"><span class="dir">← Oldingi</span><span class="ttl">Raqamli imzo va butunlik</span></a>
@@ -670,6 +689,6 @@ console.log('30s keyin: ', totpKod(umumiySir, hozir + 30));</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

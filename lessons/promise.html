@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promise — Kodla</title>
   <meta name="description" content="new Promise(executor), resolve/reject, holatlar (pending/fulfilled/rejected) va .then/.catch/.finally metodlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,26 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Promise</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#analogiya-qo-shiqchi-va-muxlislar">Analogiya: qo'shiqchi va muxlislar</a></li>
+<li class="lvl2"><a href="#new-promise-executor-sintaksisi">new Promise(executor) sintaksisi</a></li>
+<li class="lvl2"><a href="#promise-holatlari">Promise holatlari</a></li>
+<li class="lvl2"><a href="#then-natijani-qabul-qilish">.then — natijani qabul qilish</a></li>
+<li class="lvl2"><a href="#catch-faqat-xatolikni-boshqarish">.catch — faqat xatolikni boshqarish</a></li>
+<li class="lvl2"><a href="#finally-yakuniy-tozalash">.finally — yakuniy tozalash</a></li>
+<li class="lvl2"><a href="#promise-ning-callback-dan-afzalligi">Promise'ning callback'dan afzalligi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Promise</strong> ("va'da") — asinxron harakat natijasini chiroyli boshqarish uchun maxsus obyekt. U callback jahannamining oldini oladi va kodni tekis, o'qilishi oson qiladi. Ushbu darsda Promise nima ekani, uning holatlari va asosiy metodlari bilan tanishamiz.</p>
-<h2>Analogiya: qo'shiqchi va muxlislar</h2>
+<h2 id="analogiya-qo-shiqchi-va-muxlislar">Analogiya: qo'shiqchi va muxlislar</h2>
 <p>Promise'ni tushunish uchun oddiy analogiya. Faraz qiling, mashhur qo'shiqchi bor. Muxlislar undan yangi qo'shig'i qachon chiqishini so'rab turishadi. Qo'shiqchi ularga <em>va'da</em> beradi: "Qo'shiq chiqqach, hammangizga xabar beraman". Muxlislar esa ro'yxatga yozilib qo'yishadi.</p>
 <p>Bu yerda ikki ishtirokchi bor:</p>
 <ul><li><strong>Ijodkor kod</strong> (qo'shiqchi) — biror vaqt oladigan ishni bajaradi. Bu — <em>"producing code"</em>;</li><li><strong>Iste'mol kod</strong> (muxlislar) — natijani kutadi va u tayyor bo'lganda foydalanadi. Bu — <em>"consuming code"</em>.</li></ul>
 <p><strong>Promise</strong> — ularni bog'lovchi maxsus obyekt (ro'yxat kabi). U ijodkor kod tayyor bo'lganda barcha yozilgan iste'molchilarga natijani yetkazadi.</p>
-<h2>new Promise(executor) sintaksisi</h2>
+<h2 id="new-promise-executor-sintaksisi">new Promise(executor) sintaksisi</h2>
 <p>Promise obyekti <code>new Promise</code> konstruktori bilan yaratiladi. Unga <em>executor</em> (bajaruvchi) deb ataluvchi funksiya uzatiladi:</p>
 <pre class="code"><code>const promise = new Promise(function (resolve, reject) {
   // Bu yerda ijodkor (asinxron) kod turadi
@@ -613,7 +629,7 @@
 <p>Executor funksiya <code>new Promise</code> yaratilishi bilan <strong>darhol va avtomatik</strong> ishga tushadi. Unga JavaScript'ning o'zi ikkita funksiya-argument beradi:</p>
 <ul><li><code>resolve(value)</code> — ish <strong>muvaffaqiyatli</strong> tugaganda chaqiriladi, natija <code>value</code>;</li><li><code>reject(error)</code> — <strong>xatolik</strong> yuz berganda chaqiriladi, xato obyekti <code>error</code>.</li></ul>
 <div class="note"><code>resolve</code> va <code>reject</code> funksiyalarini biz o'zimiz yozmaymiz — ularni JavaScript tayyor holda executor'ga beradi. Bizning vazifamiz — ish natijasiga qarab shulardan birini chaqirish.</div>
-<h2>Promise holatlari</h2>
+<h2 id="promise-holatlari">Promise holatlari</h2>
 <p>Har bir Promise obyekti ichida ikkita muhim ichki xususiyat bor: <code>state</code> (holat) va <code>result</code> (natija). Promise uch holatdan birida bo'ladi:</p>
 <ul><li><strong>pending</strong> (kutilmoqda) — boshlang'ich holat. Ish hali tugamagan, natija yo'q;</li><li><strong>fulfilled</strong> (bajarilgan) — <code>resolve(value)</code> chaqirildi. Ish muvaffaqiyatli tugadi;</li><li><strong>rejected</strong> (rad etilgan) — <code>reject(error)</code> chaqirildi. Xatolik yuz berdi.</li></ul>
 <p>Muhim jihat: Promise dastlab <code>pending</code> holatda bo'ladi, so'ng <strong>bir marta</strong> — yo <code>fulfilled</code>, yo <code>rejected</code> holatiga o'tadi. Bu o'tish <em>qaytmas</em>: bir marta hal bo'lgan Promise'ni o'zgartirib bo'lmaydi.</p>
@@ -631,7 +647,7 @@ const yomon = new Promise(function (resolve, reject) {
   }, 1000);
 });</code></pre>
 <div class="warn"><code>resolve</code> yoki <code>reject</code>dan faqat <strong>bittasi</strong> hisobga olinadi — birinchi chaqiruv. Keyingi barcha chaqiruvlar e'tiborsiz qoldiriladi. Shuningdek, <code>resolve</code> va <code>reject</code> faqat bitta argument qabul qiladi, qolganlari inobatga olinmaydi.</div>
-<h2>.then — natijani qabul qilish</h2>
+<h2 id="then-natijani-qabul-qilish">.then — natijani qabul qilish</h2>
 <p>Promise'ni <em>yaratdik</em>, endi uning natijasini <em>qabul qilish</em> kerak (iste'mol kod). Buning eng asosiy metodi — <code>.then</code>. U ikkita callback qabul qiladi:</p>
 <pre class="code"><code>promise.then(
   function (result) {
@@ -662,7 +678,7 @@ promise.then(
 <pre class="code"><code>promise.then(function (result) {
   console.log(result); // faqat muvaffaqiyatni boshqaradi
 });</code></pre>
-<h2>.catch — faqat xatolikni boshqarish</h2>
+<h2 id="catch-faqat-xatolikni-boshqarish">.catch — faqat xatolikni boshqarish</h2>
 <p>Agar bizni faqat xatolik qiziqtirsa, <code>.then(null, funksiya)</code> yozish mumkin. Ammo buning uchun qulayroq va o'qilishi oson metod bor — <code>.catch</code>:</p>
 <pre class="code"><code>const promise = new Promise(function (resolve, reject) {
   setTimeout(function () {
@@ -675,7 +691,7 @@ promise.catch(function (error) {
   console.log("Ushlangan xato: " + error.message); // Ushlangan xato: Voy, xatolik!
 });</code></pre>
 <div class="note"><code>.catch(f)</code> — bu <code>.then(null, f)</code>ning qisqacha yozuvi. Faqat xatolikni boshqarish uchun ishlatiladi va kodni ancha o'qilishi oson qiladi.</div>
-<h2>.finally — yakuniy tozalash</h2>
+<h2 id="finally-yakuniy-tozalash">.finally — yakuniy tozalash</h2>
 <p><code>.finally</code> — Promise <strong>qanday tugashidan qat'i nazar</strong> (muvaffaqiyat yoki xatolik) doim chaqiriladigan metod. U ko'pincha tozalash ishlari uchun ishlatiladi: masalan, yuklanish indikatorini (spinner) o'chirish.</p>
 <pre class="code"><code>new Promise(function (resolve, reject) {
   setTimeout(function () {
@@ -692,10 +708,10 @@ promise.catch(function (error) {
 <p><code>.finally</code>ning muhim xususiyatlari:</p>
 <ul><li>U <strong>argumentsiz</strong> funksiya qabul qiladi — natija yoki xatoni bilmaydi, chunki uning vazifasi — umumiy tugatish ishlari;</li><li>U natijani <strong>o'zgartirmaydi</strong> — natija yoki xato keyingi <code>.then</code>/<code>.catch</code>ga o'zgarishsiz o'tadi;</li><li>Har ikki holatda ham (fulfilled/rejected) ishlaydi.</li></ul>
 <div class="tip"><code>.finally</code>ni sinf-metodlaridagi <code>try...finally</code> bilan solishtiring: ikkalasi ham "nima bo'lishidan qat'i nazar bu kodni bajar" degan g'oyani ifodalaydi.</div>
-<h2>Promise'ning callback'dan afzalligi</h2>
+<h2 id="promise-ning-callback-dan-afzalligi">Promise'ning callback'dan afzalligi</h2>
 <p>Callback bilan solishtirganda Promise nima yutuq beradi?</p>
 <ul><li><strong>Tabiiy tartib</strong> — avval asinxron ishni yozamiz, keyin natija bilan nima qilishni. Callback'da esa avval "keyin nima qilish"ni yozib, keyin ishni chaqirardik;</li><li><strong>Ko'p iste'molchi</strong> — bitta Promise'ga <code>.then</code>ni bir necha marta ulash mumkin;</li><li><strong>Zanjirlash</strong> — <code>.then</code>larni ketma-ket ulab, tekis kod yozish mumkin (keyingi darsda);</li><li><strong>Xatoliklarni yagona joyda</strong> boshqarish — <code>.catch</code> orqali.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Promise</strong> — asinxron natijani boshqaruvchi obyekt, <code>new Promise(executor)</code> bilan yaratiladi;</li><li>Executor darhol ishga tushadi va <code>resolve(value)</code> yoki <code>reject(error)</code> chaqiradi;</li><li>Holatlar: <strong>pending</strong> &rarr; <strong>fulfilled</strong> yoki <strong>rejected</strong> (qaytmas o'tish);</li><li><code>.then(f1, f2)</code> — natija va xatoni qabul qiladi;</li><li><code>.catch(f)</code> — faqat xatoni boshqaradi (= <code>.then(null, f)</code>);</li><li><code>.finally(f)</code> — natijadan qat'i nazar doim ishlaydigan tozalash.</li></ul>
 <nav class="lesson-nav">
   <a href="callback.html"><span class="dir">← Oldingi</span><span class="ttl">Kirish: callback'lar</span></a>
@@ -709,6 +725,6 @@ promise.catch(function (error) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reverse proxy va load balancing — Kodla</title>
   <meta name="description" content="Reverse proxy tushunchasi, proxy_pass bilan Node.js ilovaga so'rov uzatish, proxy_set_header (Host, X-Real-IP), upstream bloki bilan load balancing va usullar (round-robin, least_conn).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,31 @@
 <main class="content article">
 <div class="crumbs">Nginx</div>
 <h1>Reverse proxy va load balancing</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#reverse-proxy-nima">Reverse proxy nima?</a></li>
+<li class="lvl2"><a href="#proxy-pass-so-rovni-uzatish">proxy_pass — so'rovni uzatish</a></li>
+<li class="lvl2"><a href="#proxy-set-header-sarlavhalarni-to-g-ri-uzatish">proxy_set_header — sarlavhalarni to'g'ri uzatish</a></li>
+<li class="lvl2"><a href="#websocket-ni-qo-llab-quvvatlash">WebSocket'ni qo'llab-quvvatlash</a></li>
+<li class="lvl2"><a href="#load-balancing-va-upstream-bloki">Load balancing va upstream bloki</a></li>
+<li class="lvl2"><a href="#load-balancing-usullari">Load balancing usullari</a></li>
+<li class="lvl3"><a href="#round-robin-standart">round-robin (standart)</a></li>
+<li class="lvl3"><a href="#least-conn-eng-kam-ulanish">least_conn (eng kam ulanish)</a></li>
+<li class="lvl3"><a href="#ip-hash-ip-bo-yicha">ip_hash (IP bo'yicha)</a></li>
+<li class="lvl2"><a href="#server-vaznlari-va-zaxira">Server vaznlari va zaxira</a></li>
+<li class="lvl2"><a href="#to-liq-namuna-statik-api">To'liq namuna: statik + API</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Zamonaviy veb-ilovalar (Node.js, Python, Java) ko'pincha o'z ichki serveriga ega bo'lib, ma'lum portda (masalan, 3000) ishlaydi. Lekin bu ilovalarni to'g'ridan-to'g'ri internetga ochish yaxshi emas. Buning o'rniga oldiga <strong>Nginx</strong> qo'yiladi — bu <strong>reverse proxy</strong> deb ataladi. Ushbu darsda reverse proxy va load balancing'ni batafsil o'rganamiz.</p>
-<h2>Reverse proxy nima?</h2>
+<h2 id="reverse-proxy-nima">Reverse proxy nima?</h2>
 <p><strong>Reverse proxy</strong> (teskari proksi) — bu klient (brauzer) bilan orqa fondagi ilova o'rtasida turuvchi vositachi. Brauzer faqat Nginx bilan gaplashadi, Nginx esa so'rovni orqadagi ilovaga uzatib, javobni qaytaradi.</p>
 <p>Jarayon quyidagicha kechadi:</p>
 <ol><li>Brauzer <code>https://mysite.com</code> ga so'rov yuboradi;</li><li>Nginx bu so'rovni 80/443 portida qabul qiladi;</li><li>Nginx so'rovni ichki ilovaga uzatadi (masalan, <code>http://localhost:3000</code>);</li><li>Node.js ilovasi javob tayyorlaydi;</li><li>Nginx bu javobni brauzerga qaytaradi.</li></ol>
 <p>Reverse proxy'ning afzalliklari:</p>
 <ul><li>Ilova internetga to'g'ridan-to'g'ri ochiq bo'lmaydi — <strong>xavfsizroq</strong>;</li><li>Nginx statik fayllarni o'zi beradi, ilovani yuklamaydi;</li><li>SSL/HTTPS'ni Nginx boshqaradi (ilova bilan ovora bo'lmaydi);</li><li>Bir nechta ilovani (masalan, <code>/api</code> Node.js'ga, <code>/</code> statik saytga) bitta domenda birlashtirish mumkin;</li><li>Load balancing (yukni taqsimlash) imkonini beradi.</li></ul>
-<h2>proxy_pass — so'rovni uzatish</h2>
+<h2 id="proxy-pass-so-rovni-uzatish">proxy_pass — so'rovni uzatish</h2>
 <p>So'rovni orqadagi ilovaga uzatish uchun <code>proxy_pass</code> direktivasi ishlatiladi. Faraz qilaylik, Node.js ilovasi <code>localhost:3000</code> da ishlayapti:</p>
 <pre class="code"><code>server {
     listen 80;
@@ -615,7 +635,7 @@
 }</code></pre>
 <p>Endi <code>mysite.com</code> ga kelgan har bir so'rov <code>localhost:3000</code> da ishlayotgan Node.js ilovasiga uzatiladi. Brauzer buni sezmaydi — u faqat Nginx bilan ishlaydi.</p>
 <div class="note"><code>localhost:3000</code> — bu serverning o'zidagi 3000-port. Node.js ilovasini shu portda ishga tushirasiz (masalan, Express'da <code>app.listen(3000)</code>), Nginx esa unga so'rovlarni uzatadi.</div>
-<h2>proxy_set_header — sarlavhalarni to'g'ri uzatish</h2>
+<h2 id="proxy-set-header-sarlavhalarni-to-g-ri-uzatish">proxy_set_header — sarlavhalarni to'g'ri uzatish</h2>
 <p>Nginx so'rovni uzatganda, orqadagi ilova <strong>haqiqiy klient haqidagi</strong> ma'lumotni yo'qotishi mumkin. Chunki ilova nazarida so'rov Nginx'dan (localhost'dan) kelmoqda. Buni tuzatish uchun maxsus sarlavhalarni qo'lda o'rnatamiz:</p>
 <pre class="code"><code>location / {
     proxy_pass http://localhost:3000;
@@ -628,7 +648,7 @@
 <p>Har bir sarlavhaning vazifasi:</p>
 <ul><li><code>Host $host;</code> — brauzer so'ragan asl domen nomini ilovaga yetkazadi (<code>$host</code> — kelgan so'rovdagi domen);</li><li><code>X-Real-IP $remote_addr;</code> — <strong>haqiqiy foydalanuvchi</strong> IP manzilini uzatadi (<code>$remote_addr</code> — klient IP'si);</li><li><code>X-Forwarded-For</code> — so'rov qaysi proksilardan o'tganini zanjir ko'rinishida saqlaydi;</li><li><code>X-Forwarded-Proto $scheme;</code> — asl so'rov HTTP mi yoki HTTPS mi — shuni bildiradi (<code>$scheme</code> — protokol nomi).</li></ul>
 <div class="warn"><code>X-Real-IP</code> ni uzatmasangiz, ilovangiz barcha so'rovlarni bir xil IP (localhost yoki Nginx IP'si) dan kelayotgandek ko'radi. Bu foydalanuvchi statistikasi, ban qilish yoki geolokatsiya kabi funksiyalarni buzadi. Shuning uchun reverse proxy'da bu sarlavhalar deyarli har doim o'rnatiladi.</div>
-<h2>WebSocket'ni qo'llab-quvvatlash</h2>
+<h2 id="websocket-ni-qo-llab-quvvatlash">WebSocket'ni qo'llab-quvvatlash</h2>
 <p>Agar ilovangiz WebSocket (real vaqtli ulanish, masalan chat) ishlatsa, qo'shimcha sarlavhalar kerak bo'ladi:</p>
 <pre class="code"><code>location / {
     proxy_pass http://localhost:3000;
@@ -639,7 +659,7 @@
     proxy_set_header Host $host;
 }</code></pre>
 <p>Bu sarlavhalar oddiy HTTP ulanishini WebSocket ulanishiga "ko'tarish" (upgrade) imkonini beradi.</p>
-<h2>Load balancing va upstream bloki</h2>
+<h2 id="load-balancing-va-upstream-bloki">Load balancing va upstream bloki</h2>
 <p>Agar saytingizga juda ko'p trafik kelsa, bitta ilova serveri yetmasligi mumkin. Yechim — ilovaning <strong>bir nechta nusxasini</strong> (masalan, 3000, 3001, 3002 portlarida) ishga tushirib, so'rovlarni ular orasida taqsimlash. Buning uchun <code>upstream</code> bloki ishlatiladi:</p>
 <pre class="code"><code># orqa fondagi serverlar guruhini e'lon qilamiz
 upstream backend {
@@ -659,30 +679,30 @@ server {
     }
 }</code></pre>
 <p>Bu yerda <code>upstream backend { ... }</code> — uchta server nusxasidan iborat guruh yaratadi. <code>proxy_pass http://backend;</code> esa so'rovni shu guruhga (aniq bir serverga emas) uzatadi. Nginx so'rovlarni serverlar orasida avtomatik taqsimlaydi.</p>
-<h2>Load balancing usullari</h2>
+<h2 id="load-balancing-usullari">Load balancing usullari</h2>
 <p>Nginx so'rovlarni serverlar orasida qanday taqsimlashini bir necha usulda sozlash mumkin:</p>
-<h3>round-robin (standart)</h3>
+<h3 id="round-robin-standart">round-robin (standart)</h3>
 <p>Standart usul. So'rovlar serverlarga <strong>navbat bilan</strong> beriladi: birinchi so'rov 1-serverga, ikkinchisi 2-serverga, uchinchisi 3-serverga, keyin yana 1-serverga va h.k. Hech qanday qo'shimcha sozlash kerak emas:</p>
 <pre class="code"><code>upstream backend {
     server localhost:3000;
     server localhost:3001;
     server localhost:3002;
 }</code></pre>
-<h3>least_conn (eng kam ulanish)</h3>
+<h3 id="least-conn-eng-kam-ulanish">least_conn (eng kam ulanish)</h3>
 <p>So'rov ayni damda <strong>eng kam faol ulanishga</strong> ega bo'lgan serverga yuboriladi. Bu so'rovlar turli vaqt talab qilganda foydali — band serverlarga kamroq yuk tushadi:</p>
 <pre class="code"><code>upstream backend {
     least_conn;
     server localhost:3000;
     server localhost:3001;
 }</code></pre>
-<h3>ip_hash (IP bo'yicha)</h3>
+<h3 id="ip-hash-ip-bo-yicha">ip_hash (IP bo'yicha)</h3>
 <p>Bir xil IP'dan kelgan so'rovlar <strong>doim bir xil serverga</strong> yuboriladi. Bu sessiya (login holati) serverda saqlanadigan holatlarda foydali:</p>
 <pre class="code"><code>upstream backend {
     ip_hash;
     server localhost:3000;
     server localhost:3001;
 }</code></pre>
-<h2>Server vaznlari va zaxira</h2>
+<h2 id="server-vaznlari-va-zaxira">Server vaznlari va zaxira</h2>
 <p>Serverlar quvvati har xil bo'lsa, ularga <strong>vazn</strong> (weight) berish mumkin — kuchliroq serverga ko'proq so'rov tushadi:</p>
 <pre class="code"><code>upstream backend {
     server localhost:3000 weight=3;   # 3 barobar ko'p so'rov oladi
@@ -691,7 +711,7 @@ server {
 }</code></pre>
 <ul><li><code>weight=3</code> — bu serverga uch barobar ko'proq so'rov yuboriladi;</li><li><code>backup</code> — bu server odatda ishlatilmaydi, faqat asosiy serverlar ishdan chiqsa faollashadi.</li></ul>
 <div class="tip">Bir domende bir necha ilovani birlashtirish uchun turli <code>location</code> larda turli <code>proxy_pass</code> ishlatishingiz mumkin: <code>location /api/</code> ni Node.js'ga, <code>location /</code> ni esa statik saytga yo'naltirish.</div>
-<h2>To'liq namuna: statik + API</h2>
+<h2 id="to-liq-namuna-statik-api">To'liq namuna: statik + API</h2>
 <p>Amalda ko'p uchraydigan holat — statik fayllarni Nginx beradi, <code>/api/</code> so'rovlarini esa Node.js ilovasiga uzatadi:</p>
 <pre class="code"><code>upstream api_backend {
     least_conn;
@@ -719,7 +739,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Reverse proxy</strong> — Nginx orqadagi ilovaga (masalan, Node.js) so'rovlarni uzatuvchi vositachi;</li><li><code>proxy_pass http://localhost:3000;</code> so'rovni ilovaga yuboradi;</li><li><code>proxy_set_header</code> bilan <code>Host</code>, <code>X-Real-IP</code> kabi sarlavhalarni to'g'ri uzatish shart;</li><li><code>upstream</code> bloki bir nechta server guruhini yaratib, load balancing imkonini beradi;</li><li>Usullar: <code>round-robin</code> (standart, navbat bilan), <code>least_conn</code> (eng kam ulanish), <code>ip_hash</code> (IP bo'yicha);</li><li><code>weight</code> va <code>backup</code> bilan serverlarga turli rol berish mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="nginx-static.html"><span class="dir">← Oldingi</span><span class="ttl">Statik saytga xizmat ko'rsatish</span></a>
@@ -733,6 +753,6 @@ server {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

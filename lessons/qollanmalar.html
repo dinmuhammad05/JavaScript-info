@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Qo'llanmalar va spetsifikatsiyalar — Kodla</title>
   <meta name="description" content="ECMAScript spetsifikatsiyasi, MDN va boshqa ishonchli manbalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,17 +599,26 @@
 <main class="content article">
 <div class="crumbs">Kirish</div>
 <h1>Qo'llanmalar va spetsifikatsiyalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#spetsifikatsiya">Spetsifikatsiya</a></li>
+<li class="lvl2"><a href="#qo-llanmalar-manuals">Qo'llanmalar (Manuals)</a></li>
+<li class="lvl2"><a href="#moslik-jadvallari">Moslik jadvallari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ushbu kurs JavaScript'ni o'rgatadi, ammo vaqt o'tib sizga ishonchli ma'lumotnomalar kerak bo'ladi. Keling, asosiylarini ko'rib chiqamiz.</p>
-<h2>Spetsifikatsiya</h2>
+<h2 id="spetsifikatsiya">Spetsifikatsiya</h2>
 <p><strong>ECMA-262 spetsifikatsiyasi</strong> — JavaScript haqidagi eng rasmiy, chuqur va batafsil ma'lumot manbai. U tilni to'liq ta'riflaydi. Ammo aynan rasmiyligi tufayli boshlang'ich o'rganish uchun qiyin — kundalik ishda undan kamdan-kam foydalaniladi.</p>
 <div class="note">Har yili yangi spetsifikatsiya versiyasi chiqadi. Versiyalar orasidagi eng so'nggi qoralama <a href="https://tc39.es/ecma262/" target="_blank" rel="noopener">tc39.es/ecma262</a> manzilida joylashgan.</div>
-<h2>Qo'llanmalar (Manuals)</h2>
+<h2 id="qo-llanmalar-manuals">Qo'llanmalar (Manuals)</h2>
 <ul><li><strong>MDN (Mozilla) JavaScript Reference</strong> — funksiyalar va metodlar bo'yicha misollar va batafsil ma'lumotli asosiy qo'llanma. Biror funksiya haqida bilmoqchi bo'lsangiz, internetda "MDN [mavzu]" deb qidiring.</li></ul>
-<h2>Moslik jadvallari</h2>
+<h2 id="moslik-jadvallari">Moslik jadvallari</h2>
 <p>JavaScript rivojlanmoqda, muntazam yangi imkoniyatlar qo'shiladi. Ularning brauzerlarda qo'llab-quvvatlanishini ko'rish uchun:</p>
 <ul><li><strong>caniuse.com</strong> — bir imkoniyat qaysi brauzerlarda ishlashini ko'rsatadi;</li><li><strong>MDN moslik jadvallari</strong> — har bir funksiya sahifasida.</li></ul>
 <div class="tip">Bu manbalarni xatcho'plarga (bookmark) qo'shib qo'ying — biror narsani unutganingizda tez topasiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Spetsifikatsiya (ECMA-262)</strong> — rasmiy, chuqur manba;</li><li><strong>MDN</strong> — kundalik ish uchun eng qulay qo'llanma;</li><li><strong>caniuse.com</strong> — brauzer mosligini tekshirish uchun.</li></ul>
 <nav class="lesson-nav">
   <a href="js-haqida.html"><span class="dir">← Oldingi</span><span class="ttl">JavaScript haqida</span></a>
@@ -620,6 +632,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

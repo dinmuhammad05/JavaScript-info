@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wireshark bilan trafik tahlili — Kodla</title>
   <meta name="description" content="Wireshark nima va nega kerak, paket ushlash asoslari, interfeys tanlash, displey filtrlar, TCP oqimni kuzatish hamda HTTP va HTTPS farqi orqali TLS nega zarurligini isbotlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,18 +599,33 @@
 <main class="content article">
 <div class="crumbs">Amaliy vositalar (lab muhitida)</div>
 <h1>Wireshark bilan trafik tahlili</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#wireshark-nima">Wireshark nima</a></li>
+<li class="lvl2"><a href="#nega-bu-kerak">Nega bu kerak</a></li>
+<li class="lvl2"><a href="#interfeys-tanlash-va-paket-ushlash">Interfeys tanlash va paket ushlash</a></li>
+<li class="lvl2"><a href="#displey-filtrlar-wireshark-ning-kuchi">Displey filtrlar — Wireshark'ning kuchi</a></li>
+<li class="lvl2"><a href="#tcp-oqimni-kuzatish">TCP oqimni kuzatish</a></li>
+<li class="lvl2"><a href="#http-ochiq-matnli-login">HTTP: ochiq matnli login</a></li>
+<li class="lvl2"><a href="#https-shifrlangan-va-o-qib-bo-lmaydigan">HTTPS: shifrlangan va o'qib bo'lmaydigan</a></li>
+<li class="lvl2"><a href="#himoya-sabog-i-har-doim-tls">Himoya sabog'i: har doim TLS</a></li>
+<li class="lvl2"><a href="#protokollarni-jonli-o-rganish">Protokollarni jonli o'rganish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Tarmoq bo'ylab har soniyada minglab paket uchib o'tadi, lekin ular ko'zga ko'rinmaydi. <strong>Wireshark</strong> — aynan shu ko'rinmas trafikni ko'zga ko'rinadigan qiladigan vosita. U tarmoqda nima ketayotganini paketma-paket ochib beradi. Bu darsda uni o'z laboratoriya trafigingizni tahlil qilish uchun ishlatamiz va nima uchun har doim <code>HTTPS</code> kerakligini o'z ko'zimiz bilan ko'ramiz.</p>
-<h2>Wireshark nima</h2>
+<h2 id="wireshark-nima">Wireshark nima</h2>
 <p><strong>Wireshark</strong> — paket tahlilchisi (<em>packet analyzer</em>). U tarmoq interfeysingizdan o'tayotgan paketlarni ushlaydi (capture) va ularning har birini eng mayda tafsilotigacha ochib ko'rsatadi: qaysi manzildan qaysi manzilga, qaysi protokol bilan, qanday ma'lumot ketmoqda.</p>
 <p>Wireshark — tarmoq muhandislari, tizim administratorlari va xavfsizlik mutaxassislarining kundalik asbobi. U bilan tarmoq muammolarini tuzatish, protokollarni o'rganish va trafikni tahlil qilish mumkin. Biz uni o'rganuvchi sifatida — "tarmoqda aslida nima ketyapti?" degan savolga javob topish uchun ishlatamiz.</p>
 <div class="warn">Faqat o'z trafigingizni yoki o'z laboratoriyangiz trafigini tahlil qiling. Boshqalarning tarmoq trafigini ularning roziligisiz ushlash va o'qish — JINOYAT va shaxsiy hayotga tajovuz. Bu qoidani hech qachon buzmang.</div>
-<h2>Nega bu kerak</h2>
+<h2 id="nega-bu-kerak">Nega bu kerak</h2>
 <p>Wireshark uch narsaga xizmat qiladi. Birinchidan, <strong>muammo tuzatish</strong>: ilova serverga ulanolmasa, paketlarga qarab, so'rov qayerda "qotib qolayotganini" aniqlaysiz. Ikkinchidan, <strong>o'rganish</strong>: protokollar (TCP, DNS, HTTP) qanday ishlashini kitobdan emas, jonli misolda ko'rasiz. Uchinchidan, <strong>xavfsizlik</strong>: ma'lumot shifrlanganmi yoki ochiq matnda ketyaptimi — buni o'z ko'zingiz bilan tekshirasiz.</p>
-<h2>Interfeys tanlash va paket ushlash</h2>
+<h2 id="interfeys-tanlash-va-paket-ushlash">Interfeys tanlash va paket ushlash</h2>
 <p>Wireshark'ni ishga tushirganingizda birinchi ko'radigan narsangiz — tarmoq interfeyslari ro'yxati (masalan, <code>eth0</code>, <code>wlan0</code>, yoki lab uchun <code>vboxnet0</code> host-only interfeysi). Trafikni ushlash uchun qaysi interfeysdan tinglashni tanlaysiz.</p>
 <p>Kerakli interfeysni ikki marta bosish bilan ushlash boshlanadi. Ekran paketlar bilan to'lib boradi — har bir qator bitta paket. Ushlashni to'xtatgach, ularni bemalol ko'zdan kechirishingiz mumkin. Lab uchun host-only interfeysini (masalan <code>vboxnet0</code>) tanlang — shunda faqat lab mashinalari orasidagi trafikni ko'rasiz.</p>
 <div class="note">Paketlarni ushlash uchun odatda administrator (root) huquqi kerak, chunki bu tarmoq kartasiga past darajada murojaat qiladi. Kali'da Wireshark shu huquq bilan ishlashga sozlangan holda keladi.</div>
-<h2>Displey filtrlar — Wireshark'ning kuchi</h2>
+<h2 id="displey-filtrlar-wireshark-ning-kuchi">Displey filtrlar — Wireshark'ning kuchi</h2>
 <p>Bir necha soniyada minglab paket to'planadi — bularning hammasini qo'lda ko'rib bo'lmaydi. Aynan shu yerda <strong>displey filtrlar</strong> ish beradi: siz faqat qiziqtirgan paketlarni ko'rsatasiz, qolganini yashirasiz. Filtrni yuqoridagi maxsus qatorga yozasiz:</p>
 <pre class="code"><code># Faqat HTTP trafigini ko'rsatish:
 http
@@ -630,10 +648,10 @@ http or dns
 # HTTP so'rovlari, lekin rasm fayllaridan tashqari:
 http.request and not http.request.uri contains ".png"</code></pre>
 <div class="tip">Filtr — Wireshark'ning eng kuchli tomoni. "Hamma narsani ko'rish" o'rniga "aynan kerakli narsani ko'rish"ni o'rganing. Yaxshi filtr minglab paketni bir nechtaga qisqartiradi va tahlilni oson qiladi.</div>
-<h2>TCP oqimni kuzatish</h2>
+<h2 id="tcp-oqimni-kuzatish">TCP oqimni kuzatish</h2>
 <p>Bitta so'rov ko'pincha bir nechta paketga bo'linadi. Ularni birma-bir ko'rish o'rniga, Wireshark'ning <strong>Follow TCP Stream</strong> ("TCP oqimni kuzatish") xususiyatidan foydalaning. Paketga o'ng tugma bilan bosib, shu buyruqni tanlaganingizda, Wireshark barcha bog'liq paketlarni yig'ib, butun suhbatni bir oynada ko'rsatadi.</p>
 <p>Bu ayniqsa <code>HTTP</code> uchun foydali: klient nima so'raganini va server nima javob berganini xuddi matn sifatida to'liq o'qiysiz. So'rov sarlavhalari, javob kodi, hatto uzatilgan ma'lumot — barchasi bir joyda.</p>
-<h2>HTTP: ochiq matnli login</h2>
+<h2 id="http-ochiq-matnli-login">HTTP: ochiq matnli login</h2>
 <p>Endi eng muhim tajribaga o'tamiz. O'z laboratoriyangizdagi <code>HTTP</code> (shifrlanmagan) web ilovaga — masalan DVWA'ga — login qiling va o'sha paytda trafikni ushlang. So'ng <code>http</code> filtri bilan login so'rovini toping va TCP oqimni kuzating. Quyidagicha manzarani ko'rasiz:</p>
 <pre class="code"><code># HTTP login so'rovi (Follow TCP Stream ichida):
 POST /login.php HTTP/1.1
@@ -646,7 +664,7 @@ username=admin&amp;password=parol123
 # HTTP shifrlanmagani uchun har kim buni o'qiy oladi.</code></pre>
 <p>Mana, xavfsizlikning eng jonli darsi: <code>HTTP</code> orqali yuborilgan login va parol tarmoqda ochiq matnda uchadi. Trafikni ushlagan har qanday odam uni bemalol o'qiy oladi. Bu — nazariya emas, o'z ko'zingiz bilan ko'rgan haqiqat.</p>
 <div class="warn">Bu tajribani FAQAT o'z laboratoriya trafigingizda, o'zingiz kiritgan soxta login bilan bajaring. Boshqa birovning login-parolini ushlash — jinoyat. Bu yerda maqsad — himoya tamoyilini tushunish, hujum emas.</div>
-<h2>HTTPS: shifrlangan va o'qib bo'lmaydigan</h2>
+<h2 id="https-shifrlangan-va-o-qib-bo-lmaydigan">HTTPS: shifrlangan va o'qib bo'lmaydigan</h2>
 <p>Endi xuddi shu tajribani <code>HTTPS</code> (masalan, <code>https://127.0.0.1:3000</code> dagi Juice Shop) bilan takrorlang. Trafikni ushlab, TCP oqimni kuzatsangiz, butunlay boshqa manzara ko'rasiz:</p>
 <pre class="code"><code># HTTPS trafigi (Follow TCP Stream ichida):
 16 03 03 00 45 a1 f2 9c 3b ...  (tushunarsiz baytlar)
@@ -655,14 +673,14 @@ e7 4d 1a 88 c0 5f 2e 91 ...     (shifrlangan ma'lumot)
 # Login va parol YO'Q — hammasi shifrlangan.
 # TLS ularni o'qib bo'lmaydigan holga keltirgan.</code></pre>
 <p>Farq keskin: <code>HTTP</code>da parol ochiq ko'rinardi, <code>HTTPS</code>da esa faqat tushunarsiz shifrlangan baytlar. <code>TLS</code> (<em>Transport Layer Security</em> — <code>HTTPS</code>dagi "S") ma'lumotni uzatishdan oldin shifrlaydi, shuning uchun trafikni ushlagan odam ham hech narsani o'qiy olmaydi.</p>
-<h2>Himoya sabog'i: har doim TLS</h2>
+<h2 id="himoya-sabog-i-har-doim-tls">Himoya sabog'i: har doim TLS</h2>
 <p>Ushbu ikki tajriba butun bir ma'ruzaga arziydigan xulosani beradi: <strong>har doim HTTPS/TLS ishlating</strong>. Login sahifasi, forma, API — foydalanuvchi ma'lumoti ketadigan har qanday joy shifrlangan ulanish orqali bo'lishi shart.</p>
 <ul><li>Web ilovangiz uchun har doim <code>HTTPS</code>ni yoqing va <code>HTTP</code>'ni <code>HTTPS</code>'ga yo'naltiring;</li><li>Maxfiy ma'lumotni hech qachon shifrlanmagan kanal orqali yubormang;</li><li>Ochiq Wi-Fi kabi ishonchsiz tarmoqlarda ayniqsa ehtiyot bo'ling — u yerda trafik ushlanishi oson.</li></ul>
 <p>Wireshark bu saboqni kitobdagi jumla emas, balki o'z ko'zingiz bilan ko'rgan dalilga aylantiradi. Aynan shuning uchun u shu qadar kuchli o'quv vositasi.</p>
-<h2>Protokollarni jonli o'rganish</h2>
+<h2 id="protokollarni-jonli-o-rganish">Protokollarni jonli o'rganish</h2>
 <p>Wireshark shunchaki xavfsizlik asbobi emas — u protokollarni o'rganishning eng yaxshi usullaridan biri. Masalan, brauzerda bir sahifa ochib, <code>dns</code> filtri bilan DNS so'rov-javobini ko'rasiz; keyin <code>tcp</code> filtri bilan TCP ulanish qanday o'rnatilishini (uch qadamli "qo'l berish") kuzatasiz. Kitobdagi sxemalar birdan jonli manzaraga aylanadi.</p>
 <p>Har bir paketni bosganingizda, Wireshark uni qatlamma-qatlam ochib beradi: Ethernet, IP, TCP, va yuqoridagi protokol. Bu tarmoq qanday qavatlardan iboratligini his qilishning eng aniq yo'li.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Wireshark tarmoqning ko'rinmas trafigini ko'rinadigan qiladi. Interfeys tanlab paket ushlaysiz, displey filtrlar bilan kerakligini ajratasiz, Follow TCP Stream bilan butun suhbatni o'qiysiz. Eng muhim saboq — <code>HTTP</code>da parol ochiq, <code>HTTPS</code>da shifrlangan: shuning uchun har doim TLS.</p>
 <div class="tip">Filtr — Wireshark'ning kuchi. Yaxshi filtr yozishni mashq qiling: <code>http</code>, <code>ip.addr == ...</code>, <code>tcp.port == ...</code> — bu uchtasi eng ko'p ishlatiladigan va eng foydali filtrlardir.</div>
 <nav class="lesson-nav">
@@ -677,6 +695,6 @@ e7 4d 1a 88 c0 5f 2e 91 ...     (shifrlangan ma'lumot)
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

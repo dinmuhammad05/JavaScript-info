@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Routing va DTO — Kodla</title>
   <meta name="description" content="HTTP metod dekoratorlari (@Get, @Post, @Put, @Delete), parametrlarni olish (@Param, @Query, @Body), DTO klasslari orqali ma'lumot shakli, class-validator va ValidationPipe bilan avtomatik validatsiya.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">NestJS</div>
 <h1>Routing va DTO</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#http-metod-dekoratorlari">HTTP metod dekoratorlari</a></li>
+<li class="lvl2"><a href="#param-marshrut-parametrlari">@Param — marshrut parametrlari</a></li>
+<li class="lvl2"><a href="#query-so-rov-parametrlari">@Query — so'rov parametrlari</a></li>
+<li class="lvl2"><a href="#body-so-rov-tanasi">@Body — so'rov tanasi</a></li>
+<li class="lvl2"><a href="#dto-ma-lumot-uzatish-obyekti">DTO — ma'lumot uzatish obyekti</a></li>
+<li class="lvl2"><a href="#class-validator-bilan-validatsiya">class-validator bilan validatsiya</a></li>
+<li class="lvl2"><a href="#validationpipe-validatsiyani-yoqish">ValidationPipe — validatsiyani yoqish</a></li>
+<li class="lvl2"><a href="#parseintpipe-parametr-aylantirish">ParseIntPipe — parametr aylantirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har qanday REST API'ning yuragi — bu <strong>routing</strong>, ya'ni turli manzil va HTTP metodlarini tegishli funksiyalarga bog'lash. NestJS routing'ni juda tushunarli qiladi: har bir metod uchun alohida dekorator, parametrlarni olish uchun alohida dekorator. Bundan tashqari, kiruvchi ma'lumotni <strong>DTO</strong> klasslari va avtomatik validatsiya bilan xavfsiz qilishni o'rganamiz.</p>
-<h2>HTTP metod dekoratorlari</h2>
+<h2 id="http-metod-dekoratorlari">HTTP metod dekoratorlari</h2>
 <p>REST API'da har bir amal o'z HTTP metodiga ega bo'ladi. NestJS har bir metod uchun dekorator beradi. Ular controller metodini ma'lum bir marshrut va metodga bog'laydi:</p>
 <ul><li><code>@Get()</code> — ma'lumot o'qish (masalan, ro'yxatni olish);</li><li><code>@Post()</code> — yangi ma'lumot yaratish;</li><li><code>@Put()</code> — mavjud ma'lumotni to'liq yangilash;</li><li><code>@Patch()</code> — ma'lumotning bir qismini yangilash;</li><li><code>@Delete()</code> — ma'lumotni o'chirish.</li></ul>
 <pre class="code"><code>// src/users/users.controller.ts
@@ -619,7 +636,7 @@ export class UsersController {
   remove() { return 'o'chirildi'; }
 }</code></pre>
 <div class="note">Marshrut prefiksi (<code>@Controller('users')</code>) va metod yo'li (<code>@Get(':id')</code>) birlashadi. Ya'ni <code>@Get(':id')</code> aslida <code>GET /users/:id</code> manzilini bildiradi.</div>
-<h2>@Param — marshrut parametrlari</h2>
+<h2 id="param-marshrut-parametrlari">@Param — marshrut parametrlari</h2>
 <p>Marshrutda <code>:id</code> kabi qism <strong>marshrut parametri</strong> deb ataladi. Uning qiymatini olish uchun <code>@Param</code> dekoratoridan foydalanamiz. Masalan, <code>GET /users/42</code> so'rovida <code>id</code> qiymati <code>42</code> bo'ladi:</p>
 <pre class="code"><code>import { Controller, Get, Param } from '@nestjs/common';
 
@@ -633,7 +650,7 @@ export class UsersController {
   }
 }</code></pre>
 <div class="warn">Marshrut parametrlari <strong>har doim satr</strong> ko'rinishida keladi, hatto ular raqamga o'xshasa ham. <code>id</code>'ni son sifatida ishlatish uchun uni <code>Number(id)</code> bilan aylantiring yoki keyinroq ko'radigan <code>ParseIntPipe</code>'dan foydalaning.</div>
-<h2>@Query — so'rov parametrlari</h2>
+<h2 id="query-so-rov-parametrlari">@Query — so'rov parametrlari</h2>
 <p>URL'dagi <code>?</code> dan keyingi qism — bu <strong>query string</strong> (so'rov parametrlari). Masalan <code>/users?page=2&limit=10</code>. Ularni <code>@Query</code> dekoratori bilan olamiz. Bu odatda filtrlash, saralash va sahifalash uchun ishlatiladi:</p>
 <pre class="code"><code>import { Controller, Get, Query } from '@nestjs/common';
 
@@ -646,7 +663,7 @@ export class UsersController {
     return 'Sahifa: ' + page + ', limit: ' + limit;
   }
 }</code></pre>
-<h2>@Body — so'rov tanasi</h2>
+<h2 id="body-so-rov-tanasi">@Body — so'rov tanasi</h2>
 <p>POST va PUT so'rovlarida ma'lumot odatda so'rov <strong>tanasida</strong> (body) JSON ko'rinishida yuboriladi. Uni olish uchun <code>@Body</code> dekoratoridan foydalanamiz. NestJS JSON'ni avtomatik o'qiydi (Express'dagi <code>express.json()</code> ichkarida allaqachon yoqilgan):</p>
 <pre class="code"><code>import { Controller, Post, Body } from '@nestjs/common';
 
@@ -660,7 +677,7 @@ export class UsersController {
   }
 }</code></pre>
 <p>Lekin <code>body: any</code> yozish yomon amaliyot: bu tipni yo'qotadi va ma'lumot shaklini nazorat qilmaydi. Aynan shu yerda <strong>DTO</strong> tushunchasi kirib keladi.</p>
-<h2>DTO — ma'lumot uzatish obyekti</h2>
+<h2 id="dto-ma-lumot-uzatish-obyekti">DTO — ma'lumot uzatish obyekti</h2>
 <p><strong>DTO</strong> (Data Transfer Object — ma'lumot uzatish obyekti) — bu so'rov tanasi qanday ko'rinishda bo'lishini belgilaydigan klass. U ma'lumotning <em>shakli</em>ni (qaysi maydonlar, qaysi tiplar) rasmiylashtiradi. DTO odatda alohida faylda yoziladi:</p>
 <pre class="code"><code>// src/users/dto/create-user.dto.ts
 export class CreateUserDto {
@@ -682,7 +699,7 @@ export class UsersController {
   }
 }</code></pre>
 <div class="note">DTO va <code>interface</code> orasidagi farq muhim: DTO <strong>klass</strong> bo'lishi kerak, interface emas. Sababi — validatsiya dekoratorlari (keyingi bo'lim) faqat klasslarda ishlaydi. TypeScript interface'lari kompilyatsiya vaqtida yo'qoladi, klasslar esa ishga tushish paytida ham mavjud bo'ladi.</div>
-<h2>class-validator bilan validatsiya</h2>
+<h2 id="class-validator-bilan-validatsiya">class-validator bilan validatsiya</h2>
 <p>DTO'ning eng katta kuchi — u <strong>avtomatik validatsiya</strong>ga imkon beradi. Buning uchun ikki paket kerak: <code>class-validator</code> va <code>class-transformer</code>. Ularni o'rnatamiz:</p>
 <pre class="code"><code>npm install class-validator class-transformer</code></pre>
 <p>Endi DTO maydonlariga validatsiya dekoratorlarini qo'shamiz. Har bir dekorator ma'lum bir qoidani tekshiradi:</p>
@@ -704,7 +721,7 @@ export class CreateUserDto {
 }</code></pre>
 <p>Ko'p ishlatiladigan validatsiya dekoratorlari:</p>
 <ul><li><code>@IsString()</code>, <code>@IsInt()</code>, <code>@IsBoolean()</code> — tip tekshiruvi;</li><li><code>@IsEmail()</code>, <code>@IsUrl()</code> — format tekshiruvi;</li><li><code>@MinLength(n)</code>, <code>@MaxLength(n)</code> — satr uzunligi;</li><li><code>@Min(n)</code>, <code>@Max(n)</code> — sonlar chegarasi;</li><li><code>@IsOptional()</code> — maydon ixtiyoriy ekanligini bildiradi;</li><li><code>@IsNotEmpty()</code> — bo'sh bo'lmasligi kerak.</li></ul>
-<h2>ValidationPipe — validatsiyani yoqish</h2>
+<h2 id="validationpipe-validatsiyani-yoqish">ValidationPipe — validatsiyani yoqish</h2>
 <p>Dekoratorlarni yozishning o'zi yetarli emas — NestJS'ga ularni tekshirishni buyurish kerak. Buni <strong>ValidationPipe</strong> global tarzda yoqib qilamiz. Buni <code>main.ts</code>'da bir marta sozlaymiz:</p>
 <pre class="code"><code>// src/main.ts
 import { NestFactory } from '@nestjs/core';
@@ -739,7 +756,7 @@ bootstrap();</code></pre>
 //   "error": "Bad Request"
 // }</code></pre>
 <div class="tip"><code>whitelist: true</code> juda foydali xavfsizlik sozlamasi: u DTO'da e'lon qilinmagan barcha maydonlarni avtomatik olib tashlaydi. Bu mijoz ortiqcha maydonlar (masalan, <code>isAdmin: true</code>) yuborib, tizimni chalg'itishining oldini oladi.</div>
-<h2>ParseIntPipe — parametr aylantirish</h2>
+<h2 id="parseintpipe-parametr-aylantirish">ParseIntPipe — parametr aylantirish</h2>
 <p>Yodingizda bo'lsa, marshrut parametrlari doim satr keladi. NestJS'ning tayyor <strong>Pipe</strong>'lari qiymatni avtomatik aylantirib, tekshirib beradi. Masalan <code>ParseIntPipe</code> satrni songa aylantiradi va agar bu mumkin bo'lmasa, 400 xato beradi:</p>
 <pre class="code"><code>import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 
@@ -753,7 +770,7 @@ export class UsersController {
     return 'ID: ' + id;
   }
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>HTTP metodlari uchun <code>@Get</code>, <code>@Post</code>, <code>@Put</code>, <code>@Patch</code>, <code>@Delete</code> dekoratorlari mavjud;</li><li><code>@Param</code> marshrut parametrini, <code>@Query</code> so'rov parametrini, <code>@Body</code> so'rov tanasini oladi;</li><li><strong>DTO</strong> — so'rov tanasi shaklini belgilaydigan <em>klass</em> (interface emas);</li><li><code>class-validator</code> dekoratorlari (<code>@IsString</code>, <code>@IsEmail</code>, <code>@Min</code>) validatsiya qoidalarini beradi;</li><li><strong>ValidationPipe</strong> global yoqilganda ma'lumotni avtomatik tekshiradi va noto'g'ri bo'lsa 400 qaytaradi;</li><li><code>whitelist: true</code> ortiqcha maydonlarni olib tashlab, xavfsizlikni oshiradi;</li><li><code>ParseIntPipe</code> kabi pipe'lar parametrlarni avtomatik aylantirib tekshiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="nestjs-struktura.html"><span class="dir">← Oldingi</span><span class="ttl">Loyiha tuzilishi: Module, Controller, Service</span></a>
@@ -767,6 +784,6 @@ export class UsersController {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

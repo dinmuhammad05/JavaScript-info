@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ma'lumotlar bazasi nima? — Kodla</title>
   <meta name="description" content="Ma'lumotlar bazasi nima uchun kerak, DBMS (ma'lumotlar bazasini boshqarish tizimi) nima, relatsion (SQL) va NoSQL bazalar farqi, jadval/qator/ustun tushunchalari, mashhur bazalar (PostgreSQL, MySQL, MongoDB) va qachon qaysi birini tanlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,22 +599,38 @@
 <main class="content article">
 <div class="crumbs">Ma'lumotlar bazalari</div>
 <h1>Ma'lumotlar bazasi nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nima-uchun-ma-lumotlar-bazasi-kerak">Nima uchun ma'lumotlar bazasi kerak?</a></li>
+<li class="lvl2"><a href="#dbms-ma-lumotlar-bazasini-boshqarish-tizimi">DBMS — ma'lumotlar bazasini boshqarish tizimi</a></li>
+<li class="lvl2"><a href="#ikki-katta-oila-sql-va-nosql">Ikki katta oila: SQL va NoSQL</a></li>
+<li class="lvl2"><a href="#relatsion-baza-jadval-qator-ustun">Relatsion baza: jadval, qator, ustun</a></li>
+<li class="lvl2"><a href="#nosql-baza-hujjat-ko-rinishi">NoSQL baza: hujjat ko'rinishi</a></li>
+<li class="lvl2"><a href="#mashhur-bazalar">Mashhur bazalar</a></li>
+<li class="lvl3"><a href="#postgresql">PostgreSQL</a></li>
+<li class="lvl3"><a href="#mysql">MySQL</a></li>
+<li class="lvl3"><a href="#mongodb">MongoDB</a></li>
+<li class="lvl2"><a href="#qachon-qaysi-birini-tanlash">Qachon qaysi birini tanlash?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har qanday jiddiy dastur ma'lumotni <strong>saqlashi</strong> kerak: foydalanuvchilar, buyurtmalar, xabarlar, rasmlar haqidagi ma'lumot. Dastur o'chib qayta ishga tushganda ham bu ma'lumot yo'qolmasligi shart. Aynan shu vazifani <em>ma'lumotlar bazasi</em> (database) bajaradi. Ushbu darsda ma'lumotlar bazasi nima ekanligini, nima uchun oddiy faylda saqlashdan yaxshiroq ekanligini va qanday turlari borligini o'rganamiz.</p>
-<h2>Nima uchun ma'lumotlar bazasi kerak?</h2>
+<h2 id="nima-uchun-ma-lumotlar-bazasi-kerak">Nima uchun ma'lumotlar bazasi kerak?</h2>
 <p>Aytaylik, siz kichik dastur yozdingiz va foydalanuvchilar ro'yxatini oddiy matnli faylda saqlamoqchisiz. Boshida bu ishlaydi. Lekin dastur o'sgani sayin muammolar paydo bo'ladi:</p>
 <ul><li><strong>Qidiruv sekin</strong> — 1 million foydalanuvchi orasidan bittasini topish uchun butun faylni boshdan-oxir o'qib chiqishga to'g'ri keladi;</li><li><strong>Bir vaqtda yozish xavfli</strong> — ikki foydalanuvchi bir vaqtda faylni o'zgartirsa, ma'lumot buzilishi mumkin;</li><li><strong>Butunlikni tekshirish qiyin</strong> — masalan, bir email ikki marta ro'yxatdan o'tmasligini kafolatlash uchun har safar butun faylni tekshirish kerak;</li><li><strong>Qisman yozuv</strong> — fayl yozilayotganda dastur o'chib qolsa, yarim yozilgan buzuq ma'lumot qoladi;</li><li><strong>Murakkab so'rovlar</strong> — "eng ko'p buyurtma bergan 10 mijozni topish" kabi so'rovlarni faylga qo'llash deyarli imkonsiz.</li></ul>
 <p>Ma'lumotlar bazasi bu muammolarning barchasini hal qilish uchun maxsus yaratilgan. U ma'lumotni tez qidirish, xavfsiz saqlash, bir vaqtda ko'plab foydalanuvchilarga xizmat qilish va murakkab so'rovlarni bajarish uchun optimallashtirilgan.</p>
-<h2>DBMS — ma'lumotlar bazasini boshqarish tizimi</h2>
+<h2 id="dbms-ma-lumotlar-bazasini-boshqarish-tizimi">DBMS — ma'lumotlar bazasini boshqarish tizimi</h2>
 <p>Aslida "ma'lumotlar bazasi" deganda biz ikki narsani nazarda tutamiz. Birinchisi — ma'lumotning o'zi (jadvallar, yozuvlar). Ikkinchisi — <strong>DBMS</strong> (Database Management System, ma'lumotlar bazasini boshqarish tizimi) — bu ma'lumotni saqlaydigan, o'qiydigan va boshqaradigan dastur.</p>
 <p>PostgreSQL, MySQL, MongoDB — bularning barchasi aslida DBMS'lardir. Ular alohida dastur (ko'pincha <em>server</em>) sifatida ishlaydi. Sizning dasturingiz DBMS'ga <strong>so'rov</strong> (query) yuboradi, DBMS esa javob qaytaradi:</p>
 <pre class="code"><code>Sizning dasturingiz  ---so'rov---&gt;  DBMS (server)  &lt;---&gt;  Disk (ma'lumot)
 (Node.js)            &lt;---javob----  (PostgreSQL)</code></pre>
 <div class="note">Bu arxitektura muhim: DBMS odatda alohida jarayon (ba'zan alohida kompyuter) sifatida ishlaydi. Sizning Node.js dasturingiz unga tarmoq orqali ulanadi. Shuning uchun bitta bazaga bir nechta dastur bir vaqtda ulanishi mumkin.</div>
-<h2>Ikki katta oila: SQL va NoSQL</h2>
+<h2 id="ikki-katta-oila-sql-va-nosql">Ikki katta oila: SQL va NoSQL</h2>
 <p>Ma'lumotlar bazalari ikki katta guruhga bo'linadi:</p>
 <ul><li><strong>Relatsion (SQL) bazalar</strong> — ma'lumotni <em>jadvallar</em> ko'rinishida saqlaydi. Har bir jadval qat'iy tuzilishga (sxemaga) ega. Ular bilan ishlash uchun <strong>SQL</strong> tili ishlatiladi. Misollar: PostgreSQL, MySQL, SQLite, Oracle, SQL Server;</li><li><strong>NoSQL bazalar</strong> — ma'lumotni jadval emas, boshqa ko'rinishlarda (hujjatlar, kalit-qiymat juftliklari, graflar) saqlaydi. Tuzilish erkinroq. Misollar: MongoDB (hujjatli), Redis (kalit-qiymat), Cassandra.</li></ul>
 <p>"SQL" so'zi <em>Structured Query Language</em> (tuzilgan so'rovlar tili) ma'nosini bildiradi. Bu — relatsion bazalar bilan gaplashish uchun standart til. "NoSQL" esa "SQL emas" degani, ya'ni SQL tilidan foydalanmaydigan bazalarning umumiy nomi.</p>
-<h2>Relatsion baza: jadval, qator, ustun</h2>
+<h2 id="relatsion-baza-jadval-qator-ustun">Relatsion baza: jadval, qator, ustun</h2>
 <p>Relatsion bazani tushunish uchun Excel jadvalini tasavvur qiling. Ma'lumot <strong>jadval</strong> (table) ko'rinishida saqlanadi. Masalan, <code>users</code> (foydalanuvchilar) jadvali:</p>
 <pre class="code"><code>users jadvali:
 
@@ -623,7 +642,7 @@
 <p>Bu jadvalning asosiy qismlari:</p>
 <ul><li><strong>Ustun</strong> (column) — vertikal to'plam. Yuqorida <code>id</code>, <code>name</code>, <code>email</code>, <code>age</code> — bular ustunlar. Har bir ustunning nomi va turi bor (masalan, <code>age</code> — butun son);</li><li><strong>Qator</strong> (row) yoki yozuv (record) — gorizontal to'plam. Bitta qator bitta obyektni tasvirlaydi. Yuqoridagi 1-qator — bu "Ali" ismli foydalanuvchi;</li><li><strong>Katak</strong> (cell) — ustun va qator kesishmasidagi bitta qiymat (masalan, 1-qator, <code>name</code> ustuni = "Ali");</li><li><strong>Sxema</strong> (schema) — jadvalning tuzilishi: qanday ustunlar bor, ularning turlari qanday. Sxema oldindan belgilanadi.</li></ul>
 <div class="note">Relatsion baza "relatsion" deb atalishining sababi — jadvallar bir-biri bilan <em>bog'lana</em> (relation) oladi. Masalan, <code>orders</code> (buyurtmalar) jadvali <code>users</code> jadvaliga bog'lanib, qaysi buyurtma qaysi foydalanuvchiga tegishli ekanligini ko'rsatishi mumkin. Bu haqda JOIN darsida batafsil gaplashamiz.</div>
-<h2>NoSQL baza: hujjat ko'rinishi</h2>
+<h2 id="nosql-baza-hujjat-ko-rinishi">NoSQL baza: hujjat ko'rinishi</h2>
 <p>NoSQL bazalarning eng mashhuri — MongoDB. U ma'lumotni jadval emas, <strong>hujjat</strong> (document) ko'rinishida saqlaydi. Hujjat — bu JSON obyektiga juda o'xshash tuzilma:</p>
 <pre class="code"><code>{
   "_id": 1,
@@ -640,19 +659,19 @@
 jadval (table)   kolleksiya (collection)
 qator (row)      hujjat (document)
 ustun (column)   maydon (field)</code></pre>
-<h2>Mashhur bazalar</h2>
-<h3>PostgreSQL</h3>
+<h2 id="mashhur-bazalar">Mashhur bazalar</h2>
+<h3 id="postgresql">PostgreSQL</h3>
 <p>Kuchli, ochiq kodli relatsion baza. Ilg'or imkoniyatlari, ishonchliligi va standartlarga rioya qilishi bilan mashhur. JSON ma'lumotini ham qo'llaydi, ya'ni ham relatsion, ham qisman NoSQL vazifasini bajaradi. Ko'p tajribali backend dasturchilar birinchi tanlov sifatida PostgreSQL'ni tavsiya qiladi.</p>
-<h3>MySQL</h3>
+<h3 id="mysql">MySQL</h3>
 <p>Yana bir mashhur ochiq kodli relatsion baza. Uzoq tarixga ega, sozlash oson, veb-hostinglarda keng tarqalgan (WordPress kabi tizimlar undan foydalanadi). PostgreSQL bilan juda o'xshash, farqlari asosan ilg'or imkoniyatlarda.</p>
-<h3>MongoDB</h3>
+<h3 id="mongodb">MongoDB</h3>
 <p>Eng mashhur hujjatli NoSQL baza. Ma'lumot JSON-simon ko'rinishda saqlanadi, tuzilish erkin. Tez prototip yasash va tuzilishi tez o'zgaradigan loyihalar uchun qulay. Node.js dunyosida keng ishlatiladi, chunki ma'lumot ko'rinishi JavaScript obyektlariga juda o'xshaydi.</p>
 <div class="note">Yana ba'zi bazalar: <strong>SQLite</strong> — server talab qilmaydigan, bitta faylga saqlaydigan yengil relatsion baza (mobil ilovalar va kichik loyihalar uchun). <strong>Redis</strong> — juda tez, xotirada ishlaydigan kalit-qiymat bazasi (kesh va navbatlar uchun).</div>
-<h2>Qachon qaysi birini tanlash?</h2>
+<h2 id="qachon-qaysi-birini-tanlash">Qachon qaysi birini tanlash?</h2>
 <p>Universal javob yo'q, lekin umumiy tavsiyalar quyidagicha:</p>
 <ul><li>Ma'lumotingiz aniq tuzilishga ega bo'lsa (foydalanuvchilar, buyurtmalar, to'lovlar) va ular orasida ko'p bog'lanishlar bo'lsa — <strong>relatsion baza (PostgreSQL)</strong> tanlang;</li><li>Pul, buyurtma, moliyaviy operatsiyalar bilan ishlasangiz, ya'ni ma'lumot butunligi juda muhim bo'lsa — <strong>relatsion baza</strong> (u "tranzaksiyalar" orqali ma'lumot butunligini kafolatlaydi);</li><li>Ma'lumot tuzilishi noaniq yoki tez o'zgaradigan bo'lsa, ichma-ich murakkab obyektlar ko'p bo'lsa — <strong>MongoDB</strong> qulayroq bo'lishi mumkin;</li><li>Juda tez o'qish/yozish kerak bo'lsa (kesh, sessiyalar) — <strong>Redis</strong> kabi xotira bazasi.</li></ul>
 <div class="tip">Yangi boshlovchi uchun eng yaxshi maslahat: <strong>relatsion baza (PostgreSQL yoki MySQL) va SQL</strong> tilini o'rganishdan boshlang. SQL — bu 50 yildan beri ishlatilayotgan, deyarli barcha kompaniyalarda kerak bo'ladigan asosiy ko'nikma. Uni bilsangiz, boshqa bazalarni ham osonroq tushunasiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Ma'lumotlar bazasi — ma'lumotni tez, xavfsiz va ishonchli saqlash uchun maxsus tizim; oddiy fayldan ancha ustun;</li><li><strong>DBMS</strong> — ma'lumotni boshqaradigan dastur (server); dasturingiz unga so'rov yuboradi;</li><li><strong>Relatsion (SQL)</strong> bazalar ma'lumotni jadvallarda saqlaydi (qator, ustun, sxema) va <strong>SQL</strong> tilida boshqariladi;</li><li><strong>NoSQL</strong> bazalar (masalan MongoDB) ma'lumotni hujjatlar (JSON-simon) ko'rinishida, erkin tuzilishda saqlaydi;</li><li>Mashhur bazalar: PostgreSQL, MySQL (relatsion), MongoDB (hujjatli), Redis (kalit-qiymat);</li><li>Boshlovchi uchun eng foydali yo'l — PostgreSQL/MySQL va SQL tilini o'rganish.</li></ul>
 <nav class="lesson-nav">
   <a href="express-middleware.html"><span class="dir">← Oldingi</span><span class="ttl">Middleware va xatoliklar</span></a>
@@ -666,6 +685,6 @@ ustun (column)   maydon (field)</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

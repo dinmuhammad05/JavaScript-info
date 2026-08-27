@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modullar va npm — Kodla</title>
   <meta name="description" content="CommonJS (require/module.exports) va ESM (import/export), o'rnatilgan modullar, npm nima, npm init, package.json, npm install, node_modules, dependencies va npx.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,26 @@
 <main class="content article">
 <div class="crumbs">Node.js va Express</div>
 <h1>Modullar va npm</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#modul-nima">Modul nima?</a></li>
+<li class="lvl2"><a href="#commonjs-require-va-module-exports">CommonJS: require va module.exports</a></li>
+<li class="lvl2"><a href="#esm-import-va-export">ESM: import va export</a></li>
+<li class="lvl2"><a href="#o-rnatilgan-built-in-modullar">O'rnatilgan (built-in) modullar</a></li>
+<li class="lvl2"><a href="#npm-nima">npm nima?</a></li>
+<li class="lvl2"><a href="#package-json-va-npm-init">package.json va npm init</a></li>
+<li class="lvl2"><a href="#npm-install-va-node-modules">npm install va node_modules</a></li>
+<li class="lvl2"><a href="#dependencies-va-devdependencies">dependencies va devDependencies</a></li>
+<li class="lvl2"><a href="#npx">npx</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har qanday jiddiy loyiha bir nechta fayldan iborat bo'ladi va tashqi kutubxonalardan foydalanadi. Node.js'da kodni fayllarga bo'lish uchun <strong>modullar</strong>, tashqi paketlarni o'rnatish uchun esa <strong>npm</strong> ishlatiladi. Ushbu darsda ikkalasini ham chuqur o'rganamiz.</p>
-<h2>Modul nima?</h2>
+<h2 id="modul-nima">Modul nima?</h2>
 <p>Node.js'da har bir <strong>fayl — alohida modul</strong>. Bir faylning o'zgaruvchi va funksiyalari boshqa faylga avtomatik ko'rinmaydi. Ularni almashish uchun modul kerakli narsalarni <strong>eksport</strong> qiladi, boshqa modul esa ularni <strong>import</strong> qiladi.</p>
 <p>Node.js ikki xil modul tizimini qo'llab-quvvatlaydi: eski, an'anaviy <strong>CommonJS</strong> va zamonaviy standart <strong>ESM</strong> (ES Modules).</p>
-<h2>CommonJS: require va module.exports</h2>
+<h2 id="commonjs-require-va-module-exports">CommonJS: require va module.exports</h2>
 <p><strong>CommonJS</strong> — Node.js'ning an'anaviy modul tizimi. Uzoq yillar davomida standart bo'lgan va hozir ham juda keng tarqalgan. Unda eksport uchun <code>module.exports</code>, import uchun <code>require()</code> ishlatiladi.</p>
 <p>Bir modulda funksiyani eksport qilaylik:</p>
 <pre class="code"><code>// math.js
@@ -625,7 +643,7 @@ const { qoshish } = require('./math.js');
 console.log(qoshish(10, 20)); // 30</code></pre>
 <p>Diqqat qiling: o'z fayllaringizni import qilishda <strong>nisbiy yo'l</strong> beriladi — <code>'./math.js'</code>. Bu yerda <code>./</code> joriy papkani bildiradi.</p>
 <div class="note"><code>module.exports</code>ga istalgan narsani berish mumkin: obyekt, funksiya, class, hatto sonni ham. Ko'pincha obyekt (bir nechta narsani eksport qilish uchun) ishlatiladi. Bitta narsani eksport qilsangiz — masalan, bitta funksiyani — <code>module.exports = qoshish</code> deb yozasiz.</div>
-<h2>ESM: import va export</h2>
+<h2 id="esm-import-va-export">ESM: import va export</h2>
 <p><strong>ESM</strong> (ES Modules) — bu JavaScript'ning rasmiy, standart modul tizimi. Siz uni brauzerdagi modullardan tanigansiz. U <code>import</code> va <code>export</code> kalit so'zlaridan foydalanadi.</p>
 <pre class="code"><code>// math.mjs
 export function qoshish(a, b) {
@@ -642,7 +660,7 @@ console.log(qoshish(2, 3)); // 5</code></pre>
 <p>Node.js'da ESM'ni ishlatishning ikki yo'li bor:</p>
 <ul><li>Fayl kengaytmasini <code>.mjs</code> qilib qo'yish;</li><li><code>package.json</code>ga <code>"type": "module"</code> qatorini qo'shish (u holda oddiy <code>.js</code> fayllar ham ESM sifatida ishlaydi).</li></ul>
 <div class="warn">CommonJS va ESM'ni bir faylda aralashtirib bo'lmaydi. Ya'ni bir faylda ham <code>require</code>, ham <code>import</code> yozib bo'lmaydi. Loyihada bittasini tanlab, izchil ishlating. Yangi loyihalar uchun ESM tavsiya etiladi, lekin ko'plab eski loyihalar va o'quv materiallari hali ham CommonJS'da.</div>
-<h2>O'rnatilgan (built-in) modullar</h2>
+<h2 id="o-rnatilgan-built-in-modullar">O'rnatilgan (built-in) modullar</h2>
 <p>Node.js o'zi bilan birga ko'plab foydali modullarni olib keladi — ularni o'rnatish shart emas, faqat import qilish kifoya. Ular <strong>o'rnatilgan modullar</strong> (built-in / core modules) deyiladi:</p>
 <ul><li><code>fs</code> — fayl tizimi bilan ishlash;</li><li><code>path</code> — fayl yo'llari bilan ishlash;</li><li><code>http</code> — HTTP server va so'rovlar;</li><li><code>os</code> — operatsion tizim haqida ma'lumot;</li><li><code>crypto</code> — shifrlash va xeshlash;</li><li><code>url</code> — URL manzillarni tahlil qilish.</li></ul>
 <pre class="code"><code>// O'rnatilgan modulni import qilish (yo'lsiz, faqat nom):
@@ -651,10 +669,10 @@ const os = require('os');
 console.log(os.platform()); // 'linux'
 console.log(os.cpus().length); // protsessor yadrolari soni</code></pre>
 <div class="note">O'rnatilgan modullarni import qilganda nom oldiga <code>./</code> qo'yilmaydi. <code>require('os')</code> — o'rnatilgan modul, <code>require('./os')</code> — sizning <code>os.js</code> faylingiz. Ba'zi zamonaviy modullar <code>node:</code> prefiksi bilan ham yoziladi: <code>require('node:fs')</code>.</div>
-<h2>npm nima?</h2>
+<h2 id="npm-nima">npm nima?</h2>
 <p><strong>npm</strong> (Node Package Manager) — bu Node.js bilan birga keladigan <strong>paketlar menejeri</strong>. U tashqi kutubxonalarni (paketlarni) o'rnatish, yangilash va boshqarishga imkon beradi.</p>
 <p>Dunyodagi eng katta ochiq kod omborlaridan biri — <a href="https://npmjs.com">npmjs.com</a>. U yerda millionlab tayyor paketlar bor: veb-freymvorklar, sana bilan ishlash, ma'lumotlar bazasi drayverlari va hokazo. Ularni bir buyruq bilan loyihangizga qo'shasiz.</p>
-<h2>package.json va npm init</h2>
+<h2 id="package-json-va-npm-init">package.json va npm init</h2>
 <p>Har bir Node.js loyihasining markazida <code>package.json</code> fayli turadi. U loyiha haqidagi ma'lumot (nomi, versiyasi, bog'liqliklari, skriptlari)ni saqlaydi. Uni yaratish uchun:</p>
 <pre class="code"><code>npm init
 # yoki barcha savollarni o'tkazib, standart qiymatlar bilan:
@@ -672,7 +690,7 @@ npm init -y</code></pre>
   "devDependencies": {}
 }</code></pre>
 <p><code>scripts</code> bo'limi juda foydali — u yerda buyruqlarga qisqa nom berishingiz mumkin. Masalan, <code>npm start</code> yozganingizda <code>node index.js</code> ishga tushadi. O'zingizning skriptlaringizni <code>npm run &lt;nom&gt;</code> orqali chaqirasiz.</p>
-<h2>npm install va node_modules</h2>
+<h2 id="npm-install-va-node-modules">npm install va node_modules</h2>
 <p>Tashqi paketni o'rnatish uchun <code>npm install</code> (yoki qisqacha <code>npm i</code>) ishlatiladi. Masalan, mashhur <code>express</code> freymvorkini o'rnataylik:</p>
 <pre class="code"><code>npm install express</code></pre>
 <p>Bu buyruq uch ish qiladi:</p>
@@ -681,7 +699,7 @@ npm init -y</code></pre>
 <pre class="code"><code>const express = require('express');
 const app = express();</code></pre>
 <div class="warn"><code>node_modules</code> papkasi juda katta bo'lishi mumkin (yuzlab megabayt). Uni git'ga <strong>joylamang</strong> — <code>.gitignore</code> fayliga <code>node_modules/</code> qatorini qo'shing. Loyihani boshqa joyda ochganda <code>npm install</code> buyrug'i <code>package.json</code> asosida barcha paketlarni qayta yuklab oladi.</div>
-<h2>dependencies va devDependencies</h2>
+<h2 id="dependencies-va-devdependencies">dependencies va devDependencies</h2>
 <p><code>package.json</code>da bog'liqliklar ikki turga bo'linadi:</p>
 <ul><li><strong>dependencies</strong> — ilova ishlashi uchun kerak bo'lgan paketlar (masalan, <code>express</code>);</li><li><strong>devDependencies</strong> — faqat ishlab chiqish (development) paytida kerak bo'lgan paketlar (masalan, test vositalari, kod tekshirgichlari).</li></ul>
 <pre class="code"><code># Oddiy bog'liqlik (dependencies):
@@ -693,7 +711,7 @@ npm install --save-dev nodemon
 npm install -D nodemon</code></pre>
 <p>Ishlab chiqarish (production) serverida faqat <code>dependencies</code> o'rnatiladi, <code>devDependencies</code> esa o'tkazib yuboriladi — bu serverni yengil qiladi. Buning uchun <code>npm install --production</code> ishlatiladi.</p>
 <div class="note"><code>nodemon</code> — foydali dev vositasi: u faylni har o'zgartirganingizda serverni avtomatik qayta ishga tushiradi. Shuning uchun u devDependencies'ga qo'yiladi — u yakuniy ilovaga kerak emas, faqat dasturchiga qulaylik uchun.</div>
-<h2>npx</h2>
+<h2 id="npx">npx</h2>
 <p><strong>npx</strong> — npm bilan birga keladigan yana bir vosita. U paketni <strong>o'rnatmasdan</strong>, bir marta ishga tushirishga imkon beradi. Bu ayniqsa CLI vositalarini sinab ko'rish uchun qulay.</p>
 <pre class="code"><code># create-react-app'ni o'rnatmasdan ishga tushirish:
 npx create-react-app mening-ilovam
@@ -701,7 +719,7 @@ npx create-react-app mening-ilovam
 # lokal o'rnatilgan paketni ishga tushirish:
 npx eslint .</code></pre>
 <p>npx paketni vaqtincha yuklab oladi, ishga tushiradi va tugagach o'chiradi. Shuning uchun global o'rnatishlar bilan tizimni to'ldirmaslik uchun juda foydali.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Node.js'da har bir fayl — modul; ular <strong>CommonJS</strong> (<code>require</code>/<code>module.exports</code>) yoki <strong>ESM</strong> (<code>import</code>/<code>export</code>) bilan bog'lanadi;</li><li><strong>O'rnatilgan modullar</strong> (<code>fs</code>, <code>path</code>, <code>http</code>...) o'rnatishsiz mavjud;</li><li><strong>npm</strong> — tashqi paketlarni boshqaruvchi menejer; <code>npm init</code> loyihani, <code>package.json</code> uning ma'lumotini saqlaydi;</li><li><code>npm install</code> paketni <code>node_modules</code>ga yuklaydi; git'ga <code>node_modules</code> joylanmaydi;</li><li><strong>dependencies</strong> — ilova uchun, <strong>devDependencies</strong> — ishlab chiqish uchun;</li><li><strong>npx</strong> — paketni o'rnatmasdan ishga tushiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="nodejs-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Node.js nima?</span></a>
@@ -715,6 +733,6 @@ npx eslint .</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

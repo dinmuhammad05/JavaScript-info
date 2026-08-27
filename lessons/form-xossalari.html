@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forma xossalari va metodlari — Kodla</title>
   <meta name="description" content="document.forms, form.elements, input/textarea/select/option bilan ishlash: value, checked, selectedIndex va options orqali qiymatlarni o'qish va yozish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Formalar va boshqaruv elementlari</div>
 <h1>Forma xossalari va metodlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#formalarga-navigatsiya-document-forms">Formalarga navigatsiya: document.forms</a></li>
+<li class="lvl2"><a href="#fieldset-kichik-forma-sifatida">Fieldset "kichik forma" sifatida</a></li>
+<li class="lvl2"><a href="#qisqa-yozuv-form-name">Qisqa yozuv: form.name</a></li>
+<li class="lvl2"><a href="#orqaga-havola-element-form">Orqaga havola: element.form</a></li>
+<li class="lvl2"><a href="#elementlar-bilan-ishlash-input-va-textarea">Elementlar bilan ishlash: input va textarea</a></li>
+<li class="lvl2"><a href="#select-va-option-bilan-ishlash">select va option bilan ishlash</a></li>
+<li class="lvl2"><a href="#new-option">new Option</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Formalar (<code>&lt;form&gt;</code>) va ular ichidagi boshqaruv elementlari (<code>input</code>, <code>textarea</code>, <code>select</code> va boshqalar) foydalanuvchi bilan ma'lumot almashishning asosiy vositasi. Ular DOM'da o'ziga xos xossa va metodlarga ega bo'lib, ularni oddiy DOM elementlaridan qulayroq topish va boshqarish imkonini beradi. Ushbu darsda formalarga navigatsiya qilishni va boshqaruv elementlari bilan ishlashni chuqur o'rganamiz.</p>
-<h2>Formalarga navigatsiya: document.forms</h2>
+<h2 id="formalarga-navigatsiya-document-forms">Formalarga navigatsiya: document.forms</h2>
 <p>Formalar hujjatdagi maxsus to'plam — <code>document.forms</code>ning bir qismidir. Bu "nomlangan to'plam" (named collection): unga ham tartib raqami, ham forma <code>name</code> atributi orqali murojaat qilish mumkin.</p>
 <pre class="code"><code>document.forms.my;   // name="my" bo'lgan forma
 document.forms[0];   // hujjatdagi birinchi forma</code></pre>
@@ -630,7 +646,7 @@ document.forms[0];   // hujjatdagi birinchi forma</code></pre>
   alert(ageElems[0]); // [object HTMLInputElement]
 &lt;/script&gt;</code></pre>
 <div class="note">Bu navigatsiya xossalari HTML tuzilmasining chuqurligiga bog'liq emas. Element nechanchi darajada joylashganidan qat'i nazar, <code>form.elements</code> orqali barcha boshqaruv elementlari to'g'ridan-to'g'ri mavjud bo'ladi.</div>
-<h2>Fieldset "kichik forma" sifatida</h2>
+<h2 id="fieldset-kichik-forma-sifatida">Fieldset "kichik forma" sifatida</h2>
 <p>Forma ichida bir yoki bir nechta <code>&lt;fieldset&gt;</code> elementi bo'lishi mumkin. Ular ham <code>elements</code> xossasiga ega bo'lib, o'z ichidagi boshqaruv elementlarini saqlaydi:</p>
 <pre class="code"><code>&lt;form id="form"&gt;
   &lt;fieldset name="userFields"&gt;
@@ -648,7 +664,7 @@ document.forms[0];   // hujjatdagi birinchi forma</code></pre>
   // login ni ham forma orqali, ham fieldset orqali olsak bo'ladi
   alert(fieldset.elements.login === form.elements.login); // true
 &lt;/script&gt;</code></pre>
-<h2>Qisqa yozuv: form.name</h2>
+<h2 id="qisqa-yozuv-form-name">Qisqa yozuv: form.name</h2>
 <p>Uzun <code>form.elements.login</code> o'rniga qisqaroq <code>form.login</code> yozuvi ham ishlaydi — forma o'zi ham o'z elementlariga nom orqali kirishga imkon beradi:</p>
 <pre class="code"><code>&lt;form id="form"&gt;
   &lt;input name="login"&gt;
@@ -665,7 +681,7 @@ document.forms[0];   // hujjatdagi birinchi forma</code></pre>
   alert(form.login); // undefined
 &lt;/script&gt;</code></pre>
 <div class="warn">Qisqa yozuv (<code>form.login</code>) qulay, lekin bitta "nozik" kamchiligi bor: elementning <code>name</code>ini kodda o'zgartirsak, u eski nom orqali darhol topilmay qoladi. Bu odatiy holat, lekin nomni dinamik o'zgartirganda esda tutish kerak. Aksincha, <code>form.elements</code> to'plami esa o'zgargan yangi nomni to'g'ri qaytaradi.</div>
-<h2>Orqaga havola: element.form</h2>
+<h2 id="orqaga-havola-element-form">Orqaga havola: element.form</h2>
 <p>Har bir forma elementi o'zi tegishli bo'lgan formaga <code>element.form</code> xossasi orqali murojaat qila oladi. Ya'ni forma o'z elementlariga ishora qiladi, elementlar esa formaga qaytadan ishora qiladi:</p>
 <pre class="code"><code>&lt;form id="form"&gt;
   &lt;input type="text" name="login"&gt;
@@ -679,14 +695,14 @@ document.forms[0];   // hujjatdagi birinchi forma</code></pre>
   alert(login.form); // HTMLFormElement
 &lt;/script&gt;</code></pre>
 <div class="tip"><code>element.form</code> hodisa ishlovchilarida juda qulay: masalan, tugma bosilganda uning <code>event.target.form</code> orqali qaysi formaga tegishli ekanligini darhol bilib olish mumkin — DOM bo'ylab qidirish shart emas.</div>
-<h2>Elementlar bilan ishlash: input va textarea</h2>
+<h2 id="elementlar-bilan-ishlash-input-va-textarea">Elementlar bilan ishlash: input va textarea</h2>
 <p>Matnli input va <code>textarea</code>ning qiymatiga <code>input.value</code> (string) orqali kiramiz yoki checkbox/radio uchun <code>input.checked</code> (boolean) orqali:</p>
 <pre class="code"><code>input.value = 'Yangi qiymat';
 textarea.value = 'Yangi matn';
 
 input.checked = true; // checkbox yoki radio uchun</code></pre>
 <div class="warn"><code>textarea</code>ning qiymatini o'qish uchun har doim <code>textarea.value</code>dan foydalaning, <code>textarea.innerHTML</code>dan emas! <code>innerHTML</code> faqat sahifa dastlab yuklangandagi HTML'ni saqlaydi va foydalanuvchi kiritgan yangi matnni <em>aks ettirmaydi</em>.</div>
-<h2>select va option bilan ishlash</h2>
+<h2 id="select-va-option-bilan-ishlash">select va option bilan ishlash</h2>
 <p><code>&lt;select&gt;</code> elementi (ochiladigan ro'yxat) uch muhim xossaga ega:</p>
 <ul><li><code>select.options</code> — <code>&lt;option&gt;</code> elementlari to'plami;</li><li><code>select.value</code> — hozir tanlangan <code>&lt;option&gt;</code>ning qiymati (value);</li><li><code>select.selectedIndex</code> — hozir tanlangan <code>&lt;option&gt;</code>ning tartib raqami.</li></ul>
 <p>Ular <code>&lt;select&gt;</code> uchun qiymat belgilashning uch xil usulini beradi:</p>
@@ -718,7 +734,7 @@ input.checked = true; // checkbox yoki radio uchun</code></pre>
 
   alert(selected); // blues,rock
 &lt;/script&gt;</code></pre>
-<h2>new Option</h2>
+<h2 id="new-option">new Option</h2>
 <p><code>&lt;option&gt;</code> elementlarini dinamik yaratish uchun qisqa maxsus sintaksis mavjud — <code>new Option</code> konstruktori:</p>
 <pre class="code"><code>let option = new Option(text, value, defaultSelected, selected);</code></pre>
 <ul><li><code>text</code> — <code>&lt;option&gt;</code> ichidagi ko'rinadigan matn;</li><li><code>value</code> — <code>&lt;option&gt;</code>ning qiymati;</li><li><code>defaultSelected</code> — <code>true</code> bo'lsa, <code>selected</code> HTML-atributi qo'yiladi;</li><li><code>selected</code> — <code>true</code> bo'lsa, <code>&lt;option&gt;</code> tanlanadi.</li></ul>
@@ -731,7 +747,7 @@ let option2 = new Option('Matn', 'value', true, true);
 // keyin uni select ichiga qo'shamiz
 select.append(option);</code></pre>
 <div class="note"><code>&lt;option&gt;</code> elementlari yana bir necha foydali xossaga ega: <code>option.selected</code> (tanlanganmi?), <code>option.index</code> (ro'yxatdagi raqami), <code>option.text</code> (ko'rinadigan matni).</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Formalarga navigatsiya: <code>document.forms</code> — barcha formalar; <code>form.elements</code> — forma ichidagi elementlar; <code>fieldset.elements</code> — kichik guruh elementlari;</li><li>Qisqa yozuv <code>form.name</code> ishlaydi, lekin element <code>name</code>i o'zgarsa eski nom orqali topilmay qoladi;</li><li>Orqaga havola <code>element.form</code> — element o'z formasiga ishora qiladi;</li><li>Matnli input/textarea qiymati — <code>value</code> (har doim <code>value</code>, <code>innerHTML</code> emas!); checkbox/radio holati — <code>checked</code>;</li><li><code>&lt;select&gt;</code> uchun uch usul: <code>selectedIndex</code>, <code>value</code>, yoki <code>option.selected</code>; <code>options</code> — barcha optionlar to'plami;</li><li>Yangi <code>&lt;option&gt;</code>ni <code>new Option(text, value, defaultSelected, selected)</code> bilan tez yaratish mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="scroll.html"><span class="dir">← Oldingi</span><span class="ttl">Skroll</span></a>
@@ -745,6 +761,6 @@ select.append(option);</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

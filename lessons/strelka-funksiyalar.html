@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Strelka funksiyalari, asoslari — Kodla</title>
   <meta name="description" content="() => sintaksisi — funksiyalarni yozishning qisqa va qulay usuli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Strelka funksiyalari, asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#umumiy-sintaksis">Umumiy sintaksis</a></li>
+<li class="lvl2"><a href="#bir-yoki-nol-argument">Bir yoki nol argument</a></li>
+<li class="lvl2"><a href="#ko-p-qatorli-strelka-funksiyalari">Ko'p qatorli strelka funksiyalari</a></li>
+<li class="lvl2"><a href="#qachon-qulay">Qachon qulay?</a></li>
+<li class="lvl2"><a href="#callback-sifatida-massivlar-bilan">Callback sifatida — massivlar bilan</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Funksiya ifodalaridan ham qisqaroq va qulayroq sintaksis mavjud — <strong>strelka funksiyalari</strong> (arrow functions). Ular ayniqsa callback'lar uchun juda qulay.</p>
-<h2>Umumiy sintaksis</h2>
+<h2 id="umumiy-sintaksis">Umumiy sintaksis</h2>
 <p>Strelka funksiyasi shunday yaratiladi:</p>
 <pre class="code"><code>let funk = (arg1, arg2, ...) =&gt; ifoda;</code></pre>
 <p>Bu — quyidagi Function Expression ning qisqa varianti:</p>
@@ -610,7 +624,7 @@
 console.log(yigindi(3, 5)); // 8
 console.log(yigindi(10, 20)); // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>(a, b) => a + b</code> ikkita <code>a</code> va <code>b</code> argument oluvchi funksiya. Chaqirilganda u <code>a + b</code> ni hisoblab qaytaradi — <code>return</code> so'zi ham, figurali qavs ham kerak emas!</p>
-<h2>Bir yoki nol argument</h2>
+<h2 id="bir-yoki-nol-argument">Bir yoki nol argument</h2>
 <p>Agar funksiyada faqat <strong>bitta</strong> argument bo'lsa, qavslarni tashlab yuborish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-bir.js</span></div><textarea spellcheck="false">let ikkilantir = n =&gt; n * 2; // (n) =&gt; n * 2 bilan bir xil
 
@@ -619,7 +633,7 @@ console.log(ikkilantir(5)); // 10</textarea><div class="pg-actions"><button clas
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-nol.js</span></div><textarea spellcheck="false">let salomBer = () =&gt; console.log("Salom!");
 
 salomBer(); // Salom!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Ko'p qatorli strelka funksiyalari</h2>
+<h2 id="ko-p-qatorli-strelka-funksiyalari">Ko'p qatorli strelka funksiyalari</h2>
 <p>Yuqoridagi misollar <code>=></code> ning chap tomonidan argumentlarni, o'ng tomonidan bitta ifodani oldi. Ba'zan bir nechta amal yoki qatordan iborat murakkabroq kod kerak bo'ladi. Bunda <strong>figurali qavs</strong> ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-kop.js</span></div><textarea spellcheck="false">let yigindi = (a, b) =&gt; {
   let natija = a + b;
@@ -629,7 +643,7 @@ salomBer(); // Salom!</textarea><div class="pg-actions"><button class="pg-run">�
 console.log(yigindi(3, 5)); // 8</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Muhim farq! Figurali qavs <code>{ }</code> ishlatsangiz, natijani qaytarish uchun <code>return</code> ni <strong>albatta</strong> yozishingiz kerak. Qavssiz variantda esa <code>return</code> avtomatik nazarda tutiladi. <code>{ }</code> ni yozib, <code>return</code> ni unutish — keng tarqalgan xato (funksiya <code>undefined</code> qaytaradi).</div>
 <p>Xulosa qilib: <em>bir ifoda</em> uchun qavssiz (<code>=> ifoda</code>), <em>bir nechta qator</em> uchun figurali qavs va <code>return</code> (<code>=> { ...; return ...; }</code>).</p>
-<h2>Qachon qulay?</h2>
+<h2 id="qachon-qulay">Qachon qulay?</h2>
 <p>Strelka funksiyalari qisqa, bir martalik funksiyalar uchun juda qulay — ayniqsa ularni boshqa joyga yozib o'tirishga hojat yo'q bo'lgan callback'lar uchun. Ular kodni ixcham va o'qishga oson qiladi.</p>
 <p>Oldingi darsdagi "sora" misolini strelka funksiyalari bilan solishtiring — kod ancha qisqardi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-callback.js</span></div><textarea spellcheck="false">function sora(shart, haFunk, yoqFunk) {
@@ -642,7 +656,7 @@ sora(
   () =&gt; console.log("Rozilik"),
   () =&gt; console.log("Rad etish")
 );</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Callback sifatida — massivlar bilan</h2>
+<h2 id="callback-sifatida-massivlar-bilan">Callback sifatida — massivlar bilan</h2>
 <p>Strelka funksiyalari massiv metodlari bilan (masalan <code>forEach</code>, <code>map</code>) juda tez-tez ishlatiladi. Ular haqida keyinroq batafsil o'rganamiz, hozircha strelka funksiyaning qulayligini ko'ramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-massiv.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3, 4];
 
@@ -654,7 +668,7 @@ let ikki = sonlar.map(son =&gt; son * 2);
 console.log(ikki); // [ 2, 4, 6, 8 ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Xuddi shu kodni oddiy funksiya ifodasi bilan yozganingizda uzunroq va ko'proq "shovqinli" bo'lardi. Strelka funksiyasi bu yerda niyatni aniq ko'rsatadi.</p>
 <div class="tip">Strelka funksiyalarining <code>this</code> bilan bog'liq yana bir muhim xususiyati bor, u oddiy funksiyalardan farq qiladi. Ammo bu ilg'or mavzu — uni obyektlar va <code>this</code> ni o'rgangandan keyin ko'rib chiqamiz. Hozircha strelka funksiyani "qisqa yozuv" sifatida bilib qo'yish yetarli.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Strelka funksiyasi: <code>let funk = (arg1, arg2) => ifoda;</code> — qisqa va qulay;</li><li>Bitta argument bo'lsa qavslar shart emas: <code>n => n * 2</code>;</li><li>Argument bo'lmasa bo'sh qavs kerak: <code>() => ...</code>;</li><li>Bir ifoda uchun <strong>qavssiz</strong> yozuv — <code>return</code> avtomatik;</li><li>Bir nechta qator uchun <strong>figurali qavs</strong> va <code>return</code> majburiy;</li><li>Ular ayniqsa <strong>callback</strong> lar va massiv metodlari uchun qulay.</li></ul>
 <nav class="lesson-nav">
   <a href="funksiya-ifodalari.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiya ifodalari</span></a>
@@ -668,6 +682,6 @@ console.log(ikki); // [ 2, 4, 6, 8 ]</textarea><div class="pg-actions"><button c
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

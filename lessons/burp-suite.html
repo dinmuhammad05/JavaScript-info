@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Burp Suite bilan web ilova o'rganish — Kodla</title>
   <meta name="description" content="Burp Suite nima, brauzer-proxy-ilova sxemasi, proxy va sertifikat sozlash, Proxy/Intercept va Repeater modullari hamda o'z lab ilovangizdagi so'rovlarni ushlab o'rganish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,27 @@
 <main class="content article">
 <div class="crumbs">Amaliy vositalar (lab muhitida)</div>
 <h1>Burp Suite bilan web ilova o'rganish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#burp-suite-nima">Burp Suite nima</a></li>
+<li class="lvl2"><a href="#brauzer-burp-ilova-sxemasi">Brauzer - Burp - ilova sxemasi</a></li>
+<li class="lvl2"><a href="#proxy-va-sertifikatni-sozlash">Proxy va sertifikatni sozlash</a></li>
+<li class="lvl2"><a href="#nishon-o-zingiz-ko-targan-ilova">Nishon: o'zingiz ko'targan ilova</a></li>
+<li class="lvl2"><a href="#proxy-intercept-moduli">Proxy / Intercept moduli</a></li>
+<li class="lvl2"><a href="#repeater-moduli">Repeater moduli</a></li>
+<li class="lvl2"><a href="#target-va-sitemap">Target va Sitemap</a></li>
+<li class="lvl2"><a href="#namuna-ish-oqimi">Namuna ish oqimi</a></li>
+<li class="lvl2"><a href="#burp-ni-himoyachi-sifatida-ishlatish">Burp'ni himoyachi sifatida ishlatish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Web ilova bilan brauzer o'rtasida ko'plab so'rov va javob almashiladi — lekin brauzer bularni bizdan yashiradi. <strong>Burp Suite</strong> — aynan shu almashinuvni to'xtatib, ko'rib, hatto o'zgartirib ko'rish imkonini beruvchi vosita. U web ilova xavfsizligini o'rganishning asosiy asbobi. Bu darsda uni o'zingiz ko'targan zaif mashq ilovasida (Juice Shop yoki DVWA) ishlatishni o'rganamiz.</p>
-<h2>Burp Suite nima</h2>
+<h2 id="burp-suite-nima">Burp Suite nima</h2>
 <p><strong>Burp Suite</strong> — web ilovalarni tekshirish uchun mo'ljallangan <code>proxy</code> asosidagi vosita to'plami. Uning yuragi — brauzer bilan web server o'rtasida turadigan proxy: barcha so'rovlar Burp orqali o'tadi, siz esa ularni ushlab, ko'rib, tahlil qilishingiz mumkin.</p>
 <p>Burp Suite ikki asosiy versiyada keladi: pullik <strong>Professional</strong> va bepul <strong>Community</strong>. O'rganish uchun Community versiyasi to'liq yetarli — undagi asosiy modullar (Proxy, Repeater) barcha muhim tushunchalarni qamrab oladi.</p>
 <div class="warn">Burp Suite'ni FAQAT o'zingiz ko'targan lab ilovasiga (Juice Shop, DVWA) yoki rasman ruxsat berilgan nishonga qarating. Boshqa birovning web ilovasi so'rovlarini ushlash yoki o'zgartirish — JINOYAT. Faqat o'z lab ilovangiz.</div>
-<h2>Brauzer - Burp - ilova sxemasi</h2>
+<h2 id="brauzer-burp-ilova-sxemasi">Brauzer - Burp - ilova sxemasi</h2>
 <p>Burp'ning ish tamoyilini tushunish uchun sxemani tasavvur qiling. Odatda brauzer to'g'ridan-to'g'ri serverga ulanadi. Burp bilan esa oradaga qo'shimcha bir halqa qo'shiladi:</p>
 <pre class="code"><code># Oddiy holat:
 Brauzer  ----------------&gt;  Web server
@@ -613,7 +631,7 @@ Brauzer  ---&gt;  Burp Proxy  ---&gt;  Web server
 # Endi har bir so'rov Burp orqali o'tadi —
 # siz uni ushlashingiz, ko'rishingiz va o'zgartirishingiz mumkin.</code></pre>
 <p>Ya'ni Burp — brauzer va server o'rtasida turgan "oraliq nazoratchi". Barcha trafik u orqali o'tgani uchun, siz web ilova bilan brauzer qanday gaplashayotganini to'liq ko'rasiz.</p>
-<h2>Proxy va sertifikatni sozlash</h2>
+<h2 id="proxy-va-sertifikatni-sozlash">Proxy va sertifikatni sozlash</h2>
 <p>Burp'ni ishlatish uchun ikki narsani sozlaysiz. Birinchidan, brauzerni Burp proxysi orqali yuboradigan qilib moslaysiz. Burp odatda <code>127.0.0.1:8080</code> manzilida tinglaydi:</p>
 <pre class="code"><code># Brauzer proxy sozlamalari:
 #   HTTP Proxy:  127.0.0.1
@@ -629,7 +647,7 @@ Brauzer  ---&gt;  Burp Proxy  ---&gt;  Web server
 #
 # Bu FAQAT o'z brauzeringizda, o'z lab ilovangiz uchun.</code></pre>
 <div class="note">Bu sertifikat mexanizmi aynan HTTPS'ni ushlash uchun kerak — u brauzerga "Burp'ga ishon" deydi. Aynan shu sabab ham begona kompyuterga bunday sertifikat o'rnatish xavfli; siz buni faqat o'z mashinangizda, o'rganish uchun qilasiz.</div>
-<h2>Nishon: o'zingiz ko'targan ilova</h2>
+<h2 id="nishon-o-zingiz-ko-targan-ilova">Nishon: o'zingiz ko'targan ilova</h2>
 <p>Burp bilan ishlashdan oldin nishoningiz tayyor bo'lsin. Oldingi darsda o'rgangan usulda Juice Shop yoki DVWA'ni lokal ko'taring:</p>
 <pre class="code"><code># Juice Shop'ni lokal ko'tarish (nishon sifatida):
 docker run --rm -p 127.0.0.1:3000:3000 bkimminich/juice-shop
@@ -637,7 +655,7 @@ docker run --rm -p 127.0.0.1:3000:3000 bkimminich/juice-shop
 # Brauzerda:  http://127.0.0.1:3000
 # Endi shu ilova bilan Burp orqali ishlaymiz.</code></pre>
 <p>Bu ilova ataylab zaif qilib yaratilgan va aynan o'rganish uchun mo'ljallangan. Uni o'z kompyuteringizda ko'targaningiz uchun, uni Burp bilan tekshirish to'liq qonuniy va etik.</p>
-<h2>Proxy / Intercept moduli</h2>
+<h2 id="proxy-intercept-moduli">Proxy / Intercept moduli</h2>
 <p>Burp'ning eng asosiy moduli — <strong>Proxy</strong>, uning ichida esa <strong>Intercept</strong> (ushlash) rejimi. <code>Intercept is on</code> holatida har bir so'rov serverga borishdan oldin Burp'da to'xtaydi — siz uni ko'rasiz, o'rganasiz va istasangiz o'zgartirasiz, keyin <code>Forward</code> bilan davom ettirasiz.</p>
 <p>Masalan, Juice Shop'da login qilsangiz, so'rov Burp'da to'xtaydi va siz uning ichini ko'rasiz:</p>
 <pre class="code"><code># Intercept ushlagan login so'rovi:
@@ -650,20 +668,20 @@ Content-Type: application/json
 # Endi ko'rinadi: qaysi manzilga, qanday maydonlar bilan
 # so'rov yuborilmoqda. Bu — ilovani tushunishning kaliti.</code></pre>
 <p>Intercept sizga so'rovning ichki tuzilishini ochib beradi: qanday maydonlar bor, ma'lumot qanday formatda (bu yerda <code>JSON</code>), qaysi endpoint'ga boradi. Bu — web ilova qanday ishlashini tushunishning eng to'g'ridan-to'g'ri yo'li.</p>
-<h2>Repeater moduli</h2>
+<h2 id="repeater-moduli">Repeater moduli</h2>
 <p><strong>Repeater</strong> — ikkinchi muhim modul. U bitta so'rovni qayta-qayta yuborib, har safar javobni o'rganish imkonini beradi. Ushlagan so'rovni Repeater'ga jo'natasiz (o'ng tugma → <code>Send to Repeater</code>), so'ng uni istagancha o'zgartirib, qayta yuborasiz.</p>
 <p>Repeater — o'rganishning ideal maydoni: so'rovni bir maydonini o'zgartirib yuborasiz, server javobi qanday o'zgarishini ko'rasiz, xulosalar chiqarasiz. Bu — web ilovaning "o'zini qanday tutishini" tekshirishning tinch, nazorat ostidagi usuli.</p>
-<h2>Target va Sitemap</h2>
+<h2 id="target-va-sitemap">Target va Sitemap</h2>
 <p><strong>Target</strong> moduli ichidagi <strong>Sitemap</strong> — siz ko'rgan ilovaning "xaritasi". Ilovada yurar ekansiz, Burp barcha ko'rilgan manzillar, endpointlar va resurslarni avtomatik yig'ib boradi. Natijada ilovaning tuzilishini bir joyda ko'rasiz: qaysi sahifalar, qaysi API endpointlari bor.</p>
 <div class="note">Burp'da <strong>Intruder</strong> va <strong>Scanner</strong> nomli kuchliroq modullar ham bor (avtomatlashtirilgan tekshiruv uchun). Boshlovchi uchun ularni faqat nomini bilish yetarli — asosiy tushunchalar Proxy va Repeater orqali o'zlashtiriladi.</div>
-<h2>Namuna ish oqimi</h2>
+<h2 id="namuna-ish-oqimi">Namuna ish oqimi</h2>
 <p>Burp bilan birinchi mashqingiz quyidagi tartibda bo'lsin:</p>
 <ol><li>Juice Shop'ni lokal ko'taring va Burp proxysini sozlang;</li><li>Intercept'ni yoqing va ilovada login qilishga urinib ko'ring;</li><li>Ushlangan login so'rovini diqqat bilan o'qing — qanday maydonlar borligini tushuning;</li><li>So'rovni Repeater'ga jo'nating;</li><li>Repeater'da uni qayta yuboring va server javobini o'rganing;</li><li>Bir maydonni o'zgartirib, javob qanday o'zgarishini kuzating.</li></ol>
 <p>Bu oddiy oqim OWASP darslaridagi zaifliklarni (masalan, autentifikatsiya yoki kirish validatsiyasi muammolarini) amalda ko'rishga yordam beradi: siz endi so'rovni to'g'ridan-to'g'ri ko'rib, ilova ma'lumotni qanday qabul qilishini tushunasiz.</p>
-<h2>Burp'ni himoyachi sifatida ishlatish</h2>
+<h2 id="burp-ni-himoyachi-sifatida-ishlatish">Burp'ni himoyachi sifatida ishlatish</h2>
 <p>Burp faqat tekshiruvchining asbobi emas — u dasturchi va himoyachi uchun ham foydali. O'z ilovangizni Burp orqali kuzatib, uning haqiqatan qanday so'rovlar yuborayotganini ko'rasiz: ehtimol maxfiy ma'lumot kutilmagan joyga ketyapti yoki keraksiz sarlavha uzatilyapti.</p>
 <p>Shu tarzda Burp "mening ilovam tashqariga aslida nima yuboryapti?" degan savolga aniq javob beradi. Ilovangizni ishga topshirishdan oldin uni Burp bilan ko'zdan kechirish — arzon va samarali xavfsizlik odati.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Burp Suite — web ilova bilan brauzer o'rtasidagi trafikni ochib beruvchi proxy. Proxy/Intercept bilan so'rovlarni ushlab ko'rasiz, Repeater bilan qayta yuborib o'rganasiz, Sitemap bilan ilova tuzilishini yig'asiz. Bularning barchasi web ilova qanday ishlashini chuqur tushunish uchun.</p>
 <div class="tip">Community (bepul) versiyasi o'rganish uchun to'liq yetarli. Uni faqat o'z lab ilovangizda ishlating va har doim yodda tuting: maqsad — ilovani tushunish va himoyani yaxshilash, boshqaning tizimiga zarar yetkazish emas.</div>
 <nav class="lesson-nav">
@@ -678,6 +696,6 @@ Content-Type: application/json
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

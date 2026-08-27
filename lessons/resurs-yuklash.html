@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resurs yuklash: onload va onerror — Kodla</title>
   <meta name="description" content="Tashqi resurslarni (skript, rasm, iframe) yuklash holatini kuzatish: onload va onerror hodisalari, crossorigin atributi va resursning tayyor bo'lishini aniqlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,25 @@
 <main class="content article">
 <div class="crumbs">Hujjat va resurs yuklanishi</div>
 <h1>Resurs yuklash: onload va onerror</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#load-va-error-hodisalari">load va error hodisalari</a></li>
+<li class="lvl2"><a href="#skriptni-yuklashni-kuzatish-script-onload">Skriptni yuklashni kuzatish (script.onload)</a></li>
+<li class="lvl2"><a href="#script-onerror">script.onerror</a></li>
+<li class="lvl2"><a href="#boshqa-resurslar-rasm-iframe">Boshqa resurslar (rasm, iframe)</a></li>
+<li class="lvl2"><a href="#crossorigin-siyosati-crossorigin-atributi">Crossorigin siyosati (crossorigin atributi)</a></li>
+<li class="lvl2"><a href="#resurs-holatini-kuzatish-amaliy-misol">Resurs holatini kuzatish (amaliy misol)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Brauzer bizga tashqi resurslar — skriptlar, rasm, iframe va boshqalar — yuklanishini kuzatish imkonini beradi. Buning uchun ikkita asosiy hodisa bor: <code>load</code> — resurs muvaffaqiyatli yuklandi va <code>error</code> — yuklashda xatolik yuz berdi. Bu, masalan, skriptni dinamik yuklab, u tayyor bo'lgach undagi funksiyalarni chaqirish uchun, yoki rasm yuklanmaganda zaxira rasmni ko'rsatish uchun kerak bo'ladi. Ushbu darsda resurs yuklanishini kuzatishni chuqur o'rganamiz.</p>
 <div class="warn">Bu darsdagi misollar brauzer muhitiga (DOM elementlari, <code>document</code>) tegishli. Kurs maydonchasi Node.js muhitida ishlaydi va DOM'ga ega emas — shu sabab misollar <strong>statik</strong>, faqat o'qish uchun keltiriladi.</div>
-<h2>load va error hodisalari</h2>
+<h2 id="load-va-error-hodisalari">load va error hodisalari</h2>
 <p>Ko'pchilik resurslar, ya'ni tashqi <code>src</code>ga ega elementlar (rasm, tashqi skript va h.k.) ikkita hodisani generatsiya qiladi:</p>
 <ul><li><code>load</code> — resurs muvaffaqiyatli yuklanganda;</li><li><code>error</code> — resursni yuklashda xatolik yuz berganda.</li></ul>
 <p>Istisno: <code>&lt;iframe&gt;</code> — u tarixiy sabablarga ko'ra yuklash tugagach har doim <code>load</code>ni generatsiya qiladi, hatto sahifa topilmasa ham.</p>
-<h2>Skriptni yuklashni kuzatish (script.onload)</h2>
+<h2 id="skriptni-yuklashni-kuzatish-script-onload">Skriptni yuklashni kuzatish (script.onload)</h2>
 <p>Aytaylik, biz tashqi skriptdagi funksiyani chaqirmoqchimiz. Skriptni dinamik yuklaymiz:</p>
 <pre class="code"><code>let script = document.createElement('script');
 script.src = 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js';
@@ -617,7 +632,7 @@ script.onload = function() {
   alert(_.VERSION); // lodash kutubxonasi versiyasi
 };</code></pre>
 <p><code>onload</code> ishlovchisi skript yuklanib, bajarilib bo'lgach ishga tushadi. Shu paytda skript e'lon qilgan barcha o'zgaruvchi va funksiyalardan foydalanish mumkin.</p>
-<h2>script.onerror</h2>
+<h2 id="script-onerror">script.onerror</h2>
 <p>Skriptni yuklashda xatoliklarni ham kuzatishimiz kerak. <code>error</code> hodisasi yuklash muvaffaqiyatsiz bo'lganda ishga tushadi:</p>
 <pre class="code"><code>let script = document.createElement('script');
 script.src = 'https://example.com/mavjud-emas.js'; // bunday skript yo'q
@@ -628,7 +643,7 @@ script.onerror = function() {
 };</code></pre>
 <p>Bu yerda mavjud bo'lmagan skript yuklanishga urinilgani uchun <code>onerror</code> ishga tushadi.</p>
 <div class="warn">Muhim: <code>onload/onerror</code> faqat yuklash jarayonining o'zini kuzatadi — resurs olindimi yoki yo'qmi. Agar skript <strong>yuklandi</strong>, lekin uning ichida xatolik bo'lsa (masalan, kod ichida <code>throw</code> yoki sintaksis xatosi), buni <code>onerror</code> ushlamaydi. Yuklash muvaffaqiyatli bo'lgani uchun <code>onload</code> baribir ishga tushadi. Kod ichidagi xatoliklarni kuzatish uchun <code>window.onerror</code> global ishlovchisidan foydalaniladi.</div>
-<h2>Boshqa resurslar (rasm, iframe)</h2>
+<h2 id="boshqa-resurslar-rasm-iframe">Boshqa resurslar (rasm, iframe)</h2>
 <p><code>load</code> va <code>error</code> hodisalari boshqa resurslar uchun ham ishlaydi, ba'zi nozikliklar bilan.</p>
 <p>Rasmlar (<code>&lt;img&gt;</code>), tashqi stillar, skriptlar va boshqa resurslarda <code>onload</code> va <code>onerror</code> hodisalari mavjud:</p>
 <pre class="code"><code>let img = document.createElement('img');
@@ -651,7 +666,7 @@ img.onerror = () =&gt; alert('Xatolik');
 // keyin src — shu paytda yuklash boshlanadi
 img.src = 'https://js.cx/clipart/train.gif';</code></pre>
 <div class="note"><code>&lt;iframe&gt;</code> uchun <code>load</code> hodisasi iframe ichidagi sahifa yuklanib bo'lgach ishlaydi — muvaffaqiyatli ham, muvaffaqiyatsiz ham (masalan, 404). Bu tarixiy xususiyat, shuning uchun iframe'da <code>error</code> hodisasiga ishonib bo'lmaydi.</div>
-<h2>Crossorigin siyosati (crossorigin atributi)</h2>
+<h2 id="crossorigin-siyosati-crossorigin-atributi">Crossorigin siyosati (crossorigin atributi)</h2>
 <p>Bir muhim qoida bor: bir saytdagi (origin) skript boshqa saytning ichki ma'lumotlariga kira olmaydi. Aniqrog'i, bitta <strong>origin</strong> (domen/port/protokol) boshqasidagi resurs tarkibiga to'liq kira olmaydi. Bu "Same-Origin Policy" (bir manba siyosati) deb ataladi va xavfsizlik uchun mavjud.</p>
 <p>Agar boshqa domendan (masalan, CDN'dan) yuklangan skriptda xatolik yuz bersa, <code>window.onerror</code> global ishlovchisi bu haqda batafsil ma'lumot ololmaydi — u faqat qisqa "Script error" xabarini oladi, satr raqami yoki xato tafsilotlarisiz. Bu xavfsizlik cheklovi.</p>
 <p>Buning sababi — skript boshqa domendan bo'lsa, uning ichki xatolik ma'lumotini ko'rsatish maxfiy ma'lumotning sizib chiqishiga olib kelishi mumkin. Masalan, boshqa domendagi skript ichida foydalanuvchiga xos ma'lumot bo'lsa, xato xabari orqali uni o'g'irlash mumkin bo'lardi.</p>
@@ -661,7 +676,7 @@ img.src = 'https://js.cx/clipart/train.gif';</code></pre>
 <ul><li><code>crossorigin</code> yo'q — kirish taqiqlangan (to'liq xato ma'lumoti berilmaydi);</li><li><code>crossorigin="anonymous"</code> — server <code>Access-Control-Allow-Origin</code> yuborsa, kirishga ruxsat. Cookie va autentifikatsiya ma'lumotlari yuborilmaydi;</li><li><code>crossorigin="use-credentials"</code> — server maxsus sarlavhalar yuborsa, kirishga ruxsat. Cookie va autentifikatsiya ma'lumotlari ham yuboriladi.</li></ul>
 <pre class="code"><code>&lt;script crossorigin="anonymous" src="https://another-site.com/script.js"&gt;&lt;/script&gt;</code></pre>
 <div class="tip">Aksariyat hollarda uchinchi tomon skriptlari uchun <code>crossorigin="anonymous"</code> yetarli. Bu esa <code>window.onerror</code>da to'liq xato tafsilotlarini olish imkonini beradi — bu, ayniqsa, ishlab chiqarishda (production) xatolarni kuzatuvchi tizimlar (Sentry va h.k.) uchun muhim.</div>
-<h2>Resurs holatini kuzatish (amaliy misol)</h2>
+<h2 id="resurs-holatini-kuzatish-amaliy-misol">Resurs holatini kuzatish (amaliy misol)</h2>
 <p>Yuqoridagi bilimlarni birlashtirib, resursni yuklab, uni kuzatuvchi umumiy funksiya yozamiz. Bu funksiya skriptni yuklaydi va <code>callback</code> orqali natijani (xato yoki muvaffaqiyat) qaytaradi:</p>
 <pre class="code"><code>function loadScript(src, callback) {
   let script = document.createElement('script');
@@ -699,7 +714,7 @@ loadScriptPromise('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js')
   .then(script =&gt; alert('Yuklandi'))
   .catch(error =&gt; alert(error.message));</code></pre>
 <div class="tip">Bir necha resursni ketma-ket yoki parallel yuklashda Promise varianti juda qulay: <code>Promise.all</code> bilan hammasini parallel yuklab, hammasi tayyor bo'lishini kutish mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Tashqi resurslarni yuklashni kuzatish:</p>
 <ul><li>Rasmlar (<code>img</code>), tashqi stillar, skriptlar va boshqa resurslar <code>load</code> va <code>error</code> hodisalarini generatsiya qiladi;</li><li><code>load</code> — resurs muvaffaqiyatli yuklanganda; <code>error</code> — yuklashda xatolik bo'lganda;</li><li>Istisno — <code>&lt;iframe&gt;</code>: u har doim <code>load</code>ni generatsiya qiladi (muvaffaqiyat/xatolikdan qat'i nazar);</li><li><code>load/onerror</code> faqat yuklashni kuzatadi — skript <strong>ichidagi</strong> ishlash xatolarini ko'rmaydi (buning uchun <code>window.onerror</code>).</li></ul>
 <p>Crossorigin (bir manba) siyosati: boshqa domendan yuklangan skript xatoliklarining to'liq ma'lumotini olish uchun <code>crossorigin</code> atributi va server tomonida <code>Access-Control-Allow-Origin</code> sarlavhasi kerak. <code>crossorigin="anonymous"</code> odatda yetarli.</p>
@@ -716,6 +731,6 @@ loadScriptPromise('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js')
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

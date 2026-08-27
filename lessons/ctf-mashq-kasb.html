@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CTF, mashq platformalari va kasb yo'li — Kodla</title>
   <meta name="description" content="Capture The Flag musobaqalari, kategoriyalari, qonuniy o'rganish platformalari va kiberxavfsizlik sohasida kasb yo'l xaritasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,28 +599,40 @@
 <main class="content article">
 <div class="crumbs">Amaliy himoya va DevSecOps</div>
 <h1>CTF, mashq platformalari va kasb yo'li</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ctf-nima">CTF nima</a></li>
+<li class="lvl2"><a href="#nega-bu-ajoyib-o-rganish-usuli">Nega bu ajoyib o'rganish usuli</a></li>
+<li class="lvl2"><a href="#asosiy-kategoriyalar">Asosiy kategoriyalar</a></li>
+<li class="lvl2"><a href="#qonuniy-platformalar">Qonuniy platformalar</a></li>
+<li class="lvl2"><a href="#qanday-boshlash-yo-l-xaritasi">Qanday boshlash: yo'l xaritasi</a></li>
+<li class="lvl2"><a href="#portfolio-va-jamoa">Portfolio va jamoa</a></li>
+<li class="lvl2"><a href="#sertifikatlar-va-sabr">Sertifikatlar va sabr</a></li>
+  </ul>
+</details>
 <p class="lead">Xavfsizlikni kitobdan o'qib o'rganish mumkin, ammo uni haqiqatan his qilish uchun — qo'l bilan ishlash kerak. Muammo shundaki, mashq qilishga "nishon" kerak, birovning tizimini esa sinab bo'lmaydi. Bu jumboqning yechimi allaqachon topilgan: maxsus, qonuniy o'rganish maydonlari. Ular ichida eng qiziqarlisi — CTF musobaqalari. Bu — o'ynab turib o'rganishning eng yaxshi usuli.</p>
-<h2>CTF nima</h2>
+<h2 id="ctf-nima">CTF nima</h2>
 <p><strong>CTF</strong> (Capture The Flag — "bayroqni qo'lga kirit") — bu xavfsizlik boshqotirmalari musobaqasi. Har bir topshiriqda yashirin "bayroq" (odatda maxsus formatdagi matn) bo'ladi. Vazifa — o'sha bayroqni topish uchun tizimning zaifligini aniqlash yoki boshqotirmani yechish. Bayroqni topsangiz — ball olasiz.</p>
 <p>CTF'ning ajoyibligi shundaki, u to'liq <em>qonuniy va xavfsiz</em>. Topshiriqlar maxsus shu maqsad uchun yaratilgan izolyatsiya qilingan muhitda ishlaydi. Siz haqiqiy hujum texnikalarini o'rganasiz, ammo hech kimga zarar bermaysiz. Bu — laboratoriya sharoitidagi mashg'ulot.</p>
-<h2>Nega bu ajoyib o'rganish usuli</h2>
+<h2 id="nega-bu-ajoyib-o-rganish-usuli">Nega bu ajoyib o'rganish usuli</h2>
 <p>CTF quruq nazariyani jonli mahoratga aylantiradi. Uning bir necha ustunligi bor:</p>
 <ul><li><strong>Amaliy</strong> — o'qib emas, qilib o'rganasiz; bilim qo'lingizda qoladi;</li><li><strong>Bosqichma-bosqich</strong> — topshiriqlar oson'dan qiyinga qarab tuzilgan, o'sib borasiz;</li><li><strong>Zudlik bilan qaytim</strong> — bayroqni topganingizda darhol "topdim!" degan mamnunlik, bu motivatsiyani ushlab turadi;</li><li><strong>Xavfsiz</strong> — xato qilishdan qo'rqmaysiz, hech narsa buzilmaydi.</li></ul>
-<h2>Asosiy kategoriyalar</h2>
+<h2 id="asosiy-kategoriyalar">Asosiy kategoriyalar</h2>
 <p>CTF topshiriqlari bir necha yo'nalishga bo'linadi. Har biri sohaning boshqa qirrasini o'rgatadi:</p>
 <ul><li><strong>Web</strong> — veb-ilovalardagi zaifliklar (validatsiya, sessiya, avtorizatsiya muammolari); web dasturchilari uchun eng foydali boshlang'ich nuqta;</li><li><strong>Crypto</strong> — kriptografiya boshqotirmalari: zaif shifrlash, noto'g'ri ishlatilgan algoritmlarni tahlil qilish;</li><li><strong>Forensics</strong> — raqamli kriminalistika: fayllar, tarmoq trafigi yoki xotira ichidan yashirin ma'lumotni topish;</li><li><strong>Reverse</strong> — teskari muhandislik: kompilyatsiya qilingan dasturning ishlash mantig'ini ochib tahlil qilish.</li></ul>
 <p>Hammasini birdan qamrab olishga urinmang. Bittasidan — masalan, web'dan — boshlang, chunki u siz allaqachon bilgan bilimlarga eng yaqin.</p>
-<h2>Qonuniy platformalar</h2>
+<h2 id="qonuniy-platformalar">Qonuniy platformalar</h2>
 <p>Yolg'iz mashq qilish uchun bir nechta ajoyib, qonuniy platforma bor. Ular tayyor topshiriqlar, izoh va bosqichma-bosqich yo'l bilan ta'minlaydi:</p>
 <ul><li><strong>TryHackMe</strong> — mutlaqo yangi boshlovchilar uchun eng qulay; qo'ldan yetaklaydigan, izohli "yo'l"lar (learning paths) bilan asoslarni o'rgatadi;</li><li><strong>Hack The Box</strong> — amaliyroq va murakkabroq; real muhitga yaqin mashinalarni yechish orqali mahoratni chuqurlashtiradi;</li><li><strong>PortSwigger Web Security Academy</strong> — bepul va nihoyatda sifatli; ayni web xavfsizligiga bag'ishlangan, nazariya va amaliy laboratoriyani birlashtiradi;</li><li><strong>OverTheWire</strong> — asosan buyruq qatori va tizim asoslarini o'rgatadigan "wargame"lar; Linux va terminalni his qilishga zo'r.</li></ul>
 <p>Bularning barchasi — o'rganish uchun mo'ljallangan, qonuniy muhitlar. Ular ichida qilgan har bir harakatingiz ruxsat etilgan va xavfsiz.</p>
-<h2>Qanday boshlash: yo'l xaritasi</h2>
+<h2 id="qanday-boshlash-yo-l-xaritasi">Qanday boshlash: yo'l xaritasi</h2>
 <p>Sohaga kirish chalkash tuyulishi mumkin. Mana sodda, bosqichli yo'l xaritasi:</p>
 <ol><li>Asoslarni mustahkamlang — bu bobning oldingi darslaridagi HTTPS, autentifikatsiya, keng tarqalgan zaifliklar mavzularini yaxshi bilib oling;</li><li>Bitta yumshoq platformadan boshlang — masalan TryHackMe'ning yangi boshlovchilar yo'lidan;</li><li>Bitta kategoriyaga chuqurlashing — o'zingizga eng yaqinini (web dasturchi bo'lsangiz — Web) tanlang;</li><li>Muntazam mashq qiling — kuniga oz bo'lsa ham, uzoq tanaffuslardan ko'ra yaxshiroq;</li><li>Yechimlaringizni yozib boring — har bir topshiriqni qanday yechganingizni qayd qiling; bu ham xotira, ham portfolio;</li><li>Jamoaga qo'shiling — CTF jamoasi yoki hamjamiyatda boshqalardan o'rganing va tajriba almashing.</li></ol>
-<h2>Portfolio va jamoa</h2>
+<h2 id="portfolio-va-jamoa">Portfolio va jamoa</h2>
 <p>Yechgan topshiriqlaringiz haqidagi izohlaringizni (write-up) omma bilan ulashish — ikki tomonlama foydali. Bir tomondan, yozish jarayonida bilim mustahkamlanadi. Boshqa tomondan, bu sizning ochiq portfolioingizga aylanadi: bo'lajak ish beruvchi sizning haqiqiy mahoratingizni ko'radi, quruq CV emas.</p>
 <p>Jamoa esa o'sishni tezlashtiradi. CTF ko'pincha jamoaviy o'ynaladi — kimdir web'da, kimdir crypto'da kuchli. Bir-biringizdan o'rganasiz va yolg'iz yecholmaydiganingizni birga yechasiz.</p>
-<h2>Sertifikatlar va sabr</h2>
+<h2 id="sertifikatlar-va-sabr">Sertifikatlar va sabr</h2>
 <p>Sohada tan olingan kasbiy sertifikatlar mavjud — ular bilim va mahoratni rasmiy tasdiqlaydi va ish topishda yordam beradi. Ammo ular — maqsadning o'zi emas, natijasidir. Avval haqiqiy mahorat, keyin uni tasdiqlovchi qog'oz.</p>
 <div class="note">Kiberxavfsizlik — bir kechada egallanadigan soha emas. U sabr, muntazamlik va doimiy qiziqish talab qiladi. Har kuni ozgina o'rganish — haftada bir marta uzoq o'tirishdan ko'ra ancha samarali.</div>
 <div class="tip">Har kuni oz-ozdan, qonuniy muhitda mashq qiling. Bir yil davomida kuniga bir topshiriq — bu 365 ta yechilgan boshqotirma va sezilarli o'sish demakdir. Muhimi — to'xtamaslik.</div>
@@ -633,6 +648,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

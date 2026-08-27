@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promisifikatsiya — Kodla</title>
   <meta name="description" content="Callback qabul qiluvchi funksiyani promise qaytaradigan funksiyaga aylantirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Promisifikatsiya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#callback-uslubidagi-funksiya">Callback uslubidagi funksiya</a></li>
+<li class="lvl2"><a href="#qo-lda-promisifikatsiya">Qo'lda promisifikatsiya</a></li>
+<li class="lvl2"><a href="#umumiy-promisify-yordamchisi">Umumiy promisify yordamchisi</a></li>
+<li class="lvl2"><a href="#bir-nechta-natijali-callback">Bir nechta natijali callback</a></li>
+<li class="lvl2"><a href="#cheklovlar">Cheklovlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Promisifikatsiya</strong> — callback qabul qiluvchi funksiyani promise qaytaradigan funksiyaga aylantirish uchun ishlatiladigan uzun so'z. Ko'p funksiyalar va kutubxonalar callback'ga asoslangan, lekin promise'lar bilan ishlash qulayroq — shuning uchun ularni promise'ga o'girish foydali.</p>
-<h2>Callback uslubidagi funksiya</h2>
+<h2 id="callback-uslubidagi-funksiya">Callback uslubidagi funksiya</h2>
 <p>Aytaylik, bizda skript yuklovchi callback uslubidagi funksiya bor. U <code>callback(error, result)</code> ko'rinishidagi callback qabul qiladi — bu <em>"error-first callback"</em> deb ataladigan keng tarqalgan uslub:</p>
 <pre class="code"><code>function loadScript(src, callback) {
   let script = document.createElement('script');
@@ -612,7 +626,7 @@
 // Ishlatilishi:
 // loadScript('path/script.js', (err, script) =&gt; {...})</code></pre>
 <p>Endi biz uni promise qaytaradigan versiyaga aylantiramiz — ya'ni <strong>promisifikatsiya</strong> qilamiz.</p>
-<h2>Qo'lda promisifikatsiya</h2>
+<h2 id="qo-lda-promisifikatsiya">Qo'lda promisifikatsiya</h2>
 <p>Yangi funksiya <code>loadScriptPromise(src)</code> callback o'rniga promise qaytaradi. Uning ichida eski <code>loadScript</code> chaqiriladi va callback promise'ni resolve/reject qiladi:</p>
 <pre class="code"><code>let loadScriptPromise = function(src) {
   return new Promise((resolve, reject) =&gt; {
@@ -629,7 +643,7 @@ loadScriptPromise('path/script.js')
   .catch(err =&gt; console.log('Xato: ' + err.message));</code></pre>
 <p>Ko'rib turibmiz: yangi funksiya eski funksiyaning ishini bajaradi, lekin callback o'rniga promise qaytaradi. Xato bo'lsa promise reject bo'ladi, aks holda natija bilan resolve bo'ladi.</p>
 <div class="note">Bu yerda muhim nuqta: <code>loadScriptPromise</code> callback qabul qilmaydi. Barcha ish promise ichida bo'ladi, va biz <code>.then/.catch</code> orqali natijani olamiz.</div>
-<h2>Umumiy promisify yordamchisi</h2>
+<h2 id="umumiy-promisify-yordamchisi">Umumiy promisify yordamchisi</h2>
 <p>Amalda bizga bitta emas, bir nechta funksiyani promisifikatsiya qilish kerak bo'ladi. Har safar qo'lda yozish o'rniga, umumiy <strong>promisify</strong> yordamchi funksiyasini yozish qulayroq.</p>
 <p>Bu yordamchi "error-first callback" uslubidagi istalgan funksiyani qabul qilib, promise qaytaradigan yangi funksiyani beradi:</p>
 <pre class="code"><code>function promisify(f) {
@@ -656,7 +670,7 @@ let loadScriptPromise = promisify(loadScript);
 loadScriptPromise('path/script.js').then(/*...*/);</code></pre>
 <p>Bu qanday ishlaydi:</p>
 <ol><li><code>promisify(f)</code> yangi <em>wrapper</em> funksiya qaytaradi;</li><li>Wrapper chaqirilganda yangi promise yaratiladi;</li><li>Wrapper asl <code>f</code> funksiyasini chaqiradi va uning argumentlariga maxsus <code>callback</code> qo'shadi;</li><li>Callback ishga tushganda: xato bo'lsa <code>reject</code>, aks holda <code>resolve</code> qiladi.</li></ol>
-<h2>Bir nechta natijali callback</h2>
+<h2 id="bir-nechta-natijali-callback">Bir nechta natijali callback</h2>
 <p>Yuqoridagi <code>promisify</code> callback'ning faqat bitta natijasini (<code>result</code>) oladi. Ammo ba'zi funksiyalar callback'ga bir nechta argument beradi: <code>callback(err, res1, res2, ...)</code>. Ular uchun promisify'ni kengaytiramiz:</p>
 <pre class="code"><code>// promisify(f, true) — natijalar massivini olish uchun
 function promisify(f, manyArgs = false) {
@@ -682,10 +696,10 @@ function promisify(f, manyArgs = false) {
 let f = promisify(f, true);
 f(...).then(arrayOfResults =&gt; /*...*/, err =&gt; /*...*/);</code></pre>
 <div class="tip">Node.js muhitida <code>util.promisify</code> tayyor yordamchi funksiyasi bor. Amalda ko'pincha o'z qo'lida yozish o'rniga shundan foydalaniladi.</div>
-<h2>Cheklovlar</h2>
+<h2 id="cheklovlar">Cheklovlar</h2>
 <div class="warn">Promisifikatsiya callback <strong>faqat bir marta</strong> chaqiriladigan holatlar uchun ajoyib. Agar callback bir necha marta chaqirilsa (masalan, hodisa har safar sodir bo'lganda), promise faqat <strong>birinchi</strong> chaqiruvni ushlaydi — qolganlari e'tiborga olinmaydi. Chunki promise faqat bir marta yakunlanadi.</div>
 <p>Shu sababli, bir necha marta chaqiriladigan callback'lar (masalan, hodisa tinglovchilari) uchun promisifikatsiya <strong>mos kelmaydi</strong>.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Promisifikatsiya</strong> — callback uslubidagi funksiyani promise qaytaradigan funksiyaga aylantirish;</li><li>U kodni <code>.then/.catch</code> yoki <code>async/await</code> bilan qulay ishlatishga imkon beradi;</li><li>Umumiy <code>promisify</code> yordamchisi "error-first callback" funksiyalarni avtomatik o'giradi;</li><li>Node.js'da tayyor <code>util.promisify</code> mavjud;</li><li>Faqat <strong>bir marta</strong> chaqiriladigan callback'lar uchun mos keladi.</li></ul>
 <nav class="lesson-nav">
   <a href="promise-api.html"><span class="dir">← Oldingi</span><span class="ttl">Promise API</span></a>
@@ -699,6 +713,6 @@ f(...).then(arrayOfResults =&gt; /*...*/, err =&gt; /*...*/);</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

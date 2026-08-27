@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Popup oynalar va window metodlari — Kodla</title>
   <meta name="description" content="window.open bilan yangi oyna ochish, popup bloklovchilar, oyna sozlamalari (width, height, left, top), ochilgan oynaga murojaat qilish, close, focus va blur metodlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,27 @@
 <main class="content article">
 <div class="crumbs">Oynalar va freymlar</div>
 <h1>Popup oynalar va window metodlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#popup-lar-haqida-qisqacha-tarix">Popup'lar haqida qisqacha tarix</a></li>
+<li class="lvl2"><a href="#popup-ni-bloklash">Popup'ni bloklash</a></li>
+<li class="lvl2"><a href="#window-open-sintaksisi">window.open sintaksisi</a></li>
+<li class="lvl2"><a href="#oyna-sozlamalari-params">Oyna sozlamalari (params)</a></li>
+<li class="lvl2"><a href="#ochilgan-oynaga-murojaat-qilish">Ochilgan oynaga murojaat qilish</a></li>
+<li class="lvl2"><a href="#popup-dan-asosiy-oynaga-kirish-window-opener">Popup'dan asosiy oynaga kirish: window.opener</a></li>
+<li class="lvl2"><a href="#oynani-yopish-close-va-closed">Oynani yopish: close va closed</a></li>
+<li class="lvl2"><a href="#oynaga-fokus-berish-va-olib-qo-yish-focus-blur">Oynaga fokus berish va olib qo'yish: focus/blur</a></li>
+<li class="lvl2"><a href="#popup-ni-to-g-ri-va-odob-bilan-ishlatish">Popup'ni to'g'ri va odob bilan ishlatish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Popup oyna — bu asosiy sahifadan tashqarida ochiladigan yangi brauzer oynasi. Uni <code>window.open</code> metodi bilan ochiladi. Popup'lar internetning eng qadimgi imkoniyatlaridan biri bo'lib, ular ba'zan hozir ham foydali: masalan, autentifikatsiya (OAuth) oynalari, reklama yoki katta rasmni alohida oynada ko'rsatish uchun ishlatiladi. Ushbu darsda popup oynalarni ochish, sozlash va ular bilan ikki tomonlama ishlashni chuqur o'rganamiz.</p>
 <div class="warn">Brauzer/oyna API'lari (<code>window.open</code>, <code>window.close</code>, <code>focus</code>, <code>blur</code> va boshqalar) — bu <strong>brauzer</strong> muhitiga tegishli. Ushbu kurs sahifasidagi interaktiv maydonchada (playground) ular <strong>ishlamaydi</strong>. Shu sababli quyidagi barcha kod bloklari faqat <strong>statik misol</strong> sifatida keltiriladi — ularni haqiqiy brauzer sahifasida sinab ko'ring.</div>
-<h2>Popup'lar haqida qisqacha tarix</h2>
+<h2 id="popup-lar-haqida-qisqacha-tarix">Popup'lar haqida qisqacha tarix</h2>
 <p>Popup oynalar hamma vaqt yaxshi tavsiyaga ega bo'lmagan. Ular ko'pincha zararli saytlar tomonidan foydalanuvchini ko'plab reklama oynalari bilan bezovta qilish uchun ishlatilgan. Shu sababli deyarli barcha zamonaviy brauzerlar <strong>popup bloklovchilarga</strong> ega — ular kutilmagan popup'larni bloklaydi.</p>
 <p>Shunga qaramay, popup'lar ba'zi holatlarda hali ham foydali. Masalan, asosiy sahifani boy interfeys bilan qoldirib, foydalanuvchini boshqa saytdagi (masalan, to'lov tizimi yoki ijtimoiy tarmoq) autentifikatsiya oynasiga yo'naltirish kerak bo'lganda popup qulaydir. Bunda asosiy oyna o'z holicha qoladi, popup esa alohida ochiladi.</p>
-<h2>Popup'ni bloklash</h2>
+<h2 id="popup-ni-bloklash">Popup'ni bloklash</h2>
 <p>Ko'p brauzerlar popup'ni <strong>foydalanuvchidan tashqarida</strong> ochilishini bloklaydi. G'oya oddiy: agar popup foydalanuvchi <em>o'zi</em> chaqirgan hodisa (masalan, <code>onclick</code>) natijasida ochilsa — u bloklanmaydi. Ammo popup'ni <code>setTimeout</code> ichida yoki sahifa yuklanishi bilan darhol ochishga urinsangiz — u bloklanadi.</p>
 <p>Masalan, quyidagi kod ishlaydi, chunki popup <code>onclick</code> ichida — foydalanuvchi bosishiga javoban ochiladi:</p>
 <pre class="code"><code>// Bu ishlaydi: bosish (onclick) hodisasi ichida
@@ -615,14 +633,14 @@ setTimeout(() =&gt; {
   window.open('https://javascript.info');
 }, 2000);</code></pre>
 <div class="note">Aniq qoida brauzerdan brauzerga farq qiladi. Masalan, Firefox <code>setTimeout</code>dagi popup'ni ba'zi hollarda ruxsat berishi, boshqalari esa umuman bloklashi mumkin. Umumiy tavsiya: popup'ni <strong>doim foydalanuvchi harakati (bosish)</strong> natijasida oching.</div>
-<h2>window.open sintaksisi</h2>
+<h2 id="window-open-sintaksisi">window.open sintaksisi</h2>
 <p>Popup'ni ochishning asosiy metodi — <code>window.open(url, name, params)</code>:</p>
 <ul><li><code>url</code> — yangi oynada yuklanadigan URL manzil;</li><li><code>name</code> — yangi oynaning nomi. Har bir oynada <code>window.name</code> bo'ladi. Bu yerda mavjud nom berilsa, oyna qayta ochilmaydi — o'sha nomdagi oyna qayta ishlatiladi (URL'i almashtiriladi);</li><li><code>params</code> — yangi oyna uchun sozlamalar satri (vergul bilan ajratilgan konfiguratsiya, probelsiz).</li></ul>
 <p>Eng oddiy chaqiruv — faqat URL bilan:</p>
 <pre class="code"><code>// eng oddiy popup
 window.open('https://javascript.info');</code></pre>
 <p>Agar ikkinchi va uchinchi argumentlar berilmasa, brauzer standart yangi oyna (yoki ko'pincha yangi tab/vkladka) ochadi.</p>
-<h2>Oyna sozlamalari (params)</h2>
+<h2 id="oyna-sozlamalari-params">Oyna sozlamalari (params)</h2>
 <p>Uchinchi argument <code>params</code> — bu satr bo'lib, yangi oynaning konfiguratsiyasini belgilaydi. Sozlamalar vergul bilan ajratiladi, ular orasida <strong>probel bo'lmasligi</strong> kerak. Eng muhim sozlamalar:</p>
 <ul><li><code>width</code> va <code>height</code> — oyna ichki maydonining eni va balandligi (piksellarda). Minimal qiymatga cheklovlar bor — juda kichik oyna ochib bo'lmaydi;</li><li><code>left</code> va <code>top</code> — oynaning ekrandagi chapdan va yuqoridan koordinatasi. Manfiy yoki ekrandan tashqari qiymatlar odatda inobatga olinmaydi;</li><li><code>menubar</code> (yes/no) — brauzer menyusini ko'rsatish yoki yashirish;</li><li><code>toolbar</code> (yes/no) — navigatsiya paneli (oldinga/orqaga tugmalari va h.k.);</li><li><code>location</code> (yes/no) — manzil (URL) maydoni;</li><li><code>status</code> (yes/no) — holat qatori (status bar);</li><li><code>resizable</code> (yes/no) — oynani o'lchamini o'zgartirishga ruxsat;</li><li><code>scrollbars</code> (yes/no) — kerak bo'lganda aylantirish (scroll) chiziqlariga ruxsat.</li></ul>
 <p>Masalan, 600x300 o'lchamdagi oynani ekranning markaziga yaqin joyda ochamiz:</p>
@@ -642,14 +660,14 @@ let params = `width=${width},height=${height},left=${left},top=${top}`;
 // diqqat: bu yerda backtick o'rniga oddiy string ham ishlatsa bo'ladi
 window.open('https://javascript.info', 'test', params);</code></pre>
 <div class="note">Sozlamalar bilan bog'liq muhim qoida: agar <code>params</code>da <strong>hech qanday</strong> oyna xususiyati (width/height va h.k.) ko'rsatilmasa, ular standart qiymatda qoladi. Ammo <strong>kamida bitta</strong> xususiyat ko'rsatilsa, ko'rsatilmagan boshqa panellar (toolbar, menubar va h.k.) ko'pincha <code>no</code> deb hisoblanadi. Shuning uchun kerakli panellarni ochiq qoldirmoqchi bo'lsangiz, ularni ochiqcha <code>yes</code> qiling.</div>
-<h2>Ochilgan oynaga murojaat qilish</h2>
+<h2 id="ochilgan-oynaga-murojaat-qilish">Ochilgan oynaga murojaat qilish</h2>
 <p><code>open</code> chaqiruvi yangi oynaga havolani (window obyektini) qaytaradi. Bu havola orqali ochilgan oynani boshqarish, uning tarkibini o'zgartirish yoki hodisalarni kuzatish mumkin:</p>
 <pre class="code"><code>let newWindow = window.open('about:blank', 'hello', 'width=200,height=200');
 
 newWindow.document.write('Salom, dunyo!');</code></pre>
 <p>Bu yerda <code>newWindow</code> — yangi oynaning <code>window</code> obyekti. Biz uning <code>document</code>iga yozdik. Lekin bu faqat <strong>bir xil manba (Same Origin)</strong> bo'lganda ishlaydi — ya'ni ikkala oyna ham bir xil protokol, domen va portga ega bo'lganda. Agar oyna boshqa saytdan bo'lsa, xavfsizlik siyosati tufayli uning ichiga kira olmaymiz (bu haqda keyingi darsda batafsil).</p>
 <div class="warn">Boshqa manbadan (origin) yuklangan oynaning tarkibiga kirishga urinish xatolik beradi. Masalan, <code>window.open('https://google.com')</code> qaytargan oynaning <code>document</code>iga yoza olmaysiz — bu Same Origin siyosati tomonidan taqiqlangan.</div>
-<h2>Popup'dan asosiy oynaga kirish: window.opener</h2>
+<h2 id="popup-dan-asosiy-oynaga-kirish-window-opener">Popup'dan asosiy oynaga kirish: window.opener</h2>
 <p>Popup asosiy (uni ochgan) oynaga <code>window.opener</code> orqali murojaat qila oladi. Boshqa barcha oynalar uchun <code>opener</code> qiymati <code>null</code> bo'ladi.</p>
 <pre class="code"><code>// asosiy oynada
 let newWin = window.open('our.html', 'hello', 'width=300,height=300');
@@ -658,7 +676,7 @@ let newWin = window.open('our.html', 'hello', 'width=300,height=300');
 // window.opener — bu bizni ochgan asosiy oyna
 // window.opener.document.title — asosiy sahifa sarlavhasi</code></pre>
 <p>Shunday qilib, asosiy oyna va popup o'rtasida ikki tomonlama aloqa mavjud: asosiy oyna popup'ga <code>newWin</code> orqali, popup esa asosiy oynaga <code>window.opener</code> orqali murojaat qiladi. Bu — <strong>faqat Same Origin</strong> bo'lganda to'liq ishlaydi.</p>
-<h2>Oynani yopish: close va closed</h2>
+<h2 id="oynani-yopish-close-va-closed">Oynani yopish: close va closed</h2>
 <p>Oynani yopish uchun <code>win.close()</code> metodi ishlatiladi. Oyna yopilgan-yopilmaganini <code>win.closed</code> xossasi bildiradi — u <code>true</code> yoki <code>false</code> qaytaradi.</p>
 <pre class="code"><code>let newWindow = window.open('about:blank', 'hello', 'width=200,height=200');
 
@@ -668,7 +686,7 @@ newWindow.close();
 alert(newWindow.closed); // true</code></pre>
 <div class="note"><code>close()</code> metodi faqat <code>window.open</code> orqali (yoki <code>window.opener</code>ga ega bo'lgan holda) ochilgan oynalarda ishonchli ishlaydi. Foydalanuvchi o'zi ochgan asosiy oynani skript orqali yopishga ko'pincha ruxsat berilmaydi — bu xavfsizlik chorasi.</div>
 <p>Popup o'zini ham yopishi mumkin: <code>window.close()</code>. Bu ko'pincha popup asosiy oynaga biror ma'lumot (masalan, avtorizatsiya natijasi) uzatgach ishlatiladi.</p>
-<h2>Oynaga fokus berish va olib qo'yish: focus/blur</h2>
+<h2 id="oynaga-fokus-berish-va-olib-qo-yish-focus-blur">Oynaga fokus berish va olib qo'yish: focus/blur</h2>
 <p><code>window.focus()</code> oynani fokusga (oldinga) chiqaradi, <code>window.blur()</code> esa fokusni olib qo'yadi. Nazariy jihatdan bu bilan popup'ni oldinga chiqarish yoki uni orqada qoldirish mumkin.</p>
 <pre class="code"><code>let newWindow = window.open('https://javascript.info', 'example', 'width=300,height=300');
 
@@ -681,11 +699,11 @@ newWindow.focus();</code></pre>
 newWindow.onload = function() {
   newWindow.focus();
 };</code></pre>
-<h2>Popup'ni to'g'ri va odob bilan ishlatish</h2>
+<h2 id="popup-ni-to-g-ri-va-odob-bilan-ishlatish">Popup'ni to'g'ri va odob bilan ishlatish</h2>
 <p>Popup'lar foydalanuvchini bezovta qilishi mumkin, shuning uchun ularni ehtiyotkorlik bilan qo'llang. Amaliy tavsiyalar:</p>
 <ul><li>Popup'ni faqat <strong>foydalanuvchi harakatiga (bosish)</strong> javoban oching — aks holda u bloklanadi;</li><li>Oyna o'lchami va joylashuvini foydalanuvchi qulayligi uchun oqilona tanlang (masalan, ekran markazi);</li><li>Popup bilan ish tugagach, uni <code>close()</code> bilan yoping (ayniqsa OAuth kabi oqimlarda);</li><li>Boshqa manbadagi oyna tarkibiga kira olmasligingizni yodda tuting — bu holda faqat <code>postMessage</code> (keyingi dars) orqali xabar almashinuvi mumkin;</li><li><code>focus/blur</code>ga ishonch bilan tayanmang — ular brauzerlarda cheklangan.</li></ul>
 <div class="tip">Zamonaviy veb-ilovalarda popup o'rniga ko'pincha <strong>modal oynalar</strong> (sahifa ichidagi <code>&lt;dialog&gt;</code> yoki maxsus <code>div</code> qatlamlar) ishlatiladi. Ular boshqarish osonroq va bloklanmaydi. Popup'lar esa asosan boshqa domendagi sahifa (masalan, to'lov yoki OAuth) kerak bo'lganda foydali qoladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Popup'lar <code>window.open(url, name, params)</code> bilan ochiladi va yangi oynaning <code>window</code> obyektini qaytaradi;</li><li>Brauzerlar popup'ni <strong>foydalanuvchi harakatidan tashqarida</strong> ochishni bloklaydi — doim <code>onclick</code> kabi hodisa ichida oching;</li><li><code>params</code> satri orqali <code>width</code>, <code>height</code>, <code>left</code>, <code>top</code> va panellarni (<code>toolbar</code>, <code>menubar</code> va h.k.) sozlash mumkin;</li><li>Asosiy oyna popup'ga <code>open</code> qaytargan havola orqali, popup esa asosiy oynaga <code>window.opener</code> orqali murojaat qiladi;</li><li>Bu ikki tomonlama aloqa faqat <strong>Same Origin</strong> bo'lganda to'liq ishlaydi;</li><li>Oynani yopish uchun <code>close()</code>, holatini bilish uchun <code>closed</code>, fokus uchun <code>focus()</code>/<code>blur()</code> ishlatiladi (oxirgilari cheklangan).</li></ul>
 <nav class="lesson-nav">
   <a href="event-loop.html"><span class="dir">← Oldingi</span><span class="ttl">Hodisalar tsikli: mikro va makrovazifalar</span></a>
@@ -699,6 +717,6 @@ newWindow.onload = function() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "4";
+const ASSET_VER = "5";
 
 const BRAND = {
   name: "Kodla",
@@ -68,6 +68,9 @@ function head(title, desc, depth) {
     "  <title>" + title + "</title>\n" +
     '  <meta name="description" content="' + (desc || "").replace(/"/g, "&quot;") + '">\n' +
     '  <link rel="stylesheet" href="' + base + 'css/style.css?v=' + ASSET_VER + '">\n' +
+    "  <script>(function(){try{var t=localStorage.getItem('theme');" +
+    "if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))" +
+    "document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>\n" +
     "</head>\n<body>\n"
   );
 }
@@ -84,6 +87,7 @@ function header(depth) {
     '      <a href="' + base + 'index.html#mundarija">Mundarija</a>\n' +
     '      <a href="' + BRAND.github + '" target="_blank" rel="noopener">Muallif</a>\n' +
     "    </nav>\n" +
+    '    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>\n' +
     '    <button class="menu-toggle" aria-label="Menyu">☰</button>\n' +
     "  </div>\n</header>\n"
   );
@@ -219,6 +223,55 @@ function renderBody(body) {
   return body.map(renderBlock).join("\n");
 }
 
+/* Sarlavhalardan matn ajratish (id va TOC uchun) */
+function stripTags(s) {
+  return String(s).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+function uniqueId(base, used) {
+  base = base || "bolim";
+  let id = base, i = 2;
+  while (used[id]) { id = base + "-" + i; i++; }
+  used[id] = true;
+  return id;
+}
+
+/* Dars tanasini render qilib, bir vaqtda h2/h3  larga id beradi va
+   "Ushbu sahifada" ro'yxati (TOC) uchun sarlavhalarni yig'adi. */
+function buildArticle(body) {
+  if (!Array.isArray(body)) return { html: renderBody(body), toc: [] };
+  const used = {};
+  const toc = [];
+  const html = body
+    .map((b) => {
+      if (b && b.h2 != null) {
+        const id = uniqueId(slugify(stripTags(b.h2)), used);
+        toc.push({ level: 2, id: id, text: stripTags(b.h2) });
+        return '<h2 id="' + id + '">' + b.h2 + "</h2>";
+      }
+      if (b && b.h3 != null) {
+        const id = uniqueId(slugify(stripTags(b.h3)), used);
+        toc.push({ level: 3, id: id, text: stripTags(b.h3) });
+        return '<h3 id="' + id + '">' + b.h3 + "</h3>";
+      }
+      return renderBlock(b);
+    })
+    .join("\n");
+  return { html: html, toc: toc };
+}
+
+function tocHtml(toc) {
+  if (toc.length < 3) return "";
+  const items = toc
+    .map((t) => '<li class="lvl' + t.level + '"><a href="#' + t.id + '">' + esc(t.text) + "</a></li>")
+    .join("\n");
+  return (
+    '<details class="toc" open>\n' +
+    '  <summary>📑 Ushbu sahifada</summary>\n' +
+    "  <ul>\n" + items + "\n  </ul>\n" +
+    "</details>\n"
+  );
+}
+
 /* Dars tanasidan toza matn ajratib olish (qidiruv indeksi uchun).
    HTML teglari va entity'lar olib tashlanadi, kichik harfga o'giriladi. */
 function lessonText(lesson) {
@@ -312,15 +365,19 @@ function renderLesson(lesson, chapter, parts, prev, next) {
   }
   nav += "</nav>\n";
 
+  const art = buildArticle(lesson.body);
+
   return (
     head(esc(lesson.title) + " — " + esc(BRAND.name), lesson.blurb, 1) +
     header(1) +
+    '<div class="reading-progress"><span id="readingBar"></span></div>\n' +
     '<div class="layout">\n' +
     sidebar(parts, lesson.slug, 1) +
     '<main class="content article">\n' +
     '<div class="crumbs">' + esc(chapter) + "</div>\n" +
     "<h1>" + esc(lesson.title) + "</h1>\n" +
-    renderBody(lesson.body) +
+    tocHtml(art.toc) +
+    art.html +
     "\n" + nav +
     "</main>\n</div>\n" +
     footer(1)

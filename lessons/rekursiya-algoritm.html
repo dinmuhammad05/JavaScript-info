@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rekursiya algoritmlar tilida — Kodla</title>
   <meta name="description" content="Rekursiv fikrlash, bazaviy holat, rekursiya daraxti, chaqiruvlar steki, murakkablikni hisoblash va rekursiyani siklga aylantirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,32 @@
 <main class="content article">
 <div class="crumbs">Algoritm asoslari</div>
 <h1>Rekursiya algoritmlar tilida</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#rekursiya-nima">Rekursiya nima?</a></li>
+<li class="lvl2"><a href="#bazaviy-holat-eng-muhim-qism">Bazaviy holat - eng muhim qism</a></li>
+<li class="lvl2"><a href="#rekursiya-qanday-ochiladi">Rekursiya qanday "ochiladi"</a></li>
+<li class="lvl2"><a href="#ko-proq-rekursiv-misollar">Ko'proq rekursiv misollar</a></li>
+<li class="lvl3"><a href="#1-dan-n-gacha-sonlar-yig-indisi">1 dan n gacha sonlar yig'indisi</a></li>
+<li class="lvl3"><a href="#massivdagi-sonlar-yig-indisi">Massivdagi sonlar yig'indisi</a></li>
+<li class="lvl3"><a href="#matnni-teskarilash">Matnni teskarilash</a></li>
+<li class="lvl2"><a href="#rekursiya-daraxti">Rekursiya daraxti</a></li>
+<li class="lvl2"><a href="#chaqiruvlar-steki-va-stek-to-lib-ketishi">Chaqiruvlar steki va stek to'lib ketishi</a></li>
+<li class="lvl2"><a href="#rekursiya-murakkabligini-baholash">Rekursiya murakkabligini baholash</a></li>
+<li class="lvl2"><a href="#rekursiya-va-iteratsiya-qaysi-biri-qachon">Rekursiya va iteratsiya - qaysi biri qachon?</a></li>
+<li class="lvl2"><a href="#bo-lib-tashla-va-hukmronlik-qil">Bo'lib tashla va hukmronlik qil</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zi masalalar o'z ichida o'zining kichraytirilgan nusxasini yashiradi. Matryoshka qo'g'irchoqni ochsangiz - ichidan yana bir xuddi shunday, lekin kichikroq qo'g'irchoq chiqadi. Aynan shunday masalalarni yechishning tabiiy va nafis usuli bor - <strong>rekursiya</strong>. Bu - funksiyaning o'zini-o'zi chaqirishi. Boshda bu sehrdek tuyuladi, lekin aslida ortida juda oddiy va chiroyli mantiq yotadi. Bu darsda rekursiv fikrlashni, uning qoidalarini va ko'plab algoritmlarda nega u shunchalik muhim ekanini o'rganamiz.</p>
 <div class="note">Rekursiya - algoritmlar bo'limining tayanch tushunchalaridan biri. Kelgusida ko'radigan ko'plab algoritmlar (ikkilik qidiruv, birlashtirib saralash, daraxtlarni aylanib chiqish) aynan rekursiv yoziladi. Shuning uchun bu darsni yaxshi o'zlashtirish juda muhim.</div>
-<h2>Rekursiya nima?</h2>
+<h2 id="rekursiya-nima">Rekursiya nima?</h2>
 <p><strong>Rekursiya</strong> (recursion) - bu funksiyaning o'z ichida o'zini chaqirishi. Ya'ni funksiya masalani yechish uchun xuddi o'zini, lekin biroz kichikroq masala bilan yana ishga soladi. Bu jarayon masala shu qadar kichrayadiki, uni to'g'ridan-to'g'ri yechib bo'ladigan holatga yetguncha davom etadi.</p>
 <p>Rekursiv fikrlashning asosiy g'oyasi: "Katta masalani yechish uchun uni kichikroq, xuddi shunday masalaga aylantiraman, va shu kichikroq masalani yechishni o'zimga topshiraman."</p>
 <p>Har bir rekursiv funksiya ikki qismdan iborat bo'ladi:</p>
 <ul><li><strong>Bazaviy holat (base case)</strong> - rekursiya to'xtaydigan eng oddiy holat. Bu yerda funksiya o'zini chaqirmasdan, to'g'ridan-to'g'ri javob qaytaradi.</li><li><strong>Rekursiv holat (recursive case)</strong> - funksiya o'zini kichikroq masala bilan chaqiradigan qism.</li></ul>
-<h2>Bazaviy holat - eng muhim qism</h2>
+<h2 id="bazaviy-holat-eng-muhim-qism">Bazaviy holat - eng muhim qism</h2>
 <p>Bazaviy holat rekursiyaning "to'xtash tugmasi". Agar u bo'lmasa yoki noto'g'ri bo'lsa, funksiya o'zini cheksiz chaqiraveradi va dastur ishdan chiqadi. Shuning uchun har bir rekursiv funksiya yozganda birinchi savol shu bo'lishi kerak: <strong>"Bu qachon to'xtaydi?"</strong></p>
 <p>Keling, eng klassik misol - <strong>faktorial</strong> hisoblashni ko'raylik. Faktorial n! = n * (n-1) * (n-2) * ... * 1. Masalan 5! = 5 * 4 * 3 * 2 * 1 = 120. Buni rekursiv qilib shunday ifodalash mumkin: n! = n * (n-1)!</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>faktorial.js</span></div><textarea spellcheck="false">function faktorial(n) {
@@ -618,7 +639,7 @@ console.log(faktorial(3)); // 6
 console.log(faktorial(1)); // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu qanday ishlaydi? <code>faktorial(5)</code> chaqirilganda: u 5 * faktorial(4) ni hisoblamoqchi bo'ladi. Buning uchun faktorial(4) ni chaqiradi, u esa 4 * faktorial(3) ni... va hokazo, faktorial(1) ga yetguncha. faktorial(1) bazaviy holat bo'lgani uchun 1 qaytaradi va zanjir orqaga qarab hisoblanib chiqadi.</p>
 <div class="warn">Bazaviy holatni unutmang! Agar <code>faktorial</code> da <code>if (n <= 1)</code> qismini olib tashlasak, funksiya faktorial(0), faktorial(-1), faktorial(-2) ni cheksiz chaqiraveradi va dastur "stack overflow" xatosi bilan qulaydi.</div>
-<h2>Rekursiya qanday "ochiladi"</h2>
+<h2 id="rekursiya-qanday-ochiladi">Rekursiya qanday "ochiladi"</h2>
 <p>Rekursiyani tushunishning eng yaxshi yo'li - uni qadamma-qadam "ochib" ko'rish. <code>faktorial(4)</code> qanday hisoblanishini yozib chiqaylik:</p>
 <pre class="code"><code>faktorial(4)
 = 4 * faktorial(3)
@@ -629,9 +650,9 @@ console.log(faktorial(1)); // 1</textarea><div class="pg-actions"><button class=
 = 4 * 6
 = 24</code></pre>
 <p>Ko'rib turibsizki, avval funksiya "pastga" tushadi (o'zini qayta-qayta chaqirib, masalani kichraytirib boradi), bazaviy holatga yetgach esa "yuqoriga" qaytadi (natijalarni birlashtirib, yakuniy javobni hosil qiladi). Bu "tushish va qaytish" harakati rekursiyaning yuragi.</p>
-<h2>Ko'proq rekursiv misollar</h2>
+<h2 id="ko-proq-rekursiv-misollar">Ko'proq rekursiv misollar</h2>
 <p>Rekursiyani his qilish uchun bir nechta misol ko'raylik. Har birida bazaviy holat va rekursiv holatni ajratib oling.</p>
-<h3>1 dan n gacha sonlar yig'indisi</h3>
+<h3 id="1-dan-n-gacha-sonlar-yig-indisi">1 dan n gacha sonlar yig'indisi</h3>
 <p>Yig'indini ham rekursiv ifodalash mumkin: yigindi(n) = n + yigindi(n-1). Bazaviy holat - yigindi(0) = 0:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>rekursiv-yigindi.js</span></div><textarea spellcheck="false">function yigindi(n) {
   if (n === 0) return 0;      // bazaviy holat
@@ -640,7 +661,7 @@ console.log(faktorial(1)); // 1</textarea><div class="pg-actions"><button class=
 
 console.log(yigindi(5));  // 15 (1+2+3+4+5)
 console.log(yigindi(10)); // 55</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Massivdagi sonlar yig'indisi</h3>
+<h3 id="massivdagi-sonlar-yig-indisi">Massivdagi sonlar yig'indisi</h3>
 <p>Massiv bilan ham ishlash mumkin: birinchi elementni olib, qolgan qismning yig'indisiga qo'shamiz. Bazaviy holat - bo'sh massiv, uning yig'indisi 0:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>massiv-yigindi.js</span></div><textarea spellcheck="false">function massivYigindi(massiv) {
   if (massiv.length === 0) return 0; // bazaviy holat
@@ -650,7 +671,7 @@ console.log(yigindi(10)); // 55</textarea><div class="pg-actions"><button class=
 
 console.log(massivYigindi([10, 20, 30])); // 60
 console.log(massivYigindi([5]));          // 5</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Matnni teskarilash</h3>
+<h3 id="matnni-teskarilash">Matnni teskarilash</h3>
 <p>Matnni ham rekursiv teskarilash mumkin: oxirgi belgini olib, qolganini teskarilaymiz. Bazaviy holat - bo'sh yoki bitta belgili matn:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>matn-teskari.js</span></div><textarea spellcheck="false">function teskari(matn) {
   if (matn.length &lt;= 1) return matn; // bazaviy holat
@@ -661,7 +682,7 @@ console.log(massivYigindi([5]));          // 5</textarea><div class="pg-actions"
 console.log(teskari("salom")); // molas
 console.log(teskari("kod"));   // dok</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Rekursiv funksiya yozishning oddiy retsepti: 1) "Eng oddiy holat qaysi?" - bu bazaviy holat. 2) "Masalani bir pog'ona kichraytirsam, o'zimni qanday chaqiraman?" - bu rekursiv holat. Shu ikki savolga javob topsangiz, funksiya deyarli tayyor.</div>
-<h2>Rekursiya daraxti</h2>
+<h2 id="rekursiya-daraxti">Rekursiya daraxti</h2>
 <p>Ba'zi rekursiv funksiyalar o'zini bir marta emas, <strong>bir necha marta</strong> chaqiradi. Bunday holatda chaqiruvlar shoxlanib, <strong>rekursiya daraxti</strong> (recursion tree) hosil qiladi. Buni Fibonacci misolida yaqqol ko'rish mumkin, chunki fib(n) o'zini ikki marta chaqiradi: fib(n-1) va fib(n-2).</p>
 <pre class="code"><code>                 fib(4)
                /        \
@@ -671,7 +692,7 @@ console.log(teskari("kod"));   // dok</textarea><div class="pg-actions"><button 
      /    \
  fib(1)   fib(0)</code></pre>
 <p>Diqqat qiling: fib(2) ikki marta, fib(1) uch marta hisoblanmoqda! Bir xil ish qayta-qayta bajarilyapti. Aynan shu takrorlanish tufayli sodda rekursiv Fibonacci o'tgan darsda ko'rganimizdek O(2^n) - eksponensial bo'lib qoladi. Rekursiya daraxti qanchalik keng shoxlansa, murakkablik shunchalik yomon bo'ladi.</p>
-<h2>Chaqiruvlar steki va stek to'lib ketishi</h2>
+<h2 id="chaqiruvlar-steki-va-stek-to-lib-ketishi">Chaqiruvlar steki va stek to'lib ketishi</h2>
 <p>Kompyuter rekursiv chaqiruvlarni qanday eslab qoladi? Buning uchun <strong>chaqiruvlar steki</strong> (call stack) degan maxsus xotira bor. Har safar funksiya chaqirilganda, uning holati stekka "taxlanadi". Funksiya javob qaytarganda esa stekdan olib tashlanadi.</p>
 <p>faktorial(4) misolida stek shunday to'ladi: faktorial(4) chaqiriladi va stekka qo'yiladi, u faktorial(3) ni chaqiradi - u ham stekka, so'ng faktorial(2), faktorial(1). Bazaviy holatga yetgach, stek teskari tartibda bo'shab boradi.</p>
 <pre class="code"><code>Stek to'lishi:        Stek bo'shashi:
@@ -692,13 +713,13 @@ try {
   // "Maximum call stack size exceeded"
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Stek to'lib ketishi - rekursiyadagi eng ko'p uchraydigan xato. Sabablari: 1) bazaviy holat umuman yo'q; 2) bazaviy holatga hech qachon yetmaydi (masala kichraymayapti). Har doim tekshiring: har bir rekursiv chaqiruv masalani bazaviy holatga <strong>yaqinlashtiryaptimi?</strong></div>
-<h2>Rekursiya murakkabligini baholash</h2>
+<h2 id="rekursiya-murakkabligini-baholash">Rekursiya murakkabligini baholash</h2>
 <p>Rekursiv algoritmning Big O sini hisoblash uchun ikki narsani ko'paytiramiz:</p>
 <ul><li><strong>Chaqiruvlar soni</strong> - funksiya jami necha marta chaqiriladi?</li><li><strong>Har bir chaqiruvdagi ish</strong> - bitta chaqiruvda rekursiv chaqiruvdan tashqari qancha ish bajariladi?</li></ul>
 <p>Masalan, <code>faktorial(n)</code>: u n marta chaqiriladi (faktorial(n) dan faktorial(1) gacha), va har chaqiruvda faqat bitta ko'paytirish - O(1) ish. Demak jami: n * O(1) = <strong>O(n)</strong>.</p>
 <p>Fibonacci esa boshqacha: rekursiya daraxti har qadamda ikkiga shoxlanadi, shuning uchun chaqiruvlar soni taxminan 2^n bo'ladi. Har chaqiruvda O(1) ish. Jami: <strong>O(2^n)</strong> - eksponensial.</p>
 <div class="note">Rekursiv algoritmning xotira murakkabligi ham muhim. Chaqiruvlar steki eng chuqur nuqtada qancha chaqiruv saqlaydi - o'sha xotira sarfi bo'ladi. faktorial(n) uchun stek chuqurligi n ta, demak O(n) xotira. Oddiy sikl esa O(1) xotira ishlatadi - bu rekursiyaning bir kamchiligi.</div>
-<h2>Rekursiya va iteratsiya - qaysi biri qachon?</h2>
+<h2 id="rekursiya-va-iteratsiya-qaysi-biri-qachon">Rekursiya va iteratsiya - qaysi biri qachon?</h2>
 <p>Har bir rekursiv yechimni <strong>iteratsiya</strong> (oddiy sikl) bilan ham yozish mumkin, va aksincha. Masalan, faktorialni siklsiz-rekursiv ham, sikl bilan ham yozsa bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>rekursiya-vs-iteratsiya.js</span></div><textarea spellcheck="false">// Rekursiv usul
 function faktorialR(n) {
@@ -720,13 +741,13 @@ console.log(faktorialI(5)); // 120 - bir xil natija</textarea><div class="pg-act
 <p>Ikkalasi ham to'g'ri, lekin farqlari bor:</p>
 <ul><li><strong>Rekursiya</strong> - kod ko'pincha qisqaroq va tabiiyroq, ayniqsa masala o'zi rekursiv tuzilishga ega bo'lsa (daraxtlar, bo'lib-yechish masalalari). Lekin chaqiruvlar steki tufayli qo'shimcha xotira sarflaydi va stek to'lib ketishi xavfi bor.</li><li><strong>Iteratsiya</strong> - odatda tezroq va kam xotira ishlatadi (O(1) xotira). Lekin ba'zi murakkab masalalarda kodi chalkashroq bo'lishi mumkin.</li></ul>
 <div class="tip">Amaliy qoida: agar masala tabiiy ravishda kichikroq bir xil masalalarga bo'linsa (daraxt tuzilmalari, birlashtirib saralash, bo'lib-hukmronlik masalalari) - rekursiya chiroyliroq. Agar oddiy takrorlanuvchi hisoblash bo'lsa (yig'indi, faktorial) - iteratsiya samaraliroq va xavfsizroq.</div>
-<h2>Bo'lib tashla va hukmronlik qil</h2>
+<h2 id="bo-lib-tashla-va-hukmronlik-qil">Bo'lib tashla va hukmronlik qil</h2>
 <p>Rekursiyaning eng kuchli qo'llanilishi - <strong>"bo'lib tashla va hukmronlik qil"</strong> (divide and conquer) g'oyasi. Bu yondashuvda katta masala uchun quyidagi qadamlar bajariladi:</p>
 <ol><li><strong>Bo'lish (divide)</strong> - masalani ikki yoki undan ortiq kichikroq, xuddi shunday qism-masalalarga bo'lamiz.</li><li><strong>Hukmronlik (conquer)</strong> - har bir qism-masalani rekursiya bilan yechamiz.</li><li><strong>Birlashtirish (combine)</strong> - qism-yechimlarni birlashtirib, yakuniy javobni hosil qilamiz.</li></ol>
 <p>O'tgan darslarda ko'rgan <strong>ikkilik qidiruv</strong> aynan shu g'oyaga asoslangan: har qadamda masalani (izlash oralig'ini) yarmiga bo'lib, faqat kerakli yarmda davom etamiz. Shu tufayli u O(log n) da ishlaydi.</p>
 <p>Xuddi shunday, kelgusida o'rganadigan <strong>birlashtirib saralash</strong> (merge sort) massivni ikki yarmga bo'lib, har birini alohida saralaydi, keyin ikki saralangan yarmni birlashtiradi - va O(n log n) tezlikka erishadi. Bu yondashuv juda ko'p tez algoritmlarning asosini tashkil qiladi.</p>
 <div class="note">"Bo'lib tashla va hukmronlik qil" - bu shunchaki texnika emas, balki fikrlash usuli. Katta muammoga duch kelganda: "Buni ikkita kichikroq, o'xshash muammoga bo'lib bo'ladimi?" degan savolni bering. Ko'p hollarda javob - ha, va bu sizni nafis, tez yechimga olib keladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Rekursiya - dasturchining eng nafis va kuchli vositalaridan biri. Uni o'zlashtirish uchun asosiy nuqtalarni yodda tuting:</p>
 <ul><li>Rekursiya - bu funksiyaning o'zini kichikroq masala bilan chaqirishi.</li><li>Har bir rekursiv funksiyada <strong>bazaviy holat</strong> (to'xtash sharti) bo'lishi shart.</li><li>Har bir chaqiruv masalani bazaviy holatga <strong>yaqinlashtirishi</strong> kerak, aks holda stek to'lib ketadi.</li><li>Murakkablik = chaqiruvlar soni * har chaqiruvdagi ish. Rekursiya daraxti keng shoxlansa, murakkablik yomonlashadi.</li><li>Rekursiya qo'shimcha xotira (call stack) sarflaydi; iteratsiya odatda tejamkorroq.</li><li>"Bo'lib tashla va hukmronlik qil" - rekursiyaga asoslangan eng kuchli algoritmik g'oyalardan biri.</li></ul>
 <p>Bu bilan "Algoritm asoslari" bobini yakunlaymiz. Endi sizda algoritm nima ekani, uni Big O bilan qanday o'lchash va rekursiv fikrlash haqida mustahkam poydevor bor. Kelgusi boblarda bu bilimlarni haqiqiy algoritmlar - qidiruv, saralash va ma'lumotlar tuzilmalari - ustida qo'llaymiz. Omad tilaymiz!</p>
@@ -742,6 +763,6 @@ console.log(faktorialI(5)); // 120 - bir xil natija</textarea><div class="pg-act
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

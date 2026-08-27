@@ -20,9 +20,37 @@
   --radius: 10px;
   --shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .04);
   --max: 1180px;
+  --header-bg: #1a1a2e;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
+
+/* ---------- Kechki rejim (dark mode) ---------- */
+:root[data-theme="dark"] {
+  --ink: #e7e7f1;
+  --ink-soft: #c4c4d8;
+  --muted: #9a9ab2;
+  --bg: #14141c;
+  --bg-soft: #1e1e2a;
+  --bg-code: #0d0d15;
+  --border: #2c2c3e;
+  --accent: #7aa2ff;
+  --accent-dark: #9db8ff;
+  --header-bg: #0f0f17;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
+}
+/* Sariq fon ustidagi matn kechki rejimda ham to'q qolsin */
+:root[data-theme="dark"] .logo .mark,
+:root[data-theme="dark"] .btn,
+:root[data-theme="dark"] .pg-run,
+:root[data-theme="dark"] .sidebar li a.active,
+:root[data-theme="dark"] .sidebar details li a.active { color: #14141c; }
+:root[data-theme="dark"] .card { background: var(--bg-soft); }
+:root[data-theme="dark"] .article code { color: #f3a9c6; }
+:root[data-theme="dark"] .note { background: #12233d; }
+:root[data-theme="dark"] .warn { background: #3a1c1c; }
+:root[data-theme="dark"] .tip { background: #10291b; }
+:root[data-theme="dark"] .side-search input:focus { background: #0d0d15; }
 
 * { box-sizing: border-box; }
 
@@ -47,7 +75,7 @@ img { max-width: 100%; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--ink);
+  background: var(--header-bg);
   color: #fff;
   border-bottom: 3px solid var(--brand);
 }
@@ -302,8 +330,17 @@ img { max-width: 100%; }
 .card p { margin: 0; color: var(--muted); font-size: .92rem; }
 
 /* ---------- Article / lesson content ---------- */
-.article h1 { font-size: 2.1rem; margin: 0 0 8px; line-height: 1.2; }
-.article .lead { font-size: 1.12rem; color: var(--ink-soft); margin: 0 0 28px; }
+/* O'qish qulayligi: matn qatorini ~70 belgi bilan cheklaymiz */
+.article { font-size: 1.02rem; line-height: 1.75; }
+.article > p,
+.article > ul,
+.article > ol,
+.article > .lead,
+.article > .note,
+.article > .tip,
+.article > .warn { max-width: 72ch; }
+.article h1 { font-size: 2.15rem; margin: 0 0 10px; line-height: 1.2; letter-spacing: -.01em; }
+.article .lead { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 28px; line-height: 1.6; }
 .article h2 {
   font-size: 1.5rem;
   margin: 40px 0 14px;
@@ -564,3 +601,101 @@ pre.code code {
 
 /* Yopish paneli faqat mobil drawerda ko'rinadi */
 .side-close { display: none; }
+
+/* ================= UX komponentlari ================= */
+
+/* Rejim almashtirish tugmasi (header) */
+.theme-toggle {
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 7px 11px;
+  cursor: pointer;
+  margin-inline-start: 16px;
+  transition: background .15s ease;
+}
+.theme-toggle:hover { background: rgba(255, 255, 255, .16); }
+
+/* O'qish progressi (sahifa eng tepasidagi ingichka chiziq) */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 3px;
+  background: transparent;
+  pointer-events: none;
+}
+.reading-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--brand);
+  transition: width .1s linear;
+}
+
+/* "Ushbu sahifada" — dars ichi mundarija (TOC) */
+.article .toc {
+  max-width: 72ch;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 16px;
+  margin: 0 0 28px;
+}
+.article .toc > summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--ink-soft);
+  padding: 8px 0;
+  list-style: none;
+}
+.article .toc > summary::-webkit-details-marker { display: none; }
+.article .toc > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-inline-end: 8px;
+  color: var(--muted);
+  transition: transform .15s ease;
+}
+.article .toc[open] > summary::before { transform: rotate(90deg); }
+.article .toc ul {
+  list-style: none;
+  margin: 4px 0 10px;
+  padding: 0;
+  columns: 2;
+  column-gap: 28px;
+}
+.article .toc li { margin: 3px 0; break-inside: avoid; }
+.article .toc li.lvl3 { padding-inline-start: 16px; }
+.article .toc li.lvl3 a { color: var(--muted); font-size: .86rem; }
+.article .toc a { font-size: .9rem; color: var(--ink-soft); }
+.article .toc a.active { color: var(--accent); font-weight: 700; }
+/* Sticky header ostiga sarlavha yashirinmasligi uchun */
+.article h2[id], .article h3[id] { scroll-margin-top: 76px; }
+@media (max-width: 640px) { .article .toc ul { columns: 1; } }
+
+/* Kodni nusxalash tugmasi (pre.code ustida) */
+.code-wrap { position: relative; }
+.code-wrap .copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, .1);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: .78rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s ease, background .15s ease;
+}
+.code-wrap:hover .copy-btn { opacity: 1; }
+.code-wrap .copy-btn:hover { background: rgba(255, 255, 255, .2); }
+.code-wrap .copy-btn.copied { background: var(--success); color: #fff; border-color: var(--success); opacity: 1; }

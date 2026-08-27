@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Symbol turi — Kodla</title>
   <meta name="description" content="Symbol — noyob identifikatorlar yaratuvchi primitiv tur, yashirin xossalar va tizimli simvollar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Obyektlar: asoslar</div>
 <h1>Symbol turi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#symbol-nima">Symbol nima?</a></li>
+<li class="lvl2"><a href="#yashirin-maxfiy-xossalar">Yashirin ("maxfiy") xossalar</a></li>
+<li class="lvl2"><a href="#symbollar-sikllardan-yashiringan">Symbollar sikllardan yashiringan</a></li>
+<li class="lvl2"><a href="#global-reestr-symbol-for">Global reestr: Symbol.for</a></li>
+<li class="lvl2"><a href="#tizimli-well-known-simvollar">Tizimli (well-known) simvollar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Spetsifikatsiyaga ko'ra obyekt xossalarining kaliti faqat ikki turdan biri bo'la oladi: <strong>satr (string)</strong> yoki <strong>Symbol</strong>. Bu darsda ikkinchisi — noyob identifikatorlar yaratuvchi <code>Symbol</code> turi bilan tanishamiz.</p>
-<h2>Symbol nima?</h2>
+<h2 id="symbol-nima">Symbol nima?</h2>
 <p><code>Symbol</code> — "noyob identifikator"ni ifodalovchi primitiv tur. Uni <code>Symbol()</code> funksiyasi bilan yaratamiz. Ixtiyoriy tavsif (nom) berishimiz mumkin — u faqat debug uchun foydali:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yaratish.js</span></div><textarea spellcheck="false">let id = Symbol("id");
 
@@ -610,7 +624,7 @@ let id2 = Symbol("id");
 
 console.log(id1 == id2);  // false — ular har xil!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Symbollar avtomatik satrga o'girilmaydi. <code>console.log(id)</code> ba'zi muhitlarda xato beradi. Satr kerak bo'lsa, aniq <code>id.toString()</code> yoki <code>id.description</code> ishlating.</div>
-<h2>Yashirin ("maxfiy") xossalar</h2>
+<h2 id="yashirin-maxfiy-xossalar">Yashirin ("maxfiy") xossalar</h2>
 <p>Symbollar yordamida obyektga "yashirin" xossalar qo'shish mumkin. Boshqa kod (hatto o'sha obyektni to'g'ridan-to'g'ri qamrab olgan kutubxona ham) bu xossaga tasodifan kira olmaydi yoki uni qayta yoza olmaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yashirin.js</span></div><textarea spellcheck="false">let id = Symbol("id");
 
@@ -623,7 +637,7 @@ user[id] = 123;  // symbol kalit bilan
 console.log(user[id]);  // 123</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Buning afzalligi: agar boshqa kutubxona ham <code>user</code>'ga <code>"id"</code> nomli satr xossa qo'shsa, ular to'qnashmaydi — chunki symbol kaliti mutlaqo noyob.</p>
 <div class="note">Obyekt literalida symbol kalitini ishlatish uchun kvadrat qavs kerak:<br><code>let user = { [id]: 123 };</code><br>Oddiy <code>id: 123</code> yozsak, kalit satr <code>"id"</code> bo'lib qoladi.</div>
-<h2>Symbollar sikllardan yashiringan</h2>
+<h2 id="symbollar-sikllardan-yashiringan">Symbollar sikllardan yashiringan</h2>
 <p>Symbol kalitli xossalar <code>for..in</code> siklida va <code>Object.keys()</code>'da ko'rinmaydi — ular "o'tkazib yuboriladi":</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sikl.js</span></div><textarea spellcheck="false">let id = Symbol("id");
 let user = {
@@ -638,7 +652,7 @@ for (let key in user) {
 
 console.log(Object.keys(user));  // [ 'name', 'age' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Aksincha, <code>Object.assign()</code> symbol xossalarni ham nusxalaydi — bu ataylik shunday qilingan, chunki obyektni klonlaganda uning barcha xossalari (symbollar bilan birga) ko'chirilishi kerak.</p>
-<h2>Global reestr: Symbol.for</h2>
+<h2 id="global-reestr-symbol-for">Global reestr: Symbol.for</h2>
 <p>Ba'zan bir xil nomli symbolning butun dastur bo'ylab <strong>bir xil</strong> nusxasi kerak bo'ladi. Buning uchun <em>global symbol reestri</em> mavjud. <code>Symbol.for(kalit)</code> reestrda symbolni qidiradi, topmasa yaratadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for.js</span></div><textarea spellcheck="false">// global reestrdan o'qish yoki yaratish
 let id = Symbol.for("id");
@@ -655,11 +669,11 @@ console.log(Symbol.keyFor(sym));  // name
 let local = Symbol("local");
 console.log(Symbol.keyFor(local));  // undefined</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>Symbol("id")</code> va <code>Symbol.for("id")</code> farqini eslang: birinchisi <strong>har doim yangi</strong> noyob symbol yaratadi; ikkinchisi global reestrdan bir xilini qaytaradi.</div>
-<h2>Tizimli (well-known) simvollar</h2>
+<h2 id="tizimli-well-known-simvollar">Tizimli (well-known) simvollar</h2>
 <p>JavaScript'ning ichida oldindan belgilangan bir qator <strong>tizimli simvollar</strong> mavjud. Ular tilning ichki xatti-harakatini sozlashga imkon beradi. Ularga <code>Symbol.*</code> orqali murojaat qilinadi:</p>
 <ul><li><code>Symbol.iterator</code> — obyektni iteratsiya qilinuvchi qilish uchun;</li><li><code>Symbol.toPrimitive</code> — obyektni primitivga o'girish qoidasini belgilash;</li><li><code>Symbol.toStringTag</code> — obyekt turining maxsus nomi;</li><li><code>Symbol.hasInstance</code>, <code>Symbol.asyncIterator</code> va boshqalar.</li></ul>
 <p>Masalan, <code>Symbol.iterator</code> yordamida oddiy obyektni <code>for..of</code> bilan aylanuvchi qilib bo'ladi (bu ilg'or mavzu, keyingi boblarda ko'ramiz). Keyingi darsda esa <code>Symbol.toPrimitive</code> bilan ishlaymiz.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>Symbol</code> — noyob identifikatorlar uchun primitiv tur; <code>Symbol(tavsif)</code> bilan yaratiladi;</li><li>Har bir <code>Symbol()</code> chaqiruvi — yangi, boshqa hech kimga teng bo'lmagan qiymat;</li><li>Symbol kalitlar obyektga "yashirin" xossalar qo'shadi va <code>for..in</code>, <code>Object.keys</code>'da ko'rinmaydi;</li><li><code>Symbol.for(kalit)</code> / <code>Symbol.keyFor(sym)</code> — global reestr orqali umumiy symbollar;</li><li><code>Symbol.iterator</code>, <code>Symbol.toPrimitive</code> kabi tizimli simvollar til xatti-harakatini sozlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="optional-chaining.html"><span class="dir">← Oldingi</span><span class="ttl">Optional chaining ?.</span></a>
@@ -673,6 +687,6 @@ console.log(Symbol.keyFor(local));  // undefined</textarea><div class="pg-action
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

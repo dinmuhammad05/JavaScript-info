@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loyiha tuzilishi: Module, Controller, Service — Kodla</title>
   <meta name="description" content="NestJS'ning uch asosiy qurilish bloki: @Module modullarni tashkil qiladi, @Controller so'rovlarni qabul qiladi, @Injectable service biznes-logikani saqlaydi. Nest CLI bilan ularni generatsiya qilish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,24 @@
 <main class="content article">
 <div class="crumbs">NestJS</div>
 <h1>Loyiha tuzilishi: Module, Controller, Service</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#mas-uliyatlarni-ajratish-tamoyili">Mas'uliyatlarni ajratish tamoyili</a></li>
+<li class="lvl2"><a href="#module-modul-nima">@Module — modul nima?</a></li>
+<li class="lvl2"><a href="#controller-so-rovlarni-qabul-qilish">@Controller — so'rovlarni qabul qilish</a></li>
+<li class="lvl2"><a href="#injectable-service-biznes-logika">@Injectable — service (biznes-logika)</a></li>
+<li class="lvl2"><a href="#hamma-narsani-modulga-bog-lash">Hamma narsani modulga bog'lash</a></li>
+<li class="lvl2"><a href="#nest-cli-bilan-avtomatik-generatsiya">Nest CLI bilan avtomatik generatsiya</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">NestJS'da har qanday ilova uch xil qurilish blokidan yig'iladi: <strong>Module</strong> (modul), <strong>Controller</strong> (kontroller) va <strong>Service</strong> (servis). Bu uchlik NestJS falsafasining yuragi. Ularni bir marta yaxshi tushunib olsangiz, butun framework tushunarli bo'lib qoladi. Keling, har birini alohida ko'rib chiqamiz.</p>
-<h2>Mas'uliyatlarni ajratish tamoyili</h2>
+<h2 id="mas-uliyatlarni-ajratish-tamoyili">Mas'uliyatlarni ajratish tamoyili</h2>
 <p>NestJS arxitekturasi <strong>Separation of Concerns</strong> (mas'uliyatlarni ajratish) tamoyiliga tayanadi. Buning ma'nosi: har bir qism faqat bitta ishga javob berishi kerak. Uchlikda vazifalar shunday taqsimlanadi:</p>
 <ul><li><strong>Controller</strong> — HTTP so'rovlarini <em>qabul qiladi</em> va javob <em>qaytaradi</em>. U "qaysi manzilga qaysi funksiya"ni belgilaydi, ammo biznes-logikani o'zi bajarmaydi;</li><li><strong>Service</strong> — asosiy <em>biznes-logika</em> shu yerda. Ma'lumotni hisoblash, bazaga saqlash, tashqi API'ga so'rov — bularning hammasi service'da;</li><li><strong>Module</strong> — controller va service'larni <em>bir joyga bog'laydi</em> va ularni tashkil qiladi.</li></ul>
 <div class="note">Oddiy qoida: Controller <strong>ingichka</strong> (thin) bo'lishi kerak — u faqat so'rovni qabul qiladi va service'ga uzatadi. Barcha "og'ir" ish service ichida bajariladi. Bu kodni testlash va qayta ishlatishni osonlashtiradi.</div>
-<h2>@Module — modul nima?</h2>
+<h2 id="module-modul-nima">@Module — modul nima?</h2>
 <p>Modul — bu bir-biriga bog'liq kodni birlashtiruvchi konteyner. Masalan, foydalanuvchilar bilan bog'liq barcha kod (controller, service) <code>UsersModule</code> ichida, mahsulotlar esa <code>ProductsModule</code> ichida bo'ladi. Har bir NestJS ilovada kamida bitta modul bo'ladi — bu <strong>ildiz modul</strong> (<code>AppModule</code>).</p>
 <p>Modul <code>@Module</code> dekoratori bilan belgilangan oddiy klass. Dekorator argument sifatida to'rt xossali obyekt qabul qiladi:</p>
 <pre class="code"><code>// src/app.module.ts
@@ -619,7 +634,7 @@ export class AppModule {}</code></pre>
 <p>To'rt xossaning ma'nosi:</p>
 <ul><li><code>controllers</code> — shu modulga tegishli controller'lar ro'yxati;</li><li><code>providers</code> — shu modulda ishlaydigan service'lar va boshqa injektsiya qilinadigan obyektlar;</li><li><code>imports</code> — boshqa modullarni ulash (masalan, <code>UsersModule</code> ichida <code>DatabaseModule</code>);</li><li><code>exports</code> — ushbu modul provayderlarining qaysi biri boshqa modullarga ko'rinishi kerakligi.</li></ul>
 <div class="tip">Modulni <strong>dastur bo'limi</strong> deb tasavvur qiling. Har bir bo'lim mustaqil, o'z ichida to'liq. Bu yondashuv katta ilovada har bir xususiyatni (feature) alohida modulda saqlashga imkon beradi — bu <strong>feature module</strong> deb ataladi.</div>
-<h2>@Controller — so'rovlarni qabul qilish</h2>
+<h2 id="controller-so-rovlarni-qabul-qilish">@Controller — so'rovlarni qabul qilish</h2>
 <p>Controller HTTP so'rovlarini qabul qiladi va tegishli javobni qaytaradi. U <code>@Controller</code> dekoratori bilan belgilanadi. Dekoratorga berilgan satr — bu <strong>marshrut prefiksi</strong> (route prefix), ya'ni ushbu controller'dagi barcha manzillarning boshi:</p>
 <pre class="code"><code>// src/users/users.controller.ts
 import { Controller, Get } from '@nestjs/common';
@@ -639,7 +654,7 @@ export class UsersController {
 }</code></pre>
 <p>Bu yerda <code>@Get()</code> — HTTP metod dekoratori. U funksiyani ma'lum bir GET manziliga bog'laydi. Express'da biz <code>app.get('/users', handler)</code> yozardik; NestJS'da esa route va uni bajaradigan funksiya dekorator orqali bir-biriga ulanadi. Bu kodni ancha o'qishli qiladi.</p>
 <div class="note">Controller metodidan qaytgan qiymat avtomatik javobga aylanadi. Agar obyekt yoki massiv qaytarsangiz, NestJS uni avtomatik <strong>JSON</strong>'ga o'giradi. Express'dagidek <code>res.json()</code> chaqirish shart emas.</div>
-<h2>@Injectable — service (biznes-logika)</h2>
+<h2 id="injectable-service-biznes-logika">@Injectable — service (biznes-logika)</h2>
 <p>Service — bu haqiqiy ish bajariladigan joy. U <code>@Injectable</code> dekoratori bilan belgilangan klass. Bu dekorator NestJS'ga "bu klassni boshqa joylarga injektsiya qilish mumkin" deb aytadi (buni keyingi darsda Dependency Injection mavzusida chuqurroq ko'ramiz):</p>
 <pre class="code"><code>// src/users/users.service.ts
 import { Injectable } from '@nestjs/common';
@@ -680,7 +695,7 @@ export class UsersController {
   }
 }</code></pre>
 <p>E'tibor bering: controller <strong>hech qanday biznes-logikani o'zi bajarmaydi</strong>. U faqat so'rovni qabul qiladi va <code>usersService</code>'ga uzatadi. Bu ideal ajratish: controller HTTP bilan, service esa ma'lumot bilan shug'ullanadi.</p>
-<h2>Hamma narsani modulga bog'lash</h2>
+<h2 id="hamma-narsani-modulga-bog-lash">Hamma narsani modulga bog'lash</h2>
 <p>Controller va service yaratganingizdan keyin ularni modulda ro'yxatdan o'tkazishingiz kerak. Aks holda NestJS ularni topolmaydi:</p>
 <pre class="code"><code>// src/users/users.module.ts
 import { Module } from '@nestjs/common';
@@ -702,7 +717,7 @@ import { UsersModule } from './users/users.module';
 })
 export class AppModule {}</code></pre>
 <div class="warn">Eng ko'p uchraydigan boshlang'ich xato — service'ni <code>providers</code> ro'yxatiga qo'shishni unutish. Bunda NestJS ishga tushganda <em>"Nest can't resolve dependencies"</em> xatosini beradi. Har doim tekshiring: service <code>providers</code>'da, controller <code>controllers</code>'da bo'lishi shart.</div>
-<h2>Nest CLI bilan avtomatik generatsiya</h2>
+<h2 id="nest-cli-bilan-avtomatik-generatsiya">Nest CLI bilan avtomatik generatsiya</h2>
 <p>Bu qismlarning hammasini qo'lda yozish zerikarli. Nest CLI'ning <code>generate</code> (qisqasi <code>g</code>) buyrug'i barcha fayllarni yaratib, ularni modulga avtomatik bog'lab beradi:</p>
 <pre class="code"><code># To'liq resurs yaratish (modul + controller + service + testlar):
 nest generate resource users
@@ -713,7 +728,7 @@ nest generate controller users    # nest g controller users
 nest generate service users       # nest g service users</code></pre>
 <p><code>nest g resource users</code> buyrug'i ayniqsa qulay — u CRUD (yaratish, o'qish, yangilash, o'chirish) uchun tayyor shablon bilan to'liq modul yaratadi. CLI hatto REST API yoki GraphQL kabi turni ham so'raydi. Bu bir necha daqiqalik qo'l ishini bir buyruqqa qisqartiradi.</p>
 <div class="tip">CLI generatsiya qilgan fayllar avtomatik ravishda tegishli modulning <code>controllers</code> va <code>providers</code> ro'yxatiga qo'shiladi. Ya'ni yuqoridagi "modulga bog'lash" bosqichini CLI siz uchun bajaradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Controller</strong> — HTTP so'rovlarini qabul qiladi va javob qaytaradi, biznes-logikasiz ingichka bo'lishi kerak;</li><li><strong>Service</strong> (<code>@Injectable</code>) — biznes-logika, hisob-kitob, ma'lumotlar bilan ishlash shu yerda;</li><li><strong>Module</strong> (<code>@Module</code>) — controller va service'larni birlashtiradi, <code>imports</code>/<code>controllers</code>/<code>providers</code>/<code>exports</code> xossalari bilan;</li><li>Service controller'ga <strong>konstruktor orqali injektsiya</strong> qilinadi;</li><li>Har bir yangi modulni <code>AppModule</code>ning <code>imports</code>'iga qo'shish shart;</li><li><code>nest g resource</code> va <code>nest g</code> buyruqlari fayllarni avtomatik yaratib, modulga bog'laydi.</li></ul>
 <nav class="lesson-nav">
   <a href="nestjs-nima.html"><span class="dir">← Oldingi</span><span class="ttl">NestJS nima?</span></a>
@@ -727,6 +742,6 @@ nest generate service users       # nest g service users</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

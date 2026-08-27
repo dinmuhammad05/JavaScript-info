@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Funksiya obyekti, NFE — Kodla</title>
   <meta name="description" content="Funksiya ham obyekt ekanligi, uning name va length xossalari, o'z xossalarini qo'shish hamda Named Function Expression (NFE).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,23 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Funksiya obyekti, NFE</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#funksiya-bu-obyekt">Funksiya — bu obyekt</a></li>
+<li class="lvl2"><a href="#name-xossasi">name xossasi</a></li>
+<li class="lvl2"><a href="#length-xossasi">length xossasi</a></li>
+<li class="lvl2"><a href="#o-z-xossalarini-qo-shish">O'z xossalarini qo'shish</a></li>
+<li class="lvl2"><a href="#named-function-expression-nfe">Named Function Expression (NFE)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da funksiya — bu shunchaki chaqiriladigan amal emas, balki to'laqonli <strong>obyekt</strong>. Uni chaqirish mumkin, lekin ayni paytda unga xossalar qo'shish, undan xossalarni o'qish ham mumkin. Ushbu darsda funksiyaning obyekt sifatidagi tabiatini chuqur o'rganamiz.</p>
-<h2>Funksiya — bu obyekt</h2>
+<h2 id="funksiya-bu-obyekt">Funksiya — bu obyekt</h2>
 <p>Biz allaqachon funksiyalar <em>chaqiriladigan</em> (callable) qiymatlar ekanligini bilamiz. Ammo JavaScript'da funksiyalar <strong>obyekt</strong> turiga kiradi. Ularni obyekt sifatida tasavvur qilish qulay: chaqirsa bo'ladigan "harakat qiluvchi obyekt".</p>
 <p>Obyekt bo'lgani uchun funksiyaga xossalarni o'qish, qo'shish va o'chirish, uni o'zgaruvchanga uzatish mumkin. Va eng qizig'i — funksiyalarning tayyor, o'rnatilgan (built-in) xossalari ham bor.</p>
 <div class="note">Funksiya <code>typeof</code> orqali tekshirilganda <code>"function"</code> deb qaytadi, lekin ichki jihatdan u obyektga asoslangan. Shuning uchun unga nuqta (<code>.</code>) orqali xossalar qo'shish mumkin.</div>
-<h2>name xossasi</h2>
+<h2 id="name-xossasi">name xossasi</h2>
 <p>Har bir funksiyaning <code>name</code> xossasi bor — bu uning nomini o'zida saqlaydi. Eng qizig'i, funksiyaga aniq nom berilmagan holatlarda ham JavaScript nomni o'zi "topib beradi" (bu <em>contextual name</em> — kontekstli nom deb ataladi).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>name-xossasi.js</span></div><textarea spellcheck="false">function aytHi() {
   return "Salom";
@@ -624,7 +638,7 @@ f();</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushiris
 console.log(arr[0].name === ""); // true — nom yo'q
 console.log("[" + arr[0].name + "]"); // []</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Obyekt metodlarining ham <code>name</code> xossasi bor. Bu funksiyaning "o'z nomini bilishi" logging (jurnal yozish) va debugging paytida juda foydali.</div>
-<h2>length xossasi</h2>
+<h2 id="length-xossasi">length xossasi</h2>
 <p>Yana bir o'rnatilgan xossa — <code>length</code>. U funksiya <strong>parametrlari sonini</strong> qaytaradi, ammo <em>rest parametri</em> (<code>...args</code>) hisobga olinmaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>length-xossasi.js</span></div><textarea spellcheck="false">function f1(a) {}
 function f2(a, b) {}
@@ -635,7 +649,7 @@ console.log(f2.length);   // 2
 console.log(ko_p.length); // 2 — ...more sanalmaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>length</code> xossasi ba'zida amaliy ma'noga ega. Masalan, boshqa funksiyalar ustida ishlaydigan funksiyalarda uzatilgan funksiya nechta argument kutishini tekshirish uchun ishlatiladi.</p>
 <div class="warn">Standart qiymatga ega parametrlar ham <code>length</code>dan tashqarida qoladi. Masalan, <code>function f(a, b = 1) {}</code> uchun <code>f.length</code> — 1 bo'ladi, chunki hisob birinchi standart qiymatli parametrda to'xtaydi.</div>
-<h2>O'z xossalarini qo'shish</h2>
+<h2 id="o-z-xossalarini-qo-shish">O'z xossalarini qo'shish</h2>
 <p>Funksiyaga o'zimizning xossalarimizni ham qo'shishimiz mumkin. Bu ba'zan holatni (state) funksiyaning o'zida saqlash uchun qulay yechim beradi.</p>
 <p>Quyida <code>counter</code> funksiyasi chaqirilgan sonini o'zining <code>count</code> xossasida saqlaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>funksiya-xossasi.js</span></div><textarea spellcheck="false">function counter() {
@@ -650,7 +664,7 @@ console.log(counter()); // 3
 console.log("Jami chaqirilgan:", counter.count); // 3</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Xossaga berilgan qiymat — bu <strong>o'zgaruvchan (variable) emas</strong>. <code>counter.count</code> va funksiya ichidagi lokal <code>let count</code> bir-biriga bog'liq emas. Xossa funksiya obyektiga "yopishtirilgan", closure orqali yashiringan o'zgaruvchandan farq qiladi.</div>
 <p>Ba'zan closure o'rniga funksiya xossasidan foydalanish afzalroq: xossa <em>tashqaridan ko'rinadi va o'zgartirilishi</em> mumkin. Masalan, hisoblagichni tashqaridan nolga qaytarish oson bo'ladi.</p>
-<h2>Named Function Expression (NFE)</h2>
+<h2 id="named-function-expression-nfe">Named Function Expression (NFE)</h2>
 <p><strong>Named Function Expression</strong> (NFE — nomli funksional ifoda) — bu nomi bor Function Expression. Nom faqat funksiya <em>ichida o'ziga murojaat qilish</em> uchun ishlatiladi va tashqarida ko'rinmaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nfe-asosiy.js</span></div><textarea spellcheck="false">let sayHi = function func(who) {
   if (who) {
@@ -679,7 +693,7 @@ sayHi = null; // asl o'zgaruvchan yo'qoldi
 console.log(salomlash()); // Salom, Mehmon — baribir ishlaydi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Agar <code>func</code> o'rniga tashqi <code>sayHi</code> ishlatilganida, <code>sayHi = null</code> bo'lgach ichki chaqiruv "<code>sayHi is not a function</code>" xatoligini bergan bo'lardi. NFE aynan shu muammodan himoya qiladi.</p>
 <div class="warn">Ichki nom faqat <strong>Function Expression</strong> uchun ishlaydi. Function Declaration (oddiy <code>function name() {}</code>) uchun alohida "ichki" nom mavjud emas — u yerda oddiy nomning o'zi tashqarida ham, ichkarida ham ishlaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Funksiyalar — bu <strong>obyektlar</strong>: ularni chaqirish, xossa qo'shish va o'qish mumkin;</li><li><code>name</code> — funksiya nomini saqlaydi (ba'zan avtomatik aniqlanadi);</li><li><code>length</code> — parametrlar sonini beradi (rest va standart qiymatlilarni hisobga olmaydi);</li><li>Funksiyaga o'z xossalarini qo'shish holatni saqlash uchun (closure'ga muqobil) ishlatiladi;</li><li><strong>NFE</strong> funksiyaga o'ziga ishonchli murojaat qilish imkonini beradi — tashqi o'zgaruvchan o'zgarsa ham buzilmaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="global-obyekt.html"><span class="dir">← Oldingi</span><span class="ttl">Global obyekt</span></a>
@@ -693,6 +707,6 @@ console.log(salomlash()); // Salom, Mehmon — baribir ishlaydi!</textarea><div 
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

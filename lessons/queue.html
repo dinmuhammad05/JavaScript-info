@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Navbat (Queue) va Deque — Kodla</title>
   <meta name="description" content="Birinchi kirgan birinchi chiqadi (FIFO), navbatni qurish, samaradorlik nuqtai nazari va ikki tomonlama navbat (deque).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,31 @@
 <main class="content article">
 <div class="crumbs">Chiziqli ma'lumotlar tuzilmalari</div>
 <h1>Navbat (Queue) va Deque</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#fifo-birinchi-kirgan-birinchi-chiqadi">FIFO — birinchi kirgan birinchi chiqadi</a></li>
+<li class="lvl2"><a href="#asosiy-amallar">Asosiy amallar</a></li>
+<li class="lvl2"><a href="#massiv-bilan-sodda-navbat">Massiv bilan sodda navbat</a></li>
+<li class="lvl2"><a href="#nega-shift-sekin">Nega shift sekin?</a></li>
+<li class="lvl2"><a href="#samarali-navbat-ikki-ko-rsatkichli-usul">Samarali navbat: ikki ko'rsatkichli usul</a></li>
+<li class="lvl2"><a href="#murakkablik-taqqoslash">Murakkablik taqqoslash</a></li>
+<li class="lvl2"><a href="#deque-ikki-tomonlama-navbat">Deque — ikki tomonlama navbat</a></li>
+<li class="lvl2"><a href="#qo-llanishlar">Qo'llanishlar</a></li>
+<li class="lvl2"><a href="#navbat-bilan-mini-simulyatsiya">Navbat bilan mini-simulyatsiya</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Do'kon kassasidagi navbatni ko'z oldingizga keltiring. Kim birinchi kelgan bo'lsa, o'shanga birinchi xizmat ko'rsatiladi. Yangi kelgan odam esa navbatning oxiriga turadi. Bu adolatli tartib — kompyuter olamida <strong>navbat (queue)</strong> deb ataladi va stekning teskarisi hisoblanadi.</p>
-<h2>FIFO — birinchi kirgan birinchi chiqadi</h2>
+<h2 id="fifo-birinchi-kirgan-birinchi-chiqadi">FIFO — birinchi kirgan birinchi chiqadi</h2>
 <p>Navbat <strong>FIFO</strong> (First In, First Out) prinsipiga asoslanadi: eng birinchi qo'shilgan element eng birinchi bo'lib chiqadi. Kassadagi navbat bilan aynan bir xil — birinchi kelgan birinchi ketadi.</p>
 <p>Stekdan farqi shundaki, navbatning <strong>ikkita</strong> ishchi uchi bor: bir uchidan qo'shamiz (odatda <em>orqa / tail</em> deymiz), boshqa uchidan olamiz (<em>old / front</em>).</p>
 <ul><li><strong>Qo'shish</strong> — orqaga (enqueue)</li><li><strong>Olib tashlash</strong> — olddan (dequeue)</li><li><strong>Ko'rish</strong> — olddagini (front / peek)</li></ul>
-<h2>Asosiy amallar</h2>
+<h2 id="asosiy-amallar">Asosiy amallar</h2>
 <ul><li><code>enqueue(x)</code> — <code>x</code> elementni navbat oxiriga qo'shadi</li><li><code>dequeue()</code> — navbat boshidagi elementni olib tashlaydi va qaytaradi</li><li><code>front()</code> — navbat boshidagi elementni olmasdan ko'rsatadi</li><li><code>isEmpty()</code> — navbat bo'shmi, tekshiradi</li></ul>
 <div class="note">"Enqueue" va "dequeue" so'zlari qo'rqinchli ko'rinishi mumkin, lekin ular shunchaki "navbatga qo'shish" va "navbatdan olish" degani. Ma'nosini bilsangiz, nomi oson eslab qolinadi.</div>
 <p>Stek bilan yodda solishtiring: stekda ham qo'shish, ham olish <em>bir</em> uchda edi (LIFO). Navbatda esa qo'shish bir uchda, olish esa <em>qarama-qarshi</em> uchda (FIFO). Aynan shu bitta farq ikki tuzilmani butunlay boshqacha xarakterga ega qiladi.</p>
-<h2>Massiv bilan sodda navbat</h2>
+<h2 id="massiv-bilan-sodda-navbat">Massiv bilan sodda navbat</h2>
 <p>Navbatni ham massiv bilan qurish mumkin. Oxiriga qo'shish uchun <code>push</code>, boshidan olish uchun <code>shift</code> ishlatamiz. <code>shift</code> — massivning birinchi elementini olib tashlaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>massiv-navbat.js</span></div><textarea spellcheck="false">const navbat = [];
 
@@ -623,10 +641,10 @@ console.log('Xizmat:', navbat.shift());
 console.log('Qoldi:', navbat);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Alisher birinchi kelgan edi — birinchi bo'lib xizmat oldi. FIFO ishlayapti. Ammo bu sodda yechimda jiddiy tezlik muammosi yashiringan.</p>
 <div class="warn"><code>shift</code> — <strong>O(n)</strong> amal! Massivning birinchi elementini olib tashlaganda, qolgan barcha elementlar bittadan chapga suriladi. Ya'ni 1 million elementli navbatdan bitta element olsangiz, million marta siljish sodir bo'ladi. Kichik navbatlarda sezilmaydi, katta navbatlarda esa dastur sekinlashib ketadi.</div>
-<h2>Nega shift sekin?</h2>
+<h2 id="nega-shift-sekin">Nega shift sekin?</h2>
 <p>Massivda elementlar xotirada ketma-ket, indekslar bilan turadi: 0, 1, 2, 3... Birinchi elementni (indeks 0) olib tashlasangiz, indeks 1 dagi element 0 ga, 2 dagisi 1 ga ko'chishi kerak — chunki massivda "teshik" qolishi mumkin emas. Bu ko'chirish hamma element uchun bajariladi, shuning uchun <code>O(n)</code>.</p>
 <p>Solishtiring: stekda <code>pop</code> massivning <em>oxiridan</em> oladi, hech narsa ko'chmaydi, shuning uchun <code>O(1)</code>. Muammo aynan boshdan olishda.</p>
-<h2>Samarali navbat: ikki ko'rsatkichli usul</h2>
+<h2 id="samarali-navbat-ikki-ko-rsatkichli-usul">Samarali navbat: ikki ko'rsatkichli usul</h2>
 <p>Yechim oddiy va nafis: elementlarni haqiqatan o'chirib, hammasini surish o'rniga, biz shunchaki <strong>ikkita indeks-ko'rsatkich</strong> yuritamiz. <code>head</code> — navbat boshi qayerda, <code>tail</code> — keyingi bo'sh joy qayerda. <code>dequeue</code> qilganda faqat <code>head</code>ni bir qadam oldinga suramiz, hech narsani ko'chirmaymiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>samarali-navbat.js</span></div><textarea spellcheck="false">class Queue {
   constructor() {
@@ -674,11 +692,11 @@ console.log('Hajmi:', q.size());
 console.log('Old:', q.front());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Endi <code>enqueue</code> ham, <code>dequeue</code> ham hech narsani ko'chirmaydi — faqat indekslar o'zgaradi. Ikkalasi ham <strong>O(1)</strong>. Xuddi shu g'oyani <em>bog'langan ro'yxat</em> bilan ham amalga oshirish mumkin (keyingi darsda ko'ramiz): boshiga va oxiriga ko'rsatkich saqlansa, ikkala amal ham <code>O(1)</code> bo'ladi.</p>
 <p>Bir savol tug'ilishi mumkin: <code>head</code> doim oldinga surilaversa, ishlatilgan indekslar (masalan 0, 1, 2) o'sha obyektda ovora bo'lib qolmaydimi? Biz har <code>dequeue</code> da <code>delete this.items[this.head]</code> bilan eski joyni tozalaymiz, shuning uchun xotira bo'shaydi. Amaliy real navbatlarda odatda bog'langan ro'yxat yoki <em>aylanma bufer (circular buffer)</em> ishlatiladi — indekslar jadval bo'ylab aylanib qayta ishlatiladi.</p>
-<h2>Murakkablik taqqoslash</h2>
+<h2 id="murakkablik-taqqoslash">Murakkablik taqqoslash</h2>
 <p>Uchta yondashuvni yonma-yon qo'yaylik:</p>
 <ul><li><strong>Massiv + shift</strong>: <code>enqueue</code> O(1), <code>dequeue</code> <strong>O(n)</strong> — katta navbatda sekin</li><li><strong>Ikki ko'rsatkich (obyekt/indeks)</strong>: <code>enqueue</code> O(1), <code>dequeue</code> <strong>O(1)</strong></li><li><strong>Bog'langan ro'yxat</strong>: <code>enqueue</code> O(1), <code>dequeue</code> <strong>O(1)</strong></li></ul>
 <p>Xulosa: o'quv maqsadida <code>shift</code> yaxshi, ammo jiddiy dasturda ikki ko'rsatkichli yoki bog'langan ro'yxatli navbatni tanlang.</p>
-<h2>Deque — ikki tomonlama navbat</h2>
+<h2 id="deque-ikki-tomonlama-navbat">Deque — ikki tomonlama navbat</h2>
 <p><strong>Deque</strong> ("dek" deb o'qiladi, Double-Ended Queue) — navbatning kuchaytirilgan versiyasi. Unda <em>ikkala</em> uchdan ham qo'shish va olish mumkin. Ya'ni deque bir vaqtning o'zida ham stek, ham navbat vazifasini bajara oladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>deque.js</span></div><textarea spellcheck="false">class Deque {
   constructor() {
@@ -703,11 +721,11 @@ console.log('Olddan chiqdi:', d.olOlddan()); // 0
 console.log('Orqadan chiqdi:', d.olOrqadan()); // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda soddalik uchun massiv ishlatdik (<code>unshift</code>/<code>shift</code> O(n)), lekin g'oyani ko'rsatish uchun yetarli. Haqiqiy tez deque odatda ikki tomonlama bog'langan ro'yxat ustiga quriladi.</p>
 <div class="tip">Deque — universal tuzilma: faqat orqadan qo'shib olddan olsangiz — bu navbat; faqat orqadan qo'shib orqadan olsangiz — bu stek. Ya'ni bitta deque bilan ham stek, ham navbat vazifasini bajarish mumkin.</div>
-<h2>Qo'llanishlar</h2>
+<h2 id="qo-llanishlar">Qo'llanishlar</h2>
 <ul><li><strong>BFS (kenglik bo'yicha qidiruv)</strong> — grafda eng qisqa yo'lni topishda tugunlarni navbat orqali aylanib chiqamiz.</li><li><strong>Vazifalar navbati</strong> — serverlar so'rovlarni kelish tartibida navbatga qo'yib bajaradi.</li><li><strong>Printer navbati</strong> — hujjatlar chop etishga yuborilgan tartibda bosiladi.</li><li><strong>Media pleyer</strong> — "keyingi qo'shiqlar" ro'yxati aslida bir navbat.</li></ul>
 <p>Bir yaqin qarindoshini eslatib o'tamiz: <strong>ustuvorlik navbati (priority queue)</strong>. Unda elementlar kelish tartibida emas, balki muhimlik darajasi (ustuvorligi) bo'yicha chiqadi — masalan shifoxonada og'ir bemor navbatsiz qabul qilinadi. Uni samarali qurish uchun odatda <em>uyum (heap)</em> tuzilmasi ishlatiladi, buni keyingi boblarda ko'ramiz.</p>
 <div class="note">Keyingi bo'limlarda graflar va BFS algoritmini o'rganamiz — o'sha yerda navbat asosiy qurol bo'ladi. Shuning uchun navbat qanday ishlashini yaxshi o'zlashtirib qo'ying, u yana kerak bo'ladi.</div>
-<h2>Navbat bilan mini-simulyatsiya</h2>
+<h2 id="navbat-bilan-mini-simulyatsiya">Navbat bilan mini-simulyatsiya</h2>
 <p>Navbatning tirik misolini ko'raylik: uchta odam kelib navbatga turadi, kassir birma-bir xizmat ko'rsatadi, o'rtada yana bittasi qo'shiladi. FIFO tartibini kuzating.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>navbat-simulyatsiya.js</span></div><textarea spellcheck="false">class Queue {
   constructor() { this.items = []; this.head = 0; }
@@ -728,7 +746,7 @@ console.log('Xizmat:', kassa.dequeue()); // Bobur
 console.log('Xizmat:', kassa.dequeue()); // Dilnoza
 console.log('Navbat bosh?', kassa.isEmpty()); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Dilnoza Boburdan keyin qo'shilgani uchun undan keyin xizmat oldi — navbat tartibni adolatli saqladi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Navbat — FIFO, adolatli tartib, ikkita uch. Sodda yechimda <code>shift</code> ning <code>O(n)</code> tuzog'iga tushmang; ikki ko'rsatkich yoki bog'langan ro'yxat bilan <code>O(1)</code> ga erishing. Deque esa har ikki uchdan ishlaydigan universal tuzilma. Endi bu <code>O(1)</code> mo'jizalarning aksariyati ortida turgan tuzilma — bog'langan ro'yxat bilan tanishaylik.</p>
 <nav class="lesson-nav">
   <a href="stack.html"><span class="dir">← Oldingi</span><span class="ttl">Stek (Stack) — LIFO tuzilma</span></a>
@@ -742,6 +760,6 @@ console.log('Navbat bosh?', kassa.isEmpty()); // true</textarea><div class="pg-a
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

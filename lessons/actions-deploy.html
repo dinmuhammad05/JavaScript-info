@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Avtomatik deploy — Kodla</title>
   <meta name="description" content="Secrets, ${{ secrets.X }}, environment, shartli ishga tushirish, deploy qadami (GitHub Pages / SSH) va CI+CD birga.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,27 @@
 <main class="content article">
 <div class="crumbs">CI/CD (GitHub Actions)</div>
 <h1>Avtomatik deploy</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#secrets-maxfiy-ma-lumotlar">Secrets — maxfiy ma'lumotlar</a></li>
+<li class="lvl2"><a href="#secrets-x-secret-ni-ishlatish">${{ secrets.X }} — secret'ni ishlatish</a></li>
+<li class="lvl2"><a href="#shartli-ishga-tushirish-faqat-main-ga-deploy">Shartli ishga tushirish — faqat main'ga deploy</a></li>
+<li class="lvl2"><a href="#environment-muhitlar-va-himoya">Environment — muhitlar va himoya</a></li>
+<li class="lvl2"><a href="#deploy-misoli-1-github-pages">Deploy misoli 1 — GitHub Pages</a></li>
+<li class="lvl2"><a href="#deploy-misoli-2-ssh-orqali-serverga">Deploy misoli 2 — SSH orqali serverga</a></li>
+<li class="lvl2"><a href="#ci-va-cd-birga-to-liq-pipeline">CI va CD birga — to'liq pipeline</a></li>
+<li class="lvl2"><a href="#xavfsizlik-va-yaxshi-amaliyotlar">Xavfsizlik va yaxshi amaliyotlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">CI kodni tekshiradi, endi <strong>CD</strong> uni serverga chiqaradi. Deploy paytida parol, kalit va tokenlar kerak bo'ladi — ularni kodda ochiq yozib bo'lmaydi. Buning uchun <strong>secrets</strong> ishlatiladi.</p>
-<h2>Secrets — maxfiy ma'lumotlar</h2>
+<h2 id="secrets-maxfiy-ma-lumotlar">Secrets — maxfiy ma'lumotlar</h2>
 <p>Server paroli, API kalit, SSH kalit — bularni hech qachon YAML faylga yoki kodga ochiq yozmang. GitHub'da ular <strong>Secrets</strong> sifatida shifrlangan holda saqlanadi.</p>
 <p>Qo'shish yo'li: GitHub repo &rarr; <strong>Settings</strong> &rarr; <strong>Secrets and variables</strong> &rarr; <strong>Actions</strong> &rarr; <strong>New repository secret</strong>.</p>
 <ul><li>Har bir secret'ga nom (masalan <code>SSH_PRIVATE_KEY</code>) va qiymat berasiz.</li><li>Bir marta saqlangach, qiymatini <em>hech kim</em> (siz ham) qayta ko'ra olmaysiz — faqat yangilash mumkin.</li><li>Loglarda secret qiymati avtomatik <code>***</code> bilan yashiriladi.</li></ul>
 <div class="warn">Secret'ni hech qachon <code>echo</code> yoki <code>console.log</code> bilan chiqarmang. GitHub yashirishga harakat qiladi, lekin kodlangan (base64) ko'rinishda oshkor bo'lib qolishi mumkin.</div>
-<h2>${{ secrets.X }} — secret'ni ishlatish</h2>
+<h2 id="secrets-x-secret-ni-ishlatish">${{ secrets.X }} — secret'ni ishlatish</h2>
 <p>Workflow ichida secret'ga <code>${{ secrets.NOM }}</code> ifodasi orqali murojaat qilinadi:</p>
 <pre class="code"><code>steps:
   - name: Serverga ulanish
@@ -611,7 +628,7 @@
       DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}</code></pre>
 <p>Bu yerda secret <code>env:</code> orqali muhit o'zgaruvchisiga uzatiladi, so'ng buyruqda <code>$DEPLOY_TOKEN</code> sifatida ishlatiladi. Bu — eng xavfsiz usul.</p>
 <div class="note"><code>${{ ... }}</code> — GitHub Actions ifodasi. U workflow ishga tushishidan oldin haqiqiy qiymat bilan almashtiriladi. Faqat <code>secrets</code> emas, <code>github</code>, <code>matrix</code>, <code>env</code> kabi kontekstlarga ham murojaat qiladi.</div>
-<h2>Shartli ishga tushirish — faqat main'ga deploy</h2>
+<h2 id="shartli-ishga-tushirish-faqat-main-ga-deploy">Shartli ishga tushirish — faqat main'ga deploy</h2>
 <p>Deploy har PR'da emas, faqat asosiy shoxchaga (main) push bo'lganda ishga tushishi kerak. Buni ikki usulda qilamiz.</p>
 <p>1-usul — workflow darajasida <code>on</code> orqali:</p>
 <pre class="code"><code>on:
@@ -625,7 +642,7 @@
     steps:
       - run: echo "Faqat main da ishga tushdim"</code></pre>
 <div class="tip"><code>github.ref</code> — joriy shoxcha/teg havolasi. <code>refs/heads/main</code> asosiy shoxcha degani. Bu shart PR'larda deploy'ni bloklaydi.</div>
-<h2>Environment — muhitlar va himoya</h2>
+<h2 id="environment-muhitlar-va-himoya">Environment — muhitlar va himoya</h2>
 <p>GitHub <strong>Environment</strong> tushunchasi deploy muhitlarini (masalan <code>production</code>, <code>staging</code>) ajratish va himoyalash uchun ishlatiladi. Settings &rarr; Environments'da yaratiladi.</p>
 <pre class="code"><code>jobs:
   deploy:
@@ -634,7 +651,7 @@
     steps:
       - run: echo "Production ga deploy"</code></pre>
 <ul><li>Har bir environment'ning o'z secret'lari bo'lishi mumkin (production va staging uchun har xil kalitlar).</li><li><strong>Required reviewers:</strong> deploy oldidan qo'lda tasdiqlash talab qilinadi (Continuous Delivery).</li><li><strong>Wait timer:</strong> deploy oldidan kutish vaqti qo'yish mumkin.</li></ul>
-<h2>Deploy misoli 1 — GitHub Pages</h2>
+<h2 id="deploy-misoli-1-github-pages">Deploy misoli 1 — GitHub Pages</h2>
 <p>Statik saytni (React, Vite, oddiy HTML) GitHub Pages'ga deploy qilish eng sodda holat. Rasmiy action'lar buni oson qiladi:</p>
 <pre class="code"><code>name: Deploy to Pages
 
@@ -675,7 +692,7 @@ jobs:
         uses: actions/deploy-pages@v4</code></pre>
 <p><code>permissions</code> bloki Pages'ga yozish huquqini beradi. <code>path: ./dist</code> — build natijasi papkasi (Vite'da <code>dist</code>, boshqa vositalarda farq qilishi mumkin).</p>
 <div class="note">GitHub Pages'ni yoqish kerak: Settings &rarr; Pages &rarr; Source &rarr; "GitHub Actions". Shundan keyin workflow deploy qila oladi.</div>
-<h2>Deploy misoli 2 — SSH orqali serverga</h2>
+<h2 id="deploy-misoli-2-ssh-orqali-serverga">Deploy misoli 2 — SSH orqali serverga</h2>
 <p>O'z serveringizga (VPS) SSH orqali deploy qilish uchun tayyor action ishlatamiz. SSH maxfiy kalit secret sifatida saqlanadi:</p>
 <pre class="code"><code>  - name: Serverga SSH orqali deploy
     uses: appleboy/ssh-action@v1
@@ -691,7 +708,7 @@ jobs:
         pm2 restart myapp</code></pre>
 <p><code>script:</code> ichidagi buyruqlar <em>uzoq server</em>da bajariladi: kod yangilanadi, bog'liqliklar o'rnatiladi, build qilinadi va ilova qayta ishga tushiriladi. Hamma maxfiy ma'lumot secrets'dan olinadi.</p>
 <div class="warn">SSH maxfiy kalitni (<code>SSH_PRIVATE_KEY</code>) juda ehtiyot bo'lib saqlang. U server'ga to'liq kirish huquqini beradi. Faqat deploy uchun alohida cheklangan kalit yaratish yaxshi amaliyot.</div>
-<h2>CI va CD birga — to'liq pipeline</h2>
+<h2 id="ci-va-cd-birga-to-liq-pipeline">CI va CD birga — to'liq pipeline</h2>
 <p>Amalda CI (test) va CD (deploy) ko'pincha bitta workflow'da bog'lanadi. <code>needs</code> kaliti deploy'ni test muvaffaqiyatli tugagandan keyingina ishga tushiradi:</p>
 <pre class="code"><code>name: CI/CD
 
@@ -733,9 +750,9 @@ jobs:
             pm2 restart myapp</code></pre>
 <p>Mana bu haqiqiy CI/CD! Mantiq:</p>
 <ul><li><strong>test</strong> job har push va har PR'da ishlaydi (tekshiruv).</li><li><strong>deploy</strong> job <code>needs: test</code> tufayli faqat test o'tgach ishlaydi.</li><li><code>if: github.ref == 'refs/heads/main'</code> tufayli deploy faqat main'ga push'da bo'ladi — PR'larda emas.</li><li>Buzuq kod hech qachon serverga chiqmaydi: testlar buzilsa, deploy umuman boshlanmaydi.</li></ul>
-<h2>Xavfsizlik va yaxshi amaliyotlar</h2>
+<h2 id="xavfsizlik-va-yaxshi-amaliyotlar">Xavfsizlik va yaxshi amaliyotlar</h2>
 <ul><li>Maxfiy ma'lumotlarni <strong>doimo secrets</strong>'da saqlang, kodda emas.</li><li>Deploy job'ni <code>if</code> va <code>needs</code> bilan himoyalang.</li><li><code>environment</code> orqali production uchun qo'lda tasdiqlash qo'ying (muhim loyihalarda).</li><li>Deploy uchun <em>eng kam huquqli</em> kalit/token ishlating.</li><li>Har bir deploy'ni Actions logida kuzatib boring — muammo bo'lsa tez orqaga qayting (rollback).</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Secrets</strong> (Settings &rarr; Secrets) maxfiy ma'lumotni shifrlangan saqlaydi; <code>${{ secrets.X }}</code> bilan olinadi.</li><li><strong>Shartli deploy:</strong> <code>on: push: branches: [main]</code> yoki job'da <code>if: github.ref == 'refs/heads/main'</code>.</li><li><strong>Environment</strong> muhitlarni ajratadi va qo'lda tasdiqlash/himoya qo'shadi.</li><li>Deploy tayyor action'lar bilan qilinadi: GitHub Pages yoki SSH (<code>appleboy/ssh-action</code>).</li><li><code>needs: test</code> deploy'ni test o'tgach ishga tushiradi — CI va CD birga to'liq pipeline hosil qiladi.</li><li>Buzuq kod hech qachon production'ga chiqmaydi — bu CI/CD ning asosiy va'dasi.</li></ul>
 <nav class="lesson-nav">
   <a href="actions-test.html"><span class="dir">← Oldingi</span><span class="ttl">Avtomatik test va build</span></a>
@@ -749,6 +766,6 @@ jobs:
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

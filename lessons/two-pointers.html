@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ikki ko'rsatkich (Two Pointers) usuli — Kodla</title>
   <meta name="description" content="Ikki indeks bilan massivni samarali kezish: qarama-qarshi va bir yo'nalishli ko'rsatkichlar, klassik masalalar va O(n) yechimlar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,29 @@
 <main class="content article">
 <div class="crumbs">Massiv va satr algoritmlari</div>
 <h1>Ikki ko'rsatkich (Two Pointers) usuli</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#intuitsiya-nima-uchun-bitta-emas-ikkita-indeks">Intuitsiya: nima uchun bitta emas, ikkita indeks?</a></li>
+<li class="lvl2"><a href="#naive-yechim-va-uning-big-o-si">Naive yechim va uning Big O si</a></li>
+<li class="lvl2"><a href="#qarama-qarshi-ko-rsatkichlar-massivni-teskarilash">Qarama-qarshi ko'rsatkichlar: massivni teskarilash</a></li>
+<li class="lvl2"><a href="#palindrom-tekshirish">Palindrom tekshirish</a></li>
+<li class="lvl2"><a href="#saralangan-massivda-ikki-son-yig-indisi-two-sum-sorted">Saralangan massivda ikki son yig'indisi (Two Sum Sorted)</a></li>
+<li class="lvl2"><a href="#eng-ko-p-suv-sig-diruvchi-idish-container-with-most-water">Eng ko'p suv sig'diruvchi idish (Container With Most Water)</a></li>
+<li class="lvl2"><a href="#bir-yo-nalishli-ko-rsatkichlar-nusxalarni-o-chirish">Bir yo'nalishli ko'rsatkichlar: nusxalarni o'chirish</a></li>
+<li class="lvl2"><a href="#nollarni-oxiriga-surish">Nollarni oxiriga surish</a></li>
+<li class="lvl2"><a href="#tez-va-sekin-ko-rsatkich-massiv-o-rtasini-topish">Tez va sekin ko'rsatkich: massiv o'rtasini topish</a></li>
+<li class="lvl2"><a href="#chegaraviy-holatlar">Chegaraviy holatlar</a></li>
+<li class="lvl2"><a href="#murakkablik-jadvali">Murakkablik jadvali</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'p massiv masalalarida biz bir vaqtning o'zida ikkita joyga qarashimiz kerak bo'ladi: masalan, massivning boshi va oxiriga, yoki ikkita turli tezlikda harakatlanuvchi nuqtaga. Aynan shu yerda <strong>ikki ko'rsatkich (two pointers)</strong> usuli yordamga keladi. Bu oddiy, lekin nihoyatda kuchli texnika bo'lib, ko'plab masalalarni O(n&sup2;) dan O(n) ga tushiradi. Bu darsda biz uni bosqichma-bosqich, ishlangan misollar bilan o'rganamiz.</p>
-<h2>Intuitsiya: nima uchun bitta emas, ikkita indeks?</h2>
+<h2 id="intuitsiya-nima-uchun-bitta-emas-ikkita-indeks">Intuitsiya: nima uchun bitta emas, ikkita indeks?</h2>
 <p>Tasavvur qiling, siz kitob javonining ikki chetida turgan ikki do'stsiz. Biringiz chapdan, ikkinchingiz o'ngdan bir-biringizga qarab yurasiz. O'rtada uchrashguncha butun javonni ko'rib chiqasiz — lekin har biringiz faqat yarim yo'lni bosasiz. Ikki ko'rsatkich usulining butun mohiyati shu: <strong>ishni ikkiga bo'lib</strong>, yoki bitta o'tishda ikki xil ma'lumotni kuzatib borish.</p>
 <p>Odatda massivni bitta <code>for</code> tsikli va bitta indeks bilan kezamiz. Ikki ko'rsatkich usulida esa biz <strong>ikkita indeks</strong> ishlatamiz. Ular massiv ustida turli qoidalar bilan harakatlanadi:</p>
 <ul><li><strong>Qarama-qarshi ko'rsatkichlar</strong> — biri boshdan (chapdan), ikkinchisi oxiridan (o'ngdan) bir-biriga qarab yaqinlashadi.</li><li><strong>Bir yo'nalishli ko'rsatkichlar</strong> — ikkalasi ham chapdan boshlanadi, lekin turli tezlik yoki shartlar bilan oldinga siljiydi (ko'pincha "sekin" va "tez" deb ataladi).</li></ul>
 <p>Asosiy foyda shundaki, biz har bir elementni ko'pincha faqat bir marta ko'rib chiqamiz va ichma-ich tsikllardan qutulamiz.</p>
-<h2>Naive yechim va uning Big O si</h2>
+<h2 id="naive-yechim-va-uning-big-o-si">Naive yechim va uning Big O si</h2>
 <p>Tasavvur qiling, saralangan massivda yig'indisi berilgan songa teng juftlikni izlaymiz. Sodda (naive) yechim har bir elementni qolgan hammasi bilan taqqoslaydi — bu ichma-ich ikkita tsikl, ya'ni O(n&sup2;) vaqt. Katta massivda bu juda sekin.</p>
 <pre class="code"><code>// Sodda (naive) yechim: O(n^2) vaqt, O(1) xotira
 function twoSumNaive(arr, target) {
@@ -614,7 +633,7 @@ function twoSumNaive(arr, target) {
   return null;
 }</code></pre>
 <p>Agar massiv <strong>saralangan</strong> bo'lsa, ikki ko'rsatkich bilan buni O(n) da hal qilamiz. Optimal yechimga o'tishdan avval eng oddiy misoldan boshlaymiz.</p>
-<h2>Qarama-qarshi ko'rsatkichlar: massivni teskarilash</h2>
+<h2 id="qarama-qarshi-ko-rsatkichlar-massivni-teskarilash">Qarama-qarshi ko'rsatkichlar: massivni teskarilash</h2>
 <p>Eng oddiy misol — massivni joyida (qo'shimcha massivsiz) teskarilash. Bitta ko'rsatkich boshdan, ikkinchisi oxiridan yuradi va elementlarni almashtiradi. Ular o'rtada uchrashganda to'xtaymiz. Bu naqshni yaxshi tushunsangiz, qolgan hamma masalalar shunga o'xshaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>teskarilash.js</span></div><textarea spellcheck="false">function reverse(arr) {
   let left = 0;
@@ -631,7 +650,7 @@ function twoSumNaive(arr, target) {
 console.log(reverse([1, 2, 3, 4, 5]));
 console.log(reverse(['a', 'b', 'c', 'd']));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n) — har element bir marta ko'riladi; xotira O(1) — joyida ishlaymiz, qo'shimcha massiv yo'q.</p>
-<h2>Palindrom tekshirish</h2>
+<h2 id="palindrom-tekshirish">Palindrom tekshirish</h2>
 <p>Palindrom — oldidan ham, orqasidan ham bir xil o'qiladigan ketma-ketlik (masalan, <code>racecar</code>). Qarama-qarshi ko'rsatkichlar bilan chapdagi va o'ngdagi belgilarni taqqoslaymiz. Agar biror joyda ular mos kelmasa, bu palindrom emas — darrov <code>false</code> qaytaramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>palindrom.js</span></div><textarea spellcheck="false">function isPalindrome(str) {
   let left = 0;
@@ -648,7 +667,7 @@ console.log(isPalindrome('racecar')); // true
 console.log(isPalindrome('kok'));     // true
 console.log(isPalindrome('salom'));   // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n), xotira O(1). Butun satrni teskarilab, keyin solishtirishdan ham tezroq — chunki farq topilishi bilanoq to'xtaymiz.</p>
-<h2>Saralangan massivda ikki son yig'indisi (Two Sum Sorted)</h2>
+<h2 id="saralangan-massivda-ikki-son-yig-indisi-two-sum-sorted">Saralangan massivda ikki son yig'indisi (Two Sum Sorted)</h2>
 <p>Endi eng klassik masalaga qaytamiz. Massiv <strong>o'sish tartibida saralangan</strong>. Yig'indisi <code>target</code> ga teng ikkita sonni topishimiz kerak. G'oya juda nafis: <code>left</code> boshdan, <code>right</code> oxiridan boshlanadi.</p>
 <ul><li>Agar <code>arr[left] + arr[right]</code> juda <em>kichik</em> bo'lsa — yig'indini oshirish uchun <code>left</code> ni oldinga suramiz (kattaroq songa).</li><li>Agar yig'indi juda <em>katta</em> bo'lsa — <code>right</code> ni orqaga suramiz (kichikroq songa).</li><li>Agar teng bo'lsa — javob topildi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>two-sum-sorted.js</span></div><textarea spellcheck="false">function twoSumSorted(arr, target) {
@@ -671,7 +690,7 @@ console.log(twoSumSorted([1, 3, 4, 6, 8, 11], 10)); // [2, 3]
 console.log(twoSumSorted([2, 7, 11, 15], 9));       // [0, 1]
 console.log(twoSumSorted([1, 2, 3], 7));            // null</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n) — har qadamda kamida bitta ko'rsatkich siljiydi, demak jami eng ko'pi n qadam; xotira O(1). Naive O(n&sup2;) yechimga nisbatan katta yutuq. Diqqat: bu usul faqat <strong>saralangan</strong> massiv uchun ishlaydi.</p>
-<h2>Eng ko'p suv sig'diruvchi idish (Container With Most Water)</h2>
+<h2 id="eng-ko-p-suv-sig-diruvchi-idish-container-with-most-water">Eng ko'p suv sig'diruvchi idish (Container With Most Water)</h2>
 <p>Bu masala ikki ko'rsatkichning eng chiroyli namunalaridan. Bizga balandliklar massivi berilgan: har bir son vertikal devor. Ikki devor va ular orasidagi tub bilan hosil bo'ladigan idishning eng katta suv hajmini topishimiz kerak. Hajm = <code>eng past devor * ular orasidagi masofa</code>.</p>
 <p>Naive yechim barcha juftliklarni tekshiradi — O(n&sup2;). Ikki ko'rsatkich bilan esa <code>left</code> ni boshdan, <code>right</code> ni oxiridan qo'yamiz va har qadamda <strong>pastroq</strong> devorni ichkariga suramiz. Sababi: keng masofa allaqachon bor, uni yo'qotib borsak, faqat balandroq devor topsak yutamiz — shuning uchun pastini surish mantiqli.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>container-water.js</span></div><textarea spellcheck="false">function maxArea(height) {
@@ -696,7 +715,7 @@ console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
 console.log(maxArea([1, 1]));                      // 1
 console.log(maxArea([4, 3, 2, 1, 4]));             // 16</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n) — ikki ko'rsatkich birga bir marta o'tadi; xotira O(1). Naive O(n&sup2;) dan sezilarli tez.</p>
-<h2>Bir yo'nalishli ko'rsatkichlar: nusxalarni o'chirish</h2>
+<h2 id="bir-yo-nalishli-ko-rsatkichlar-nusxalarni-o-chirish">Bir yo'nalishli ko'rsatkichlar: nusxalarni o'chirish</h2>
 <p>Endi ikkala ko'rsatkich ham chapdan boshlanadigan holatga o'tamiz. Saralangan massivdan takroriy elementlarni <strong>joyida</strong> o'chirishni ko'raylik. <code>slow</code> ko'rsatkichi "toza" qismning oxirini belgilaydi, <code>fast</code> esa butun massivni kezib chiqadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>remove-duplicates.js</span></div><textarea spellcheck="false">function removeDuplicates(arr) {
   if (arr.length === 0) return 0;
@@ -716,7 +735,7 @@ const k = removeDuplicates(nums);
 console.log('Noyoblar soni:', k);
 console.log('Massiv boshi:', nums.slice(0, k));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n), xotira O(1). <code>fast</code> har qadamda oldinga yuradi, <code>slow</code> esa faqat yangi noyob element topilganda siljiydi.</p>
-<h2>Nollarni oxiriga surish</h2>
+<h2 id="nollarni-oxiriga-surish">Nollarni oxiriga surish</h2>
 <p>Yana bir mashhur masala: massivdagi barcha <code>0</code> larni oxiriga surish, nolmas elementlarning tartibini saqlagan holda. Bu ham bir yo'nalishli ikki ko'rsatkich naqshi: <code>insertPos</code> keyingi nolmas elementni qo'yish joyini belgilaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>move-zeroes.js</span></div><textarea spellcheck="false">function moveZeroes(arr) {
   let insertPos = 0;
@@ -738,7 +757,7 @@ console.log('Massiv boshi:', nums.slice(0, k));</textarea><div class="pg-actions
 console.log(moveZeroes([0, 1, 0, 3, 12])); // [1, 3, 12, 0, 0]
 console.log(moveZeroes([0, 0, 1]));        // [1, 0, 0]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n), xotira O(1).</p>
-<h2>Tez va sekin ko'rsatkich: massiv o'rtasini topish</h2>
+<h2 id="tez-va-sekin-ko-rsatkich-massiv-o-rtasini-topish">Tez va sekin ko'rsatkich: massiv o'rtasini topish</h2>
 <p>Ba'zan ikki ko'rsatkich turli <strong>tezlikda</strong> yuradi. <code>fast</code> har qadamda ikki qadam, <code>slow</code> bir qadam yuradi. <code>fast</code> oxiriga yetganda, <code>slow</code> aynan o'rtada bo'ladi. Bu naqsh ayniqsa bog'langan ro'yxatlarda (linked list) o'rtani topishda mashhur, lekin g'oyani massivda ham ko'rish mumkin.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>fast-slow.js</span></div><textarea spellcheck="false">function findMiddle(arr) {
   let slow = 0;
@@ -754,7 +773,7 @@ console.log(moveZeroes([0, 0, 1]));        // [1, 0, 0]</textarea><div class="pg
 console.log(findMiddle([1, 2, 3, 4, 5])); // 3
 console.log(findMiddle([10, 20, 30, 40])); // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n), xotira O(1). <code>fast</code> massivning yarmiga yetganda tsikl tugaydi.</p>
-<h2>Chegaraviy holatlar</h2>
+<h2 id="chegaraviy-holatlar">Chegaraviy holatlar</h2>
 <p>Ikki ko'rsatkich yechimlarini sinashda quyidagilarni doim tekshiring — kod bir chetki holatda buzilmasligi kerak:</p>
 <ul><li><strong>Bo'sh massiv</strong> (<code>[]</code>) — <code>right = -1</code> bo'ladi, <code>while (left &lt; right)</code> darrov to'xtaydi. Xavfsiz.</li><li><strong>Bitta element</strong> (<code>[5]</code>) — <code>left = right = 0</code>, tsikl ishlamaydi. Palindromda bitta belgi doim palindrom.</li><li><strong>Hammasi bir xil</strong> (<code>[7, 7, 7]</code>) — nusxa o'chirishda bitta element qoladi.</li><li><strong>Manfiy sonlar</strong> — Two Sum va Container masalalarida manfiy qiymatlar ham to'g'ri ishlaydi, chunki taqqoslash mantiqi belgiga bog'liq emas.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>chegara-holatlar.js</span></div><textarea spellcheck="false">// chegaraviy holatlarni tekshiramiz
@@ -770,7 +789,7 @@ function reverse(arr) {
 console.log(reverse([]));      // []
 console.log(reverse([42]));    // [42]
 console.log(reverse([-1, -5, -3])); // [-3, -5, -1]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Murakkablik jadvali</h2>
+<h2 id="murakkablik-jadvali">Murakkablik jadvali</h2>
 <pre class="code"><code>Masala                     | Naive      | Two Pointers
 ---------------------------|------------|-------------
 Massivni teskarilash       | O(n)       | O(n), O(1) xotira
@@ -793,6 +812,6 @@ Nusxa o'chirish            | O(n) qo'sh | O(n), joyida</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

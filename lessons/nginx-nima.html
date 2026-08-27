@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nginx nima? — Kodla</title>
   <meta name="description" content="Veb-server tushunchasi, Nginx tarixi va mashhurligi, uning asosiy vazifalari (statik fayl, reverse proxy, load balancer, SSL termination) va Apache bilan qisqa taqqoslash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,35 +599,50 @@
 <main class="content article">
 <div class="crumbs">Nginx</div>
 <h1>Nginx nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#veb-server-nima">Veb-server nima?</a></li>
+<li class="lvl2"><a href="#nginx-tarixi-va-nega-mashhur">Nginx tarixi va nega mashhur</a></li>
+<li class="lvl2"><a href="#nginx-qanday-vazifalarni-bajaradi">Nginx qanday vazifalarni bajaradi</a></li>
+<li class="lvl3"><a href="#1-statik-fayllarga-xizmat-ko-rsatish">1. Statik fayllarga xizmat ko'rsatish</a></li>
+<li class="lvl3"><a href="#2-reverse-proxy-teskari-proksi">2. Reverse proxy (teskari proksi)</a></li>
+<li class="lvl3"><a href="#3-load-balancer-yuk-taqsimlagich">3. Load balancer (yuk taqsimlagich)</a></li>
+<li class="lvl3"><a href="#4-ssl-termination-ssl-yakunlash">4. SSL termination (SSL yakunlash)</a></li>
+<li class="lvl2"><a href="#apache-bilan-qisqa-taqqoslash">Apache bilan qisqa taqqoslash</a></li>
+<li class="lvl2"><a href="#qayerda-ishlatiladi">Qayerda ishlatiladi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Nginx</strong> (o'qilishi: "engine-x") — bugungi kunda internetdagi eng ko'p ishlatiladigan veb-serverlardan biri. Deyarli har bir zamonaviy sayt yoki API uning ortida qandaydir tarzda Nginx'dan foydalanadi. Ushbu darsda veb-server nima ekanligini, Nginx qanday paydo bo'lganini va u qanday vazifalarni bajarishini chuqur o'rganamiz.</p>
 <div class="note">Bu bob — <strong>server</strong> muhitiga oid. Bu yerdagi buyruqlar va konfiguratsiya (config) misollari Linux serverida ishlaydi. Ularni brauzerda ishga tushirib bo'lmaydi, shuning uchun barcha misollar <strong>statik</strong> — ya'ni tushunib o'qish uchun keltirilgan. Har bir buyruq va direktivani mazmunini anglagan holda o'rganing.</div>
-<h2>Veb-server nima?</h2>
+<h2 id="veb-server-nima">Veb-server nima?</h2>
 <p>Veb-server — bu ikki ma'noga ega tushuncha. Birinchisi, <strong>jismoniy (yoki virtual) kompyuter</strong> — internetga ulangan va doimo ishlab turadigan mashina. Ikkinchisi — o'sha mashinada ishlaydigan <strong>dastur</strong>, u brauzerlardan (klientlardan) keladigan HTTP so'rovlarni qabul qiladi va javob qaytaradi.</p>
 <p>Nginx — aynan ikkinchi ma'nodagi veb-server, ya'ni <strong>dastur</strong>. U tarmoqning ma'lum bir portini (odatda 80 va 443) "tinglab" turadi. Kimdir brauzerda saytingiz manzilini yozganda, brauzer o'sha portga HTTP so'rov yuboradi. Nginx bu so'rovni qabul qiladi, kerakli faylni topadi yoki boshqa dasturga uzatadi va natijani brauzerga qaytaradi.</p>
 <p>Oddiy qilib aytganda: brauzer <strong>so'raydi</strong> ("menga index.html sahifasini ber"), Nginx esa <strong>javob beradi</strong> (o'sha faylning mazmunini yuboradi).</p>
-<h2>Nginx tarixi va nega mashhur</h2>
+<h2 id="nginx-tarixi-va-nega-mashhur">Nginx tarixi va nega mashhur</h2>
 <p>Nginx'ni rus dasturchisi <strong>Igor Sysoev</strong> yaratgan va u birinchi marta 2004-yilda ommaga chiqarilgan. O'sha davrdagi mashhur veb-server Apache bir vaqtning o'zida juda ko'p ulanishni (masalan, o'n minglab) samarali boshqara olmasdi — bu <strong>C10k muammosi</strong> (ya'ni bir vaqtda 10 000 ulanishni ushlab turish muammosi) deb atalgan.</p>
 <p>Nginx aynan shu muammoni hal qilish uchun yaratildi. U <strong>asinxron, hodisaga asoslangan (event-driven)</strong> arxitekturaga ega. Bu shuni anglatadiki, Nginx har bir ulanish uchun alohida jarayon (process) yoki oqim (thread) ochmaydi — buning o'rniga bitta jarayon minglab ulanishni bir vaqtda, kam xotira sarflab boshqaradi.</p>
 <ul><li><strong>Tezkorlik</strong> — statik fayllarni juda tez uzatadi;</li><li><strong>Kam resurs</strong> — oz miqdorda operativ xotira (RAM) va protsessor (CPU) sarflaydi;</li><li><strong>Barqarorlik</strong> — yuqori yuklama ostida ham ishonchli ishlaydi;</li><li><strong>Moslashuvchanlik</strong> — veb-server, proxy, load balancer sifatida ishlata olinadi.</li></ul>
 <div class="note">Aynan shu sabablarga ko'ra Nginx tez orada dunyodagi eng yuklama ko'radigan saytlar tomonidan qabul qilindi va hozirda internetdagi eng band saytlarning katta qismiga xizmat qiladi.</div>
-<h2>Nginx qanday vazifalarni bajaradi</h2>
+<h2 id="nginx-qanday-vazifalarni-bajaradi">Nginx qanday vazifalarni bajaradi</h2>
 <p>Nginx ko'p qirrali vosita. U bir necha xil rolda ishlashi mumkin va ko'pincha bu rollarni bir vaqtda bajaradi. Asosiy vazifalari quyidagilar:</p>
-<h3>1. Statik fayllarga xizmat ko'rsatish</h3>
+<h3 id="1-statik-fayllarga-xizmat-ko-rsatish">1. Statik fayllarga xizmat ko'rsatish</h3>
 <p>Eng asosiy vazifasi — disk'da yotgan <strong>statik fayllarni</strong> (HTML, CSS, JavaScript, rasmlar, videolar) brauzerga uzatish. Nginx bu ishni juda samarali bajaradi, chunki u aynan shu maqsad uchun optimallashtirilgan.</p>
-<h3>2. Reverse proxy (teskari proksi)</h3>
+<h3 id="2-reverse-proxy-teskari-proksi">2. Reverse proxy (teskari proksi)</h3>
 <p>Nginx brauzerdan kelgan so'rovni qabul qilib, uni orqa fonda ishlayotgan boshqa dasturga (masalan, Node.js, Python yoki PHP ilovasiga) uzatishi mumkin. Ilova javob berganda, Nginx uni brauzerga qaytaradi. Bunda brauzer orqadagi ilovani ko'rmaydi — u faqat Nginx bilan gaplashadi.</p>
-<h3>3. Load balancer (yuk taqsimlagich)</h3>
+<h3 id="3-load-balancer-yuk-taqsimlagich">3. Load balancer (yuk taqsimlagich)</h3>
 <p>Agar sizda bir xil ilovaning bir nechta nusxasi (serveri) bo'lsa, Nginx kelayotgan so'rovlarni ular orasida <strong>taqsimlab</strong> beradi. Bu bitta serverga tushadigan yukni kamaytiradi va saytni sekinlashib qolishdan saqlaydi.</p>
-<h3>4. SSL termination (SSL yakunlash)</h3>
+<h3 id="4-ssl-termination-ssl-yakunlash">4. SSL termination (SSL yakunlash)</h3>
 <p>HTTPS (shifrlangan ulanish) uchun serverga sertifikat o'rnatiladi. Nginx shifrlangan trafikni <strong>ochib</strong> (deshifratsiya qilib), oddiy so'rovni orqadagi ilovaga uzatadi. Shu tarzda ilovaning o'zi shifrlash bilan ovora bo'lmaydi — bu og'ir ishni Nginx bajaradi.</p>
-<h2>Apache bilan qisqa taqqoslash</h2>
+<h2 id="apache-bilan-qisqa-taqqoslash">Apache bilan qisqa taqqoslash</h2>
 <p>Apache HTTP Server (qisqacha Apache) — Nginx'dan oldin paydo bo'lgan va uzoq yillar hukmronlik qilgan veb-server. Ular bir-biriga raqib, lekin arxitekturasi jihatidan farq qiladi:</p>
 <ul><li><strong>Model:</strong> Apache an'anaviy ravishda har bir ulanishga alohida jarayon/oqim ajratadi; Nginx esa asinxron, hodisaga asoslangan modelda ishlaydi;</li><li><strong>Statik fayllar:</strong> statik kontentda Nginx odatda tezroq va kamroq xotira sarflaydi;</li><li><strong>Konfiguratsiya:</strong> Apache <code>.htaccess</code> fayllari orqali papka darajasida sozlashga imkon beradi; Nginx'da bunday mexanizm yo'q, barcha sozlash markaziy config'da bo'ladi (bu tezroq ishlaydi);</li><li><strong>Ko'p ulanish:</strong> juda katta miqdordagi bir vaqtli ulanishlarda Nginx sezilarli ustunlikka ega.</li></ul>
 <div class="tip">Amalda ko'pincha ularni <strong>birgalikda</strong> ishlatishadi: Nginx oldinda turadi (statik fayllar va reverse proxy uchun), Apache esa orqada dinamik kontentni (masalan, eski PHP ilovalarini) qayta ishlaydi. Lekin zamonaviy loyihalarda ko'pincha faqat Nginx yetarli.</div>
-<h2>Qayerda ishlatiladi</h2>
+<h2 id="qayerda-ishlatiladi">Qayerda ishlatiladi</h2>
 <p>Nginx quyidagi holatlarda keng qo'llaniladi:</p>
 <ul><li>Statik saytlar va bir sahifali ilovalar (SPA — React, Vue, Angular) uchun fayl serveri;</li><li>Node.js, Django, Laravel kabi ilovalar oldida reverse proxy sifatida;</li><li>Yuqori trafikli saytlarda bir nechta server orasida yukni taqsimlash uchun;</li><li>HTTPS'ni ta'minlash va SSL sertifikatlarni boshqarish uchun;</li><li>API shlyuzi (gateway) va mikroservis arxitekturasida marshrutlash uchun;</li><li>Media (rasm, video) fayllarni keshlash va tez uzatish uchun.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Nginx</strong> — asinxron, tezkor va kam resurs sarflaydigan veb-server dasturi;</li><li>U 2004-yilda C10k muammosini (ko'p bir vaqtli ulanish) hal qilish uchun yaratilgan;</li><li>Asosiy vazifalari: statik fayllarga xizmat, reverse proxy, load balancing va SSL termination;</li><li>Apache'dan farqli o'laroq, u hodisaga asoslangan modelda ishlaydi va statik kontentda samaraliroq;</li><li>Zamonaviy veb-loyihalarning katta qismida shu yoki boshqa rolda ishlatiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="docker-volume-network.html"><span class="dir">← Oldingi</span><span class="ttl">Volume va tarmoq (network)</span></a>
@@ -638,6 +656,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

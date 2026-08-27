@@ -257,3 +257,97 @@
     if (e.key === "Escape") { input.value = ""; reset(); }
   });
 })();
+
+/* ===========================================================
+   UX: kechki rejim, o'qish progressi, kod nusxalash,
+   yon menyu avto-siljish, TOC scrollspy
+   =========================================================== */
+(function () {
+  "use strict";
+  var root = document.documentElement;
+
+  /* --- Kechki/kunduzgi rejim --- */
+  var toggle = document.getElementById("themeToggle");
+  function isDark() { return root.getAttribute("data-theme") === "dark"; }
+  function paintToggle() { if (toggle) toggle.textContent = isDark() ? "☀️" : "🌙"; }
+  paintToggle();
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      paintToggle();
+    });
+  }
+
+  /* --- O'qish progressi --- */
+  var bar = document.getElementById("readingBar");
+  if (bar) {
+    var onScroll = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max * 100 : 0;
+      bar.style.width = pct + "%";
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+  }
+
+  /* --- Kodni nusxalash tugmasi (pre.code) --- */
+  Array.prototype.forEach.call(document.querySelectorAll("pre.code"), function (pre) {
+    if (pre.parentNode && pre.parentNode.classList.contains("code-wrap")) return;
+    var wrap = document.createElement("div");
+    wrap.className = "code-wrap";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    var btn = document.createElement("button");
+    btn.className = "copy-btn";
+    btn.type = "button";
+    btn.textContent = "Nusxalash";
+    wrap.appendChild(btn);
+    btn.addEventListener("click", function () {
+      var text = pre.innerText;
+      var done = function () {
+        btn.textContent = "✓ Nusxalandi";
+        btn.classList.add("copied");
+        setTimeout(function () { btn.textContent = "Nusxalash"; btn.classList.remove("copied"); }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {});
+      } else {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand("copy"); document.body.removeChild(ta); done();
+        } catch (e) {}
+      }
+    });
+  });
+
+  /* --- Yon menyu joriy darsga avto-siljish --- */
+  var sb = document.getElementById("sidebar");
+  var active = sb && sb.querySelector("a.active");
+  if (sb && active) {
+    try { sb.scrollTop = active.offsetTop - sb.clientHeight / 2; } catch (e) {}
+  }
+
+  /* --- TOC scrollspy: joriy bo'limni belgilash --- */
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+  if (tocLinks.length) {
+    var heads = tocLinks.map(function (a) {
+      var id = a.getAttribute("href").slice(1);
+      return document.getElementById(id);
+    });
+    var spy = function () {
+      var pos = window.scrollY + 90;
+      var idx = 0;
+      for (var i = 0; i < heads.length; i++) {
+        if (heads[i] && heads[i].offsetTop <= pos) idx = i;
+      }
+      tocLinks.forEach(function (a, i) { a.classList.toggle("active", i === idx); });
+    };
+    window.addEventListener("scroll", spy, { passive: true });
+    spy();
+  }
+})();

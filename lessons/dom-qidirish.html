@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elementlarni qidirish: getElement*, querySelector* — Kodla</title>
   <meta name="description" content="getElementById, querySelector va querySelectorAll, getElementsByTagName/ClassName, matches, closest, contains hamda jonli va statik to'plamlar farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Elementlarni qidirish: getElement*, querySelector*</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#document-getelementbyid-yoki-id">document.getElementById yoki id</a></li>
+<li class="lvl2"><a href="#queryselectorall">querySelectorAll</a></li>
+<li class="lvl2"><a href="#queryselector">querySelector</a></li>
+<li class="lvl2"><a href="#matches">matches</a></li>
+<li class="lvl2"><a href="#closest">closest</a></li>
+<li class="lvl2"><a href="#getelementsby-metodlari">getElementsBy* metodlari</a></li>
+<li class="lvl2"><a href="#jonli-live-va-statik-to-plamlar">Jonli (live) va statik to'plamlar</a></li>
+<li class="lvl2"><a href="#elema-contains-elemb">elemA.contains(elemB)</a></li>
+<li class="lvl2"><a href="#barcha-6-metod-umumiy-jadval">Barcha 6 metod umumiy jadval</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">DOM navigatsiyasi xossalari qo'shni tugunlar bir-biriga yaqin joylashganda juda qulay. Ammo elementlar bir-biridan uzoqda bo'lsa-chi? Sahifadagi istalgan elementni uning DOM'dagi o'rniga bog'liq bo'lmagan holda topish uchun maxsus qidiruv metodlari bor. Ushbu darsda ularni chuqur o'rganamiz.</p>
-<h2>document.getElementById yoki id</h2>
+<h2 id="document-getelementbyid-yoki-id">document.getElementById yoki id</h2>
 <p>Agar elementning <code>id</code> atributi bo'lsa, uni <code>document.getElementById(id)</code> orqali topamiz, u qayerda bo'lishidan qat'i nazar:</p>
 <pre class="code"><code>&lt;div id="elem"&gt;
   &lt;div id="elem-content"&gt;Element&lt;/div&gt;
@@ -620,7 +638,7 @@
 <div class="warn">Bu "avtomatik global o'zgaruvchi" xususiyatiga TAYANMANG! U standartda tasvirlangan, ammo asosan orqaga moslik uchun saqlanadi. Brauzer bizning kodimizdagi o'zgaruvchi bilan <code>id</code>ni chalkashtirib yuborishi mumkin. Agar kodda <code>elem</code> nomli o'zgaruvchi e'lon qilsak, u avtomatik global'ni bekor qiladi. Har doim <code>document.getElementById</code>dan foydalanish yaxshi amaliyot.</div>
 <div class="note">Nomlar noyob (unique) bo'lishi kerak. Hujjatda faqat bitta element berilgan <code>id</code>ga ega bo'lsin. Agar bir nechta element bir xil <code>id</code>ga ega bo'lsa, qidiruv metodlarining xatti-harakati oldindan aytib bo'lmaydigan bo'ladi.</div>
 <div class="warn"><code>getElementById</code> faqat <code>document</code> obyektida chaqiriladi, oddiy elementlarda emas: <code>elem.getElementById(...)</code> mavjud emas!</div>
-<h2>querySelectorAll</h2>
+<h2 id="queryselectorall">querySelectorAll</h2>
 <p>Eng ko'p qirrali metod — <code>elem.querySelectorAll(css)</code>. U berilgan CSS selektorga mos keluvchi <strong>barcha</strong> elementlarni qaytaradi.</p>
 <pre class="code"><code>&lt;ul&gt;
   &lt;li&gt;Bu&lt;/li&gt;
@@ -640,11 +658,11 @@
   }
 &lt;/script&gt;</code></pre>
 <p>Bu metod juda kuchli, chunki har qanday CSS selektorni qo'llash mumkin. Hatto <code>:hover</code> va <code>:active</code> kabi psevdo-klasslar ham qo'llab-quvvatlanadi. Masalan, <code>document.querySelectorAll(':hover')</code> ustiga sichqoncha turgan elementlar to'plamini beradi.</p>
-<h2>querySelector</h2>
+<h2 id="queryselector">querySelector</h2>
 <p><code>elem.querySelector(css)</code> chaqiruvi berilgan CSS selektorga mos <strong>birinchi</strong> elementni qaytaradi.</p>
 <p>Boshqacha aytganda, natija <code>querySelectorAll(css)[0]</code> bilan bir xil, ammo <code>querySelectorAll</code> barcha elementlarni topib to'plamdan birinchisini olsa, <code>querySelector</code> faqat birinchisini topadi. Shuning uchun u tezroq va yozishda ham qisqaroq:</p>
 <pre class="code"><code>let elem = document.querySelector('.my-class'); // birinchi mos element</code></pre>
-<h2>matches</h2>
+<h2 id="matches">matches</h2>
 <p>Oldingi metodlar DOM'da qidirar edi. <code>elem.matches(css)</code> esa hech narsa qidirmaydi. U faqat <code>elem</code> berilgan CSS selektorga mosligini tekshiradi va <code>true</code> yoki <code>false</code> qaytaradi.</p>
 <p>Bu qandaydir to'plam (masalan, massiv) ustidan aylanib, kerakli elementlarni filtrlaganda foydali:</p>
 <pre class="code"><code>&lt;a href="http://example.com/file.zip"&gt;...&lt;/a&gt;
@@ -658,7 +676,7 @@
     }
   }
 &lt;/script&gt;</code></pre>
-<h2>closest</h2>
+<h2 id="closest">closest</h2>
 <p>Elementning <strong>ajdodlari</strong> (ancestors) — bu uning otasi, otasining otasi, uning otasi va hokazo. Ajdodlar birgalikda yuqoriga, ildizgacha bo'lgan zanjirni tashkil qiladi.</p>
 <p><code>elem.closest(css)</code> metodi berilgan CSS selektorga mos keluvchi eng yaqin ajdodni qidiradi. <code>elem</code>ning o'zi ham qidiruvga kiritiladi.</p>
 <p>Boshqacha aytganda, <code>closest</code> elementning o'zidan boshlab yuqoriga ko'tarilib boradi va har bir ajdodni selektorga tekshiradi. Mos kelgani topilsa, qidiruv to'xtaydi va shu ajdod qaytariladi:</p>
@@ -679,7 +697,7 @@
   alert(chapter.closest('h1')); // null (h1 ajdod emas)
 &lt;/script&gt;</code></pre>
 <div class="tip"><code>closest</code> hodisalarni qayta ishlashda (event delegation) juda ko'p ishlatiladi: bosilgan element atrofidagi kerakli "o'rovchi" (wrapper) elementni topish uchun ideal vosita.</div>
-<h2>getElementsBy* metodlari</h2>
+<h2 id="getelementsby-metodlari">getElementsBy* metodlari</h2>
 <p>Elementlarni teg, klass va boshqalar bo'yicha qidiruvchi eski metodlar ham bor. Bugun ular asosan <code>querySelector</code> foydasiga o'z ahamiyatini yo'qotmoqda, ammo eski kodlarda hali ko'p uchraydi:</p>
 <ul><li><code>elem.getElementsByTagName(tag)</code> — berilgan tegli elementlarni qidiradi va to'plam qaytaradi. <code>tag</code> o'rniga <code>"*"</code> berilsa, "barcha teglar" degani;</li><li><code>elem.getElementsByClassName(className)</code> — berilgan klassga ega elementlar to'plami;</li><li><code>document.getElementsByName(name)</code> — hujjat bo'yicha berilgan <code>name</code> atributiga ega elementlar to'plami (kamdan-kam ishlatiladi).</li></ul>
 <pre class="code"><code>// hujjatdagi barcha &lt;div&gt;lar
@@ -692,7 +710,7 @@ for (let input of inputs) {
 }</code></pre>
 <div class="warn">Metod nomida <strong>"s"</strong> harfiga e'tibor bering! Yangi boshlovchilar ba'zan xato qiladi: <code>getElementByTagName</code> (bittalik) — mavjud emas! To'g'ri nomi <code>getElementsByTagName</code> (ko'plik, chunki bir nechta element qaytaradi). Aksincha, <code>getElementById</code> bitta element qaytargani uchun "s"siz yoziladi.</div>
 <div class="warn">Ba'zilar <code>getElementsByTagName</code> to'plam qaytarishini unutib, uni to'g'ridan-to'g'ri element deb ishlatadi: <code>document.getElementsByTagName('input').value</code> ishlamaydi! To'g'risi — element indeksini olish: <code>document.getElementsByTagName('input')[0].value</code>.</div>
-<h2>Jonli (live) va statik to'plamlar</h2>
+<h2 id="jonli-live-va-statik-to-plamlar">Jonli (live) va statik to'plamlar</h2>
 <p>Bu yerda muhim farq bor:</p>
 <ul><li>Barcha <code>getElementsBy*</code> metodlari <strong>jonli</strong> (live) to'plam qaytaradi. Bunday to'plamlar hujjatning joriy holatini har doim aks ettiradi va o'zgarishlarda avtomatik yangilanadi;</li><li>Aksincha, <code>querySelectorAll</code> <strong>statik</strong> to'plam qaytaradi. Bu "muzlatib qo'yilgan" massiv kabi — chaqiruv paytidagi holatni saqlaydi va keyingi o'zgarishlar unga ta'sir qilmaydi.</li></ul>
 <pre class="code"><code>// jonli to'plam
@@ -711,17 +729,17 @@ document.body.append(document.createElement('div'));
 
 alert(divs.length); // hali ham 1 (o'zgarmaydi)</code></pre>
 <div class="note">Bu farqni bilish muhim: agar to'plamni saqlab, keyin DOM'ni o'zgartirsangiz, jonli to'plamda yangi elementlar paydo bo'ladi, statik to'plamda esa yo'q. Ko'p hollarda statik (<code>querySelectorAll</code>) xatti-harakat oldindan aytiluvchan bo'lgani uchun qulayroq.</div>
-<h2>elemA.contains(elemB)</h2>
+<h2 id="elema-contains-elemb">elemA.contains(elemB)</h2>
 <p>Yana bir foydali metod — <code>elemA.contains(elemB)</code>. U <code>elemB</code> <code>elemA</code> ichida (uning avlodi) yoki <code>elemA === elemB</code> bo'lsa, <code>true</code> qaytaradi:</p>
 <pre class="code"><code>// tekshirish: parent element child'ni o'z ichiga oladimi?
 if (parentElem.contains(childElem)) {
   alert('child parent ichida');
 }</code></pre>
-<h2>Barcha 6 metod umumiy jadval</h2>
+<h2 id="barcha-6-metod-umumiy-jadval">Barcha 6 metod umumiy jadval</h2>
 <p>Qidiruv metodlarini eslab qolish uchun umumiy ko'rinish:</p>
 <ul><li><code>querySelector</code> — CSS-selektor, ilk element, istalgan element ustida ishlaydi;</li><li><code>querySelectorAll</code> — CSS-selektor, statik to'plam;</li><li><code>getElementById</code> — <code>id</code> bo'yicha, faqat <code>document</code>da;</li><li><code>getElementsByName</code> — <code>name</code> bo'yicha, faqat <code>document</code>da, jonli;</li><li><code>getElementsByTagName</code> — teg yoki <code>"*"</code> bo'yicha, jonli;</li><li><code>getElementsByClassName</code> — klass bo'yicha, jonli.</li></ul>
 <div class="tip">Amaliyotda 99% hollarda <code>querySelector</code> va <code>querySelectorAll</code> yetarli. Ular eng moslashuvchan va yodda tutish oson. <code>getElementById</code> esa juda tez bo'lgani va oddiyligi tufayli <code>id</code> bo'yicha qidirishda hali ham ommabop.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>6 ta asosiy qidiruv metodi bor: <code>querySelector</code>, <code>querySelectorAll</code>, <code>getElementById</code>, <code>getElementsByName</code>, <code>getElementsByTagName</code>, <code>getElementsByClassName</code>;</li><li><code>getElementsBy*</code> jonli (live) to'plam, <code>querySelectorAll</code> esa statik to'plam qaytaradi;</li><li><code>elem.matches(css)</code> — element selektorga mosligini tekshiradi;</li><li><code>elem.closest(css)</code> — selektorga mos eng yaqin ajdodni (o'zini ham) qidiradi;</li><li><code>elemA.contains(elemB)</code> — <code>elemB</code> <code>elemA</code> ichida ekanligini tekshiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="dom-boylab.html"><span class="dir">← Oldingi</span><span class="ttl">DOM bo'ylab harakatlanish</span></a>
@@ -735,6 +753,6 @@ if (parentElem.contains(childElem)) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File va FileReader — Kodla</title>
   <meta name="description" content="Foydalanuvchi tanlagan fayllar bilan ishlash: File obyekti (input.files), FileReader bilan faylni o'qish (readAsText, readAsDataURL, readAsArrayBuffer) va yuklash jarayonini kuzatish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Ikkilik ma'lumot va fayllar</div>
 <h1>File va FileReader</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#file-obyekti">File obyekti</a></li>
+<li class="lvl2"><a href="#input-files-orqali-fayl-olish">input.files orqali fayl olish</a></li>
+<li class="lvl2"><a href="#filereader-faylni-o-qish">FileReader: faylni o'qish</a></li>
+<li class="lvl2"><a href="#readastext-matnli-faylni-o-qish">readAsText: matnli faylni o'qish</a></li>
+<li class="lvl2"><a href="#readasdataurl-rasmni-ko-rsatish">readAsDataURL: rasmni ko'rsatish</a></li>
+<li class="lvl2"><a href="#readasarraybuffer-ikkilik-o-qish">readAsArrayBuffer: ikkilik o'qish</a></li>
+<li class="lvl2"><a href="#yuklash-jarayonini-kuzatish-progress">Yuklash jarayonini kuzatish (progress)</a></li>
+<li class="lvl2"><a href="#o-qishni-to-xtatish">O'qishni to'xtatish</a></li>
+<li class="lvl2"><a href="#filereader-va-blob">FileReader va Blob</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Foydalanuvchi kompyuteridagi faylni brauzerga yuklaganida (masalan <code>&lt;input type="file"&gt;</code> orqali), biz <code>File</code> obyektini olamiz. <code>File</code> — bu <code>Blob</code>ning kengaytirilgan ko'rinishi bo'lib, unga fayl nomi va o'zgartirilgan sanasi qo'shilgan. Fayl mazmunini o'qish uchun esa <code>FileReader</code> ishlatiladi. Bularning barchasi brauzerga xos, shuning uchun quyidagi misollar brauzer muhitiga oid.</p>
-<h2>File obyekti</h2>
+<h2 id="file-obyekti">File obyekti</h2>
 <p><code>File</code> — <code>Blob</code>dan meros oladi, shuning uchun uning barcha xususiyatlari (<code>size</code>, <code>type</code>, <code>slice</code>) mavjud, plyus qo'shimchalari:</p>
 <ul><li><code>name</code> — fayl nomi (masalan <code>rasm.png</code>);</li><li><code>lastModified</code> — oxirgi o'zgartirilgan vaqt (timestamp, millisekundlarda);</li><li><code>size</code> — fayl hajmi baytlarda (Blobdan meros);</li><li><code>type</code> — MIME turi (Blobdan meros).</li></ul>
 <p>File obyektini konstruktor orqali ham yasash mumkin, lekin amaliyotda ko'proq foydalanuvchi tanlovi orqali olinadi:</p>
@@ -610,7 +628,7 @@ let file = new File(["salom"], "hello.txt", {
 console.log(file.name);         // hello.txt
 console.log(file.size);         // 5
 console.log(file.type);         // text/plain</code></pre>
-<h2>input.files orqali fayl olish</h2>
+<h2 id="input-files-orqali-fayl-olish">input.files orqali fayl olish</h2>
 <p>Amaliyotda File obyektlari <code>&lt;input type="file"&gt;</code> elementidan olinadi. Foydalanuvchi fayl tanlagach, <code>input.files</code> — <code>FileList</code> (fayllar ro'yxati) to'ldiriladi:</p>
 <pre class="code"><code>// HTML: &lt;input type="file" id="tanlov" multiple&gt;
 
@@ -627,14 +645,14 @@ input.addEventListener("change", function() {
 });</code></pre>
 <div class="note"><code>multiple</code> atributi bir nechta fayl tanlashga imkon beradi. <code>files</code> — <code>FileList</code> obyekti, u massivga o'xshaydi (indeks va <code>length</code> bor), lekin toza massiv emas. Kerak bo'lsa <code>Array.from(files)</code> bilan massivga o'giring.</div>
 <div class="tip">Fayllarni <em>tortib tashlash</em> (drag and drop) orqali ham olish mumkin: <code>drop</code> hodisasida <code>event.dataTransfer.files</code> ham <code>FileList</code> qaytaradi — xuddi <code>input.files</code>dek ishlaydi.</div>
-<h2>FileReader: faylni o'qish</h2>
+<h2 id="filereader-faylni-o-qish">FileReader: faylni o'qish</h2>
 <p><code>File</code> (yoki <code>Blob</code>) mazmunini o'qish uchun <code>FileReader</code> ishlatiladi. Bu — asinxron obyekt bo'lib, faylni o'qib bo'lgach hodisa (event) chaqiradi:</p>
 <pre class="code"><code>let reader = new FileReader();</code></pre>
 <p>FileReaderning o'qish metodlari fayl mazmunini turli formatda beradi:</p>
 <ul><li><code>readAsText(file, [encoding])</code> — faylni matn (satr) sifatida o'qiydi (standart UTF-8);</li><li><code>readAsArrayBuffer(file)</code> — faylni ikkilik <code>ArrayBuffer</code> sifatida o'qiydi;</li><li><code>readAsDataURL(file)</code> — faylni base64 <code>data:</code> URL sifatida o'qiydi;</li><li><code>readAsBinaryString(file)</code> — har bir baytni belgi sifatida o'qiydi (eskirgan, ishlatmang).</li></ul>
 <p>O'qish asinxron bo'lgani uchun natija to'g'ridan-to'g'ri qaytarilmaydi — u <em>hodisalar</em> orqali keladi:</p>
 <ul><li><code>load</code> — o'qish muvaffaqiyatli tugadi; natija <code>reader.result</code>da;</li><li><code>error</code> — o'qishda xatolik; sabab <code>reader.error</code>da;</li><li><code>progress</code> — o'qish davomida vaqti-vaqti bilan chaqiriladi;</li><li><code>loadend</code> — o'qish tugadi (muvaffaqiyat yoki xatolikdan qat'i nazar).</li></ul>
-<h2>readAsText: matnli faylni o'qish</h2>
+<h2 id="readastext-matnli-faylni-o-qish">readAsText: matnli faylni o'qish</h2>
 <p>Matnli faylni o'qishning to'liq misoli:</p>
 <pre class="code"><code>let input = document.getElementById("tanlov");
 
@@ -654,7 +672,7 @@ input.addEventListener("change", function() {
   reader.readAsText(file); // o'qishni boshlaymiz
 });</code></pre>
 <div class="warn"><code>readAsText</code> (va boshqa <code>readAs...</code>) metodlari <strong>darhol natija qaytarmaydi</strong>. Ular o'qishni boshlaydi va tugagach <code>onload</code>ni chaqiradi. Natijaga <code>onload</code> ichida murojaat qiling — <code>readAsText</code> chaqiruvidan keyin darhol <code>reader.result</code> hali <code>null</code> bo'ladi.</div>
-<h2>readAsDataURL: rasmni ko'rsatish</h2>
+<h2 id="readasdataurl-rasmni-ko-rsatish">readAsDataURL: rasmni ko'rsatish</h2>
 <p><code>readAsDataURL</code> faylni <code>data:</code> URL (base64) ko'rinishida beradi. Bu, ayniqsa, tanlangan rasmni yuklashdan oldin <em>oldindan ko'rsatish</em> (preview) uchun qulay:</p>
 <pre class="code"><code>let input = document.getElementById("rasmTanlov");
 
@@ -672,7 +690,7 @@ input.addEventListener("change", function() {
   reader.readAsDataURL(file);
 });</code></pre>
 <div class="note"><code>data:</code> URL rasmni to'liq base64 satr sifatida saqlaydi — serverga murojaat qilmaydi. Kichik rasmlar uchun qulay, lekin base64 ma'lumot hajmini ~33% oshiradi. Katta fayllar uchun <code>URL.createObjectURL(file)</code> tejamkorroq (u ham to'g'ridan-to'g'ri File bilan ishlaydi).</div>
-<h2>readAsArrayBuffer: ikkilik o'qish</h2>
+<h2 id="readasarraybuffer-ikkilik-o-qish">readAsArrayBuffer: ikkilik o'qish</h2>
 <p>Fayl baytlarini past darajada qayta ishlash kerak bo'lsa (masalan, fayl formatini tahlil qilish, sarlavhani o'qish), <code>readAsArrayBuffer</code> ishlatiladi:</p>
 <pre class="code"><code>let file = input.files[0];
 let reader = new FileReader();
@@ -693,7 +711,7 @@ reader.onload = function() {
 
 reader.readAsArrayBuffer(file);</code></pre>
 <div class="tip">Katta faylning faqat bir qismini o'qish kerak bo'lsa, avval <code>file.slice(0, 100)</code> bilan bo'lak oling, so'ng shu Blobni <code>readAsArrayBuffer</code>ga bering. Butun faylni o'qish shart emas — bu tezroq va xotira tejaydi.</div>
-<h2>Yuklash jarayonini kuzatish (progress)</h2>
+<h2 id="yuklash-jarayonini-kuzatish-progress">Yuklash jarayonini kuzatish (progress)</h2>
 <p>Katta faylni o'qiganda foydalanuvchiga jarayon foizini ko'rsatish uchun <code>progress</code> hodisasi ishlatiladi. Uning obyektida <code>loaded</code> (o'qilgan baytlar) va <code>total</code> (jami baytlar) bor:</p>
 <pre class="code"><code>let reader = new FileReader();
 
@@ -710,7 +728,7 @@ reader.onload = function() {
 
 reader.readAsArrayBuffer(file);</code></pre>
 <div class="note"><code>event.lengthComputable</code> — jami hajm oldindan ma'lummi degan bayroq. Agar u <code>false</code> bo'lsa, foizni hisoblab bo'lmaydi (<code>total</code> noaniq). Lokal fayllar uchun odatda <code>true</code> bo'ladi.</div>
-<h2>O'qishni to'xtatish</h2>
+<h2 id="o-qishni-to-xtatish">O'qishni to'xtatish</h2>
 <p>Boshlangan o'qishni <code>reader.abort()</code> bilan bekor qilish mumkin. Bu, masalan, foydalanuvchi katta faylni tanlab, so'ng fikridan qaytganda kerak bo'ladi:</p>
 <pre class="code"><code>let reader = new FileReader();
 reader.readAsArrayBuffer(katta_fayl);
@@ -721,10 +739,10 @@ reader.abort(); // o'qishni to'xtatamiz
 reader.onabort = function() {
   console.log("O'qish bekor qilindi");
 };</code></pre>
-<h2>FileReader va Blob</h2>
+<h2 id="filereader-va-blob">FileReader va Blob</h2>
 <p><code>FileReader</code> nafaqat <code>File</code>, balki har qanday <code>Blob</code>ni o'qiy oladi — chunki <code>File</code> Blobdan meros oladi. Shuning uchun <code>fetch</code>dan kelgan Blobni ham FileReader bilan o'qish mumkin. Lekin zamonaviy kodda Blobning o'z <code>await blob.text()</code> / <code>await blob.arrayBuffer()</code> metodlari qulayroq — ular Promise qaytaradi va <code>async/await</code> bilan toza yoziladi.</p>
 <div class="tip">Yangi kodda faylni o'qish uchun ko'pincha <code>await file.text()</code> yoki <code>await file.arrayBuffer()</code> yetarli — FileReader shart emas. FileReader esa <code>progress</code> hodisasi kerak bo'lganda yoki eski brauzerlarni qo'llab-quvvatlashda foydali bo'lib qoladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>File</code> — <code>Blob</code>ning kengaytmasi; qo'shimcha <code>name</code> va <code>lastModified</code> xususiyatlari bor;</li><li>Fayllar <code>input.files</code> (FileList) yoki drag-and-drop orqali olinadi;</li><li><code>FileReader</code> — faylni asinxron o'qiydi; natija hodisalar orqali keladi;</li><li><code>readAsText</code>, <code>readAsDataURL</code>, <code>readAsArrayBuffer</code> — turli formatlarda o'qish;</li><li>Natija <code>reader.result</code>da, faqat <code>onload</code> ishlagach mavjud bo'ladi;</li><li><code>progress</code> hodisasi bilan yuklash foizini kuzatish, <code>abort()</code> bilan to'xtatish mumkin;</li><li>Zamonaviy kodda ko'pincha <code>await file.text()</code> / <code>file.arrayBuffer()</code> yetarli.</li></ul>
 <nav class="lesson-nav">
   <a href="blob.html"><span class="dir">← Oldingi</span><span class="ttl">Blob</span></a>
@@ -738,6 +756,6 @@ reader.onabort = function() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

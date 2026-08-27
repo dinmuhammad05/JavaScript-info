@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Uslublar va klasslar — Kodla</title>
   <meta name="description" content="className va classList (add/remove/toggle/contains), element.style bilan inline uslublar, cssText, getComputedStyle orqali yakuniy uslublarni o'qish va muhim uslub qoidalari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,25 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Uslublar va klasslar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#classname-va-classlist">className va classList</a></li>
+<li class="lvl3"><a href="#elem-classname">elem.className</a></li>
+<li class="lvl3"><a href="#elem-classlist">elem.classList</a></li>
+<li class="lvl2"><a href="#element-style">element.style</a></li>
+<li class="lvl3"><a href="#xususiyatni-tozalash">Xususiyatni tozalash</a></li>
+<li class="lvl2"><a href="#style-csstext-bilan-to-liq-qayta-yozish">style.cssText bilan to'liq qayta yozish</a></li>
+<li class="lvl2"><a href="#o-lchov-birliklarini-unutmang">O'lchov birliklarini unutmang</a></li>
+<li class="lvl2"><a href="#getcomputedstyle-bilan-hisoblangan-uslublarni-o-qish">getComputedStyle bilan hisoblangan uslublarni o'qish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Elementga uslub berishning ikki asosiy yo'li bor: CSS klassi qo'shish yoki <code>style</code> orqali to'g'ridan-to'g'ri uslub yozish. Deyarli har doim <strong>klasslar</strong> afzal, <code>style</code> esa faqat klass "ojiz" bo'lgan holatlarda ishlatiladi. Ushbu darsda ikkalasini ham chuqur o'rganamiz.</p>
 <div class="note">Umumiy qoida: elementga qanday ko'rinishda bo'lishini xohlasangiz — buni <strong>CSS klasslari</strong> orqali qiling, JavaScript esa faqat klasslarni qo'shib-olib turadi. <code>elem.style</code> ni faqat klasslar bilan hal qilib bo'lmaydigan, dinamik hisoblangan qiymatlar uchun ishlating (masalan, koordinatalar).</div>
-<h2>className va classList</h2>
+<h2 id="classname-va-classlist">className va classList</h2>
 <p>Klasslarni o'zgartirish — dasturlashda eng ko'p uchraydigan amallardan biridir.</p>
-<h3>elem.className</h3>
+<h3 id="elem-classname">elem.className</h3>
 <p>"class" atributiga to'liq mos keladi. Unga qiymat berish <strong>butun klasslar qatorini</strong> almashtiradi:</p>
 <pre class="code"><code>// &lt;body class="main page"&gt;
 let body = document.body;
@@ -609,7 +626,7 @@ alert(body.className); // main page
 body.className = 'yangi';
 // endi class="yangi", eski klasslar yo'qoldi</code></pre>
 <p>Eslatma: JavaScript'da <code>class</code> — bu zaxiralangan (reserved) kalit so'z, shuning uchun atribut nomi <code>className</code> deb o'zgartirilgan. Agar bittagina klassni almashtirsak yoki qo'shib-olib tursak, <code>className</code> noqulay — buning uchun <code>classList</code> bor.</p>
-<h3>elem.classList</h3>
+<h3 id="elem-classlist">elem.classList</h3>
 <p><code>classList</code> — bu klasslarni birma-bir boshqarish uchun maxsus obyekt. Uning metodlari:</p>
 <ul><li><code>elem.classList.add('klass')</code> — klass qo'shadi;</li><li><code>elem.classList.remove('klass')</code> — klassni o'chiradi;</li><li><code>elem.classList.toggle('klass')</code> — klass bo'lsa o'chiradi, bo'lmasa qo'shadi;</li><li><code>elem.classList.contains('klass')</code> — klass bor-yo'qligini tekshiradi, <code>true/false</code> qaytaradi.</li></ul>
 <pre class="code"><code>// &lt;body class="main page"&gt;
@@ -631,7 +648,7 @@ for (let name of document.body.classList) {
   alert(name); // avval 'main', keyin 'page'
 }</code></pre>
 <div class="tip"><code>toggle</code>ga ikkinchi argument sifatida mantiqiy qiymat berish mumkin: <code>elem.classList.toggle('klass', force)</code>. Agar <code>force = true</code> bo'lsa — har doim qo'shadi, <code>false</code> bo'lsa — har doim o'chiradi. Bu shartga qarab klassni yoqish/o'chirishda qulay.</div>
-<h2>element.style</h2>
+<h2 id="element-style">element.style</h2>
 <p><code>elem.style</code> — bu <code>"style"</code> atributiga mos keluvchi obyekt bo'lib, uning yordamida <strong>inline</strong> (satr ichidagi) uslublarni o'qish va yozish mumkin. Xususiyat nomi CSS'dan biroz farq qiladi.</p>
 <p>Ko'p so'zli CSS xususiyatlari <strong>camelCase</strong> ko'rinishida yoziladi:</p>
 <pre class="code"><code>background-color  =&gt;  elem.style.backgroundColor
@@ -644,13 +661,13 @@ let elem = document.getElementById('elem');
 elem.style.width = '150px';
 elem.style.display = 'none'; // elementni yashiradi</code></pre>
 <div class="warn">Prefiksli xususiyatlar ham camelCase qoidasiga bo'ysunadi. Masalan, <code>-moz-border-radius</code> quyidagicha bo'ladi: <code>elem.style.MozBorderRadius</code> (defis o'rniga bosh harf, birinchi harf ham katta).</div>
-<h3>Xususiyatni tozalash</h3>
+<h3 id="xususiyatni-tozalash">Xususiyatni tozalash</h3>
 <p>Ba'zan biror uslub xususiyatini olib tashlash kerak bo'ladi. Uni yashirish o'rniga, bo'sh qator berib to'liq tozalash mumkin:</p>
 <pre class="code"><code>// document.body.style.display = 'none' berilgan bo'lsin
 document.body.style.display = ''; // xususiyat o'chiriladi
 // endi element o'zining oddiy CSS holatiga qaytadi</code></pre>
 <p>Agar <code>display</code>ga bo'sh qator bersak, brauzer <code>display</code> uslubini xuddi hech qachon o'rnatilmagandek CSS klasslari bo'yicha qo'llaydi.</p>
-<h2>style.cssText bilan to'liq qayta yozish</h2>
+<h2 id="style-csstext-bilan-to-liq-qayta-yozish">style.cssText bilan to'liq qayta yozish</h2>
 <p>Odatda <code>style.*</code> bilan alohida xususiyatlarni beramiz, chunki bu boshqalarini o'chirmaydi. Agar butun uslub qatorini <strong>bir vaqtda</strong> berish kerak bo'lsa, <code>style.cssText</code> ishlatiladi:</p>
 <pre class="code"><code>let div = document.getElementById('div');
 
@@ -658,7 +675,7 @@ document.body.style.display = ''; // xususiyat o'chiriladi
 div.style.cssText = 'color: red !important;\n                    background-color: yellow;\n                    width: 100px;\n                    text-align: center;';</code></pre>
 <p><code>cssText</code>ga qiymat berish avvalgi barcha inline uslublarni <strong>butunlay almashtiradi</strong>, faqat qo'shmaydi. Shuning uchun undan mavjud muhim uslublarni tasodifan o'chirib yubormaslikka ehtiyot bo'ling.</p>
 <div class="note">Xuddi shu natijaga <code>div.setAttribute('style', '...')</code> orqali ham erishish mumkin — u ham butun style atributini almashtiradi.</div>
-<h2>O'lchov birliklarini unutmang</h2>
+<h2 id="o-lchov-birliklarini-unutmang">O'lchov birliklarini unutmang</h2>
 <p>JavaScript'da CSS uslub qiymatlarini o'rnatishda o'lchov <strong>birliklarini</strong> qo'shishni unutmaslik kerak. Masalan, <code>elem.style.top</code>ga <code>'10'</code> berish ishlamaydi — <code>'10px'</code> deyish kerak, aks holda qiymat e'tiborga olinmaydi:</p>
 <pre class="code"><code>let elem = document.getElementById('elem');
 
@@ -666,7 +683,7 @@ elem.style.top = 10;    // ISHLAMAYDI! (birlik yo'q)
 elem.style.top = '10px'; // to'g'ri
 elem.style.margin = '20px'; // to'g'ri</code></pre>
 <div class="warn">Bu juda ko'p uchraydigan xato. Brauzer noto'g'ri qiymatni jimgina e'tiborsiz qoldiradi, shuning uchun xato darrov ko'rinmasligi mumkin. Har doim birlik (<code>px</code>, <code>%</code>, <code>em</code> va h.k.) qo'shing.</div>
-<h2>getComputedStyle bilan hisoblangan uslublarni o'qish</h2>
+<h2 id="getcomputedstyle-bilan-hisoblangan-uslublarni-o-qish">getComputedStyle bilan hisoblangan uslublarni o'qish</h2>
 <p><code>style</code> faqat <strong>inline</strong> uslublar bilan ishlaydi. U CSS klasslaridan kelgan uslublarni ko'rmaydi:</p>
 <pre class="code"><code>&lt;style&gt; body { color: red; } &lt;/style&gt;
 &lt;script&gt;
@@ -687,7 +704,7 @@ elem.style.margin = '20px'; // to'g'ri</code></pre>
 <div class="warn"><code>getComputedStyle</code>ga <strong>to'liq</strong> (aniq) xususiyat nomi kerak: <code>paddingLeft</code>, <code>marginTop</code>, <code>borderTopWidth</code> kabi. Qisqartma xususiyatlar (masalan, faqat <code>padding</code> yoki <code>margin</code>) turli brauzerlarda noaniq natija berishi mumkin — ulardan qochish tavsiya etiladi.</div>
 <div class="note"><code>getComputedStyle</code> qaytargan qiymatlar <strong>faqat o'qish</strong> uchundir — ularni o'zgartirib bo'lmaydi. Element uslubini o'zgartirish uchun <code>elem.style</code> yoki klasslar ishlatiladi.</div>
 <div class="note"><code>:visited</code> psevdo-klassidan olingan uslublar (masalan, tashrif buyurilgan havolaning rangi) <code>getComputedStyle</code> orqali <strong>yashiriladi</strong> — bu maxfiylik (privacy) himoyasidir, foydalanuvchi qaysi saytlarga kirganini JavaScript aniqlay olmasin uchun.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Klasslarni boshqarish:</p>
 <ul><li><code>className</code> — butun klass qatori (string sifatida);</li><li><code>classList</code> — bitta klass bilan ishlash: <code>add</code>, <code>remove</code>, <code>toggle</code>, <code>contains</code>; u iterable.</li></ul>
 <p>Uslublarni boshqarish:</p>
@@ -705,6 +722,6 @@ elem.style.margin = '20px'; // to'g'ri</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

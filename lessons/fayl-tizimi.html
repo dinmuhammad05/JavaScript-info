@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fayl tizimi va navigatsiya — Kodla</title>
   <meta name="description" content="Linux fayl tizimi tuzilishi (/, /home, /etc), pwd, ls flaglari bilan, cd, mkdir, rmdir; mutlaq va nisbiy yo'llar; ~, . va .. belgilari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,19 +599,33 @@
 <main class="content article">
 <div class="crumbs">Linux va terminal</div>
 <h1>Fayl tizimi va navigatsiya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#linux-fayl-tizimi-tuzilishi">Linux fayl tizimi tuzilishi</a></li>
+<li class="lvl2"><a href="#pwd-joriy-joyni-aniqlash">pwd — joriy joyni aniqlash</a></li>
+<li class="lvl2"><a href="#ls-papka-mazmunini-ko-rish">ls — papka mazmunini ko'rish</a></li>
+<li class="lvl2"><a href="#cd-papkalar-orasida-yurish">cd — papkalar orasida yurish</a></li>
+<li class="lvl2"><a href="#mutlaq-va-nisbiy-yo-llar">Mutlaq va nisbiy yo'llar</a></li>
+<li class="lvl2"><a href="#maxsus-belgilar">Maxsus belgilar: ~ . ..</a></li>
+<li class="lvl2"><a href="#mkdir-papka-yaratish">mkdir — papka yaratish</a></li>
+<li class="lvl2"><a href="#rmdir-bo-sh-papkani-o-chirish">rmdir — bo'sh papkani o'chirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Terminalda ishlashning birinchi ko'nikmasi — <strong>navigatsiya</strong>, ya'ni papkalar orasida yurish va nima qayerda joylashganini bilish. Bu darsda Linux fayl tizimining tuzilishini, joriy joyni aniqlash, papkalarni ko'rish, ular ichiga kirish va yangi papka yaratishni o'rganamiz.</p>
-<h2>Linux fayl tizimi tuzilishi</h2>
+<h2 id="linux-fayl-tizimi-tuzilishi">Linux fayl tizimi tuzilishi</h2>
 <p>Windowsda disklar <code>C:</code>, <code>D:</code> kabi harflar bilan ajratiladi. Linuxda esa <strong>bitta</strong> daraxt bor: eng tepada <code>/</code> (root, ildiz) turadi, qolgan hamma narsa uning ichiga joylashadi. Barcha disklar, papkalar, hatto USB fleshka ham shu yagona daraxtga "ulanadi".</p>
 <p>Ildizdagi asosiy papkalar va ularning vazifasi:</p>
 <ul><li><code>/</code> — ildiz (root), butun tizimning boshi;</li><li><code>/home</code> — foydalanuvchilar papkalari; masalan <code>/home/aziz</code> — Azizning shaxsiy papkasi;</li><li><code>/root</code> — bosh administrator (root) foydalanuvchining uy papkasi;</li><li><code>/etc</code> — tizim va dasturlar sozlamalari (konfiguratsiya fayllari);</li><li><code>/bin</code> va <code>/usr/bin</code> — bajariladigan dasturlar (buyruqlar shu yerda yashaydi);</li><li><code>/var</code> — o'zgaruvchan ma'lumot: log'lar (<code>/var/log</code>), bazalar, kesh;</li><li><code>/tmp</code> — vaqtinchalik fayllar, qayta yuklanganda tozalanadi;</li><li><code>/opt</code> — qo'shimcha (ixtiyoriy) dasturlar;</li><li><code>/dev</code> — qurilmalar (disk, terminal, klaviatura) fayl ko'rinishida;</li><li><code>/mnt</code> va <code>/media</code> — tashqi disklar va fleshkalar ulanadigan joy.</li></ul>
 <div class="note">Linuxda "hamma narsa — fayl" degan falsafa bor. Nafaqat hujjatlar, balki qurilmalar, jarayonlar va hatto tarmoq ulanishlari ham fayl kabi ko'rinishi mumkin. Bu tizimni juda mustahkam va yaxlit qiladi.</div>
-<h2>pwd — joriy joyni aniqlash</h2>
+<h2 id="pwd-joriy-joyni-aniqlash">pwd — joriy joyni aniqlash</h2>
 <p>Terminalda har doim biror papka "ichida" turasiz — bu <strong>joriy ish papkasi</strong> (current working directory). Qayerda ekaningizni bilish uchun <code>pwd</code> (print working directory) buyrug'ini tering:</p>
 <pre class="code"><code>pwd</code></pre>
 <p>Natija sifatida to'liq yo'l chiqadi, masalan:</p>
 <pre class="code"><code>/home/aziz/loyihalar</code></pre>
 <p>Bu — siz hozir <code>loyihalar</code> papkasida turganingizni bildiradi, u esa <code>aziz</code> ichida, u ham <code>home</code> ichida, u esa ildizda.</p>
-<h2>ls — papka mazmunini ko'rish</h2>
+<h2 id="ls-papka-mazmunini-ko-rish">ls — papka mazmunini ko'rish</h2>
 <p><code>ls</code> (list) buyrug'i joriy papkadagi fayl va papkalar ro'yxatini chiqaradi:</p>
 <pre class="code"><code>ls</code></pre>
 <p>Bu qisqacha ro'yxatni beradi. Lekin <code>ls</code> ning <strong>flaglari</strong> (qo'shimcha sozlamalari) bilan ko'proq ma'lumot olish mumkin. Flaglar buyruqdan keyin <code>-</code> bilan yoziladi:</p>
@@ -623,7 +640,7 @@ drwxr-xr-x 2 aziz aziz 4096 Jun 28 09:15 rasmlar</code></pre>
 <pre class="code"><code>ls -lah</code></pre>
 <p>Bu — batafsil (<code>l</code>) + yashirin fayllar bilan (<code>a</code>) + o'qishga qulay hajmda (<code>h</code>). Amalda deyarli har doim shu ko'rinishda ishlatiladi.</p>
 <div class="tip">Buyruq oxiriga papka nomini qo'shsangiz, o'sha papkaning ichini ko'rasiz — kirmasdan turib: <code>ls -l /etc</code>. Bu <code>/etc</code> papkasi mazmunini ko'rsatadi, lekin joriy joyingiz o'zgarmaydi.</div>
-<h2>cd — papkalar orasida yurish</h2>
+<h2 id="cd-papkalar-orasida-yurish">cd — papkalar orasida yurish</h2>
 <p><code>cd</code> (change directory) buyrug'i joriy papkani o'zgartiradi. Papka nomini yozib, ichiga kirasiz:</p>
 <pre class="code"><code>cd loyihalar</code></pre>
 <p>Bu "loyihalar" papkasiga kiradi. Bir necha muhim maxsus shakllari bor:</p>
@@ -631,20 +648,20 @@ drwxr-xr-x 2 aziz aziz 4096 Jun 28 09:15 rasmlar</code></pre>
 <p>Bir necha papkani ketma-ket o'tish uchun yo'lni <code>/</code> bilan yozasiz:</p>
 <pre class="code"><code>cd loyihalar/veb-sayt/src</code></pre>
 <div class="note">Papka yoki fayl nomini to'liq yozmang — bir-ikki harfini yozib <strong>Tab</strong> tugmasini bosing, shell qolganini avtomatik to'ldiradi. Bu <em>avto-to'ldirish</em> (autocomplete) — terminalda tezlikning kaliti. Agar bir necha mos variant bo'lsa, Tabni ikki marta bosing — hammasi ro'yxat bo'lib chiqadi.</div>
-<h2>Mutlaq va nisbiy yo'llar</h2>
+<h2 id="mutlaq-va-nisbiy-yo-llar">Mutlaq va nisbiy yo'llar</h2>
 <p>Yo'l (path) ikki xil bo'ladi:</p>
 <ul><li><strong>Mutlaq yo'l</strong> (absolute) — ildizdan (<code>/</code>) boshlanadi, to'liq manzil. Masalan: <code>/home/aziz/loyihalar</code>. U qayerda turishingizdan qat'i nazar bir xil ishlaydi;</li><li><strong>Nisbiy yo'l</strong> (relative) — <code>/</code>siz boshlanadi, <em>joriy papkaga</em> nisbatan hisoblanadi. Masalan, <code>loyihalar/src</code> — joriy papkadagi "loyihalar" ichidagi "src".</li></ul>
 <p>Misol bilan tushunaylik. Aytaylik, siz <code>/home/aziz</code> da turibsiz:</p>
 <pre class="code"><code>cd /home/aziz/loyihalar    # mutlaq yo'l
 cd loyihalar               # nisbiy yo'l (natija bir xil)</code></pre>
 <p>Ikkalasi ham bir xil joyga olib boradi, chunki joriy papka <code>/home/aziz</code> edi.</p>
-<h2>Maxsus belgilar: ~ . ..</h2>
+<h2 id="maxsus-belgilar">Maxsus belgilar: ~ . ..</h2>
 <p>Yo'llarda uch qisqartma juda tez-tez ishlatiladi:</p>
 <ul><li><code>~</code> (tilda) — <strong>uy papkangiz</strong>, ya'ni <code>/home/aziz</code>. Masalan, <code>cd ~/loyihalar</code> = <code>cd /home/aziz/loyihalar</code>;</li><li><code>.</code> (bitta nuqta) — <strong>joriy papka</strong>. Masalan, <code>./skript.sh</code> — shu papkadagi skriptni ishga tushirish;</li><li><code>..</code> (ikki nuqta) — <strong>ota-papka</strong> (bitta yuqori). <code>cd ..</code> yuqoriga chiqaradi, <code>cd ../..</code> ikki pog'ona yuqoriga.</li></ul>
 <pre class="code"><code>cd ~/loyihalar     # uy papkasidagi loyihalar
 cd ../boshqa       # yuqoriga chiqib, boshqa papkaga kirish
 ls ..              # ota-papka mazmunini ko'rish (o'zi kirmasdan)</code></pre>
-<h2>mkdir — papka yaratish</h2>
+<h2 id="mkdir-papka-yaratish">mkdir — papka yaratish</h2>
 <p><code>mkdir</code> (make directory) yangi papka yaratadi:</p>
 <pre class="code"><code>mkdir yangi-loyiha</code></pre>
 <p>Bir vaqtning o'zida bir necha papka yaratish ham mumkin:</p>
@@ -652,12 +669,12 @@ ls ..              # ota-papka mazmunini ko'rish (o'zi kirmasdan)</code></pre>
 <p>Agar ichma-ich (bir vaqtning o'zida ota va bola) papkalar yaratmoqchi bo'lsangiz, <code>-p</code> (parents) flagini ishlating:</p>
 <pre class="code"><code>mkdir -p loyiha/src/komponentlar</code></pre>
 <p>Bu "loyiha" bo'lmasa ham, uni va ichidagi barcha papkalarni bir yo'la yaratadi. <code>-p</code> siz esa "ota-papka topilmadi" xatosi chiqardi.</p>
-<h2>rmdir — bo'sh papkani o'chirish</h2>
+<h2 id="rmdir-bo-sh-papkani-o-chirish">rmdir — bo'sh papkani o'chirish</h2>
 <p><code>rmdir</code> (remove directory) papkani o'chiradi, lekin faqat u <strong>bo'sh</strong> bo'lsa:</p>
 <pre class="code"><code>rmdir eski-papka</code></pre>
 <p>Agar papka ichida fayl yoki boshqa papka bo'lsa, <code>rmdir</code> "papka bo'sh emas" degan xatolik beradi va o'chirmaydi.</p>
 <div class="warn">Ichida fayllari bor papkani o'chirish uchun <code>rm -r</code> ishlatiladi, lekin u juda xavfli — hamma narsani so'roqsiz o'chiradi. Buni keyingi darsda ehtiyotkorlik bilan o'rganamiz. Hozircha bo'sh papkalar uchun <code>rmdir</code> — xavfsiz tanlov.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Linuxda yagona daraxt bor, ildizi — <code>/</code>; muhim papkalar: <code>/home</code>, <code>/etc</code>, <code>/var</code>, <code>/tmp</code>;</li><li><code>pwd</code> — qayerda turganingizni ko'rsatadi;</li><li><code>ls -lah</code> — papka mazmunini batafsil, yashirin fayllar bilan, qulay hajmda ko'rsatadi;</li><li><code>cd</code> — papkalar orasida yuradi; <code>cd ..</code> yuqoriga, <code>cd ~</code> uyga, <code>cd -</code> orqaga;</li><li><strong>Mutlaq yo'l</strong> <code>/</code>dan boshlanadi, <strong>nisbiy yo'l</strong> joriy papkaga nisbatan;</li><li><code>~</code> — uy papkasi, <code>.</code> — joriy, <code>..</code> — ota-papka;</li><li><code>mkdir -p</code> — ichma-ich papka yaratadi, <code>rmdir</code> — faqat bo'sh papkani o'chiradi;</li><li><strong>Tab</strong> tugmasi bilan nomlarni avtomatik to'ldiring.</li></ul>
 <nav class="lesson-nav">
   <a href="linux-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Linux va terminal nima?</span></a>
@@ -671,6 +688,6 @@ ls ..              # ota-papka mazmunini ko'rish (o'zi kirmasdan)</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

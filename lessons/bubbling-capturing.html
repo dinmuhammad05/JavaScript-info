@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ko'tarilish va tutish (bubbling va capturing) — Kodla</title>
   <meta name="description" content="Bubbling tamoyili, event.target va currentTarget farqi, stopPropagation va stopImmediatePropagation, capturing fazasi va hodisaning uch fazasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Hodisalarga kirish</div>
 <h1>Ko'tarilish va tutish (bubbling va capturing)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#bubbling-tamoyili">Bubbling tamoyili</a></li>
+<li class="lvl2"><a href="#event-target-asl-manba">event.target — asl manba</a></li>
+<li class="lvl2"><a href="#ko-tarilishni-to-xtatish-stoppropagation">Ko'tarilishni to'xtatish: stopPropagation</a></li>
+<li class="lvl3"><a href="#stoppropagation-va-stopimmediatepropagation-farqi">stopPropagation va stopImmediatePropagation farqi</a></li>
+<li class="lvl2"><a href="#capturing-tutish-fazasi">Capturing (tutish) fazasi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Hodisalar tarqalishini (propagation) tushunmasdan haqiqiy hodisalar bilan ishlab bo'lmaydi. Bu darsda hodisaning uch fazasini, ayniqsa eng muhim <strong>bubbling</strong> (ko'tarilish) tamoyilini chuqur o'rganamiz.</p>
-<h2>Bubbling tamoyili</h2>
+<h2 id="bubbling-tamoyili">Bubbling tamoyili</h2>
 <p>Bubbling tamoyili sodda: <strong>elementda hodisa sodir bo'lganda, avval o'sha elementning ishlovchilari, keyin uning ota-elementiniki, so'ng eng yuqorigacha barcha ota-elementlarniki ishga tushadi.</strong></p>
 <p>Quyidagicha uch ichma-ich element bor deylik: <code>FORM &gt; DIV &gt; P</code>. Har biriga ishlovchi biriktirilgan:</p>
 <pre class="code"><code>&lt;style&gt;
@@ -613,7 +627,7 @@
 <ol><li>avval <code>&lt;p&gt;</code>dagi <code>onclick</code>: <code>alert('p')</code>;</li><li>keyin tashqaridagi <code>&lt;div&gt;</code>dagi: <code>alert('div')</code>;</li><li>so'ng eng tashqaridagi <code>&lt;form&gt;</code>dagi: <code>alert('form')</code>.</li></ol>
 <p>Hodisa ichki elementdan boshlanib, tepaga — ota-elementlar bo'ylab "ko'tariladi" — huddi suvdagi havo pufakchasi yuqoriga ko'tarilgandek. Shu sababdan bu jarayon <strong>bubbling</strong> (ko'tarilish, ba'zan "pufaklanish") deb ataladi.</p>
 <div class="note">Ko'p hodisalar ko'tariladi, lekin hammasi emas. Masalan, <code>focus</code> hodisasi ko'tarilmaydi. Bunday istisnolar kam va biz ularni maxsus holatlarda ko'ramiz. Umumiy qoida: <strong>deyarli barcha hodisalar ko'tariladi.</strong></div>
-<h2>event.target — asl manba</h2>
+<h2 id="event-target-asl-manba">event.target — asl manba</h2>
 <p>Ko'tarilishda muhim savol: <strong>hodisa aslida qaysi elementda boshlangan?</strong> Bunga <code>event.target</code> javob beradi — bu hodisani boshlagan, eng ichkaridagi (chuqurdagi) element.</p>
 <p>Buni <code>this</code> (yoki <code>event.currentTarget</code>) bilan solishtiring:</p>
 <ul><li><code>event.target</code> — hodisa <strong>boshlangan</strong> asl element. Ko'tarilish davomida u <strong>o'zgarmaydi</strong>;</li><li><code>this</code> = <code>event.currentTarget</code> — <strong>hozir</strong> ishlov berayotgan element (ishlovchi biriktirilgan element). Ko'tarilish har bir ota-elementga o'tganda bu <strong>o'zgaradi</strong>.</li></ul>
@@ -627,14 +641,14 @@
 };</code></pre>
 <p>Agar <code>&lt;p&gt;</code>ga bossak: <code>event.target</code> — <code>P</code> bo'ladi, lekin <code>this</code> (currentTarget) doim <code>FORM</code> bo'ladi. Agar to'g'ridan-to'g'ri formaning bo'sh joyiga bossak, u holda <code>event.target === this</code> (ikkovi ham <code>FORM</code>).</p>
 <div class="tip">Bu ikki xossaning farqi hodisa delegatsiyasi (keyingi dars) uchun juda muhim: <code>this</code> orqali ishlovchi joyi, <code>event.target</code> orqali esa aynan qayerda voqea yuz berganini bilamiz.</div>
-<h2>Ko'tarilishni to'xtatish: stopPropagation</h2>
+<h2 id="ko-tarilishni-to-xtatish-stoppropagation">Ko'tarilishni to'xtatish: stopPropagation</h2>
 <p>Ko'tarilish eng tepaga — <code>&lt;html&gt;</code>, so'ng <code>document</code> obyektiga, ba'zan hatto <code>window</code>gacha davom etadi: har bir ishlovchi navbat bilan ishga tushadi.</p>
 <p>Ammo istalgan ishlovchi "hodisa to'liq qayta ishlandi" deb qaror qilib, ko'tarilishni <strong>to'xtata oladi</strong>. Buning uchun <code>event.stopPropagation()</code> metodi ishlatiladi:</p>
 <pre class="code"><code>&lt;body onclick="alert('Bu ishlamaydi.')"&gt;
   &lt;button onclick="event.stopPropagation()"&gt;Meni bosing&lt;/button&gt;
 &lt;/body&gt;</code></pre>
 <p>Endi tugma bosilsa, <code>&lt;body&gt;</code>dagi <code>onclick</code> ishlamaydi, chunki ko'tarilish tugma darajasida to'xtatildi.</p>
-<h3>stopPropagation va stopImmediatePropagation farqi</h3>
+<h3 id="stoppropagation-va-stopimmediatepropagation-farqi">stopPropagation va stopImmediatePropagation farqi</h3>
 <p><code>event.stopPropagation()</code> yuqoriga ko'tarilishni to'xtatadi, <strong>lekin joriy elementdagi boshqa ishlovchilarni to'xtatmaydi.</strong> Agar bir elementda bir nechta ishlovchi bo'lsa, ular baribir ishlaydi.</p>
 <p>Joriy elementdagi <strong>qolgan barcha ishlovchilarni ham</strong> to'xtatish va ko'tarilishni ham bekor qilish uchun <code>event.stopImmediatePropagation()</code> ishlatiladi:</p>
 <pre class="code"><code>elem.addEventListener('click', (e) =&gt; {
@@ -647,7 +661,7 @@ elem.addEventListener('click', () =&gt; {
   alert('Ikkinchi ishlovchi');
 });</code></pre>
 <div class="warn">Ko'tarilishni asossiz to'xtatmang! <code>stopPropagation</code> "o'lik zonalar" (dead zone) yaratishi mumkin. Masalan, sahifadagi barcha kliklarni hisoblaydigan analitika tizimi hujjat darajasida <code>click</code>ni tinglaydi. Agar biror element ko'tarilishni to'xtatib qo'ysa, o'sha element ustidagi kliklar analitikaga tushmaydi — natijada "o'lik" hisoblanmaydigan joylar paydo bo'ladi. Odatda ko'tarilishni to'xtatishga real ehtiyoj yo'q; agar ehtiyoj bo'lsa, muqobil yechim (masalan, maxsus hodisa yoki <code>event</code>ga qo'shimcha belgi qo'yish) yaxshiroq bo'lishi mumkin.</div>
-<h2>Capturing (tutish) fazasi</h2>
+<h2 id="capturing-tutish-fazasi">Capturing (tutish) fazasi</h2>
 <p>Bubbling — hodisalar tarqalishining bir qismi. Aslida standart hodisa tarqalishining <strong>uch fazasi</strong> bor:</p>
 <ol><li><strong>Capturing (tutish) fazasi</strong> — hodisa yuqoridan (<code>window</code>dan) pastga, elementga qadar tushadi;</li><li><strong>Target (nishon) fazasi</strong> — hodisa asl elementga (target) yetib keladi;</li><li><strong>Bubbling (ko'tarilish) fazasi</strong> — hodisa elementdan yuqoriga qaytadi.</li></ol>
 <p>Ya'ni <code>&lt;td&gt;</code>ga bosilsa, hodisa avval yuqoridan (<code>&lt;html&gt; &gt; &lt;body&gt; &gt; &lt;table&gt; &gt; ...</code>) elementgacha "tushadi" (capturing), so'ng elementga yetib, keyin yana yuqoriga "ko'tariladi" (bubbling), yo'lda ishlovchilarni ishga tushiradi.</p>
@@ -666,7 +680,7 @@ elem.addEventListener('click', handler, { capture: true });</code></pre>
 <p>Eng ichki elementga bosilsa, avval barcha ota-elementlar <em>tepadan pastga</em> capturing ishlovchilarini ishga tushiradi, so'ng elementga yetib, keyin <em>pastdan tepaga</em> bubbling ishlovchilari ishlaydi.</p>
 <div class="note"><code>event.eventPhase</code> xossasi hodisa qaysi fazada ekanligini bildiradi: 1 — capturing, 2 — target, 3 — bubbling. Amalda kamdan-kam ishlatiladi, chunki odatda fazani ishlovchini biriktirish paytida bilamiz.</div>
 <div class="warn">Ishlovchini olib tashlashda (<code>removeEventListener</code>) <code>capture</code> qiymati ham <strong>mos kelishi</strong> kerak. Ya'ni <code>addEventListener('click', h, true)</code> bilan qo'yilgan ishlovchi <code>removeEventListener('click', h, true)</code> bilan olinadi — <code>true</code>ni tushirib qoldirsangiz, boshqa ishlovchi olib tashlanadi (yoki hech narsa).</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Elementda hodisa sodir bo'lsa, ishlovchilar avval o'sha elementda, keyin ota-elementlarda tepaga qarab ishlaydi — bu <strong>bubbling</strong> (ko'tarilish);</li><li>Hodisa tarqalishining uch fazasi bor: <strong>capturing</strong> (tepadan pastga) &rarr; <strong>target</strong> (nishon) &rarr; <strong>bubbling</strong> (pastdan tepaga);</li><li><code>event.target</code> — hodisa <strong>boshlangan</strong> asl (eng chuqur) element, ko'tarilishda o'zgarmaydi;</li><li><code>event.currentTarget</code> (= <code>this</code>) — <strong>hozir</strong> ishlov berayotgan element;</li><li><code>event.stopPropagation()</code> — yuqoriga ko'tarilishni to'xtatadi (joriy elementdagi boshqa ishlovchilar baribir ishlaydi);</li><li><code>event.stopImmediatePropagation()</code> — ko'tarilishni ham, joriy elementdagi qolgan ishlovchilarni ham to'xtatadi;</li><li>Capturing fazasida tinglash uchun: <code>addEventListener(event, handler, true)</code> yoki <code>{ capture: true }</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="hodisalar-kirish.html"><span class="dir">← Oldingi</span><span class="ttl">Brauzer hodisalariga kirish</span></a>
@@ -680,6 +694,6 @@ elem.addEventListener('click', handler, { capture: true });</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

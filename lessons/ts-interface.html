@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interfeys va tip aliaslari — Kodla</title>
   <meta name="description" content="interface bilan obyekt shaklini tavsiflash, type alias, ixtiyoriy va readonly xossalar, union va intersection, interface vs type.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">TypeScript</div>
 <h1>Interfeys va tip aliaslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#interface-obyekt-shaklini-tavsiflash">interface — obyekt shaklini tavsiflash</a></li>
+<li class="lvl2"><a href="#type-alias-tur-uchun-taxallus">type alias — tur uchun taxallus</a></li>
+<li class="lvl2"><a href="#ixtiyoriy-xossalar">Ixtiyoriy xossalar (?)</a></li>
+<li class="lvl2"><a href="#readonly-xossalar">readonly xossalar</a></li>
+<li class="lvl2"><a href="#union-turlar">Union turlar (|)</a></li>
+<li class="lvl2"><a href="#intersection-turlar">Intersection turlar (&amp;)</a></li>
+<li class="lvl2"><a href="#interface-va-type-farqi-qanday">interface va type: farqi qanday?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Haqiqiy dasturlarda biz ko'pincha oddiy sonlar yoki matnlar emas, balki murakkab <strong>obyektlar</strong> bilan ishlaymiz — foydalanuvchi, buyurtma, mahsulot. TypeScript bunday obyektlarning "shaklini" tavsiflash uchun ikkita asosiy vosita beradi: <strong>interface</strong> (interfeys) va <strong>type alias</strong> (tip aliasi). Ushbu darsda ularni chuqur o'rganamiz.</p>
-<h2>interface — obyekt shaklini tavsiflash</h2>
+<h2 id="interface-obyekt-shaklini-tavsiflash">interface — obyekt shaklini tavsiflash</h2>
 <p><strong>Interfeys</strong> — obyekt qanday xossalarga va qanday turlarga ega bo'lishi kerakligini tavsiflaydigan "shartnoma". Uni <code>interface</code> kalit so'zi bilan e'lon qilamiz:</p>
 <pre class="code"><code>interface Foydalanuvchi {
   ism: string;
@@ -618,7 +634,7 @@
 // Xato: Property 'faol' is missing in type
 // '{ ism: string; yosh: number; }' but required in type 'Foydalanuvchi'.</code></pre>
 <div class="note">Interfeys nomlarini odatda katta harf bilan boshlaymiz (masalan <code>Foydalanuvchi</code>, <code>Mahsulot</code>). Bu — kelishuv (konvensiya), majburiy emas, lekin kodni o'qishni osonlashtiradi.</div>
-<h2>type alias — tur uchun taxallus</h2>
+<h2 id="type-alias-tur-uchun-taxallus">type alias — tur uchun taxallus</h2>
 <p><strong>Tip alias</strong> (type alias) — bu istalgan turga <em>nom berish</em> usuli. Uni <code>type</code> kalit so'zi bilan yaratamiz. Obyekt shakli uchun u interfeysga juda o'xshaydi:</p>
 <pre class="code"><code>type Foydalanuvchi = {
   ism: string;
@@ -637,7 +653,7 @@ type Ism = string;
 type Koordinata = [number, number];
 type Holat = "tayyor" | "kutilyapti";</code></pre>
 <div class="tip">Interfeys faqat obyekt shakllari uchun ishlatiladi. <code>type</code> esa ancha keng — u har qanday turga (union, kortej, ibtidoiy) nom bera oladi.</div>
-<h2>Ixtiyoriy xossalar (?)</h2>
+<h2 id="ixtiyoriy-xossalar">Ixtiyoriy xossalar (?)</h2>
 <p>Ba'zi xossalar majburiy bo'lmasligi mumkin. Bunday xossa nomidan keyin <strong>savol belgisi</strong> <code>?</code> qo'yamiz. Bu "bu xossa bo'lishi ham, bo'lmasligi ham mumkin" degani:</p>
 <pre class="code"><code>interface Foydalanuvchi {
   ism: string;
@@ -658,7 +674,7 @@ let u2: Foydalanuvchi = { ism: "Vali", yosh: 30, email: "vali@mail.uz" };</code>
     console.log("Email yo'q");
   }
 }</code></pre>
-<h2>readonly xossalar</h2>
+<h2 id="readonly-xossalar">readonly xossalar</h2>
 <p>Ba'zi xossalarni yaratilgandan keyin <em>o'zgartirib bo'lmasligi</em> kerak. Bunday xossa oldiga <code>readonly</code> yozamiz. Bu JavaScript'dagi <code>const</code>ning obyekt xossalari uchun o'xshashi:</p>
 <pre class="code"><code>interface Foydalanuvchi {
   readonly id: number;
@@ -671,7 +687,7 @@ user.ism = "Vali"; // OK
 user.id = 2;
 // Xato: Cannot assign to 'id' because it is a read-only property.</code></pre>
 <div class="note"><code>readonly</code> faqat kompilyatsiya paytida ishlaydi. Tayyor JavaScript'da bunday cheklov qolmaydi — bu shunchaki dasturchi uchun xavfsizlik qatlami.</div>
-<h2>Union turlar (|)</h2>
+<h2 id="union-turlar">Union turlar (|)</h2>
 <p><strong>Union</strong> (birlashma) tur — bu "bir nechta turdan biri" degani. Turlar orasiga <strong>vertikal chiziq</strong> <code>|</code> qo'yamiz. Bu "yoki" ma'nosini beradi:</p>
 <pre class="code"><code>let qiymat: string | number;
 qiymat = "matn"; // OK
@@ -687,7 +703,7 @@ qiymat = true;    // Xato: boolean ruxsat etilmagan</code></pre>
     console.log(id.toFixed(2));
   }
 }</code></pre>
-<h2>Intersection turlar (&)</h2>
+<h2 id="intersection-turlar">Intersection turlar (&)</h2>
 <p><strong>Intersection</strong> (kesishma) tur — union'ning aksi. U bir nechta turni <em>birlashtirib</em>, hammasini birdaniga talab qiladi. Bunda <strong>ampersand</strong> <code>&</code> ishlatiladi:</p>
 <pre class="code"><code>interface Ism {
   ism: string;
@@ -707,7 +723,7 @@ let odam: Odam = {
 // ikkala xossa ham majburiy</code></pre>
 <p>Ya'ni <code>Ism &amp; Yosh</code> — bu <code>ism</code> <em>va</em> <code>yosh</code> xossalariga ega bo'lgan obyekt. Union "yoki" bo'lsa, intersection "va" degani.</p>
 <div class="tip">Eslab qolish uchun: <code>|</code> (union) — "yo bu, yo u"; <code>&amp;</code> (intersection) — "ham bu, ham u".</div>
-<h2>interface va type: farqi qanday?</h2>
+<h2 id="interface-va-type-farqi-qanday">interface va type: farqi qanday?</h2>
 <p>Ikkalasi ham obyekt shaklini tavsiflay oladi, shuning uchun ko'pincha almashtirsa bo'ladi. Lekin bir nechta muhim farq bor:</p>
 <ul><li><strong>Kengayish (extends):</strong> interfeyslar <code>extends</code> orqali meros oladi; <code>type</code> esa intersection (<code>&amp;</code>) bilan birlashtiriladi;</li><li><strong>Deklaratsiya birlashuvi:</strong> bir nomdagi interfeysni bir necha marta e'lon qilsangiz, ular <em>birlashadi</em>. <code>type</code>da bunday emas — takror e'lon qilish xato beradi;</li><li><strong>Kenglik:</strong> <code>type</code> union, kortej, ibtidoiy turlarga ham nom bera oladi; interface faqat obyekt shakllari uchun.</li></ul>
 <p>Interfeysning <code>extends</code> orqali meros olishi:</p>
@@ -732,7 +748,7 @@ interface Oyna {
 // endi Oyna'da ikkala xossa bor:
 let o: Oyna = { eni: 100, bo'yi: 200 };</code></pre>
 <div class="note">Amaliy maslahat: obyekt shakllari uchun ko'pincha <code>interface</code> tavsiya etiladi (ayniqsa kutubxona/API tavsiflarida). Union, kortej yoki murakkab turlar uchun esa <code>type</code> ishlatiladi. Ko'p loyihalar shu qoidaga amal qiladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>interface</code> obyekt shaklini tavsiflaydi — qanday xossalar va turlar bo'lishini belgilaydi;</li><li><code>type</code> (alias) istalgan turga nom beradi — obyekt, union, kortej, ibtidoiy;</li><li><code>?</code> — ixtiyoriy xossa; <code>readonly</code> — o'zgartirib bo'lmaydigan xossa;</li><li><code>|</code> (union) — "turlardan biri"; <code>&amp;</code> (intersection) — "turlarning barchasi birga";</li><li>Union bilan ishlashda TypeScript turni tekshirishga (narrowing) undaydi;</li><li><code>interface</code> <code>extends</code> va deklaratsiya birlashuvini qo'llab-quvvatlaydi; <code>type</code> esa ancha keng qo'llaniladi.</li></ul>
 <nav class="lesson-nav">
   <a href="ts-turlar.html"><span class="dir">← Oldingi</span><span class="ttl">Asosiy turlar</span></a>
@@ -746,6 +762,6 @@ let o: Oyna = { eni: 100, bo'yi: 200 };</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

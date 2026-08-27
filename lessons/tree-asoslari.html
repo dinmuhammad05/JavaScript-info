@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daraxt (Tree) va ikkilik daraxt — Kodla</title>
   <meta name="description" content="Iyerarxik tuzilma, ildiz/tugun/barg atamalari, ikkilik daraxt (binary tree), balandlik va daraxtni kod bilan tasvirlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Daraxt va graf</div>
 <h1>Daraxt (Tree) va ikkilik daraxt</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#daraxt-nima-va-nega-u-shunday-nomlangan">Daraxt nima va nega u shunday nomlangan</a></li>
+<li class="lvl2"><a href="#asosiy-atamalar">Asosiy atamalar</a></li>
+<li class="lvl2"><a href="#chuqurlik-va-balandlik">Chuqurlik va balandlik</a></li>
+<li class="lvl2"><a href="#ikkilik-daraxt-binary-tree">Ikkilik daraxt (binary tree)</a></li>
+<li class="lvl2"><a href="#tugunni-kod-bilan-tasvirlash">Tugunni kod bilan tasvirlash</a></li>
+<li class="lvl3"><a href="#kichik-yordamchi-bola-qo-shish">Kichik yordamchi: bola qo'shish</a></li>
+<li class="lvl2"><a href="#daraxt-turlari">Daraxt turlari</a></li>
+<li class="lvl2"><a href="#daraxtlar-qayerda-ishlatiladi">Daraxtlar qayerda ishlatiladi</a></li>
+  </ul>
+</details>
 <p class="lead">Bu darsgacha biz asosan chiziqli tuzilmalar bilan ishladik: massiv, ro'yxat, stek, navbat. Ularda elementlar bir chiziq bo'ylab ketma-ket joylashadi. Endi biz butunlay boshqa dunyoga qadam qo'yamiz — <strong>iyerarxik</strong> tuzilmalar dunyosiga. <strong>Daraxt (tree)</strong> — bu ma'lumotni pog'ona-pog'ona, ustma-ust bog'lab saqlaydigan tuzilma. Bir marta tushunib olsangiz, uni atrofingizdan hamma joyda ko'ra boshlaysiz.</p>
-<h2>Daraxt nima va nega u shunday nomlangan</h2>
+<h2 id="daraxt-nima-va-nega-u-shunday-nomlangan">Daraxt nima va nega u shunday nomlangan</h2>
 <p>Daraxtni tasavvur qilish uchun uzoqqa borish shart emas. <strong>Oila daraxti</strong>ni eslang: eng yuqorida bobo-buvi, ulardan pastda ota-onalar, undan pastda farzandlar. Yoki kompyuteringizdagi <strong>papkalar tuzilmasi</strong>: bitta asosiy papka ichida boshqa papkalar, ular ichida yana papkalar va fayllar.</p>
 <p>Aynan shu — daraxt tuzilmasi. Bitta boshlang'ich nuqta bor, undan tarmoqlar chiqadi, har bir tarmoq yana bo'linadi. Qiziq tomoni: dasturchilar daraxtni odatda <em>teskari</em> chizishadi — ildiz tepada, barglar pastda. Xuddi daraxtni ag'darib qo'ygandek.</p>
 <p>Rasmini ko'z oldingizga keltiring. Quyida oddiy daraxtning ASCII sxemasi:</p>
@@ -607,10 +623,10 @@
      / \   \
     D   E   F      &lt;- barglar (leaves)</code></pre>
 <p>Bu yerda <code>A</code> — eng yuqoridagi tugun, <code>B</code> va <code>C</code> undan tarqaladi, <code>D</code>, <code>E</code>, <code>F</code> esa pastki uchlar — ulardan boshqa hech narsa chiqmaydi.</p>
-<h2>Asosiy atamalar</h2>
+<h2 id="asosiy-atamalar">Asosiy atamalar</h2>
 <p>Daraxt bilan ishlash uchun avval uning tilini o'rganishimiz kerak. Bu atamalar keyingi barcha darslarda takrorlanadi, shuning uchun ularni yaxshilab yodda tuting.</p>
 <ul><li><strong>Tugun (node)</strong> — daraxtdagi har bir element. Yuqoridagi sxemada <code>A</code>, <code>B</code>, <code>C</code> va boshqalar tugundir. Har bir tugun o'zida ma'lumot (qiymat) va bolalariga havolalarni saqlaydi.</li><li><strong>Ildiz (root)</strong> — eng yuqoridagi, ota-onasi yo'q yagona tugun. Daraxtda faqat bitta ildiz bo'ladi. Sxemada bu <code>A</code>.</li><li><strong>Bola (child)</strong> — bir tugundan pastda, unga bevosita bog'langan tugun. <code>B</code> va <code>C</code> — <code>A</code> ning bolalari.</li><li><strong>Ota-ona (parent)</strong> — bolaning tepasidagi tugun. <code>A</code> — <code>B</code> ning ota-onasi. Ildizdan tashqari har bir tugunning aynan bitta ota-onasi bor.</li><li><strong>Barg (leaf)</strong> — hech qanday bolasi bo'lmagan tugun. Sxemada <code>D</code>, <code>E</code>, <code>F</code> — barglar.</li><li><strong>Qirra (edge)</strong> — ikki tugunni bog'lovchi chiziq. Sxemadagi har bir <code>/</code> yoki <code>\</code> bitta qirra.</li><li><strong>Qism daraxt (subtree)</strong> — istalgan tugunni o'zini ildiz deb olsak, u va uning ostidagi hamma narsa — bitta qism daraxt hosil qiladi.</li><li><strong>Aka-uka (sibling)</strong> — bir xil ota-onaga ega tugunlar. <code>B</code> va <code>C</code> — aka-uka.</li></ul>
-<h2>Chuqurlik va balandlik</h2>
+<h2 id="chuqurlik-va-balandlik">Chuqurlik va balandlik</h2>
 <p>Ikki tushunchani ko'pincha adashtirishadi, shuning uchun ularni alohida ajratamiz.</p>
 <p><strong>Chuqurlik (depth)</strong> — bu berilgan tugundan ildizgacha bo'lgan qirralar soni. Ildizning chuqurligi 0. Uning bolalari 1-chuqurlikda, nevaralar 2-chuqurlikda va hokazo.</p>
 <p><strong>Balandlik (height)</strong> — bu berilgan tugundan pastdagi eng uzoq bargigacha bo'lgan qirralar soni. Bargning balandligi 0. Butun daraxtning balandligi — bu ildizning balandligi.</p>
@@ -620,7 +636,7 @@
      / \
     D   E     chuqurlik 2, balandlik 0</code></pre>
 <p>Balandlik juda muhim: keyingi darslarda ko'ramizki, ko'p amallarning tezligi aynan daraxt balandligiga bog'liq bo'ladi. Balandlik qancha kichik bo'lsa, daraxt shuncha samarali.</p>
-<h2>Ikkilik daraxt (binary tree)</h2>
+<h2 id="ikkilik-daraxt-binary-tree">Ikkilik daraxt (binary tree)</h2>
 <p>Umumiy daraxtda tugun istalgancha ko'p bolaga ega bo'lishi mumkin. Lekin amaliyotda eng ko'p ishlatiladigani — <strong>ikkilik daraxt (binary tree)</strong>. Uning yagona qoidasi juda sodda: <strong>har bir tugunda ko'pi bilan ikkita bola bo'ladi</strong>.</p>
 <p>Bu ikki bola maxsus nomlanadi: <strong>chap bola (left)</strong> va <strong>o'ng bola (right)</strong>. Tugunda bitta ham bola bo'lmasligi (barg), faqat chap yoki faqat o'ng bola bo'lishi, yoki ikkalasi ham bo'lishi mumkin. Lekin uchtasi hech qachon bo'lmaydi.</p>
 <p>Nega aynan ikkita? Chunki bu "chap yoki o'ng", "ha yoki yo'q", "kichik yoki katta" degan ikkilik tanlovni juda tabiiy ifodalaydi. Keyingi darsda buni qidiruv daraxtida amalda ko'ramiz.</p>
@@ -629,7 +645,7 @@
    5    15     - 5 da ikki bola (3 va 7)
   / \     \    - 15 da faqat o'ng bola (20)
  3   7     20  - 3, 7, 20 barglar</code></pre>
-<h2>Tugunni kod bilan tasvirlash</h2>
+<h2 id="tugunni-kod-bilan-tasvirlash">Tugunni kod bilan tasvirlash</h2>
 <p>Endi eng qiziq qismi: bu tuzilmani JavaScriptda qanday yaratamiz? Har bir tugun uchun bizga uchta narsa kerak: uning <strong>qiymati</strong>, <strong>chap bolasiga havola</strong> va <strong>o'ng bolasiga havola</strong>. Buni klass orqali ifodalaymiz.</p>
 <p>Bolasi yo'q bo'lsa, havola <code>null</code> bo'ladi — bu "bu yerda hech narsa yo'q" degani. Quyidagi kodda kichik daraxtni qo'lda yig'amiz va uni tekshiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tree-node.js</span></div><textarea spellcheck="false">class TreeNode {
@@ -653,7 +669,7 @@ console.log('Chap bola:', root.left.value);
 console.log('O'ng bola:', root.right.value);
 console.log('Chap bola bargmi?', root.left.left === null &amp;&amp; root.left.right === null);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rib turibsizmi — hech qanday sehr yo'q. Daraxt — bu shunchaki bir-biriga havola qilingan obyektlar to'plami. Har bir tugun o'z bolalarini "bilib turadi", va shu havolalar orqali biz butun tuzilma bo'ylab harakatlana olamiz.</p>
-<h3>Kichik yordamchi: bola qo'shish</h3>
+<h3 id="kichik-yordamchi-bola-qo-shish">Kichik yordamchi: bola qo'shish</h3>
 <p>Har safar <code>root.left = new TreeNode(...)</code> deb yozish zerikarli. Odatda daraxtga qiymat qo'shishni alohida usulga chiqarishadi. Quyida oddiy misol — hozircha faqat qo'lda joylashtiramiz, keyingi darsda esa "aqlli" qo'shishni ko'ramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>count-leaves.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(value) {
@@ -680,10 +696,10 @@ root.left.right = new TreeNode(7);
 
 console.log('Barglar soni:', countLeaves(root)); // 3, 15</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering — funksiya o'zini o'zi chaqiryapti (rekursiya). Bu daraxtlar bilan ishlashning asosiy usuli, chunki daraxtning har bir bolasi ham o'zi kichik daraxt. Qism daraxtlar butun daraxtga o'xshaydi, shuning uchun rekursiya juda tabiiy o'tiradi.</p>
-<h2>Daraxt turlari</h2>
+<h2 id="daraxt-turlari">Daraxt turlari</h2>
 <p>Daraxtlarning ko'p xillari bor. Hozircha faqat nomlari bilan tanishib chiqamiz — keyingi darslarda ba'zilarini chuqurroq o'rganamiz.</p>
 <ul><li><strong>Ikkilik daraxt (binary tree)</strong> — har tugunda ko'pi bilan 2 bola. Umumiy holat.</li><li><strong>Ikkilik qidiruv daraxti (BST)</strong> — tartiblangan ikkilik daraxt, chap < ildiz < o'ng. Keyingi dars aynan shu haqda.</li><li><strong>Muvozanatli daraxt (balanced tree)</strong> — chap va o'ng tomonlari balandligi bir-biridan deyarli farq qilmaydigan daraxt. Bu tezlikni kafolatlaydi.</li><li><strong>To'liq daraxt (complete tree)</strong> — barcha pog'onalar (oxirgisidan boshqa) to'la to'ldirilgan, oxirgi pog'ona chapdan to'ldiriladi.</li></ul>
-<h2>Daraxtlar qayerda ishlatiladi</h2>
+<h2 id="daraxtlar-qayerda-ishlatiladi">Daraxtlar qayerda ishlatiladi</h2>
 <p>Daraxt shunchaki nazariy o'yin emas — u zamonaviy dasturlarning tagida yotibdi. Mana bir nechta joy:</p>
 <ul><li><strong>Brauzerdagi DOM</strong> — veb-sahifadagi har bir HTML element daraxt tugunidir. <code>&lt;body&gt;</code> ichida <code>&lt;div&gt;</code>, uning ichida <code>&lt;p&gt;</code> — bu aniq daraxt tuzilmasi.</li><li><strong>Fayl tizimi</strong> — papkalar va fayllar. Ildiz papka, uning ichida boshqa papkalar va fayllar (barglar).</li><li><strong>Ma'lumotlar bazasi indekslari</strong> — bazalar ma'lumotni tez topish uchun maxsus daraxtlardan (masalan B-tree) foydalanadi.</li><li><strong>Manzillar (routing)</strong> va <strong>qaror daraxtlari (decision trees)</strong> — sun'iy intellektda ham keng qo'llaniladi.</li></ul>
 <div class="note">Bu dars — daraxtlar bilan tanishuv. Keyingi darslarda biz BST (ikkilik qidiruv daraxti) bilan tez qidirishni, so'ng daraxtni to'liq aylanib chiqishning (traversal) turli usullarini o'rganamiz. TreeNode klassini yaxshi tushunib oling — u hamma joyda kerak bo'ladi.</div>
@@ -700,6 +716,6 @@ console.log('Barglar soni:', countLeaves(root)); // 3, 15</textarea><div class="
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

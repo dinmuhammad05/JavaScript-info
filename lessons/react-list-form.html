@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ro'yxatlar va formalar — Kodla</title>
   <meta name="description" content="Massivni map bilan render qilish, key propi, shartli render (&& va ternar), controlled input (value + onChange) va oddiy TODO ilovasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">React</div>
 <h1>Ro'yxatlar va formalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#massivni-map-bilan-render-qilish">Massivni map bilan render qilish</a></li>
+<li class="lvl2"><a href="#key-propi-nega-u-kerak">key propi — nega u kerak?</a></li>
+<li class="lvl2"><a href="#shartli-render-operatori">Shartli render — &amp;&amp; operatori</a></li>
+<li class="lvl2"><a href="#shartli-render-ternar-operator">Shartli render — ternar operator</a></li>
+<li class="lvl2"><a href="#controlled-input-boshqariladigan-maydon">Controlled input — boshqariladigan maydon</a></li>
+<li class="lvl2"><a href="#to-liq-todo-ilovasi">To'liq TODO ilovasi</a></li>
+<li class="lvl2"><a href="#forma-va-onsubmit">Forma va onSubmit</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Real ilovalar ro'yxatlar (foydalanuvchilar, mahsulotlar, vazifalar) va formalar (matn kiritish, tanlash) bilan to'la. Ushbu yakuniy darsda massivni ekranga chiqarish, shartli ko'rsatish va formani boshqarishni o'rganib, kichik TODO ilovasini yig'amiz.</p>
-<h2>Massivni map bilan render qilish</h2>
+<h2 id="massivni-map-bilan-render-qilish">Massivni map bilan render qilish</h2>
 <p>React'da massivni ekranga chiqarish uchun JavaScript'ning <code>Array.map()</code> metodidan foydalanamiz. <code>map</code> har bir elementni JSX'ga aylantirib, JSX elementlari massivini qaytaradi. React esa bunday massivni avtomatik ravishda ketma-ket chizadi:</p>
 <pre class="code"><code>function Mevalar() {
   const mevalar = ["olma", "banan", "uzum"];
@@ -620,13 +636,13 @@
     &lt;/ul&gt;
   );
 }</code></pre>
-<h2>key propi — nega u kerak?</h2>
+<h2 id="key-propi-nega-u-kerak">key propi — nega u kerak?</h2>
 <p>Yuqoridagi kodni ishga tushirsangiz, React konsolda ogohlantirish beradi: <em>"Each child in a list should have a unique key prop"</em>. Har bir ro'yxat elementiga <strong>key</strong> nomli maxsus prop berish shart:</p>
 <pre class="code"><code>{users.map(u =&gt; &lt;li key={u.id}&gt;{u.ism}&lt;/li&gt;)}</code></pre>
 <p><strong>key</strong> — React'ga ro'yxatdagi har bir elementni <em>farqlash</em> imkonini beradigan noyob belgi. Nega u muhim? Ro'yxat o'zgarganda (element qo'shilsa, o'chirilsa, tartibi o'zgarsa), React <code>key</code> orqali qaysi element o'zgarganini aniq biladi va faqat shuni yangilaydi. Bu — samaradorlik uchun juda muhim.</p>
 <ul><li><code>key</code> ro'yxat ichida <strong>noyob</strong> bo'lishi kerak (odatda ma'lumotning <code>id</code>si);</li><li><code>key</code>ni <em>eng tashqi</em> qaytarilgan elementga qo'yamiz;</li><li><code>key</code> — bu React uchun ichki belgi; uni komponent ichida prop sifatida o'qib bo'lmaydi.</li></ul>
 <div class="warn">Massiv indeksini (<code>map((item, i) =&gt; ... key={i})</code>) key sifatida ishlatishdan iloji boricha qoching — ro'yxat tartibi o'zgarganda bu xatolarga olib keladi. Har doim barqaror, noyob <code>id</code>dan foydalaning.</div>
-<h2>Shartli render — && operatori</h2>
+<h2 id="shartli-render-operatori">Shartli render — && operatori</h2>
 <p>Ko'pincha biror elementni <em>faqat ma'lum shartda</em> ko'rsatishni istaymiz. JSX ichida <code>if</code> yozib bo'lmaydi, lekin <strong><code>&&</code></strong> (mantiqiy VA) operatoridan foydalanish mumkin. Uning ishlashi: agar chap tomon <code>true</code> bo'lsa, o'ng tomondagi JSX ko'rsatiladi:</p>
 <pre class="code"><code>function Xabar({ xabarlarSoni }) {
   return (
@@ -640,7 +656,7 @@
 }</code></pre>
 <p>Agar <code>xabarlarSoni</code> 0 dan katta bo'lsa, xabar ko'rsatiladi; aks holda hech narsa chiqmaydi. Chunki <code>false && ...</code> hech narsa render qilmaydi.</p>
 <div class="warn">Ehtiyot bo'ling: <code>{xabarlarSoni && ...}</code> deb yozsangiz va son 0 bo'lsa, ekranda <strong>0</strong> raqami chiqib qoladi! Sababi: 0 — "falsy", lekin React uni chizadi. Shuning uchun aniq shart yozing: <code>{xabarlarSoni &gt; 0 && ...}</code>.</div>
-<h2>Shartli render — ternar operator</h2>
+<h2 id="shartli-render-ternar-operator">Shartli render — ternar operator</h2>
 <p>Agar shartga qarab <em>ikki xil</em> narsadan birini ko'rsatish kerak bo'lsa (u yoki bu), <strong>ternar operator</strong> (<code>shart ? a : b</code>) ishlatiladi:</p>
 <pre class="code"><code>function Holat({ tizimgaKirgan }) {
   return (
@@ -653,7 +669,7 @@
 }</code></pre>
 <p>Bu yerda <code>tizimgaKirgan</code> <code>true</code> bo'lsa birinchi, <code>false</code> bo'lsa ikkinchi <code>&lt;p&gt;</code> ko'rsatiladi. Ternar operator — JSX ichida "agar-bo'lmasa" mantig'ini ifodalashning eng qulay usuli.</p>
 <div class="tip">Qoida: bir narsa ko'rsatilishi yoki ko'rsatilmasligi kerak bo'lsa — <code>&&</code> ishlating. Ikkitadan biri ko'rsatilishi kerak bo'lsa — <strong>ternar</strong> ishlating.</div>
-<h2>Controlled input — boshqariladigan maydon</h2>
+<h2 id="controlled-input-boshqariladigan-maydon">Controlled input — boshqariladigan maydon</h2>
 <p>Formalar bilan ishlashda React'da <strong>controlled input</strong> (boshqariladigan maydon) uslubi qo'llaniladi. Bunda input maydonining qiymati state'da saqlanadi, ya'ni React — yagona haqiqat manbasi. Bu ikki qadamdan iborat:</p>
 <ul><li>Input'ning <code>value</code>si state'ga bog'lanadi (<code>value={matn}</code>);</li><li>Input o'zgarganda <code>onChange</code> state'ni yangilaydi (<code>onChange={e =&gt; setMatn(e.target.value)}</code>).</li></ul>
 <pre class="code"><code>import { useState } from "react";
@@ -673,7 +689,7 @@ function Forma() {
 }</code></pre>
 <p>Bu yerda oqim shunday: foydalanuvchi yozadi → <code>onChange</code> ishga tushadi → <code>e.target.value</code> orqali yangi qiymat olinadi → <code>setMatn</code> state'ni yangilaydi → React qayta render qiladi → <code>value={matn}</code> yangi qiymatni ko'rsatadi. Ma'lumot va ko'rinish doim mos bo'ladi.</p>
 <div class="note"><code>e.target.value</code> — bu foydalanuvchi kiritgan input maydonining joriy matnini beradi. Bu — oddiy DOM'dagi kabi ishlaydi.</div>
-<h2>To'liq TODO ilovasi</h2>
+<h2 id="to-liq-todo-ilovasi">To'liq TODO ilovasi</h2>
 <p>Endi o'rganganlarimizni birlashtirib, oddiy <strong>TODO</strong> (vazifalar ro'yxati) ilovasini yig'amiz. Unda: input orqali yangi vazifa qo'shish, ro'yxatni <code>map</code> bilan chiqarish, <code>key</code> ishlatish va shartli render bor:</p>
 <pre class="code"><code>import { useState } from "react";
 
@@ -721,7 +737,7 @@ export default Todo;</code></pre>
 <p>Ushbu ilova React asoslarining barchasini bir joyda ko'rsatadi:</p>
 <ul><li><strong>useState</strong> — input matni (<code>matn</code>) va vazifalar ro'yxati (<code>vazifalar</code>) uchun ikki state;</li><li><strong>Controlled input</strong> — <code>value</code> + <code>onChange</code> orqali maydon boshqariladi;</li><li>Yangi vazifa qo'shishda <strong>massivni nusxalab</strong> yangilaymiz: <code>[...vazifalar, yangi]</code> — eski massivni o'zgartirmaymiz;</li><li>O'chirishda <code>filter</code> bilan yangi massiv yasaymiz;</li><li><strong>map</strong> + <strong>key</strong> — ro'yxatni chizish;</li><li><strong>ternar</strong> — ro'yxat bo'sh bo'lsa xabar, aks holda ro'yxat ko'rsatiladi.</li></ul>
 <div class="warn">State massivini <strong>hech qachon</strong> to'g'ridan-to'g'ri o'zgartirmang: <code>vazifalar.push(yangi)</code> ishlamaydi! Har doim yangi massiv yarating: <code>setVazifalar([...vazifalar, yangi])</code>. Bu — React'ning holat o'zgarmasligi (immutability) qoidasi.</div>
-<h2>Forma va onSubmit</h2>
+<h2 id="forma-va-onsubmit">Forma va onSubmit</h2>
 <p>Yuqoridagi misolda tugma bosdik. Amalda formalarni <code>&lt;form&gt;</code> teg va <code>onSubmit</code> bilan yozish yaxshiroq — chunki foydalanuvchi Enter tugmasi bilan ham yubora oladi. Faqat brauzerning sahifani qayta yuklashini <code>e.preventDefault()</code> bilan to'xtatish kerak:</p>
 <pre class="code"><code>function Forma() {
   const [matn, setMatn] = useState("");
@@ -740,7 +756,7 @@ export default Todo;</code></pre>
   );
 }</code></pre>
 <div class="tip"><code>e.preventDefault()</code>ni unutmang — aks holda forma yuborilganda brauzer sahifani qayta yuklaydi va SPA "buziladi".</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Massivni <strong><code>map</code></strong> bilan JSX elementlariga aylantirib chizamiz;</li><li>Har bir ro'yxat elementiga noyob <strong><code>key</code></strong> propi shart (odatda <code>id</code>);</li><li>Shartli render: bittasi ko'rinsa-ko'rinmasa — <strong><code>&&</code></strong>, ikkitadan biri — <strong>ternar</strong> (<code>? :</code>);</li><li><code>0 && ...</code> tuzog'idan ehtiyot bo'ling — aniq shart yozing (<code>son &gt; 0 &&</code>);</li><li><strong>Controlled input</strong>: <code>value={state}</code> + <code>onChange</code> — React yagona haqiqat manbasi;</li><li>State massiv/obyektlarini <strong>o'zgartirmang</strong> — nusxalab yangilang (<code>[...eski, yangi]</code>, <code>filter</code>);</li><li>Formalar uchun <code>&lt;form onSubmit&gt;</code> + <code>e.preventDefault()</code> ishlating.</li></ul>
 <nav class="lesson-nav">
   <a href="react-effect.html"><span class="dir">← Oldingi</span><span class="ttl">useEffect va yon effektlar</span></a>
@@ -754,6 +770,6 @@ export default Todo;</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

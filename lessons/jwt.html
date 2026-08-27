@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JWT (JSON Web Token) — Kodla</title>
   <meta name="description" content="JWT tuzilishi (header.payload.signature), imzolash va tekshirish, Express'da login → token → himoyalangan route middleware, token muddati, afzallik va kamchiliklari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,29 @@
 <main class="content article">
 <div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
 <h1>JWT (JSON Web Token)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#jwt-nima-va-u-nimani-hal-qiladi">JWT nima va u nimani hal qiladi?</a></li>
+<li class="lvl2"><a href="#jwt-tuzilishi-uch-qism">JWT tuzilishi: uch qism</a></li>
+<li class="lvl3"><a href="#1-header-sarlavha">1. Header (sarlavha)</a></li>
+<li class="lvl3"><a href="#2-payload-foydali-yuk">2. Payload (foydali yuk)</a></li>
+<li class="lvl3"><a href="#3-signature-imzo">3. Signature (imzo)</a></li>
+<li class="lvl2"><a href="#express-da-jwt-login-token">Express'da JWT: login → token</a></li>
+<li class="lvl2"><a href="#tokenni-tekshirish-himoyalangan-route-middleware">Tokenni tekshirish: himoyalangan route middleware</a></li>
+<li class="lvl2"><a href="#muddat-va-tokenni-yangilash-refresh">Muddat va tokenni yangilash (refresh)</a></li>
+<li class="lvl2"><a href="#jwt-afzallik-va-kamchiliklari">JWT: afzallik va kamchiliklari</a></li>
+<li class="lvl3"><a href="#afzalliklari">Afzalliklari</a></li>
+<li class="lvl3"><a href="#kamchiliklari">Kamchiliklari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>JWT</strong> (JSON Web Token) — bu ma'lumotni imzolangan, ixcham va o'zini-o'zi tavsiflaydigan token sifatida uzatish standarti. U zamonaviy API'larda autentifikatsiya uchun keng qo'llaniladi. Ushbu darsda JWT tuzilishini, uning imzo orqali qanday himoyalanishini va Express'da login'dan himoyalangan route'gacha bo'lgan to'liq oqimni ko'rib chiqamiz.</p>
-<h2>JWT nima va u nimani hal qiladi?</h2>
+<h2 id="jwt-nima-va-u-nimani-hal-qiladi">JWT nima va u nimani hal qiladi?</h2>
 <p>Oldingi darsda ko'rgan edik: HTTP holatsiz, shuning uchun har so'rovda foydalanuvchini qayta taniymiz. JWT bu muammoni <strong>imzolangan token</strong> orqali hal qiladi. Server login vaqtida foydalanuvchi ma'lumotini o'z ichiga olgan tokenni <em>imzolaydi</em> va mijozga beradi. Mijoz uni har so'rovda qaytaradi. Server imzoni tekshiradi — agar imzo to'g'ri bo'lsa, token ichidagi ma'lumotga ishonadi.</p>
 <p>Muhim jihat: token ichidagi ma'lumot <strong>shifrlanmagan</strong>, lekin <strong>imzolangan</strong>. Ya'ni har kim token ichini o'qiy oladi, ammo <em>uni server sirini bilmasdan o'zgartira olmaydi</em> — o'zgartirilsa, imzo mos kelmaydi.</p>
 <div class="warn">JWT payload'iga <strong>maxfiy ma'lumot</strong> (parol, karta raqami) qo'ymang. Payload oddiy kodlash bilan yozilgan, shifrlanmagan — uni har kim ochib o'qiy oladi. Payload'da faqat identifikator va rol kabi maxfiy bo'lmagan ma'lumot bo'lsin.</div>
-<h2>JWT tuzilishi: uch qism</h2>
+<h2 id="jwt-tuzilishi-uch-qism">JWT tuzilishi: uch qism</h2>
 <p>JWT nuqta bilan ajratilgan uchta qismdan iborat: <code>header.payload.signature</code>. Har bir qism alohida kodlangan matndir:</p>
 <pre class="code"><code>// JWT quyidagicha ko'rinadi (uch qism nuqta bilan ajratilgan):
 // xxxxx.yyyyy.zzzzz
@@ -609,13 +629,13 @@
 // header payload signature
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJyb2wiOiJ1c2VyIn0.aBcDeFg...</code></pre>
-<h3>1. Header (sarlavha)</h3>
+<h3 id="1-header-sarlavha">1. Header (sarlavha)</h3>
 <p>Qanday algoritm bilan imzolanganini ko'rsatadi:</p>
 <pre class="code"><code>{
   "alg": "HS256",
   "typ": "JWT"
 }</code></pre>
-<h3>2. Payload (foydali yuk)</h3>
+<h3 id="2-payload-foydali-yuk">2. Payload (foydali yuk)</h3>
 <p>Token ichidagi ma'lumot — "claims" deb ataladi. Bu foydalanuvchi identifikatori, roli va muddati kabi maydonlar:</p>
 <pre class="code"><code>{
   "sub": "123",        // foydalanuvchi ID (subject)
@@ -623,7 +643,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJyb2wiOiJ1c2VyIn0.aBcDeFg
   "iat": 1719800000,    // yaratilgan vaqt (issued at)
   "exp": 1719803600     // amal qilish muddati (expiration)
 }</code></pre>
-<h3>3. Signature (imzo)</h3>
+<h3 id="3-signature-imzo">3. Signature (imzo)</h3>
 <p>Header va payload'ni maxfiy kalit bilan birga hashlashdan hosil bo'ladi. Imzo — bu tokenning butunligini kafolatlaydigan qism. Agar biror bayt o'zgartirilsa, imzo mos kelmay qoladi:</p>
 <pre class="code"><code>// Kontseptual tarzda imzo shunday hisoblanadi:
 // HMACSHA256(
@@ -634,7 +654,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJyb2wiOiJ1c2VyIn0.aBcDeFg
 // MAXFIY_KALIT faqat serverda bo'ladi. Shuning uchun
 // hech kim to'g'ri imzoni server sirisiz yasay olmaydi.</code></pre>
 <div class="note">"Kodlash" (base64url) — bu shifrlash EMAS. U shunchaki ma'lumotni matn ko'rinishiga o'tkazadi, uni istagan kishi qaytarib o'qiy oladi. Tokenni himoya qiladigan yagona narsa — bu <strong>imzo</strong>, chunki uni yasash uchun maxfiy kalit kerak.</div>
-<h2>Express'da JWT: login → token</h2>
+<h2 id="express-da-jwt-login-token">Express'da JWT: login → token</h2>
 <p>Endi to'liq oqimni ko'ramiz. Avval foydalanuvchi login qiladi, biz parolni tekshiramiz va muvaffaqiyatli bo'lsa, imzolangan token beramiz. Bu yerda <code>jsonwebtoken</code> kutubxonasi ishlatiladi:</p>
 <pre class="code"><code>const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -661,7 +681,7 @@ app.post('/login', async (req, res) =&gt; {
   res.json({ token });
 });</code></pre>
 <div class="tip"><code>expiresIn</code> ni albatta belgilang. Muddatsiz token o'g'irlansa, u abadiy yaroqli qoladi. Qisqa muddat (masalan, 15 daqiqa - 1 soat) o'g'irlangan tokenning zarar oynasini kichraytiradi.</div>
-<h2>Tokenni tekshirish: himoyalangan route middleware</h2>
+<h2 id="tokenni-tekshirish-himoyalangan-route-middleware">Tokenni tekshirish: himoyalangan route middleware</h2>
 <p>Endi himoyalangan route'larni yaratamiz. Har bir himoyalangan so'rovda mijoz tokenni odatda <code>Authorization</code> sarlavhasida <code>Bearer</code> sxemasi bilan yuboradi. Middleware uni tekshiradi:</p>
 <pre class="code"><code>function tokenTekshir(req, res, next) {
   const sarlavha = req.headers['authorization'];
@@ -701,19 +721,19 @@ app.delete('/api/foydalanuvchi/:id', tokenTekshir, faqatAdmin, async (req, res) 
   res.json({ muvaffaqiyat: true });
 });</code></pre>
 <div class="warn"><code>jwt.verify</code> ni doim <code>try/catch</code> ichida chaqiring. Muddati o'tgan yoki soxta token exception tashlaydi. Agar <code>verify</code> o'rniga <code>decode</code> ishlatsangiz — bu <strong>xato</strong>: <code>decode</code> imzoni <em>tekshirmaydi</em>, shunchaki payload'ni o'qiydi. Har doim <code>verify</code> ishlating.</div>
-<h2>Muddat va tokenni yangilash (refresh)</h2>
+<h2 id="muddat-va-tokenni-yangilash-refresh">Muddat va tokenni yangilash (refresh)</h2>
 <p>Qisqa muddatli access token xavfsizroq, lekin har soatda foydalanuvchini qayta login qildirish noqulay. Amaliyotda ko'pincha ikki tokenli sxema ishlatiladi:</p>
 <ul><li><strong>Access token:</strong> qisqa muddatli (masalan, 15 daqiqa), har so'rovda ishlatiladi;</li><li><strong>Refresh token:</strong> uzoqroq muddatli, xavfsiz saqlanadi (masalan, <code>HttpOnly</code> cookie'da) va faqat yangi access token olish uchun ishlatiladi.</li></ul>
 <p>Access token muddati tugaganda, mijoz refresh token bilan yangi access token so'raydi. Refresh tokenni serverda kuzatib borish uni bekor qilish (masalan, chiqishda) imkonini beradi.</p>
 <div class="note">Bu bilan JWT'ning "holatsizlik" afzalligining bir qismidan voz kechamiz (refresh tokenlarni bazada kuzatamiz), lekin buning evaziga xavfsizlikni oshiramiz. Xavfsizlik va qulaylik o'rtasidagi bu muvozanat — amaliy loyihalarda odatiy holdir.</div>
-<h2>JWT: afzallik va kamchiliklari</h2>
+<h2 id="jwt-afzallik-va-kamchiliklari">JWT: afzallik va kamchiliklari</h2>
 <p>JWT sehrli tayoqcha emas. Uni to'g'ri joyda ishlatish uchun kuchli va zaif tomonlarini biling:</p>
-<h3>Afzalliklari</h3>
+<h3 id="afzalliklari">Afzalliklari</h3>
 <ul><li><strong>Holatsizlik:</strong> server har so'rovda bazaga murojaat qilmasdan tokenni tekshiradi — masshtablash oson;</li><li><strong>Turli mijozlar:</strong> web, mobil ilova va boshqa xizmatlar bir xil token bilan ishlaydi;</li><li><strong>O'zini-o'zi tavsiflaydi:</strong> foydalanuvchi ID va roli tokenning ichida.</li></ul>
-<h3>Kamchiliklari</h3>
+<h3 id="kamchiliklari">Kamchiliklari</h3>
 <ul><li><strong>Bekor qilish qiyin:</strong> imzolangan token muddati tugaguncha yaroqli qoladi; uni majburan bekor qilish uchun qo'shimcha mexanizm (qora ro'yxat yoki qisqa muddat) kerak;</li><li><strong>O'g'irlanish xavfi:</strong> token o'g'irlansa, uni ishlatgan har kim foydalanuvchi bo'lib ko'rinadi — shuning uchun HTTPS va xavfsiz saqlash zarur;</li><li><strong>Hajmi:</strong> token cookie yoki sessiya ID'dan kattaroq, har so'rovda yuboriladi.</li></ul>
 <div class="warn">Tokenni <code>localStorage</code>'da saqlash keng tarqalgan, lekin xavfli: XSS bo'lsa, zararli skript <code>localStorage</code>'ni o'qiy oladi va tokenni o'g'irlaydi. Xavfsizroq variant — tokenni <code>HttpOnly</code> cookie'da saqlash (JS o'qiy olmaydi), ammo bu holda CSRF himoyasini (keyingi darsda) qo'shish kerak. Har ikki yondashuvning o'ziga xos xavfi bor.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>JWT — imzolangan, uch qismli (<code>header.payload.signature</code>) token; imzo uning butunligini kafolatlaydi;</li><li>Payload shifrlanmagan — unga maxfiy ma'lumot qo'ymang, faqat identifikator va rol;</li><li>Login'da <code>jwt.sign</code> bilan token yasaymiz, himoyalangan route'da <code>jwt.verify</code> bilan tekshiramiz (hech qachon <code>decode</code> bilan emas);</li><li>Maxfiy kalit <code>.env</code>da saqlanadi, kodga yozilmaydi;</li><li><code>expiresIn</code> ni albatta belgilang; qisqa access + uzoq refresh token sxemasi xavfsizlikni oshiradi;</li><li>Tokenni <code>HttpOnly</code> cookie'da yoki xavfsiz saqlang; <code>localStorage</code> XSS'ga zaif.</li></ul>
 <nav class="lesson-nav">
   <a href="auth-asoslar.html"><span class="dir">← Oldingi</span><span class="ttl">Autentifikatsiya va avtorizatsiya</span></a>
@@ -727,6 +747,6 @@ app.delete('/api/foydalanuvchi/:id', tokenTekshir, faqatAdmin, async (req, res) 
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

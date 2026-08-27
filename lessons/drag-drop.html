@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drag'n'Drop (sichqoncha bilan) — Kodla</title>
   <meta name="description" content="mousedown → mousemove → mouseup algoritmi asosida element sudrash; brauzerning standart ondragstart harakatini o'chirish; pointer-events va document.elementFromPoint yordamida nishonlarni (droppable) aniqlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,10 +599,22 @@
 <main class="content article">
 <div class="crumbs">UI hodisalari</div>
 <h1>Drag'n'Drop (sichqoncha bilan)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#asosiy-algoritm">Asosiy algoritm</a></li>
+<li class="lvl2"><a href="#standart-ondragstart-harakatini-o-chirish">Standart ondragstart harakatini o'chirish</a></li>
+<li class="lvl2"><a href="#sudrash-markazini-to-g-rilash">Sudrash markazini to'g'rilash</a></li>
+<li class="lvl2"><a href="#pointer-events-bilan-nishonni-aniqlash-muammosi">pointer-events bilan nishonni aniqlash muammosi</a></li>
+<li class="lvl2"><a href="#document-elementfrompoint-bilan-nishonni-aniqlash">document.elementFromPoint bilan nishonni aniqlash</a></li>
+<li class="lvl2"><a href="#nishonlarni-kuzatish-ondragenter-ondragleave">Nishonlarni kuzatish: onDragEnter/onDragLeave</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Drag'n'Drop (sudrab tashlash) — foydalanuvchiga qulay interfeys usuli. Faylni papkaga sudrash, savatga mahsulot tashlash, elementlar tartibini o'zgartirish — bularning barchasi shu texnikaga asoslanadi. Bu darsda sof sichqoncha hodisalari asosidagi Drag'n'Drop'ni chuqur ko'rib chiqamiz.</p>
 <div class="note">Brauzerda "tug'ma" Drag Events API ham mavjud (<code>dragstart</code>, <code>dragend</code> va h.k.). U fayllarni tashqi ilovalardan sudrab kirtish uchun qulay, lekin cheklovlari bor: gorizontal/vertikal harakatni cheklash yoki maxsus animatsiyalar qilish qiyin. Shuning uchun ko'p hollarda oddiy sichqoncha hodisalari afzal ko'riladi — biz shuni o'rganamiz.</div>
 <div class="warn">Bu darsdagi kod misollari statik — DOM hodisalari playground'da ishlamaydi. Ularni haqiqiy HTML sahifada sinang.</div>
-<h2>Asosiy algoritm</h2>
+<h2 id="asosiy-algoritm">Asosiy algoritm</h2>
 <p>Drag'n'Drop algoritmi juda sodda ko'rinadi — u uch hodisaga asoslanadi:</p>
 <ol><li><code>mousedown</code> — elementni bosganda sudrashni boshlaymiz.</li><li><code>mousemove</code> — kursor harakatlanganda elementni ko'chiramiz (uni <code>position: absolute</code> qilib, koordinatalarini yangilaymiz).</li><li><code>mouseup</code> — tugma qo'yib yuborilganda sudrashni to'xtatamiz.</li></ol>
 <p>Muhim nuqta: <code>mousemove</code>ni <strong>elementga emas, balki butun hujjatga</strong> (<code>document</code>ga) bog'lash kerak. Chunki kursor tez harakatlanganda element kursordan orqada qolishi va <code>mousemove</code> element ustida bo'lmasligi mumkin. Agar hodisani faqat elementga bog'lasak, sudrash "uzilib" qoladi.</p>
@@ -632,7 +647,7 @@ ball.onmousedown = function(event) {
     ball.onmouseup = null;
   };
 };</code></pre>
-<h2>Standart ondragstart harakatini o'chirish</h2>
+<h2 id="standart-ondragstart-harakatini-o-chirish">Standart ondragstart harakatini o'chirish</h2>
 <p>Agar yuqoridagi kodni sinasangiz, tuval (canvas) yoki rasm (image) elementlarida g'alati holat kuzatiladi: sudrash o'rniga brauzer o'zining "native" drag-and-drop harakatini ishga tushiradi. Bu bizga xalaqit beradi.</p>
 <p>Yechim — brauzerning standart <code>dragstart</code> harakatini bekor qilish:</p>
 <pre class="code"><code>ball.ondragstart = function() {
@@ -640,7 +655,7 @@ ball.onmousedown = function(event) {
 };</code></pre>
 <p>Endi brauzer o'zining drag harakatini boshlamaydi va bizning kodimiz to'sqinliksiz ishlaydi.</p>
 <div class="note">Bu bitta qator ko'pincha unutiladi va "nega mening drag'n'drop'im ba'zi elementlarda buziladi?" degan savolga sabab bo'ladi. Rasm va havolalar (link) uchun bu ayniqsa muhim.</div>
-<h2>Sudrash markazini to'g'rilash</h2>
+<h2 id="sudrash-markazini-to-g-rilash">Sudrash markazini to'g'rilash</h2>
 <p>Yuqorida biz elementni kursor markaziga joylashtirdik. Lekin haqiqiy interfeyslarda foydalanuvchi elementning istalgan joyidan ushlashi mumkin. Agar shunda elementni har doim markazga ko'chirsak, u "sakrab" ketadi.</p>
 <p>To'g'ri yechim: <code>mousedown</code> paytida kursor bilan element chekkasi orasidagi masofani (siljish, shift) hisoblab, keyingi harakatlarda uni saqlab qolish kerak:</p>
 <pre class="code"><code>ball.onmousedown = function(event) {
@@ -655,14 +670,14 @@ ball.onmousedown = function(event) {
   // ...qolgan qismi yuqoridagidek
 };</code></pre>
 <div class="tip"><code>getBoundingClientRect()</code> elementning oynaga nisbatan koordinatalarini beradi. Shu sabab bu yerda <code>clientX/Y</code> ishlatiladi (ikkalasi ham oynaga nisbatan). Keyin joylashtirishda esa hujjatga nisbatan <code>pageX/Y</code> va <code>left/top</code> (absolute) ishlatiladi.</div>
-<h2>pointer-events bilan nishonni aniqlash muammosi</h2>
+<h2 id="pointer-events-bilan-nishonni-aniqlash-muammosi">pointer-events bilan nishonni aniqlash muammosi</h2>
 <p>Sudralayotgan element kursor tagida turadi. Bu bir muammo tug'diradi: kursor ostidagi <strong>haqiqiy nishon</strong> (masalan, savat yoki papka) qaysi element ekanini bilmoqchi bo'lsak, <code>event.target</code> har doim sudralayotgan elementning o'zini qaytaradi — chunki u kursor tagida yotibdi!</p>
 <p>Yechim ikkita. Birinchisi — CSS <code>pointer-events: none</code>. Bu xossa elementni sichqoncha hodisalari uchun "ko'rinmas" qiladi — hodisalar undan o'tib, ostidagi elementga yetadi:</p>
 <pre class="code"><code>// Sudrayotgan element sichqoncha hodisalarini o'tkazib yuboradi:
 // ball.style.pointerEvents = 'none';
 // Endi event.target ostidagi haqiqiy elementni qaytaradi.</code></pre>
 <div class="warn"><code>pointer-events: none</code> oddiy va tez, lekin cheklovi bor: agar sudralayotgan elementda ham sichqoncha hodisalari kerak bo'lsa, bu ishlamaydi. Bunday holatda quyidagi <code>elementFromPoint</code> usuli afzal.</div>
-<h2>document.elementFromPoint bilan nishonni aniqlash</h2>
+<h2 id="document-elementfrompoint-bilan-nishonni-aniqlash">document.elementFromPoint bilan nishonni aniqlash</h2>
 <p>Ikkinchi, universal yechim — <code>document.elementFromPoint(clientX, clientY)</code> metodi. U berilgan oyna koordinatalaridagi eng ustki (topmost) elementni qaytaradi. Sudrash paytida sudralayotgan elementni vaqtincha yashirib, ostidagi nishonni topamiz:</p>
 <pre class="code"><code>// mousemove ichida:
 function onMouseMove(event) {
@@ -682,7 +697,7 @@ function onMouseMove(event) {
 }</code></pre>
 <div class="warn"><code>elementFromPoint(clientX, clientY)</code> aynan <strong>oyna koordinatalarini</strong> (client), <strong>hujjat koordinatalarini emas</strong> (page) kutadi. Agar adashib <code>pageX/pageY</code> bersangiz va sahifa skroll qilingan bo'lsa — noto'g'ri element qaytadi. Shuningdek, agar koordinatalar oyna tashqarisida bo'lsa, metod <code>null</code> qaytaradi.</div>
 <div class="note">Sudralayotgan elementni <code>ball.hidden = true</code> bilan bir lahzaga yashirib, so'ng darhol <code>ball.hidden = false</code> qilish miltillash chaqirmaydi, chunki brauzer bu ikki o'zgarish orasida ekranni qayta chizmaydi (repaint).</div>
-<h2>Nishonlarni kuzatish: onDragEnter/onDragLeave</h2>
+<h2 id="nishonlarni-kuzatish-ondragenter-ondragleave">Nishonlarni kuzatish: onDragEnter/onDragLeave</h2>
 <p>Yuqoridagi <code>elemBelow</code>ni har <code>mousemove</code>da hisoblab, oldingi qiymat bilan solishtirib, o'zimizning "nishonga kirdi / nishondan chiqdi" mantig'ini yozamiz. Bu bizga nishonni yoritish (highlight) yoki boshqa vizual javob berish imkonini beradi:</p>
 <pre class="code"><code>let currentDroppable = null;
 
@@ -702,7 +717,7 @@ function onMouseMove(event) {
     }
   }
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Sichqoncha asosidagi Drag'n'Drop algoritmi:</p>
 <ol><li><code>mousedown</code>: sudrashni boshlash, <code>shiftX/shiftY</code> ni hisoblash, standart <code>ondragstart</code>ni <code>return false</code> bilan o'chirish.</li><li><code>mousemove</code> (hujjatga bog'langan): elementni ko'chirish va <code>elementFromPoint</code> yoki <code>pointer-events: none</code> orqali nishonni aniqlash.</li><li><code>mouseup</code>: sudrashni to'xtatish va ishlov beruvchilarni tozalash (<code>removeEventListener</code>).</li></ol>
 <div class="tip">Chinakam kutubxonalar (masalan, Sortable.js, jQuery UI Draggable) shu asosda qurilgan, lekin ular tekislik (accessibility), sensorli qurilma va ko'plab chekka holatlarni ham hisobga oladi. Amaliy loyihalarda tayyor kutubxonadan foydalanish ko'pincha oqilona.</div>
@@ -718,6 +733,6 @@ function onMouseMove(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fetch: so'rovlar va JSON — Kodla</title>
   <meta name="description" content="POST so'rov yuborish: method, headers, body parametrlari; JSON.stringify bilan ma'lumot yuborish; Content-Type sarlavhasining ahamiyati.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Tarmoq so'rovlari</div>
 <h1>Fetch: so'rovlar va JSON</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#options-obyekti">options obyekti</a></li>
+<li class="lvl2"><a href="#post-so-rovi-bilan-json-yuborish">POST so'rovi bilan JSON yuborish</a></li>
+<li class="lvl2"><a href="#content-type-sarlavhasi">Content-Type sarlavhasi</a></li>
+<li class="lvl2"><a href="#turli-http-metodlari">Turli HTTP metodlari</a></li>
+<li class="lvl2"><a href="#to-liq-amaliy-misol-xatoliklar-bilan">To'liq amaliy misol: xatoliklar bilan</a></li>
+<li class="lvl2"><a href="#json-stringify-eslatmasi">JSON.stringify eslatmasi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Oldingi darsda <code>fetch</code> bilan ma'lumot <em>olishni</em> ko'rdik. Endi serverga ma'lumot <em>yuborishni</em> — POST, PUT, DELETE kabi so'rovlarni o'rganamiz. Buning uchun <code>fetch</code>ning ikkinchi argumenti — <code>options</code> obyekti ishlatiladi.</p>
-<h2>options obyekti</h2>
+<h2 id="options-obyekti">options obyekti</h2>
 <p>So'rovni sozlash uchun <code>fetch</code>ga ikkinchi argument sifatida obyekt beramiz. Uning eng muhim maydonlari:</p>
 <ul><li><code>method</code> — HTTP metodi: <code>GET</code> (standart), <code>POST</code>, <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code>;</li><li><code>headers</code> — so'rov sarlavhalari (obyekt ko'rinishida);</li><li><code>body</code> — so'rov tanasi: yuboriladigan ma'lumot (matn, JSON qatori, FormData, Blob va h.k.).</li></ul>
 <pre class="code"><code>let response = await fetch(url, {
@@ -607,7 +622,7 @@
   },
   body: JSON.stringify(data)
 });</code></pre>
-<h2>POST so'rovi bilan JSON yuborish</h2>
+<h2 id="post-so-rovi-bilan-json-yuborish">POST so'rovi bilan JSON yuborish</h2>
 <p>Serverga JSON ma'lumot yuborishning to'liq misoli. Biz avval JavaScript obyektini <code>JSON.stringify</code> bilan matnga aylantiramiz, so'ng uni <code>body</code>ga joylashtiramiz:</p>
 <pre class="code"><code>let user = {
   name: 'Ali',
@@ -625,13 +640,13 @@ let response = await fetch('https://api.example.com/users', {
 let result = await response.json();
 console.log(result.message); // serverning javobi</code></pre>
 <div class="note"><code>body</code> — bu tarmoq orqali yuboriladigan xom ma'lumot (odatda matn). JavaScript obyektini to'g'ridan-to'g'ri yubora olmaymiz — uni avval <code>JSON.stringify(obyekt)</code> bilan JSON matniga aylantirishimiz kerak.</div>
-<h2>Content-Type sarlavhasi</h2>
+<h2 id="content-type-sarlavhasi">Content-Type sarlavhasi</h2>
 <p><code>Content-Type</code> sarlavhasi serverga <strong>qanday formatdagi</strong> ma'lumot yuborayotganimizni bildiradi. JSON yuborayotganda uni <code>application/json</code> qilib belgilash muhim, aks holda server ma'lumotni noto'g'ri talqin qilishi mumkin.</p>
 <pre class="code"><code>headers: {
   'Content-Type': 'application/json;charset=utf-8'
 }</code></pre>
 <div class="warn">Agar <code>Content-Type</code>ni yubormasangiz, brauzer <code>body</code> matn bo'lganda uni <code>text/plain</code> deb belgilashi mumkin. Ko'p serverlar JSON'ni to'g'ri qabul qilishi uchun aynan <code>application/json</code>ni kutadi. Shuning uchun JSON yuborganda bu sarlavhani doim qo'shing.</div>
-<h2>Turli HTTP metodlari</h2>
+<h2 id="turli-http-metodlari">Turli HTTP metodlari</h2>
 <p>RESTful API'larda turli amallar uchun turli metodlar ishlatiladi:</p>
 <ul><li><code>GET</code> — ma'lumot olish (tanasiz);</li><li><code>POST</code> — yangi ma'lumot yaratish;</li><li><code>PUT</code> — mavjud ma'lumotni to'liq almashtirish;</li><li><code>PATCH</code> — ma'lumotning bir qismini yangilash;</li><li><code>DELETE</code> — ma'lumotni o'chirish.</li></ul>
 <pre class="code"><code>// PUT: foydalanuvchini yangilash
@@ -646,7 +661,7 @@ await fetch('https://api.example.com/users/1', {
   method: 'DELETE'
 });</code></pre>
 <div class="note"><code>GET</code> va <code>DELETE</code> so'rovlarida odatda <code>body</code> bo'lmaydi. <code>GET</code> so'rovida <code>body</code> berish umuman xatolikka olib keladi.</div>
-<h2>To'liq amaliy misol: xatoliklar bilan</h2>
+<h2 id="to-liq-amaliy-misol-xatoliklar-bilan">To'liq amaliy misol: xatoliklar bilan</h2>
 <p>Real koda POST so'rovni ham xatoliklardan himoyalaymiz — xuddi oldingi darsdagidek:</p>
 <pre class="code"><code>async function foydalanuvchiYarat(user) {
   try {
@@ -678,7 +693,7 @@ foydalanuvchiYarat({ name: 'Salim', email: 'salim@example.com' })
   .catch(function () {
     console.log('Amal bajarilmadi');
   });</code></pre>
-<h2>JSON.stringify eslatmasi</h2>
+<h2 id="json-stringify-eslatmasi">JSON.stringify eslatmasi</h2>
 <p><code>JSON.stringify</code> JavaScript obyektini JSON matniga aylantiradi. U obyekt, massiv, son, satr, boolean va <code>null</code> bilan ishlaydi:</p>
 <pre class="code"><code>let obj = {
   name: 'Ali',
@@ -690,7 +705,7 @@ foydalanuvchiYarat({ name: 'Salim', email: 'salim@example.com' })
 console.log(JSON.stringify(obj));
 // {"name":"Ali","age":25,"active":true,"roles":["admin","user"]}</code></pre>
 <div class="warn"><code>JSON.stringify</code> <code>undefined</code>, funksiyalar va <code>Symbol</code>larni <strong>tashlab yuboradi</strong> (obyekt maydonlarida). Shuning uchun faqat oddiy ma'lumot (data) yuboring — metodlar yoki funksiyalar JSON'ga kirmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Ma'lumot yuborish uchun <code>fetch(url, options)</code>ning ikkinchi argumentidan foydalanamiz;</li><li><code>method</code> — HTTP metodi (POST, PUT, PATCH, DELETE);</li><li><code>headers</code> — so'rov sarlavhalari, JSON uchun <code>Content-Type: application/json</code> muhim;</li><li><code>body</code> — yuboriladigan ma'lumot; JavaScript obyektini <code>JSON.stringify()</code> bilan matnga aylantirish shart;</li><li>Server javobini <code>await response.json()</code> bilan qayta o'qib olamiz;</li><li>POST so'rovlarni ham <code>try...catch</code> va <code>response.ok</code> bilan himoyalash kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="fetch.html"><span class="dir">← Oldingi</span><span class="ttl">Fetch</span></a>
@@ -704,6 +719,6 @@ console.log(JSON.stringify(obj));
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

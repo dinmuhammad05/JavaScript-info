@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destrukturizatsiya — Kodla</title>
   <meta name="description" content="Massiv va obyektlarni alohida o'zgaruvchilarga qulay tarzda ajratib olish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Destrukturizatsiya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#massiv-destrukturizatsiyasi">Massiv destrukturizatsiyasi</a></li>
+<li class="lvl2"><a href="#standart-default-qiymatlar">Standart (default) qiymatlar</a></li>
+<li class="lvl2"><a href="#qiymatlarni-almashtirish-swap">Qiymatlarni almashtirish (swap)</a></li>
+<li class="lvl2"><a href="#qoldiq-rest">Qoldiq "...rest"</a></li>
+<li class="lvl2"><a href="#obyekt-destrukturizatsiyasi">Obyekt destrukturizatsiyasi</a></li>
+<li class="lvl2"><a href="#yangi-nom-berish">Yangi nom berish</a></li>
+<li class="lvl2"><a href="#ichma-ich-nested-destrukturizatsiya">Ichma-ich (nested) destrukturizatsiya</a></li>
+<li class="lvl2"><a href="#funksiya-parametrlarida-destrukturizatsiya">Funksiya parametrlarida destrukturizatsiya</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da ma'lumotlar ko'pincha massiv yoki obyektlarda saqlanadi. <strong>Destrukturizatsiya</strong> (destructuring assignment) — bu massiv yoki obyektni alohida o'zgaruvchilarga bir satrda "ochib" olishning qulay usuli.</p>
-<h2>Massiv destrukturizatsiyasi</h2>
+<h2 id="massiv-destrukturizatsiyasi">Massiv destrukturizatsiyasi</h2>
 <p>Massivni o'zgaruvchilarga ajratib olishga misol:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>arr-destr.js</span></div><textarea spellcheck="false">let arr = ["Jasur", "Karimov"];
 
@@ -618,14 +635,14 @@ console.log(unvon); // Direktor</textarea><div class="pg-actions"><button class=
 console.log(a); // a
 console.log(b); // b
 console.log(c); // c</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Standart (default) qiymatlar</h2>
+<h2 id="standart-default-qiymatlar">Standart (default) qiymatlar</h2>
 <p>Agar massivda o'zgaruvchilardan kamroq element bo'lsa, ortiqcha o'zgaruvchilar <code>undefined</code> bo'ladi. Buning oldini olish uchun standart qiymat berish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>default-values.js</span></div><textarea spellcheck="false">let [ism = "Mehmon", familiya = "Noma'lum"] = ["Jasur"];
 
 console.log(ism);      // Jasur (massivdan olindi)
 console.log(familiya); // Noma'lum (standart qiymat)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Standart qiymat sifatida murakkab ifoda yoki hatto funksiya chaqiruvi ham berish mumkin. Ular faqat tegishli qiymat massivda bo'lmagandagina bajariladi.</div>
-<h2>Qiymatlarni almashtirish (swap)</h2>
+<h2 id="qiymatlarni-almashtirish-swap">Qiymatlarni almashtirish (swap)</h2>
 <p>Destrukturizatsiya yordamida ikki o'zgaruvchining qiymatini vaqtinchalik o'zgaruvchisiz almashtirish mumkin — bu juda mashhur usul:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>swap.js</span></div><textarea spellcheck="false">let mehmon = "Ali";
 let admin = "Vali";
@@ -636,7 +653,7 @@ let admin = "Vali";
 console.log(mehmon); // Vali
 console.log(admin);  // Ali</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda o'ng tomonda vaqtinchalik <code>[admin, mehmon]</code> massivi yasaladi va darhol chap tomondagi o'zgaruvchilarga ajratib beriladi.</p>
-<h2>Qoldiq "...rest"</h2>
+<h2 id="qoldiq-rest">Qoldiq "...rest"</h2>
 <p>Agar massiv o'zgaruvchilardan uzun bo'lsa, qolgan barcha elementlarni bitta massivga yig'ib olish uchun <code>...rest</code> ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>rest.js</span></div><textarea spellcheck="false">let [birinchi, ikkinchi, ...qolganlari] = ["Bahor", "Yoz", "Kuz", "Qish"];
 
@@ -645,7 +662,7 @@ console.log(ikkinchi);        // Yoz
 console.log(qolganlari);      // [ 'Kuz', 'Qish' ]
 console.log(qolganlari.length); // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>...rest</code> har doim eng oxirida turishi shart. <code>[...boshi, oxirgi]</code> ko'rinishida yozib bo'lmaydi — bu xatolik beradi.</div>
-<h2>Obyekt destrukturizatsiyasi</h2>
+<h2 id="obyekt-destrukturizatsiyasi">Obyekt destrukturizatsiyasi</h2>
 <p>Obyektlarni ham destrukturizatsiya qilish mumkin. Bu holda kvadrat qavs <code>[]</code> o'rniga jingalak qavs <code>{}</code> ishlatiladi va o'zgaruvchi nomlari <strong>kalitlarga mos</strong> bo'lishi kerak:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>obj-destr.js</span></div><textarea spellcheck="false">let sozlamalar = {
   kenglik: 100,
@@ -659,7 +676,7 @@ console.log(sarlavha);  // Menyu
 console.log(kenglik);   // 100
 console.log(balandlik); // 200</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: massivdan farqli o'laroq, obyektda <strong>tartib muhim emas</strong>. O'zgaruvchi nomi kalitga mos kelsa bo'ldi.</p>
-<h2>Yangi nom berish</h2>
+<h2 id="yangi-nom-berish">Yangi nom berish</h2>
 <p>Agar o'zgaruvchiga kalitdan boshqa nom bermoqchi bo'lsak, <code>kalit: yangiNom</code> sintaksisidan foydalanamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>obj-rename.js</span></div><textarea spellcheck="false">let sozlamalar = {
   kenglik: 100,
@@ -685,7 +702,7 @@ let {
 console.log(s);  // Menyu (obyektdan)
 console.log(kn); // 100 (standart)
 console.log(bl); // 200 (standart)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Ichma-ich (nested) destrukturizatsiya</h2>
+<h2 id="ichma-ich-nested-destrukturizatsiya">Ichma-ich (nested) destrukturizatsiya</h2>
 <p>Agar obyekt ichida boshqa obyekt yoki massiv bo'lsa, tuzilmani takrorlab, ichki qiymatlarni ham ajratib olish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nested-destr.js</span></div><textarea spellcheck="false">let sozlamalar = {
   olcham: {
@@ -708,7 +725,7 @@ console.log(asosiy);      // qora
 console.log(ikkilamchi);  // oq
 console.log(ekstra);      // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>olcham</code> va <code>ranglar</code> nomlari bu yerda o'zgaruvchiga aylanmaydi — ular faqat ichkariga "kirish" uchun ishlatiladi. Faqat eng ichki qiymatlar o'zgaruvchi bo'ladi.</div>
-<h2>Funksiya parametrlarida destrukturizatsiya</h2>
+<h2 id="funksiya-parametrlarida-destrukturizatsiya">Funksiya parametrlarida destrukturizatsiya</h2>
 <p>Destrukturizatsiyaning eng foydali qo'llanilishlaridan biri — funksiya ko'p parametr olganda. Agar ularni bitta obyekt sifatida uzatsak, funksiya ichida ularni qulay ajratib olamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>func-params.js</span></div><textarea spellcheck="false">function menyuYasa({
   sarlavha = "Sarlavhasiz",
@@ -728,7 +745,7 @@ menyuYasa();
 // Sarlavhasiz: 200x100</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu usul "nomlangan argumentlar" (named arguments) ta'sirini beradi — chaqirishda argumentlar tartibini eslab qolish shart emas, faqat kerakli kalitlarni ko'rsatamiz.</p>
 <div class="tip">Oxiridagi <code>= {}</code> juda muhim: u funksiya <strong>hech qanday argumentsiz</strong> chaqirilganda ham xatolik bermasligini ta'minlaydi. Aks holda <code>menyuYasa()</code> chaqiruvi <code>undefined</code>ni destrukturizatsiya qilishga urinib xatolik beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Destrukturizatsiya — massiv/obyektni bir satrda o'zgaruvchilarga ochish usuli;</li><li>Massivda tartib muhim (<code>[a, b]</code>), obyektda esa kalit nomi muhim (<code>{a, b}</code>);</li><li>Standart qiymat: <code>[a = 5]</code> yoki <code>{a = 5}</code>;</li><li>Almashtirish: <code>[x, y] = [y, x]</code>;</li><li>Qoldiq: <code>[a, ...rest]</code> — qolgan elementlarni massivga yig'adi;</li><li>Obyektda yangi nom: <code>{kalit: yangiNom}</code>;</li><li>Funksiya parametrlarida qo'llasa, "nomlangan argumentlar" hosil bo'ladi.</li></ul>
 <nav class="lesson-nav">
   <a href="object-keys.html"><span class="dir">← Oldingi</span><span class="ttl">Object.keys, values, entries</span></a>
@@ -742,6 +759,6 @@ menyuYasa();
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

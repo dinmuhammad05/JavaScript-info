@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Funksiyalar — Kodla</title>
   <meta name="description" content="Kodni takrorlamaslik uchun asosiy vosita — funksiya e'loni, parametrlar, return.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Funksiyalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#funksiya-e-loni-function-declaration">Funksiya e'loni (Function Declaration)</a></li>
+<li class="lvl2"><a href="#lokal-va-tashqi-o-zgaruvchilar">Lokal va tashqi o'zgaruvchilar</a></li>
+<li class="lvl2"><a href="#parametrlar">Parametrlar</a></li>
+<li class="lvl2"><a href="#standart-default-qiymatlar">Standart (default) qiymatlar</a></li>
+<li class="lvl2"><a href="#qiymat-qaytarish-return">Qiymat qaytarish: "return"</a></li>
+<li class="lvl2"><a href="#funksiyalarni-nomlash">Funksiyalarni nomlash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'pincha bir xil harakatni skriptning turli joylarida bajarish kerak bo'ladi. Masalan, foydalanuvchiga chiroyli xabar ko'rsatish. <strong>Funksiyalar</strong> — dasturning asosiy "qurilish bloklari". Ular kodni ko'p marta takrorlamasdan ishlatishga imkon beradi.</p>
-<h2>Funksiya e'loni (Function Declaration)</h2>
+<h2 id="funksiya-e-loni-function-declaration">Funksiya e'loni (Function Declaration)</h2>
 <p>Funksiyani yaratish uchun <em>funksiya e'loni</em> ishlatiladi. U shunday ko'rinadi:</p>
 <pre class="code"><code>function nom(parametr1, parametr2, ...) {
   // funksiya tanasi (kod)
@@ -612,7 +627,7 @@
 salomBer();
 salomBer();</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>salomBer()</code> — funksiyani <em>chaqirish</em> (call). Chaqirilganda uning tanasidagi kod bajariladi. Yuqorida ikki marta chaqirdik — natijada xabar ikki marta chiqdi.</p>
-<h2>Lokal va tashqi o'zgaruvchilar</h2>
+<h2 id="lokal-va-tashqi-o-zgaruvchilar">Lokal va tashqi o'zgaruvchilar</h2>
 <p>Funksiya ichida e'lon qilingan o'zgaruvchi — <strong>lokal</strong> o'zgaruvchi. U faqat funksiya ichida ko'rinadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>funk-lokal.js</span></div><textarea spellcheck="false">function korsat() {
   let xabar = "Salom, men lokalman";
@@ -634,7 +649,7 @@ console.log(foydalanuvchi); // Ali (funksiyadan oldin)
 salomlash();
 console.log(foydalanuvchi); // Vali (funksiya o'zgartirdi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Agar funksiya ichida tashqi o'zgaruvchi bilan bir xil nomli <em>lokal</em> o'zgaruvchi e'lon qilinsa, funksiya faqat lokalidan foydalanadi va tashqisini "ko'rmaydi" (u soyada qoladi). Iloji bo'lsa, funksiyalar tashqi o'zgaruvchilarga tayanmasligi maqsadga muvofiq.</div>
-<h2>Parametrlar</h2>
+<h2 id="parametrlar">Parametrlar</h2>
 <p>Parametrlar orqali funksiyaga ixtiyoriy ma'lumot uzatish mumkin. Ular <em>argumentlar</em> deb ham ataladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>funk-param.js</span></div><textarea spellcheck="false">function salomBer(ism, shahar) {
   console.log("Salom, " + ism + "! " + shahar + "dan kelibsizmi?");
@@ -644,7 +659,7 @@ salomBer("Ali", "Toshkent");
 salomBer("Laylo", "Samarqand");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Funksiya chaqirilganda berilgan qiymatlar (<code>"Ali"</code>, <code>"Toshkent"</code>) parametrlarga (<code>ism</code>, <code>shahar</code>) ko'chiriladi. Parametr — funksiya ichidagi lokal o'zgaruvchi.</p>
 <div class="note">Atamalar farqi: <strong>parametr</strong> — funksiya e'lonidagi o'zgaruvchi (qavs ichida yozilgani); <strong>argument</strong> — funksiya chaqirilganda beriladigan haqiqiy qiymat. Amalda ko'pincha ikkalasi bir ma'noda ishlatiladi.</div>
-<h2>Standart (default) qiymatlar</h2>
+<h2 id="standart-default-qiymatlar">Standart (default) qiymatlar</h2>
 <p>Agar funksiya chaqirilganda parametr berilmasa, uning qiymati <code>undefined</code> bo'ladi. Buning oldini olish uchun <strong>standart qiymat</strong> belgilash mumkin — <code>=</code> orqali:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>funk-default.js</span></div><textarea spellcheck="false">function salomBer(ism, shahar = "noma'lum shahar") {
   console.log(ism + " — " + shahar);
@@ -653,7 +668,7 @@ salomBer("Laylo", "Samarqand");</textarea><div class="pg-actions"><button class=
 salomBer("Ali", "Toshkent"); // Ali — Toshkent
 salomBer("Laylo");            // Laylo — noma'lum shahar</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ikkinchi chaqiruvda <code>shahar</code> berilmagani uchun standart qiymat (<code>"noma'lum shahar"</code>) ishlatildi. Standart qiymat sifatida murakkab ifoda yoki hatto boshqa funksiya chaqiruvi ham bo'lishi mumkin.</p>
-<h2>Qiymat qaytarish: "return"</h2>
+<h2 id="qiymat-qaytarish-return">Qiymat qaytarish: "return"</h2>
 <p>Funksiya natijani chaqirilgan joyga qaytarishi mumkin — buning uchun <code>return</code> ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>funk-return.js</span></div><textarea spellcheck="false">function yigindi(a, b) {
   return a + b;
@@ -674,11 +689,11 @@ console.log(tekshir(20)); // Kirish mumkin
 console.log(tekshir(15)); // Kirish taqiqlangan</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>return</code> ni qiymatsiz ham ishlatish mumkin — bu funksiyani darhol tugatadi. Bu holda funksiya <code>undefined</code> qaytaradi. Umuman <code>return</code> siz funksiya ham <code>undefined</code> qaytaradi.</p>
 <div class="warn"><code>return</code> va uning qiymatini bir qatorga yozing! <code>return</code> dan keyin yangi qatorga o'tsangiz, JavaScript avtomatik nuqta-vergul qo'yib, bo'sh <code>return</code> deb hisoblaydi va <code>undefined</code> qaytaradi. Masalan, <code>return</code> keyin yangi qatorda <code>(a + b)</code> yozish — xato natija beradi.</div>
-<h2>Funksiyalarni nomlash</h2>
+<h2 id="funksiyalarni-nomlash">Funksiyalarni nomlash</h2>
 <p>Funksiya — bu <em>harakat</em>. Shuning uchun uning nomi odatda fe'l (yoki fe'lga o'xshash) bo'ladi va funksiya nima qilishini aniq ifodalashi kerak. Ko'p tarqalgan prefikslar:</p>
 <ul><li><code>get...</code> — qiymat qaytaradi (masalan <code>getYosh</code>);</li><li><code>calc...</code> — biror narsani hisoblaydi (<code>calcYigindi</code>);</li><li><code>create...</code> — biror narsa yaratadi (<code>createForma</code>);</li><li><code>check...</code> — tekshiradi va boolean qaytaradi (<code>checkKirish</code>);</li><li><code>show...</code> — biror narsani ko'rsatadi (<code>showXabar</code>).</li></ul>
 <div class="tip">Bitta funksiya — bitta harakat. Agar funksiya nomi <code>getYosh</code> bo'lsa, u faqat yoshni olib qaytarishi kerak, uni ekranga chiqarmasligi lozim. Qisqa, lekin aniq nomlar tanlang — kod hujjatning o'zi bo'ladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Funksiya <strong>function nom(param) { ... }</strong> ko'rinishida e'lon qilinadi;</li><li><strong>Parametrlar</strong> orqali funksiyaga ma'lumot uzatiladi; <strong>standart qiymat</strong> <code>=</code> bilan beriladi;</li><li>Funksiya ichidagi o'zgaruvchilar — <strong>lokal</strong>, tashqaridagilar — <strong>tashqi</strong>;</li><li><strong>return</strong> natijani qaytaradi va funksiyani to'xtatadi; qiymatsiz yoki umuman bo'lmasa — <code>undefined</code>;</li><li>Funksiya nomi uning harakatini aniq ifodalashi kerak — bitta funksiya, bitta vazifa.</li></ul>
 <nav class="lesson-nav">
   <a href="switch.html"><span class="dir">← Oldingi</span><span class="ttl">switch konstruksiyasi</span></a>
@@ -692,6 +707,6 @@ console.log(tekshir(15)); // Kirish taqiqlangan</textarea><div class="pg-actions
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

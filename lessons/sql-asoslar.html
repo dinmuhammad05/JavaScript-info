@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SQL asoslari — Kodla</title>
   <meta name="description" content="SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,28 @@
 <main class="content article">
 <div class="crumbs">Ma'lumotlar bazalari</div>
 <h1>SQL asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#create-table-jadval-yaratish">CREATE TABLE — jadval yaratish</a></li>
+<li class="lvl3"><a href="#asosiy-ma-lumot-turlari">Asosiy ma'lumot turlari</a></li>
+<li class="lvl3"><a href="#cheklovlar-constraints">Cheklovlar (constraints)</a></li>
+<li class="lvl2"><a href="#insert-into-ma-lumot-qo-shish">INSERT INTO — ma'lumot qo'shish</a></li>
+<li class="lvl2"><a href="#select-ma-lumot-o-qish">SELECT — ma'lumot o'qish</a></li>
+<li class="lvl2"><a href="#where-shart-bo-yicha-filtrlash">WHERE — shart bo'yicha filtrlash</a></li>
+<li class="lvl3"><a href="#and-va-or-bir-necha-shart">AND va OR — bir necha shart</a></li>
+<li class="lvl3"><a href="#like-matn-ichida-qidirish">LIKE — matn ichida qidirish</a></li>
+<li class="lvl3"><a href="#boshqa-foydali-shartlar">Boshqa foydali shartlar</a></li>
+<li class="lvl2"><a href="#order-by-saralash">ORDER BY — saralash</a></li>
+<li class="lvl2"><a href="#limit-natijani-cheklash">LIMIT — natijani cheklash</a></li>
+<li class="lvl2"><a href="#update-ma-lumotni-o-zgartirish">UPDATE — ma'lumotni o'zgartirish</a></li>
+<li class="lvl2"><a href="#delete-ma-lumotni-o-chirish">DELETE — ma'lumotni o'chirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">SQL (Structured Query Language) — relatsion bazalar bilan gaplashish tili. U bilan siz jadval yaratasiz, ma'lumot qo'shasiz, o'qiysiz, o'zgartirasiz va o'chirasiz. Ushbu darsda eng muhim SQL buyruqlarini o'rganamiz. Barcha misollar PostgreSQL/MySQL uslubida yozilgan (ular deyarli bir xil).</p>
 <div class="note">SQL buyruqlari odatda BOSH HARFLAR bilan yoziladi (SELECT, FROM, WHERE), lekin bu majburiy emas — SQL katta-kichik harfga sezgir emas (kalit so'zlar uchun). An'ana bo'yicha kalit so'zlar bosh harfda, jadval va ustun nomlari kichik harfda yoziladi. Har bir buyruq oxirida nuqta-vergul <code>;</code> qo'yiladi.</div>
-<h2>CREATE TABLE — jadval yaratish</h2>
+<h2 id="create-table-jadval-yaratish">CREATE TABLE — jadval yaratish</h2>
 <p>Har qanday ish jadval yaratishdan boshlanadi. <code>CREATE TABLE</code> buyrug'i jadval nomi va ustunlar ro'yxatini oladi. Har bir ustun uchun <strong>nom</strong> va <strong>tur</strong> ko'rsatiladi:</p>
 <pre class="code"><code>CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -609,12 +631,12 @@
   created_at TIMESTAMP DEFAULT NOW()
 );</code></pre>
 <p>Bu yerda nima yuz berdi? <code>users</code> nomli jadval yaratildi va unda 6 ta ustun belgilandi. Endi turlarni va cheklovlarni ko'rib chiqamiz.</p>
-<h3>Asosiy ma'lumot turlari</h3>
+<h3 id="asosiy-ma-lumot-turlari">Asosiy ma'lumot turlari</h3>
 <ul><li><code>INT</code> (yoki <code>INTEGER</code>) — butun son (masalan, 25, -3, 1000);</li><li><code>VARCHAR(n)</code> — o'zgaruvchan uzunlikdagi matn, ko'pi bilan <code>n</code> ta belgi (masalan, <code>VARCHAR(100)</code>);</li><li><code>TEXT</code> — uzunligi cheklanmagan matn (uzun izohlar, maqolalar uchun);</li><li><code>BOOLEAN</code> — mantiqiy qiymat: <code>true</code> yoki <code>false</code>;</li><li><code>DECIMAL(p, s)</code> yoki <code>NUMERIC</code> — aniq kasrli son (pul uchun ideal, masalan <code>DECIMAL(10, 2)</code> — 2 kasr xonasi);</li><li><code>DATE</code> — sana (2026-07-01);</li><li><code>TIMESTAMP</code> — sana va vaqt birga;</li><li><code>SERIAL</code> — avtomatik o'suvchi butun son (PostgreSQL'da). Har yangi qatorda o'zi 1, 2, 3... bo'lib ortadi, odatda <code>id</code> uchun ishlatiladi.</li></ul>
-<h3>Cheklovlar (constraints)</h3>
+<h3 id="cheklovlar-constraints">Cheklovlar (constraints)</h3>
 <ul><li><code>PRIMARY KEY</code> — asosiy kalit: qatorni yagona aniqlaydigan ustun (takrorlanmaydi, bo'sh bo'lmaydi);</li><li><code>NOT NULL</code> — bu ustun bo'sh (NULL) bo'lishi mumkin emas;</li><li><code>UNIQUE</code> — qiymat takrorlanmasligi kerak (masalan, email);</li><li><code>DEFAULT qiymat</code> — agar qiymat berilmasa, shu standart qiymat qo'yiladi.</li></ul>
 <div class="note"><code>NULL</code> — bu "qiymat yo'q", "noma'lum" degani. U 0 yoki bo'sh matndan farq qiladi. Masalan, foydalanuvchi yoshini ko'rsatmasa, <code>age</code> ustuni NULL bo'lishi mumkin.</div>
-<h2>INSERT INTO — ma'lumot qo'shish</h2>
+<h2 id="insert-into-ma-lumot-qo-shish">INSERT INTO — ma'lumot qo'shish</h2>
 <p>Jadval tayyor bo'lgach, unga qator qo'shamiz. <code>INSERT INTO</code> buyrug'i jadval nomini, ustunlarni va qiymatlarni oladi:</p>
 <pre class="code"><code>INSERT INTO users (name, email, age)
 VALUES ('Ali', 'ali@mail.com', 25);</code></pre>
@@ -624,25 +646,25 @@ VALUES ('Ali', 'ali@mail.com', 25);</code></pre>
   ('Vali', 'vali@mail.com', 30),
   ('Guli', 'guli@mail.com', 22),
   ('Hasan', 'hasan@mail.com', 28);</code></pre>
-<h2>SELECT — ma'lumot o'qish</h2>
+<h2 id="select-ma-lumot-o-qish">SELECT — ma'lumot o'qish</h2>
 <p><code>SELECT</code> — eng ko'p ishlatiladigan buyruq. U jadvaldan ma'lumot o'qiydi. Barcha ustunlarni olish uchun yulduzcha <code>*</code> ishlatiladi:</p>
 <pre class="code"><code>SELECT * FROM users;</code></pre>
 <p>Faqat kerakli ustunlarni olish uchun ularning nomlarini sanab o'tamiz (bu tezroq va toza):</p>
 <pre class="code"><code>SELECT name, email FROM users;</code></pre>
 <div class="tip">Amaliyotda <code>SELECT *</code> emas, balki aniq kerakli ustunlarni sanab o'tish yaxshi odat. Bu tarmoqdan kamroq ma'lumot uzatadi va kod nima olayotgani aniq ko'rinadi.</div>
-<h2>WHERE — shart bo'yicha filtrlash</h2>
+<h2 id="where-shart-bo-yicha-filtrlash">WHERE — shart bo'yicha filtrlash</h2>
 <p>Ko'pincha bizga hamma qator emas, faqat ma'lum shartga mos qatorlar kerak. <code>WHERE</code> shu uchun ishlatiladi:</p>
 <pre class="code"><code>SELECT * FROM users WHERE age &gt; 25;</code></pre>
 <p>Solishtirish operatorlari: <code>=</code> (teng), <code>&lt;&gt;</code> yoki <code>!=</code> (teng emas), <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Matn bilan solishtirish:</p>
 <pre class="code"><code>SELECT * FROM users WHERE name = 'Ali';</code></pre>
-<h3>AND va OR — bir necha shart</h3>
+<h3 id="and-va-or-bir-necha-shart">AND va OR — bir necha shart</h3>
 <p>Bir necha shartni birlashtirish uchun <code>AND</code> (va) hamda <code>OR</code> (yoki) ishlatiladi:</p>
 <pre class="code"><code>-- yoshi 25 dan katta VA faol bo'lganlar
 SELECT * FROM users WHERE age &gt; 25 AND is_active = true;
 
 -- ismi Ali YOKI Vali bo'lganlar
 SELECT * FROM users WHERE name = 'Ali' OR name = 'Vali';</code></pre>
-<h3>LIKE — matn ichida qidirish</h3>
+<h3 id="like-matn-ichida-qidirish">LIKE — matn ichida qidirish</h3>
 <p><code>LIKE</code> operatori matn namunasi (pattern) bo'yicha qidiradi. Ikki maxsus belgi ishlatiladi: <code>%</code> — istalgan (nol yoki ko'p) belgilar, <code>_</code> — aniq bitta belgi:</p>
 <pre class="code"><code>-- ismi 'A' harfi bilan boshlanadiganlar
 SELECT * FROM users WHERE name LIKE 'A%';
@@ -652,7 +674,7 @@ SELECT * FROM users WHERE email LIKE '%mail%';
 
 -- ismi aynan 4 harfli va 'A' bilan boshlananuvchi
 SELECT * FROM users WHERE name LIKE 'A___';</code></pre>
-<h3>Boshqa foydali shartlar</h3>
+<h3 id="boshqa-foydali-shartlar">Boshqa foydali shartlar</h3>
 <pre class="code"><code>-- ma'lum ro'yxatdagi qiymatlar
 SELECT * FROM users WHERE age IN (22, 25, 30);
 
@@ -662,7 +684,7 @@ SELECT * FROM users WHERE age BETWEEN 20 AND 30;
 -- qiymati yo'q (NULL) bo'lganlar
 SELECT * FROM users WHERE age IS NULL;</code></pre>
 <div class="warn">NULL bilan solishtirishda <code>=</code> ishlatilmaydi! <code>age = NULL</code> hech qachon <code>true</code> bermaydi. To'g'ri usul — <code>IS NULL</code> yoki <code>IS NOT NULL</code>.</div>
-<h2>ORDER BY — saralash</h2>
+<h2 id="order-by-saralash">ORDER BY — saralash</h2>
 <p>Natijani tartiblash uchun <code>ORDER BY</code> ishlatiladi. <code>ASC</code> — o'sish bo'yicha (standart), <code>DESC</code> — kamayish bo'yicha:</p>
 <pre class="code"><code>-- yosh bo'yicha o'sish tartibida
 SELECT * FROM users ORDER BY age ASC;
@@ -672,7 +694,7 @@ SELECT * FROM users ORDER BY age DESC;
 
 -- avval yosh bo'yicha, keyin ism bo'yicha
 SELECT * FROM users ORDER BY age DESC, name ASC;</code></pre>
-<h2>LIMIT — natijani cheklash</h2>
+<h2 id="limit-natijani-cheklash">LIMIT — natijani cheklash</h2>
 <p><code>LIMIT</code> qaytariladigan qatorlar sonini cheklaydi. Bu "eng katta 5 ta" kabi so'rovlar uchun juda foydali:</p>
 <pre class="code"><code>-- eng yosh 3 ta foydalanuvchi
 SELECT * FROM users ORDER BY age ASC LIMIT 3;
@@ -680,7 +702,7 @@ SELECT * FROM users ORDER BY age ASC LIMIT 3;
 -- 5-qatordan boshlab 10 ta olish (sahifalash uchun)
 SELECT * FROM users ORDER BY id LIMIT 10 OFFSET 5;</code></pre>
 <div class="tip"><code>LIMIT</code> va <code>OFFSET</code> birgalikda "sahifalash" (pagination) uchun ishlatiladi. Masalan, har sahifada 10 ta natija ko'rsatsangiz: 1-sahifa <code>LIMIT 10 OFFSET 0</code>, 2-sahifa <code>LIMIT 10 OFFSET 10</code> va hokazo.</div>
-<h2>UPDATE — ma'lumotni o'zgartirish</h2>
+<h2 id="update-ma-lumotni-o-zgartirish">UPDATE — ma'lumotni o'zgartirish</h2>
 <p><code>UPDATE</code> mavjud qatorlarni o'zgartiradi. <code>SET</code> qaysi ustunni qanday qiymatga o'zgartirishni, <code>WHERE</code> esa qaysi qatorlarni belgilaydi:</p>
 <pre class="code"><code>-- id = 1 bo'lgan foydalanuvchining yoshini o'zgartirish
 UPDATE users SET age = 26 WHERE id = 1;
@@ -688,7 +710,7 @@ UPDATE users SET age = 26 WHERE id = 1;
 -- bir vaqtda bir necha ustun
 UPDATE users SET age = 26, is_active = false WHERE id = 1;</code></pre>
 <div class="warn"><strong>Juda muhim:</strong> <code>UPDATE</code>da <code>WHERE</code>ni unutmang! Agar <code>WHERE</code>siz yozsangiz — <code>UPDATE users SET age = 0;</code> — bu <strong>barcha</strong> qatorlarning yoshini o'zgartiradi. Bu ko'p yangi boshlovchilarning eng katta xatosi.</div>
-<h2>DELETE — ma'lumotni o'chirish</h2>
+<h2 id="delete-ma-lumotni-o-chirish">DELETE — ma'lumotni o'chirish</h2>
 <p><code>DELETE</code> qatorlarni o'chiradi. Bu ham <code>WHERE</code> bilan ishlatiladi:</p>
 <pre class="code"><code>-- id = 3 bo'lgan foydalanuvchini o'chirish
 DELETE FROM users WHERE id = 3;
@@ -696,7 +718,7 @@ DELETE FROM users WHERE id = 3;
 -- 18 yoshdan kichiklarni o'chirish
 DELETE FROM users WHERE age &lt; 18;</code></pre>
 <div class="warn"><code>DELETE FROM users;</code> — <code>WHERE</code>siz yozilsa, jadvaldagi BARCHA qatorlarni o'chiradi! Har doim avval <code>SELECT</code> bilan qaysi qatorlar o'chishini tekshirib ko'ring, keyin xuddi shu <code>WHERE</code> bilan <code>DELETE</code> qiling.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>CREATE TABLE</code> — jadval yaratadi, har ustun uchun tur (INT, VARCHAR, BOOLEAN...) va cheklov (PRIMARY KEY, NOT NULL, UNIQUE, DEFAULT) beriladi;</li><li><code>INSERT INTO ... VALUES</code> — yangi qator(lar) qo'shadi; matn bitta tirnoqda;</li><li><code>SELECT ustunlar FROM jadval</code> — ma'lumot o'qiydi; <code>*</code> barcha ustun;</li><li><code>WHERE</code> — shart bo'yicha filtrlaydi; <code>AND</code>, <code>OR</code>, <code>LIKE</code>, <code>IN</code>, <code>BETWEEN</code>, <code>IS NULL</code>;</li><li><code>ORDER BY</code> — saralaydi (ASC/DESC); <code>LIMIT</code>/<code>OFFSET</code> — natijani cheklaydi;</li><li><code>UPDATE ... SET ... WHERE</code> — o'zgartiradi; <code>DELETE FROM ... WHERE</code> — o'chiradi;</li><li><strong>WHERE'ni unutmaslik</strong> — UPDATE va DELETE'da eng muhim ehtiyot chorasi.</li></ul>
 <nav class="lesson-nav">
   <a href="db-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Ma'lumotlar bazasi nima?</span></a>
@@ -710,6 +732,6 @@ DELETE FROM users WHERE age &lt; 18;</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

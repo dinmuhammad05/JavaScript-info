@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TextDecoder va TextEncoder — Kodla</title>
   <meta name="description" content="Ikkilik ma'lumotni matnga aylantirish: TextDecoder baytlarni satrga o'giradi, TextEncoder esa satrni baytlarga. UTF-8 kodlash bilan amaliy ishlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Ikkilik ma'lumot va fayllar</div>
 <h1>TextDecoder va TextEncoder</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#textdecoder-baytlardan-matnga">TextDecoder: baytlardan matnga</a></li>
+<li class="lvl2"><a href="#utf-8-va-ko-p-baytli-belgilar">UTF-8 va ko'p baytli belgilar</a></li>
+<li class="lvl2"><a href="#textencoder-matndan-baytlarga">TextEncoder: matndan baytlarga</a></li>
+<li class="lvl2"><a href="#aylantirishning-to-liq-davri">Aylantirishning to'liq davri</a></li>
+<li class="lvl2"><a href="#qachon-ishlatiladi">Qachon ishlatiladi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ikkilik ma'lumot bilan ishlaganda tez-tez matnga aylantirish kerak bo'ladi. Masalan, faylni o'qiganingizda baytlar keladi, ularni esa odam o'qiy oladigan satrga o'girish kerak. Buning uchun ikkita o'rnatilgan obyekt bor: <code>TextDecoder</code> (baytlardan matnga) va <code>TextEncoder</code> (matndan baytlarga). Ular <strong>Node.js va brauzerda</strong> mavjud.</p>
-<h2>TextDecoder: baytlardan matnga</h2>
+<h2 id="textdecoder-baytlardan-matnga">TextDecoder: baytlardan matnga</h2>
 <p><code>TextDecoder</code> berilgan bayt ketma-ketligini (buffer yoki TypedArray) satrga o'giradi. Avval dekoder yaratiladi, so'ng <code>decode</code> metodi chaqiriladi:</p>
 <pre class="code"><code>let decoder = new TextDecoder(kodlash, {options});
 let str = decoder.decode(bytesBuffer);</code></pre>
@@ -611,7 +625,7 @@ let str = decoder.decode(bytes);
 console.log(str);        // Hi
 console.log(str.length); // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>decode</code>ga <code>Uint8Array</code>, boshqa TypedArray yoki <code>ArrayBuffer</code>ni berish mumkin. Standart holda kodlash — UTF-8, shuning uchun ko'p hollarda argument yozish shart emas.</div>
-<h2>UTF-8 va ko'p baytli belgilar</h2>
+<h2 id="utf-8-va-ko-p-baytli-belgilar">UTF-8 va ko'p baytli belgilar</h2>
 <p>ASCII belgilar (lotin harflari, raqamlar) UTF-8da bitta bayt egallaydi. Lekin boshqa alifbolar — o'zbekcha (kirill), arab, emoji — bir necha bayt egallaydi. Masalan, o'zbekcha kirill harflari odatda 2 baytdan iborat:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>decoder-utf8.js</span></div><textarea spellcheck="false">// "Salom" so'zining UTF-8 baytlari (lotin)
 let bytes = new Uint8Array([83, 97, 108, 111, 109]);
@@ -632,7 +646,7 @@ let s1 = decoder.decode(qism1, {stream: true}); // bo'sh yoki qisman
 let s2 = decoder.decode(qism2, {stream: true}); // to'liq belgi
 
 console.log("Natija uzunligi: " + (s1 + s2).length); // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>TextEncoder: matndan baytlarga</h2>
+<h2 id="textencoder-matndan-baytlarga">TextEncoder: matndan baytlarga</h2>
 <p><code>TextEncoder</code> teskari ishni bajaradi — satrni UTF-8 baytlariga o'giradi. U doim <strong>faqat UTF-8</strong> bilan ishlaydi (boshqa kodlashni qo'llab-quvvatlamaydi), shuning uchun argument olmaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>encoder-oddiy.js</span></div><textarea spellcheck="false">let encoder = new TextEncoder();
 let bytes = encoder.encode("Hi");
@@ -649,7 +663,7 @@ let bytes = encoder.encode("A\u20AC"); // A + evro belgisi
 console.log(bytes.length); // 4  (A=1 bayt, evro=3 bayt)
 console.log(bytes[0]);     // 65  (A)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">TextEncoderda yana <code>encodeInto(str, uint8Array)</code> metodi bor — u yangi massiv yaratmasdan, natijani mavjud <code>Uint8Array</code>ga to'g'ridan-to'g'ri yozadi. Bu tez-tez kodlash kerak bo'lganda xotira tejaydi.</div>
-<h2>Aylantirishning to'liq davri</h2>
+<h2 id="aylantirishning-to-liq-davri">Aylantirishning to'liq davri</h2>
 <p>Matnni baytga, so'ng qaytadan matnga o'girib, natija bir xilligiga ishonch hosil qilaylik:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>toliq-davr.js</span></div><textarea spellcheck="false">let asl = "Salom, dunyo!";
 
@@ -661,11 +675,11 @@ let decoder = new TextDecoder();
 let qayta = decoder.decode(bytes);
 console.log(qayta);          // Salom, dunyo!
 console.log(qayta === asl);  // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qachon ishlatiladi</h2>
+<h2 id="qachon-ishlatiladi">Qachon ishlatiladi</h2>
 <p>TextDecoder/TextEncoder amaliyotda quyidagi holatlarda kerak bo'ladi:</p>
 <ul><li><strong>Fayl o'qish</strong>: <code>ArrayBuffer</code> ko'rinishida kelgan matnli faylni satrga o'girish;</li><li><strong>Tarmoq</strong>: <code>fetch</code> orqali kelgan ikkilik javobni matnga aylantirish;</li><li><strong>WebSocket</strong>: ikkilik xabarlarni o'qish;</li><li><strong>Kriptografiya</strong>: matnni baytga o'girib, hash yoki shifrlashga uzatish;</li><li><strong>Fayl formatlari</strong>: sarlavha (header)dan matnli qismlarni ajratib olish.</li></ul>
 <div class="tip">Agar sizda oddiy ASCII matn bo'lsa va tezkorlik muhim bo'lmasa, <code>String.fromCharCode(...bytes)</code> bilan ham ishlash mumkin. Lekin <strong>UTF-8 va ko'p tilli matn</strong> uchun doim <code>TextDecoder</code> ishlating — u ko'p baytli belgilarni to'g'ri qayta ishlaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>TextDecoder</code> — baytlarni (Uint8Array/ArrayBuffer) satrga o'giradi;</li><li><code>TextEncoder</code> — satrni UTF-8 baytlariga (Uint8Array) o'giradi;</li><li>Standart kodlash — <strong>UTF-8</strong>; TextEncoder faqat UTF-8 bilan ishlaydi;</li><li>Ko'p baytli belgilar bir nechta bayt egallaydi — bayt soni belgi soniga teng emas;</li><li>Oqimli (bo'laklab kelgan) ma'lumot uchun <code>decode(..., {stream: true})</code> ishlating;</li><li>Ular Node.js va brauzerda mavjud — fayl, tarmoq va kriptografiyada ko'p qo'llaniladi.</li></ul>
 <nav class="lesson-nav">
   <a href="arraybuffer.html"><span class="dir">← Oldingi</span><span class="ttl">ArrayBuffer, TypedArray</span></a>
@@ -679,6 +693,6 @@ console.log(qayta === asl);  // true</textarea><div class="pg-actions"><button c
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

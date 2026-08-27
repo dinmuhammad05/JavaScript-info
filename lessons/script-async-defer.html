@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skriptlar: async, defer — Kodla</title>
   <meta name="description" content="Skriptlarni yuklashda bloklovchi muammo, defer va async atributlari, ularning farqi, dinamik skriptlar va qaysi birini qachon ishlatish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,21 @@
 <main class="content article">
 <div class="crumbs">Hujjat va resurs yuklanishi</div>
 <h1>Skriptlar: async, defer</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#bloklovchi-skript-muammosi">Bloklovchi skript muammosi</a></li>
+<li class="lvl2"><a href="#defer">defer</a></li>
+<li class="lvl3"><a href="#defer-skriptlar-tartibni-saqlaydi">defer skriptlar tartibni saqlaydi</a></li>
+<li class="lvl2"><a href="#async">async</a></li>
+<li class="lvl2"><a href="#async-va-defer-farqi">async va defer farqi</a></li>
+<li class="lvl2"><a href="#dinamik-skriptlar">Dinamik skriptlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Zamonaviy saytlarda skriptlar ko'pincha HTML'dan "og'irroq" bo'ladi: ular hajmi katta, yuklanishi va ishga tushishi vaqt oladi. Brauzer HTML'ni o'qib turib <code>&lt;script&gt;</code> tegiga duch kelsa, u DOM qurishni to'xtatib skriptni yuklab bajarishi kerak. Bu esa sahifaning ko'rinishini kechiktiradi. Bu muammoni hal qilish uchun ikkita atribut bor: <code>defer</code> va <code>async</code>. Ushbu darsda ular qanday ishlashini va farqini chuqur o'rganamiz.</p>
 <div class="warn">Bu darsdagi HTML/DOM misollari brauzer muhitiga tegishli. Kurs sahifasidagi maydoncha Node.js muhitida ishlaydi, shu sabab bu misollar <strong>statik</strong> — faqat o'qish uchun, ishga tushirib bo'lmaydi.</div>
-<h2>Bloklovchi skript muammosi</h2>
+<h2 id="bloklovchi-skript-muammosi">Bloklovchi skript muammosi</h2>
 <p>Ikkita muhim muammo bor. Birinchidan, skriptlar undan <strong>keyingi</strong> DOM elementlarini ko'ra olmaydi. Shuning uchun ularga hodisa biriktira olmaydi:</p>
 <pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
@@ -620,7 +635,7 @@
   &lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;
 &lt;/body&gt;</code></pre>
 <p>Lekin bu yechim ideal emas: brauzer skriptni faqat butun HTML hujjatni yuklab bo'lgach ko'radi va yuklashni boshlaydi. Katta HTML'larda bu sezilarli kechikish beradi. Bu muammoni <code>defer</code> va <code>async</code> atributlari hal qiladi.</p>
-<h2>defer</h2>
+<h2 id="defer">defer</h2>
 <p><code>defer</code> atributi brauzerga skriptni "fon rejimida" yuklashni buyuradi: brauzer skriptni yuklab olishda kutmaydi, HTML'ni qurishda davom etadi. Skript esa DOM to'liq tayyor bo'lgach bajariladi:</p>
 <pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
 
@@ -639,14 +654,14 @@
 
 &lt;script defer src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"&gt;&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>DOMContentLoaded</code> <code>defer</code>li skript yuklanib bajarilishini kutadi.</p>
-<h3>defer skriptlar tartibni saqlaydi</h3>
+<h3 id="defer-skriptlar-tartibni-saqlaydi">defer skriptlar tartibni saqlaydi</h3>
 <p>Bir necha <code>defer</code>li skript bo'lsa, ular <strong>hujjatdagi tartibda</strong> bajariladi — xuddi oddiy skriptlar kabi:</p>
 <pre class="code"><code>&lt;script defer src="long.js"&gt;&lt;/script&gt;
 &lt;script defer src="small.js"&gt;&lt;/script&gt;</code></pre>
 <p>Bu yerda <code>long.js</code> hajmi katta bo'lsa-da, u avval yuklab bo'lingandek kutiladi va <code>small.js</code>dan oldin bajariladi. Brauzer skriptlarni parallel yuklaydi (tezlik uchun), lekin ularni belgilangan tartibda ishga tushiradi.</p>
 <div class="tip"><code>defer</code> — kodning to'g'ri tartibda bajarilishi muhim bo'lganda ajoyib. Masalan, ikkinchi skript birinchisiga bog'liq bo'lsa (kutubxona + uni ishlatuvchi kod), <code>defer</code> tartibni kafolatlaydi.</div>
 <div class="note"><code>defer</code> atributi faqat tashqi skriptlar uchun, ya'ni <code>src</code> ga ega skriptlar uchun ishlaydi. Agar <code>&lt;script&gt;</code>da <code>src</code> bo'lmasa (kodni to'g'ridan-to'g'ri yozgan bo'lsangiz), <code>defer</code> e'tiborga olinmaydi.</div>
-<h2>async</h2>
+<h2 id="async">async</h2>
 <p><code>async</code> atributi ham skriptni fon rejimida yuklaydi, lekin butunlay boshqacha mustaqillik beradi. <code>async</code>li skript to'liq mustaqil:</p>
 <ul><li>Sahifa <code>async</code>li skriptni kutmaydi: kontent ko'rsatiladi, <code>DOMContentLoaded</code> hodisasi ham skriptni kutmasligi mumkin;</li><li><code>async</code>li skriptlar boshqa skriptlarni kutmaydi va ularni ham kutib turmaydi — tartib yo'q. Qaysi biri avval yuklansa, o'sha avval bajariladi ("load-first" tartibi).</li></ul>
 <pre class="code"><code>&lt;p&gt;...skriptdan oldingi kontent...&lt;/p&gt;
@@ -660,7 +675,7 @@
 <p>Bu yerdagi tartib "belgilanmagan":</p>
 <ul><li>Sahifa kontenti darhol ko'rsatiladi: <code>async</code> bloklamaydi;</li><li><code>DOMContentLoaded</code> va <code>async</code> bir-birini kutmaydi — <code>DOMContentLoaded</code> <code>async</code>dan oldin ham, keyin ham bo'lishi mumkin (yuklanish tezligiga qarab);</li><li><code>async</code> skriptlar bir-birini kutmaydi: qaysi biri oldin yuklansa (kichikroq yoki keshdan olingan), o'sha oldin bajariladi.</li></ul>
 <div class="tip"><code>async</code> boshqa skriptlarga bog'liq bo'lmagan mustaqil skriptlar uchun ideal: hisoblagichlar (counters), reklama, analitika kabi uchinchi tomon skriptlari. Ular sahifangizning boshqa kodiga bog'liq emas va sizning kodingiz ham ularga bog'liq emas.</div>
-<h2>async va defer farqi</h2>
+<h2 id="async-va-defer-farqi">async va defer farqi</h2>
 <p>Ikkalasi ham skriptni bloklamasdan fon rejimida yuklaydi. Asosiy farq — <strong>tartib</strong> va <strong>qachon bajarilishi</strong>:</p>
 <ul><li><strong>Tartib (order):</strong> <code>defer</code> — hujjatdagi tartibda bajariladi; <code>async</code> — qaysi biri oldin yuklansa, o'sha oldin (load-first, tartib yo'q).</li><li><strong>DOMContentLoaded:</strong> <code>defer</code> — DOM qurilib bo'lgach, lekin <code>DOMContentLoaded</code>dan <strong>oldin</strong> bajariladi (uni kutadi); <code>async</code> — istalgan vaqtda, <code>DOMContentLoaded</code> bilan bog'liq emas.</li><li><strong>Foydalanish:</strong> <code>defer</code> — tartib va DOM muhim bo'lganda (bog'liq skriptlar, DOM bilan ishlash); <code>async</code> — mustaqil, boshqa hech narsaga bog'liq bo'lmagan skriptlar uchun.</li></ul>
 <p>Uni jadval ko'rinishida umumlashtiramiz:</p>
@@ -670,7 +685,7 @@ defer   |  hujjatdagi tartibda     |  KUTADI (undan oldin)
 async   |  load-first tartibida    |  BOG'LIQ EMAS (kutmaydi)</code></pre>
 <div class="warn">Amaliyotda <code>defer</code> odatda DOM'ga muhtoj yoki bir-biriga bog'liq skriptlar uchun, <code>async</code> esa mustaqil skriptlar (analitika, reklama) uchun ishlatiladi. Ko'p hollarda dasturchilar bosh sahifa kodini <code>defer</code> bilan, uchinchi tomon vidjetlarini <code>async</code> bilan yuklaydi.</div>
 <div class="note">Agar skriptda ham <code>async</code>, ham <code>defer</code> yozilsa, zamonaviy brauzerlarda <code>async</code> ustunlik qiladi. Eski, <code>async</code>ni qo'llab-quvvatlamaydigan brauzerlarda esa <code>defer</code> zaxira sifatida ishlaydi.</div>
-<h2>Dinamik skriptlar</h2>
+<h2 id="dinamik-skriptlar">Dinamik skriptlar</h2>
 <p>Skriptni HTML'da yozish shart emas — uni JavaScript orqali dinamik ravishda ham qo'shishimiz mumkin. Buning uchun element yaratib, uni hujjatga qo'shamiz:</p>
 <pre class="code"><code>let script = document.createElement('script');
 script.src = '/article/dynamic-scripts/long.js';
@@ -691,7 +706,7 @@ loadScript('/article/dynamic-scripts/long.js');
 loadScript('/article/dynamic-scripts/small.js');</code></pre>
 <p>Agar <code>script.async = false</code> qo'ymasak, tartib "load-first" bo'lardi — kichikroq <code>small.js</code> ehtimol oldin yuklanib, oldin bajarilardi.</p>
 <div class="tip"><code>script.async = false</code> — bir necha dinamik skriptni to'g'ri tartibda yuklashning oddiy usuli. Bu ayniqsa modulli kutubxonalarni tartib bilan yuklashda foydali.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p><code>async</code> va <code>defer</code> ikkalasi ham skript yuklanishini bloklamasdan amalga oshiradi va foydalanuvchi sahifani deyarli darhol ko'radi. Farqlar:</p>
 <ul><li><code>defer</code>: tartibni saqlaydi (hujjatdagi kabi), <code>DOMContentLoaded</code>dan oldin bajariladi, DOM tayyor bo'lishini kutadi. To'g'ri tartib va DOM muhim bo'lganda ishlating;</li><li><code>async</code>: mustaqil, load-first tartibi (belgilanmagan), <code>DOMContentLoaded</code> bilan bog'liq emas. Reklama, analitika kabi mustaqil skriptlar uchun;</li><li>Dinamik skriptlar sukut bo'yicha <code>async</code> — tartibni tiklash uchun <code>script.async = false</code> qo'ying.</li></ul>
 <div class="warn">Muhim tavsiya: <code>defer</code> yoki <code>async</code> ishlatganda skript yuklanmasdan turib sahifa ko'rsatilishini yodda tuting. Foydalanuvchi skript hali ishga tushmagan sahifani ko'radi — ba'zi tugmalar hali "jonlanmagan" bo'lishi mumkin. Shu sabab yuklanish holatini ko'rsatuvchi indikator qo'shish yoki funksionallikni asta-sekin yoqish yaxshi amaliyot hisoblanadi.</div>
@@ -707,6 +722,6 @@ loadScript('/article/dynamic-scripts/small.js');</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

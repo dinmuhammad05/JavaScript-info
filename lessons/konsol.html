@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ishlab chiquvchi konsoli — Kodla</title>
   <meta name="description" content="Brauzer developer tools va konsol orqali xatolarni ko'rish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,21 @@
 <main class="content article">
 <div class="crumbs">Kirish</div>
 <h1>Ishlab chiquvchi konsoli</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#developer-tools-nima">Developer Tools nima?</a></li>
+<li class="lvl2"><a href="#konsolni-qanday-ochish-kerak">Konsolni qanday ochish kerak?</a></li>
+<li class="lvl2"><a href="#konsol-nima-uchun-kerak">Konsol nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Kodda xatolar bo'lishi muqarrar. Ularni ko'rish va tuzatish uchun brauzerlar <strong>ishlab chiquvchi vositalari</strong> (developer tools) bilan jihozlangan.</p>
-<h2>Developer Tools nima?</h2>
+<h2 id="developer-tools-nima">Developer Tools nima?</h2>
 <p>Har bir zamonaviy brauzer ichida dasturchilar uchun maxsus vositalar to'plami bor. Ular xatolarni ko'rsatadi, kodni bosqichma-bosqich bajarishga va tarmoq so'rovlarini kuzatishga imkon beradi.</p>
-<h2>Konsolni qanday ochish kerak?</h2>
+<h2 id="konsolni-qanday-ochish-kerak">Konsolni qanday ochish kerak?</h2>
 <ul><li><strong>Chrome / Edge / Firefox</strong>: <code>F12</code> tugmasi;</li><li><strong>Mac</strong>: <code>Cmd + Option + J</code> (Chrome) yoki <code>Cmd + Option + K</code> (Firefox);</li><li>Yoki sahifada o'ng tugma → "Inspect" → "Console" bo'limi.</li></ul>
-<h2>Konsol nima uchun kerak?</h2>
+<h2 id="konsol-nima-uchun-kerak">Konsol nima uchun kerak?</h2>
 <p><strong>Console</strong> bo'limi ikki asosiy vazifani bajaradi:</p>
 <ol><li>Kodda yuzaga kelgan xatolarni (qizil rangda) ko'rsatadi;</li><li><code>console.log()</code> orqali chiqarilgan ma'lumotlarni ko'rsatadi.</li></ol>
 <p>Quyidagi misolni ishga tushiring — natija maydonchada, xuddi brauzer konsolidagidek, ko'rinadi:</p>
@@ -613,7 +625,7 @@ let y = 10;
 console.log("Yig'indi:", x + y);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Konsolga to'g'ridan-to'g'ri JavaScript kod yozib, <code>Enter</code> bosish orqali ham uni bajarish mumkin.</div>
 <div class="tip">Debugging — dasturchining asosiy mahoratlaridan biri. Konsol bilan yaxshi tanishib oling.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Har bir brauzerda <strong>developer tools</strong> mavjud (<code>F12</code>);</li><li><strong>Console</strong> — xatolar va <code>console.log</code> chiqishini ko'rsatadi;</li><li>Konsolda kod yozib, darhol bajarish mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="muharrirlar.html"><span class="dir">← Oldingi</span><span class="ttl">Kod muharrirlari</span></a>
@@ -627,6 +639,6 @@ console.log("Yig'indi:", x + y);</textarea><div class="pg-actions"><button class
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

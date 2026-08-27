@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Klaviatura: keydown va keyup — Kodla</title>
   <meta name="description" content="keydown va keyup hodisalari; event.key (belgi) va event.code (fizik tugma) o'rtasidagi farq; avto-takror (auto-repeat); standart harakatlar va ularni oldini olish; amaliy qiyosiy misollar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,21 @@
 <main class="content article">
 <div class="crumbs">UI hodisalari</div>
 <h1>Klaviatura: keydown va keyup</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#keydown-va-keyup-hodisalari">keydown va keyup hodisalari</a></li>
+<li class="lvl2"><a href="#event-key-va-event-code-asosiy-farq">event.key va event.code: asosiy farq</a></li>
+<li class="lvl2"><a href="#avto-takror-auto-repeat">Avto-takror (auto-repeat)</a></li>
+<li class="lvl2"><a href="#standart-harakatlar">Standart harakatlar</a></li>
+<li class="lvl2"><a href="#qiyosiy-amaliy-misol-hotkey">Qiyosiy amaliy misol: hotkey</a></li>
+<li class="lvl2"><a href="#eskirgan-xossalar">Eskirgan xossalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Klaviatura hodisalari foydalanuvchi tugmalarni bosganda kuzatiladi. Zamonaviy qurilmalarda matn kiritishning boshqa usullari ham bor (ovoz orqali kiritish, nusxa-joylashtirish), shuning uchun "matn kiritishini kuzatish" istasangiz, <code>input</code> hodisasi ko'pincha afzalroq. Klaviatura hodisalari esa aynan jismoniy tugmalar bilan ishlash kerak bo'lganda ishlatiladi — masalan, o'yin boshqaruvi yoki tez tugmalar (hotkey).</p>
 <div class="warn">Bu darsdagi misollar statik — klaviatura hodisalari playground'da ishlamaydi. Ularni haqiqiy sahifada sinang.</div>
-<h2>keydown va keyup hodisalari</h2>
+<h2 id="keydown-va-keyup-hodisalari">keydown va keyup hodisalari</h2>
 <p>Ikki asosiy hodisa bor:</p>
 <ul><li><code>keydown</code> — tugma bosilganda (pastga tushganda).</li><li><code>keyup</code> — tugma qo'yib yuborilganda (yuqoriga qaytganda).</li></ul>
 <pre class="code"><code>document.addEventListener('keydown', function(event) {
@@ -608,7 +623,7 @@
 document.addEventListener('keyup', function(event) {
   console.log('Qo'yib yuborildi');
 });</code></pre>
-<h2>event.key va event.code: asosiy farq</h2>
+<h2 id="event-key-va-event-code-asosiy-farq">event.key va event.code: asosiy farq</h2>
 <p>Har bir klaviatura hodisasida ikkita muhim xossa bor: <code>event.key</code> va <code>event.code</code>. Ularning farqini tushunish klaviatura bilan ishlashning asosidir.</p>
 <ul><li><code>event.key</code> — bu <strong>belgi (character)</strong>ning o'zi, ya'ni bosilgan natijada nima chiqishi. U tildan/registrdan/modifikatorlardan qat'i o'zgaradi.</li><li><code>event.code</code> — bu <strong>fizik tugma kodi</strong>, ya'ni klaviaturada qaysi jismoniy tugma bosilgani. U qaysi belgi chiqishidan qat'i nazar bir xil bo'lib qoladi.</li></ul>
 <p>Masalan, <code>Z</code> tugmasini bosganda:</p>
@@ -625,7 +640,7 @@ document.addEventListener('keyup', function(event) {
 });</code></pre>
 <div class="warn">Xat/raqam tugmalari uchun kod naqshlari: harflar — <code>KeyA</code>...<code>KeyZ</code>, raqamlar — <code>Digit0</code>...<code>Digit9</code>. Diqqat: <code>event.code</code> katta-kichik harfga sezgir. <code>'keyZ'</code> emas, aynan <code>'KeyZ'</code>. Bu tez-tez adashtiradigan xato.</div>
 <div class="note">Maxsus tugmalar uchun <code>event.key</code> tavsiflovchi nom qaytaradi: <code>'Enter'</code>, <code>'Escape'</code>, <code>'Backspace'</code>, <code>'Shift'</code>, <code>'ArrowLeft'</code>, <code>'Tab'</code>, <code>'F1'</code> va h.k. Bu holatda <code>key</code> va <code>code</code> ko'pincha o'xshash bo'ladi (masalan, key='Tab', code='Tab'), lekin har doim emas.</div>
-<h2>Avto-takror (auto-repeat)</h2>
+<h2 id="avto-takror-auto-repeat">Avto-takror (auto-repeat)</h2>
 <p>Agar tugma uzoq bosib turilsa, avto-takror ishga tushadi: <code>keydown</code> hodisasi qayta-qayta chaqiriladi. Va nihoyat tugma qo'yib yuborilganda bitta <code>keyup</code> keladi.</p>
 <p>Shunday holatda <code>event.repeat</code> xossasi <code>true</code> bo'ladi — bu bizga takroriy hodisalarni birinchi bosishdan ajratish imkonini beradi:</p>
 <pre class="code"><code>document.addEventListener('keydown', function(event) {
@@ -636,7 +651,7 @@ document.addEventListener('keyup', function(event) {
   // Bu birinchi bosish
 });</code></pre>
 <div class="tip">O'yinlarda avto-takror foydali (belgi tinimsiz harakatlanadi). Ammo ba'zi amallarda (masalan, "Enter bosilsa yubor") takrorni e'tiborsiz qoldirish uchun <code>event.repeat</code>ni tekshirish kerak bo'ladi.</div>
-<h2>Standart harakatlar</h2>
+<h2 id="standart-harakatlar">Standart harakatlar</h2>
 <p>Ko'p klaviatura amallari brauzerning standart harakatiga bog'langan. Masalan:</p>
 <ul><li>Belgi tugmasi bosilsa — matn maydoniga belgi chiqadi.</li><li><code>Delete</code> bosilsa — belgi o'chiriladi.</li><li><code>PageDown</code> bosilsa — sahifa pastga skroll qilinadi.</li><li><code>Ctrl+S</code> bosilsa — brauzer sahifani saqlash oynasini ochadi.</li></ul>
 <p>Bu standart harakatlarni <code>event.preventDefault()</code> bilan bekor qilish mumkin. Masalan, matn maydonini faqat raqamlar qabul qiladigan qilib cheklashda:</p>
@@ -647,7 +662,7 @@ document.addEventListener('keyup', function(event) {
   }
 });</code></pre>
 <div class="warn">Ba'zi maxsus tugmalarni <code>preventDefault()</code> bilan to'xtatib bo'lmaydi — ular operatsion tizim darajasida ishlaydi. Masalan, ko'p brauzerlarda <code>F5</code> (yangilash), <code>Ctrl+Tab</code> (yorliqlar orasida o'tish) yoki <code>Alt+F4</code> (oynani yopish) JavaScript'ga bo'ysunmaydi. Bu foydalanuvchi xavfsizligi uchun ataylab shunday qilingan.</div>
-<h2>Qiyosiy amaliy misol: hotkey</h2>
+<h2 id="qiyosiy-amaliy-misol-hotkey">Qiyosiy amaliy misol: hotkey</h2>
 <p>Amaliy misol — <code>Ctrl+B</code> (yoki Mac'da <code>Cmd+B</code>) tez tugmasini ushlash. Modifikatorlar uchun (dars 1'da ko'rganimizdek) mos xossalar bor:</p>
 <pre class="code"><code>document.addEventListener('keydown', function(event) {
   // Windows/Linux'da Ctrl, Mac'da Cmd (metaKey)
@@ -657,10 +672,10 @@ document.addEventListener('keyup', function(event) {
   }
 });</code></pre>
 <div class="note">Bu yerda <code>event.code === 'KeyB'</code> ishlatildi (fizik tugma), chunki hotkey odatda klaviatura tilidan mustaqil bo'lishi kerak. Agar <code>event.key === 'b'</code> ishlatsangiz, boshqa til yoqilganda hotkey ishlamay qolishi mumkin.</div>
-<h2>Eskirgan xossalar</h2>
+<h2 id="eskirgan-xossalar">Eskirgan xossalar</h2>
 <p>Eski kodda quyidagi xossalarni uchratasiz — ularni <strong>ishlatmang</strong>:</p>
 <ul><li><code>event.keyCode</code>, <code>event.charCode</code>, <code>event.which</code> — hammasi eskirgan (deprecated). Ularning o'rniga <code>event.key</code> va <code>event.code</code> ishlating.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>keydown</code> tugma bosilganda, <code>keyup</code> qo'yib yuborilganda ishga tushadi.</li><li><code>event.key</code> — belgining o'zi (til/registrga bog'liq); <code>event.code</code> — fizik tugma kodi (mustaqil).</li><li>"Aynan shu tugma" kerak bo'lsa <code>event.code</code>, "qaysi harf" kerak bo'lsa <code>event.key</code> ishlating.</li><li>Tugma bosib turilsa <code>keydown</code> takrorlanadi, <code>event.repeat</code> bilan buni aniqlash mumkin.</li><li>Standart harakatni <code>event.preventDefault()</code> bekor qiladi, ammo ba'zi OT-darajasidagi tugmalar bunga bo'ysunmaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="pointer-events.html"><span class="dir">← Oldingi</span><span class="ttl">Pointer hodisalari</span></a>
@@ -674,6 +689,6 @@ document.addEventListener('keyup', function(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

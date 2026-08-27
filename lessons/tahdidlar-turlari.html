@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tahdidlar: malware, phishing, ijtimoiy injeneriya — Kodla</title>
   <meta name="description" content="Zararli dastur turlarini tanib olish, phishing hujumlarini fosh qilish, ijtimoiy injeneriyadan himoya, parol menejeri va 2FA foydasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,25 +599,42 @@
 <main class="content article">
 <div class="crumbs">Kiberxavfsizlik asoslari</div>
 <h1>Tahdidlar: malware, phishing, ijtimoiy injeneriya</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#zararli-dastur-malware-nima">Zararli dastur (malware) nima?</a></li>
+<li class="lvl3"><a href="#asosiy-turlar-faqat-tanib-olish-uchun">Asosiy turlar (faqat tanib olish uchun)</a></li>
+<li class="lvl2"><a href="#zararli-dasturdan-himoya">Zararli dasturdan himoya</a></li>
+<li class="lvl2"><a href="#phishing-nima">Phishing nima?</a></li>
+<li class="lvl2"><a href="#phishingni-tanib-olish-belgilar">Phishingni tanib olish belgilar</a></li>
+<li class="lvl2"><a href="#amaliyot-soxta-domenni-tekshirish">Amaliyot: soxta domenni tekshirish</a></li>
+<li class="lvl2"><a href="#ijtimoiy-injeneriya">Ijtimoiy injeneriya</a></li>
+<li class="lvl3"><a href="#keng-tarqalgan-usullar">Keng tarqalgan usullar</a></li>
+<li class="lvl2"><a href="#parol-menejeri-va-2fa">Parol menejeri va 2FA</a></li>
+<li class="lvl3"><a href="#parol-menejeri">Parol menejeri</a></li>
+<li class="lvl3"><a href="#ikki-bosqichli-tasdiqlash-2fa">Ikki bosqichli tasdiqlash (2FA)</a></li>
+<li class="lvl2"><a href="#xulosa-tahdidni-tanib-olish-birinchi-himoya">Xulosa: tahdidni tanib olish — birinchi himoya</a></li>
+  </ul>
+</details>
 <p class="lead">Himoyachi bo'lish uchun avvalo tahdidni tanib olishni bilish kerak. Ushbu darsda biz eng keng tarqalgan tahdidlarni — zararli dasturlar, phishing va ijtimoiy injeneriyani <strong>faqat tanib olish va ulardan himoyalanish</strong> maqsadida o'rganamiz. Hech qanday zararli kod yoki hujum yo'riqnomasi berilmaydi.</p>
 <div class="warn">Ushbu darsning maqsadi — sizga phishing yoki zararli dastur <em>yaratishni</em> emas, balki ularni <strong>tanib olish va o'zingizni himoya qilishni</strong> o'rgatish. Bunday narsalarni ruxsatsiz yaratish yoki tarqatish — jinoyat.</div>
-<h2>Zararli dastur (malware) nima?</h2>
+<h2 id="zararli-dastur-malware-nima">Zararli dastur (malware) nima?</h2>
 <p><strong>Malware</strong> (malicious software) — foydalanuvchiga zarar keltirish yoki ruxsatsiz harakat qilish uchun yozilgan dasturlar umumiy nomi. Himoyachi sifatida bizga ularning <em>turlarini tanib olish</em> muhim, chunki har biri o'zicha tarqaladi va o'zicha davolanadi.</p>
-<h3>Asosiy turlar (faqat tanib olish uchun)</h3>
+<h3 id="asosiy-turlar-faqat-tanib-olish-uchun">Asosiy turlar (faqat tanib olish uchun)</h3>
 <ul><li><strong>Virus:</strong> boshqa fayllarga "yopishib", ular ochilganda tarqaladi;</li><li><strong>Trojan (troyan oti):</strong> foydali dastur qiyofasida keladi, lekin ichida zararli maqsad yashiringan;</li><li><strong>Ransomware (to'lov talab qiluvchi):</strong> fayllarni shifrlab, ochish uchun pul talab qiladi;</li><li><strong>Spyware (josuslik dasturi):</strong> foydalanuvchini yashirin kuzatib, ma'lumot yig'adi;</li><li><strong>Worm (qurt):</strong> odam aralashuvisiz o'zi tarmoq bo'ylab ko'payadi.</li></ul>
 <div class="note">Biz bu turlarni faqat <strong>tanib olish</strong> darajasida o'rganamiz. Har biri qanday yozilishini emas, balki qanday belgilar orqali payqash va undan qanday himoyalanishni bilamiz.</div>
-<h2>Zararli dasturdan himoya</h2>
+<h2 id="zararli-dasturdan-himoya">Zararli dasturdan himoya</h2>
 <p>Malware qanday ishlashini bilgach, undan himoyalanish oddiy odatlarga bog'lanadi:</p>
 <ul><li><strong>Yangilanishlarni o'rnating:</strong> operatsion tizim va dasturlarni doim yangilab turing;</li><li><strong>Ishonchli manbadan yuklang:</strong> dasturlarni faqat rasmiy do'kon yoki saytdan oling;</li><li><strong>Antivirus ishlating:</strong> u ma'lum tahdidlarni aniqlaydi;</li><li><strong>Zaxira nusxa saqlang:</strong> ransomware'dan eng yaxshi himoya — muntazam zaxira;</li><li><strong>Noma'lum ilovalarni ochmang:</strong> emaildagi kutilmagan ilova — eng keng tarqalgan tarqalish yo'li.</li></ul>
 <div class="tip">Muntazam zaxira nusxa — bu eng arzon va eng kuchli himoya. Agar fayllaringiz shifrlansa ham, zaxirangiz bo'lsa, siz hech narsa yo'qotmaysiz va hech kimga pul to'lashingiz shart emas.</div>
-<h2>Phishing nima?</h2>
+<h2 id="phishing-nima">Phishing nima?</h2>
 <p><strong>Phishing</strong> — foydalanuvchini aldab, uning maxfiy ma'lumotini (parol, karta raqami) o'zi ixtiyoriy berishga majburlash usuli. Hujumchi ishonchli tashkilot (bank, ijtimoiy tarmoq, ish beruvchi) nomidan soxta xabar jo'natadi.</p>
 <p>Phishing texnik zaiflikdan emas, balki <em>insonning ishonchidan</em> foydalanadi. Shuning uchun undan himoya ham asosan diqqat va shubha bilan bog'liq.</p>
-<h2>Phishingni tanib olish belgilar</h2>
+<h2 id="phishingni-tanib-olish-belgilar">Phishingni tanib olish belgilar</h2>
 <p>Shubhali xatni tanib olish uchun quyidagi belgilarga e'tibor bering. Ular birga uchrasa — ehtiyot bo'ling:</p>
 <ul><li><strong>Shoshirish:</strong> "Hoziroq bosing yoki hisobingiz o'chiriladi!" — bosim o'tkazish odatiy hiyla;</li><li><strong>Soxta manzil:</strong> yuboruvchi manzili biroz o'zgartirilgan (masalan, rasmiyga o'xshash lekin bir harfi boshqa);</li><li><strong>Umumiy murojaat:</strong> ismingiz o'rniga "Hurmatli mijoz" deb yozilgan;</li><li><strong>Kutilmagan ilova yoki havola:</strong> siz kutmagan fayl yoki tugma;</li><li><strong>Grammatik xatolar:</strong> rasmiy tashkilotlar odatda puxta yozadi;</li><li><strong>Ma'lumot so'rash:</strong> haqiqiy bank hech qachon email orqali parolingizni so'ramaydi.</li></ul>
 <p>Eng muhim qoida: <strong>havolaga bosishdan oldin uning ustiga sichqonchani olib boring</strong> va haqiqiy manzilni ko'ring. Ko'rinadigan matn va haqiqiy manzil boshqacha bo'lishi mumkin.</p>
-<h2>Amaliyot: soxta domenni tekshirish</h2>
+<h2 id="amaliyot-soxta-domenni-tekshirish">Amaliyot: soxta domenni tekshirish</h2>
 <p>Hujumchilar ko'pincha haqiqiy saytga o'xshash, lekin sal o'zgartirilgan domen ishlatadi. Masalan, <code>paypal.com</code> o'rniga <code>paypa1.com</code> (oxirida "l" harfi emas, "1" raqami). Quyidagi xavfsiz misol berilgan domenni ishonchli ro'yxat bilan solishtirib, shubhaliligini ogohlantiradi. Bu himoya vositasi — hujum emas:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>domen-tekshir.js</span></div><textarea spellcheck="false">const ishonchli = ["paypal.com", "google.com", "bank.uz"];
 
@@ -661,22 +681,22 @@ console.log(domenTekshir("g00gle.com"));</textarea><div class="pg-actions"><butt
 
 console.log(phishingBaho("Salom, ertaga uchrashamizmi?"));
 console.log(phishingBaho("Hoziroq bosing, aks holda hisobingiz bloklanadi va parolingizni tasdiqlang!"));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Ijtimoiy injeneriya</h2>
+<h2 id="ijtimoiy-injeneriya">Ijtimoiy injeneriya</h2>
 <p><strong>Ijtimoiy injeneriya</strong> — bu insonni psixologik ta'sir orqali aldab, xavfsizlik qoidalarini o'zi buzishga undash. Bunda hech qanday texnik hujum bo'lmaydi — hujumchi shunchaki ishonch, qo'rquv yoki yordam istagidan foydalanadi.</p>
 <p>Xavfsizlik dunyosida taniqli gap bor: <strong>"inson — eng zaif bo'g'in"</strong>. Eng kuchli shifrlash ham, agar xodim parolni telefonda "tizim administratori"ga aytib qo'ysa, foydasiz bo'ladi.</p>
-<h3>Keng tarqalgan usullar</h3>
+<h3 id="keng-tarqalgan-usullar">Keng tarqalgan usullar</h3>
 <ul><li><strong>Bahona (pretexting):</strong> hujumchi soxta hikoya to'qiydi ("men IT bo'limidanman");</li><li><strong>Yem (baiting):</strong> qiziqarli narsa taklif qiladi ("bepul sovg'a", tashlab ketilgan USB);</li><li><strong>Shoshirish:</strong> o'ylashga vaqt qoldirmaslik uchun tazyiq;</li><li><strong>Vakolatga tayanish:</strong> "rahbar so'radi" deb bosim o'tkazish.</li></ul>
 <p>Himoya — bu shubha va tasdiqlash. Kutilmagan so'rov kelsa, to'g'ridan-to'g'ri, ma'lum va ishonchli kanal orqali (masalan, rasmiy raqamga o'zingiz qo'ng'iroq qilib) tekshiring.</p>
-<h2>Parol menejeri va 2FA</h2>
+<h2 id="parol-menejeri-va-2fa">Parol menejeri va 2FA</h2>
 <p>Ikki oddiy vosita himoyangizni jiddiy kuchaytiradi:</p>
-<h3>Parol menejeri</h3>
+<h3 id="parol-menejeri">Parol menejeri</h3>
 <p>Har bir sayt uchun boshqacha, uzun va murakkab parol eslab qolish imkonsiz. <strong>Parol menejeri</strong> shu muammoni hal qiladi: u har bir sayt uchun kuchli parolni yaratadi va shifrlab saqlaydi. Sizga faqat bitta asosiy parolni eslab qolish kifoya.</p>
 <ul><li>Har bir sayt uchun noyob parol — bitta sayt buzilsa, qolganlari xavfsiz qoladi;</li><li>Kuchli, tasodifiy parollar — inson o'ylab topganidan mustahkamroq;</li><li>Soxta saytlarni fosh qiladi — menejer domen mos kelmasa, parolni to'ldirmaydi.</li></ul>
-<h3>Ikki bosqichli tasdiqlash (2FA)</h3>
+<h3 id="ikki-bosqichli-tasdiqlash-2fa">Ikki bosqichli tasdiqlash (2FA)</h3>
 <p><strong>2FA</strong> (two-factor authentication) — kirishda parolga qo'shimcha ikkinchi tasdiq talab qiladi. Bu odatda telefondagi ilova beradigan bir martalik kod bo'ladi.</p>
 <p>Ahamiyati katta: hujumchi parolingizni bilib olsa ham, ikkinchi omil (sizning telefoningiz) yo'qligi sabab kira olmaydi. Bu — chuqurlashtirilgan himoyaning yaqqol namunasi.</p>
 <div class="tip">Muhim hisoblaringizda — email, bank, ijtimoiy tarmoq — bugunoq 2FA'ni yoqing. Bu bir necha daqiqalik ish, ammo hisobingizni o'g'irlashdan himoya qiladigan eng samarali qadamlardan biri.</div>
-<h2>Xulosa: tahdidni tanib olish — birinchi himoya</h2>
+<h2 id="xulosa-tahdidni-tanib-olish-birinchi-himoya">Xulosa: tahdidni tanib olish — birinchi himoya</h2>
 <p>Ushbu darsda uchta asosiy tahdid oilasini ko'rib chiqdik. Ularning barchasida umumiy jihat bor: ko'pincha eng zaif nuqta — texnologiya emas, balki inson e'tibori. Shu sabab eng yaxshi himoya — bilim va shubha.</p>
 <ul><li><strong>Malware:</strong> ishonchli manba, yangilanish va zaxira nusxa;</li><li><strong>Phishing:</strong> havolani tekshirish, shoshirishga berilmaslik;</li><li><strong>Ijtimoiy injeneriya:</strong> kutilmagan so'rovni ishonchli kanal orqali tasdiqlash;</li><li><strong>Umumiy:</strong> parol menejeri va 2FA — har bir hisob uchun.</li></ul>
 <div class="note">Yodda tuting: tahdidlarni o'rganish maqsadi — ulardan himoyalanish. Bu bilimni faqat o'zingizni va o'zgalarni himoya qilish uchun ishlating.</div>
@@ -692,6 +712,6 @@ console.log(phishingBaho("Hoziroq bosing, aks holda hisobingiz bloklanadi va par
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

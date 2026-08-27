@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Atributlar va xossalar — Kodla</title>
   <meta name="description" content="DOM xossalari va HTML atributlari orasidagi farq, getAttribute/setAttribute/hasAttribute/removeAttribute, xossa-atribut sinxronizatsiyasi hamda data-* atributlar va dataset.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Atributlar va xossalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#dom-xossalari">DOM xossalari</a></li>
+<li class="lvl2"><a href="#html-atributlari">HTML atributlari</a></li>
+<li class="lvl2"><a href="#xossa-atribut-sinxronizatsiyasi">Xossa-atribut sinxronizatsiyasi</a></li>
+<li class="lvl2"><a href="#dom-xossalari-tur-type-bo-yicha-farqlanadi">DOM xossalari tur (type) bo'yicha farqlanadi</a></li>
+<li class="lvl2"><a href="#nostandart-atributlar-va-dataset">Nostandart atributlar va dataset</a></li>
+<li class="lvl3"><a href="#data-atributlar-va-dataset">data-* atributlar va dataset</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Brauzer HTML sahifasini yuklaganda, teglarni "o'qib" (parse qilib), DOM obyektlarini yaratadi. Element tugunlari uchun standart HTML atributlari mos DOM xossalariga aylanadi. Masalan, <code>&lt;body id="page"&gt;</code> uchun DOM obyektida <code>body.id === "page"</code> bo'ladi. Ammo bu "atribut → xossa" moslashuvi 1-ga-1 emas! Ushbu darsda atribut va xossalar orasidagi nozik, ammo muhim farqlarni chuqur o'rganamiz.</p>
-<h2>DOM xossalari</h2>
+<h2 id="dom-xossalari">DOM xossalari</h2>
 <p>Biz DOM tugunlari standart JavaScript obyektlari ekanligini ko'rdik. Ular xossalar to'plamiga ega. Va biz ularga o'z xossalarimizni ham qo'shishimiz mumkin — huddi oddiy obyektlarga o'xshab:</p>
 <pre class="code"><code>document.body.myData = {
   name: 'Sezar',
@@ -620,7 +635,7 @@ document.body.sayTagName(); // BODY (this qiymati document.body)</code></pre>
 document.documentElement.sayHi(); // Salom, men HTML
 document.body.sayHi(); // Salom, men BODY</code></pre>
 <p>Demak, DOM xossalari va metodlari oddiy JavaScript obyektlarinikidek ishlaydi: istalgan qiymat qabul qiladi, katta-kichik harfga sezgir (<code>elem.nodeType</code>, <code>elem.NodeType</code> emas).</p>
-<h2>HTML atributlari</h2>
+<h2 id="html-atributlari">HTML atributlari</h2>
 <p>HTML'da teglar atributlarga ega bo'lishi mumkin. Brauzer HTML'ni o'qiganda <strong>standart</strong> atributlarni tanib, ulardan DOM xossalarini yaratadi.</p>
 <p>Ammo elementda <strong>nostandart</strong> (standartda bo'lmagan) atribut bo'lsa, u mos DOM xossasiga aylanmaydi. Masalan:</p>
 <pre class="code"><code>&lt;body id="test" something="nostandart"&gt;
@@ -661,7 +676,7 @@ document.body.sayHi(); // Salom, men BODY</code></pre>
   alert( elem.outerHTML ); // &lt;div id="elem" about="Elephant" test="123"&gt;
   // ...ammo satr sifatida saqlandi
 &lt;/script&gt;</code></pre>
-<h2>Xossa-atribut sinxronizatsiyasi</h2>
+<h2 id="xossa-atribut-sinxronizatsiyasi">Xossa-atribut sinxronizatsiyasi</h2>
 <p>Standart atribut o'zgarsa, mos xossa avtomatik yangilanadi — va (aksariyat hollarda) teskarisi ham. Ular <strong>sinxronlashadi</strong>:</p>
 <pre class="code"><code>&lt;input&gt;
 
@@ -691,7 +706,7 @@ document.body.sayHi(); // Salom, men BODY</code></pre>
   alert(input.getAttribute('value')); // matn (o'zgarmadi!)
 &lt;/script&gt;</code></pre>
 <div class="note">Yuqoridagi "xususiyat" aslida foydali: foydalanuvchi <code>&lt;input&gt;</code> qiymatini o'zgartirsa (yozsa), <code>value</code> xossasi yangilanadi, ammo <code>value</code> atributi HTML'dagi ASL (dastlabki, default) qiymatni saqlab qoladi. Bu esa "formani asl holatiga qaytarish" (reset) kabi vazifalarda qo'l keladi.</div>
-<h2>DOM xossalari tur (type) bo'yicha farqlanadi</h2>
+<h2 id="dom-xossalari-tur-type-bo-yicha-farqlanadi">DOM xossalari tur (type) bo'yicha farqlanadi</h2>
 <p>DOM xossalari har doim satr emas! Ular turli tiplarda bo'lishi mumkin, atributlar esa har doim satr. Bir necha misol:</p>
 <p>1. <code>input.checked</code> — checkbox uchun — <strong>mantiqiy (boolean)</strong> qiymat:</p>
 <pre class="code"><code>&lt;input id="input" type="checkbox" checked&gt;
@@ -722,7 +737,7 @@ document.body.sayHi(); // Salom, men BODY</code></pre>
   alert(a.href); // http://site.com/page#salom (to'liq)
 &lt;/script&gt;</code></pre>
 <div class="tip">Agar atributdagi AYNAN yozilgan qiymat kerak bo'lsa — <code>getAttribute</code> ishlating. Agar odatiy, qulay talqin (masalan to'liq URL yoki boolean) kerak bo'lsa — DOM xossasidan foydalaning.</div>
-<h2>Nostandart atributlar va dataset</h2>
+<h2 id="nostandart-atributlar-va-dataset">Nostandart atributlar va dataset</h2>
 <p>Ba'zan JavaScript'dan HTML'ga ma'lumot uzatish yoki elementlarni "belgilash" uchun nostandart atributlar ishlatiladi. Masalan:</p>
 <pre class="code"><code>&lt;div show-info="name"&gt;&lt;/div&gt;
 &lt;div show-info="age"&gt;&lt;/div&gt;
@@ -736,7 +751,7 @@ document.body.sayHi(); // Salom, men BODY</code></pre>
   }
 &lt;/script&gt;</code></pre>
 <div class="warn">Nostandart atributlarni ishlatish xavfli: bugun ular standart emas, ammo ertaga HTML standartiga qo'shilishi mumkin. Shunda bizning nostandart atributimiz standart atribut bilan to'qnashib, kutilmagan xatti-harakat keltirib chiqaradi. Bunday to'qnashuvlarning oldini olish uchun maxsus yechim bor: <code>data-*</code> atributlar.</div>
-<h3>data-* atributlar va dataset</h3>
+<h3 id="data-atributlar-va-dataset">data-* atributlar va dataset</h3>
 <p><code>data-</code> bilan boshlanadigan barcha atributlar dasturchilar foydalanishi uchun ZAXIRALANGAN. Ular <code>elem.dataset</code> obyekti orqali qulay o'qiladi:</p>
 <pre class="code"><code>&lt;body data-about="Fillar"&gt;
   &lt;script&gt;
@@ -762,7 +777,7 @@ document.body.sayHi(); // Salom, men BODY</code></pre>
   order.dataset.orderState = 'pending'; // rang ko'kga o'zgaradi
 &lt;/script&gt;</code></pre>
 <div class="tip"><code>data-*</code> atributlaridan foydalanish HTML'da maxsus ma'lumot saqlashning to'g'ri va xavfsiz usuli. Ular hech qachon standart HTML atributi bilan to'qnashmaydi (standart hech qachon <code>data-</code> bilan boshlanmaydi). Bundan tashqari, <code>dataset</code> ularni o'qish va yozishni juda qulay qiladi, hamda CSS ham <code>[data-...]</code> selektorlar orqali ular bilan ishlay oladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Atributlar va xossalar — ikki xil narsa, ularni ajratish muhim:</p>
 <ul><li><strong>Atributlar</strong> — HTML'da yozilgani. DOM metodlari orqali boshqariladi: <code>hasAttribute</code>, <code>getAttribute</code>, <code>setAttribute</code>, <code>removeAttribute</code> hamda <code>attributes</code> to'plami;</li><li>Atributlar: nomi katta-kichik harfga befarq, qiymati har doim satr;</li><li><strong>Xossalar (properties)</strong> — DOM obyektining maydonlari. Nomi katta-kichik harfga sezgir, qiymati istalgan tur (satr, boolean, obyekt) bo'lishi mumkin;</li><li>Standart atribut va mos xossa ko'p hollarda sinxronlashadi (istisnolar bor, masalan <code>value</code>);</li><li>Aksariyat hollarda DOM xossalarini ishlatish qulayroq. Atributlarni faqat quyidagi hollarda ishlating: nostandart atribut kerak bo'lganda, yoki AYNAN HTML'dagi qiymatni (masalan, <code>href</code>) olish kerak bo'lganda;</li><li>Foydalanuvchi ma'lumotini saqlash uchun <code>data-*</code> atributlaridan foydalaning va ularni <code>elem.dataset</code> orqali o'qing/yozing.</li></ul>
 <nav class="lesson-nav">
@@ -777,6 +792,6 @@ document.body.sayHi(); // Salom, men BODY</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

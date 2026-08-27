@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asosiy turlar — Kodla</title>
   <meta name="description" content="Tur izohlari, string/number/boolean, massiv va tuple, any va unknown, void, null/undefined, tur xulosasi va literal turlar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">TypeScript</div>
 <h1>Asosiy turlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#tur-izohi-type-annotation">Tur izohi (type annotation)</a></li>
+<li class="lvl2"><a href="#ibtidoiy-primitive-turlar-string-number-boolean">Ibtidoiy (primitive) turlar: string, number, boolean</a></li>
+<li class="lvl2"><a href="#massivlar-arrays">Massivlar (arrays)</a></li>
+<li class="lvl2"><a href="#kortej-tuple">Kortej (tuple)</a></li>
+<li class="lvl2"><a href="#any-turlar-tekshiruvidan-chiqish">any — turlar tekshiruvidan chiqish</a></li>
+<li class="lvl2"><a href="#unknown-xavfsiz-noma-lum">unknown — xavfsiz "noma'lum"</a></li>
+<li class="lvl2"><a href="#void-qaytarilmaydigan-qiymat">void — qaytarilmaydigan qiymat</a></li>
+<li class="lvl2"><a href="#null-va-undefined">null va undefined</a></li>
+<li class="lvl2"><a href="#tur-xulosasi-type-inference">Tur xulosasi (type inference)</a></li>
+<li class="lvl2"><a href="#literal-turlar">Literal turlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">TypeScript'ning yuragi — uning <strong>turlar tizimi</strong>. Ushbu darsda biz asosiy turlar bilan tanishamiz: qanday qilib o'zgaruvchiga tur berish, massiv va kortejlar (tuple) bilan ishlash, hamda <code>any</code>, <code>unknown</code>, <code>void</code> kabi maxsus turlarni tushunish. JavaScript'ning <code>typeof</code> qaytaradigan turlarini bilsangiz, bu dars siz uchun tanish tuyuladi.</p>
-<h2>Tur izohi (type annotation)</h2>
+<h2 id="tur-izohi-type-annotation">Tur izohi (type annotation)</h2>
 <p>O'zgaruvchining turini belgilash uchun uning nomidan keyin <strong>ikki nuqta</strong> va tur nomini yozamiz. Bu <strong>tur izohi</strong> deyiladi:</p>
 <pre class="code"><code>let yosh: number = 25;
 let ism: string = "Ali";
@@ -606,7 +625,7 @@ let faol: boolean = true;</code></pre>
 <pre class="code"><code>let yosh: number = 25;
 yosh = "o'ttiz";
 // Xato: Type 'string' is not assignable to type 'number'.</code></pre>
-<h2>Ibtidoiy (primitive) turlar: string, number, boolean</h2>
+<h2 id="ibtidoiy-primitive-turlar-string-number-boolean">Ibtidoiy (primitive) turlar: string, number, boolean</h2>
 <p>JavaScript'da uchta asosiy ibtidoiy tur bor va TypeScript ularni bir xil nomlar bilan ataydi. Muhim: tur nomlari <strong>kichik harflar bilan</strong> yoziladi (<code>string</code>, <code>number</code>, <code>boolean</code>) — katta harfli <code>String</code>, <code>Number</code> emas:</p>
 <pre class="code"><code>let salom: string = "Salom dunyo";
 let narx: number = 199.99;
@@ -617,7 +636,7 @@ let butun: number = 42;
 let kasr: number = 3.14;
 let oltilik: number = 0xff;</code></pre>
 <div class="warn">Tur nomlarini kichik harf bilan yozing. <code>String</code>, <code>Number</code> (katta harfli) — bular JavaScript'ning o'rovchi obyekt (wrapper) turlari bo'lib, ularni tur izohida ishlatish tavsiya etilmaydi.</div>
-<h2>Massivlar (arrays)</h2>
+<h2 id="massivlar-arrays">Massivlar (arrays)</h2>
 <p>Massiv turini yozishning ikkita usuli bor va ikkalasi bir xil ma'noni bildiradi. Birinchisi — element turidan keyin <code>[]</code> qo'yish:</p>
 <pre class="code"><code>let sonlar: number[] = [1, 2, 3];
 let ismlar: string[] = ["Ali", "Vali"];
@@ -631,7 +650,7 @@ sonlar.push(4);       // OK
 sonlar.push("besh");  // Xato: Argument of type 'string'
                       // is not assignable to parameter of type 'number'.</code></pre>
 <div class="note"><code>number[]</code> va <code>Array&lt;number&gt;</code> — bir xil narsa. <code>number[]</code> shakli qisqaroq bo'lgani uchun ko'proq ishlatiladi.</div>
-<h2>Kortej (tuple)</h2>
+<h2 id="kortej-tuple">Kortej (tuple)</h2>
 <p><strong>Kortej</strong> (tuple) — bu uzunligi va har bir pozitsiyadagi elementning turi <em>aniq belgilangan</em> massiv. Oddiy massivda barcha elementlar bir turda bo'ladi; kortejda esa har bir o'rin o'z turiga ega bo'lishi mumkin:</p>
 <pre class="code"><code>// birinchi element — string, ikkinchisi — number
 let odam: [string, number] = ["Ali", 25];
@@ -648,7 +667,7 @@ odam = [25, "Ali"];
 }
 
 let [x, y] = koordinata();</code></pre>
-<h2>any — turlar tekshiruvidan chiqish</h2>
+<h2 id="any-turlar-tekshiruvidan-chiqish">any — turlar tekshiruvidan chiqish</h2>
 <p><code>any</code> — bu maxsus tur bo'lib, u "har qanday qiymat bo'lishi mumkin, tekshirma" degan ma'noni bildiradi. <code>any</code> turli o'zgaruvchi bilan hamma narsani qilish mumkin — TypeScript tur tekshiruvini butunlay o'chiradi:</p>
 <pre class="code"><code>let biror: any = "matn";
 biror = 42;        // OK
@@ -656,7 +675,7 @@ biror = true;      // OK
 biror.hohla();     // OK (lekin ishga tushganda buziladi!)
 biror.foo.bar.baz; // OK (tekshirilmaydi)</code></pre>
 <div class="warn"><code>any</code> — TypeScript'ning barcha himoyasini o'chiradi. Uni ishlatganingizda kod aslida oddiy JavaScript'ga aylanadi. Iloji boricha <code>any</code>dan qoching — u faqat vaqtinchalik yechim yoki tashqi kutubxonalar bilan ishlashda kerak bo'ladi.</div>
-<h2>unknown — xavfsiz "noma'lum"</h2>
+<h2 id="unknown-xavfsiz-noma-lum">unknown — xavfsiz "noma'lum"</h2>
 <p><code>unknown</code> — <code>any</code>ning xavfsiz muqobili. U ham "tur noma'lum" degani, lekin farqi shundaki: <code>unknown</code> turli qiymat bilan biror amal qilishdan oldin uning turini <strong>tekshirishga majbur</strong> qiladi:</p>
 <pre class="code"><code>let biror: unknown = "matn";
 
@@ -669,14 +688,14 @@ if (typeof biror === "string") {
   console.log(biror.toUpperCase()); // endi OK
 }</code></pre>
 <div class="note">Qoida: agar tur haqiqatan noma'lum bo'lsa, <code>any</code> o'rniga <code>unknown</code> ishlating. U sizni turni tekshirishga undaydi va shu bilan xatolardan himoyalaydi.</div>
-<h2>void — qaytarilmaydigan qiymat</h2>
+<h2 id="void-qaytarilmaydigan-qiymat">void — qaytarilmaydigan qiymat</h2>
 <p><code>void</code> — funksiya hech narsa <em>qaytarmasligini</em> bildirish uchun ishlatiladi. Odatda faqat yon ta'sir (masalan, konsolga chop etish) qiladigan funksiyalarning qaytish turi:</p>
 <pre class="code"><code>function xabarBer(matn: string): void {
   console.log(matn);
   // return yo'q
 }</code></pre>
 <p><code>void</code> asosan funksiyalar kontekstida ma'noli. O'zgaruvchiga <code>void</code> tur berish deyarli hech qachon kerak bo'lmaydi.</p>
-<h2>null va undefined</h2>
+<h2 id="null-va-undefined">null va undefined</h2>
 <p>JavaScript'dagi <code>null</code> va <code>undefined</code> qiymatlari TypeScript'da o'zining nomdosh turlariga ega:</p>
 <pre class="code"><code>let bosh: null = null;
 let aniqmas: undefined = undefined;</code></pre>
@@ -684,7 +703,7 @@ let aniqmas: undefined = undefined;</code></pre>
 <pre class="code"><code>let ism: string | null = "Ali";
 ism = null; // OK — endi null ham ruxsat etilgan</code></pre>
 <div class="tip"><code>strictNullChecks</code> sozlamasi yoqilganda (tavsiya etiladi) TypeScript <code>null</code> va <code>undefined</code>ni jiddiy tekshiradi va "null bo'lishi mumkin" qiymatlarni tasodifan ishlatishdan himoya qiladi.</div>
-<h2>Tur xulosasi (type inference)</h2>
+<h2 id="tur-xulosasi-type-inference">Tur xulosasi (type inference)</h2>
 <p>TypeScript juda aqlli: agar o'zgaruvchini boshlang'ich qiymat bilan e'lon qilsangiz, u turni <strong>o'zi topib oladi</strong>. Bunga <strong>tur xulosasi</strong> (type inference) deyiladi. Ya'ni har doim ham tur yozish shart emas:</p>
 <pre class="code"><code>let ism = "Ali";   // TS o'zi biladi: string
 let yosh = 25;      // TS o'zi biladi: number
@@ -693,7 +712,7 @@ let faol = true;    // TS o'zi biladi: boolean
 ism = 42; // Xato: Type 'number' is not assignable to type 'string'.</code></pre>
 <p>Bu yerda <code>ism</code>ga tur yozmaganimiz bilan, TypeScript uni <code>string</code> deb hisoblaydi (chunki boshlang'ich qiymati matn). Shuning uchun keyin son berishga urinsak, xato chiqadi.</p>
 <div class="note">Amaliy qoida: agar o'zgaruvchi darrov qiymat bilan e'lon qilinsa, turni <em>yozmaslik</em> odatiy hol. Turni funksiya parametrlariga, murakkab holatlarga yoki qiymat keyinroq beriladigan o'zgaruvchilarga yozamiz.</div>
-<h2>Literal turlar</h2>
+<h2 id="literal-turlar">Literal turlar</h2>
 <p>TypeScript'da tur nafaqat <code>string</code> yoki <code>number</code> kabi keng bo'lishi, balki <em>aniq bir qiymat</em> ham bo'lishi mumkin. Bu <strong>literal tur</strong> deyiladi:</p>
 <pre class="code"><code>let yonalish: "chap" | "o'ng" = "chap";
 yonalish = "o'ng";  // OK
@@ -708,7 +727,7 @@ function holatOrnat(h: Holat): void {
 
 holatOrnat("tayyor"); // OK
 holatOrnat("xato");   // Xato: noto'g'ri literal</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Tur izohi <code>nom: tur</code> shaklida yoziladi; asosiy turlar: <code>string</code>, <code>number</code>, <code>boolean</code> (kichik harflar bilan);</li><li>Massivlar: <code>number[]</code> yoki <code>Array&lt;number&gt;</code> — ikkalasi bir xil;</li><li><strong>Kortej</strong> (tuple) — uzunligi va pozitsiya turlari aniq belgilangan massiv: <code>[string, number]</code>;</li><li><code>any</code> tur tekshiruvini o'chiradi (undan qoching); <code>unknown</code> — xavfsiz muqobili, turni tekshirishga majbur qiladi;</li><li><code>void</code> — hech narsa qaytarmaydigan funksiyalar uchun; <code>null</code> va <code>undefined</code> o'z turlariga ega;</li><li><strong>Tur xulosasi</strong> tufayli boshlang'ich qiymatli o'zgaruvchiga turni yozish shart emas;</li><li><strong>Literal turlar</strong> aniq qiymatlarni ifodalaydi va <code>union</code> bilan enum kabi ishlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="ts-nima.html"><span class="dir">← Oldingi</span><span class="ttl">TypeScript nima?</span></a>
@@ -722,6 +741,6 @@ holatOrnat("xato");   // Xato: noto'g'ri literal</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

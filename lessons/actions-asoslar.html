@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GitHub Actions asoslari — Kodla</title>
   <meta name="description" content=".github/workflows/ papka, workflow YAML tuzilishi (name, on, jobs, steps), runner va birinchi workflow.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">CI/CD (GitHub Actions)</div>
 <h1>GitHub Actions asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#github-workflows-papkasi">.github/workflows/ papkasi</a></li>
+<li class="lvl2"><a href="#workflow-yaml-tuzilishi">Workflow YAML tuzilishi</a></li>
+<li class="lvl2"><a href="#on-hodisa-qachon-ishga-tushadi">on — hodisa (qachon ishga tushadi)</a></li>
+<li class="lvl2"><a href="#jobs-va-runner">jobs va runner</a></li>
+<li class="lvl2"><a href="#steps-va-actions-checkout">steps va actions/checkout</a></li>
+<li class="lvl2"><a href="#birinchi-to-liq-workflow">Birinchi to'liq workflow</a></li>
+<li class="lvl2"><a href="#natijani-qayerda-ko-rish">Natijani qayerda ko'rish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">GitHub Actions'da hamma narsa <strong>YAML fayl</strong> orqali boshqariladi. Bu fayllarni repoda saqlaysiz, GitHub esa ularni avtomatik o'qib, kerakli paytda ishga tushiradi.</p>
-<h2>.github/workflows/ papkasi</h2>
+<h2 id="github-workflows-papkasi">.github/workflows/ papkasi</h2>
 <p>GitHub Actions faqat bitta joyni qaraydi: repo ildizidagi <code>.github/workflows/</code> papkasi. Shu papkadagi har bir <code>.yml</code> (yoki <code>.yaml</code>) fayl alohida <strong>workflow</strong> hisoblanadi.</p>
 <pre class="code"><code>my-project/
   .github/
@@ -607,7 +623,7 @@
   src/
   package.json</code></pre>
 <div class="note">Papka nomi aynan <code>.github/workflows</code> bo'lishi shart. Nuqta bilan boshlanadi va GitHub buni maxsus qabul qiladi. Boshqa papkaga qo'ysangiz, hech narsa ishlamaydi.</div>
-<h2>Workflow YAML tuzilishi</h2>
+<h2 id="workflow-yaml-tuzilishi">Workflow YAML tuzilishi</h2>
 <p>Har bir workflow uch asosiy qismdan iborat: <code>name</code> (nomi), <code>on</code> (qachon ishga tushadi), <code>jobs</code> (nima qiladi).</p>
 <pre class="code"><code>name: CI
 
@@ -623,7 +639,7 @@ jobs:
       - name: Salom aytish
         run: echo "Salom, GitHub Actions!"</code></pre>
 <div class="warn">YAML'da <strong>chekinish (indent) muhim!</strong> Faqat probel ishlating, TAB ISHLATMANG. Noto'g'ri chekinish butun faylni buzadi. Odatda 2 probel qatlamlar orasida.</div>
-<h2>on — hodisa (qachon ishga tushadi)</h2>
+<h2 id="on-hodisa-qachon-ishga-tushadi">on — hodisa (qachon ishga tushadi)</h2>
 <p><code>on</code> kaliti workflow qaysi hodisada ishga tushishini belgilaydi:</p>
 <pre class="code"><code># Har qanday push va PR da:
 on: [push, pull_request]
@@ -643,12 +659,12 @@ on:
   schedule:
     - cron: '0 0 * * *'</code></pre>
 <div class="tip">Boshlash uchun <code>on: [push, pull_request]</code> yetarli — har bir push va har bir Pull Request'da tekshiruv ishga tushadi.</div>
-<h2>jobs va runner</h2>
+<h2 id="jobs-va-runner">jobs va runner</h2>
 <p><code>jobs</code> ichida bir yoki bir nechta <strong>job</strong> (vazifa) bo'ladi. Har bir job alohida, toza virtual mashinada — <strong>runner</strong>da ishga tushadi.</p>
 <ul><li><code>runs-on: ubuntu-latest</code> — eng ko'p ishlatiladigan runner (Linux). Tez va bepul.</li><li><code>runs-on: windows-latest</code> — Windows kerak bo'lsa.</li><li><code>runs-on: macos-latest</code> — macOS (masalan iOS build uchun).</li></ul>
 <p>Har bir job <em>toza</em> mashinada boshlanadi: hech qanday oldingi fayl yo'q, hatto sizning kodingiz ham yo'q. Shuning uchun birinchi qadam odatda kodni yuklab olish bo'ladi.</p>
 <div class="note">Bir workflow'da bir nechta job bo'lsa, ular <strong>parallel</strong> (bir vaqtda) ishlaydi. Agar ketma-ketlik kerak bo'lsa, <code>needs:</code> kaliti bilan bog'lanadi.</div>
-<h2>steps va actions/checkout</h2>
+<h2 id="steps-va-actions-checkout">steps va actions/checkout</h2>
 <p>Har bir job ichida <code>steps</code> — ketma-ket qadamlar bo'ladi. Qadam ikki xil bo'ladi:</p>
 <ul><li><code>uses:</code> — tayyor <strong>action</strong>ni ishlatadi (boshqalar yozgan qayta ishlatiladigan qadam).</li><li><code>run:</code> — terminal buyrug'ini bajaradi (masalan <code>npm test</code>).</li></ul>
 <p>Eng muhim tayyor action — <code>actions/checkout</code>. U repodagi kodni runner mashinasiga yuklab oladi. Deyarli har bir workflow shundan boshlanadi:</p>
@@ -666,7 +682,7 @@ on:
       node --version</code></pre>
 <p>E'tibor bering: <code>@v4</code> — bu action'ning versiyasi. Versiyani ko'rsatish tavsiya etiladi, chunki keyingi versiyalar o'zgarib ketishi mumkin.</p>
 <div class="tip"><code>run: |</code> (quvur belgisi) bir nechta qatorli buyruqlarni yozishga imkon beradi. Har bir qator alohida bajariladi.</div>
-<h2>Birinchi to'liq workflow</h2>
+<h2 id="birinchi-to-liq-workflow">Birinchi to'liq workflow</h2>
 <p>Endi hamma qismlarni birlashtiramiz. Quyidagi fayl <code>.github/workflows/ci.yml</code> ga saqlanadi:</p>
 <pre class="code"><code>name: CI
 
@@ -689,9 +705,9 @@ jobs:
       - name: Loyiha fayllari
         run: ls -la</code></pre>
 <p>Bu faylni repoga qo'shib, <code>git push</code> qilganingizdan so'ng GitHub'da <strong>Actions</strong> yorlig'iga o'ting — workflow'ning ishga tushganini va har bir qadamning natijasini ko'rasiz.</p>
-<h2>Natijani qayerda ko'rish</h2>
+<h2 id="natijani-qayerda-ko-rish">Natijani qayerda ko'rish</h2>
 <ul><li>GitHub repo &rarr; yuqoridagi <strong>Actions</strong> yorlig'i.</li><li>Har bir ishga tushish (run) alohida ro'yxatda ko'rinadi.</li><li>Ustiga bosib, har bir job va qadamning loglarini ochish mumkin.</li><li>Yashil belgi &rarr; muvaffaqiyat; qizil belgi &rarr; xato (logdan sababni topasiz).</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Workflow fayllari <code>.github/workflows/</code> papkasida <code>.yml</code> ko'rinishida yashaydi.</li><li>Tuzilma: <code>name</code>, <code>on</code> (hodisa), <code>jobs</code> (vazifalar), <code>steps</code> (qadamlar).</li><li><code>runs-on: ubuntu-latest</code> — toza virtual runner mashinasi.</li><li><code>uses:</code> tayyor action ishlatadi, <code>run:</code> terminal buyrug'ini bajaradi.</li><li>Deyarli har doim <code>actions/checkout@v4</code> bilan boshlanadi.</li><li>Natijalarni <strong>Actions</strong> yorlig'ida kuzatasiz.</li></ul>
 <nav class="lesson-nav">
   <a href="cicd-nima.html"><span class="dir">← Oldingi</span><span class="ttl">CI/CD nima?</span></a>
@@ -705,6 +721,6 @@ jobs:
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

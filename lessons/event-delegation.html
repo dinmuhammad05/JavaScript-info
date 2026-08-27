@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hodisa delegatsiyasi — Kodla</title>
   <meta name="description" content="Bubbling va targetdan foydalanib, bitta ishlovchi bilan ko'p elementni boshqarish; data-atributlar bilan delegatsiya; 'behavior' patterni va afzalliklari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Hodisalarga kirish</div>
 <h1>Hodisa delegatsiyasi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#delegatsiya-g-oyasi">Delegatsiya g'oyasi</a></li>
+<li class="lvl2"><a href="#amaliy-misol-data-atributlar-bilan">Amaliy misol: data-atributlar bilan</a></li>
+<li class="lvl2"><a href="#behavior-xatti-harakat-patterni">"Behavior" (xatti-harakat) patterni</a></li>
+<li class="lvl2"><a href="#delegatsiyaning-afzalliklari">Delegatsiyaning afzalliklari</a></li>
+<li class="lvl2"><a href="#delegatsiyaning-kamchiliklari">Delegatsiyaning kamchiliklari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Bubbling va targeting bir kuchli hodisa qayta ishlash naqshiga — <strong>hodisa delegatsiyasiga</strong> (event delegation) imkon beradi. Bu naqsh yordamida bir xil tarzda ishlov beriladigan ko'plab elementlarga har biriga alohida ishlovchi biriktirish o'rniga, <strong>bitta ishlovchi</strong> qo'yamiz.</p>
-<h2>Delegatsiya g'oyasi</h2>
+<h2 id="delegatsiya-g-oyasi">Delegatsiya g'oyasi</h2>
 <p>Agar bizda umumiy usulda ishlov beriladigan ko'plab element bo'lsa, har biriga alohida ishlovchi biriktirish o'rniga, ularning umumiy ota-elementiga bitta ishlovchi qo'yamiz.</p>
 <p>Bu ishlovchida <code>event.target</code> orqali aynan qaysi element bosilganini aniqlaymiz va shunga qarab ishlov beramiz. Bubbling tufayli ichki elementlardagi kliklar ota-elementga ko'tarilib keladi, shuning uchun bitta ishlovchi barchasini "tutadi".</p>
 <p>G'oyaning oddiy misoli — jadval (<code>&lt;table&gt;</code>). Uning ko'p kataklari (<code>&lt;td&gt;</code>) bor va biz bosilgan katakni belgilamoqchimiz. Har bir <code>&lt;td&gt;</code>ga ishlovchi qo'yish o'rniga, bitta ishlovchini <code>&lt;table&gt;</code>ga qo'yamiz:</p>
@@ -620,7 +634,7 @@ function highlight(td) {
 }</code></pre>
 <p>Bu ishlovchi <strong>necha katak bo'lishidan qat'i nazar</strong> — 10 ta ham, 10 000 ta ham — ishlaydi. Bundan tashqari, kataklar dinamik qo'shilib/olib tashlansa ham (masalan, <code>innerHTML</code> orqali) qo'shimcha ishlovchi biriktirish shart emas.</p>
 <div class="warn"><code>event.target</code> aniq bosilgan element bo'lgani uchun, u <code>&lt;td&gt;</code> ichidagi teg (masalan, <code>&lt;strong&gt;</code>) bo'lishi mumkin. Bunday holatlarda faqat <code>target.tagName == 'TD'</code> tekshiruvi yetmasligi mumkin — kerak bo'lsa, <code>target.closest('td')</code> orqali eng yaqin <code>&lt;td&gt;</code>ni topish to'g'riroq bo'ladi.</div>
-<h2>Amaliy misol: data-atributlar bilan</h2>
+<h2 id="amaliy-misol-data-atributlar-bilan">Amaliy misol: data-atributlar bilan</h2>
 <p>Delegatsiyaning kuchli tomoni — <code>data-*</code> atributlaridan foydalanib, harakatlarni deklarativ qilish. Bir nechta tugma bo'lib, har biri boshqa amalni bajarsin. Har biriga alohida ishlovchi qo'yish o'rniga, ularning konteynerida bitta ishlovchi bilan hammasi boshqariladi:</p>
 <pre class="code"><code>&lt;div id="menu"&gt;
   &lt;button data-action="save"&gt;Saqlash&lt;/button&gt;
@@ -651,7 +665,7 @@ function highlight(td) {
 &lt;/script&gt;</code></pre>
 <p>Bu yerda <code>data-action</code> atributi tugma qaysi metodni chaqirishi kerakligini belgilaydi. Ishlovchida <code>event.target.dataset.action</code> orqali o'sha nomni olib, tegishli metodni chaqiramiz. Yangi tugma qo'shish uchun faqat HTML'ga <code>data-action</code> bilan bitta qator yozish yetarli — JavaScriptga tegmaymiz.</p>
 <div class="note"><code>(*)</code> qatordagi <code>bind(this)</code> muhim: ishlovchi ichida <code>this</code> <code>Menu</code> nusxasini ko'rsatishi kerak (chunki <code>this.save()</code> chaqiramiz). Agar <code>bind</code> qilmasak, <code>this</code> bosilgan DOM element bo'lib qolardi va <code>this.save</code> topilmasdi.</div>
-<h2>"Behavior" (xatti-harakat) patterni</h2>
+<h2 id="behavior-xatti-harakat-patterni">"Behavior" (xatti-harakat) patterni</h2>
 <p>Delegatsiyani nafaqat "boshqarish" uchun, balki elementlarga <strong>deklarativ xatti-harakatlar</strong> (behaviors) qo'shish uchun ham ishlatish mumkin. Naqsh ikki qismdan iborat:</p>
 <ol><li>Elementga uning xatti-harakatini bildiruvchi maxsus atribut qo'shamiz (masalan, <code>data-counter</code>);</li><li>Butun hujjat (<code>document</code>) darajasida bitta ishlovchi hodisalarni tinglaydi va agar hodisa shunday atributli elementda bo'lsa, kerakli amalni bajaradi.</li></ol>
 <p>Masalan, <code>data-counter</code> atributi bo'lgan har qanday tugma bosilganda o'z qiymatini oshirsin:</p>
@@ -683,11 +697,11 @@ Boshqasi: &lt;input type="button" value="2" data-counter&gt;
   });
 &lt;/script&gt;</code></pre>
 <div class="tip">Behavior patterni HTML'ni deklarativ qiladi: element o'zining xatti-harakatini atribut orqali "e'lon qiladi", JavaScript esa umumiy mantiqni bir joyda saqlaydi. Bu murakkab ilovalarni yig'ishda ajoyib ishlaydi — komponentni sahifaga qo'yish uchun faqat kerakli atributlar bilan HTML yozasiz.</div>
-<h2>Delegatsiyaning afzalliklari</h2>
+<h2 id="delegatsiyaning-afzalliklari">Delegatsiyaning afzalliklari</h2>
 <ul><li><strong>Xotira tejaladi:</strong> minglab elementlar o'rniga bitta ishlovchi — DOM'da har biriga ishlovchi qo'shish shart emas;</li><li><strong>Kod qisqaradi:</strong> element qo'shish/o'chirishda ishlovchilarni qo'lda biriktirish/olib tashlash kerak emas;</li><li><strong>Dinamik elementlar:</strong> keyinroq qo'shilgan elementlar ham avtomatik ishlaydi (<code>innerHTML</code> va hokazo bilan);</li><li><strong>Kamroq kod, kamroq xato:</strong> <code>innerHTML</code> yoki shunga o'xshash usullar bilan DOM'ni erkin o'zgartirish mumkin — hodisalar buzilmaydi.</li></ul>
-<h2>Delegatsiyaning kamchiliklari</h2>
+<h2 id="delegatsiyaning-kamchiliklari">Delegatsiyaning kamchiliklari</h2>
 <ul><li>Hodisa <strong>ko'tarilishi</strong> (bubbling) shart. Ba'zi hodisalar ko'tarilmaydi. Shuningdek, past darajadagi ishlovchilar <code>event.stopPropagation()</code> chaqirmasligi kerak, aks holda hodisa yuqoriga yetib bormaydi;</li><li>Konteyner darajasidagi ishlovchi <strong>barcha</strong> hodisalarga javob berishi kerak — hatto bizni qiziqtirmaydiganlariga ham. Bu odatda arzon (yengil), lekin juda faol hodisalarda (masalan, <code>mousemove</code>) hisobga olish kerak;</li><li>Ba'zan qo'shimcha tekshiruv kerak: <code>event.target</code> aniq kerakli element ekanini (yoki <code>closest</code> orqali eng yaqin mos elementni) aniqlash lozim.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Hodisa delegatsiyasi haqiqatan ham ajoyib naqsh. Uni qo'llash algoritmi:</p>
 <ol><li>Konteynerga bitta ishlovchi qo'yamiz;</li><li>Ishlovchi ichida <code>event.target</code> orqali hodisa qaysi elementda boshlanganini aniqlaymiz;</li><li>Agar bizni qiziqtirgan element bo'lsa (masalan, mos <code>tagName</code>, <code>class</code> yoki <code>data-*</code> atribut), hodisani qayta ishlaymiz.</li></ol>
 <p>Bu naqsh xotira va kod jihatidan tejamkor, dinamik elementlar bilan ajoyib ishlaydi va "behavior" naqshi orqali HTML'ni deklarativ qilishga imkon beradi.</p>
@@ -703,6 +717,6 @@ Boshqasi: &lt;input type="button" value="2" data-counter&gt;
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

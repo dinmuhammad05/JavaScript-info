@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Async/await — Kodla</title>
   <meta name="description" content="async funksiyalar, await, try/catch bilan xatoliklar va top-level await.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Async/await</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#async-funksiyalar">async funksiyalar</a></li>
+<li class="lvl2"><a href="#await">await</a></li>
+<li class="lvl2"><a href="#await-faqat-async-ichida">await faqat async ichida</a></li>
+<li class="lvl2"><a href="#top-level-await">Top-level await</a></li>
+<li class="lvl2"><a href="#xatoliklar-try-catch">Xatoliklar: try/catch</a></li>
+<li class="lvl2"><a href="#promise-bilan-birga-ishlash">Promise bilan birga ishlash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>async/await</code> — promise'lar bilan ishlashning eng qulay va zamonaviy usuli. U asinxron kodni <strong>sinxronga o'xshab</strong>, o'qishga oson ko'rinishda yozishga imkon beradi.</p>
-<h2>async funksiyalar</h2>
+<h2 id="async-funksiyalar">async funksiyalar</h2>
 <p><code>async</code> so'zini funksiya oldiga qo'yish mumkin. Bu bitta narsani anglatadi: funksiya <strong>doim promise qaytaradi</strong>. Agar funksiya oddiy qiymat qaytarsa, JavaScript uni avtomatik ravishda <em>resolved</em> promise'ga o'raydi.</p>
 <pre class="code"><code>async function f() {
   return 1;
@@ -614,7 +629,7 @@ f().then(console.log); // 1  (1 avtomatik resolved promise'ga o'raldi)</code></p
 salom(); // funksiya ichidagi log darhol chiqadi
 console.log("Funksiya chaqirildi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Yuqoridagi maydonchada faqat <strong>sinxron</strong> <code>console.log</code>'lar ko'rinadi. <code>return "Salom!"</code> promise'ni resolve qiladi, lekin uni <code>.then</code> bilan olmasak, natija konsolda ko'rinmaydi.</div>
-<h2>await</h2>
+<h2 id="await">await</h2>
 <p><code>await</code> — bu haqiqiy sehr. Uning sintaksisi:</p>
 <pre class="code"><code>// await faqat async funksiya ichida ishlaydi
 let value = await promise;</code></pre>
@@ -645,14 +660,14 @@ async function loadUser() {
   let user = await response.json();
   return user.name;
 }</code></pre>
-<h2>await faqat async ichida</h2>
+<h2 id="await-faqat-async-ichida">await faqat async ichida</h2>
 <div class="warn"><code>await</code>'ni oddiy (async bo'lmagan) funksiya ichida ishlatib bo'lmaydi — bu <strong>sintaksis xatosi</strong> beradi.</div>
 <pre class="code"><code>function f() {
   let promise = Promise.resolve(1);
   let result = await promise; // Syntax error!
 }</code></pre>
 <p>Sabab: <code>await</code> faqat <code>async</code> funksiyaning ichida ma'noga ega, chunki funksiyani "to'xtatib turish" mexanizmi shu yerda mavjud.</p>
-<h2>Top-level await</h2>
+<h2 id="top-level-await">Top-level await</h2>
 <p>Zamonaviy JavaScript'da (ES modullarida) <code>await</code>'ni funksiyadan tashqarida, modul darajasida ham ishlatish mumkin — buni <strong>top-level await</strong> deyiladi:</p>
 <pre class="code"><code>// modul darajasida (ES module ichida)
 let response = await fetch('/user.json');
@@ -665,7 +680,7 @@ console.log(user);</code></pre>
   let user = await response.json();
   console.log(user);
 })();</code></pre>
-<h2>Xatoliklar: try/catch</h2>
+<h2 id="xatoliklar-try-catch">Xatoliklar: try/catch</h2>
 <p>Agar promise reject bo'lsa, <code>await</code> o'sha joyda <strong>xato tashlaydi</strong> (throw) — xuddi <code>throw</code> operatori kabi. Shuning uchun uni oddiy <code>try/catch</code> bilan ushlash mumkin:</p>
 <pre class="code"><code>async function f() {
   try {
@@ -694,7 +709,7 @@ f();</code></pre>
 
 // f() reject qilingan promise qaytaradi
 f().catch(console.log); // TypeError: failed to fetch</code></pre>
-<h2>Promise bilan birga ishlash</h2>
+<h2 id="promise-bilan-birga-ishlash">Promise bilan birga ishlash</h2>
 <p><code>async/await</code> promise'lar bilan yaxshi ishlaydi. Masalan, bir nechta ishni parallel kutish uchun <code>await Promise.all(...)</code> ishlatamiz:</p>
 <pre class="code"><code>async function f() {
   // ikkala fetch parallel boshlanadi, ikkalasini kutamiz
@@ -709,7 +724,7 @@ f().catch(console.log); // TypeError: failed to fetch</code></pre>
 }</code></pre>
 <div class="tip">Agar bir nechta mustaqil so'rovni ketma-ket <code>await</code> qilsangiz, ular <strong>navbatma-navbat</strong> bajariladi (sekin). Ularni <strong>parallel</strong> ishga tushirish uchun <code>Promise.all</code> ichiga joylang — bu ancha tezroq.</div>
 <p><code>await</code> nafaqat promise, balki <em>"thenable"</em> obyektlar (ya'ni <code>.then</code> metodiga ega obyektlar) bilan ham ishlaydi — xuddi <code>promise.then</code> kabi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>async</code> funksiya <strong>doim promise qaytaradi</strong>; oddiy qiymat avtomatik resolved promise'ga o'raladi;</li><li><code>await</code> promise yakunlanguncha kutadi va natijasini qaytaradi;</li><li><code>await</code> faqat <code>async</code> funksiya ichida (yoki ES modul darajasida — top-level await) ishlaydi;</li><li>Xatolarni oddiy <code>try/catch</code> bilan, yoki tashqarida <code>.catch</code> bilan ushlash mumkin;</li><li>Parallel ishlar uchun <code>await Promise.all(...)</code> ishlatiladi;</li><li><code>async/await</code> — <code>.then/.catch</code> zanjirlariga qaraganda ancha o'qishga oson va toza usul.</li></ul>
 <nav class="lesson-nav">
   <a href="microtask.html"><span class="dir">← Oldingi</span><span class="ttl">Mikrovazifalar (microtasks)</span></a>
@@ -723,6 +738,6 @@ f().catch(console.log); // TypeError: failed to fetch</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

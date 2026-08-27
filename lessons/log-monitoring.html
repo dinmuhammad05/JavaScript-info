@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loglar, monitoring va aniqlash — Kodla</title>
   <meta name="description" content="Nega log muhim, nima loglanadi va nima loglanmaydi (parol, token); markazlashgan log va SIEM g'oyasi; anomaliyani aniqlash asoslari, ogohlantirish (alerting) va oddiy audit log namunasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,20 +599,34 @@
 <main class="content article">
 <div class="crumbs">Tarmoq va tizim xavfsizligi</div>
 <h1>Loglar, monitoring va aniqlash</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-log-muhim">Nega log muhim?</a></li>
+<li class="lvl2"><a href="#nima-loglanadi">Nima loglanadi?</a></li>
+<li class="lvl2"><a href="#nima-loglanmaydi">Nima LOGLANMAYDI</a></li>
+<li class="lvl2"><a href="#oddiy-audit-log-namunasi">Oddiy audit log namunasi</a></li>
+<li class="lvl2"><a href="#markazlashgan-log-va-siem">Markazlashgan log va SIEM</a></li>
+<li class="lvl2"><a href="#anomaliyani-aniqlash-va-ogohlantirish">Anomaliyani aniqlash va ogohlantirish</a></li>
+<li class="lvl2"><a href="#loglarni-himoyalash-va-saqlash">Loglarni himoyalash va saqlash</a></li>
+<li class="lvl2"><a href="#hodisaga-javob-berish-incident-response">Hodisaga javob berish (incident response)</a></li>
+<li class="lvl2"><a href="#bobni-yakunlash">Bobni yakunlash</a></li>
+  </ul>
+</details>
 <p class="lead">Xavfsizlikda achchiq haqiqat shu: <strong>hech qanday himoya yuz foizli emas</strong>. Ertami-kechmi biror shubhali hodisa sodir bo'lishi mumkin. Savol shundaki — siz buni <em>ko'rasizmi</em>? Loglar va monitoring bo'lmasa, buzilganingizni ham bilmay qolishingiz mumkin. Ushbu yakuniy darsda nima sodir bo'layotganini kuzatish, anomaliyani aniqlash va o'z vaqtida ogohlantirilishni o'rganamiz.</p>
-<h2>Nega log muhim?</h2>
+<h2 id="nega-log-muhim">Nega log muhim?</h2>
 <p><strong>Log</strong> — bu tizimda sodir bo'lgan hodisalarning yozma qaydi: kim kirdi, qachon, qanday amal bajardi, qanday xato yuz berdi. Loglar ikki muhim vazifani bajaradi:</p>
 <ul><li><strong>Real vaqtda aniqlash:</strong> hujum yoki nosozlik sodir bo'layotganini o'sha zahoti sezish;</li><li><strong>Hodisadan keyin tergov:</strong> nimadir buzilganda, "aynan nima bo'ldi, qachon va qanday" degan savollarga javob berish.</li></ul>
 <div class="tip">Xavfsizlikda oddiy haqiqat bor: <strong>log bo'lmasa, buzilganingizni ham bilmaysan</strong>. Loglar — bu tizimingizning "xotirasi"; usiz siz ko'r holatdasiz.</div>
-<h2>Nima loglanadi?</h2>
+<h2 id="nima-loglanadi">Nima loglanadi?</h2>
 <p>Hamma narsani loglash shart emas — bu shovqin yaratadi. Ammo xavfsizlik nuqtai nazaridan muhim hodisalarni albatta yozib borish kerak:</p>
 <ul><li><strong>Kirish urinishlari:</strong> muvaffaqiyatli va, ayniqsa, <em>muvaffaqiyatsiz</em> login urinishlari;</li><li><strong>Autentifikatsiya hodisalari:</strong> parol o'zgartirish, huquq berish, sessiya yaratish;</li><li><strong>Muhim amallar:</strong> ma'lumot o'chirish, to'lov, sozlama o'zgartirish;</li><li><strong>Xatolar:</strong> kutilmagan xatolar, ruxsatsiz kirish urinishlari (403/401);</li><li><strong>Tizim hodisalari:</strong> xizmatning ishga tushishi, to'xtashi, resurs tanqisligi.</li></ul>
 <p>Har bir log yozuvida foydali kontekst bo'lishi kerak: <strong>qachon</strong> (vaqt belgisi), <strong>kim</strong> (foydalanuvchi yoki IP), <strong>nima</strong> (amal) va <strong>natija</strong> (muvaffaqiyat yoki xato).</p>
-<h2>Nima LOGLANMAYDI</h2>
+<h2 id="nima-loglanmaydi">Nima LOGLANMAYDI</h2>
 <p>Bu — juda muhim va ko'pincha unutiladigan nuqta. Loglar odatda ko'p joyda saqlanadi va ko'p odamga ko'rinadi. Shu bois <strong>nozik ma'lumotlarni hech qachon log'ga yozmang</strong>:</p>
 <ul><li><strong>Parollar</strong> — hatto xato kiritilgan parolni ham yozmang;</li><li><strong>Tokenlar va API kalitlar</strong> — sessiya tokeni, JWT, maxfiy kalitlar;</li><li><strong>To'lov ma'lumotlari</strong> — karta raqami, CVV;</li><li><strong>Shaxsiy ma'lumotlar</strong> — zarur bo'lmasa, to'liq shaxsiy ma'lumotni yozmang.</li></ul>
 <div class="warn">Parol yoki token log'ga tushib qolsa — bu sirning ochilishiga tenglashadi, chunki log fayllari ko'pincha kamroq himoyalangan bo'ladi. Log yozishdan oldin nozik maydonlarni doim niqoblang yoki olib tashlang.</div>
-<h2>Oddiy audit log namunasi</h2>
+<h2 id="oddiy-audit-log-namunasi">Oddiy audit log namunasi</h2>
 <p>Keling, muhim hodisalarni tuzilgan (structured) shaklda yozadigan oddiy <strong>audit log</strong> misolini ko'raylik. E'tibor bering: parol maydoni umuman yozilmaydi.</p>
 <pre class="code"><code>// Oddiy audit log yozuvi
 function auditLog(hodisa) {
@@ -632,12 +649,12 @@ auditLog({
   natija: 'muvaffaqiyatsiz'  // xato parol urinishi
 });</code></pre>
 <p>Log'ni <strong>JSON</strong> kabi tuzilgan formatda yozish muhim: keyin uni avtomatik qidirish, filtrlash va tahlil qilish osonlashadi. "Erkin matn" loglarni mashina o'qishi qiyin.</p>
-<h2>Markazlashgan log va SIEM</h2>
+<h2 id="markazlashgan-log-va-siem">Markazlashgan log va SIEM</h2>
 <p>Bir nechta server bo'lsa, loglar har birida alohida yotishi noqulay. Yechim — <strong>markazlashgan log</strong> (centralized logging): barcha serverlarning loglari bitta joyga oqib keladi. Shunda siz butun tizimni bir oynadan kuzatasiz.</p>
 <p>Bundan yuqori bosqich — <strong>SIEM</strong> (Security Information and Event Management). Bu tizimlar turli manbalardan loglarni yig'ib, ular orasidagi bog'liqlikni tahlil qiladi va shubhali naqshlarni aniqlaydi.</p>
 <ul><li><strong>ELK to'plami</strong> (Elasticsearch, Logstash, Kibana) — mashhur ochiq log tahlil to'plami;</li><li><strong>Splunk</strong> — kuchli tijorat SIEM va log tahlil platformasi;</li><li><strong>Grafana Loki</strong> — yengil, ochiq markazlashgan log yechimi.</li></ul>
 <div class="note">SIEM'ning asosiy g'oyasi — <strong>bog'liqlikni ko'rish</strong>: bitta serverda ma'nosiz ko'ringan hodisa (masalan, bir necha xato login) butun tizim bo'ylab birga ko'rilganda hujum naqshiga aylanishi mumkin.</div>
-<h2>Anomaliyani aniqlash va ogohlantirish</h2>
+<h2 id="anomaliyani-aniqlash-va-ogohlantirish">Anomaliyani aniqlash va ogohlantirish</h2>
 <p>Loglarni yig'ish — bu yarim ish. Ularni kimdir yoki nimadir <em>kuzatishi</em> kerak. Bu yerda ikki tushuncha muhim: <strong>anomaliyani aniqlash</strong> va <strong>ogohlantirish</strong>.</p>
 <p><strong>Anomaliya</strong> — bu odatiy holatdan keskin farq qiluvchi xatti-harakat. Masalan:</p>
 <ul><li>Bir daqiqada bir IP'dan yuzlab login urinishi (brute-force belgisi);</li><li>Yarim tunda, odatda bo'sh bo'ladigan vaqtda katta ma'lumot yuklab olish;</li><li>Bir foydalanuvchining birdaniga g'ayrioddiy joydan kirishi;</li><li>Xatolar sonining keskin ko'payishi (xizmatga hujum belgisi bo'lishi mumkin).</li></ul>
@@ -657,15 +674,15 @@ function loginXatoTekshir(ip, xatoSoni) {
 
 // ogohlantir() — email yoki xabar yuboruvchi funksiya</code></pre>
 <div class="tip">Ogohlantirishlarni ehtiyotkorlik bilan sozlang: agar juda ko'p "bo'sh" ogohlantirish kelsa, jamoa ularga e'tibor bermay qo'yadi (alert fatigue). Faqat haqiqatan muhim hodisalar odamni bezovta qilsin.</div>
-<h2>Loglarni himoyalash va saqlash</h2>
+<h2 id="loglarni-himoyalash-va-saqlash">Loglarni himoyalash va saqlash</h2>
 <p>Loglarning o'zi ham himoyaga muhtoj. Agar hujumchi serverga kirsa, u ko'pincha izlarni yashirish uchun loglarni o'chirishga yoki o'zgartirishga urinadi. Shu bois loglarni <strong>server tashqarisiga</strong> uzatib turish muhim.</p>
 <ul><li><strong>Faqat qo'shish (append-only):</strong> loglar o'zgartirilmasin, faqat yangi yozuv qo'shilsin;</li><li><strong>Markazlashgan saqlash:</strong> loglar ishlab turgan serverdan boshqa, himoyalangan joyda ham saqlansin;</li><li><strong>Saqlash muddati:</strong> loglar tergov uchun yetarlicha uzoq (masalan, bir necha oy) saqlansin, ammo cheksiz emas.</li></ul>
 <p>Loglarni boshqa joyga uzatish oddiy, ammo muhim g'oya: hujumchi bir serverni buzsa ham, u yerdagi loglarni o'chirib, markazlashgan nusxadagi izni yo'q qila olmaydi.</p>
-<h2>Hodisaga javob berish (incident response)</h2>
+<h2 id="hodisaga-javob-berish-incident-response">Hodisaga javob berish (incident response)</h2>
 <p>Loglar va ogohlantirishlar — bu hodisani <em>aniqlash</em>ning bir qismi. Ammo hodisa aniqlangach, nima qilish kerak? Bu yerda oldindan tayyorlangan <strong>javob rejasi</strong> yordam beradi. Umumiy bosqichlar:</p>
 <ol><li><strong>Aniqlash:</strong> log va ogohlantirish orqali hodisani sezish;</li><li><strong>Cheklash:</strong> zararni to'xtatish — masalan, buzilgan hisobni bloklash, xizmatni ajratish;</li><li><strong>Yo'qotish:</strong> sababni bartaraf qilish — zaiflikni yopish, sirni rotatsiya qilish;</li><li><strong>Tiklash:</strong> tizimni normal holatga qaytarish, zaxira nusxalardan foydalanish;</li><li><strong>Saboq:</strong> nima bo'lganini tahlil qilib, kelajakda oldini olish choralarini ko'rish.</li></ol>
 <div class="note">Javob rejasini hodisa <em>sodir bo'lishidan oldin</em> tayyorlang. Muammo yuz bergan paytda vahima ichida reja tuzish — eng yomon vaqt. Oldindan yozilgan qadamlar ro'yxati vaqtni va asablarni tejaydi.</div>
-<h2>Bobni yakunlash</h2>
+<h2 id="bobni-yakunlash">Bobni yakunlash</h2>
 <p>Ushbu bobda biz tarmoq va tizim xavfsizligining asosiy qatlamlarini ko'rib chiqdik: xavfsizlik sarlavhalari, firewall va VPN, server hardening, sirlarni boshqarish va nihoyat loglar bilan aniqlash. Bularning barchasi bitta g'oyaga bog'lanadi — <strong>chuqurlashtirilgan himoya</strong>: bir necha mustaqil qatlam, biri buzilsa ikkinchisi ushlab qoladi.</p>
 <p>Eng muhim xulosa: xavfsizlik — bu <em>jarayon</em>, bir martalik ish emas. Serverni qattiqlashtiring, sirlarni ehtiyotlang, va doimo kuzatib turing. Loglar sizga tizimingiz haqida "gapiradi" — uni tinglashni o'rganing.</p>
 <nav class="lesson-nav">
@@ -680,6 +697,6 @@ function loginXatoTekshir(ip, xatoSoni) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

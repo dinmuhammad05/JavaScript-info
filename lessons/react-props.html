@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Props — Kodla</title>
   <meta name="description" content="Komponentga ma'lumot uzatish, props obyekti, destructuring, children propi va propslarning faqat o'qish uchun (immutable) ekanligi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">React</div>
 <h1>Props</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#props-nima">Props nima?</a></li>
+<li class="lvl2"><a href="#turli-xil-qiymatlarni-uzatish">Turli xil qiymatlarni uzatish</a></li>
+<li class="lvl2"><a href="#props-ni-destructuring-qilish">Props'ni destructuring qilish</a></li>
+<li class="lvl2"><a href="#children-propi">children propi</a></li>
+<li class="lvl2"><a href="#props-faqat-o-qish-uchun-immutable">Props faqat o'qish uchun (immutable)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Bir xil komponentni turli ma'lumotlar bilan ko'rsatishni istaymiz. Masalan, bitta <code>Card</code> komponenti turli ismlar bilan chiqishi kerak. Buning uchun React'da <strong>props</strong> (properties — xossalar) mexanizmi mavjud. Ushbu darsda komponentga tashqaridan ma'lumot uzatishni o'rganamiz.</p>
-<h2>Props nima?</h2>
+<h2 id="props-nima">Props nima?</h2>
 <p><strong>Props</strong> — bu ota (parent) komponentdan bola (child) komponentga uzatiladigan ma'lumot. Ularni oddiy JavaScript funksiyasining <em>argumentlari</em> deb tasavvur qiling: siz komponentga qandaydir qiymat berasiz, u shu qiymatga qarab turlicha ko'rinadi.</p>
 <p>Props'ni JSX'da xuddi HTML atributlari kabi yozamiz. Masalan, <code>Salom</code> komponentiga <code>ism</code> nomli prop uzatamiz:</p>
 <pre class="code"><code>&lt;Salom ism="Ali" /&gt;
@@ -609,7 +623,7 @@
 // &lt;Salom ism="Ali" /&gt; =&gt; Salom, Ali!
 // &lt;Salom ism="Vali" /&gt; =&gt; Salom, Vali!</code></pre>
 <p>Ya'ni <code>ism="Ali"</code> yozganda, komponent ichida <code>props.ism</code> qiymati <code>"Ali"</code> bo'ladi. Shu tariqa bitta komponent turli ma'lumotlar bilan ishlaydi.</p>
-<h2>Turli xil qiymatlarni uzatish</h2>
+<h2 id="turli-xil-qiymatlarni-uzatish">Turli xil qiymatlarni uzatish</h2>
 <p>Props sifatida faqat matn emas, har qanday JavaScript qiymatini uzatish mumkin: son, mantiqiy qiymat, massiv, obyekt, hatto funksiya. Matn bo'lmagan qiymatlarni <code>{ }</code> qavslar ichida beramiz:</p>
 <pre class="code"><code>&lt;Profile
   ism="Ali"
@@ -628,7 +642,7 @@
   );
 }</code></pre>
 <div class="note">Diqqat: matn qiymatni tirnoq bilan (<code>ism="Ali"</code>), boshqa har qanday qiymatni qavs bilan (<code>yosh={25}</code>) beramiz. <code>yosh="25"</code> yozsangiz, bu son emas, matn bo'ladi!</div>
-<h2>Props'ni destructuring qilish</h2>
+<h2 id="props-ni-destructuring-qilish">Props'ni destructuring qilish</h2>
 <p>Har safar <code>props.ism</code>, <code>props.yosh</code> deb yozish uzun bo'ladi. JavaScript'dan tanish <strong>destructuring</strong> yordamida buni qulaylashtiramiz. Odatda destructuring'ni to'g'ridan-to'g'ri funksiya parametrida bajaramiz:</p>
 <pre class="code"><code>function Profile({ ism, yosh, faol }) {
   return (
@@ -646,7 +660,7 @@
 // &lt;Tugma /&gt; =&gt; matn: "Bosing", turi: "oddiy"
 // &lt;Tugma matn="Saqlash" /&gt; =&gt; matn: "Saqlash"</code></pre>
 <div class="tip">Destructuring va standart qiymatlar — bu sof JavaScript imkoniyatlari. React ularni maxsus qilib chiqmaydi, shunchaki funksiya parametrlaridan foydalanadi.</div>
-<h2>children propi</h2>
+<h2 id="children-propi">children propi</h2>
 <p>Ba'zan komponentga oddiy atribut emas, balki uning teglari <em>orasidagi kontentni</em> uzatishni istaymiz — xuddi HTML'da <code>&lt;div&gt;...&lt;/div&gt;</code> ichiga narsa qo'ygan kabi. React buni maxsus <strong><code>children</code></strong> propi orqali beradi.</p>
 <p>Masalan, <code>Card</code> komponenti — bu ramka, uning ichiga istalgan kontent joylashtirmoqchimiz:</p>
 <pre class="code"><code>function Card({ children }) {
@@ -663,7 +677,7 @@
 }</code></pre>
 <p>Natijada <code>Card</code> ichidagi <code>{children}</code> o'rniga <code>&lt;h2&gt;</code> va <code>&lt;p&gt;</code> chiqadi. Bu — o'rovchi (wrapper) komponentlar yaratishning asosiy usuli: modal oynalar, panellar, ramkalar shu tariqa quriladi.</p>
 <div class="note"><code>children</code> — bu React tomonidan avtomatik beriladigan maxsus prop. Siz uni qo'lda yozmaysiz — u teglar orasidagi kontentdan to'ldiriladi.</div>
-<h2>Props faqat o'qish uchun (immutable)</h2>
+<h2 id="props-faqat-o-qish-uchun-immutable">Props faqat o'qish uchun (immutable)</h2>
 <p>Bu — React'ning eng muhim qoidalaridan biri: <strong>komponent o'z props'larini o'zgartira olmaydi</strong>. Props — faqat o'qish uchun (read-only, immutable). Quyidagi kod <em>qat'iyan man etiladi</em>:</p>
 <pre class="code"><code>function Profile({ ism }) {
   ism = "Boshqa ism"; // MUMKIN EMAS! Props'ni o'zgartirmang
@@ -672,7 +686,7 @@
 <p>Nima uchun bunday qoida bor? React'da ma'lumot oqimi <strong>bir yo'nalishli</strong> (one-way data flow): ma'lumot yuqoridan (ota komponentdan) pastga (bola komponentga) oqadi. Agar bola o'z props'ini o'zgartira olsa, ma'lumot manbasi tushunarsiz bo'lib qolar va xatolarni topish qiyinlashardi.</p>
 <p>React hujjatlarida buni shunday ifodalaydi: <em>"Barcha React komponentlari o'z props'lariga nisbatan sof funksiya (pure function) kabi ishlashi kerak."</em> Ya'ni bir xil props uchun har doim bir xil natija qaytarishi lozim.</p>
 <div class="warn">Agar komponent ichida vaqt o'tishi bilan <em>o'zgaradigan</em> ma'lumot kerak bo'lsa (masalan, tugma bosilganda hisoblagich oshsa), props emas — <strong>state</strong> (holat) ishlatiladi. Bu keyingi darsimiz mavzusi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Props</strong> — ota komponentdan bola komponentga uzatiladigan ma'lumot; funksiyaning argumentlariga o'xshaydi;</li><li>Props JSX'da HTML atributlari kabi yoziladi: matn tirnoqda, boshqa qiymatlar <code>{ }</code> qavsda;</li><li>Komponent ichida props'ni <strong>destructuring</strong> orqali qulay o'qiymiz: <code>function C({ ism })</code>;</li><li>Standart qiymat berish mumkin: <code>{ matn = "Bosing" }</code>;</li><li><strong><code>children</code></strong> — teglar orasidagi kontentni uzatuvchi maxsus prop; o'rovchi komponentlar uchun ishlatiladi;</li><li>Props <strong>o'zgarmas</strong> (immutable, faqat o'qish uchun) — ma'lumot bir yo'nalishli, yuqoridan pastga oqadi.</li></ul>
 <nav class="lesson-nav">
   <a href="react-jsx.html"><span class="dir">← Oldingi</span><span class="ttl">JSX va komponentlar</span></a>
@@ -686,6 +700,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

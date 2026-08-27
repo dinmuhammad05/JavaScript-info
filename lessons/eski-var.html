@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eski "var" — Kodla</title>
   <meta name="description" content="var ning o'ziga xosligi, blok ko'lami yo'qligi, hoisting va nega let/const afzal.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>Eski "var"</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#var-qanday-ishlaydi">var qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#1-farq-var-da-blok-ko-lami-yo-q">1-farq: var da blok ko'lami YO'Q</a></li>
+<li class="lvl2"><a href="#2-farq-hoisting-yuqoriga-ko-tarilish">2-farq: hoisting (yuqoriga ko'tarilish)</a></li>
+<li class="lvl2"><a href="#3-farq-qayta-e-lon-qilishga-ruxsat">3-farq: qayta e'lon qilishga ruxsat</a></li>
+<li class="lvl2"><a href="#nega-hozir-let-const-afzal">Nega hozir let/const afzal?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Eng dastlabki JavaScript'da o'zgaruvchilar faqat <code>var</code> orqali e'lon qilinardi. Bugun uni deyarli ishlatmaymiz, ammo eski kodlarda tez-tez uchraydi va u <code>let</code>/<code>const</code>dan jiddiy farq qiladi. Uni tushunish kutilmagan xatolardan asraydi.</p>
-<h2>var qanday ishlaydi?</h2>
+<h2 id="var-qanday-ishlaydi">var qanday ishlaydi?</h2>
 <p>Birinchi qarashda <code>var</code> ham <code>let</code> kabi ko'rinadi — o'zgaruvchi e'lon qiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>var-basic.js</span></div><textarea spellcheck="false">var message = 'Salom';
 console.log(message);
@@ -605,7 +619,7 @@ console.log(message);
 var age = 25;
 console.log(age);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ammo ichkaridan u boshqacha xatti-harakat qiladi. Uch asosiy farqni ko'ramiz.</p>
-<h2>1-farq: var da blok ko'lami YO'Q</h2>
+<h2 id="1-farq-var-da-blok-ko-lami-yo-q">1-farq: var da blok ko'lami YO'Q</h2>
 <p><code>let</code>/<code>const</code>dan farqli o'laroq, <code>var</code> o'zgaruvchisi bloklarni (agar blok funksiya bo'lmasa) <strong>e'tiborsiz qoldiradi</strong>. U blok ichida e'lon qilinsa ham, blokdan tashqarida ham ko'rinadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>var-no-block.js</span></div><textarea spellcheck="false">if (true) {
   var test = 'men var man';
@@ -630,7 +644,7 @@ console.log('Sikldan keyin i =', i);  // 3</textarea><div class="pg-actions"><bu
 sayHi();
 // bu yerda phrase mavjud emas — funksiya ichida qoldi
 console.log('Funksiyadan tashqaridamiz');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>2-farq: hoisting (yuqoriga ko'tarilish)</h2>
+<h2 id="2-farq-hoisting-yuqoriga-ko-tarilish">2-farq: hoisting (yuqoriga ko'tarilish)</h2>
 <p><code>var</code> e'lonlari funksiya (yoki skript) boshiga <strong>"ko'tariladi"</strong> — bu <em>hoisting</em> deb ataladi. Ya'ni o'zgaruvchini e'lon qilishdan <em>oldin</em> ishlatsangiz ham xatolik bo'lmaydi — u <code>undefined</code> bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>var-hoisting.js</span></div><textarea spellcheck="false">function test() {
   console.log(phrase);  // undefined (xatolik EMAS!)
@@ -642,19 +656,19 @@ test();</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushi
 <p>Nima sodir bo'ldi? JavaScript kodni shunday "o'qiydi": <code>var phrase</code> <em>e'loni</em> funksiya boshiga ko'tariladi, ammo <strong>qiymat berish</strong> (<code>= 'Salom'</code>) o'z joyida qoladi. Shuning uchun birinchi <code>console.log</code> da o'zgaruvchi bor, lekin hali qiymatsiz — <code>undefined</code>.</p>
 <div class="note">Diqqat: <strong>faqat e'lon ko'tariladi, qiymat berish emas</strong>. Buni shunday tasavvur qiling: kod ichkarida <code>var phrase;</code> (yuqorida) va <code>phrase = 'Salom';</code> (o'z joyida) ga bo'linadi.</div>
 <p><code>let</code> bilan esa bunday bo'lmaydi — e'londan oldin ishlatish xatolik beradi ("temporal dead zone"). Bu aslida <strong>yaxshi</strong> — xatoni yashirmasdan darhol ko'rsatadi.</p>
-<h2>3-farq: qayta e'lon qilishga ruxsat</h2>
+<h2 id="3-farq-qayta-e-lon-qilishga-ruxsat">3-farq: qayta e'lon qilishga ruxsat</h2>
 <p>Bir xil <code>var</code> o'zgaruvchisini bir necha marta qayta e'lon qilsa bo'ladi — hech qanday xatolik chiqmaydi (bu ham xatolarni yashiradi):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>var-redeclare.js</span></div><textarea spellcheck="false">var user = 'Ali';
 var user = 'Vali';   // xatolik yo'q, oddiy qayta yozish
 
 console.log(user);   // 'Vali'</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>let</code> bilan bir xil o'zgaruvchini ikki marta e'lon qilish <code>SyntaxError</code> beradi — bu tasodifiy nom to'qnashuvidan asraydi.</p>
-<h2>Nega hozir let/const afzal?</h2>
+<h2 id="nega-hozir-let-const-afzal">Nega hozir let/const afzal?</h2>
 <p>Yuqoridagi "o'ziga xosliklar" aslida <code>var</code> ning <em>kamchiliklari</em>. Ular kodni tushunishni qiyinlashtiradi va yashirin xatolarga sabab bo'ladi. <code>let</code> va <code>const</code> ularni to'g'irlaydi:</p>
 <ul><li><strong>Blok ko'lami</strong> — o'zgaruvchi faqat kerak bo'lgan joyda yashaydi, tasodifan tarqalib ketmaydi;</li><li><strong>E'londan oldin ishlatib bo'lmaydi</strong> — xatoni yashirmasdan darhol ko'rsatadi;</li><li><strong>Qayta e'lon qilib bo'lmaydi</strong> — nom to'qnashuvi darhol aniqlanadi;</li><li><strong>const</strong> qiymat o'zgarmasligini kafolatlaydi — kod niyati aniqroq bo'ladi.</li></ul>
 <div class="tip">Amaliy tavsiya: <strong>doim <code>const</code>dan boshlang</strong>. Agar qiymat keyin o'zgarishi kerak bo'lsa — <code>let</code>ga o'ting. <code>var</code> ni esa yangi kodda umuman ishlatmaslik ma'qul.</div>
 <div class="warn">Eski loyihalar va kutubxonalarda <code>var</code> hali ham ko'p uchraydi. Uni o'chirib tashlash shart emas, ammo uning xatti-harakatini <strong>bilishingiz</strong> kerak — aks holda "nega bu o'zgaruvchi bu yerda ham bor?" degan chalkashlikka tushishingiz mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>var</code> — o'zgaruvchi e'lon qilishning eski usuli, hozir kamdan-kam ishlatiladi;</li><li>Uning <strong>blok ko'lami yo'q</strong> — faqat funksiya yoki skript darajasida cheklanadi;</li><li><strong>Hoisting</strong> tufayli e'londan oldin ishlatilsa <code>undefined</code> bo'ladi (xatolik bermaydi);</li><li>Uni <strong>qayta e'lon qilsa</strong> bo'ladi — bu xatolarni yashiradi;</li><li>Yangi kodda <strong>const</strong> va <strong>let</strong> ishlatilishi kerak — ular xavfsizroq va tushunarliroq.</li></ul>
 <nav class="lesson-nav">
   <a href="closure.html"><span class="dir">← Oldingi</span><span class="ttl">O'zgaruvchi ko'lami, closure</span></a>
@@ -668,6 +682,6 @@ console.log(user);   // 'Vali'</textarea><div class="pg-actions"><button class="
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

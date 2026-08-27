@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Belgilar sinflari — Kodla</title>
   <meta name="description" content="Belgi sinflari \d \D \s \S \w \W, ularning teskarilari, nuqta (.) va s flagi, unicode haqida qisqacha hamda telefon raqamini ajratish kabi amaliy misollar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Belgilar sinflari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#belgi-sinfi-nima">Belgi sinfi nima?</a></li>
+<li class="lvl2"><a href="#asosiy-belgi-sinflari">Asosiy belgi sinflari</a></li>
+<li class="lvl2"><a href="#nuqta-istalgan-belgi">Nuqta (.) — istalgan belgi</a></li>
+<li class="lvl2"><a href="#s-flagi-nuqta-har-qanday-belgiga">s flagi — nuqta har qanday belgiga</a></li>
+<li class="lvl2"><a href="#unicode-haqida-qisqacha">Unicode haqida qisqacha</a></li>
+<li class="lvl2"><a href="#amaliy-misol-telefon-raqamini-ajratish">Amaliy misol: telefon raqamini ajratish</a></li>
+<li class="lvl2"><a href="#bo-shliq-belgisiga-e-tibor">Bo'shliq belgisiga e'tibor</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Belgi sinfi</strong> (character class) — muntazam ifodada belgilarning ma'lum bir <em>turini</em> bildiruvchi maxsus yozuv. Masalan, "istalgan raqam" yoki "istalgan bo'shliq belgisi". Belgi sinflari muntazam ifodalarning eng ko'p ishlatiladigan qismlaridan biridir. Ushbu darsda barcha asosiy belgi sinflarini, nuqta belgisini va ularni amaliy misollarda qo'llashni o'rganamiz.</p>
-<h2>Belgi sinfi nima?</h2>
+<h2 id="belgi-sinfi-nima">Belgi sinfi nima?</h2>
 <p>Ba'zan biz aniq bir belgini emas, balki butun bir <em>toifadagi</em> belgini qidiramiz. Masalan, telefon raqamidagi barcha raqamlarni topmoqchimiz, ammo qaysi raqamlar ekanini oldindan bilmaymiz. Aynan shunday holatlarda belgi sinflari yordamga keladi.</p>
 <p>Eng muhim belgi sinfi — <strong>raqam (digit)</strong>. U <code>\d</code> deb yoziladi va istalgan bitta raqamga (0 dan 9 gacha) mos keladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>digit.js</span></div><textarea spellcheck="false">let telefon = '+998 90 123 45 67';
@@ -608,7 +624,7 @@ console.log(telefon.match(/\d/)[0]); // 9
 // hamma raqamlarni topamiz (g flagi bilan)
 console.log(telefon.match(/\d/g).join(''));
 // 998901234567</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Asosiy belgi sinflari</h2>
+<h2 id="asosiy-belgi-sinflari">Asosiy belgi sinflari</h2>
 <p>JavaScript'da uchta asosiy belgi sinfi va ularning har biri uchun <strong>teskari</strong> (inkor) varianti mavjud:</p>
 <ul><li><code>\d</code> — <strong>raqam</strong> (digit): 0 dan 9 gacha bo'lgan belgi;</li><li><code>\D</code> — <strong>raqam bo'lmagan</strong>: <code>\d</code>dan tashqari istalgan belgi;</li><li><code>\s</code> — <strong>bo'shliq belgisi</strong> (space): probel, tabulyatsiya <code>\t</code>, qatorga o'tish <code>\n</code> va shu kabilar;</li><li><code>\S</code> — <strong>bo'shliq bo'lmagan</strong>: <code>\s</code>dan tashqari istalgan belgi;</li><li><code>\w</code> — <strong>so'z belgisi</strong> (word): lotin harfi, raqam yoki pastki chiziq <code>_</code> (ya'ni <code>[a-zA-Z0-9_]</code>);</li><li><code>\W</code> — <strong>so'z belgisi bo'lmagan</strong>: <code>\w</code>dan tashqari istalgan belgi.</li></ul>
 <div class="note">Diqqat qiling: <strong>katta harfli</strong> variant har doim <em>teskari</em> ma'noni bildiradi. Ya'ni <code>\d</code> raqam bo'lsa, <code>\D</code> — raqam <em>bo'lmagan</em> hamma narsa. Bu qoida barcha juftliklar uchun amal qiladi.</div>
@@ -618,7 +634,7 @@ console.log(matn.match(/\d/g)); // ['1', '2'] — raqamlar
 console.log(matn.match(/\D/g)); // ['A', ' ', 'b'] — raqam emaslar
 console.log(matn.match(/\s/g)); // [' '] — bo'shliq
 console.log(matn.match(/\w/g)); // ['A', '1', 'b', '2'] — so'z belgilari</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Nuqta (.) — istalgan belgi</h2>
+<h2 id="nuqta-istalgan-belgi">Nuqta (.) — istalgan belgi</h2>
 <p>Nuqta <code>.</code> — bu maxsus belgi sinfi bo'lib, <strong>qatorga o'tish belgisidan tashqari istalgan bitta belgiga</strong> mos keladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nuqta.js</span></div><textarea spellcheck="false">// C, keyin istalgan belgi, keyin T
 console.log('CAT'.match(/C.T/)[0]); // CAT
@@ -631,7 +647,7 @@ console.log('CATT'.match(/^C.T$/)); // null</textarea><div class="pg-actions"><b
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nuqta-newline.js</span></div><textarea spellcheck="false">// nuqta \n ga mos kelmaydi
 let matn = 'A\nB';
 console.log(matn.match(/A.B/)); // null</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>s flagi — nuqta har qanday belgiga</h2>
+<h2 id="s-flagi-nuqta-har-qanday-belgiga">s flagi — nuqta har qanday belgiga</h2>
 <p>Agar nuqta qatorga o'tish belgisini ham qamrab olishini istasangiz, <code>s</code> (dotall) flagini qo'shing. U bilan nuqta <strong>haqiqatan ham istalgan belgiga</strong>, jumladan <code>\n</code> ga ham mos keladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>s-flag.js</span></div><textarea spellcheck="false">let matn = 'A\nB';
 
@@ -645,13 +661,13 @@ console.log(matn.match(/A.B/s)[0]); // 'A\nB' (ichida yangi qator)</textarea><di
 
 // [\s\S] — mutlaqo istalgan belgi (s flagisiz ham ishlaydi)
 console.log(matn.match(/A[\s\S]B/)[0]); // 'A\nB'</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Unicode haqida qisqacha</h2>
+<h2 id="unicode-haqida-qisqacha">Unicode haqida qisqacha</h2>
 <p>Belgi sinflari birinchi navbatda ASCII (lotin) belgilariga mo'ljallangan. Masalan, <code>\w</code> faqat lotin harflari, raqamlar va <code>_</code> ga mos keladi — o'zbek, kirill yoki boshqa alifbolarga <strong>mos kelmaydi</strong>:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unicode-w.js</span></div><textarea spellcheck="false">// \w kirill/o'zbek harflarini qamramaydi
 console.log('Salom'.match(/\w/g)); // ['S', 'a', 'l', 'o', 'm'] — lotin OK
 console.log('Привет'.match(/\w/g)); // null — kirill mos kelmaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">To'liq unicode qo'llab-quvvatlash uchun <code>u</code> flagi va unicode xossalari (masalan <code>\p{L}</code> — istalgan alifbodagi harf) ishlatiladi. Bu ilg'or mavzu bo'lib, alohida darsda batafsil ko'rib chiqiladi. Hozircha shuni yodda tuting: <code>\w</code> — bu faqat lotin so'z belgilari.</div>
-<h2>Amaliy misol: telefon raqamini ajratish</h2>
+<h2 id="amaliy-misol-telefon-raqamini-ajratish">Amaliy misol: telefon raqamini ajratish</h2>
 <p>Endi belgi sinflarini amaliyotda qo'llaymiz. Foydalanuvchi telefon raqamini turli formatlarda kiritishi mumkin — probellar, chiziqchalar, qavslar bilan. Bizga esa faqat raqamlar kerak. <code>\d</code> va <code>g</code> flagi bu vazifani oson hal qiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>telefon-ajratish.js</span></div><textarea spellcheck="false">let kirim = '+998 (90) 123-45-67';
 
@@ -676,7 +692,7 @@ let sozlar = jumla.match(/\w+/g);
 console.log(sozlar);
 // ['Bugun', 'havo', 'issiq', 'ammo', 'shamol', 'bor']
 console.log('Sozlar soni:', sozlar.length); // 6</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Bo'shliq belgisiga e'tibor</h2>
+<h2 id="bo-shliq-belgisiga-e-tibor">Bo'shliq belgisiga e'tibor</h2>
 <p>Ko'pchilik <code>\s</code> (bo'shliq) belgisini e'tiborsiz qoldiradi, ammo u juda muhim. Bo'shliq nafaqat probel, balki tabulyatsiya va qatorga o'tish belgilarini ham o'z ichiga oladi — matnni to'g'ri tozalashda buni hisobga olish kerak:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bosliq.js</span></div><textarea spellcheck="false">let matn = 'so\tz   bo\nsh liq';
 
@@ -684,7 +700,7 @@ console.log('Sozlar soni:', sozlar.length); // 6</textarea><div class="pg-action
 let natija = matn.replace(/\s+/g, ' ');
 
 console.log(natija); // so z bo sh liq</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>belgi sinflari belgilarning ma'lum turiga mos keladi: <code>\d</code> (raqam), <code>\s</code> (bo'shliq), <code>\w</code> (so'z belgisi);</li><li>katta harfli variantlar teskari ma'noni bildiradi: <code>\D</code>, <code>\S</code>, <code>\W</code>;</li><li>nuqta <code>.</code> qatorga o'tishdan tashqari istalgan belgiga mos keladi; <code>s</code> flagi bilan esa <code>\n</code> ga ham mos keladi;</li><li><code>[\s\S]</code> — <code>s</code> flagisiz ham istalgan belgiga mos keluvchi muqobil yozuv;</li><li><code>\w</code> faqat lotin harflari, raqamlar va <code>_</code> ga mos keladi; to'liq unicode uchun <code>u</code> flagi va <code>\p{...}</code> kerak;</li><li>amaliyotda <code>\d</code> va <code>\D</code> yordamida telefon raqamlarini tozalash, <code>\w+</code> bilan so'zlarni ajratish juda qulay.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-kirish.html"><span class="dir">← Oldingi</span><span class="ttl">Muntazam ifodalar: kirish</span></a>
@@ -698,6 +714,6 @@ console.log(natija); // so z bo sh liq</textarea><div class="pg-actions"><button
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

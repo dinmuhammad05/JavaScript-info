@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Satrlar — Kodla</title>
   <meta name="description" content="Matn ma'lumotlari: tirnoq turlari, shablon satrlar, maxsus belgilar, uzunlik, belgilarga murojaat va satr metodlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Satrlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#tirnoq-turlari">Tirnoq turlari</a></li>
+<li class="lvl2"><a href="#shablon-satrlar-template-literals">Shablon satrlar (template literals)</a></li>
+<li class="lvl2"><a href="#maxsus-belgilar">Maxsus belgilar</a></li>
+<li class="lvl2"><a href="#uzunlik-va-belgilarga-murojaat">Uzunlik va belgilarga murojaat</a></li>
+<li class="lvl2"><a href="#katta-va-kichik-harflar">Katta va kichik harflar</a></li>
+<li class="lvl2"><a href="#qism-satr-izlash-indexof-includes">Qism satr izlash: indexOf, includes</a></li>
+<li class="lvl2"><a href="#qism-satrni-ajratish-slice-substring">Qism satrni ajratish: slice, substring</a></li>
+<li class="lvl2"><a href="#satrlarni-taqqoslash">Satrlarni taqqoslash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Matnli ma'lumot JavaScript'da <strong>satr</strong> (string) sifatida saqlanadi. Bitta belgi uchun alohida tur yo'q — hamma matn satrdir. Ushbu darsda satrlar bilan ishlashni chuqur o'rganamiz.</p>
-<h2>Tirnoq turlari</h2>
+<h2 id="tirnoq-turlari">Tirnoq turlari</h2>
 <p>JavaScript'da satrni uch xil tirnoq bilan yozish mumkin:</p>
 <ul><li>Qo'shtirnoq: <code>"Salom"</code>;</li><li>Bir tirnoq (apostrof): <code>'Salom'</code>;</li><li>Teskari tirnoq (backtick): shablon satrlar uchun.</li></ul>
 <p>Qo'shtirnoq va bir tirnoq amalda bir xil ishlaydi. Teskari tirnoq esa qo'shimcha imkoniyat beradi.</p>
@@ -605,7 +622,7 @@
 let b = 'bir tirnoq';
 console.log(a);
 console.log(b);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Shablon satrlar (template literals)</h2>
+<h2 id="shablon-satrlar-template-literals">Shablon satrlar (template literals)</h2>
 <p>Teskari tirnoq (backtick) bilan yozilgan satrlar <strong>shablon satrlar</strong> deyiladi. Ular ichiga <code>${...}</code> orqali istalgan ifoda joylashtirish mumkin — o'zgaruvchilar va hisob-kitoblar.</p>
 <p>Quyida shablon satr sintaksisi ko'rsatilgan (teskari tirnoq belgisi \` bilan ifodalangan):</p>
 <pre class="code"><code>let ism = "Ali";
@@ -628,7 +645,7 @@ console.log(xabar);
 // arifmetik ifoda ham mumkin
 console.log("Kelasi yil: " + (yosh + 1));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Amalda satr yaratganda deyarli har doim shablon satrlar (backtick) ishlatiladi, chunki <code>${...}</code> bilan yozish <code>+</code> bilan birlashtirishdan ancha o'qilishi oson.</div>
-<h2>Maxsus belgilar</h2>
+<h2 id="maxsus-belgilar">Maxsus belgilar</h2>
 <p>Ba'zi belgilarni to'g'ridan-to'g'ri yozib bo'lmaydi, ular uchun <strong>maxsus belgilar</strong> (escape ketma-ketligi) bor. Ular teskari chiziq <code>\</code> bilan boshlanadi:</p>
 <ul><li><code>\n</code> — yangi qatorga o'tish;</li><li><code>\t</code> — tabulyatsiya (bo'sh joy);</li><li><code>\\</code> — teskari chiziqning o'zi;</li><li><code>\'</code> va <code>\"</code> — tirnoqning o'zi (satr ichida).</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>maxsus-belgi.js</span></div><textarea spellcheck="false">// \n yangi qator qo'shadi
@@ -640,7 +657,7 @@ console.log("Ism:\tAli");
 // tirnoqni satr ichida ko'rsatish
 console.log("U \"kitob\" dedi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Agar satr bir tirnoqda bo'lsa, ichidagi qo'shtirnoqni eskeyplashga hojat yo'q: <code>'U "salom" dedi'</code>. Va aksincha. Bu ko'pincha kodni tozaroq qiladi.</div>
-<h2>Uzunlik va belgilarga murojaat</h2>
+<h2 id="uzunlik-va-belgilarga-murojaat">Uzunlik va belgilarga murojaat</h2>
 <p>Satr uzunligini <code>length</code> xususiyati beradi. Diqqat: bu metod emas, xususiyat — qavs qo'yilmaydi (<code>str.length</code>, <code>str.length()</code> emas).</p>
 <p>Alohida belgiga ikki yo'l bilan murojaat qilinadi: to'rtburchak qavs <code>[...]</code> yoki <code>at(...)</code> metodi orqali. Indekslar 0 dan boshlanadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>uzunlik.js</span></div><textarea spellcheck="false">let matn = "JavaScript";
@@ -654,7 +671,7 @@ console.log(matn[4]);       // "S"
 console.log(matn.at(-1));   // "t" (oxirgi belgi)
 console.log(matn.at(-2));   // "p"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>at()</code> ning ustunligi — manfiy indeks bilan oxiridan sanash. <code>[]</code> bilan bu ishlamaydi: <code>matn[-1]</code> → <code>undefined</code>, <code>matn.at(-1)</code> esa oxirgi belgini beradi.</p>
-<h2>Katta va kichik harflar</h2>
+<h2 id="katta-va-kichik-harflar">Katta va kichik harflar</h2>
 <p>Satrni butunlay katta yoki kichik harflarga o'girish uchun ikki metod bor. Ular yangi satr qaytaradi, aslini o'zgartirmaydi (satrlar o'zgarmas):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>harflar.js</span></div><textarea spellcheck="false">let matn = "Salom Dunyo";
 
@@ -663,7 +680,7 @@ console.log(matn.toLowerCase());  // "salom dunyo"
 
 // bitta belgini ham o'girish mumkin
 console.log("salom"[0].toUpperCase());  // "S"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qism satr izlash: indexOf, includes</h2>
+<h2 id="qism-satr-izlash-indexof-includes">Qism satr izlash: indexOf, includes</h2>
 <p>Satr ichida boshqa satrni izlash uchun bir nechta metod bor. <code>indexOf(qism)</code> — qism satr birinchi uchragan indeksni qaytaradi, topilmasa <code>-1</code> qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indexof.js</span></div><textarea spellcheck="false">let matn = "Men JavaScript'ni yaxshi ko'raman";
 
@@ -683,7 +700,7 @@ console.log(fayl.startsWith("rasm"));   // true
 console.log(fayl.endsWith(".png"));     // true
 console.log(fayl.endsWith(".jpg"));     // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>includes</code>, <code>startsWith</code>, <code>endsWith</code> to'g'ridan-to'g'ri <code>true</code>/<code>false</code> qaytargani uchun shartlarda <code>indexOf</code>dan qulayroq. Zamonaviy kodda ularni afzal ko'ring.</div>
-<h2>Qism satrni ajratish: slice, substring</h2>
+<h2 id="qism-satrni-ajratish-slice-substring">Qism satrni ajratish: slice, substring</h2>
 <p>Satrdan bir qismini ajratib olish uchun asosan uch metod bor. Eng ko'p ishlatiladigani va tavsiya etilgani — <code>slice(boshi, oxiri)</code>. U <code>boshi</code>dan <code>oxiri</code>gacha (oxiri kirmaydi) qismni qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>slice.js</span></div><textarea spellcheck="false">let matn = "JavaScript";
 
@@ -703,7 +720,7 @@ console.log(matn.slice(4, 0));      // "" (bo'sh)
 // substr: boshi va UZUNLIK
 console.log(matn.substr(4, 6));     // "Script"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Uchtasidan <strong>slice</strong>ni yodda saqlash yetarli — u eng moslashuvchan (manfiy indekslar bilan) va massivlarda ham xuddi shunday ishlaydi.</div>
-<h2>Satrlarni taqqoslash</h2>
+<h2 id="satrlarni-taqqoslash">Satrlarni taqqoslash</h2>
 <p>Satrlar belgilarning ichki raqamli kodlari (Unicode) bo'yicha taqqoslanadi. Shuning uchun taqqoslash ba'zan kutilmagan natija beradi — masalan, barcha katta harflar kichik harflardan "kichik" hisoblanadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>taqqoslash.js</span></div><textarea spellcheck="false">// harflar Unicode kodi bo'yicha taqqoslanadi
 console.log("a" &gt; "Z");   // true (kichik harf kodi kattaroq)
@@ -713,7 +730,7 @@ console.log("a" &lt; "b");   // true
 console.log("A".codePointAt(0));  // 65
 console.log("a".codePointAt(0));  // 97</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Turli tildagi harflarni to'g'ri (til qoidalari bo'yicha) taqqoslash uchun <code>str.localeCompare(str2)</code> ishlatiladi. U <code>-1</code>, <code>0</code> yoki <code>1</code> qaytaradi va milliy alifbolarni to'g'ri tartiblaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Satrlar uch tirnoqda yoziladi; teskari tirnoq (backtick) shablon satr va <code>${...}</code> beradi;</li><li>Maxsus belgilar: <code>\n</code> (yangi qator), <code>\t</code> (tab), <code>\\</code>;</li><li><code>length</code> — uzunlik; <code>[i]</code> va <code>at(i)</code> — belgiga murojaat (<code>at</code> manfiy indeksni qo'llaydi);</li><li><code>toUpperCase</code>/<code>toLowerCase</code> — harf o'lchamini o'zgartiradi;</li><li>Izlash: <code>indexOf</code>, va qulay <code>includes</code>/<code>startsWith</code>/<code>endsWith</code>;</li><li>Ajratish: <code>slice</code> (tavsiya etiladi), <code>substring</code>, eskirgan <code>substr</code>;</li><li>Satrlar Unicode kodi bo'yicha taqqoslanadi; milliy tartiblash uchun <code>localeCompare</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="sonlar.html"><span class="dir">← Oldingi</span><span class="ttl">Sonlar</span></a>
@@ -727,6 +744,6 @@ console.log("a".codePointAt(0));  // 97</textarea><div class="pg-actions"><butto
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

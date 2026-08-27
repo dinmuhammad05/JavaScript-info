@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Proxy va Reflect — Kodla</title>
   <meta name="description" content="Proxy obyekti bilan boshqa obyekt ustidagi amallarni ushlab qolish (traps) va Reflect API bilan ularni to'g'ri bajarish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>Proxy va Reflect</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#proxy-sintaksisi">Proxy sintaksisi</a></li>
+<li class="lvl2"><a href="#get-tuzog-i-o-qishni-ushlab-qolish">get tuzog'i: o'qishni ushlab qolish</a></li>
+<li class="lvl2"><a href="#set-tuzog-i-validatsiya">set tuzog'i: validatsiya</a></li>
+<li class="lvl2"><a href="#has-va-deleteproperty-tuzoqlari">has va deleteProperty tuzoqlari</a></li>
+<li class="lvl2"><a href="#reflect-api">Reflect API</a></li>
+<li class="lvl2"><a href="#cheklovlar">Cheklovlar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>Proxy</code> boshqa obyektni "o'rab" oladi va u bilan bog'liq amallarni — o'qish, yozish, o'chirish kabi — ushlab qolib, o'zgartirish imkonini beradi. <code>Reflect</code> esa aynan shu amallarni past darajada bajarish uchun standart funksiyalar to'plamidir. Ular ko'pincha juft holda ishlatiladi.</p>
-<h2>Proxy sintaksisi</h2>
+<h2 id="proxy-sintaksisi">Proxy sintaksisi</h2>
 <p>Proxy quyidagicha yaratiladi:</p>
 <pre class="code"><code>let proxy = new Proxy(target, handler);</code></pre>
 <ul><li><code>target</code> — o'raladigan asl obyekt (istalgan obyekt, jumladan funksiya yoki massiv);</li><li><code>handler</code> — <em>tuzoqlar</em> (traps) to'plami bo'lgan obyekt. Har bir tuzoq ma'lum amalni ushlab qoladi.</li></ul>
@@ -609,7 +624,7 @@ proxy.name = "Vali";          // proxy orqali yozamiz
 console.log(target.name);     // Vali (asl obyekt o'zgardi)
 console.log(proxy.name);      // Vali (proxy orqali o'qiymiz)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Proxy shaffof ishlashi uchun <strong>asl obyekt bilan emas, faqat proxy bilan ishlash</strong> kerak. Proxy — obyektning ustidagi "qatlam".</div>
-<h2>get tuzog'i: o'qishni ushlab qolish</h2>
+<h2 id="get-tuzog-i-o-qishni-ushlab-qolish">get tuzog'i: o'qishni ushlab qolish</h2>
 <p>Eng ko'p ishlatiladigan tuzoqlar — <code>get</code> (xususiyat o'qishda) va <code>set</code> (xususiyat yozishda). <code>get(target, property, receiver)</code> chaqiriladi:</p>
 <ul><li><code>target</code> — asl obyekt;</li><li><code>property</code> — o'qilayotgan xususiyat nomi;</li><li><code>receiver</code> — proxyning o'zi (yoki undan meros olgan obyekt).</li></ul>
 <p>Mana mavjud bo'lmagan kalitlar uchun <strong>standart qiymat</strong> qaytaruvchi misol. Odatda mavjud bo'lmagan kalit <code>undefined</code> beradi, biz esa <code>0</code> qaytaramiz:</p>
@@ -627,7 +642,7 @@ sonlar = new Proxy(sonlar, {
 
 console.log(sonlar[1]);    // 2 (mavjud)
 console.log(sonlar[123]);  // 0 (mavjud emas -&gt; 0)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>set tuzog'i: validatsiya</h2>
+<h2 id="set-tuzog-i-validatsiya">set tuzog'i: validatsiya</h2>
 <p><code>set(target, property, value, receiver)</code> yozishni ushlab qoladi. U <strong>albatta</strong> qiymat qabul qilinganda <code>true</code>, rad etilganda <code>false</code> qaytarishi kerak. <code>false</code> qaytsa (yoki qat'iy rejimda) <code>TypeError</code> yuzaga keladi.</p>
 <p>Massivga faqat butun son qo'shishga ruxsat beruvchi validatsiya:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proxy-set-validatsiya.js</span></div><textarea spellcheck="false">let raqamlar = [];
@@ -648,7 +663,7 @@ raqamlar.push(10);
 console.log("Uzunlik: " + raqamlar.length);  // 2
 console.log(raqamlar[0] + ", " + raqamlar[1]);  // 5, 10</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Tuzoqlar amallarni <strong>shaffof</strong> ushlab qolishi kerak. <code>set</code>da <code>return true</code>ni unutmang — aks holda amal muvaffaqiyatsiz deb hisoblanadi va xatolik chiqadi.</div>
-<h2>has va deleteProperty tuzoqlari</h2>
+<h2 id="has-va-deleteproperty-tuzoqlari">has va deleteProperty tuzoqlari</h2>
 <p><code>has(target, property)</code> — <code>in</code> operatorini ushlab qoladi. Quyida <code>range</code> obyekti oraliqqa tegishlilikni tekshiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>proxy-has.js</span></div><textarea spellcheck="false">let range = { start: 1, end: 10 };
 
@@ -675,7 +690,7 @@ user = new Proxy(user, {
 
 delete user.name;
 console.log("name mavjudmi: " + ("name" in user));  // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Reflect API</h2>
+<h2 id="reflect-api">Reflect API</h2>
 <p><code>Reflect</code> — obyekt ustidagi ichki amallarni chaqirish uchun standart obyekt. Uning har bir metodi biror tuzoq bilan mos keladi: <code>Reflect.get</code>, <code>Reflect.set</code>, <code>Reflect.has</code>, <code>Reflect.deleteProperty</code> va hokazo.</p>
 <p>Tuzoq ichida asl amalni bajarishning eng to'g'ri usuli — mos <code>Reflect</code> metodini chaqirish. Bu <code>receiver</code>ni to'g'ri uzatadi va meros (inheritance) holatlarida ham xatosiz ishlaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reflect-get-set.js</span></div><textarea spellcheck="false">let user = { name: "Ali" };
@@ -694,10 +709,10 @@ user = new Proxy(user, {
 user.name;            // O'qildi: name
 user.name = "Vali";   // Yozildi: name = Vali</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Qoida: <strong>tuzoq ichida asl amalni <code>target[prop]</code> deb emas, <code>Reflect.get(target, prop, receiver)</code> deb bajaring</strong>. Bu <code>receiver</code> orqali <code>this</code>ni to'g'ri saqlaydi.</div>
-<h2>Cheklovlar</h2>
+<h2 id="cheklovlar">Cheklovlar</h2>
 <p>Proxy kuchli, lekin ba'zi cheklovlari bor:</p>
 <ul><li>Ba'zi ichki obyektlar (masalan <code>Map</code>, <code>Set</code>, <code>Date</code>) <em>ichki slotlar</em>ga ega — ularni to'g'ridan-to'g'ri proxylash muammo tug'diradi. Yechim: metodni <code>bind</code> qilish;</li><li>Xususiy sinf maydonlari (<code>#field</code>) ham ichki slotdan foydalanadi;</li><li>Proxy asl obyektdan biroz sekinroq ishlaydi — juda tez-tez chaqiriladigan joylarda buni hisobga oling.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>new Proxy(target, handler)</code> — obyekt ustidagi amallarni ushlab qolish uchun "o'rovchi";</li><li>Asosiy tuzoqlar: <code>get</code>, <code>set</code>, <code>has</code>, <code>deleteProperty</code> va boshqalar;</li><li><code>set</code> tuzog'i <code>true</code>/<code>false</code> qaytarishi shart;</li><li><code>Reflect</code> — tuzoq ichida asl amalni to'g'ri bajarish uchun ishlatiladi;</li><li>Qo'llanilishi: validatsiya, standart qiymat, kirishni cheklash, kuzatuv (logging).</li></ul>
 <nav class="lesson-nav">
   <a href="dynamic-import.html"><span class="dir">← Oldingi</span><span class="ttl">Dinamik importlar</span></a>
@@ -711,6 +726,6 @@ user.name = "Vali";   // Yozildi: name = Vali</textarea><div class="pg-actions">
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

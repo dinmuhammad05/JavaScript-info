@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brauzerning standart harakatlari — Kodla</title>
   <meta name="description" content="preventDefault bilan standart harakatni to'xtatish; onclick uchun return false; passive; event.defaultPrevented; havola va forma misollari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,24 @@
 <main class="content article">
 <div class="crumbs">Hodisalarga kirish</div>
 <h1>Brauzerning standart harakatlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#standart-harakatlar">Standart harakatlar</a></li>
+<li class="lvl2"><a href="#event-preventdefault">event.preventDefault()</a></li>
+<li class="lvl2"><a href="#onclick-uchun-return-false">onclick uchun return false</a></li>
+<li class="lvl2"><a href="#event-defaultprevented">event.defaultPrevented</a></li>
+<li class="lvl2"><a href="#passive-ishlovchilar">passive ishlovchilar</a></li>
+<li class="lvl2"><a href="#muhim-qaysi-hodisalar-to-xtatiladi">Muhim: qaysi hodisalar to'xtatiladi?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'p hodisalar avtomatik ravishda brauzerning <strong>standart harakatiga</strong> (default action) olib keladi. Masalan, havolaga bosish yangi manzilga o'tkazadi, forma tugmasi ma'lumotni yuboradi. Ba'zan bu harakatni to'xtatib, o'zimiz JavaScript bilan boshqarmoqchi bo'lamiz.</p>
-<h2>Standart harakatlar</h2>
+<h2 id="standart-harakatlar">Standart harakatlar</h2>
 <p>Brauzerning standart harakatlariga misollar:</p>
 <ul><li>Havolaga (<code>&lt;a&gt;</code>) bosish — <code>href</code>dagi URL manziliga o'tishga olib keladi;</li><li>Forma yuborish tugmasini bosish — serverga so'rov yuborishni boshlaydi;</li><li>Matn ustida sichqonchani bosib sudrash — matn belgilanadi (selection);</li><li><code>&lt;input&gt;</code>da o'ng tugma bosish — kontekst menyusini ochadi.</li></ul>
 <p>Ba'zan bu harakatlar kerak emas — biz o'z mantig'imizni ishlatmoqchimiz. Standart harakatni <strong>to'xtatish</strong> mumkin.</p>
-<h2>event.preventDefault()</h2>
+<h2 id="event-preventdefault">event.preventDefault()</h2>
 <p>Brauzer harakatini to'xtatishning asosiy usuli — hodisa obyektidagi <code>event.preventDefault()</code> metodini chaqirish. Masalan, havolani "harakatsiz" qilamiz:</p>
 <pre class="code"><code>&lt;a href="/" onclick="event.preventDefault()"&gt;Bu yerga bosing&lt;/a&gt;</code></pre>
 <p>Endi havolaga bossak, brauzer <code>/</code> manziliga o'tmaydi — standart harakat bekor qilinadi. <code>addEventListener</code> orqali ham xuddi shunday:</p>
@@ -611,7 +626,7 @@
   showCustomMenu();
 });</code></pre>
 <div class="note">Odatda standart harakati bor hodisalar <strong>ko'tariladi</strong> (bubble). Agar biror element ustidagi ishlovchida <code>preventDefault()</code> chaqirilsa, standart harakat butunlay to'xtaydi — hatto ko'tarilish davomida boshqa ishlovchilar bo'lsa ham.</div>
-<h2>onclick uchun return false</h2>
+<h2 id="onclick-uchun-return-false">onclick uchun return false</h2>
 <p>HTML atributi yoki DOM xossasi (<code>on&lt;hodisa&gt;</code>) orqali biriktirilgan ishlovchida standart harakatni to'xtatishning yana bir usuli — <code>false</code> qaytarish:</p>
 <pre class="code"><code>&lt;a href="/" onclick="return false"&gt;Bu yerga bosing&lt;/a&gt;
 
@@ -626,7 +641,7 @@
 <p><code>on&lt;hodisa&gt;</code> ishlovchisidan <code>false</code> qaytarilsa, bu <code>event.preventDefault()</code> chaqirilgandek ta'sir qiladi — standart harakat to'xtaydi.</p>
 <div class="warn"><code>return false</code> faqat <code>on&lt;hodisa&gt;</code> (atribut yoki DOM xossasi) ishlovchilarida ishlaydi. <code>addEventListener</code> bilan biriktirilgan ishlovchida <code>return false</code>ning hech qanday ta'siri <strong>yo'q</strong> — u shunchaki e'tiborsiz qoldiriladi. <code>addEventListener</code>da doim <code>event.preventDefault()</code> ishlating.</div>
 <div class="warn">Ishlovchidan qaytariladigan qiymat odatda e'tiborga olinmaydi. Yagona istisno — <code>on&lt;hodisa&gt;</code> ishlovchisidan qaytarilgan <code>false</code>. Boshqa har qanday qiymat (jumladan <code>true</code>, <code>undefined</code>) hech narsaga ta'sir qilmaydi.</div>
-<h2>event.defaultPrevented</h2>
+<h2 id="event-defaultprevented">event.defaultPrevented</h2>
 <p>Standart harakat to'xtatilganini tekshirish uchun <code>event.defaultPrevented</code> xossasi bor. Agar <code>preventDefault()</code> chaqirilgan bo'lsa, u <code>true</code> bo'ladi:</p>
 <pre class="code"><code>elem.oncontextmenu = function(event) {
   event.preventDefault();
@@ -642,7 +657,7 @@
   alert('Hujjatning umumiy menyusi');
 };</code></pre>
 <div class="tip"><code>event.defaultPrevented</code> ba'zan <code>event.stopPropagation()</code>ga muqobil bo'la oladi. <code>stopPropagation()</code> ko'tarilishni butunlay to'xtatib, boshqa ishlovchilarga "bu yerda hech narsa bo'lmagan" degandek ko'rsatadi va "o'lik zonalar" yaratishi mumkin. <code>defaultPrevented</code> esa hodisani to'xtatmasdan, boshqa ishlovchilarga "standart harakat allaqachon boshqa joyda qayta ishlangan" degan xabarni beradi — bu ko'pincha xavfsizroq yondashuv.</div>
-<h2>passive ishlovchilar</h2>
+<h2 id="passive-ishlovchilar">passive ishlovchilar</h2>
 <p><code>addEventListener</code>ning <code>passive: true</code> opsiyasi brauzerga ishlovchi <code>preventDefault()</code>ni <strong>chaqirmasligini</strong> oldindan aytadi.</p>
 <p>Nega bu kerak? Mobil qurilmalarda <code>touchmove</code> kabi hodisalar bor (barmoq ekranda harakatlanganda) — ular sahifani aylantirishga (scroll) olib keladi. Odatda brauzer aylantirishni <em>boshlashdan avval</em> ishlovchi <code>preventDefault()</code> chaqiradimi-yo'qmi, kutishi kerak. Bu kutish sahifa aylanishida sezilarli kechikish (lag) beradi.</p>
 <pre class="code"><code>elem.addEventListener('touchmove', function(event) {
@@ -650,10 +665,10 @@
 }, { passive: true });</code></pre>
 <p><code>passive: true</code> bilan brauzer bilib turadiki, aylantirish to'xtatilmaydi — shuning uchun u darhol silliq aylantiradi, ishlovchini kutmaydi. Natijada sahifa ravon ishlaydi.</p>
 <div class="warn">Ba'zi brauzerlarda <code>touchstart</code> va <code>touchmove</code> hodisalari uchun <code>passive</code> <strong>standart bo'yicha <code>true</code></strong>. Ya'ni bunday ishlovchida <code>preventDefault()</code> chaqirsangiz, u ishlamaydi (ba'zan konsolda ogohlantirish chiqadi). Agar rostdan <code>preventDefault()</code> kerak bo'lsa, aniq <code>{ passive: false }</code> bering.</div>
-<h2>Muhim: qaysi hodisalar to'xtatiladi?</h2>
+<h2 id="muhim-qaysi-hodisalar-to-xtatiladi">Muhim: qaysi hodisalar to'xtatiladi?</h2>
 <p>Standart harakati bor hodisalarni to'xtatish mumkin, lekin hodisaning o'zi baribir sodir bo'ladi. Masalan, havolaga bosganda <code>click</code> hodisasi ishlaydi, biz faqat <em>navigatsiyani</em> (o'tishni) to'xtatamiz.</p>
 <div class="note">Standart harakatni to'xtatib, o'rniga o'z mantig'ini qo'yish — juda keng tarqalgan. Masalan, JavaScript bilan boshqariladigan formalar (AJAX orqali yuborish), o'z navigatsiya tizimlari, maxsus kontekst menyular — barchasi <code>preventDefault()</code>ga tayanadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Ko'p hodisalarning <strong>standart brauzer harakati</strong> bor: havola o'tishi, forma yuborilishi va hokazo;</li><li>Standart harakatni to'xtatish uchun <code>event.preventDefault()</code> chaqiriladi;</li><li><code>on&lt;hodisa&gt;</code> ishlovchisida <code>return false</code> ham xuddi shunday ishlaydi (lekin <code>addEventListener</code>da emas!);</li><li><code>event.defaultPrevented</code> — standart harakat to'xtatilgan-to'xtatilmaganini bildiradi (<code>true</code>/<code>false</code>);</li><li><code>passive: true</code> — brauzerga ishlovchi <code>preventDefault()</code> chaqirmasligini bildiradi, aylantirish (scroll) ravonligini oshiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="event-delegation.html"><span class="dir">← Oldingi</span><span class="ttl">Hodisa delegatsiyasi</span></a>
@@ -667,6 +682,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

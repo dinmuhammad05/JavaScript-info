@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nullish birlashtiruvchi operator ?? — Kodla</title>
   <meta name="description" content="?? operatori nima, uning || dan farqi (0 va bo'sh matn holatlari) va ustuvorligi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,18 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Nullish birlashtiruvchi operator ??</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#operatori-nima">?? operatori nima?</a></li>
+<li class="lvl2"><a href="#va-farqi-eng-muhim-qism">?? va || farqi — eng muhim qism</a></li>
+<li class="lvl2"><a href="#ning-ustuvorligi">?? ning ustuvorligi</a></li>
+<li class="lvl2"><a href="#bilan-zanjir">?? bilan zanjir</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>??</code> — nisbatan yangi operator (2020-yilda qo'shilgan). U "aniqlangan" birinchi qiymatni topish uchun ishlatiladi va <code>||</code> ning ba'zi kamchiliklarini bartaraf etadi.</p>
-<h2>?? operatori nima?</h2>
+<h2 id="operatori-nima">?? operatori nima?</h2>
 <p><code>a ?? b</code> ifodasining natijasi:</p>
 <ul><li>Agar <code>a</code> <strong>aniqlangan</strong> bo'lsa (ya'ni <code>null</code> ham, <code>undefined</code> ham bo'lmasa) &mdash; <code>a</code> qaytariladi;</li><li>Aks holda &mdash; <code>b</code> qaytariladi.</li></ul>
 <p>Boshqacha aytganda, <code>??</code> qiymat <code>null</code> yoki <code>undefined</code> ekanini tekshiradi. Buni oddiy <code>if</code> bilan ham yozsa bo'lardi:</p>
@@ -614,7 +627,7 @@ console.log( foydalanuvchi ?? "Mehmon" ); // "Mehmon"
 
 foydalanuvchi = "Ali";
 console.log( foydalanuvchi ?? "Mehmon" ); // "Ali"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>?? va || farqi — eng muhim qism</h2>
+<h2 id="va-farqi-eng-muhim-qism">?? va || farqi — eng muhim qism</h2>
 <p>Bir qarashda <code>??</code> va <code>||</code> bir xil ko'rinadi. Haqiqatan ham, ko'p holatlarda ular bir xil natija beradi. Ammo muhim farq bor:</p>
 <ul><li><code>||</code> birinchi <strong>truthy</strong> qiymatni qaytaradi;</li><li><code>??</code> birinchi <strong>aniqlangan</strong> (null/undefined bo'lmagan) qiymatni qaytaradi.</li></ul>
 <p>Bu farq ayniqsa <code>0</code> va bo'sh matn <code>""</code> uchun juda muhim. Bu qiymatlar falsy, lekin ular aniqlangan (mavjud) qiymatlar!</p>
@@ -633,7 +646,7 @@ console.log( balandlik ?? 100 ); // 0 — to'g'ri, foydalanuvchi tanlovi saqland
 console.log( xabar || "standart matn" ); // "standart matn" — bo'sh matn falsy
 console.log( xabar ?? "standart matn" ); // "" — bo'sh matn saqlandi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Umumiy tavsiya: agar <code>0</code>, <code>""</code> yoki <code>false</code> qiymatlari ham to'g'ri, mavjud qiymat bo'lishi mumkin bo'lsa — <code>??</code> ishlating. Agar faqat "bo'sh emas" qiymatni istasangiz — <code>||</code> ishlating.</div>
-<h2>?? ning ustuvorligi</h2>
+<h2 id="ning-ustuvorligi">?? ning ustuvorligi</h2>
 <p><code>??</code> ning ustuvorligi past — <code>||</code> va <code>&amp;&amp;</code> bilan bir xil darajada (aniqrog'i, <code>||</code> bilan bir xil). Shuning uchun murakkab ifodalarda uni matematik amallardan keyin ishlashiga e'tibor bering. Odatda qavs qo'yish tavsiya etiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>ustuvorlik-nullish.js</span></div><textarea spellcheck="false">let balandlik = null;
 let eni = null;
@@ -649,7 +662,7 @@ console.log(maydon); // 5000  (100 * 50)</textarea><div class="pg-actions"><butt
 let x = (1 &amp;&amp; 2) ?? 3;
 console.log(x); // 2</code></pre>
 <div class="note">Bu cheklov ataylab qo'yilgan. <code>??</code> va <code>||</code> ning natijalari inson uchun oson chalkashadi, shuning uchun til dizaynerlari qavsni majburiy qildi — bu xatolarning oldini oladi.</div>
-<h2>?? bilan zanjir</h2>
+<h2 id="bilan-zanjir">?? bilan zanjir</h2>
 <p>Bir nechta <code>??</code> ni ketma-ket ishlatib, birinchi aniqlangan qiymatni tanlash mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nullish-zanjir.js</span></div><textarea spellcheck="false">let birinchi = null;
 let ikkinchi = undefined;
@@ -657,7 +670,7 @@ let uchinchi = "Topildi!";
 
 console.log( birinchi ?? ikkinchi ?? uchinchi ?? "standart" );
 // Chiqadi: Topildi! — birinchi null/undefined bo'lmagan qiymat</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>??</code> birinchi <strong>aniqlangan</strong> (null/undefined bo'lmagan) qiymatni qaytaradi;</li><li><code>||</code> dan farqi: <code>||</code> falsy qiymatlarni (<code>0</code>, <code>""</code>, <code>false</code>) ham o'tkazib yuboradi, <code>??</code> esa faqat <code>null</code> va <code>undefined</code> ni;</li><li><code>0</code> yoki bo'sh matn haqiqiy qiymat bo'lishi mumkin bo'lsa — <code>??</code> ishlating;</li><li><code>??</code> ni <code>||</code> yoki <code>&amp;&amp;</code> bilan qavssiz ishlatib bo'lmaydi — SyntaxError beradi;</li><li>Ketma-ket <code>??</code> zanjiri birinchi aniqlangan qiymatni topadi.</li></ul>
 <nav class="lesson-nav">
   <a href="mantiqiy-operatorlar.html"><span class="dir">← Oldingi</span><span class="ttl">Mantiqiy operatorlar</span></a>
@@ -671,6 +684,6 @@ console.log( birinchi ?? ikkinchi ?? uchinchi ?? "standart" );
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

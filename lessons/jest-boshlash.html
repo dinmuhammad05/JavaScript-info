@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jest asoslari — Kodla</title>
   <meta name="description" content="Jest o'rnatish, test fayllar, test()/it(), expect va matcherlar, describe bloki, npm test bilan ishga tushirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,25 @@
 <main class="content article">
 <div class="crumbs">Testlash (Jest)</div>
 <h1>Jest asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#jest-ni-o-rnatish">Jest'ni o'rnatish</a></li>
+<li class="lvl2"><a href="#test-fayllar-qayerda-joylashadi">Test fayllar qayerda joylashadi?</a></li>
+<li class="lvl2"><a href="#test-va-it">test() va it()</a></li>
+<li class="lvl2"><a href="#expect-va-matcherlar">expect va matcherlar</a></li>
+<li class="lvl3"><a href="#tobe-aniq-tenglik">toBe — aniq tenglik</a></li>
+<li class="lvl3"><a href="#toequal-chuqur-tenglik">toEqual — chuqur tenglik</a></li>
+<li class="lvl3"><a href="#tocontain-tarkibida-bormi">toContain — tarkibida bormi</a></li>
+<li class="lvl3"><a href="#tothrow-xato-tashlaydimi">toThrow — xato tashlaydimi</a></li>
+<li class="lvl3"><a href="#boshqa-foydali-matcherlar">Boshqa foydali matcherlar</a></li>
+<li class="lvl2"><a href="#describe-bloki">describe bloki</a></li>
+<li class="lvl2"><a href="#testlarni-ishga-tushirish">Testlarni ishga tushirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Jest — bu JavaScript uchun eng ommabop test freymvorki. U o'rnatishi oson, konfiguratsiyasiz ishlaydi va test yozish uchun kerak bo'lgan hamma narsani o'z ichiga oladi. Bu darsda Jest'ni o'rnatib, birinchi testlarimizni yozamiz.</p>
-<h2>Jest'ni o'rnatish</h2>
+<h2 id="jest-ni-o-rnatish">Jest'ni o'rnatish</h2>
 <p>Jest — bu <code>devDependencies</code>ga (ishlab chiqish bog'liqliklariga) o'rnatiladigan paket, chunki u faqat dasturchiga kerak, produksiyada emas. Loyiha papkasida quyidagini bajaring:</p>
 <pre class="code"><code># Yangi loyiha bo'lsa avval:
 npm init -y
@@ -618,7 +638,7 @@ npm i -D jest</code></pre>
   }
 }</code></pre>
 <div class="note"><code>--save-dev</code> (yoki <code>-D</code>) paketni <code>devDependencies</code>ga yozadi. Bu produksiya serverida keraksiz paketlar o'rnatilmasligini ta'minlaydi.</div>
-<h2>Test fayllar qayerda joylashadi?</h2>
+<h2 id="test-fayllar-qayerda-joylashadi">Test fayllar qayerda joylashadi?</h2>
 <p>Jest test fayllarni avtomatik topadi. U quyidagi qoidalarga mos fayllarni test deb hisoblaydi:</p>
 <ul><li><code>.test.js</code> bilan tugaydigan fayllar — masalan <code>narx.test.js</code>.</li><li><code>.spec.js</code> bilan tugaydigan fayllar — masalan <code>narx.spec.js</code>.</li><li><code>__tests__</code> nomli papka ichidagi barcha fayllar.</li></ul>
 <p>Odatda test fayl tekshirilayotgan fayl yonida turadi. Aytaylik, bizda <code>narx.js</code> bor:</p>
@@ -635,7 +655,7 @@ const { narxHisobla } = require('./narx');
 test('mahsulot narxini hisoblaydi', () =&gt; {
   expect(narxHisobla(3, 100)).toBe(300);
 });</code></pre>
-<h2>test() va it()</h2>
+<h2 id="test-va-it">test() va it()</h2>
 <p>Har bir test <code>test()</code> funksiyasi bilan e'lon qilinadi. U ikki argument oladi: testning nomi (matn) va sinovni bajaradigan funksiya.</p>
 <pre class="code"><code>test('nom: nima tekshirilayotgani', () =&gt; {
   // shu yerda tekshiruvlar bo'ladi
@@ -645,15 +665,15 @@ test('mahsulot narxini hisoblaydi', () =&gt; {
 test('300 qaytaradi', () =&gt; { /* ... */ });
 it('300 qaytaradi',   () =&gt; { /* ... */ });</code></pre>
 <div class="tip">Test nomini aniq va tushunarli yozing. Yaxshi nom xatolik chiqqanda darhol nima buzilganini aytib beradi: <code>'bo'sh savatcha uchun 0 qaytaradi'</code> — <code>'test1'</code> dan minglab marta foydaliroq.</div>
-<h2>expect va matcherlar</h2>
+<h2 id="expect-va-matcherlar">expect va matcherlar</h2>
 <p>Testning yuragi — <code>expect</code>. U tekshirmoqchi bo'lgan qiymatni oladi, so'ng unga <strong>matcher</strong> (moslashtiruvchi) zanjirlanadi. Matcher qiymat qanday bo'lishi kerakligini aytadi. Umumiy shakl:</p>
 <pre class="code"><code>expect(haqiqiyQiymat).matcher(kutilganQiymat);</code></pre>
-<h3>toBe — aniq tenglik</h3>
+<h3 id="tobe-aniq-tenglik">toBe — aniq tenglik</h3>
 <p><code>toBe</code> qiymatlarni <code>===</code> orqali solishtiradi. Sonlar, satrlar, boolean kabi oddiy (primitiv) qiymatlar uchun ishlatiladi.</p>
 <pre class="code"><code>expect(2 + 2).toBe(4);
 expect('salom').toBe('salom');
 expect(narxHisobla(0, 100)).toBe(0);</code></pre>
-<h3>toEqual — chuqur tenglik</h3>
+<h3 id="toequal-chuqur-tenglik">toEqual — chuqur tenglik</h3>
 <p>Obyekt va massivlar uchun <code>toBe</code> ishlamaydi, chunki ikki alohida obyekt hech qachon <code>===</code> bo'yicha teng emas. Ular ichidagi qiymatlarni solishtirish uchun <code>toEqual</code> ishlatiladi:</p>
 <pre class="code"><code>expect({ ism: 'Ali', yosh: 20 }).toEqual({ ism: 'Ali', yosh: 20 });
 expect([1, 2, 3]).toEqual([1, 2, 3]);
@@ -661,12 +681,12 @@ expect([1, 2, 3]).toEqual([1, 2, 3]);
 // Diqqat: bu YIQILADI, chunki ikki obyekt turli xotira manzillari:
 // expect({ ism: 'Ali' }).toBe({ ism: 'Ali' });</code></pre>
 <div class="warn">Obyekt yoki massivni <code>toBe</code> bilan solishtirmang — u har doim yiqiladi. Ichki qiymatlarni tekshirish uchun har doim <code>toEqual</code> ishlating.</div>
-<h3>toContain — tarkibida bormi</h3>
+<h3 id="tocontain-tarkibida-bormi">toContain — tarkibida bormi</h3>
 <p>Massivda element yoki satrda kichik satr borligini tekshiradi:</p>
 <pre class="code"><code>expect([1, 2, 3]).toContain(2);
 expect(['olma', 'nok', 'uzum']).toContain('nok');
 expect('salom dunyo').toContain('dunyo');</code></pre>
-<h3>toThrow — xato tashlaydimi</h3>
+<h3 id="tothrow-xato-tashlaydimi">toThrow — xato tashlaydimi</h3>
 <p>Funksiya xato (exception) tashlashini tekshiradi. Muhim nuqta: funksiyani chaqirib emas, balki <strong>funksiyani strelka ichiga o'rab</strong> berish kerak, aks holda xato testdan oldin otiladi:</p>
 <pre class="code"><code>function bo'l(a, b) {
   if (b === 0) throw new Error('Nolga bo'lish mumkin emas');
@@ -678,13 +698,13 @@ expect(() =&gt; bo'l(10, 0)).toThrow();
 
 // Xato matnini ham tekshirish mumkin:
 expect(() =&gt; bo'l(10, 0)).toThrow('Nolga bo'lish mumkin emas');</code></pre>
-<h3>Boshqa foydali matcherlar</h3>
+<h3 id="boshqa-foydali-matcherlar">Boshqa foydali matcherlar</h3>
 <ul><li><code>toBeTruthy()</code> / <code>toBeFalsy()</code> — qiymat rost yoki yolg'onga o'xshashligini tekshiradi.</li><li><code>toBeNull()</code> / <code>toBeUndefined()</code> / <code>toBeDefined()</code> — <code>null</code>, <code>undefined</code> holatlari uchun.</li><li><code>toBeGreaterThan(n)</code> / <code>toBeLessThan(n)</code> — sonlarni taqqoslash.</li><li><code>toHaveLength(n)</code> — massiv yoki satr uzunligini tekshiradi.</li><li><code>not</code> — har qanday matcherni inkor qiladi: <code>expect(x).not.toBe(5)</code>.</li></ul>
 <pre class="code"><code>expect(10).toBeGreaterThan(5);
 expect([1, 2, 3]).toHaveLength(3);
 expect('ali').not.toBe('vali');
 expect(undefined).toBeUndefined();</code></pre>
-<h2>describe bloki</h2>
+<h2 id="describe-bloki">describe bloki</h2>
 <p>Bog'liq testlarni guruhlash uchun <code>describe</code> bloki ishlatiladi. U testlarni tartibga soladi va natijalar chiqishini o'qilishi qulay qiladi:</p>
 <pre class="code"><code>const { narxHisobla } = require('./narx');
 
@@ -702,7 +722,7 @@ describe('narxHisobla funksiyasi', () =&gt; {
   });
 });</code></pre>
 <div class="note"><code>describe</code> bloklarini bir-birining ichiga joylashtirish (nested) ham mumkin. Bu murakkab funksiyalarni holatlarga bo'lib tekshirishda foydali.</div>
-<h2>Testlarni ishga tushirish</h2>
+<h2 id="testlarni-ishga-tushirish">Testlarni ishga tushirish</h2>
 <p>Testlarni <code>npm test</code> yoki to'g'ridan-to'g'ri <code>npx jest</code> bilan ishga tushiramiz:</p>
 <pre class="code"><code>npm test
 
@@ -724,7 +744,7 @@ npx jest narx.test.js
 # Nomi 'narx' so'zini o'z ichiga olgan testlarni ishga tushirish:
 npx jest -t narx</code></pre>
 <div class="tip">Kod yozayotganda <code>--watch</code> rejimini yoqib qo'ying. Har bir saqlashda testlar avtomatik ishlaydi va siz xatoni darhol ko'rasiz — bu o'ta samarali ish sikli.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Jest <code>npm i -D jest</code> bilan o'rnatiladi va <code>package.json</code> scripts'iga <code>"test": "jest"</code> qo'shiladi.</li><li>Test fayllar <code>.test.js</code>, <code>.spec.js</code> yoki <code>__tests__</code> papkasida bo'ladi.</li><li><code>test()</code> va <code>it()</code> — bir xil funksiya, test e'lon qiladi.</li><li><code>expect(qiymat).matcher(...)</code> — tekshiruvning asosiy shakli.</li><li>Asosiy matcherlar: <code>toBe</code>, <code>toEqual</code>, <code>toContain</code>, <code>toThrow</code>; inkor uchun <code>not</code>.</li><li><code>describe</code> bog'liq testlarni guruhlaydi; testlar <code>npm test</code> yoki <code>jest --watch</code> bilan ishga tushadi.</li></ul>
 <nav class="lesson-nav">
   <a href="testlash-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Nega test yozamiz?</span></a>
@@ -738,6 +758,6 @@ npx jest -t narx</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

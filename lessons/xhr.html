@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XMLHttpRequest — Kodla</title>
   <meta name="description" content="Tarmoq so'rovlarining eski usuli: open/send, onload/onerror/onprogress hodisalari, sinxron va asinxron rejimlar, fetch bilan solishtirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,26 @@
 <main class="content article">
 <div class="crumbs">Tarmoq so'rovlari</div>
 <h1>XMLHttpRequest</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#xhr-nima-uchun-kerak">XHR nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#asosiy-sintaksis-open-va-send">Asosiy sintaksis: open va send</a></li>
+<li class="lvl2"><a href="#hodisalar-onload-onerror-onprogress">Hodisalar: onload, onerror, onprogress</a></li>
+<li class="lvl2"><a href="#javob-xossalari">Javob xossalari</a></li>
+<li class="lvl2"><a href="#progressni-kuzatish">Progressni kuzatish</a></li>
+<li class="lvl2"><a href="#upload-progress">Upload progress</a></li>
+<li class="lvl2"><a href="#sinxron-vs-asinxron">Sinxron vs asinxron</a></li>
+<li class="lvl2"><a href="#xhr-va-fetch-solishtirish">XHR va fetch: solishtirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>XMLHttpRequest</strong> (qisqacha XHR) — bu tarmoq so'rovlarini yuborishning <em>eski</em>, ammo hali ham amalda uchraydigan usuli. Bugungi kunda <code>fetch</code> afzal ko'riladi, lekin XHR'ni bilish muhim: eski loyihalarda uchraydi va u <code>fetch</code>da yo'q ba'zi imkoniyatlarga (masalan, upload progress) ega.</p>
 <div class="note">"XML" nomiga qaramay, XHR har qanday turdagi ma'lumot bilan ishlaydi — JSON, matn, binar va boshqalar. Bu nom shunchaki tarixiy sabablarga ko'ra qolgan.</div>
-<h2>XHR nima uchun kerak?</h2>
+<h2 id="xhr-nima-uchun-kerak">XHR nima uchun kerak?</h2>
 <p>Zamonaviy koda deyarli har doim <code>fetch</code> ishlatiladi. Ammo XHR'ni o'rganishning sabablari bor:</p>
 <ul><li><strong>Eski kod:</strong> ko'p mavjud loyihalarda XHR ishlatilgan, ularni tushunish va qo'llab-quvvatlash kerak;</li><li><strong>Upload progress:</strong> <code>fetch</code> yuklab jo'natish (upload) jarayonini kuzata olmaydi, XHR esa buni qila oladi;</li><li><strong>Keng qo'llab-quvvatlash:</strong> XHR juda eski brauzerlarda ham ishlaydi.</li></ul>
-<h2>Asosiy sintaksis: open va send</h2>
+<h2 id="asosiy-sintaksis-open-va-send">Asosiy sintaksis: open va send</h2>
 <p>XHR bilan so'rov yuborish uch bosqichdan iborat: obyekt yaratish, sozlash (<code>open</code>) va yuborish (<code>send</code>):</p>
 <pre class="code"><code>// 1) Obyekt yaratamiz
 let xhr = new XMLHttpRequest();
@@ -614,7 +631,7 @@ xhr.send();</code></pre>
 <p><code>xhr.open(method, url, async)</code> parametrlari:</p>
 <ul><li><code>method</code> — HTTP metodi (GET, POST va h.k.);</li><li><code>url</code> — so'rov manzili;</li><li><code>async</code> — <code>true</code> bo'lsa asinxron (tavsiya etiladi), <code>false</code> bo'lsa sinxron.</li></ul>
 <div class="warn">Muhim: <code>open</code> so'rovni <strong>yubormaydi</strong>, faqat sozlaydi. Haqiqiy so'rov <code>send()</code> chaqirilganda boshlanadi.</div>
-<h2>Hodisalar: onload, onerror, onprogress</h2>
+<h2 id="hodisalar-onload-onerror-onprogress">Hodisalar: onload, onerror, onprogress</h2>
 <p>XHR asinxron ishlagani uchun natijani <strong>hodisalar</strong> (events) orqali olamiz. Eng muhimlari:</p>
 <ul><li><code>load</code> (onload) — so'rov tugadi va javob keldi (holat qanday bo'lishidan qat'i nazar);</li><li><code>error</code> (onerror) — so'rov bajarilmadi (masalan, tarmoq uzildi);</li><li><code>progress</code> (onprogress) — javob yuklanayotganda davriy chaqiriladi (progress uchun).</li></ul>
 <pre class="code"><code>let xhr = new XMLHttpRequest();
@@ -638,7 +655,7 @@ xhr.onerror = function () {
 
 xhr.send();</code></pre>
 <div class="note">Xuddi <code>fetch</code>dagidek, <code>onload</code> HTTP xatoliklarda (404, 500) ham chaqiriladi — chunki server javob bergan. Shuning uchun <code>xhr.status</code>ni o'zimiz tekshiramiz. <code>onerror</code> esa faqat tarmoq umuman ishlamaganda ishlaydi.</div>
-<h2>Javob xossalari</h2>
+<h2 id="javob-xossalari">Javob xossalari</h2>
 <p>So'rov tugagach javobni quyidagi xossalar orqali olamiz:</p>
 <ul><li><code>xhr.status</code> — HTTP holat kodi (200, 404, 500 ...);</li><li><code>xhr.statusText</code> — holat matni ('OK', 'Not Found' ...);</li><li><code>xhr.responseText</code> — javob tanasi matn sifatida;</li><li><code>xhr.response</code> — javob tanasi (<code>responseType</code>ga qarab turli formatda).</li></ul>
 <pre class="code"><code>xhr.responseType = 'json'; // brauzer JSON'ni avtomatik tahlil qiladi
@@ -647,7 +664,7 @@ xhr.onload = function () {
   // Endi xhr.response — tayyor obyekt (JSON.parse shart emas)
   console.log(xhr.response.name);
 };</code></pre>
-<h2>Progressni kuzatish</h2>
+<h2 id="progressni-kuzatish">Progressni kuzatish</h2>
 <p>XHR'ning kuchli tomoni — u ham yuklab olish, ham yuklab jo'natish progressini kuzata oladi:</p>
 <pre class="code"><code>let xhr = new XMLHttpRequest();
 xhr.open('GET', '/big-file', true);
@@ -665,7 +682,7 @@ xhr.onprogress = function (event) {
 xhr.send();</code></pre>
 <p><code>progress</code> hodisasining obyekti quyidagi maydonlarga ega:</p>
 <ul><li><code>event.loaded</code> — hozirgacha yuklangan baytlar soni;</li><li><code>event.total</code> — umumiy baytlar soni;</li><li><code>event.lengthComputable</code> — umumiy hajm ma'lummi (Content-Length bormi).</li></ul>
-<h2>Upload progress</h2>
+<h2 id="upload-progress">Upload progress</h2>
 <p>Fayl yuklab jo'natishda (upload) progressni kuzatish uchun <code>xhr.upload</code> obyektidan foydalanamiz — bu aynan <code>fetch</code>da yo'q imkoniyat:</p>
 <pre class="code"><code>let xhr = new XMLHttpRequest();
 xhr.open('POST', '/upload', true);
@@ -684,7 +701,7 @@ let formData = new FormData();
 formData.append('file', fileInput.files[0]);
 xhr.send(formData);</code></pre>
 <div class="tip">Agar sizga fayl yuklashda progress-bar kerak bo'lsa, bugungi kunda ham ko'pincha XHR ishlatiladi, chunki <code>fetch</code> upload progressini qo'llab-quvvatlamaydi.</div>
-<h2>Sinxron vs asinxron</h2>
+<h2 id="sinxron-vs-asinxron">Sinxron vs asinxron</h2>
 <p><code>open</code>ning uchinchi argumenti <code>false</code> bo'lsa, so'rov <strong>sinxron</strong> bajariladi — ya'ni <code>send()</code> javob kelguncha kodni <strong>bloklaydi</strong>:</p>
 <pre class="code"><code>let xhr = new XMLHttpRequest();
 xhr.open('GET', '/data', false); // sinxron!
@@ -693,7 +710,7 @@ xhr.send(); // bu yerda kod javob kelguncha KUTADI (bloklanadi)
 
 console.log(xhr.responseText); // javob tayyor</code></pre>
 <div class="warn">Sinxron so'rovlardan <strong>qochish kerak</strong>! Ular butun brauzerni (sahifani) javob kelguncha muzlatib qo'yadi — foydalanuvchi hech narsa qila olmaydi. Ko'p brauzerlar ularni eskirgan deb belgilagan. Doim asinxron (<code>true</code>) ishlating.</div>
-<h2>XHR va fetch: solishtirish</h2>
+<h2 id="xhr-va-fetch-solishtirish">XHR va fetch: solishtirish</h2>
 <p>Ikki usulni qiyoslaymiz:</p>
 <ul><li><strong>Sintaksis:</strong> <code>fetch</code> promise'ga asoslangan, tekis va zamonaviy; XHR — hodisalarga asoslangan, ko'proq kod talab qiladi;</li><li><strong>Xatoliklar:</strong> ikkalasi ham HTTP xatoliklarni (404) o'zi tekshirishni talab qiladi;</li><li><strong>Upload progress:</strong> XHR qila oladi (<code>xhr.upload</code>), <code>fetch</code> qila olmaydi;</li><li><strong>Download progress:</strong> ikkalasi ham qila oladi (fetch — ReadableStream bilan);</li><li><strong>Bekor qilish:</strong> <code>fetch</code> — <code>AbortController</code> bilan, XHR — <code>xhr.abort()</code> bilan;</li><li><strong>Zamonaviylik:</strong> yangi kod uchun <code>fetch</code> tavsiya etiladi.</li></ul>
 <pre class="code"><code>// Bir xil so'rov, ikki usul:
@@ -710,7 +727,7 @@ xhr.onload = function () {
   let data = xhr.response;
 };
 xhr.send();</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>XMLHttpRequest</code> (XHR) — tarmoq so'rovlarining eski, hodisalarga asoslangan usuli;</li><li>Uch bosqich: <code>new XMLHttpRequest()</code> → <code>xhr.open(method, url, async)</code> → <code>xhr.send()</code>;</li><li>Natija hodisalar orqali: <code>onload</code> (tugadi), <code>onerror</code> (tarmoq xatoligi), <code>onprogress</code> (jarayon);</li><li>Javob: <code>xhr.status</code>, <code>xhr.responseText</code>, <code>xhr.response</code>;</li><li><code>xhr.upload</code> — yuklab jo'natish progressini kuzatadi (bu <code>fetch</code>da yo'q);</li><li>Sinxron so'rovlar (<code>async = false</code>) brauzerni muzlatadi — <strong>ulardan qoching</strong>;</li><li>Yangi koda odatda <code>fetch</code> afzal, ammo upload progress kerak bo'lsa XHR foydali.</li></ul>
 <nav class="lesson-nav">
   <a href="fetch-progress.html"><span class="dir">← Oldingi</span><span class="ttl">Fetch: yuklanish jarayoni</span></a>
@@ -724,6 +741,6 @@ xhr.send();</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

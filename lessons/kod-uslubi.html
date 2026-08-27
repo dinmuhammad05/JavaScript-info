@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kod uslubi — Kodla</title>
   <meta name="description" content="Qavslar, chekinish, qator uzunligi, nomlash va linterlar (ESLint).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,21 @@
 <main class="content article">
 <div class="crumbs">Kod sifati</div>
 <h1>Kod uslubi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#qavslar-va-chekinish-indent">Qavslar va chekinish (indent)</a></li>
+<li class="lvl2"><a href="#qator-uzunligi">Qator uzunligi</a></li>
+<li class="lvl2"><a href="#nuqta-vergul">Nuqta-vergul (;)</a></li>
+<li class="lvl2"><a href="#nomlash">Nomlash</a></li>
+<li class="lvl2"><a href="#yomon-va-yaxshi-uslub-solishtirma">Yomon va yaxshi uslub — solishtirma</a></li>
+<li class="lvl2"><a href="#linterlar-eslint">Linterlar (ESLint)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Bizning kodimiz iloji boricha toza va o'qish oson bo'lishi kerak. Bu — haqiqiy dasturlash san'ati: murakkab vazifani <em>to'g'ri</em> va ayni paytda <em>o'qilishi oson</em> tarzda hal qilish. Yaxshi kod uslubi shunga xizmat qiladi.</p>
 <div class="note">Bu yerda keltirilgan qoidalarning hech biri qat'iy majburiy emas — bular tavsiyalar. Har bir jamoa o'z uslubiga ega bo'lishi mumkin. Muhimi — tanlangan uslubga izchil amal qilish.</div>
-<h2>Qavslar va chekinish (indent)</h2>
+<h2 id="qavslar-va-chekinish-indent">Qavslar va chekinish (indent)</h2>
 <p>Ko'pchilik dasturchilar ochuvchi jingalak qavsni <code>{</code> yangi qatorda emas, balki bir xil qatorda, oldida bo'shliq bilan yozishni afzal ko'radi. Bu "egiptcha" (K&amp;R) uslub deb ataladi:</p>
 <pre class="code"><code>// yaxshi
 if (n &lt; 0) {
@@ -614,20 +629,20 @@ function salomla(ism) {
   }
 }</code></pre>
 <div class="warn">Chekinishni bo'shliq (space) va tabulyatsiya (tab) aralashtirib yozmang — bu turli muharrirlar va sozlamalarda kodni buzib ko'rsatadi. Bittasini tanlang.</div>
-<h2>Qator uzunligi</h2>
+<h2 id="qator-uzunligi">Qator uzunligi</h2>
 <p>Hech kim uzun gorizontal qatorni o'qishni yoqtirmaydi. Qatorni bir nechta bo'lakka bo'lish yaxshi amaliyot. Odatda maksimal uzunlik 80 yoki 120 belgi qilib belgilanadi.</p>
 <pre class="code"><code>// uzun shartni bir nechta qatorga bo'lish
 let royxat = elementlar
   .filter(x =&gt; x.faol)
   .map(x =&gt; x.nomi)
   .sort();</code></pre>
-<h2>Nuqta-vergul (;)</h2>
+<h2 id="nuqta-vergul">Nuqta-vergul (;)</h2>
 <p>Har bir buyruq oxiriga nuqta-vergul qo'yish tavsiya etiladi, garchi JavaScript ba'zi hollarda uni avtomatik qo'shsa ham. Buni tashlab ketish nozik xatolarga olib kelishi mumkin.</p>
 <pre class="code"><code>// yaxshi
 let ism = "Ali";
 let yosh = 25;
 console.log(ism, yosh);</code></pre>
-<h2>Nomlash</h2>
+<h2 id="nomlash">Nomlash</h2>
 <p>Yaxshi nomlar — o'zini o'zi tushuntiradigan kodning yarmi. Umumiy qoidalar:</p>
 <ul><li>O'zgaruvchi va funksiyalar uchun <strong>camelCase</strong> uslubidan foydalaning: <code>userName</code>, <code>hisobla</code>;</li><li>Nom mazmunni aks ettirsin: <code>i</code>, <code>data</code> emas, balki <code>userIndex</code>, <code>foydalanuvchilar</code>;</li><li>Funksiya nomi odatda fe'ldan boshlanadi: <code>getUser</code>, <code>hisobla</code>, <code>korsat</code>;</li><li>O'zgarmas doimiylar (konstantalar) uchun <strong>UPPER_CASE</strong>: <code>const MAX_SONI = 100;</code>.</li></ul>
 <pre class="code"><code>// yomon nomlash
@@ -637,7 +652,7 @@ let x = a * 24;
 // yaxshi nomlash
 let SONIYALAR_SOATDA = 60 * 60;
 let soniyalarKunda = SONIYALAR_SOATDA * 24;</code></pre>
-<h2>Yomon va yaxshi uslub — solishtirma</h2>
+<h2 id="yomon-va-yaxshi-uslub-solishtirma">Yomon va yaxshi uslub — solishtirma</h2>
 <p>Quyida bir xil vazifani bajaradigan ikki kod. Birinchisi — o'qish qiyin:</p>
 <pre class="code"><code>// yomon uslub
 function f(x){if(x&gt;0){return x*2}else{return 0}}</code></pre>
@@ -649,13 +664,13 @@ function ikkiBaravar(son) {
   }
   return 0;
 }</code></pre>
-<h2>Linterlar (ESLint)</h2>
+<h2 id="linterlar-eslint">Linterlar (ESLint)</h2>
 <p><strong>Linter</strong> — kod uslubidagi xatolarni avtomatik topib beradigan vosita. U kodni tekshirib, qoidalarga muvofiq emasligini ogohlantiradi. JavaScript uchun eng mashhuri — <strong>ESLint</strong>.</p>
 <p>ESLint bilan ishlash odatda shunday:</p>
 <ol><li>Node.js va npm o'rnatiladi;</li><li>ESLint o'rnatiladi: <code>npm install -D eslint</code>;</li><li>Loyiha ildizida sozlama fayli yaratiladi (masalan <code>.eslintrc</code> yoki <code>eslint.config.js</code>);</li><li>Muharringizga (VS Code) ESLint kengaytmasi o'rnatiladi — u xatolarni yozayotganingizda ko'rsatadi.</li></ol>
 <div class="note">Ko'pgina jamoalar tayyor uslub qoidalar to'plamidan foydalanadi, masalan <strong>Airbnb</strong> yoki <strong>Standard</strong> uslubi. Bu barcha dasturchilarning bir xil uslubda yozishini ta'minlaydi.</div>
 <div class="tip">Linterni loyihaning boshidanoq sozlang. U nafaqat uslubni saqlaydi, balki ko'plab haqiqiy xatolarni (e'lon qilinmagan o'zgaruvchi, ishlatilmagan funksiya) ham topib beradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Toza kod — o'qish va qo'llab-quvvatlash oson bo'lgan kod;</li><li>Chekinish, qavslar va nuqta-vergullarda izchil bo'ling;</li><li>O'zgaruvchilarni mazmunli nomlang (camelCase, UPPER_CASE);</li><li><strong>ESLint</strong> kabi linter uslub va xatolarni avtomatik nazorat qiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="debugging.html"><span class="dir">← Oldingi</span><span class="ttl">Brauzerda debugging</span></a>
@@ -669,6 +684,6 @@ function ikkiBaravar(son) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

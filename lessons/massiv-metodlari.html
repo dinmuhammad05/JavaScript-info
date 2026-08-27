@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Massiv metodlari — Kodla</title>
   <meta name="description" content="Massivlarni boshqarish uchun eng muhim metodlar: qo'shish/o'chirish, qidirish, saralash, transformatsiya va reduce.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,25 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Massiv metodlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#elementlarni-qo-shish-va-o-chirish">Elementlarni qo'shish va o'chirish</a></li>
+<li class="lvl2"><a href="#slice-qismini-nusxalash">slice — qismini nusxalash</a></li>
+<li class="lvl2"><a href="#concat-massivlarni-birlashtirish">concat — massivlarni birlashtirish</a></li>
+<li class="lvl2"><a href="#foreach-har-bir-element-bo-yicha-yurish">forEach — har bir element bo'yicha yurish</a></li>
+<li class="lvl2"><a href="#massivda-qidirish-indexof-includes-find-findindex">Massivda qidirish: indexOf, includes, find, findIndex</a></li>
+<li class="lvl2"><a href="#filter-shartga-mos-elementlarni-saralash">filter — shartga mos elementlarni saralash</a></li>
+<li class="lvl2"><a href="#map-har-bir-elementni-o-zgartirish">map — har bir elementni o'zgartirish</a></li>
+<li class="lvl2"><a href="#sort-saralash-taqqoslash-funksiyasi-bilan">sort — saralash (taqqoslash funksiyasi bilan!)</a></li>
+<li class="lvl2"><a href="#reverse-split-va-join">reverse, split va join</a></li>
+<li class="lvl2"><a href="#reduce-va-reduceright-massivni-bitta-qiymatga-yig-ish">reduce va reduceRight — massivni bitta qiymatga yig'ish</a></li>
+<li class="lvl2"><a href="#array-isarray-massivmi-yoki-yo-q">Array.isArray — massivmi yoki yo'q?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Massivlar ko'plab metodlarga ega. O'rganishni osonlashtirish uchun ularni guruhlarga ajratamiz: elementlarni qo'shish/o'chirish, qismini olish, qidirish, aylanib chiqish, saralash va massivni bitta qiymatga yig'ish (reduce).</p>
-<h2>Elementlarni qo'shish va o'chirish</h2>
+<h2 id="elementlarni-qo-shish-va-o-chirish">Elementlarni qo'shish va o'chirish</h2>
 <p>Massiv oxiri va boshi bilan ishlash uchun bir nechta metodni allaqachon bilamiz:</p>
 <ul><li><code>arr.push(...items)</code> — oxiriga element qo'shadi;</li><li><code>arr.pop()</code> — oxirgi elementni olib tashlaydi va qaytaradi;</li><li><code>arr.shift()</code> — birinchi elementni olib tashlaydi va qaytaradi;</li><li><code>arr.unshift(...items)</code> — boshiga element qo'shadi.</li></ul>
 <p>Endi eng kuchli metod — <code>splice</code> bilan tanishamiz. U massivning istalgan joyidan element o'chira oladi, qo'sha oladi va almashtira oladi.</p>
@@ -626,7 +646,7 @@ arr.splice(1, 0, 'hozir', 'darhol');
 console.log(JSON.stringify(arr));
 // ['men', 'hozir', 'darhol', 'o'rganaman']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>start</code> manfiy bo'lishi mumkin. Bu holda u oxiridan sanaladi: <code>-1</code> — oxirgi element, <code>-2</code> — oxiridan bittasi va hokazo.</div>
-<h2>slice — qismini nusxalash</h2>
+<h2 id="slice-qismini-nusxalash">slice — qismini nusxalash</h2>
 <p>Metod <code>arr.slice(start, end)</code> massivning <code>start</code> dan <code>end</code> gacha (<code>end</code> o'z ichiga olmaydi) bo'lgan qismini <strong>yangi massiv</strong> qilib qaytaradi. Asl massivni o'zgartirmaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>slice.js</span></div><textarea spellcheck="false">let arr = ['a', 'b', 'c', 'd', 'e'];
 
@@ -635,7 +655,7 @@ console.log(JSON.stringify(arr.slice(-2)));   // ['d', 'e']
 console.log(JSON.stringify(arr.slice()));     // butun nusxa
 console.log(JSON.stringify(arr));             // asl massiv o'zgarmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Argumentsiz <code>arr.slice()</code> massivning to'liq (sayoz) nusxasini yaratishning eng qulay usuli hisoblanadi.</div>
-<h2>concat — massivlarni birlashtirish</h2>
+<h2 id="concat-massivlarni-birlashtirish">concat — massivlarni birlashtirish</h2>
 <p>Metod <code>arr.concat(...args)</code> asl massiv elementlarini va argument sifatida berilgan qiymatlarni birlashtirib, <strong>yangi</strong> massiv qaytaradi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>concat.js</span></div><textarea spellcheck="false">let arr = [1, 2];
 
@@ -644,7 +664,7 @@ console.log(JSON.stringify(arr.concat([3, 4], [5]))); // [1, 2, 3, 4, 5]
 console.log(JSON.stringify(arr.concat(3, 4)));        // [1, 2, 3, 4]
 console.log(JSON.stringify(arr));                     // asl o'zgarmadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Agar argument massiv bo'lsa, uning elementlari alohida-alohida qo'shiladi. Agar oddiy qiymat bo'lsa, o'zi qo'shiladi.</div>
-<h2>forEach — har bir element bo'yicha yurish</h2>
+<h2 id="foreach-har-bir-element-bo-yicha-yurish">forEach — har bir element bo'yicha yurish</h2>
 <p>Metod <code>arr.forEach(funksiya)</code> massivning har bir elementi uchun berilgan funksiyani chaqiradi. U hech narsa qaytarmaydi (<code>undefined</code>).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>foreach.js</span></div><textarea spellcheck="false">['Olma', 'Anor', 'Uzum'].forEach(function(item, index, array) {
   console.log(index + ': ' + item + ' (uzunlik: ' + array.length + ')');
@@ -653,7 +673,7 @@ console.log(JSON.stringify(arr));                     // asl o'zgarmadi</textare
 // 1: Anor (uzunlik: 3)
 // 2: Uzum (uzunlik: 3)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Funksiya uch argument oladi: <code>(item, index, array)</code> — element qiymati, uning indeksi va massivning o'zi. Ko'pincha faqat birinchi ikkisi kerak bo'ladi.</p>
-<h2>Massivda qidirish: indexOf, includes, find, findIndex</h2>
+<h2 id="massivda-qidirish-indexof-includes-find-findindex">Massivda qidirish: indexOf, includes, find, findIndex</h2>
 <p>Metod <code>arr.indexOf(item)</code> elementni boshidan qidiradi va topilsa indeksini, topilmasa <code>-1</code> ni qaytaradi. <code>arr.lastIndexOf(item)</code> esa oxiridan qidiradi.</p>
 <p>Metod <code>arr.includes(item)</code> element mavjud bo'lsa <code>true</code>, aks holda <code>false</code> qaytaradi — mavjudlikni tekshirish uchun qulay.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indexof.js</span></div><textarea spellcheck="false">let arr = [1, 0, false, NaN];
@@ -686,7 +706,7 @@ let idx = users.findIndex(function(item) {
 });
 console.log(idx);  // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>find</code> mos element topilmasa <code>undefined</code>, <code>findIndex</code> esa <code>-1</code> qaytaradi. <code>findLastIndex</code> oxiridan qidiradi.</div>
-<h2>filter — shartga mos elementlarni saralash</h2>
+<h2 id="filter-shartga-mos-elementlarni-saralash">filter — shartga mos elementlarni saralash</h2>
 <p><code>find</code> bitta element qaytaradi. Agar shartga mos <strong>barcha</strong> elementlar kerak bo'lsa, <code>arr.filter(funksiya)</code> ishlatiladi. U funksiya <code>true</code> qaytargan barcha elementlardan yangi massiv tuzadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>filter.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3, 4, 5, 6];
 
@@ -695,7 +715,7 @@ let juftlar = sonlar.filter(function(son) {
 });
 
 console.log(JSON.stringify(juftlar)); // [2, 4, 6]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>map — har bir elementni o'zgartirish</h2>
+<h2 id="map-har-bir-elementni-o-zgartirish">map — har bir elementni o'zgartirish</h2>
 <p>Metod <code>arr.map(funksiya)</code> — massivlar bilan ishlashda eng ko'p ishlatiladigan metodlardan biri. U har bir elementga funksiyani qo'llaydi va natijalardan <strong>yangi</strong> massiv qaytaradi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>map.js</span></div><textarea spellcheck="false">let sozlar = ['Olma', 'Anor', 'Uzum'];
 
@@ -708,7 +728,7 @@ let katta = sozlar.map(function(soz) {
   return soz.toUpperCase();
 });
 console.log(JSON.stringify(katta)); // ['OLMA', 'ANOR', 'UZUM']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>sort — saralash (taqqoslash funksiyasi bilan!)</h2>
+<h2 id="sort-saralash-taqqoslash-funksiyasi-bilan">sort — saralash (taqqoslash funksiyasi bilan!)</h2>
 <p>Metod <code>arr.sort()</code> massivni <strong>o'z joyida</strong> (asl massivni o'zgartirib) saralaydi va o'zini qaytaradi. Ammo muhim tuzoq bor:</p>
 <div class="warn">Standart holatda <code>sort</code> elementlarni <strong>satr (string)</strong> sifatida saralaydi! Shuning uchun <code>[1, 2, 15]</code> emas, balki <code>[1, 15, 2]</code> chiqadi — chunki <code>'15' &lt; '2'</code> (lug'aviy taqqoslash).</div>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sort-bad.js</span></div><textarea spellcheck="false">let arr = [1, 2, 15];
@@ -735,7 +755,7 @@ console.log(JSON.stringify(arr)); // [1, 2, 3, 10, 15]
 arr.sort(function(a, b) { return b - a; });
 console.log(JSON.stringify(arr)); // [15, 10, 3, 2, 1]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Satrlarni tilga mos (masalan, o'zbekcha yoki lotincha harflar) tartibda saralash uchun <code>str.localeCompare</code> dan foydalaning: <code>arr.sort((a, b) =&gt; a.localeCompare(b))</code>.</div>
-<h2>reverse, split va join</h2>
+<h2 id="reverse-split-va-join">reverse, split va join</h2>
 <p>Metod <code>arr.reverse()</code> massiv elementlarini teskari tartibda qo'yadi (o'z joyida).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reverse.js</span></div><textarea spellcheck="false">let arr = [1, 2, 3, 4, 5];
 arr.reverse();
@@ -750,7 +770,7 @@ console.log(arr.length);          // 3
 let yana = arr.join(' - ');
 console.log(yana); // Ali - Vali - Guli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>str.split('')</code> (bo'sh satr bilan) satrni harflarga ajratadi. <code>split</code> ga ikkinchi argument sifatida limit berish mumkin — natija massivi uzunligini cheklaydi.</div>
-<h2>reduce va reduceRight — massivni bitta qiymatga yig'ish</h2>
+<h2 id="reduce-va-reduceright-massivni-bitta-qiymatga-yig-ish">reduce va reduceRight — massivni bitta qiymatga yig'ish</h2>
 <p>Ba'zan massiv asosida bitta qiymat hisoblash kerak: yig'indi, eng katta element, obyekt va hokazo. Buning uchun <code>arr.reduce</code> ishlatiladi.</p>
 <p>Sintaksis: <code>arr.reduce(function(akkumulyator, item, index, array) { ... }, boshlang'ich)</code>. Funksiya har bir element uchun chaqiriladi va uning natijasi keyingi chaqiruvga <code>akkumulyator</code> bo'lib uzatiladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>reduce1.js</span></div><textarea spellcheck="false">let arr = [1, 2, 3, 4, 5];
@@ -770,7 +790,7 @@ let max = arr.reduce(function(a, b) {
 console.log(max); // 130</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Agar boshlang'ich qiymat berilmasa, <code>reduce</code> birinchi elementni boshlang'ich sifatida oladi va ikkinchidan boshlaydi. <strong>Bo'sh massivda</strong> boshlang'ichsiz <code>reduce</code> xatolik beradi! Shuning uchun ko'p hollarda boshlang'ich qiymatni berish tavsiya etiladi.</div>
 <p><code>arr.reduceRight</code> xuddi shunday ishlaydi, lekin massivni <strong>o'ngdan chapga</strong> aylanib chiqadi.</p>
-<h2>Array.isArray — massivmi yoki yo'q?</h2>
+<h2 id="array-isarray-massivmi-yoki-yo-q">Array.isArray — massivmi yoki yo'q?</h2>
 <p>Massivlar alohida tur emas, ular <code>object</code> turiga asoslangan. Shuning uchun <code>typeof</code> massivni obyektdan ajrata olmaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>isarray.js</span></div><textarea spellcheck="false">console.log(typeof {});        // object
 console.log(typeof []);        // object (ham!)
@@ -779,7 +799,7 @@ console.log(typeof []);        // object (ham!)
 console.log(Array.isArray({})); // false
 console.log(Array.isArray([])); // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Ko'p metodlar (masalan <code>sort</code>, <code>find</code>, <code>filter</code>) funksiyaga qo'shimcha <code>thisArg</code> argumentini qabul qiladi — u funksiya ichidagi <code>this</code> ni belgilaydi. Amalda arrow funksiyalar bilan bu deyarli kerak bo'lmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Qo'shish/o'chirish: <code>push/pop</code>, <code>shift/unshift</code>, universal <code>splice</code>;</li><li>Qismini olish: <code>slice</code>; birlashtirish: <code>concat</code>;</li><li>Aylanib chiqish: <code>forEach</code>;</li><li>Qidirish: <code>indexOf/lastIndexOf</code>, <code>includes</code>, <code>find/findIndex</code>;</li><li>Transformatsiya: <code>filter</code> (saralab olish), <code>map</code> (o'zgartirish), <code>sort</code> (albatta taqqoslash funksiyasi bilan!), <code>reverse</code>;</li><li>Satr bilan bog'liq: <code>split</code> va <code>join</code>;</li><li>Yig'ish: <code>reduce/reduceRight</code>;</li><li>Tekshirish: <code>Array.isArray</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="massivlar.html"><span class="dir">← Oldingi</span><span class="ttl">Massivlar</span></a>
@@ -793,6 +813,6 @@ console.log(Array.isArray([])); // true</textarea><div class="pg-actions"><butto
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

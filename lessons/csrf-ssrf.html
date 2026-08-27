@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSRF va SSRF — Kodla</title>
   <meta name="description" content="CSRF konsepti va himoyasi (token, SameSite, qayta tasdiq), SSRF konsepti va himoyasi (allowlist, ichki manzil bloklash), ikkalasining farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,18 +599,32 @@
 <main class="content article">
 <div class="crumbs">Web ilova xavfsizligi (OWASP Top 10)</div>
 <h1>CSRF va SSRF</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#csrf-nima">CSRF nima?</a></li>
+<li class="lvl2"><a href="#csrf-himoyasi">CSRF himoyasi</a></li>
+<li class="lvl3"><a href="#1-csrf-token">1. CSRF token</a></li>
+<li class="lvl3"><a href="#2-samesite-cookie">2. SameSite cookie</a></li>
+<li class="lvl3"><a href="#3-muhim-amallar-uchun-qayta-tasdiq">3. Muhim amallar uchun qayta tasdiq</a></li>
+<li class="lvl2"><a href="#ssrf-nima">SSRF nima?</a></li>
+<li class="lvl2"><a href="#ssrf-himoyasi">SSRF himoyasi</a></li>
+<li class="lvl2"><a href="#himoya-g-oyasini-modellashtirish">Himoya g'oyasini modellashtirish</a></li>
+<li class="lvl2"><a href="#csrf-va-ssrfning-farqi">CSRF va SSRFning farqi</a></li>
+  </ul>
+</details>
 <p class="lead">Ikkala zaiflik ham nomida "soxta so'rov" g'oyasini olib yuradi, lekin ular butunlay boshqa tomonga qaratilgan. <strong>CSRF</strong>da foydalanuvchining brauzeri aldanadi; <strong>SSRF</strong>da esa serverning o'zi aldanadi. Bu darsda biz har ikkalasini konseptual tushunamiz, aniq farqini ajratamiz va tegishli himoya usullarini o'rganamiz.</p>
-<h2>CSRF nima?</h2>
+<h2 id="csrf-nima">CSRF nima?</h2>
 <p><strong>CSRF</strong> (Cross-Site Request Forgery) — bu zaiflikda hujumchi foydalanuvchining <em>brauzerini</em> uning nomidan soxta so'rov yuborishga aldaydi. G'oyaning ildizi shundaki, brauzer ba'zi so'rovlarga cookie'ni (jumladan sessiya cookie'sini) <strong>avtomatik</strong> qo'shib yuboradi.</p>
 <p>Tasavvur qiling: foydalanuvchi biror saytga kirgan (sessiyasi faol). Keyin u boshqa, zararli sahifani ochsa va o'sha sahifa yashirin ravishda birinchi saytga so'rov yuborsa, brauzer sessiya cookie'sini avtomatik qo'shadi — server esa buni haqiqiy foydalanuvchi so'rovi deb qabul qiladi.</p>
 <div class="note">CSRFning mohiyati — <strong>hujumchi javobni ko'rmaydi</strong>, u faqat biror <em>amal</em>ni (masalan, sozlamani o'zgartirish yoki pul o'tkazish) foydalanuvchi nomidan bajartiradi. Shuning uchun himoya "bu so'rov haqiqatan foydalanuvchining ongli xohishimi?" degan savolga qaratiladi.</div>
-<h2>CSRF himoyasi</h2>
+<h2 id="csrf-himoyasi">CSRF himoyasi</h2>
 <p>CSRFga qarshi bir necha samarali himoya qatlami mavjud:</p>
-<h3>1. CSRF token</h3>
+<h3 id="1-csrf-token">1. CSRF token</h3>
 <p>Server har bir forma yoki sessiya uchun tasodifiy, oldindan aytib bo'lmaydigan <strong>token</strong> yaratadi va uni sahifaga joylashtiradi. Har bir muhim so'rovda bu token qaytib kelishi shart. Zararli sayt bu tokenni bilmaydi, shuning uchun soxta so'rov rad etiladi.</p>
-<h3>2. SameSite cookie</h3>
+<h3 id="2-samesite-cookie">2. SameSite cookie</h3>
 <p><code>SameSite</code> atributi cookie'ning boshqa saytdan kelgan so'rovlarga qo'shilishini cheklaydi. <code>SameSite=Lax</code> yoki <code>Strict</code> qo'yilsa, brauzer begona saytdan yuborilgan so'rovga sessiya cookie'sini qo'shmaydi — bu CSRFning asosini yo'q qiladi.</p>
-<h3>3. Muhim amallar uchun qayta tasdiq</h3>
+<h3 id="3-muhim-amallar-uchun-qayta-tasdiq">3. Muhim amallar uchun qayta tasdiq</h3>
 <p>Eng jiddiy amallar (parol o'zgartirish, pul o'tkazish) uchun parolni qayta so'rash yoki qo'shimcha tasdiq (masalan, ikki bosqichli) talab qilish qo'shimcha himoya beradi.</p>
 <pre class="code"><code>// XAVFSIZ g'oya: SameSite va HttpOnly bilan cookie o'rnatish
 res.cookie('sessiya', sessiyaId, {
@@ -615,14 +632,14 @@ res.cookie('sessiya', sessiyaId, {
   secure: true,     // faqat HTTPS orqali
   sameSite: 'lax'   // begona saytdan so'rovga qo'shilmaydi
 });</code></pre>
-<h2>SSRF nima?</h2>
+<h2 id="ssrf-nima">SSRF nima?</h2>
 <p><strong>SSRF</strong> (Server-Side Request Forgery) — bu zaiflikda hujumchi <em>serverni</em> aldab, uni o'zi tanlagan manzilga so'rov yuborishga majburlaydi. Bu odatda dastur foydalanuvchidan URL qabul qilib, o'sha manzilga so'rov yuboradigan joylarda yuzaga keladi (masalan, "URL orqali rasm yuklash" funksiyasi).</p>
 <p>SSRF nima uchun xavfli? Chunki server ko'pincha <strong>ichki tarmoqda</strong> joylashgan bo'lib, tashqi olamga ko'rinmaydigan resurslarga (ichki xizmatlar, ma'lumotlar bazasi, bulut metadata xizmati) kira oladi. Hujumchi serverni shu ichki manzillarga so'rov yuborishga majburlab, ma'lumotga yetib olishi mumkin.</p>
-<h2>SSRF himoyasi</h2>
+<h2 id="ssrf-himoyasi">SSRF himoyasi</h2>
 <p>SSRFga qarshi himoya foydalanuvchi bergan manzilga ishonmaslikka asoslanadi:</p>
 <ul><li><strong>URL allowlist:</strong> faqat oldindan belgilangan, ishonchli domenlarga so'rov yuborishga ruxsat bering — qora ro'yxat (blocklist) emas, oq ro'yxat (allowlist);</li><li><strong>Ichki manzillarni bloklang:</strong> <code>localhost</code>, <code>127.0.0.1</code>, xususiy IP diapazonlariga va boshqa ichki manzillarga so'rovni taqiqlang;</li><li><strong>Metadata endpointini himoyalang:</strong> bulut muhitidagi metadata xizmatiga (maxfiy ma'lumot beruvchi ichki manzil) kirishni alohida bloklang;</li><li><strong>Yo'naltirishlarni cheklang:</strong> so'rov ichki manzilga qayta yo'naltirilib ketmasligini tekshiring.</li></ul>
 <div class="warn">SSRF himoyasida qora ro'yxat (masalan, faqat <code>127.0.0.1</code> ni bloklash) yetarli emas — ichki manzilni ifodalash usullari juda ko'p. Ishonchli yechim — <strong>allowlist</strong>: faqat aniq ruxsat berilgan manzillarga yo'l ochish.</div>
-<h2>Himoya g'oyasini modellashtirish</h2>
+<h2 id="himoya-g-oyasini-modellashtirish">Himoya g'oyasini modellashtirish</h2>
 <p>Quyidagi misolda biz ikki himoyani — CSRF token tekshiruvi va SSRF uchun URL allowlist — sof mantiq sifatida ko'rsatamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>csrf-ssrf-himoya.js</span></div><textarea spellcheck="false">// --- CSRF: token tekshirish g'oyasi ---
 function csrfTekshir(sessiyaToken, sorovToken) {
@@ -643,7 +660,7 @@ function hostRuxsatmi(host) {
 console.log('Ishonchli host:', hostRuxsatmi('api.ishonchli.uz'));
 console.log('Ichki host:', hostRuxsatmi('localhost'));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: CSRF himoyasida biz "so'rovda kelgan token serverdagi bilan mos keladimi?" degan savolga javob beramiz. SSRF himoyasida esa "bu manzil oq ro'yxatda bormi?" degan savolga. Ikkalasi ham — ishonchsiz kiritmani tekshirishning ko'rinishlari.</p>
-<h2>CSRF va SSRFning farqi</h2>
+<h2 id="csrf-va-ssrfning-farqi">CSRF va SSRFning farqi</h2>
 <p>Nomlari o'xshash bo'lgani uchun bu ikkisi tez-tez chalkashtiriladi. Asosiy farqi — <strong>kim aldanadi va so'rov qayerdan boshlanadi</strong>:</p>
 <ul><li><strong>CSRF:</strong> aldangani — foydalanuvchining <em>brauzeri</em>. So'rov qurbonning brauzeridan chiqadi. Hujumchi foydalanuvchi <em>nomidan</em> amal bajartiradi;</li><li><strong>SSRF:</strong> aldangani — <em>server</em>. So'rov serverdan chiqadi. Hujumchi serverni ichki resurslarga so'rov yuborishga majburlaydi;</li><li><strong>Maqsad farqi:</strong> CSRF — foydalanuvchi nomidan amal; SSRF — server orqali ichki tarmoqqa kirish;</li><li><strong>Himoya farqi:</strong> CSRF — token va SameSite cookie; SSRF — URL allowlist va ichki manzil bloklash.</li></ul>
 <div class="note">Ikkalasining umumiy sababi bir xil: <strong>ishonchsiz kiritma yoki so'rov to'g'riligini yetarli tekshirmaslik</strong>. Himoya ham shu tamoyilga — har bir so'rovni tasdiqlash va tekshirishga — asoslanadi.</div>
@@ -659,6 +676,6 @@ console.log('Ichki host:', hostRuxsatmi('localhost'));</textarea><div class="pg-
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

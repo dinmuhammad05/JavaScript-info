@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ikkilik qidiruv daraxti (BST) — Kodla</title>
   <meta name="description" content="Tartiblangan ikkilik daraxt: chap < ildiz < o'ng qoidasi, qo'shish, qidirish, o'chirish va O(log n) samaradorlik.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">Daraxt va graf</div>
 <h1>Ikkilik qidiruv daraxti (BST)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#bst-qoidasi">BST qoidasi</a></li>
+<li class="lvl2"><a href="#nega-bu-qidiruvni-tezlashtiradi">Nega bu qidiruvni tezlashtiradi</a></li>
+<li class="lvl2"><a href="#qidirish-algoritmi">Qidirish algoritmi</a></li>
+<li class="lvl2"><a href="#qo-shish-insert">Qo'shish (insert)</a></li>
+<li class="lvl2"><a href="#minimal-va-maksimal-topish">Minimal va maksimal topish</a></li>
+<li class="lvl2"><a href="#o-chirish-g-oyasi">O'chirish g'oyasi</a></li>
+<li class="lvl2"><a href="#big-o-va-nomuvozanat-muammosi">Big O va nomuvozanat muammosi</a></li>
+<li class="lvl2"><a href="#muvozanatni-saqlaydigan-daraxtlar">Muvozanatni saqlaydigan daraxtlar</a></li>
+  </ul>
+</details>
 <p class="lead">O'tgan darsda ikkilik daraxt bilan tanishdik. Endi unga bitta kuchli qoida qo'shamiz — va shu bitta qoida uni oddiy tuzilmadan tez qidiruv mashinasiga aylantiradi. Bu — <strong>ikkilik qidiruv daraxti (Binary Search Tree, qisqacha BST)</strong>. Agar oldin ikkilik qidiruvni (binary search) ko'rgan bo'lsangiz, bu uning "jonli" tuzilma ko'rinishi deb bilib qo'ying.</p>
-<h2>BST qoidasi</h2>
+<h2 id="bst-qoidasi">BST qoidasi</h2>
 <p>BST — bu shunchaki ikkilik daraxt, lekin unda tugunlar tasodifiy joylashmaydi. Bitta qat'iy qoida amal qiladi va u har bir tugun uchun bajarilishi shart:</p>
 <ul><li>Tugunning <strong>chap qism daraxti</strong>dagi barcha qiymatlar tugundan <strong>kichik</strong>.</li><li>Tugunning <strong>o'ng qism daraxti</strong>dagi barcha qiymatlar tugundan <strong>katta</strong>.</li></ul>
 <p>Qisqacha: <strong>chap &lt; ildiz &lt; o'ng</strong>. E'tibor bering — bu faqat bevosita bolalarga emas, butun qism daraxtga tegishli. Chap tomondagi eng chuqur nevara ham tugundan kichik bo'lishi kerak.</p>
@@ -609,11 +625,11 @@
        / \   /     - 8 dan chapdagilar hammasi &lt; 8
       4   7 13     - 8 dan o'ngdagilar hammasi &gt; 8</code></pre>
 <p>Diqqat qiling: <code>13</code> tuguni <code>8</code> dan o'ng tomonda, garchi u <code>14</code> ning chap bolasi bo'lsa ham. Chunki 13 > 8 (o'ngga borish), keyin 13 < 14 (chapga borish). Qoida buzilmadi.</p>
-<h2>Nega bu qidiruvni tezlashtiradi</h2>
+<h2 id="nega-bu-qidiruvni-tezlashtiradi">Nega bu qidiruvni tezlashtiradi</h2>
 <p>Endi eng muhim savol: bu qoidadan qanday foyda? Tasavvur qiling, siz <code>7</code> qiymatini qidiryapsiz. Oddiy ro'yxatda bo'lsa, har bir elementni ketma-ket tekshirib chiqishga to'g'ri kelardi.</p>
 <p>BSTda esa boshqacha. Ildizdan boshlaysiz. Har bir tugunda faqat bitta savol berasiz: "Qidirayotgan qiymatim shu tugundan kichikmi yoki kattami?" Javobga qarab <strong>faqat bitta tomonga</strong> — chap yoki o'ngga — borasiz. Ikkinchi tomonni butunlay tashlab ketasiz.</p>
 <p>Bu har qadamda qolgan tugunlarning yarmini yo'q qilish demakdir. Xuddi lug'atdan so'z qidirgandek — o'rtasini ochasiz, so'zingiz oldindami keyindami, qarab yarmini tashlab yuborasiz. Aynan shu tufayli muvozanatli daraxtda qidiruv <strong>O(log n)</strong> bo'ladi — million element uchun ham atigi ~20 qadam.</p>
-<h2>Qidirish algoritmi</h2>
+<h2 id="qidirish-algoritmi">Qidirish algoritmi</h2>
 <p>Avval qidirishni kodda ko'raylik, chunki bu BSTning asosiy g'oyasini o'zida jamlaydi. Ildizdan boshlaymiz va qiymatni solishtirib, pastga tushib boramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bst-search.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(value) {
@@ -675,7 +691,7 @@ root.left.right = new TreeNode(6);
 console.log(search(root, 6));  // true
 console.log(search(root, 5));  // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ikkala usul ham <strong>O(h)</strong> ishlaydi, bu yerda <code>h</code> — daraxt balandligi. Muvozanatli daraxtda h ≈ log n, demak O(log n).</p>
-<h2>Qo'shish (insert)</h2>
+<h2 id="qo-shish-insert">Qo'shish (insert)</h2>
 <p>Yangi qiymatni qo'shish qidirishga juda o'xshaydi. Biz shunchaki qiymat <em>qayerda bo'lishi kerakligini</em> qidiramiz va o'sha bo'sh joyga (<code>null</code> uchragan joyga) yangi tugun qo'yamiz. Shu tarzda BST qoidasi avtomatik saqlanadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bst-insert.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(value) {
@@ -712,7 +728,7 @@ console.log('Ildiz.left:', root.left.value); // 3
 console.log('Ildiz.right:', root.right.value); // 10
 console.log('1 joyi:', root.left.left.value);  // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Qo'shish ham <strong>O(h)</strong> — chunki avval joyni qidiramiz, so'ng bitta havola o'rnatamiz.</p>
-<h2>Minimal va maksimal topish</h2>
+<h2 id="minimal-va-maksimal-topish">Minimal va maksimal topish</h2>
 <p>BSTda eng kichik va eng katta qiymatni topish bolalar o'yini. Chap &lt; ildiz &lt; o'ng qoidasini eslang. Eng kichik qiymat — doim eng chapdagi tugun. Eng katta — eng o'ngdagi. Faqat bir tomonga yurib boraverasiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bst-min-max.js</span></div><textarea spellcheck="false">class TreeNode {
   constructor(value) {
@@ -748,11 +764,11 @@ let root = null;
 for (const v of [8, 3, 10, 1, 6, 14]) root = insert(root, v);
 console.log('Eng kichik:', findMin(root)); // 1
 console.log('Eng katta:', findMax(root));  // 14</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>O'chirish g'oyasi</h2>
+<h2 id="o-chirish-g-oyasi">O'chirish g'oyasi</h2>
 <p>O'chirish — BSTdagi eng murakkab amal. Uni kod bilan to'liq yozmaymiz, lekin g'oyasini tushunish muhim. Tugunni o'chirganda BST qoidasi buzilmasligi kerak. Uch xil holat bor:</p>
 <ol><li><strong>Tugun — barg (bolasi yo'q).</strong> Eng oson holat: uni shunchaki o'chirib tashlaymiz, ota-onasining havolasini <code>null</code> qilamiz.</li><li><strong>Tugunda bitta bola bor.</strong> O'chiriladigan tugun o'rniga uning yagona bolasini qo'yamiz — xuddi ro'yxatdan elementni chiqarib, zanjirni ulagandek.</li><li><strong>Tugunda ikkita bola bor.</strong> Eng qiziq holat. O'chiriladigan tugun o'rniga uning <em>o'ng qism daraxtidagi eng kichik</em> (yoki chap qism daraxtidagi eng katta) qiymatni qo'yamiz. Bu qiymat "vorisi" deb ataladi va u BST qoidasini saqlab qoladi, chunki u chapdagilarning hammasidan katta va o'ngdagilarning hammasidan kichik.</li></ol>
 <p>O'chirish ham <strong>O(h)</strong> — asosiy vaqt o'chiriladigan tugunni va vorisni topishga ketadi.</p>
-<h2>Big O va nomuvozanat muammosi</h2>
+<h2 id="big-o-va-nomuvozanat-muammosi">Big O va nomuvozanat muammosi</h2>
 <p>Endi haqiqatni aytamiz. Yuqorida biz doim "O(log n)" dedik, lekin bu faqat bitta shart bajarilganda to'g'ri: daraxt <strong>muvozanatli</strong> bo'lishi kerak.</p>
 <p>Muammo shundaki, agar siz qiymatlarni allaqachon tartiblangan holda qo'shsangiz (masalan 1, 2, 3, 4, 5), daraxt daraxtga o'xshamay qoladi — u bir tomonga cho'zilib, oddiy bog'langan ro'yxatga aylanadi:</p>
 <pre class="code"><code>1, 2, 3, 4, 5 ni tartib bilan qo'shsak:
@@ -794,7 +810,7 @@ let b = null;
 for (const v of [1,2,3,4,5,6,7]) b = insert(b, v);
 console.log('Cho'zilgan balandlik:', height(b)); // 6</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Nomuvozanat BSTda qidiruv, qo'shish va o'chirish <strong>O(n)</strong> gacha sekinlashadi — ya'ni oddiy ro'yxat bilan bir xil, hech qanday afzallik qolmaydi. BST tez ishlashi uchun uning balandligi kichik bo'lib qolishi shart.</div>
-<h2>Muvozanatni saqlaydigan daraxtlar</h2>
+<h2 id="muvozanatni-saqlaydigan-daraxtlar">Muvozanatni saqlaydigan daraxtlar</h2>
 <p>Bu muammoni hal qilish uchun maxsus "o'z-o'zini muvozanatlab turadigan" daraxtlar o'ylab topilgan. Ular har qo'shish/o'chirishdan keyin tuzilmani avtomatik tuzatib, balandlikni doim log n atrofida ushlab turadi.</p>
 <ul><li><strong>AVL daraxti</strong> — qat'iy muvozanatli, qidiruv juda tez.</li><li><strong>Qizil-qora daraxt (Red-Black tree)</strong> — biroz erkinroq, qo'shish/o'chirish tezroq. Ko'p tillarning standart kutubxonalarida aynan shu ishlatiladi.</li></ul>
 <p>Bu darsda ularni faqat nomi bilan tanishtiryapmiz — ichki mexanizmi ancha murakkab va alohida mavzu. Hozircha shuni bilib qo'ying: ular mavjud va aynan nomuvozanat muammosini hal qiladi.</p>
@@ -811,6 +827,6 @@ console.log('Cho'zilgan balandlik:', height(b)); // 6</textarea><div class="pg-a
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

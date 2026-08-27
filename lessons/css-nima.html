@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSS nima? — Kodla</title>
   <meta name="description" content="CSS — veb-sahifalarni bezash tili. Sintaksis (selektor { xossa: qiymat; }), CSS'ni HTML'ga ulash usullari (inline, internal, external), asosiy selektorlar (element, class, id), ularni kombinatsiyalash va spetsifiklik tushunchasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,31 @@
 <main class="content article">
 <div class="crumbs">CSS</div>
 <h1>CSS nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#css-nega-kerak">CSS nega kerak?</a></li>
+<li class="lvl2"><a href="#css-sintaksisi-qoida-rule">CSS sintaksisi: qoida (rule)</a></li>
+<li class="lvl2"><a href="#css-ni-html-ga-ulashning-3-usuli">CSS'ni HTML'ga ulashning 3 usuli</a></li>
+<li class="lvl3"><a href="#1-inline-element-ichida">1. Inline (element ichida)</a></li>
+<li class="lvl3"><a href="#2-internal-sahifa-ichida">2. Internal (sahifa ichida)</a></li>
+<li class="lvl3"><a href="#3-external-tashqi-fayl-eng-yaxshi-usul">3. External (tashqi fayl) — eng yaxshi usul</a></li>
+<li class="lvl2"><a href="#asosiy-selektorlar">Asosiy selektorlar</a></li>
+<li class="lvl3"><a href="#element-teg-selektori">Element (teg) selektori</a></li>
+<li class="lvl3"><a href="#class-sinf-selektori-nuqta">Class (sinf) selektori — nuqta (.)</a></li>
+<li class="lvl3"><a href="#id-identifikator-selektori-panjara">Id (identifikator) selektori — panjara (#)</a></li>
+<li class="lvl2"><a href="#selektorlarni-kombinatsiyalash">Selektorlarni kombinatsiyalash</a></li>
+<li class="lvl2"><a href="#spetsifiklik-specificity-qaysi-qoida-g-olib">Spetsifiklik (specificity) — qaysi qoida g'olib?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>CSS</strong> (Cascading Style Sheets — "kaskadli uslublar jadvali") — veb-sahifaning <strong>tashqi ko'rinishini</strong> boshqaradigan til. Agar HTML sahifaning "skeleti" (matn, tugmalar, rasmlar) bo'lsa, CSS uning "kiyimi" — ranglar, shriftlar, joylashuv, masofalar va animatsiyalar. Ushbu darsda CSS nima ekanligini, u qanday yozilishini va HTML bilan qanday bog'lanishini noldan o'rganamiz.</p>
 <div class="note">Bu bob — <strong>brauzer</strong> muhitiga oid. Bu yerdagi barcha misollar HTML va CSS kodidan iborat. Ularni tushunib o'qing va o'z kompyuteringizda oddiy <code>.html</code> fayl yaratib, brauzerda ochib sinab ko'ring. Barcha kod bloklari <strong>statik</strong> — ya'ni namuna sifatida keltirilgan.</div>
-<h2>CSS nega kerak?</h2>
+<h2 id="css-nega-kerak">CSS nega kerak?</h2>
 <p>HTML'ning o'zi bilan ham sahifa yaratish mumkin, lekin u juda oddiy va bir xil ko'rinadi: qora matn, oq fon, ko'k havolalar. HTML'ning vazifasi — <strong>mazmun va tuzilma</strong> (bu — sarlavha, bu — paragraf, bu — ro'yxat). CSS'ning vazifasi esa — <strong>ko'rinish</strong> (sarlavha qanday rangda, qanchalik katta, qayerda joylashgan).</p>
 <p>Bu ikkisini ajratib turish juda muhim tamoyil. Mazmun (HTML) va bezak (CSS) alohida bo'lgani uchun, siz bir xil HTML'ni turlicha bezashingiz yoki barcha sahifalar uchun bitta CSS faylini ishlatishingiz mumkin. Bu kodni tartibli va oson boshqariladigan qiladi.</p>
 <ul><li><strong>HTML</strong> — <em>nima</em> ko'rsatilishi (mazmun va tuzilma);</li><li><strong>CSS</strong> — <em>qanday</em> ko'rsatilishi (rang, shrift, joylashuv);</li><li><strong>JavaScript</strong> — <em>qanday harakat qilishi</em> (bosishga javob, o'zgarishlar).</li></ul>
-<h2>CSS sintaksisi: qoida (rule)</h2>
+<h2 id="css-sintaksisi-qoida-rule">CSS sintaksisi: qoida (rule)</h2>
 <p>CSS eng kichik birligi — <strong>qoida (rule)</strong>. Har bir qoida ikki qismdan iborat: <strong>selektor</strong> (nimani bezamoqchisiz) va <strong>e'lonlar bloki</strong> (qanday bezamoqchisiz). E'lonlar bloki jingalak qavslar <code>{ }</code> ichida yoziladi.</p>
 <pre class="code"><code>selektor {
   xossa: qiymat;
@@ -616,13 +637,13 @@
 }</code></pre>
 <p>Yuqoridagi qoida shunday o'qiladi: "Barcha <code>&lt;p&gt;</code> (paragraf) elementlarining <strong>matn rangi</strong> qizil, <strong>shrift o'lchami</strong> 18 piksel va <strong>matni markazda</strong> tekislangan bo'lsin".</p>
 <div class="tip">Oxirgi e'londan keyin nuqtali vergul (<code>;</code>) qo'yish shart emas, lekin har doim qo'yish yaxshi odat. Chunki keyinchalik yangi e'lon qo'shsangiz, unutib qolish xatosi kelib chiqmaydi.</div>
-<h2>CSS'ni HTML'ga ulashning 3 usuli</h2>
+<h2 id="css-ni-html-ga-ulashning-3-usuli">CSS'ni HTML'ga ulashning 3 usuli</h2>
 <p>CSS'ni HTML sahifaga bog'lashning uchta usuli bor. Har birining o'z o'rni bor, lekin amalda deyarli har doim uchinchi usul (external) ishlatiladi.</p>
-<h3>1. Inline (element ichida)</h3>
+<h3 id="1-inline-element-ichida">1. Inline (element ichida)</h3>
 <p>CSS to'g'ridan-to'g'ri HTML elementining <code>style</code> atributi ichida yoziladi. Bu faqat o'sha bitta elementga ta'sir qiladi.</p>
 <pre class="code"><code>&lt;p style="color: blue; font-size: 20px;"&gt;Ko'k matn&lt;/p&gt;</code></pre>
 <div class="warn">Inline uslub — eng yomon usul. U mazmun bilan bezakni aralashtirib yuboradi, qayta ishlatib bo'lmaydi va kodni o'qishni qiyinlashtiradi. Undan faqat juda zarur bo'lganda (masalan, JavaScript orqali dinamik o'zgartirishda) foydalaning.</div>
-<h3>2. Internal (sahifa ichida)</h3>
+<h3 id="2-internal-sahifa-ichida">2. Internal (sahifa ichida)</h3>
 <p>CSS HTML faylning <code>&lt;head&gt;</code> qismidagi <code>&lt;style&gt;</code> tegi ichida yoziladi. Bu butun sahifaga ta'sir qiladi, lekin faqat shu bitta faylda ishlaydi.</p>
 <pre class="code"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -639,7 +660,7 @@
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 <div class="note">Internal uslub kichik, bitta sahifalik loyihalarda yoki tez sinash uchun qulay. Lekin ko'p sahifali saytda har bir faylga alohida yozish kerak bo'lib, takrorlanish yuzaga keladi.</div>
-<h3>3. External (tashqi fayl) — eng yaxshi usul</h3>
+<h3 id="3-external-tashqi-fayl-eng-yaxshi-usul">3. External (tashqi fayl) — eng yaxshi usul</h3>
 <p>CSS alohida <code>.css</code> faylida saqlanadi va HTML'ga <code>&lt;link&gt;</code> tegi orqali ulanadi. Bir CSS faylni <strong>cheksiz ko'p</strong> HTML sahifaga ulash mumkin.</p>
 <pre class="code"><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
 <p>Bu qator HTML faylning <code>&lt;head&gt;</code> qismiga yoziladi. <code>href</code> — CSS faylining manzili (yo'li). Endi <code>style.css</code> faylining o'zida odatiy CSS qoidalarini yozasiz:</p>
@@ -654,9 +675,9 @@ p {
 }</code></pre>
 <div class="tip">Deyarli har doim <strong>external</strong> usulni tanlang. Uning afzalliklari: bezak mazmundan ajratilgan, bitta faylni ko'p sahifada ishlatasiz, brauzer CSS faylni bir marta yuklab olib keshlaydi (tezlashadi) va kodni boshqarish osonlashadi.</div>
 <div class="note">CSS'da izoh (comment) <code>/* ... */</code> ko'rinishida yoziladi. U bir qatorli ham, ko'p qatorli ham bo'lishi mumkin. Izohlar brauzer tomonidan e'tiborga olinmaydi, faqat dasturchi uchun eslatma sifatida xizmat qiladi.</div>
-<h2>Asosiy selektorlar</h2>
+<h2 id="asosiy-selektorlar">Asosiy selektorlar</h2>
 <p>Selektor — CSS qoidasi qaysi elementlarga qo'llanishini belgilaydi. Uch xil asosiy selektor bor, ularni yaxshi o'zlashtirish CSS'ning yarmini bilish demakdir.</p>
-<h3>Element (teg) selektori</h3>
+<h3 id="element-teg-selektori">Element (teg) selektori</h3>
 <p>Element nomi bo'yicha tanlaydi. Masalan, <code>p</code> selektori sahifadagi <strong>barcha</strong> <code>&lt;p&gt;</code> elementlariga ta'sir qiladi.</p>
 <pre class="code"><code>h1 {
   color: navy;
@@ -665,7 +686,7 @@ p {
 a {
   text-decoration: none;
 }</code></pre>
-<h3>Class (sinf) selektori — nuqta (.)</h3>
+<h3 id="class-sinf-selektori-nuqta">Class (sinf) selektori — nuqta (.)</h3>
 <p>Class selektori nuqta bilan boshlanadi (<code>.nom</code>) va HTML'da <code>class</code> atributi orqali qo'llaniladi. Bitta class'ni <strong>ko'p</strong> elementga berish mumkin — bu eng ko'p ishlatiladigan selektor.</p>
 <pre class="code"><code>/* CSS */
 .tugma {
@@ -677,7 +698,7 @@ a {
 &lt;button class="tugma"&gt;Yubor&lt;/button&gt;
 &lt;a class="tugma"&gt;Havola&lt;/a&gt;</code></pre>
 <div class="note">Bir elementga <strong>bir nechta</strong> class berish mumkin, ular bo'sh joy bilan ajratiladi: <code>&lt;div class="karta katta ko'k"&gt;</code>. Bu holda elementga uchta class ham qo'llaniladi.</div>
-<h3>Id (identifikator) selektori — panjara (#)</h3>
+<h3 id="id-identifikator-selektori-panjara">Id (identifikator) selektori — panjara (#)</h3>
 <p>Id selektori panjara belgisi bilan boshlanadi (<code>#nom</code>) va HTML'da <code>id</code> atributi orqali qo'llaniladi. <strong>Id sahifada faqat bitta bo'lishi kerak</strong> — u noyob (unique) identifikator.</p>
 <pre class="code"><code>/* CSS */
 #asosiy-sarlavha {
@@ -686,7 +707,7 @@ a {
 }</code></pre>
 <pre class="code"><code>&lt;h1 id="asosiy-sarlavha"&gt;Salom dunyo&lt;/h1&gt;</code></pre>
 <div class="tip">Amalda bezash uchun ko'pincha <strong>class</strong> ishlatiladi, id emas. Sababi: class qayta ishlatiluvchan, id esa juda "kuchli" (yuqori spetsifiklikka ega) bo'lgani uchun keyinchalik uni bekor qilish qiyin bo'ladi. Id'lar ko'proq JavaScript uchun yoki sahifa ichidagi havolalar (anchor) uchun ishlatiladi.</div>
-<h2>Selektorlarni kombinatsiyalash</h2>
+<h2 id="selektorlarni-kombinatsiyalash">Selektorlarni kombinatsiyalash</h2>
 <p>Selektorlarni birlashtirib, aniqroq nishonlash mumkin. Bir nechta muhim kombinatsiyalar:</p>
 <ul><li><strong>Guruh</strong> — <code>h1, h2, h3 { }</code> — vergul bilan ajratilgan, uch element ham bir xil uslub oladi;</li><li><strong>Avlod (descendant)</strong> — <code>div p { }</code> — bo'sh joy bilan, <code>div</code> ichidagi barcha <code>p</code>'larni tanlaydi;</li><li><strong>Bevosita farzand</strong> — <code>ul &gt; li { }</code> — faqat <code>ul</code>ning bevosita <code>li</code> farzandlarini;</li><li><strong>Element + class</strong> — <code>p.katta { }</code> — faqat <code>katta</code> class'iga ega <code>p</code>'larni.</li></ul>
 <pre class="code"><code>/* .menyu ichidagi barcha havolalar */
@@ -698,7 +719,7 @@ a {
 h1, h2, h3 {
   font-family: Georgia, serif;
 }</code></pre>
-<h2>Spetsifiklik (specificity) — qaysi qoida g'olib?</h2>
+<h2 id="spetsifiklik-specificity-qaysi-qoida-g-olib">Spetsifiklik (specificity) — qaysi qoida g'olib?</h2>
 <p>Ba'zan bitta elementga bir nechta qoida bir xil xossani (masalan, <code>color</code>) turlicha belgilaydi. Bunday to'qnashuvda brauzer qaysi qoidani qo'llashni <strong>spetsifiklik</strong> qoidasiga ko'ra hal qiladi. Sodda tartibda "kuchdan kuchsizga":</p>
 <ol><li><strong>Inline uslub</strong> (<code>style="..."</code>) — eng kuchli;</li><li><strong>Id selektori</strong> (<code>#nom</code>) — juda kuchli;</li><li><strong>Class selektori</strong> (<code>.nom</code>) — o'rtacha;</li><li><strong>Element selektori</strong> (<code>p</code>) — eng kuchsiz.</li></ol>
 <p>Ya'ni <code>#nom</code> qoidasi <code>.nom</code> qoidasidan ustun keladi, u esa <code>p</code> qoidasidan ustun. Agar spetsifiklik <strong>teng</strong> bo'lsa, u holda CSS faylida <strong>keyinroq</strong> yozilgan qoida g'olib chiqadi ("kaskad" so'zining ma'nosi ham shu).</p>
@@ -707,7 +728,7 @@ h1, h2, h3 {
 #salom { color: red; }     /* eng kuchli */</code></pre>
 <p>Agar bir <code>&lt;p id="salom" class="matn"&gt;</code> elementiga uchala qoida ham to'g'ri kelsa, matn <strong>qizil</strong> (red) bo'ladi — chunki id selektori eng kuchli.</p>
 <div class="warn">CSS'da <code>!important</code> degan maxsus belgi bor: <code>color: red !important;</code>. U barcha spetsifiklik qoidalarini chetlab o'tib, majburan g'olib chiqadi. Undan iloji boricha <strong>foydalanmang</strong> — u kodni chalkashtiradi va keyinchalik uslubni o'zgartirishni juda qiyinlashtiradi. U — oxirgi chora.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>CSS</strong> — veb-sahifaning tashqi ko'rinishini (rang, shrift, joylashuv) boshqaradigan til;</li><li>Sintaksis: <code>selektor { xossa: qiymat; }</code>;</li><li>Ulash usullari: <strong>inline</strong> (yomon), <strong>internal</strong> (<code>&lt;style&gt;</code>), <strong>external</strong> (<code>&lt;link&gt;</code> — eng yaxshi);</li><li>Asosiy selektorlar: element (<code>p</code>), class (<code>.nom</code>), id (<code>#nom</code>);</li><li>Selektorlarni guruhlash va kombinatsiyalash mumkin;</li><li>To'qnashuvda <strong>spetsifiklik</strong> hal qiladi: inline &gt; id &gt; class &gt; element;</li><li>Amalda deyarli har doim <strong>external CSS</strong> va <strong>class</strong> selektorlarini ishlating.</li></ul>
 <nav class="lesson-nav">
   <a href="html-semantik.html"><span class="dir">← Oldingi</span><span class="ttl">Semantik HTML</span></a>
@@ -721,6 +742,6 @@ h1, h2, h3 {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

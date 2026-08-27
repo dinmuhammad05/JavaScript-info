@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oyna o'lchamlari va skroll — Kodla</title>
   <meta name="description" content="document.documentElement orqali oyna (viewport) o'lchamini olish, hujjatning to'liq o'lchami, pageYOffset/scrollY joriy skroll, scrollTo/scrollBy va scrollIntoView bilan skroll boshqarish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,30 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Oyna o'lchamlari va skroll</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#oyna-kengligi-balandligi-clientwidth-clientheight">Oyna kengligi/balandligi: clientWidth/clientHeight</a></li>
+<li class="lvl2"><a href="#hujjatning-to-liq-o-lchami-scrollheight-scrollwidth">Hujjatning to'liq o'lchami: scrollHeight/scrollWidth</a></li>
+<li class="lvl2"><a href="#joriy-skroll-pagexoffset-pageyoffset">Joriy skroll: pageXOffset / pageYOffset</a></li>
+<li class="lvl2"><a href="#skrollni-boshqarish-scrollto-va-scrollby">Skrollni boshqarish: scrollTo va scrollBy</a></li>
+<li class="lvl3"><a href="#window-scrollby-x-y">window.scrollBy(x, y)</a></li>
+<li class="lvl3"><a href="#window-scrollto-pagex-pagey">window.scrollTo(pageX, pageY)</a></li>
+<li class="lvl2"><a href="#scrollintoview-bilan-elementga-skroll-qilish">scrollIntoView bilan elementga skroll qilish</a></li>
+<li class="lvl2"><a href="#skrollni-butunlay-to-xtatish">Skrollni butunlay to'xtatish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Elementlarnigina emas, butun sahifa (oyna) o'lchamlari va uning skroll holatini ham bilishimiz kerak — masalan, sahifani ma'lum joyga skroll qilish yoki qanchalik skroll qilinganini aniqlash uchun. Ushbu darsda oyna geometriyasini chuqur ko'rib chiqamiz.</p>
 <div class="warn">Bu yerda muhim nozik nuqta bor: brauzer oynasi o'lchamlarini olish uchun <code>document.documentElement</code> (ya'ni <code>&lt;html&gt;</code>) ishlatiladi, <code>document.body</code> emas. Sabab — <code>body</code> hujjatning to'liq balandligini emas, faqat content'ini o'lchashi mumkin. Quyidagi kodlar faqat brauzerda ishlaydi (statik misollar).</div>
-<h2>Oyna kengligi/balandligi: clientWidth/clientHeight</h2>
+<h2 id="oyna-kengligi-balandligi-clientwidth-clientheight">Oyna kengligi/balandligi: clientWidth/clientHeight</h2>
 <p>Oynaning (viewport — content ko'rinadigan maydon) kengligi va balandligini olish uchun <code>document.documentElement</code>ning <code>clientWidth</code> va <code>clientHeight</code> xossalari ishlatiladi:</p>
 <pre class="code"><code>// oynaning kengligi va balandligi (skrollbardan tashqari)
 alert(document.documentElement.clientWidth);  // masalan, 1024
 alert(document.documentElement.clientHeight); // masalan, 768</code></pre>
 <div class="warn">Diqqat! <code>window.innerWidth</code>/<code>innerHeight</code> ham bor, lekin ular <strong>skroll panelini ham</strong> hisobga oladi. Agar sahifada skrollbar bo'lsa, <code>innerWidth</code> content maydonidan kengroq bo'ladi. Content sig'adigan haqiqiy joyni bilish uchun <code>documentElement.clientWidth</code> aniqroq.</div>
 <div class="note">Muhim: <code>&lt;!DOCTYPE HTML&gt;</code> HTML boshida bo'lishi shart. Aks holda geometrik xossalar (masalan, <code>documentElement.clientHeight</code>) noto'g'ri ishlashi mumkin, chunki brauzer eski (quirks) rejimga o'tadi.</div>
-<h2>Hujjatning to'liq o'lchami: scrollHeight/scrollWidth</h2>
+<h2 id="hujjatning-to-liq-o-lchami-scrollheight-scrollwidth">Hujjatning to'liq o'lchami: scrollHeight/scrollWidth</h2>
 <p>Nazariy jihatdan hujjatning to'liq balandligini (skroll qilinadigan joy bilan birga) <code>documentElement.scrollHeight</code>dan olsak bo'ladi. Ammo brauzerlar o'rtasidagi nomuvofiqliklar tufayli ishonchli natija olish uchun <strong>bir nechta</strong> xossaning maksimumini olish kerak:</p>
 <pre class="code"><code>let scrollHeight = Math.max(
   document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -615,7 +632,7 @@ alert(document.documentElement.clientHeight); // masalan, 768</code></pre>
 
 alert('Hujjatning to'liq balandligi: ' + scrollHeight + 'px');</code></pre>
 <div class="note">Nega bu murakkab? Chunki turli brauzerlar hujjat balandligini turlicha hisoblaydi. Barcha ehtimoliy qiymatlarning <strong>maksimumini</strong> olish — barcha brauzerlarda ishonchli ishlaydigan universal usul.</div>
-<h2>Joriy skroll: pageXOffset / pageYOffset</h2>
+<h2 id="joriy-skroll-pagexoffset-pageyoffset">Joriy skroll: pageXOffset / pageYOffset</h2>
 <p>Oddiy DOM elementlarining joriy skroll holati <code>elem.scrollTop</code>/<code>scrollLeft</code>da bo'ladi. Butun sahifaning joriy skrolli esa <code>window</code> obyektining maxsus xossalarida turadi:</p>
 <ul><li><code>window.pageYOffset</code> — vertikal skroll (yuqoridan qancha o'tkazilgan);</li><li><code>window.pageXOffset</code> — gorizontal skroll (chapdan qancha o'tkazilgan).</li></ul>
 <pre class="code"><code>alert('Joriy vertikal skroll: ' + window.pageYOffset);
@@ -624,19 +641,19 @@ alert('Joriy gorizontal skroll: ' + window.pageXOffset);</code></pre>
 <pre class="code"><code>alert(window.scrollY); // pageYOffset bilan bir xil
 alert(window.scrollX); // pageXOffset bilan bir xil</code></pre>
 <div class="note"><code>window</code> — global obyekt bo'lgani uchun uni tushirib qoldirib, shunchaki <code>pageYOffset</code>, <code>scrollY</code> deb yozish ham mumkin. Bu xossalar faqat o'qish uchun.</div>
-<h2>Skrollni boshqarish: scrollTo va scrollBy</h2>
+<h2 id="skrollni-boshqarish-scrollto-va-scrollby">Skrollni boshqarish: scrollTo va scrollBy</h2>
 <p>Sahifani DOM tuzilmasi to'liq yaratilgandan keyin JavaScript orqali skroll qilish mumkin. Ikki asosiy metod bor:</p>
-<h3>window.scrollBy(x, y)</h3>
+<h3 id="window-scrollby-x-y">window.scrollBy(x, y)</h3>
 <p>Sahifani joriy holatiga <strong>nisbatan</strong> (<code>x</code>, <code>y</code>) piksel skroll qiladi — ya'ni surib qo'yadi:</p>
 <pre class="code"><code>window.scrollBy(0, 10); // sahifani 10px pastga suradi (joriy holatdan)
 window.scrollBy(0, -10); // 10px yuqoriga suradi</code></pre>
-<h3>window.scrollTo(pageX, pageY)</h3>
+<h3 id="window-scrollto-pagex-pagey">window.scrollTo(pageX, pageY)</h3>
 <p>Sahifani <strong>mutlaq</strong> (absolute) koordinataga skroll qiladi — hujjat boshiga nisbatan aniq joyga o'tadi:</p>
 <pre class="code"><code>window.scrollTo(0, 0);     // sahifani eng yuqoriga qaytaradi
 window.scrollTo(0, 500);   // hujjat boshidan 500px pastga o'tadi</code></pre>
 <p>Yaqqol taqqoslash: <code>scrollBy</code> — "joriy o'rindan qancha suramiz", <code>scrollTo</code> — "qaysi aniq koordinataga boramiz".</p>
 <div class="tip">Ikkala metod ham silliq (smooth) skroll uchun obyekt shaklidagi argument qabul qiladi: <code>window.scrollTo({ top: 500, behavior: 'smooth' })</code>. Bu foydalanuvchiga yoqimliroq, animatsiyali skroll beradi.</div>
-<h2>scrollIntoView bilan elementga skroll qilish</h2>
+<h2 id="scrollintoview-bilan-elementga-skroll-qilish">scrollIntoView bilan elementga skroll qilish</h2>
 <p><code>elem.scrollIntoView(top)</code> metodi sahifani <code>elem</code> <strong>ko'rinadigan</strong> bo'ladigan darajada skroll qiladi. Bitta mantiqiy argument oladi:</p>
 <ul><li><code>elem.scrollIntoView(true)</code> yoki argumentsiz — element oyna <strong>yuqorisida</strong> ko'rinadigan qilib skroll qilinadi (element yuqori qirrasi oyna tepasiga tekislanadi);</li><li><code>elem.scrollIntoView(false)</code> — element oyna <strong>pastida</strong> ko'rinadigan qilib skroll qilinadi (pastki qirra oyna pastiga tekislanadi).</li></ul>
 <pre class="code"><code>let elem = document.getElementById('elem');
@@ -649,7 +666,7 @@ elem.scrollIntoView(false);  // elementni oyna pastiga keltiradi</code></pre>
   block: 'center'     // element vertikal markazga keladi
 });</code></pre>
 <div class="note"><code>scrollIntoView</code> — sahifadagi ma'lum elementga (masalan, izoh yoki bo'limga) foydalanuvchi diqqatini qaratish uchun juda qulay. Aniq koordinatalarni hisoblash shart emas — brauzer o'zi kerakli joyga suradi.</div>
-<h2>Skrollni butunlay to'xtatish</h2>
+<h2 id="skrollni-butunlay-to-xtatish">Skrollni butunlay to'xtatish</h2>
 <p>Ba'zan sahifani "muzlatib" qo'yish kerak bo'ladi — masalan, ustidan modal oyna (dialog) chiqqanda, orqa fon skroll qilinmasligi uchun. Buning uchun <code>document.body.style.overflow = 'hidden'</code> beriladi:</p>
 <pre class="code"><code>// sahifa skrollini to'xtatish:
 document.body.style.overflow = 'hidden';
@@ -657,7 +674,7 @@ document.body.style.overflow = 'hidden';
 // skrollni qaytarish:
 document.body.style.overflow = '';</code></pre>
 <div class="warn">Bu usulning kamchiligi — skrollbar yo'qolganda content biroz "sakrab" ketishi mumkin (skrollbar egallagan joy bo'shab qoladi). Buni kompensatsiya qilish uchun body'ga skrollbar kengligiga teng padding qo'shish mumkin, shunda content joyida qoladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Oyna o'lchamlari:</p>
 <ul><li><code>document.documentElement.clientWidth/clientHeight</code> — oyna (viewport) o'lchami, skrollbarsiz;</li><li>To'liq hujjat balandligi — bir nechta <code>scrollHeight/offsetHeight/clientHeight</code> qiymatlaridan <code>Math.max</code>.</li></ul>
 <p>Joriy skroll: <code>window.pageYOffset</code>/<code>pageXOffset</code> (yoki <code>scrollY</code>/<code>scrollX</code>) — faqat o'qish uchun.</p>
@@ -675,6 +692,6 @@ document.body.style.overflow = '';</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

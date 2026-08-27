@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Domen ulash va HTTPS — Kodla</title>
   <meta name="description" content="Domen sotib olish, DNS yozuvlari (A va CNAME), domenni serverga ulash, Let's Encrypt/certbot bilan bepul SSL sertifikat olish va HTTP dan HTTPS ga avtomatik yo'naltirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,27 @@
 <main class="content article">
 <div class="crumbs">Loyihani deploy qilish</div>
 <h1>Domen ulash va HTTPS</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#1-bosqich-domen-sotib-olish">1-bosqich: Domen sotib olish</a></li>
+<li class="lvl2"><a href="#2-bosqich-dns-yozuvlarini-tushunish">2-bosqich: DNS yozuvlarini tushunish</a></li>
+<li class="lvl2"><a href="#3-bosqich-domenni-serverga-ulash">3-bosqich: Domenni serverga ulash</a></li>
+<li class="lvl2"><a href="#4-bosqich-https-nima-uchun-kerak">4-bosqich: HTTPS nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#5-bosqich-let-s-encrypt-va-certbot">5-bosqich: Let's Encrypt va certbot</a></li>
+<li class="lvl2"><a href="#6-bosqich-http-dan-https-ga-yo-naltirish">6-bosqich: HTTP dan HTTPS ga yo'naltirish</a></li>
+<li class="lvl2"><a href="#7-bosqich-sertifikatni-avtomatik-yangilash">7-bosqich: Sertifikatni avtomatik yangilash</a></li>
+<li class="lvl2"><a href="#yakuniy-tekshiruv">Yakuniy tekshiruv</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ilovamiz serverda ishlayapti, lekin unga hali <code>203.0.113.10</code> kabi IP orqali kirilyapti va ulanish shifrlanmagan (HTTP). Bu darsda ikki muhim qadamni bajaramiz: <strong>domenni</strong> serverga ulaymiz (chiroyli manzil), va <strong>HTTPS</strong>ni yoqamiz (xavfsiz, shifrlangan ulanish) — bepul <strong>Let's Encrypt</strong> sertifikati bilan. Shundan so'ng saytingiz <code>https://mening-saytim.uz</code> orqali qulflangan brauzer belgisi bilan ochiladi.</p>
 <div class="note">Bu dars oldingi VPS darsining davomi. Biz o'sha yerda yozgan Nginx reverse proxy config'ini domen va SSL bilan kengaytiramiz. Serverning IP'si — <code>203.0.113.10</code>, domen — <code>mening-saytim.uz</code>.</div>
-<h2>1-bosqich: Domen sotib olish</h2>
+<h2 id="1-bosqich-domen-sotib-olish">1-bosqich: Domen sotib olish</h2>
 <p><strong>Domen</strong> — yillik ijara asosida olinadi. Uni <strong>registrator</strong> (domen sotuvchisi) orqali olasiz. Mashhur xalqaro registratorlar: <strong>Namecheap</strong>, <strong>Cloudflare Registrar</strong>, <strong>Porkbun</strong>, <strong>GoDaddy</strong>. <code>.uz</code> domenlari uchun mahalliy registratorlar ham bor.</p>
 <ul><li>Domen nomini tanlaysiz (masalan, <code>mening-saytim.com</code> yoki <code>.uz</code>);</li><li>Uning bo'shligini tekshirasiz (band bo'lmasa);</li><li>Yillik to'lovni amalga oshirasiz (odatda 10-15 dollar/yil, ba'zi zonalar qimmatroq);</li><li>Domen sizning hisobingizga bog'lanadi va uni DNS orqali sozlaysiz.</li></ul>
 <div class="tip"><strong>Cloudflare</strong>ni faqat registrator sifatida emas, balki bepul DNS boshqaruvi, DDoS himoyasi va CDN sifatida ham ishlatish mashhur. Domenni istalgan joydan olib, DNS'ni Cloudflare'ga o'tkazish keng tarqalgan amaliyot.</div>
-<h2>2-bosqich: DNS yozuvlarini tushunish</h2>
+<h2 id="2-bosqich-dns-yozuvlarini-tushunish">2-bosqich: DNS yozuvlarini tushunish</h2>
 <p>Domenni serverga ulash — bu <strong>DNS yozuvlari</strong>ni to'g'ri sozlash demakdir. DNS yozuvlari domen nomini IP manzil yoki boshqa manzillar bilan bog'laydi. Eng muhim ikki tur:</p>
 <ul><li><strong>A yozuvi</strong> (A record) — domenni to'g'ridan-to'g'ri <strong>IPv4 manzilga</strong> bog'laydi. Masalan, <code>mening-saytim.uz → 203.0.113.10</code>;</li><li><strong>CNAME yozuvi</strong> — bir domenni <strong>boshqa domenga</strong> (nomga) bog'laydi. Masalan, <code>www.mening-saytim.uz → mening-saytim.uz</code>.</li></ul>
 <p>Boshqa yozuvlar ham bor — <code>AAAA</code> (IPv6 uchun), <code>MX</code> (elektron pochta uchun), <code>TXT</code> (tekshiruv va sozlamalar uchun) — lekin sayt ulash uchun asosan <strong>A</strong> va <strong>CNAME</strong> yetadi.</p>
@@ -613,7 +630,7 @@
 # CNAME  www    mening-saytim.uz  3600</code></pre>
 <p>Bu yerda <code>@</code> — asosiy domenni (<code>mening-saytim.uz</code>) bildiradi, <code>www</code> esa <code>www.mening-saytim.uz</code> pastki domenini. Ikkinchi qator <code>www</code>li variantni asosiy domenga yo'naltiradi.</p>
 <div class="note"><strong>TTL</strong> (Time To Live) — yozuvning necha soniya keshlanishini bildiradi. Kichik qiymat (masalan, 300) o'zgarishlar tez tarqalishini ta'minlaydi, lekin DNS'ga ko'proq yuk beradi. Odatda 3600 (bir soat) yaxshi muvozanat.</div>
-<h2>3-bosqich: Domenni serverga ulash</h2>
+<h2 id="3-bosqich-domenni-serverga-ulash">3-bosqich: Domenni serverga ulash</h2>
 <p>DNS'da A yozuvini serveringiz IP'siga sozlaganingizdan so'ng, o'zgarish internet bo'ylab tarqalishi kerak. Bu <strong>tarqalish (propagation)</strong> deb ataladi va bir necha daqiqadan bir necha soatgacha davom etishi mumkin. Domen serverga ulanganini tekshirish uchun:</p>
 <pre class="code"><code># Domen qaysi IP'ga ko'rsatayotganini tekshirish:
 $ dig +short mening-saytim.uz
@@ -623,11 +640,11 @@ $ dig +short mening-saytim.uz
 $ nslookup mening-saytim.uz</code></pre>
 <p>Agar chiqqan IP sizning serveringiznikiga to'g'ri kelsa — domen ulandi. Endi brauzerda <code>http://mening-saytim.uz</code> yozib, saytingizni ochib ko'rishingiz mumkin (VPS darsida Nginx config'ida <code>server_name</code> allaqachon shu domenga sozlangan edi).</p>
 <div class="warn">Agar domen ochilmasa, avval DNS tarqalishini kuting va <code>dig</code> bilan tekshiring. Keyin serverda <strong>xavfsizlik devori</strong> (firewall) 80 va 443 portlarini ochganiga ishonch hosil qiling: <code>sudo ufw allow 'Nginx Full'</code>. Ko'p muammolar aynan yopiq portlardan kelib chiqadi.</div>
-<h2>4-bosqich: HTTPS nima uchun kerak?</h2>
+<h2 id="4-bosqich-https-nima-uchun-kerak">4-bosqich: HTTPS nima uchun kerak?</h2>
 <p><strong>HTTPS</strong> — bu shifrlangan HTTP. Foydalanuvchi va server orasidagi barcha ma'lumot (parollar, shaxsiy ma'lumotlar, to'lovlar) shifrlangan holda uzatiladi, shuning uchun uni oraliqda o'g'irlab bo'lmaydi. HTTPS <strong>SSL/TLS sertifikat</strong>i orqali ishlaydi.</p>
 <ul><li><strong>Xavfsizlik</strong> — ma'lumot shifrlangani uchun oraliqda o'qib bo'lmaydi;</li><li><strong>Ishonch</strong> — brauzer qulf belgisini ko'rsatadi; HTTP'da esa "xavfli" ogohlantirishi chiqadi;</li><li><strong>SEO va imkoniyatlar</strong> — qidiruv tizimlari HTTPS'ni afzal ko'radi; ko'p zamonaviy brauzer imkoniyatlari (masalan, geolokatsiya, servis-worker) faqat HTTPS'da ishlaydi.</li></ul>
 <p>Ilgari SSL sertifikat pullik va murakkab edi. Endi esa <strong>Let's Encrypt</strong> — bepul, avtomatik sertifikatlar beruvchi hokim organ (CA) tufayli HTTPS'ni bir necha buyruq bilan yoqish mumkin.</p>
-<h2>5-bosqich: Let's Encrypt va certbot</h2>
+<h2 id="5-bosqich-let-s-encrypt-va-certbot">5-bosqich: Let's Encrypt va certbot</h2>
 <p><strong>certbot</strong> — Let's Encrypt sertifikatlarini avtomatik oladigan va Nginx'ga o'rnatadigan vosita. U sizning domeningizga egaligingizni tekshiradi, sertifikat oladi va Nginx config'ini <strong>o'zi</strong> HTTPS uchun sozlaydi. Avval uni o'rnatamiz:</p>
 <pre class="code"><code># certbot va Nginx plaginini o'rnatish:
 $ sudo apt install -y certbot python3-certbot-nginx</code></pre>
@@ -641,7 +658,7 @@ https://mening-saytim.uz and https://www.mening-saytim.uz
 
 Certificate saved at: /etc/letsencrypt/live/mening-saytim.uz/fullchain.pem</code></pre>
 <div class="note">certbot ishlashi uchun 80-port ochiq bo'lishi va domen allaqachon serveringiz IP'siga ko'rsatayotgan bo'lishi shart — chunki Let's Encrypt domenga egaligingizni aynan shu domen orqali serverga ulanib tekshiradi. Shuning uchun avval DNS'ni sozlab, keyin certbot'ni ishga tushiring.</div>
-<h2>6-bosqich: HTTP dan HTTPS ga yo'naltirish</h2>
+<h2 id="6-bosqich-http-dan-https-ga-yo-naltirish">6-bosqich: HTTP dan HTTPS ga yo'naltirish</h2>
 <p>certbot HTTP'ni HTTPS'ga yo'naltirishni avtomatik sozlaganida, Nginx config'ingizga taxminan quyidagicha o'zgarishlar qo'shiladi. Natijadagi config ikki <code>server</code> blokidan iborat bo'ladi:</p>
 <pre class="code"><code># certbot tomonidan yangilangan config (soddalashtirilgan)
 
@@ -671,7 +688,7 @@ server {
 <p>Muhim qator — birinchi blokdagi <code>return 301 https://$host$request_uri;</code>. U 80-portga (HTTP) kelgan har qanday so'rovni <strong>301 (doimiy yo'naltirish)</strong> bilan HTTPS versiyasiga jo'natadi. Shu tufayli foydalanuvchi <code>http://</code> yozsa ham, avtomatik <code>https://</code>ga o'tadi.</p>
 <div class="note">Ikkinchi blokdagi <code>proxy_pass http://localhost:3000</code> — bu VPS darsidagi reverse proxy'ning aynan o'zi. Ya'ni HTTPS Nginx darajasida hal qilinadi (SSL termination), orqadagi Node.js ilova esa oddiy HTTP bilan ishlayveradi. Ilovaga shifrlash bilan shug'ullanish shart emas.</div>
 <div class="tip">Node.js ilovangizda foydalanuvchi HTTP yoki HTTPS bilan kelganini bilish uchun <code>X-Forwarded-Proto</code> sarlavhasidan foydalaning (config'da uni uzatyapmiz). Express'da <code>app.set('trust proxy', 1)</code> qo'shsangiz, <code>req.secure</code> to'g'ri ishlaydi.</div>
-<h2>7-bosqich: Sertifikatni avtomatik yangilash</h2>
+<h2 id="7-bosqich-sertifikatni-avtomatik-yangilash">7-bosqich: Sertifikatni avtomatik yangilash</h2>
 <p>Let's Encrypt sertifikatlari <strong>90 kun</strong> amal qiladi — bu qisqa muddat ataylab tanlangan (xavfsizlik uchun). Yaxshi xabar: certbot yangilanishni avtomatik bajaradi. O'rnatishda u tizim taymeri (systemd timer yoki cron) qo'shadi. Uning ishlashini tekshirish uchun:</p>
 <pre class="code"><code># Yangilashni sinov rejimida tekshirish (haqiqiy yangilamaydi):
 $ sudo certbot renew --dry-run
@@ -680,7 +697,7 @@ $ sudo certbot renew --dry-run
 $ sudo systemctl status certbot.timer</code></pre>
 <p>Agar <code>--dry-run</code> muvaffaqiyatli o'tsa — hech narsa qilishingiz shart emas, certbot muddati tugashiga yaqin sertifikatni o'zi yangilaydi va Nginx'ni qayta yuklaydi.</p>
 <div class="warn">Sertifikat avtomatik yangilanishiga tayaning, lekin certbot ishlab turgan pochtangizdagi ogohlantirishlarni e'tiborsiz qoldirmang. Agar biror sabab (masalan, 80-port yopilib qolishi) tufayli yangilash muvaffaqiyatsiz bo'lsa, sertifikat muddati tugab, sayt HTTPS ogohlantirishi bilan ochiladi. Bu foydalanuvchilarni qo'rqitadi.</div>
-<h2>Yakuniy tekshiruv</h2>
+<h2 id="yakuniy-tekshiruv">Yakuniy tekshiruv</h2>
 <p>Hammasi to'g'ri sozlanganini quyidagicha tekshiring:</p>
 <ol><li>Brauzerda <code>http://mening-saytim.uz</code> ochib — u avtomatik <code>https://</code>ga o'tishini ko'ring;</li><li>Manzil satridagi <strong>qulf belgisi</strong> paydo bo'lganini tasdiqlang;</li><li><code>www</code>li va <code>www</code>siz variantlar ham ishlashini tekshiring;</li><li>Terminalda: <code>curl -I http://mening-saytim.uz</code> — javobda <code>301</code> va <code>Location: https://...</code> bo'lishi kerak.</li></ol>
 <pre class="code"><code># HTTP yo'naltirishini terminalda tekshirish:
@@ -689,7 +706,7 @@ $ curl -I http://mening-saytim.uz
 HTTP/1.1 301 Moved Permanently
 Location: https://mening-saytim.uz/</code></pre>
 <div class="tip">SSL sozlamangiz sifatini <strong>SSL Labs</strong> (ssllabs.com/ssltest) kabi bepul xizmatda tekshirishingiz mumkin. U sertifikat, shifrlash usullari va sozlamalarga baho (A dan F gacha) beradi. Standart certbot sozlamalari odatda yaxshi baho oladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Domen</strong> registrator orqali yillik ijaraga olinadi (Namecheap, Cloudflare, Porkbun);</li><li><strong>A yozuvi</strong> domenni server IP'siga, <strong>CNAME</strong> esa bir domenni boshqasiga bog'laydi;</li><li>DNS o'zgarishi <strong>tarqalishi</strong> vaqt oladi; <code>dig</code> yoki <code>nslookup</code> bilan tekshiriladi;</li><li><strong>HTTPS</strong> ulanishni shifrlaydi; bepul sertifikatni <strong>Let's Encrypt + certbot</strong> beradi;</li><li><code>sudo certbot --nginx -d domen</code> sertifikat oladi va Nginx'ni avtomatik sozlaydi;</li><li><strong>HTTP → HTTPS</strong> yo'naltirish <code>return 301 https://...</code> orqali; certbot buni avtomatik qo'shadi;</li><li>Sertifikat 90 kun amal qiladi va certbot uni <strong>avtomatik yangilaydi</strong> — <code>certbot renew --dry-run</code> bilan tekshiring.</li></ul>
 <nav class="lesson-nav">
   <a href="deploy-frontend.html"><span class="dir">← Oldingi</span><span class="ttl">Frontend/statik saytni deploy qilish</span></a>
@@ -703,6 +720,6 @@ Location: https://mening-saytim.uz/</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

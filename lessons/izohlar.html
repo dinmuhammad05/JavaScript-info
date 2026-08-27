@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Izohlar — Kodla</title>
   <meta name="description" content="Yaxshi va yomon izohlar; nima uchun (nima emas, nega) izoh kerak.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Kod sifati</div>
 <h1>Izohlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#izoh-sintaksisi">Izoh sintaksisi</a></li>
+<li class="lvl2"><a href="#yomon-izohlar">Yomon izohlar</a></li>
+<li class="lvl2"><a href="#kodni-izoh-o-rniga-qayta-yozish">Kodni izoh o'rniga qayta yozish</a></li>
+<li class="lvl2"><a href="#yaxshi-izohlar-nima-uchun">Yaxshi izohlar: nima uchun?</a></li>
+<li class="lvl2"><a href="#funksiyalarni-hujjatlashtirish">Funksiyalarni hujjatlashtirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Izohlar (comments) — kodda dvigatel e'tiborsiz qoldiradigan matn. Ular dasturchilar uchun tushuntirish yozadi. Ammo yaxshi izoh yozish — alohida mahorat. Ko'p izoh har doim ham yaxshi emas.</p>
-<h2>Izoh sintaksisi</h2>
+<h2 id="izoh-sintaksisi">Izoh sintaksisi</h2>
 <p>JavaScript'da izohlar ikki xil bo'ladi:</p>
 <pre class="code"><code>// bir qatorli izoh
 
@@ -607,14 +621,14 @@
 */
 
 let x = 5; // qator oxirida ham yozish mumkin</code></pre>
-<h2>Yomon izohlar</h2>
+<h2 id="yomon-izohlar">Yomon izohlar</h2>
 <p>Ko'plab yangi dasturchilar izohlarni <em>"kod nima qilyapti"</em> ni tushuntirish uchun ishlatadi. Masalan:</p>
 <pre class="code"><code>// yomon: kod nima qilishini takrorlaydi
 let i = 0; // i ni nolga tenglashtiramiz
 i = i + 1; // i ni bittaga oshiramiz</code></pre>
 <p>Bunday izohlar deyarli befoyda — ular kodda allaqachon ko'rinib turgan narsani takrorlaydi. Yaxshi kodning o'zi "o'zini o'zi tushuntiradi" (self-descriptive) bo'lishi kerak.</p>
 <div class="warn">Agar kod shu qadar chalkash bo'lsaki, uni tushuntirish uchun izoh kerak bo'lsa — bu ko'pincha kodni qayta yozish kerakligining belgisi. Izoh o'rniga kodni soddalashtiring.</div>
-<h2>Kodni izoh o'rniga qayta yozish</h2>
+<h2 id="kodni-izoh-o-rniga-qayta-yozish">Kodni izoh o'rniga qayta yozish</h2>
 <p>Ba'zan chalkash kod bo'lagini izohlash o'rniga, uni alohida mazmunli nomli funksiyaga ajratish yaxshiroq:</p>
 <pre class="code"><code>// izoh bilan
 // birlamchi son ekanligini tekshiramiz
@@ -629,7 +643,7 @@ function birlamchiSonmi(n) {
   return true;
 }</code></pre>
 <p>Endi funksiya nomining o'zi maqsadni tushuntiradi — izoh kerak emas.</p>
-<h2>Yaxshi izohlar: nima uchun?</h2>
+<h2 id="yaxshi-izohlar-nima-uchun">Yaxshi izohlar: nima uchun?</h2>
 <p>Foydali izohlar odatda <strong>nima qilinayotganini emas, nega shunday qilinayotganini</strong> tushuntiradi. Bu "yuqori darajadagi" izohlar. Ular quyidagilarni yoritadi:</p>
 <ul><li><strong>Arxitektura</strong> — komponentlar qanday o'zaro ishlashi, ma'lumot oqimi;</li><li><strong>Nega aynan bu yechim?</strong> — nima uchun boshqa, aftidan sodda usul tanlanmagan;</li><li><strong>Nozik jihatlar</strong> — ochiq ko'rinmaydigan, lekin muhim tafsilotlar.</li></ul>
 <pre class="code"><code>// yaxshi: NEGA shunday qilinganini tushuntiradi
@@ -639,7 +653,7 @@ function birlamchiSonmi(n) {
 for (let i = arr.length - 1; i &gt;= 0; i--) {
   if (arr[i] === null) arr.splice(i, 1);
 }</code></pre>
-<h2>Funksiyalarni hujjatlashtirish</h2>
+<h2 id="funksiyalarni-hujjatlashtirish">Funksiyalarni hujjatlashtirish</h2>
 <p>Funksiya nima qilishini, qanday parametr olishini va nima qaytarishini tavsiflash uchun maxsus <strong>JSDoc</strong> uslubi bor. Bu izohlarni muharringiz o'qib, avtomatik yordam ko'rsatadi:</p>
 <pre class="code"><code>/**
  * n-darajaga ko'tarish.
@@ -656,7 +670,7 @@ function pow(x, n) {
   return natija;
 }</code></pre>
 <div class="tip">JSDoc izohlarini VS Code va WebStorm tushunadi: funksiyani chaqirganingizda ular parametrlar va tavsifni avtomatik ko'rsatadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Yaxshi izoh belgisi — bu <strong>izohning yo'qligi</strong>. Kodning o'zi imkon qadar tushunarli bo'lsin. Kerakli izohlar:</p>
 <ul><li>Arxitekturani yuqori darajada tavsiflaydi;</li><li>Kod nima <em>qilishini</em> emas, <em>nega</em> shunday qilinganini tushuntiradi;</li><li>Ochiq ko'rinmaydigan nozik jihatlarni yoritadi;</li><li>Funksiyalarni JSDoc orqali hujjatlashtiradi.</li></ul>
 <p>Kerakmas izohlar esa — kod nima qilishini so'zma-so'z takrorlaydi va faqat chalg'itadi.</p>
@@ -672,6 +686,6 @@ function pow(x, n) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

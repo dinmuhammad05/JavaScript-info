@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DOM bo'ylab harakatlanish — Kodla</title>
   <meta name="description" content="documentElement, body, head; bolalar (childNodes, firstChild, lastChild), qo'shnilar va ota tugunlar; faqat elementlar bo'yicha navigatsiya va jadvallar bilan ishlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>DOM bo'ylab harakatlanish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#eng-yuqoridagi-tugunlar-html-body-head">Eng yuqoridagi tugunlar: html, body, head</a></li>
+<li class="lvl2"><a href="#bolalar-childnodes-firstchild-lastchild">Bolalar: childNodes, firstChild, lastChild</a></li>
+<li class="lvl2"><a href="#dom-to-plamlari-collections">DOM to'plamlari (collections)</a></li>
+<li class="lvl2"><a href="#qo-shnilar-va-ota-siblings-parent">Qo'shnilar va ota (siblings, parent)</a></li>
+<li class="lvl2"><a href="#faqat-elementlar-bo-yicha-navigatsiya">Faqat elementlar bo'yicha navigatsiya</a></li>
+<li class="lvl2"><a href="#jadvallar-bilan-navigatsiya">Jadvallar bilan navigatsiya</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">DOM bizga har qanday element va uning mazmuni bilan istalgan narsani qilishga imkon beradi. Ammo avval kerakli DOM obyektiga yetib borishimiz kerak. DOM ustidagi barcha amallar <code>document</code> obyektidan boshlanadi — u asosiy "kirish nuqtasi". Undan istalgan tugunga yetib borishimiz mumkin. Ushbu darsda tugunlar orasida qanday harakatlanishni chuqur o'rganamiz.</p>
-<h2>Eng yuqoridagi tugunlar: html, body, head</h2>
+<h2 id="eng-yuqoridagi-tugunlar-html-body-head">Eng yuqoridagi tugunlar: html, body, head</h2>
 <p>Eng ustki daraxt tugunlari <code>document</code> obyektining maxsus xossalari sifatida to'g'ridan-to'g'ri mavjud:</p>
 <ul><li><code>&lt;html&gt;</code> = <code>document.documentElement</code> — eng ildiz hujjat tuguni;</li><li><code>&lt;body&gt;</code> = <code>document.body</code> — sahifa tanasi;</li><li><code>&lt;head&gt;</code> = <code>document.head</code> — sahifa boshi.</li></ul>
 <pre class="code"><code>// eng yuqori tugunlarga to'g'ridan-to'g'ri murojaat
@@ -617,7 +632,7 @@ alert(document.head);            // &lt;head&gt;</code></pre>
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<h2>Bolalar: childNodes, firstChild, lastChild</h2>
+<h2 id="bolalar-childnodes-firstchild-lastchild">Bolalar: childNodes, firstChild, lastChild</h2>
 <p>Endi ikkita atamani ajratamiz:</p>
 <ul><li><strong>Bola tugunlar</strong> (child nodes yoki children) — bevosita ichma-ich joylashgan tugunlar. Masalan, <code>&lt;head&gt;</code> va <code>&lt;body&gt;</code> <code>&lt;html&gt;</code>ning bolalaridir;</li><li><strong>Avlodlar</strong> (descendants) — barcha ichma-ich joylashgan tugunlar, jumladan bolalar, ularning bolalari va hokazo — butun daraxt shohobchasi.</li></ul>
 <p><code>childNodes</code> to'plami barcha bola tugunlarni, jumladan matn tugunlarini ro'yxatlaydi:</p>
@@ -646,7 +661,7 @@ elem.childNodes[elem.childNodes.length - 1] === elem.lastChild;</code></pre>
 <pre class="code"><code>if (elem.hasChildNodes()) {
   // elementning bola tugunlari bor
 }</code></pre>
-<h2>DOM to'plamlari (collections)</h2>
+<h2 id="dom-to-plamlari-collections">DOM to'plamlari (collections)</h2>
 <p><code>childNodes</code> oddiy massiv (array) EMAS, balki maxsus, massivga o'xshash <strong>iteratsiyalanuvchi obyekt</strong> — <code>NodeList</code> deb ataladi. Bundan ikkita muhim natija chiqadi:</p>
 <ol><li>Uni <code>for..of</code> bilan aylantirishimiz mumkin, chunki u iteratsiyalanuvchi;</li><li>Ammo massiv metodlari (<code>filter</code>, <code>map</code> va h.k.) unda mavjud emas, chunki u haqiqiy massiv emas.</li></ol>
 <pre class="code"><code>for (let node of document.body.childNodes) {
@@ -657,7 +672,7 @@ elem.childNodes[elem.childNodes.length - 1] === elem.lastChild;</code></pre>
 <div class="warn">DOM to'plamlari faqat o'qish uchun (read-only)! Biz <code>childNodes[i] = ...</code> deb tugunni almashtira olmaymiz. Element bolalarini o'zgartirish uchun boshqa maxsus metodlar kerak (ular keyingi darslarda).</div>
 <div class="warn">DOM to'plamlarining aksariyati <strong>jonli</strong> (live). Ya'ni ular hujjatning joriy holatini aks ettiradi. Agar biz havolani (referens) saqlab, keyin DOM'ga yangi element qo'shsak, u avtomatik ravishda to'plamda paydo bo'ladi.</div>
 <div class="warn">To'plamlarni aylantirish uchun <code>for..in</code> siklidan FOYDALANMANG! <code>for..in</code> obyektning barcha sanaladigan (enumerable) xossalarini aylanadi, bu esa to'plamda ortiqcha "texnik" maydonlarni (<code>length</code>, <code>item</code> va h.k.) ham qamrab oladi. Buning o'rniga <code>for..of</code> ishlating.</div>
-<h2>Qo'shnilar va ota (siblings, parent)</h2>
+<h2 id="qo-shnilar-va-ota-siblings-parent">Qo'shnilar va ota (siblings, parent)</h2>
 <p><strong>Qo'shnilar</strong> (siblings) — bir xil otaga ega tugunlar. Masalan, <code>&lt;head&gt;</code> va <code>&lt;body&gt;</code> — qo'shni, chunki ularning otasi <code>&lt;html&gt;</code>.</p>
 <ul><li><code>nextSibling</code> — keyingi qo'shni tugun;</li><li><code>previousSibling</code> — oldingi qo'shni tugun;</li><li><code>parentNode</code> — ota tugun.</li></ul>
 <pre class="code"><code>// &lt;body&gt; uchun "ota" — &lt;html&gt;
@@ -668,7 +683,7 @@ alert( document.head.nextSibling ); // HTMLBodyElement
 
 // &lt;body&gt;dan oldin — &lt;head&gt;
 alert( document.body.previousSibling ); // HTMLHeadElement</code></pre>
-<h2>Faqat elementlar bo'yicha navigatsiya</h2>
+<h2 id="faqat-elementlar-bo-yicha-navigatsiya">Faqat elementlar bo'yicha navigatsiya</h2>
 <p>Yuqoridagi <code>childNodes</code>, <code>firstChild</code>, <code>lastChild</code>, <code>nextSibling</code>, <code>previousSibling</code>, <code>parentNode</code> xossalari <strong>barcha</strong> tugunlarni oladi — matn tugunlari, izohlar ham. Ammo ko'p vazifalarda bizga faqat <strong>element</strong> tugunlari — teglar kerak bo'ladi.</p>
 <p>Shuning uchun ularning "faqat elementlar bo'yicha" versiyalari bor:</p>
 <ul><li><code>children</code> — faqat element bola tugunlar;</li><li><code>firstElementChild</code>, <code>lastElementChild</code> — birinchi va oxirgi bola elementlar;</li><li><code>previousElementSibling</code>, <code>nextElementSibling</code> — qo'shni elementlar;</li><li><code>parentElement</code> — ota element.</li></ul>
@@ -684,7 +699,7 @@ alert( document.documentElement.parentElement ); // null</code></pre>
   // yuqoriga ko'tarilamiz, &lt;html&gt; dan yuqoriga chiqmaymiz
   alert( elem );
 }</code></pre>
-<h2>Jadvallar bilan navigatsiya</h2>
+<h2 id="jadvallar-bilan-navigatsiya">Jadvallar bilan navigatsiya</h2>
 <p>Ba'zi element turlari qo'shimcha, maxsus navigatsiya xossalarini beradi. Jadvallar bunga eng yaxshi misol — ular juda muhim va tez-tez ishlatiladigan qulayliklarni taqdim etadi.</p>
 <p><code>&lt;table&gt;</code> elementi quyidagilarni qo'llab-quvvatlaydi:</p>
 <ul><li><code>table.rows</code> — jadvaldagi barcha <code>&lt;tr&gt;</code>lar to'plami;</li><li><code>table.caption / table.tHead / table.tFoot</code> — mos ravishda <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tfoot&gt;</code> elementlariga havola;</li><li><code>table.tBodies</code> — <code>&lt;tbody&gt;</code>lar to'plami (spetsifikatsiyaga ko'ra kamida bittasi bo'ladi).</li></ul>
@@ -711,7 +726,7 @@ alert( document.documentElement.parentElement ); // null</code></pre>
 &lt;/script&gt;</code></pre>
 <div class="tip">Bu maxsus jadval xossalari <code>childNodes</code> orqali qo'lda o'tishdan ancha qulay va ishonchli. Chunki brauzer avtomatik qo'shgan <code>&lt;tbody&gt;</code> kabi nozikliklarni ular o'zi hisobga oladi.</div>
 <div class="note">Boshqa elementlar uchun ham maxsus navigatsiya xossalari bor: masalan, formalar (<code>&lt;form&gt;</code>) va ularning elementlari. Ular bilan formalarga bag'ishlangan bo'limda tanishamiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Berilgan tugundan biz uning bevosita qo'shnilari va bolalariga o'ta olamiz;</li><li>Ikki xil to'plam bor: <strong>barcha tugunlar uchun</strong> (<code>childNodes</code>, <code>firstChild</code>, <code>lastChild</code>, <code>nextSibling</code>, <code>previousSibling</code>, <code>parentNode</code>) va <strong>faqat elementlar uchun</strong> (<code>children</code>, <code>firstElementChild</code>, <code>lastElementChild</code>, <code>nextElementSibling</code>, <code>previousElementSibling</code>, <code>parentElement</code>);</li><li>DOM to'plamlari massivga o'xshash, iteratsiyalanuvchi (<code>for..of</code>), aksariyati jonli (live) va faqat o'qish uchun;</li><li>Jadvallar kabi ba'zi elementlar qo'shimcha navigatsiya xossalarini beradi (<code>rows</code>, <code>cells</code> va h.k.).</li></ul>
 <nav class="lesson-nav">
   <a href="dom-daraxti.html"><span class="dir">← Oldingi</span><span class="ttl">DOM daraxti</span></a>
@@ -725,6 +740,6 @@ alert( document.documentElement.parentElement ); // null</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

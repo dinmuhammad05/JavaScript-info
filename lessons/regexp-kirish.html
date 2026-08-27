@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muntazam ifodalar: kirish — Kodla</title>
   <meta name="description" content="Muntazam ifoda (RegExp) nima, /pattern/flags sintaksisi, g/i/m/s/u/y flaglari, str.match, str.replace, str.search, regexp.test metodlari va regexp yaratishning ikki usuli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,26 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Muntazam ifodalar: kirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muntazam-ifoda-nima">Muntazam ifoda nima?</a></li>
+<li class="lvl2"><a href="#regexp-yaratishning-ikki-usuli">Regexp yaratishning ikki usuli</a></li>
+<li class="lvl2"><a href="#flaglar">Flaglar</a></li>
+<li class="lvl2"><a href="#str-search-pozitsiyani-topish">str.search — pozitsiyani topish</a></li>
+<li class="lvl2"><a href="#regexp-test-moslik-bor-yo-qligini-tekshirish">regexp.test — moslik bor-yo'qligini tekshirish</a></li>
+<li class="lvl2"><a href="#str-match-mosliklarni-topish">str.match — mosliklarni topish</a></li>
+<li class="lvl3"><a href="#g-flagisiz">g flagisiz</a></li>
+<li class="lvl3"><a href="#g-flagi-bilan">g flagi bilan</a></li>
+<li class="lvl2"><a href="#str-replace-almashtirish">str.replace — almashtirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Muntazam ifodalar</strong> (regular expressions, qisqacha <em>regexp</em> yoki <em>regex</em>) — matnda naqsh (pattern) bo'yicha qidirish va almashtirishning kuchli usulidir. Ular JavaScript'ga tilning o'zi orqali <code>RegExp</code> obyekti ko'rinishida chuqur singdirilgan va satrlarning bir qator metodlari bilan birgalikda ishlaydi. Ushbu darsda muntazam ifoda nima ekanligini, uni qanday yaratishni, flaglarini va asosiy metodlarini chuqur o'rganamiz.</p>
-<h2>Muntazam ifoda nima?</h2>
+<h2 id="muntazam-ifoda-nima">Muntazam ifoda nima?</h2>
 <p>Muntazam ifoda — bu <strong>naqsh</strong>dan (pattern) va ixtiyoriy <strong>flaglar</strong>dan (flags) tashkil topgan matn qidiruv shabloni. Naqsh matnda nimani qidirayotganimizni tavsiflaydi, flaglar esa qidiruvni qanday amalga oshirishni sozlaydi.</p>
 <p>JavaScript'da muntazam ifoda o'rnatilgan <code>RegExp</code> tipiga tegishli obyekt bo'lib, uni yaratishning ikki usuli mavjud.</p>
-<h2>Regexp yaratishning ikki usuli</h2>
+<h2 id="regexp-yaratishning-ikki-usuli">Regexp yaratishning ikki usuli</h2>
 <p>Birinchi va eng keng tarqalgan usul — <strong>slash (qiya chiziq) sintaksisi</strong>. Naqsh ikkita qiya chiziq <code>/.../</code> orasiga yoziladi:</p>
 <pre class="code"><code>let regexp = /naqsh/;         // flagsiz
 let regexp2 = /naqsh/gmi;     // g, m, i flaglari bilan</code></pre>
@@ -617,7 +635,7 @@ console.log('men olma yeyman'.match(regexp)[0]); // olma
 // slash sintaksisida bunday qilib bo'lmaydi:
 // /nima/ — bu literal 'nima' so'zini qidiradi, o'zgaruvchini emas</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Konstruktorda naqsh satr bo'lgani uchun, unda <strong>ikkilangan backslash</strong> kerak bo'ladi. Masalan, <code>/\d/</code> naqshini konstruktor orqali yozsangiz, <code>new RegExp('\\d')</code> deb yozishga to'g'ri keladi, chunki satr ichida <code>\d</code> avval JavaScript satr eskeypi sifatida qayta ishlanadi. Slash sintaksisida bunday muammo yo'q.</div>
-<h2>Flaglar</h2>
+<h2 id="flaglar">Flaglar</h2>
 <p>Muntazam ifodalarning oltita flagi bor. Ular qidiruvning xatti-harakatini o'zgartiradi va ixtiyoriy tartibda birga yozilishi mumkin:</p>
 <ul><li><code>g</code> — <strong>global</strong> qidiruv: birinchi mos kelishdan keyin to'xtamasdan, barcha mosliklarni topadi;</li><li><code>i</code> — <strong>ignore case</strong>: katta-kichik harflarni farqlamaydi (<code>A</code> va <code>a</code> bir xil hisoblanadi);</li><li><code>m</code> — <strong>multiline</strong>: ko'p qatorli rejim (langarlar <code>^</code> va <code>$</code> ni ta'sirlaydi);</li><li><code>s</code> — <strong>dotall</strong> rejimi: nuqta <code>.</code> qatorga o'tish belgisini <code>\n</code> ham qamrab oladi;</li><li><code>u</code> — <strong>unicode</strong>: to'liq unicode qo'llab-quvvatlashini yoqadi (surrogat juftliklarni to'g'ri ishlaydi);</li><li><code>y</code> — <strong>sticky</strong> (yopishqoq) rejim: aynan berilgan pozitsiyadan qidiradi.</li></ul>
 <p>Eng ko'p ishlatiladigan flaglar — <code>g</code> va <code>i</code>. Boshqalarini keyingi darslarda batafsil ko'rib chiqamiz.</p>
@@ -629,13 +647,13 @@ console.log(matn.match(/salom/g)); // ['salom']
 
 // i flagi bilan — hammasi
 console.log(matn.match(/salom/gi)); // ['Salom', 'SALOM', 'salom']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>str.search — pozitsiyani topish</h2>
+<h2 id="str-search-pozitsiyani-topish">str.search — pozitsiyani topish</h2>
 <p><code>str.search(regexp)</code> metodi birinchi moslikning <strong>pozitsiyasini</strong> (indeksini) qaytaradi, moslik topilmasa <code>-1</code> qaytaradi. U faqat birinchi moslikni qidiradi (<code>g</code> flagini e'tiborsiz qoldiradi).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>search.js</span></div><textarea spellcheck="false">let matn = 'JavaScript juda qiziqarli til';
 
 console.log(matn.search(/juda/));   // 11 (pozitsiya)
 console.log(matn.search(/Python/)); // -1 (topilmadi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>regexp.test — moslik bor-yo'qligini tekshirish</h2>
+<h2 id="regexp-test-moslik-bor-yo-qligini-tekshirish">regexp.test — moslik bor-yo'qligini tekshirish</h2>
 <p><code>regexp.test(str)</code> metodi satrda naqshga mos keluvchi qism <strong>bor-yo'qligini</strong> tekshiradi va <code>true</code> yoki <code>false</code> qaytaradi. U eng tez va sodda usul — faqat "bormi yoki yo'qmi" degan savolga javob kerak bo'lganda ishlatiladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>test.js</span></div><textarea spellcheck="false">// e'tibor: bu yerda metod regexp obyektiga tegishli
 console.log(/dunyo/.test('salom dunyo'));  // true
@@ -643,9 +661,9 @@ console.log(/kosmos/.test('salom dunyo')); // false
 
 let regexp = /qush/i;
 console.log(regexp.test('QUSH uchdi'));    // true (i flagi tufayli)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>str.match — mosliklarni topish</h2>
+<h2 id="str-match-mosliklarni-topish">str.match — mosliklarni topish</h2>
 <p><code>str.match(regexp)</code> metodining xatti-harakati <code>g</code> flagining bor-yo'qligiga bog'liq — bu juda muhim nozik jihat.</p>
-<h3>g flagisiz</h3>
+<h3 id="g-flagisiz">g flagisiz</h3>
 <p><code>g</code> flagi bo'lmasa, <code>str.match</code> faqat <strong>birinchi</strong> moslikni qaytaradi. Natija — massivsimon obyekt: <code>[0]</code> — topilgan matn, <code>index</code> — pozitsiya, <code>input</code> — asl satr:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>match-birinchi.js</span></div><textarea spellcheck="false">let matn = 'Yil: 2026, oy: 07';
 let natija = matn.match(/\d+/); // g yo'q
@@ -653,7 +671,7 @@ let natija = matn.match(/\d+/); // g yo'q
 console.log(natija[0]);     // 2026 (birinchi moslik)
 console.log(natija.index);  // 5 (pozitsiya)
 console.log(natija.input);  // Yil: 2026, oy: 07</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>g flagi bilan</h3>
+<h3 id="g-flagi-bilan">g flagi bilan</h3>
 <p><code>g</code> flagi bilan <code>str.match</code> barcha mosliklarni oddiy <strong>massiv</strong> ko'rinishida qaytaradi (pozitsiya va boshqa qo'shimcha ma'lumotsiz):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>match-hammasi.js</span></div><textarea spellcheck="false">let matn = 'Yil: 2026, oy: 07, kun: 01';
 let natija = matn.match(/\d+/g); // g bor
@@ -667,7 +685,7 @@ console.log(natija); // null (bo'sh massiv EMAS)
 // xavfsiz ishlash usuli:
 let raqamlar = 'faqat harflar'.match(/\d+/g) || [];
 console.log(raqamlar.length); // 0</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>str.replace — almashtirish</h2>
+<h2 id="str-replace-almashtirish">str.replace — almashtirish</h2>
 <p><code>str.replace(regexp, replacement)</code> metodi mos kelgan qismlarni almashtiradi. <code>g</code> flagisiz faqat birinchi moslikni, <code>g</code> flagi bilan esa <strong>barcha</strong> mosliklarni almashtiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>replace.js</span></div><textarea spellcheck="false">let matn = 'olma-olma-olma';
 
@@ -691,7 +709,7 @@ let natija = matn.replace(/\d+/g, function(son) {
 });
 
 console.log(natija); // narx: 200, chegirma: 100</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Muntazam ifoda — naqsh va flaglardan iborat qidiruv shabloni; <code>/naqsh/flaglar</code> yoki <code>new RegExp('naqsh', 'flaglar')</code> orqali yaratiladi;</li><li>asosiy flaglar: <code>g</code> (global), <code>i</code> (harf farqsiz), <code>m</code>, <code>s</code>, <code>u</code>, <code>y</code>;</li><li><code>regexp.test(str)</code> — moslik bor-yo'qligini <code>true/false</code> qaytaradi;</li><li><code>str.search(regexp)</code> — birinchi moslik pozitsiyasi yoki <code>-1</code>;</li><li><code>str.match(regexp)</code> — <code>g</code> flagisiz birinchi moslik (index bilan), <code>g</code> bilan hamma mosliklar massivi; moslik yo'q bo'lsa <code>null</code>;</li><li><code>str.replace(regexp, ...)</code> — almashtirish; <code>g</code> flagi hamma mosliklarga ta'sir qiladi; ikkinchi argument funksiya ham bo'lishi mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="indexeddb.html"><span class="dir">← Oldingi</span><span class="ttl">IndexedDB</span></a>
@@ -705,6 +723,6 @@ console.log(natija); // narx: 200, chegirma: 100</textarea><div class="pg-action
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

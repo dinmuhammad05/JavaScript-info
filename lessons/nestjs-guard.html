@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Middleware, Guard, Interceptor, Exception filter — Kodla</title>
   <meta name="description" content="NestJS so'rovni qayta ishlash quvuri: Middleware, autentifikatsiya uchun Guard (@UseGuards), ma'lumotni o'zgartiruvchi Pipe, javobni boyituvchi Interceptor va xatolarni tutuvchi Exception filter.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">NestJS</div>
 <h1>Middleware, Guard, Interceptor, Exception filter</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#so-rovni-qayta-ishlash-quvuri">So'rovni qayta ishlash quvuri</a></li>
+<li class="lvl2"><a href="#middleware">Middleware</a></li>
+<li class="lvl2"><a href="#guard-autentifikatsiya-va-avtorizatsiya">Guard — autentifikatsiya va avtorizatsiya</a></li>
+<li class="lvl2"><a href="#pipe-o-zgartirish-va-tekshirish">Pipe — o'zgartirish va tekshirish</a></li>
+<li class="lvl2"><a href="#interceptor-kirish-va-chiqishni-boyitish">Interceptor — kirish va chiqishni boyitish</a></li>
+<li class="lvl2"><a href="#exception-filter-xatolarni-boshqarish">Exception filter — xatolarni boshqarish</a></li>
+<li class="lvl2"><a href="#barchasini-birlashtirish">Barchasini birlashtirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">NestJS'da so'rov controller'ga yetib borishidan oldin va javob mijozga qaytishdan oldin bir necha bosqichdan o'tadi. Bu bosqichlar — <strong>Middleware</strong>, <strong>Guard</strong>, <strong>Pipe</strong>, <strong>Interceptor</strong> va <strong>Exception filter</strong>. Har biri o'z vazifasiga ega. Ushbu yakuniy darsda ushbu quvurni (pipeline) va uning har bir bo'g'inini o'rganamiz.</p>
-<h2>So'rovni qayta ishlash quvuri</h2>
+<h2 id="so-rovni-qayta-ishlash-quvuri">So'rovni qayta ishlash quvuri</h2>
 <p>Avval umumiy manzarani ko'ramiz. So'rov kelganda u quyidagi tartibda o'tadi. Bu tartibni bilish qaysi vositani qayerda ishlatishni tushunish uchun muhim:</p>
 <ol><li><strong>Middleware</strong> — eng birinchi, xom so'rov ustida (Express middleware kabi);</li><li><strong>Guard</strong> — so'rovni <em>o'tkazish yoki rad etish</em> to'g'risida qaror qabul qiladi (masalan, autentifikatsiya);</li><li><strong>Interceptor</strong> (kirish) — controller'gacha qo'shimcha logika;</li><li><strong>Pipe</strong> — parametrlar va tanani o'zgartirish/tekshirish (masalan, ValidationPipe);</li><li><strong>Controller</strong> — asosiy ish;</li><li><strong>Interceptor</strong> (chiqish) — javobni o'zgartirish;</li><li><strong>Exception filter</strong> — biror joyda xato yuz bersa, uni tutadi.</li></ol>
 <div class="note">Har bir bo'g'inning aniq vazifasi bor. Umumiy qoida: <strong>Guard</strong> — "kirishga ruxsat bormi?", <strong>Pipe</strong> — "ma'lumot to'g'rimi?", <strong>Interceptor</strong> — "kirish/chiqishni o'zgartiraymi?", <strong>Exception filter</strong> — "xatoni qanday ko'rsataymi?".</div>
-<h2>Middleware</h2>
+<h2 id="middleware">Middleware</h2>
 <p><strong>Middleware</strong> Express'dagi middleware bilan bir xil g'oyaga ega: u so'rov controller'ga yetishidan oldin ishlaydigan funksiya. Odatda logging, so'rovni tayyorlash yoki umumiy tekshiruvlar uchun ishlatiladi. NestJS'da middleware klass ko'rinishida yoziladi:</p>
 <pre class="code"><code>// src/logger.middleware.ts
 import { Injectable, NestMiddleware } from '@nestjs/common';
@@ -626,7 +642,7 @@ export class AppModule implements NestModule {
       .forRoutes('*');   // Barcha marshrutlarga qo'llash
   }
 }</code></pre>
-<h2>Guard — autentifikatsiya va avtorizatsiya</h2>
+<h2 id="guard-autentifikatsiya-va-avtorizatsiya">Guard — autentifikatsiya va avtorizatsiya</h2>
 <p><strong>Guard</strong> bitta savolga javob beradi: <em>"Bu so'rovga ruxsat bermi?"</em>. U <code>true</code> qaytarsa, so'rov davom etadi; <code>false</code> qaytarsa yoki istisno tashlasa, NestJS <strong>403 Forbidden</strong> qaytaradi. Guard'lar autentifikatsiya (kimligini aniqlash) va avtorizatsiya (huquqini tekshirish) uchun ideal.</p>
 <p>Guard <code>CanActivate</code> interfeysini amalga oshiradi. <code>canActivate</code> metodi <code>true</code>/<code>false</code> yoki ularni beruvchi Promise qaytaradi:</p>
 <pre class="code"><code>// src/auth/auth.guard.ts
@@ -664,7 +680,7 @@ export class ProfilController {
   }
 }</code></pre>
 <div class="tip"><code>@UseGuards</code>'ni metodga qo'ysangiz — faqat o'sha metod himoyalanadi. Controller klassiga qo'ysangiz — undagi barcha metodlar himoyalanadi. Global qilish uchun esa <code>app.useGlobalGuards()</code>'dan foydalaning.</div>
-<h2>Pipe — o'zgartirish va tekshirish</h2>
+<h2 id="pipe-o-zgartirish-va-tekshirish">Pipe — o'zgartirish va tekshirish</h2>
 <p><strong>Pipe</strong>ni oldingi darsda ko'rgan edik (<code>ValidationPipe</code>, <code>ParseIntPipe</code>). Uning ikki vazifasi bor: <strong>o'zgartirish</strong> (masalan, satrni songa) va <strong>tekshirish</strong> (masalan, DTO validatsiyasi). O'zingizning maxsus pipe'ingizni ham yozishingiz mumkin:</p>
 <pre class="code"><code>// src/pipes/bosh-harf.pipe.ts
 import { PipeTransform, Injectable } from '@nestjs/common';
@@ -682,7 +698,7 @@ findByName(@Param('nom', BoshHarfPipe) nom: string) {
   // Agar /ali so'ralsa, nom = 'ALI'
   return nom;
 }</code></pre>
-<h2>Interceptor — kirish va chiqishni boyitish</h2>
+<h2 id="interceptor-kirish-va-chiqishni-boyitish">Interceptor — kirish va chiqishni boyitish</h2>
 <p><strong>Interceptor</strong> so'rov <em>oldida</em> ham, javob <em>keyin</em> ham logika qo'shishga imkon beradi. U ayniqsa quyidagilar uchun foydali: barcha javoblarni yagona formatga o'rash, so'rov davomiyligini o'lchash (logging), javobni kesh qilish. Interceptor RxJS'ning <code>Observable</code>'idan foydalanadi:</p>
 <pre class="code"><code>// src/interceptors/transform.interceptor.ts
 import {
@@ -719,7 +735,7 @@ export class UsersController {
     return [{ id: 1, ism: 'Ali' }];
   }
 }</code></pre>
-<h2>Exception filter — xatolarni boshqarish</h2>
+<h2 id="exception-filter-xatolarni-boshqarish">Exception filter — xatolarni boshqarish</h2>
 <p><strong>Exception filter</strong> ilovada yuz bergan xatolarni tutadi va mijozga qanday ko'rsatishni nazorat qiladi. NestJS'da tayyor istisnolar mavjud: <code>NotFoundException</code> (404), <code>BadRequestException</code> (400), <code>UnauthorizedException</code> (401), <code>ForbiddenException</code> (403). Ularni shunchaki tashlaysiz:</p>
 <pre class="code"><code>import { NotFoundException, BadRequestException } from '@nestjs/common';
 
@@ -760,7 +776,7 @@ app.useGlobalFilters(new HttpExceptionFilter());
 // Yoki bitta controller/metodga:
 // @UseFilters(HttpExceptionFilter)</code></pre>
 <div class="warn">Exception filter faqat xatoni <em>ko'rsatish</em> uchun. Xatoni <em>oldini olish</em> uchun validatsiya (Pipe) va tekshiruvlar (Guard) ishlating. Filter — bu oxirgi himoya qatlami: kutilmagan xato yuz berganda ham mijozga chiroyli va bir xil javob berish uchun.</div>
-<h2>Barchasini birlashtirish</h2>
+<h2 id="barchasini-birlashtirish">Barchasini birlashtirish</h2>
 <p>Amalda bu vositalar birgalikda qo'llaniladi. Quyidagi controller himoyalangan, validatsiyalangan va yagona javob formatiga ega:</p>
 <pre class="code"><code>import {
   Controller, Post, Body, UseGuards, UseInterceptors, UseFilters,
@@ -782,7 +798,7 @@ export class UsersController {
   }
 }</code></pre>
 <div class="note">E'tibor bering: bitta controller ustida to'rt xil qatlam ishlaydi — Guard ruxsatni, Pipe ma'lumotni, Interceptor javobni, Filter xatoni boshqaradi. Har biri mustaqil, qayta ishlatiladigan va testlanadigan. Bu NestJS arxitekturasining kuchi — murakkab logika kichik, aniq bo'laklarga bo'linadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>So'rov quvuri tartibi: <strong>Middleware</strong> &rarr; <strong>Guard</strong> &rarr; <strong>Interceptor</strong> &rarr; <strong>Pipe</strong> &rarr; <strong>Controller</strong> &rarr; <strong>Interceptor</strong> &rarr; (xato bo'lsa) <strong>Exception filter</strong>;</li><li><strong>Middleware</strong> — Express uslubidagi umumiy oldindan qayta ishlash (logging va h.k.);</li><li><strong>Guard</strong> (<code>@UseGuards</code>) — kirishga ruxsat bor-yo'qligini hal qiladi, autentifikatsiya uchun;</li><li><strong>Pipe</strong> — parametr va tanani o'zgartiradi hamda tekshiradi (ValidationPipe, ParseIntPipe);</li><li><strong>Interceptor</strong> (<code>@UseInterceptors</code>) — kirish/chiqish logikasi, javobni yagona formatga o'rash;</li><li><strong>Exception filter</strong> (<code>@Catch</code>, <code>@UseFilters</code>) — xatolarni tutib, yagona formatda ko'rsatadi;</li><li>Bu vositalar mustaqil, qayta ishlatiladigan qatlamlar bo'lib, birgalikda ishonchli API quradi.</li></ul>
 <nav class="lesson-nav">
   <a href="nestjs-database.html"><span class="dir">← Oldingi</span><span class="ttl">Ma'lumotlar bazasi (TypeORM)</span></a>
@@ -796,6 +812,6 @@ export class UsersController {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

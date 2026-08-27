@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Metasploit asoslari (lab) — Kodla</title>
   <meta name="description" content="Metasploit Framework nima, etik ramka, modullar tuzilishi (exploit, payload, auxiliary, post), msfconsole ish oqimi hamda natijani himoyachi nuqtai nazaridan o'qish — barchasi o'z lab VM kontekstida.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,19 +599,34 @@
 <main class="content article">
 <div class="crumbs">Amaliy vositalar (lab muhitida)</div>
 <h1>Metasploit asoslari (lab)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#metasploit-nima">Metasploit nima</a></li>
+<li class="lvl2"><a href="#adabiy-va-etik-ramka">Adabiy va etik ramka</a></li>
+<li class="lvl2"><a href="#modullar-tuzilishi">Modullar tuzilishi</a></li>
+<li class="lvl2"><a href="#msfconsole-asosiy-interfeys">msfconsole — asosiy interfeys</a></li>
+<li class="lvl2"><a href="#konseptual-ish-oqimi">Konseptual ish oqimi</a></li>
+<li class="lvl2"><a href="#natijani-o-qish">Natijani o'qish</a></li>
+<li class="lvl2"><a href="#nega-bu-himoyachiga-foydali">Nega bu himoyachiga foydali</a></li>
+<li class="lvl2"><a href="#mas-uliyatli-ishlatish">Mas'uliyatli ishlatish</a></li>
+<li class="lvl2"><a href="#auxiliary-dan-boshlang">Auxiliary'dan boshlang</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Zaiflik topilgani bilan uning naqadar jiddiy ekanini har doim ham aniq baholab bo'lmaydi. "Bu port ochiq" degan ma'lumot bilan "bu zaiflik orqali tizimni to'liq egallash mumkin" degan xulosa o'rtasida katta farq bor. <strong>Metasploit Framework</strong> — aynan shu farqni ko'rsatadigan vosita: zaiflikning real ta'sirini nazorat ostida sinab ko'rish imkonini beradi. Bu darsda uni faqat o'z laboratoriyangizdagi ataylab zaif VM kontekstida, konseptual darajada o'rganamiz.</p>
-<h2>Metasploit nima</h2>
+<h2 id="metasploit-nima">Metasploit nima</h2>
 <p><strong>Metasploit Framework</strong> — ekspluatatsiya va tekshiruv freymvorki. U ma'lum zaifliklarni sinab ko'rish uchun tayyor modullar to'plamini beradi. Professional xavfsizlik mutaxassislari uni <strong>ruxsat berilgan</strong> penetratsiya testlarida — mijoz yozma ruxsat bergan tizimlarda — ishlatadi.</p>
 <p>Bizning kontekstimizda esa Metasploit — o'rganish vositasi. Uni faqat o'zingiz ko'targan, ataylab zaif qilib yaratilgan VM'da (masalan, <code>Metasploitable</code>) ishlatamiz. Maqsad — vositani tushunish, ish oqimini bilish va natijani himoyachi ko'zi bilan o'qish.</p>
 <div class="warn">Metasploit'ni FAQAT o'zingiz ko'targan, ataylab zaif qilingan VM'da (Metasploitable kabi) ishlating. Ruxsatsiz tizimga qarshi ekspluatatsiya vositasini ishlatish — OG'IR JINOYAT. Faqat o'zingizniki yoki yozma ruxsat berilgani. Bundan istisno yo'q.</div>
-<h2>Adabiy va etik ramka</h2>
+<h2 id="adabiy-va-etik-ramka">Adabiy va etik ramka</h2>
 <p>Metasploit — kuchli vosita, shu sababli uni ishlatishning etik ramkasi qat'iy. Uni ishlatishdan oldin o'zingizga uch savolni bering: "Bu tizim menikimi? Yozma ruxsatim bormi? Zarar yetkazmasdan, faqat o'rganish uchun ishlatyapmanmi?" Uchala savolga "ha" bo'lmasa — to'xtang.</p>
 <p>Shu bois ushbu darsdagi barcha misollar YUQORI DARAJADA (konseptual) berilgan. Biz real nishon uchun tayyor hujum ketma-ketligini emas, balki vositaning umumiy tuzilishi va mantiqini o'rganamiz — o'z lab VM'ingiz kontekstida.</p>
-<h2>Modullar tuzilishi</h2>
+<h2 id="modullar-tuzilishi">Modullar tuzilishi</h2>
 <p>Metasploit'ning kuchi — uning modullar tizimida. Har bir modul aniq bir vazifani bajaradi. To'rt asosiy tur bor:</p>
 <ul><li><strong>exploit</strong> — muayyan zaiflikdan foydalanadigan kod;</li><li><strong>payload</strong> — ekspluatatsiya muvaffaqiyatli bo'lgach ishga tushadigan "foydali yuk" (masalan, ulanish ochish);</li><li><strong>auxiliary</strong> — yordamchi modullar: skanerlash, versiya aniqlash, ma'lumot yig'ish (hujum emas);</li><li><strong>post</strong> — ekspluatatsiyadan keyingi bosqich modullari.</li></ul>
 <p>Boshlovchi va himoyachi uchun eng foydali va eng xavfsiz tur — <strong>auxiliary</strong>. Bu modullar hech narsani buzmaydi, faqat ma'lumot yig'adi. Aynan shulardan boshlash tavsiya etiladi.</p>
-<h2>msfconsole — asosiy interfeys</h2>
+<h2 id="msfconsole-asosiy-interfeys">msfconsole — asosiy interfeys</h2>
 <p>Metasploit bilan ishlashning asosiy yo'li — <code>msfconsole</code> nomli buyruq qatori interfeysi. U Kali'da tayyor keladi. Ishga tushirganingizdan so'ng, buyruqlar orqali modullarni qidirasiz, tanlaysiz va ularning sozlamalarini belgilaysiz:</p>
 <pre class="code"><code># Metasploit konsolini ishga tushirish:
 msfconsole
@@ -620,7 +638,7 @@ msfconsole
 #   show options — modul sozlamalarini ko'rish
 #   set     — sozlama qiymatini belgilash
 #   run     — modulni ishga tushirish</code></pre>
-<h2>Konseptual ish oqimi</h2>
+<h2 id="konseptual-ish-oqimi">Konseptual ish oqimi</h2>
 <p>Metasploit'da tipik ish oqimi bir necha oddiy qadamdan iborat. Quyida — o'z lab Metasploitable nishoningizga qarshi, konseptual (soddalashtirilgan) misol. Bu real nishon uchun tayyor ketma-ketlik EMAS, balki vositaning mantiqini ko'rsatuvchi namuna:</p>
 <pre class="code"><code># 1) Kerakli modulni qidirish:
 search vsftpd
@@ -637,7 +655,7 @@ set RHOSTS 192.168.56.102
 # 5) Modulni ishga tushirish:
 run</code></pre>
 <p>E'tibor bering: bu yerda tanlangan modul — <code>auxiliary/scanner</code>, ya'ni faqat versiya aniqlaydigan, hech narsani buzmaydigan yordamchi modul. <code>RHOSTS</code> esa — nishon manzili, u har doim o'z lab VM'ingiz IP'si (<code>192.168.56.102</code>).</p>
-<h2>Natijani o'qish</h2>
+<h2 id="natijani-o-qish">Natijani o'qish</h2>
 <p>Modul ishga tushgach, natijani o'qiy bilish — eng muhim mahorat. Auxiliary skaner, masalan, quyidagicha natija berishi mumkin:</p>
 <pre class="code"><code># 'run' natijasi (auxiliary skaner):
 [+] 192.168.56.102:21 - FTP Banner: vsftpd 2.3.4
@@ -647,18 +665,18 @@ run</code></pre>
 # Xulosa: nishonda vsftpd 2.3.4 ishlayapti —
 # bu eski, ma'lum zaifligi bo'lgan versiya.</code></pre>
 <p>Bu natija himoyachiga aniq signal beradi: <code>vsftpd 2.3.4</code> — eskirgan versiya. Endi himoyachi "bu versiyada qanday zaifliklar bor, ularni patch qilish qanchalik shoshilinch?" degan savolga o'tadi.</p>
-<h2>Nega bu himoyachiga foydali</h2>
+<h2 id="nega-bu-himoyachiga-foydali">Nega bu himoyachiga foydali</h2>
 <p>Metasploit'ni himoyachi nuqtai nazaridan ko'rish uni butunlay boshqacha tushunishga olib keladi. U hujum vositasi emas, balki <strong>prioritet belgilash</strong> vositasi:</p>
 <ul><li>U zaiflikning <strong>real jiddiyligini</strong> ko'rsatadi — "nazariy xavf" bilan "amalda foydalanish mumkin" o'rtasidagi farqni;</li><li>Shu asosda himoyachi <strong>patch prioritetini</strong> belgilaydi: qaysi zaiflikni birinchi navbatda yopish kerak;</li><li>Auxiliary modullar bilan o'z tarmog'idagi zaif nuqtalarni hujumchidan oldin topadi;</li><li>Ekspluatatsiya muvaffaqiyatli bo'lsa, bu — "bu zaiflik jiddiy, darhol tuzatilsin" degan aniq dalil.</li></ul>
 <p>Ya'ni Metasploit himoyachiga "qaysi eshik haqiqatan ochiq va xavfli?" degan savolga aniq javob beradi, va u shu javobga qarab resurslarini to'g'ri taqsimlaydi.</p>
-<h2>Mas'uliyatli ishlatish</h2>
+<h2 id="mas-uliyatli-ishlatish">Mas'uliyatli ishlatish</h2>
 <p>Ushbu darsda ekspluatatsiya qadamlari ataylab yuqori darajada — konseptual berildi. Biz auxiliary (skaner) modullariga urg'u berdik, chunki ular xavfsiz va o'rganish uchun ideal. Real, buzadigan exploit modullarini ishlatish — faqat o'z lab VM'ingizda va faqat o'rganish maqsadida, tizim tuzilishini tushunish uchun bo'lishi kerak.</p>
 <p>Vositani "tushunish" bilan "suiiste'mol qilish" o'rtasidagi chegara — ruxsat va maqsadda. Sizning maqsadingiz — himoyachi va o'rganuvchi bo'lish: zaiflik qanday ishlashini bilib, uni yopishni o'rganish.</p>
 <div class="warn">Yana bir bor: Metasploit faqat Metasploitable kabi o'zingiz ko'targan, ataylab zaif VM'da. Ruxsatsiz tizimni test qilish — jinoyat. Bu vositaning kuchi uni yanada javobgarlik bilan ishlatishni talab qiladi.</div>
-<h2>Auxiliary'dan boshlang</h2>
+<h2 id="auxiliary-dan-boshlang">Auxiliary'dan boshlang</h2>
 <p>Agar Metasploit'ni endi o'rganayotgan bo'lsangiz, birinchi mashqlaringizni faqat <code>auxiliary/scanner</code> modullari bilan qiling. Ular nishonni buzmaydi, faqat ma'lumot yig'adi: versiya, ochiq xizmat, banner. Shu bilan siz <code>use</code>, <code>show options</code>, <code>set</code>, <code>run</code> oqimini xavfsiz o'zlashtirasiz.</p>
 <p>Faqat bu oqim qo'lingizga tushib, natijani ishonch bilan o'qiy boshlaganingizdan so'ng, murakkabroq modullarga o'tishingiz mumkin — albatta o'sha o'z lab VM'ingizda va toza snapshot'dan boshlab.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Metasploit Framework — modullar (exploit, payload, auxiliary, post) va <code>msfconsole</code> asosidagi tekshiruv freymvorki. Uni o'z lab VM'ingizda ishlatib, <code>search</code>, <code>use</code>, <code>show options</code>, <code>set RHOSTS</code>, <code>run</code> oqimini o'rganasiz. Eng muhimi — natijani himoyachi ko'zi bilan o'qib, zaiflik jiddiyligini va patch prioritetini baholaysiz.</p>
 <div class="tip">Metasploitable + Kali bilan xavfsiz mashq qiling. Auxiliary skanerlardan boshlang — ular hech narsani buzmaydi va vositaning mantiqini o'rgatadi. Har doim toza snapshot'dan boshlab, izolyatsiya qilingan tarmoqda ishlang.</div>
 <nav class="lesson-nav">
@@ -673,6 +691,6 @@ run</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

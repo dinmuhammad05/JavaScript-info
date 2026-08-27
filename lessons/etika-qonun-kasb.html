@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Etika, qonun va kiberxavfsizlik kasbi — Kodla</title>
   <meta name="description" content="Etik xakerlik va ruxsat tushunchasi, qonuniy tamoyillar, mas'uliyatli oshkor qilish va bug bounty, kasb yo'llari, sertifikatlar va boshlash yo'l xaritasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,26 @@
 <main class="content article">
 <div class="crumbs">Kiberxavfsizlik asoslari</div>
 <h1>Etika, qonun va kiberxavfsizlik kasbi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#etik-xakerlik-nima">Etik xakerlik nima?</a></li>
+<li class="lvl2"><a href="#ruxsat-authorization-eng-muhim-tushuncha">Ruxsat (authorization) — eng muhim tushuncha</a></li>
+<li class="lvl2"><a href="#qonun-umumiy-tamoyillar">Qonun: umumiy tamoyillar</a></li>
+<li class="lvl2"><a href="#mas-uliyatli-oshkor-qilish">Mas'uliyatli oshkor qilish</a></li>
+<li class="lvl3"><a href="#bug-bounty">Bug bounty</a></li>
+<li class="lvl2"><a href="#kasb-yo-llari">Kasb yo'llari</a></li>
+<li class="lvl2"><a href="#sertifikatlar">Sertifikatlar</a></li>
+<li class="lvl2"><a href="#qanday-boshlash-yo-l-xaritasi">Qanday boshlash: yo'l xaritasi</a></li>
+<li class="lvl2"><a href="#bobning-yakuniy-so-zi">Bobning yakuniy so'zi</a></li>
+  </ul>
+</details>
 <p class="lead">Kiberxavfsizlikdagi bilim — kuchli qurol. Har qanday kuch kabi, uni faqat mas'uliyat va etika bilan ishlatish kerak. Ushbu yakuniy darsda biz etik xakerlik nima ekanini, ruxsat va qonun tamoyillarini, mas'uliyatli oshkor qilishni va kiberxavfsizlik kasbiga qanday kirishni o'rganamiz.</p>
-<h2>Etik xakerlik nima?</h2>
+<h2 id="etik-xakerlik-nima">Etik xakerlik nima?</h2>
 <p>"Xaker" so'zi ko'pincha noto'g'ri tushuniladi. Aslida u — tizimni chuqur tushunadigan va uni g'ayrioddiy tarzda ishlata oladigan odam. Muhimi — bu bilim <em>qanday</em> ishlatilishida:</p>
 <ul><li><strong>Etik xaker (oq shlyapa):</strong> ruxsat bilan zaiflik topib, tuzatishga yordam beradi;</li><li><strong>Yomon niyatli (qora shlyapa):</strong> ruxsatsiz, zarar keltirish yoki foyda uchun buzadi;</li><li><strong>Kulrang shlyapa:</strong> ruxsatsiz izlaydi, lekin zarar niyatisiz — bu ham qonuniy jihatdan xavfli.</li></ul>
 <p>Etik xakerlikni yomon niyatlidan ajratib turadigan yagona narsa — bu <strong>ruxsat</strong> va <strong>niyat</strong>. Bir xil harakat ruxsat bilan — ish, ruxsatsiz — jinoyat.</p>
-<h2>Ruxsat (authorization) — eng muhim tushuncha</h2>
+<h2 id="ruxsat-authorization-eng-muhim-tushuncha">Ruxsat (authorization) — eng muhim tushuncha</h2>
 <p>Kiberxavfsizlik etikasining markazida bitta oddiy, ammo mutlaq qoida turadi: <strong>yozma ruxsatsiz hech qachon boshqaning tizimini sinamang</strong>. "Men shunchaki qiziqib ko'rdim" yoki "zarar qilmadim-ku" degan uzr qonun oldida ishlamaydi.</p>
 <div class="warn">Boshqa birovning saytini, tarmog'ini yoki tizimini <strong>aniq yozma ruxsatsiz</strong> tekshirish — ko'p mamlakatlarda jinoyat. Buni hazil yoki "o'rganish" deb o'ylash katta xato. Doim faqat o'zingizga tegishli yoki sizga ochiq ruxsat berilgan tizimlarda mashq qiling.</div>
 <p>Professional pentesterlar ish boshlashdan oldin doim yozma shartnoma ("scope" — nima sinash mumkin, nima yo'qligini aniq belgilaydigan hujjat) imzolaydi. Ruxsatning chegarasi ham muhim: bitta serverga ruxsat — boshqasiga ruxsat degani emas.</p>
@@ -619,12 +636,12 @@ function sinovgaRuxsat(nishon) {
 console.log(sinovgaRuxsat("test.mysite.uz"));
 console.log(sinovgaRuxsat("boshqa-sayt.uz"));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: kod ruxsat ro'yxatida yo'q har qanday nishonni qat'iy rad etadi. Professional vositalar ham aynan shunday ishlaydi — chegaradan tashqariga chiqishga yo'l qo'ymaydi.</p>
-<h2>Qonun: umumiy tamoyillar</h2>
+<h2 id="qonun-umumiy-tamoyillar">Qonun: umumiy tamoyillar</h2>
 <p>Deyarli barcha mamlakatlarda kompyuter jinoyatlariga qarshi qonunlar bor. Biz aniq moddalarga emas, balki umumiy <em>tamoyillarga</em> e'tibor qaratamiz, chunki tamoyillar hamma joyda o'xshash:</p>
 <ul><li><strong>Ruxsatsiz kirish:</strong> begona tizimga ruxsatsiz kirish — jinoyat;</li><li><strong>Ma'lumotni o'g'irlash yoki buzish:</strong> ruxsatsiz ma'lumot olish yoki o'zgartirish jazolanadi;</li><li><strong>Xizmatga xalaqit:</strong> tizim ishini ataylab to'xtatish qonunga xilof;</li><li><strong>Vositalarni tarqatish:</strong> zararli dastur yaratish yoki tarqatish jazolanadi.</li></ul>
 <p>O'zbekistonda ham, xalqaro miqyosda ham bu tamoyillar amal qiladi. Aniq javobgarlikni bilish uchun mahalliy qonunchilikka murojaat qilish kerak, lekin oltin qoida oddiy: <strong>ruxsatingiz bo'lmasa — tegmang</strong>.</p>
 <div class="note">Qonun mamlakatdan mamlakatga farq qiladi va o'zgarib turadi. Bu dars huquqiy maslahat emas. Aniq vaziyatda malakali yurist yoki rasmiy manbaga murojaat qiling. Ammo tamoyil hamma joyda bir xil: ruxsat — hamma narsa.</div>
-<h2>Mas'uliyatli oshkor qilish</h2>
+<h2 id="mas-uliyatli-oshkor-qilish">Mas'uliyatli oshkor qilish</h2>
 <p>Faraz qiling, siz ochiq foydalanadigan xizmatda tasodifan zaiflik topib qoldingiz. To'g'ri yo'l qanday? Javob — <strong>mas'uliyatli oshkor qilish</strong> (responsible disclosure):</p>
 <ol><li>Zaiflikdan foydalanmang va ma'lumotga tegmang;</li><li>Xizmat egasiga xususiy, xavfsiz kanal orqali xabar bering;</li><li>Muammoni tuzatishga oqilona vaqt bering;</li><li>Faqat tuzatilgach (va ruxsat bilan) ommaga e'lon qiling.</li></ol>
 <p>Bu yondashuv zaiflikni foydalanuvchilarga zarar keltirmasdan tuzatishga imkon beradi. Bu — etik xakerning obro'sini ham himoya qiladi.</p>
@@ -643,23 +660,23 @@ console.log(sinovgaRuxsat("boshqa-sayt.uz"));</textarea><div class="pg-actions">
 
 console.log(oshkorTogrimi({ zaiflikdanFoydalanmadi: true, egasigaXabarBerdi: true, vaqtBerdi: true }));
 console.log(oshkorTogrimi({ zaiflikdanFoydalanmadi: false, egasigaXabarBerdi: true, vaqtBerdi: false }));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Bug bounty</h3>
+<h3 id="bug-bounty">Bug bounty</h3>
 <p>Ko'p yirik kompaniyalar <strong>bug bounty</strong> dasturlarini yuritadi: ular <em>o'z tizimlarida</em> zaiflik topib, mas'uliyatli xabar bergan tadqiqotchilarga <em>rasmiy ruxsat</em> va mukofot beradi. Bu — etik xakerlik ko'nikmalarini <strong>qonuniy va foydali</strong> tarzda qo'llashning ajoyib yo'li.</p>
 <div class="tip">Bug bounty — mahoratni qonuniy sinash uchun eng yaxshi joylardan biri. Ammo har bir dasturning o'z qoidalari ("scope") bor. Boshlashdan oldin qoidalarni diqqat bilan o'qing va faqat ruxsat berilgan chegarada ishlang.</div>
-<h2>Kasb yo'llari</h2>
+<h2 id="kasb-yo-llari">Kasb yo'llari</h2>
 <p>Kiberxavfsizlik — keng soha. Turli qiziqishga mos turli rollar bor. Mana asosiylari va ular nima qilishi:</p>
 <ul><li><strong>Pentester (etik hujumchi):</strong> ruxsat bilan tizimlarni sinab, zaifliklarni topadi va hisobot yozadi;</li><li><strong>SOC tahlilchisi:</strong> loglarni kuzatib, hujumlarni aniqlaydi va hodisalarga birinchi javob beradi;</li><li><strong>Xavfsizlik muhandisi (security engineer):</strong> himoya tizimlarini quradi va sozlaydi;</li><li><strong>AppSec mutaxassisi:</strong> dasturlarni yozilish bosqichida xavfsiz qiladi, kodni tekshiradi;</li><li><strong>DevSecOps muhandisi:</strong> xavfsizlikni dasturlash va yetkazish jarayoniga avtomatik singdiradi.</li></ul>
 <p>Ko'pchilik bitta rolda boshlab, tajriba orttirgach boshqasiga o'tadi. Masalan, dasturchi AppSec'ga, tizim administratori esa SOC yoki security engineer yo'nalishiga o'tishi tabiiy.</p>
-<h2>Sertifikatlar</h2>
+<h2 id="sertifikatlar">Sertifikatlar</h2>
 <p>Sertifikatlar — bilimingizni tasdiqlash va ish topishda yordam beruvchi vositalar. Ular majburiy emas, lekin ko'p ish beruvchilar qadrlaydi. Mashhurlaridan:</p>
 <ul><li><strong>CompTIA Security+:</strong> boshlang'ich daraja, keng asoslarni qamraydi — yangi boshlovchilar uchun yaxshi start;</li><li><strong>CEH (Certified Ethical Hacker):</strong> etik xakerlik tushunchalarini qamrab oladi;</li><li><strong>OSCP (Offensive Security Certified Professional):</strong> amaliy va qiyin, pentesting ko'nikmalarini chuqur sinaydi.</li></ul>
 <div class="note">Sertifikat — maqsad emas, vosita. Haqiqiy qiymat — undagi bilim va amaliy ko'nikmada. Sertifikatsiz ham kuchli mutaxassis bo'lish mumkin; asosiysi — doimiy o'rganish va halol amaliyot.</div>
-<h2>Qanday boshlash: yo'l xaritasi</h2>
+<h2 id="qanday-boshlash-yo-l-xaritasi">Qanday boshlash: yo'l xaritasi</h2>
 <p>Kiberxavfsizlikka kirishni istasangiz, quyidagi bosqichli yo'l xaritasi yordam beradi:</p>
 <ol><li><strong>Asoslarni o'rganing:</strong> tarmoqlar, operatsion tizimlar (ayniqsa Linux), dasturlash asoslari;</li><li><strong>Xavfsizlik asoslarini o'zlashtiring:</strong> CIA triadasi, tahdidlar, himoya tamoyillari (aynan shu bob kabi);</li><li><strong>Bitta yo'nalish tanlang:</strong> himoya (Blue) yoki hujum (Red) — qiziqishingizga qarab;</li><li><strong>Qonuniy platformalarda mashq qiling:</strong> maxsus o'quv laboratoriyalari va "capture the flag" (CTF) o'yinlari;</li><li><strong>Jamoaga qo'shiling:</strong> forumlar, mahalliy uchrashuvlar, ochiq loyihalar.</li></ol>
 <p>Muhim: mashqni <strong>faqat qonuniy, sizga ruxsat berilgan platformalarda</strong> qiling. Maxsus o'quv laboratoriyalari (masalan, o'rgatish uchun ataylab zaif qilib qurilgan mashq muhitlari va CTF musobaqalari) aynan shu maqsad uchun mavjud — ularda hech kimga zarar bermasdan, qonuniy tarzda o'rganasiz.</p>
 <div class="warn">Hech qachon o'z ko'nikmalaringizni haqiqiy, ruxsat berilmagan tizimlarda "sinab ko'rish" vasvasasiga berilmang. Bu karyerangizni ham, kelajagingizni ham vayron qilishi mumkin. Sabr bilan qonuniy yo'ldan boring.</div>
-<h2>Bobning yakuniy so'zi</h2>
+<h2 id="bobning-yakuniy-so-zi">Bobning yakuniy so'zi</h2>
 <p>Ushbu bobda biz kiberxavfsizlikning asoslarini — CIA triadasidan tortib kasb yo'llarigacha — himoya nuqtai nazaridan o'rgandik. Endi siz tahdid qanday ishlashini tushunasiz va undan himoyalanishning asosiy tamoyillarini bilasiz.</p>
 <p>Eng muhimi shundaki, bu soha doimiy o'rganishni talab qiladi. Tahdidlar o'zgaradi, texnologiyalar rivojlanadi — yaxshi mutaxassis hech qachon o'rganishni to'xtatmaydi. Ammo bitta narsa doim o'zgarmaydi: etika va mas'uliyat.</p>
 <div class="tip">Oltin qoida — butun bu bobning yakuni: <strong>bilimingizni faqat o'zingizga tegishli yoki aniq ruxsat berilgan tizimlarda qo'llang</strong>. Kiberxavfsizlikda mahorat qanchalik muhim bo'lsa, etika va mas'uliyat undan ham muhimroqdir.</div>
@@ -675,6 +692,6 @@ console.log(oshkorTogrimi({ zaiflikdanFoydalanmadi: false, egasigaXabarBerdi: tr
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

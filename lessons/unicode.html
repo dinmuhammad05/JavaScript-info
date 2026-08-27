@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unicode, satr ichki tuzilishi — Kodla</title>
   <meta name="description" content="Satrlar UTF-16 da qanday saqlanadi, surrogat juftlar, kod nuqtalari, codePointAt va emoji uzunligi muammosi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>Unicode, satr ichki tuzilishi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#kod-birligi-va-kod-nuqtasi">Kod birligi va kod nuqtasi</a></li>
+<li class="lvl2"><a href="#surrogat-juftlar">Surrogat juftlar</a></li>
+<li class="lvl2"><a href="#codepointat-va-charcodeat">codePointAt va charCodeAt</a></li>
+<li class="lvl2"><a href="#u-escape-ketma-ketligi">\u escape ketma-ketligi</a></li>
+<li class="lvl2"><a href="#emoji-uzunligini-to-g-ri-sanash">Emoji uzunligini to'g'ri sanash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript satrlari <strong>UTF-16</strong> kodlashiga asoslanadi. Ko'p belgilar bitta "kod birligi"ga sig'adi, lekin ba'zilari (emoji, kam uchraydigan iyerogliflar) ikkitaga bo'linadi — bu esa satr uzunligi bilan bog'liq chalkashliklar keltirib chiqaradi.</p>
-<h2>Kod birligi va kod nuqtasi</h2>
+<h2 id="kod-birligi-va-kod-nuqtasi">Kod birligi va kod nuqtasi</h2>
 <p>Ikki muhim tushuncha:</p>
 <ul><li><strong>Kod birligi</strong> (code unit) — UTF-16 dagi 16-bitli qism. <code>str.length</code> aynan shu birliklarni sanaydi;</li><li><strong>Kod nuqtasi</strong> (code point) — belgiga to'liq mos keluvchi Unicode raqami. Ba'zi belgilar bitta kod nuqtasi, lekin ikkita kod birligidan iborat.</li></ul>
 <p>Oddiy belgilar uchun bu bir xil:</p>
@@ -605,7 +619,7 @@
 console.log(s.length);  // 5
 console.log(s[0]);      // s
 console.log(s.charCodeAt(0));  // 115</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Surrogat juftlar</h2>
+<h2 id="surrogat-juftlar">Surrogat juftlar</h2>
 <p>Kod nuqtasi <code>U+FFFF</code> dan katta bo'lgan belgilar (emoji, ba'zi harflar) ikkita kod birligi — <strong>surrogat juft</strong> bilan ifodalanadi. Shu sabab bitta emoji <code>length</code> bo'yicha "2" deb sanaladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unicode-surrogat.js</span></div><textarea spellcheck="false">let yurak = "\u{1F600}";  // tabassum emojisi
 
@@ -614,7 +628,7 @@ console.log(yurak.length);  // 2 (surrogat juft!)
 let harf = "a";
 console.log(harf.length);   // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Emoji yoki maxsus belgilar bilan ishlaganda <code>str.length</code> <strong>ko'rinadigan belgilar sonini bermaydi</strong>. U kod birliklarini sanaydi, emoji esa 2 (ba'zan undan ko'p) birlik oladi.</div>
-<h2>codePointAt va charCodeAt</h2>
+<h2 id="codepointat-va-charcodeat">codePointAt va charCodeAt</h2>
 <p><code>charCodeAt(i)</code> berilgan pozitsiyadagi <strong>kod birligini</strong> (0..65535) qaytaradi. <code>codePointAt(i)</code> esa surrogat juftni to'g'ri o'qib, <strong>to'liq kod nuqtasini</strong> qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unicode-codepoint.js</span></div><textarea spellcheck="false">let s = "\u{1F600}";  // emoji
 
@@ -624,14 +638,14 @@ console.log(s.codePointAt(0));  // 128512 (to'liq kod nuqtasi)
 // raqamdan belgi yasash
 console.log(String.fromCodePoint(128512));  // emoji</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>codePointAt</code> va <code>String.fromCodePoint</code> — surrogat juftlarni to'g'ri qayta ishlaydigan zamonaviy juftlik. Eski <code>charCodeAt</code>/<code>fromCharCode</code> faqat bitta kod birligi bilan ishlaydi.</div>
-<h2>\u escape ketma-ketligi</h2>
+<h2 id="u-escape-ketma-ketligi">\u escape ketma-ketligi</h2>
 <p>Unicode belgini kodi orqali yozishning uch usuli bor:</p>
 <ul><li><code>\xXX</code> — ikki o'n oltilik raqam (0..255);</li><li><code>\uXXXX</code> — to'rt o'n oltilik raqam (bitta UTF-16 birligi);</li><li><code>\u{X...}</code> — jingalak qavsda istalgan kod nuqtasi (5-6 raqamli belgilar uchun).</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unicode-escape.js</span></div><textarea spellcheck="false">console.log("\x41");        // A
 console.log("\u0041");      // A
 console.log("\u{1F60E}");   // ko'zoynakli emoji
 console.log("\u00e9");      // e (urg'uli)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Emoji uzunligini to'g'ri sanash</h2>
+<h2 id="emoji-uzunligini-to-g-ri-sanash">Emoji uzunligini to'g'ri sanash</h2>
 <p>Ko'rinadigan belgilarni to'g'ri sanash uchun satrni <code>for..of</code> yoki spread (<code>[...str]</code>) bilan aylantiring — ular kod nuqtalari bo'yicha yuradi, surrogat juftni butun deb oladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unicode-sanash.js</span></div><textarea spellcheck="false">let s = "a\u{1F600}b";  // a, emoji, b
 
@@ -645,7 +659,7 @@ for (let belgi of s) {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Bu ham hamma holatni yechmaydi: bayroq emojilari yoki teri rangi modifikatori qo'shilgan emojilar bir nechta kod nuqtasidan iborat bo'lib, <code>for..of</code> ularni bo'lib yuboradi. To'liq aniq sanash uchun <code>Intl.Segmenter</code> ishlatiladi.</div>
 <div class="tip">Foydalanuvchi kiritgan matn uzunligini cheklaganizda <code>str.length</code>ga ko'r-ko'rona ishonmang — emojili matnlarda u ko'rinadigan belgilardan katta bo'ladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>JavaScript satrlari UTF-16 da saqlanadi; <code>str.length</code> kod birliklarini sanaydi;</li><li>Kod nuqtasi <code>U+FFFF</code> dan katta belgilar <em>surrogat juft</em> (2 birlik) bilan yoziladi;</li><li><code>codePointAt</code> va <code>String.fromCodePoint</code> surrogat juftlarni to'g'ri qayta ishlaydi;</li><li><code>\xXX</code>, <code>\uXXXX</code>, <code>\u{X...}</code> — belgini kodi orqali yozish usullari;</li><li>Ko'rinadigan belgilarni sanash uchun <code>[...str]</code> yoki <code>for..of</code> (murakkab hollarda <code>Intl.Segmenter</code>).</li></ul>
 <nav class="lesson-nav">
   <a href="bigint.html"><span class="dir">← Oldingi</span><span class="ttl">BigInt</span></a>
@@ -659,6 +673,6 @@ for (let belgi of s) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

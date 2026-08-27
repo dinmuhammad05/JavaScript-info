@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OWASP Top 10 bilan tanishuv — Kodla</title>
   <meta name="description" content="OWASP nima, Top 10 nima uchun sanoat standarti, 2021 ro'yxatining sharhi, &quot;shift left&quot;, tahdid modellashtirish va himoyachi fikrlash tarzi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,27 +599,39 @@
 <main class="content article">
 <div class="crumbs">Web ilova xavfsizligi (OWASP Top 10)</div>
 <h1>OWASP Top 10 bilan tanishuv</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#owasp-nima">OWASP nima?</a></li>
+<li class="lvl2"><a href="#nega-top-10-standart-hisoblanadi">Nega Top 10 standart hisoblanadi?</a></li>
+<li class="lvl2"><a href="#2021-ro-yxatining-sharhi">2021 ro'yxatining sharhi</a></li>
+<li class="lvl2"><a href="#shift-left-xavfsizlikni-erta-o-ylash">Shift left: xavfsizlikni erta o'ylash</a></li>
+<li class="lvl2"><a href="#tahdid-modellashtirish-asoslari">Tahdid modellashtirish asoslari</a></li>
+<li class="lvl2"><a href="#himoyachi-fikrlash-tarzi">Himoyachi fikrlash tarzi</a></li>
+<li class="lvl2"><a href="#muhim-ogohlantirish-ruxsatsiz-test-qonunga-xilof">Muhim ogohlantirish: ruxsatsiz test qonunga xilof</a></li>
+  </ul>
+</details>
 <p class="lead">Web ilova internetga chiqqan zahoti u faqat foydalanuvchilarga emas, balki niyati buzuq kishilarga ham eshigini ochadi. Ushbu bobda biz zamonaviy web ilovalarga tahdid soladigan eng keng tarqalgan zaifliklarni <strong>faqat himoya nuqtai nazaridan</strong> o'rganamiz. Maqsad — sizni o'z kodini himoya qila oladigan, ehtiyotkor dasturchi qilib tarbiyalash. Keling, avval bu sohada nufuzli manba bo'lgan OWASP va uning mashhur Top 10 ro'yxati bilan tanishaylik.</p>
 <div class="note">Ushbu bob to'liq ta'lim maqsadida yozilgan. Har bir zaiflik uchun biz uning <strong>qanday paydo bo'lishini</strong> tushuntiramiz, keyin eng muhimi — undan <strong>qanday himoyalanishni</strong> o'rgatamiz. Hech qanday hujum yo'riqnomasi yoki tayyor "exploit" berilmaydi.</div>
-<h2>OWASP nima?</h2>
+<h2 id="owasp-nima">OWASP nima?</h2>
 <p><strong>OWASP</strong> (Open Worldwide Application Security Project) — dasturiy ta'minot xavfsizligini yaxshilashga bag'ishlangan nufuzli notijorat tashkilotdir. U 2001-yilda tashkil etilgan bo'lib, butun dunyodagi mutaxassislar hissa qo'shadigan ochiq hamjamiyatdir.</p>
 <p>OWASP tekin qo'llanmalar, tekshirish ro'yxatlari va ochiq kodli vositalar chiqaradi. Ularning eng mashhur mahsuloti — bu <strong>OWASP Top 10</strong>, ya'ni web ilovalarga eng ko'p va eng jiddiy zarar keltiradigan o'nta zaiflik toifasi ro'yxati.</p>
 <p>Bu ro'yxat bir necha yilda bir marta yangilanadi va u haqiqiy hodisalar, xavfsizlik hisobotlari va mutaxassislar tahliliga asoslanadi. Aynan shu sabab u sanoatda amaldagi standartga aylangan.</p>
-<h2>Nega Top 10 standart hisoblanadi?</h2>
+<h2 id="nega-top-10-standart-hisoblanadi">Nega Top 10 standart hisoblanadi?</h2>
 <p>OWASP Top 10 ni ko'plab kompaniyalar, auditorlar va hatto ba'zi qonunchilik talablari asos sifatida ishlatadi. Buning bir necha sababi bor:</p>
 <ul><li><strong>Ustuvorlik beradi:</strong> cheksiz ko'p zaiflik turlari orasidan aynan eng ko'p uchraydigan va eng zararlilariga e'tibor qaratadi;</li><li><strong>Umumiy til yaratadi:</strong> "bu Injection zaifligi" deganda butun jamoa nima haqida gap ketayotganini birdek tushunadi;</li><li><strong>Amaliy:</strong> har bir band uchun oldini olish bo'yicha aniq tavsiyalar bilan birga keladi;</li><li><strong>Mustaqil:</strong> u biror kompaniya mahsulotini sotmaydi, shuning uchun tavsiyalari xolis.</li></ul>
-<h2>2021 ro'yxatining sharhi</h2>
+<h2 id="2021-ro-yxatining-sharhi">2021 ro'yxatining sharhi</h2>
 <p>Quyida OWASP Top 10 (2021-yil nashri) toifalari va ularning qisqacha ma'nosi keltirilgan. Ushbu bobning keyingi darslarida biz shulardan eng muhimlarini chuqurroq ko'rib chiqamiz:</p>
 <ul><li><strong>A01 — Buzilgan kirish nazorati (Broken Access Control):</strong> foydalanuvchi o'ziga ruxsat etilmagan ma'lumot yoki amalga kira oladi;</li><li><strong>A02 — Kriptografik xatolar (Cryptographic Failures):</strong> maxfiy ma'lumot zaif shifrlangan yoki umuman shifrlanmagan;</li><li><strong>A03 — Injection:</strong> ishonchsiz kiritma kod sifatida bajariladi (SQL, buyruq va boshqalar);</li><li><strong>A04 — Xavfsiz bo'lmagan dizayn (Insecure Design):</strong> muammo kodda emas, balki arxitektura darajasida;</li><li><strong>A05 — Xavfsizlik noto'g'ri sozlangani (Security Misconfiguration):</strong> standart parollar, ochiq sozlamalar, ortiqcha ruxsatlar;</li><li><strong>A06 — Zaif va eskirgan komponentlar (Vulnerable Components):</strong> yangilanmagan kutubxonalar va paketlar;</li><li><strong>A07 — Identifikatsiya va autentifikatsiya xatolari:</strong> zaif parol siyosati, buzuq sessiya boshqaruvi;</li><li><strong>A08 — Ma'lumot va dastur butunligining buzilishi:</strong> ishonchsiz manbadan yangilanish, tekshirilmagan deserializatsiya;</li><li><strong>A09 — Xavfsizlik loglari va monitoring yetishmovchiligi:</strong> hujumni sezmaslik va kech aniqlash;</li><li><strong>A10 — Server tomonidan so'rov soxtalashtirish (SSRF):</strong> server aldab ichki resurslarga so'rov yuborishga majburlanadi.</li></ul>
-<h2>Shift left: xavfsizlikni erta o'ylash</h2>
+<h2 id="shift-left-xavfsizlikni-erta-o-ylash">Shift left: xavfsizlikni erta o'ylash</h2>
 <p>"<strong>Shift left</strong>" (chapga siljish) — bu xavfsizlik tekshiruvlarini dasturlash jarayonining <em>boshiga</em>, ya'ni loyihalash va kod yozish bosqichiga surish g'oyasi. Nomi shundan kelib chiqqanki, ishlab chiqish jarayonini chapdan (rejalashtirish) o'ngga (chiqarish) qarab chiziq deb tasavvur qilsangiz, xavfsizlikni imkon qadar chap tomonga surish kerak.</p>
 <p>Nima uchun bu muhim? Chunki zaiflik qanchalik kech topilsa, uni tuzatish shunchalik qimmat va og'riqli bo'ladi. Loyihalash bosqichida sezilgan xato — bir necha soatlik ish; ishga tushgan mahsulotda topilgan xato — ma'lumot buzilishi va obro'ning yo'qolishi bilan tugashi mumkin.</p>
 <ul><li>Xavfsizlikni "keyin qo'shamiz" degan xususiyat emas, dizayn qismi deb ko'ring;</li><li>Kod ko'rigi (code review) paytida xavfsizlik savollarini ham bering;</li><li>Avtomatik tekshiruvlarni (masalan, <code>npm audit</code>) CI quvuriga qo'shing.</li></ul>
-<h2>Tahdid modellashtirish asoslari</h2>
+<h2 id="tahdid-modellashtirish-asoslari">Tahdid modellashtirish asoslari</h2>
 <p><strong>Tahdid modellashtirish</strong> (threat modeling) — bu "tizimim qanday hujumga uchrashi mumkin?" degan savolni tizimli ravishda berish jarayoni. Bu murakkab narsa emas; oddiy holatda unga to'rtta savol bilan yondashish mumkin:</p>
 <ol><li><strong>Biz nima quryapmiz?</strong> — tizimning tuzilishini va ma'lumot oqimini chizib chiqing;</li><li><strong>Nima noto'g'ri ketishi mumkin?</strong> — har bir qismda qanday tahdid borligini o'ylang;</li><li><strong>Bu haqda nima qilamiz?</strong> — har bir tahdidga qarshi himoya chorasini belgilang;</li><li><strong>Yaxshi ish qildikmi?</strong> — chora yetarli ekanini tekshiring va qayta ko'rib chiqing.</li></ol>
 <p>Masalan, oddiy login formasi uchun: "Kimdir parolni son-sanoqsiz marta taxmin qilishga urinsa-chi?" degan savol sizni <em>rate limiting</em> qo'shishga olib keladi. Bu — tahdid modellashtirishning eng sodda ko'rinishi.</p>
-<h2>Himoyachi fikrlash tarzi</h2>
+<h2 id="himoyachi-fikrlash-tarzi">Himoyachi fikrlash tarzi</h2>
 <p>Xavfsizlikda muhim bir haqiqat bor: <strong>hujumchi bitta zaiflikni topsa yetadi, himoyachi esa barcha zaifliklarni yopishi kerak</strong>. Shu sabab yagona himoya qatlamiga tayanish xato — buni <strong>chuqurlashtirilgan himoya</strong> (defense in depth) deyiladi.</p>
 <p>Himoyachi dasturchi doim shu tamoyilni yodda tutadi:</p>
 <ul><li><strong>Kiritmaga ishonma:</strong> tashqaridan kelgan har qanday ma'lumot soxta bo'lishi mumkin;</li><li><strong>Xavfsiz standart:</strong> tizim sozlanmagan holatda ham xavfsiz bo'lsin, ochiq emas;</li><li><strong>Eng kam imtiyoz:</strong> har bir qism faqat zarur bo'lgan huquqqa ega bo'lsin;</li><li><strong>Qatlamli himoya:</strong> bitta qatlam yiqilsa, ikkinchisi ushlab qolsin.</li></ul>
@@ -640,7 +655,7 @@ console.log('admin ochirishi:', amalRuxsatmi('admin', 'ochirish'));
 // Noma'lum rol — standart holatda hamma narsa rad etiladi
 console.log('mehmon korishi:', amalRuxsatmi('mehmon', 'korish'));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: noma'lum rol uchun ro'yxat bo'sh bo'lgani sabab har qanday amal avtomatik rad etiladi. Bu — "standart holatda rad et" (deny by default) tamoyilining amaliy ko'rinishi.</p>
-<h2>Muhim ogohlantirish: ruxsatsiz test qonunga xilof</h2>
+<h2 id="muhim-ogohlantirish-ruxsatsiz-test-qonunga-xilof">Muhim ogohlantirish: ruxsatsiz test qonunga xilof</h2>
 <div class="warn">Ushbu bobda o'rgangan bilimlaringizni faqat <strong>o'zingizga tegishli</strong> yoki <strong>egasidan yozma ruxsat olingan</strong> tizimlarda qo'llang. Boshqa birovning saytini yoki tizimini ruxsatsiz "tekshirish", zaiflik izlash yoki hujum qilish — ko'plab mamlakatlarda jinoyat hisoblanadi va jiddiy javobgarlikka olib keladi. Bu bilim himoya uchun, hujum uchun emas.</div>
 <div class="note">Keyingi darslarda biz ro'yxatning eng muhim va eng ko'p uchraydigan bandlarini — kirish nazorati, Injection, XSS, CSRF/SSRF va noto'g'ri sozlashni — batafsil, zaif kod va uning xavfsiz muqobili bilan birga ko'rib chiqamiz.</div>
 <nav class="lesson-nav">
@@ -655,6 +670,6 @@ console.log('mehmon korishi:', amalRuxsatmi('mehmon', 'korish'));</textarea><div
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

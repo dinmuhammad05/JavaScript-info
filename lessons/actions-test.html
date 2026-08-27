@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Avtomatik test va build — Kodla</title>
   <meta name="description" content="Node o'rnatish, npm ci, npm test, build, matrix (bir nechta Node versiyasi), kesh va status badge.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">CI/CD (GitHub Actions)</div>
 <h1>Avtomatik test va build</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#node-js-muhitini-o-rnatish-setup-node">Node.js muhitini o'rnatish (setup-node)</a></li>
+<li class="lvl2"><a href="#npm-ci-bog-liqliklarni-o-rnatish">npm ci — bog'liqliklarni o'rnatish</a></li>
+<li class="lvl2"><a href="#test-va-build-qadamlari">Test va build qadamlari</a></li>
+<li class="lvl2"><a href="#to-liq-ci-workflow">To'liq CI workflow</a></li>
+<li class="lvl2"><a href="#matrix-bir-nechta-node-versiyasi">Matrix — bir nechta Node versiyasi</a></li>
+<li class="lvl2"><a href="#kesh-cache-tezlashtirish">Kesh (cache) — tezlashtirish</a></li>
+<li class="lvl2"><a href="#status-badge-readme-da-nishon">Status badge — README'da nishon</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi workflow'ni haqiqiy foydali qilamiz: Node.js loyihasini o'rnatib, testlarni ishga tushirib, build qilamiz. Bu — har bir Node loyihasining CI asosini tashkil qiladi.</p>
-<h2>Node.js muhitini o'rnatish (setup-node)</h2>
+<h2 id="node-js-muhitini-o-rnatish-setup-node">Node.js muhitini o'rnatish (setup-node)</h2>
 <p>Runner mashinasida Node bo'lishi mumkin, lekin biz aniq versiyani nazorat qilmoqchimiz. Buning uchun <code>actions/setup-node</code> action ishlatiladi:</p>
 <pre class="code"><code>steps:
   - name: Kodni yuklab olish
@@ -609,13 +625,13 @@
       node-version: '20'</code></pre>
 <p><code>with:</code> — action'ga parametr uzatish usuli. Bu yerda <code>node-version: '20'</code> deb Node'ning 20-versiyasini o'rnatamiz.</p>
 <div class="note">Versiyani tirnoq ichida (<code>'20'</code>) yozing. YAML <code>20.10</code> kabi sonlarni noto'g'ri o'qishi mumkin, tirnoq esa buni oldini oladi.</div>
-<h2>npm ci — bog'liqliklarni o'rnatish</h2>
+<h2 id="npm-ci-bog-liqliklarni-o-rnatish">npm ci — bog'liqliklarni o'rnatish</h2>
 <p>CI muhitida <code>npm install</code> emas, <code>npm ci</code> ishlatiladi. Farqi muhim:</p>
 <ul><li><code>npm ci</code> aniq <code>package-lock.json</code> asosida o'rnatadi — takrorlanadigan, bir xil natija beradi.</li><li><code>node_modules</code> papkasini avval tozalab, keyin toza o'rnatadi.</li><li><code>package.json</code> va lock fayl mos kelmasa, xato beradi (bu yaxshi — muammoni erta topadi).</li><li>Tezroq va CI uchun maxsus mo'ljallangan.</li></ul>
 <pre class="code"><code>  - name: Bog'liqliklarni o'rnatish
     run: npm ci</code></pre>
 <div class="warn"><code>npm ci</code> ishlashi uchun repoda <code>package-lock.json</code> bo'lishi <strong>shart</strong>. Uni <code>.gitignore</code> ga qo'ymang — lock fayl repoda bo'lishi kerak.</div>
-<h2>Test va build qadamlari</h2>
+<h2 id="test-va-build-qadamlari">Test va build qadamlari</h2>
 <p>Bog'liqliklar o'rnatilgach, testlar va build ishga tushadi. Bu <code>package.json</code>dagi skriptlarga bog'liq:</p>
 <pre class="code"><code>// package.json ichida:
 "scripts": {
@@ -633,7 +649,7 @@
   - name: Build
     run: npm run build</code></pre>
 <p>Agar biror qadam noldan farqli chiqish kodi (exit code) qaytarsa — masalan test buzilsa — job to'xtaydi va keyingi qadamlar ishlamaydi. Aynan shu bizga kerak.</p>
-<h2>To'liq CI workflow</h2>
+<h2 id="to-liq-ci-workflow">To'liq CI workflow</h2>
 <p>Barcha qadamlarni <code>.github/workflows/ci.yml</code> ga birlashtiramiz:</p>
 <pre class="code"><code>name: CI
 
@@ -664,7 +680,7 @@ jobs:
 
       - name: Build
         run: npm run build</code></pre>
-<h2>Matrix — bir nechta Node versiyasi</h2>
+<h2 id="matrix-bir-nechta-node-versiyasi">Matrix — bir nechta Node versiyasi</h2>
 <p>Loyihangiz Node 18, 20 va 22 da ishlashini tekshirmoqchimisiz? <strong>Matrix</strong> yordamida bitta job'ni har bir versiya uchun avtomatik takrorlaysiz:</p>
 <pre class="code"><code>jobs:
   test:
@@ -684,7 +700,7 @@ jobs:
       - run: npm test</code></pre>
 <p>Bu workflow uchta parallel job yaratadi: biri Node 18 uchun, biri 20, biri 22. Ular bir vaqtda ishlaydi. <code>${{ matrix.node-version }}</code> — matrix'dagi joriy qiymatga murojaat.</p>
 <div class="tip">Matrix faqat Node versiyasi uchun emas — operatsion tizim (<code>os: [ubuntu-latest, windows-latest]</code>) yoki boshqa o'zgaruvchilar uchun ham ishlatiladi. Ular kombinatsiyalarga bo'linadi.</div>
-<h2>Kesh (cache) — tezlashtirish</h2>
+<h2 id="kesh-cache-tezlashtirish">Kesh (cache) — tezlashtirish</h2>
 <p>Har safar <code>npm ci</code> bog'liqliklarni noldan yuklab oladi — bu sekin. <code>actions/setup-node</code> o'rnatilgan keshni qo'llab-quvvatlaydi:</p>
 <pre class="code"><code>  - name: Node.js o'rnatish (kesh bilan)
     uses: actions/setup-node@v4
@@ -693,12 +709,12 @@ jobs:
       cache: 'npm'</code></pre>
 <p><code>cache: 'npm'</code> qatori npm keshini saqlaydi va keyingi ishga tushirishlarda qayta ishlatadi. <code>package-lock.json</code> o'zgarmasa, bog'liqliklar keshdan olinadi — bu ancha tez.</p>
 <div class="note">Kesh avtomatik <code>package-lock.json</code> hash'i asosida boshqariladi. Lock fayl o'zgarsa, kesh yangilanadi. Siz hech narsa qilmaysiz — faqat <code>cache: 'npm'</code> qatorini qo'shasiz.</div>
-<h2>Status badge — README'da nishon</h2>
+<h2 id="status-badge-readme-da-nishon">Status badge — README'da nishon</h2>
 <p>CI holatini README'da ko'rsatuvchi <strong>badge</strong> (nishon) qo'shishingiz mumkin. U yashil (o'tdi) yoki qizil (buzildi) bo'ladi. Markdown ko'rinishi:</p>
 <pre class="code"><code>![CI](https://github.com/USER/REPO/actions/workflows/ci.yml/badge.svg)</code></pre>
 <p><code>USER</code> — GitHub foydalanuvchi nomi, <code>REPO</code> — repo nomi, <code>ci.yml</code> — workflow fayl nomi. Badge har doim asosiy shoxchaning oxirgi holatini ko'rsatadi.</p>
 <div class="tip">Badge'ni GitHub'da Actions &rarr; workflow &rarr; o'ng yuqoridagi "..." menyusidan "Create status badge" orqali avtomatik yaratib olishingiz mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>actions/setup-node@v4</code> bilan aniq Node versiyasini o'rnatasiz.</li><li>CI'da <code>npm install</code> emas, <code>npm ci</code> ishlating (takrorlanadigan, lock faylga bog'liq).</li><li><code>npm run lint</code>, <code>npm test</code>, <code>npm run build</code> — asosiy tekshiruv qadamlari.</li><li><strong>Matrix</strong> bir workflow'ni bir nechta Node versiyasi/OS uchun parallel takrorlaydi.</li><li><code>cache: 'npm'</code> bog'liqliklarni keshlab, ishni tezlashtiradi.</li><li><strong>Badge</strong> README'da CI holatini ko'rsatadi.</li></ul>
 <nav class="lesson-nav">
   <a href="actions-asoslar.html"><span class="dir">← Oldingi</span><span class="ttl">GitHub Actions asoslari</span></a>
@@ -712,6 +728,6 @@ jobs:
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

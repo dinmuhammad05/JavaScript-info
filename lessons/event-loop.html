@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hodisalar tsikli: mikro va makrovazifalar — Kodla</title>
   <meta name="description" content="Event loop — brauzer va Node.js kodni qanday tartibda bajarishi; makrovazifa va mikrovazifa navbatlari, render, setTimeout(0) va og'ir hisob-kitobni bo'lish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,22 +599,38 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha brauzer mavzulari</div>
 <h1>Hodisalar tsikli: mikro va makrovazifalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#hodisalar-tsikli-tushunchasi">Hodisalar tsikli tushunchasi</a></li>
+<li class="lvl2"><a href="#makrovazifalar-navbati">Makrovazifalar navbati</a></li>
+<li class="lvl2"><a href="#mikrovazifalar-navbati">Mikrovazifalar navbati</a></li>
+<li class="lvl2"><a href="#tartibga-oid-misol">Tartibga oid misol</a></li>
+<li class="lvl2"><a href="#faqat-sinxron-tartibli-playground-misol">Faqat sinxron tartibli playground misol</a></li>
+<li class="lvl2"><a href="#queuemicrotask-bilan-tartib">queueMicrotask bilan tartib</a></li>
+<li class="lvl2"><a href="#render-ekran-qachon-yangilanadi">Render — ekran qachon yangilanadi</a></li>
+<li class="lvl2"><a href="#og-ir-hisob-kitobni-bo-lish-settimeout-usuli">Og'ir hisob-kitobni bo'lish: setTimeout usuli</a></li>
+<li class="lvl2"><a href="#og-ir-hisob-kitob-va-mikrovazifa-farqi">Og'ir hisob-kitob va mikrovazifa farqi</a></li>
+<li class="lvl2"><a href="#amaliy-foyda-progressni-ko-rsatish">Amaliy foyda: progressni ko'rsatish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'ning bajarilish tartibini tushunish uchun eng muhim tushuncha — <strong>hodisalar tsikli</strong> (event loop). U brauzer (yoki Node.js) kelib tushgan vazifalarni qanday navbatga qo'yishini, qaysi biri oldin bajarilishini va render qachon bo'lishini boshqaradi. Ushbu darsda makrovazifa va mikrovazifa navbatlarini, ularning tartibini va amaliy oqibatlarini chuqur ko'rib chiqamiz.</p>
-<h2>Hodisalar tsikli tushunchasi</h2>
+<h2 id="hodisalar-tsikli-tushunchasi">Hodisalar tsikli tushunchasi</h2>
 <p>JavaScript dvigateli (engine) juda oddiy tamoyil asosida ishlaydi: <em>bajariladigan vazifa bo'lsa — bajaradi, bo'lmasa — kutadi</em>. Bu cheksiz aylanuvchi algoritm quyidagicha ta'riflanadi:</p>
 <ol><li>Navbatdagi eng eski vazifa bor bo'lsa — uni <strong>to'liq</strong> bajaradi;</li><li>So'ng barcha to'plangan <strong>mikrovazifalarni</strong> bajaradi;</li><li>Kerak bo'lsa <strong>render</strong> qiladi (ekranni yangilaydi);</li><li>Vazifa yo'q bo'lsa — yangi vazifa kelguncha kutadi;</li><li>Yangi vazifa kelsa — 1-qadamdan boshlab qaytaradi.</li></ol>
 <p>Bu yerda kalit tushuncha shuki, JavaScript <strong>bir oqimli</strong> (single-threaded): bir vaqtning o'zida faqat bitta vazifa bajariladi. Vazifa boshlanganda, u tugamaguncha boshqa hech narsa (hatto foydalanuvchi bosishlari ham) qayta ishlanmaydi.</p>
 <div class="warn">Agar biror vazifa juda uzoq davom etsa (masalan, og'ir tsikl), brauzer boshqa hech narsani bajara olmaydi: bosishlarga javob bermaydi, ekranni yangilamaydi. Foydalanuvchi "sahifa qotib qoldi" degan xabarni ko'radi. Shu bois og'ir hisob-kitobni bo'lish kerak (bu haqda quyida).</div>
-<h2>Makrovazifalar navbati</h2>
+<h2 id="makrovazifalar-navbati">Makrovazifalar navbati</h2>
 <p><strong>Makrovazifa</strong> (macrotask) — event loop bajaradigan asosiy, yirik vazifa. Makrovazifalarga quyidagilar kiradi:</p>
 <ul><li>Skriptning o'zi (dastlabki kodni ishga tushirish);</li><li><code>setTimeout</code> va <code>setInterval</code> chaqiruvlari;</li><li>Foydalanuvchi hodisalarini qayta ishlash (<code>click</code>, <code>keydown</code> va h.k.);</li><li>Tarmoq so'rovi tugaganda ishlaydigan kod (masalan, hodisa sifatida).</li></ul>
 <p>Makrovazifalar navbatda (queue) turadi va event loop ularni <strong>birma-bir</strong>, kelgan tartibida bajaradi (FIFO — First In, First Out).</p>
-<h2>Mikrovazifalar navbati</h2>
+<h2 id="mikrovazifalar-navbati">Mikrovazifalar navbati</h2>
 <p><strong>Mikrovazifa</strong> (microtask) — asosan <code>Promise</code>lardan kelib chiqadigan mayda vazifa. Mikrovazifalar quyidagilar orqali hosil bo'ladi:</p>
 <ul><li><code>.then</code>, <code>.catch</code>, <code>.finally</code> ishlovchilari;</li><li><code>async/await</code> ichida <code>await</code>dan keyingi kod;</li><li><code>queueMicrotask(fn)</code> — mikrovazifani qo'lda navbatga qo'yish.</li></ul>
 <p>Eng muhim qoida: <strong>har bir makrovazifa tugagach, event loop navbatdagi keyingi makrovazifaga o'tishdan oldin BARCHA to'plangan mikrovazifalarni bajaradi</strong>. Agar mikrovazifalar ichida yana yangi mikrovazifalar paydo bo'lsa, ular ham darhol, shu yerda bajariladi.</p>
 <div class="note">Ya'ni tartib shunday: <em>bitta makrovazifa → butun mikrovazifalar navbati (bo'shatilguncha) → (kerak bo'lsa render) → keyingi makrovazifa</em>. Mikrovazifalar makrovazifalardan <strong>oldin</strong> ustunlikka ega.</div>
-<h2>Tartibga oid misol</h2>
+<h2 id="tartibga-oid-misol">Tartibga oid misol</h2>
 <p>Quyidagi kod nima chiqaradi? Bu klassik savol. Kodni o'ylab ko'ring:</p>
 <pre class="code"><code>console.log('1: skript boshi');
 
@@ -628,7 +647,7 @@ console.log('4: skript oxiri');</code></pre>
 <p>Sababi:</p>
 <ol><li><code>'1'</code> va <code>'4'</code> — bular joriy makrovazifa (skript) ichida sinxron bajariladi;</li><li><code>'3'</code> (promise) — mikrovazifa. U skript tugagach, keyingi makrovazifadan <strong>oldin</strong> bajariladi;</li><li><code>'2'</code> (setTimeout) — yangi makrovazifa, u navbatning oxirida, mikrovazifalardan keyin bajariladi.</li></ol>
 <div class="tip"><code>setTimeout(fn, 0)</code> "darhol bajar" degani emas — u "joriy makrovazifa va barcha mikrovazifalar tugagach, keyingi makrovazifa sifatida bajar" degani. Shuning uchun <code>Promise.then</code> undan doim oldin ishlaydi.</div>
-<h2>Faqat sinxron tartibli playground misol</h2>
+<h2 id="faqat-sinxron-tartibli-playground-misol">Faqat sinxron tartibli playground misol</h2>
 <p>Quyidagi misolda hech qanday kechikish yo'q — barchasi sinxron, shu bois tartib aniq va tekshirsa bo'ladi. Bu event loop emas, balki oddiy chaqiruvlar steki (call stack) tartibi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sinxron-tartib.js</span></div><textarea spellcheck="false">function ichki() {
   console.log('2: ichki funksiya');
@@ -643,7 +662,7 @@ function tashqi() {
 tashqi();
 console.log('4: eng oxir');</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Chiqish: <code>1, 2, 3, 4</code> — chunki funksiya chaqiruvlari steki sinxron ishlaydi; hech narsa navbatga qo'yilmaydi.</p>
-<h2>queueMicrotask bilan tartib</h2>
+<h2 id="queuemicrotask-bilan-tartib">queueMicrotask bilan tartib</h2>
 <p>Sof mikrovazifa tartibini <code>queueMicrotask</code> orqali ham ko'rsatish mumkin. Mikrovazifa hozirgi sinxron kod tugagach ishlaydi:</p>
 <pre class="code"><code>console.log('A: boshi');
 
@@ -653,7 +672,7 @@ console.log('B: oxiri');
 
 // Chiqish: A, B, C</code></pre>
 <p>Ya'ni <code>queueMicrotask</code> kodni "joriy sinxron blok tugagandan keyin, lekin har qanday <code>setTimeout</code>dan oldin" bajarilishga qo'yadi.</p>
-<h2>Render — ekran qachon yangilanadi</h2>
+<h2 id="render-ekran-qachon-yangilanadi">Render — ekran qachon yangilanadi</h2>
 <p>Brauzer ekranni har bir makrovazifadan keyin (va barcha mikrovazifalar tugagach) yangilashi <strong>mumkin</strong>. Lekin muhimi shundaki, render <em>hech qachon vazifa o'rtasida bo'lmaydi</em>. Agar vazifa uzoq davom etsa, uning ichida DOMni necha marta o'zgartirsangiz ham, foydalanuvchi faqat vazifa tugagach oxirgi holatni ko'radi.</p>
 <pre class="code"><code>// bu kod ekranda faqat oxirgi rangni ko'rsatadi
 elem.style.color = 'red';
@@ -661,7 +680,7 @@ elem.style.color = 'green';
 elem.style.color = 'blue';
 // render faqat kod tugagach bo'ladi -&gt; ko'k rang ko'rinadi</code></pre>
 <div class="note">Animatsiyalarni brauzer render tsikliga moslash uchun <code>requestAnimationFrame(fn)</code> ishlatiladi — u <code>fn</code>ni keyingi render'dan oldin chaqiradi. Bu <code>setTimeout</code>dan aniqroq va silliqroq animatsiya beradi.</div>
-<h2>Og'ir hisob-kitobni bo'lish: setTimeout usuli</h2>
+<h2 id="og-ir-hisob-kitobni-bo-lish-settimeout-usuli">Og'ir hisob-kitobni bo'lish: setTimeout usuli</h2>
 <p>Faraz qilaylik, bizda juda katta hisob-kitob bor — u bir necha soniya davom etadi. Uni bitta makrovazifada bajarsak, brauzer shu vaqt davomida qotib qoladi. Yechim — ishni kichik bo'laklarga bo'lib, har bir bo'lakni <code>setTimeout</code> orqali alohida makrovazifada bajarish. Bu boshqa hodisalarga (bosishlar, render) "nafas olish" imkonini beradi:</p>
 <pre class="code"><code>let i = 0;
 let natija = 0;
@@ -682,13 +701,13 @@ function hisobla() {
 hisobla();</code></pre>
 <p>Bu yerda har <code>setTimeout(hisobla, 0)</code> chaqiruvi orasida event loop boshqa makrovazifalarni (foydalanuvchi hodisalari, render) bajarishga ulguradi. Natijada brauzer "tirik" qoladi.</p>
 <div class="warn">Ammo <code>setTimeout(fn, 0)</code> tez-tez chaqirilsa ham, brauzer minimal kechikishni (odatda joylashish darajasi 5 dan oshsa ~4 ms) qo'shadi. Shuning uchun ko'p kichik bo'laklar sekinlashuvga olib kelishi mumkin. Shu bois har bo'lakni juda kichik qilmang — masalan, yuqoridagi kabi katta blok bilan ishlang.</div>
-<h2>Og'ir hisob-kitob va mikrovazifa farqi</h2>
+<h2 id="og-ir-hisob-kitob-va-mikrovazifa-farqi">Og'ir hisob-kitob va mikrovazifa farqi</h2>
 <p>Muhim: og'ir ishni <code>Promise.then</code> yoki <code>queueMicrotask</code> orqali bo'lish <strong>foyda bermaydi</strong>. Chunki mikrovazifalar joriy makrovazifadan keyin, lekin <em>render'dan oldin</em> bajariladi. Agar siz ishni mikrovazifalar orqali bo'lsangiz, brauzer ular hammasi tugamaguncha renderga o'ta olmaydi — sahifa baribir qotib qoladi.</p>
 <div class="tip">Qoida: <strong>foydalanuvchi interfeysini bloklamaslik kerak bo'lsa — ishni makrovazifalar (<code>setTimeout</code>) orqali bo'ling</strong>, mikrovazifalar orqali emas. Mikrovazifalar renderni orqaga surmaydi, ular renderdan oldin turadi.</div>
 <div class="note">Zamonaviy usul — haqiqatan og'ir hisob-kitobni <strong>Web Worker</strong>ga chiqarish. U alohida oqimda (thread) ishlaydi va asosiy oqimni umuman bloklamaydi. <code>setTimeout</code> bilan bo'lish esa sof JavaScript darajasidagi yechim.</div>
-<h2>Amaliy foyda: progressni ko'rsatish</h2>
+<h2 id="amaliy-foyda-progressni-ko-rsatish">Amaliy foyda: progressni ko'rsatish</h2>
 <p>Ishni <code>setTimeout</code> bilan bo'lishning yana bir foydasi — jarayon davomida <strong>progressni yangilash</strong>. Har bir bo'lakdan keyin render bo'lgani uchun, foydalanuvchi "progress bar"ning harakatini real vaqtda ko'radi. Agar hammasi bitta makrovazifada bo'lganida, faqat oxirida to'satdan 100% ko'rinardi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Event loop — vazifalarni birma-bir bajaruvchi cheksiz tsikl; JavaScript bir oqimli;</li><li><strong>Makrovazifalar</strong>: skript, <code>setTimeout</code>/<code>setInterval</code>, hodisalar. Navbatda birma-bir bajariladi;</li><li><strong>Mikrovazifalar</strong>: <code>Promise.then/catch/finally</code>, <code>await</code>dan keyingi kod, <code>queueMicrotask</code>;</li><li>Tartib: bitta makrovazifa → barcha mikrovazifalar → (render) → keyingi makrovazifa. Mikrovazifalar ustunlikka ega;</li><li><code>setTimeout(fn, 0)</code> — "darhol" emas, "navbatning oxirida keyingi makrovazifa sifatida" degani;</li><li>Render vazifa o'rtasida bo'lmaydi — faqat vazifa tugagach ekran yangilanadi;</li><li>Og'ir hisob-kitobni interfeysni bloklamasdan bajarish uchun uni <code>setTimeout</code> orqali makrovazifalarga bo'ling (mikrovazifalarga emas), yoki Web Worker'dan foydalaning.</li></ul>
 <nav class="lesson-nav">
   <a href="selection-range.html"><span class="dir">← Oldingi</span><span class="ttl">Tanlash va Range</span></a>
@@ -702,6 +721,6 @@ hisobla();</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

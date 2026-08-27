@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tez saralashlar: Merge Sort va Quick Sort — Kodla</title>
   <meta name="description" content="O(n log n) saralash — bo'lib tashla va hukmronlik qil, merge/quick sort ishlashi, pivot tanlash va JS'ning sort() metodi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,30 @@
 <main class="content article">
 <div class="crumbs">Qidiruv va saralash</div>
 <h1>Tez saralashlar: Merge Sort va Quick Sort</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#bo-lib-tashla-va-hukmronlik-qil">Bo'lib tashla va hukmronlik qil</a></li>
+<li class="lvl2"><a href="#merge-sort-bo-l-sarala-birlashtir">Merge Sort: bo'l, sarala, birlashtir</a></li>
+<li class="lvl3"><a href="#birlashtirish-merge-qanday-ishlaydi">Birlashtirish (merge) qanday ishlaydi?</a></li>
+<li class="lvl3"><a href="#merge-sort-big-o">Merge Sort Big O</a></li>
+<li class="lvl2"><a href="#quick-sort-pivot-va-partition">Quick Sort: pivot va partition</a></li>
+<li class="lvl3"><a href="#pivot-tanlash-muhim">Pivot tanlash muhim</a></li>
+<li class="lvl3"><a href="#quick-sort-big-o">Quick Sort Big O</a></li>
+<li class="lvl2"><a href="#merge-vs-quick-taqqoslash-jadvali">Merge vs Quick: taqqoslash jadvali</a></li>
+<li class="lvl2"><a href="#javascript-ning-o-rnatilgan-sort-metodi">JavaScript'ning o'rnatilgan sort() metodi</a></li>
+<li class="lvl3"><a href="#taqqoslash-funksiyasi-qanday-ishlaydi">Taqqoslash funksiyasi qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#amaliyot-real-hayotda-nima-ishlatiladi">Amaliyot: real hayotda nima ishlatiladi?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">O'tgan darsda oddiy saralashlar O(n²) devoriga urilib to'xtadi — million element ular uchun juda ko'p. Endi bu devorni buzamiz. Merge sort va Quick sort — O(n log n) da ishlaydigan ikkita klassik algoritm bo'lib, ikkalasi ham bitta chiroyli g'oyaga tayanadi: <em>bo'lib tashla va hukmronlik qil</em>. Bu darsda ularni noldan quramiz, taqqoslaymiz va nihoyat kundalik kodda ishlatiladigan JavaScript'ning o'rnatilgan <code>sort()</code> metodini o'rganamiz.</p>
-<h2>Bo'lib tashla va hukmronlik qil</h2>
+<h2 id="bo-lib-tashla-va-hukmronlik-qil">Bo'lib tashla va hukmronlik qil</h2>
 <p><strong>Divide and conquer</strong> (bo'lib tashla va hukmronlik qil) — muammoni yechishning kuchli usuli. Uch qadamdan iborat:</p>
 <ol><li><strong>Bo'l (divide):</strong> katta masalani kichikroq bir xil turdagi masalalarga bo'lamiz.</li><li><strong>Yech (conquer):</strong> kichik masalalarni rekursiv ravishda yechamiz (juda kichkinasi darrov yechiladi).</li><li><strong>Birlashtir (combine):</strong> kichik yechimlarni birlashtirib, katta masalaning yechimini quramiz.</li></ol>
 <p>Nega bu tezlik beradi? Chunki masalani har safar teng ikkiga bo'lish — bu bizga tanish O(log n) chuqurlikni beradi, va har darajada jami O(n) ish bajariladi. Ko'paytirsak: O(n log n).</p>
 <div class="note">Ikkilik qidiruvda ham xuddi shu "yarmga bo'lish" g'oyasini ko'rgandik. Divide and conquer — o'sha g'oyaning umumlashtirilgan, saralashga ham qo'llaniladigan shakli.</div>
-<h2>Merge Sort: bo'l, sarala, birlashtir</h2>
+<h2 id="merge-sort-bo-l-sarala-birlashtir">Merge Sort: bo'l, sarala, birlashtir</h2>
 <p><strong>Merge sort</strong> massivni ikkita yarmga bo'ladi, har yarmni rekursiv saralaydi, so'ng ikkita saralangan yarmni bitta saralangan massivga <strong>birlashtiradi</strong> (merge). Rekursiya massiv bir elementga qisqarguncha davom etadi — bitta element esa allaqachon "saralangan".</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>merge-sort.js</span></div><textarea spellcheck="false">function mergeSort(massiv) {
   // Asos holati: 1 yoki 0 element — allaqachon saralangan
@@ -640,7 +660,7 @@ function merge(chap, ong) {
 
 console.log(mergeSort([5, 2, 9, 1, 5, 6, 3]));
 // [1, 2, 3, 5, 5, 6, 9]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Birlashtirish (merge) qanday ishlaydi?</h3>
+<h3 id="birlashtirish-merge-qanday-ishlaydi">Birlashtirish (merge) qanday ishlaydi?</h3>
 <p><code>merge</code> funksiyasi — algoritmning yuragi. Bizda ikkita <em>allaqachon saralangan</em> massiv bor. Har ikkalasining boshiga barmoq qo'yamiz (<code>i</code> va <code>j</code>), kichigini natijaga olamiz va o'sha barmoqni bir qadam suramiz. Ikkala massiv saralangani uchun bu bir marta o'tishda (O(n)) yangi saralangan massivni beradi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>merge-step.js</span></div><textarea spellcheck="false">function merge(chap, ong) {
   const natija = [];
@@ -656,10 +676,10 @@ console.log(mergeSort([5, 2, 9, 1, 5, 6, 3]));
 console.log(merge([1, 4, 7], [2, 3, 8, 9]));
 // [1, 2, 3, 4, 7, 8, 9]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Diqqat: <code>chap[i] &lt;= ong[j]</code> dagi <code>&lt;=</code> muhim — u tenglik holatida chap tomondagi elementni oldin oladi, bu esa merge sortni <strong>barqaror</strong> (stable) qiladi.</p>
-<h3>Merge Sort Big O</h3>
+<h3 id="merge-sort-big-o">Merge Sort Big O</h3>
 <ul><li><strong>Eng yaxshi / o'rtacha / eng yomon:</strong> O(n log n) — har uch holatda ham bir xil, chunki massiv doim teng yarmga bo'linadi.</li><li><strong>Xotira:</strong> O(n) — birlashtirish uchun qo'shimcha massivlar yaratiladi.</li><li><strong>Barqaror:</strong> ha (to'g'ri yozilganda).</li></ul>
 <div class="tip">Merge sortning kafolatlangan O(n log n) va barqarorligi uni katta ma'lumot va tashqi saralash (fayllarni saralash) uchun ishonchli tanlov qiladi. To'lovi — qo'shimcha O(n) xotira.</div>
-<h2>Quick Sort: pivot va partition</h2>
+<h2 id="quick-sort-pivot-va-partition">Quick Sort: pivot va partition</h2>
 <p><strong>Quick sort</strong> ham bo'lib-hukmronlik qiladi, ammo boshqacha. U bitta element — <strong>pivot</strong> (tayanch) — tanlaydi va massivni shunday ajratadiki: pivotdan kichiklar chapga, kattalar o'ngga tushadi. Bu amal <strong>partition</strong> deyiladi. So'ng chap va o'ng qismlarni rekursiv saralaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>quick-sort.js</span></div><textarea spellcheck="false">function quickSort(massiv) {
   // Asos holati
@@ -687,7 +707,7 @@ console.log(merge([1, 4, 7], [2, 3, 8, 9]));
 console.log(quickSort([5, 2, 9, 1, 5, 6, 3]));
 // [1, 2, 3, 5, 5, 6, 9]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu versiya o'qish uchun soddalashtirilgan (yangi massivlar yaratadi). Amaliy quick sort odatda massiv ichida joyida (in-place) ajratib, kamroq xotira sarflaydi. Ammo g'oya bir xil: pivot tanla, ajrat, rekursiv saralash.</p>
-<h3>Pivot tanlash muhim</h3>
+<h3 id="pivot-tanlash-muhim">Pivot tanlash muhim</h3>
 <p>Quick sortning tezligi to'g'ridan-to'g'ri <strong>pivot tanlash</strong>ga bog'liq. Ideal pivot massivni teng ikkiga bo'ladi — o'shanda O(n log n) olamiz. Ammo agar pivot doim eng kichik yoki eng katta element bo'lib chiqsa, ajratish notekis bo'ladi va algoritm sekinlashadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>quick-random-pivot.js</span></div><textarea spellcheck="false">// Yaxshiroq: tasodifiy pivot yomon holatlar ehtimolini kamaytiradi
 function quickSortTasodifiy(massiv) {
@@ -709,10 +729,10 @@ function quickSortTasodifiy(massiv) {
 console.log(quickSortTasodifiy([8, 3, 8, 1, 9, 2, 8]));
 // [1, 2, 3, 8, 8, 8, 9]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Eng yomon holat O(n²): agar massiv allaqachon saralangan bo'lsa va siz doim birinchi (yoki oxirgi) elementni pivot qilib olsangiz, har partition faqat bitta elementni ajratadi va rekursiya n darajaga chuqurlashadi. Aynan shuning uchun amalda tasodifiy yoki "o'rta uchtaning medianasi" (median-of-three) pivot ishlatiladi.</div>
-<h3>Quick Sort Big O</h3>
+<h3 id="quick-sort-big-o">Quick Sort Big O</h3>
 <ul><li><strong>Eng yaxshi / o'rtacha:</strong> O(n log n) — pivot massivni yaxshi bo'lganda.</li><li><strong>Eng yomon:</strong> O(n²) — yomon pivot (masalan saralangan massivda chekka pivot).</li><li><strong>Xotira:</strong> O(log n) — rekursiya steki (joyida versiyada).</li><li><strong>Barqaror:</strong> yo'q — uzoq masofaga almashtirishlar teng elementlar tartibini buzadi.</li></ul>
 <div class="note">Merge sortdan farqli, joyida yozilgan quick sort qo'shimcha katta massiv talab qilmaydi — shuning uchun u amalda ko'pincha merge sortdan tezroq ishlaydi, garchi ikkalasi ham o'rtacha O(n log n) bo'lsa-da. "Konstanta koeffitsientlar" muhim: bir xil Big O ichida ham amaliy tezlik farq qiladi.</div>
-<h2>Merge vs Quick: taqqoslash jadvali</h2>
+<h2 id="merge-vs-quick-taqqoslash-jadvali">Merge vs Quick: taqqoslash jadvali</h2>
 <pre class="code"><code>Xususiyat          | Merge Sort       | Quick Sort
 -------------------|------------------|------------------
 Eng yaxshi         | O(n log n)       | O(n log n)
@@ -722,7 +742,7 @@ Xotira             | O(n)             | O(log n)
 Barqaror?          | Ha               | Yo'q
 Joyida (in-place)? | Yo'q             | Ha (odatda)</code></pre>
 <ul><li><strong>Merge sort</strong>ni tanlang: kafolatlangan O(n log n) va barqarorlik kerak bo'lsa (masalan bir xil kalitli yozuvlar tartibi muhim bo'lsa).</li><li><strong>Quick sort</strong>ni tanlang: xotira cheklangan bo'lsa va o'rtacha tezlik muhim bo'lsa; yomon holatdan tasodifiy pivot bilan qochiladi.</li></ul>
-<h2>JavaScript'ning o'rnatilgan sort() metodi</h2>
+<h2 id="javascript-ning-o-rnatilgan-sort-metodi">JavaScript'ning o'rnatilgan sort() metodi</h2>
 <p>Yaxshi xabar: kundalik kodda siz bu algoritmlarni qo'lda yozmaysiz. JavaScript'da <code>Array.prototype.sort()</code> bor va zamonaviy dvigatellar uni juda tez, barqaror algoritm (odatda <em>Timsort</em> — merge va insertion sort aralashmasi) bilan amalga oshiradi.</p>
 <p>Ammo bitta muhim tuzoq bor. Standart <code>sort()</code> elementlarni <strong>satr sifatida</strong>, leksikografik (lug'at) tartibda solishtiradi. Bu sonlar uchun kutilmagan natija beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>js-sort.js</span></div><textarea spellcheck="false">const sonlar = [10, 2, 1, 20, 3];
@@ -739,7 +759,7 @@ console.log([...sonlar].sort((a, b) =&gt; a - b));
 console.log([...sonlar].sort((a, b) =&gt; b - a));
 // [20, 10, 3, 2, 1]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Bu — JavaScript'dagi eng ko'p uchraydigan xatolardan biri. <code>[10, 2, 1].sort()</code> sizga <code>[1, 10, 2]</code> beradi, chunki sonlar avval satrga aylantiriladi. Sonlarni saralaganda <strong>doim</strong> taqqoslash funksiyasi bering: o'sish uchun <code>(a, b) => a - b</code>.</div>
-<h3>Taqqoslash funksiyasi qanday ishlaydi?</h3>
+<h3 id="taqqoslash-funksiyasi-qanday-ishlaydi">Taqqoslash funksiyasi qanday ishlaydi?</h3>
 <p><code>sort(compareFn)</code> ikkita elementni oladi va son qaytaradi: <strong>manfiy</strong> bo'lsa <code>a</code> oldinga, <strong>musbat</strong> bo'lsa <code>b</code> oldinga, <strong>0</strong> bo'lsa tartib o'zgarmaydi. Shu qoida bilan obyektlarni ham istalgan maydon bo'yicha saralash mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sort-objects.js</span></div><textarea spellcheck="false">const odamlar = [
   { ism: "Ali", yosh: 30 },
@@ -757,11 +777,11 @@ odamlar.sort((a, b) =&gt; a.ism.localeCompare(b.ism));
 console.log(odamlar.map(o =&gt; o.ism));
 // [ 'Ali', 'Guli', 'Vali' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">ES2019 dan boshlab <code>Array.prototype.sort()</code> spetsifikatsiya bo'yicha <strong>barqaror</strong> bo'lishi kafolatlangan. Ya'ni teng kalitli elementlarning boshlang'ich tartibi saqlanadi — bu ko'p bosqichli saralashlar uchun juda foydali.</div>
-<h2>Amaliyot: real hayotda nima ishlatiladi?</h2>
+<h2 id="amaliyot-real-hayotda-nima-ishlatiladi">Amaliyot: real hayotda nima ishlatiladi?</h2>
 <p>Real loyihalarda deyarli har doim tilning o'rnatilgan <code>sort()</code> metodini ishlatasiz. U ko'p yillar davomida optimallashtirilgan, barqaror, va sizning qo'lda yozgan versiyangizdan tez hamda ishonchliroq.</p>
 <ul><li><strong>Kundalik kod:</strong> o'rnatilgan <code>sort()</code> — hech qachon o'z quick sortingizni yozmang.</li><li><strong>O'rganish va intervyu:</strong> merge/quick sortni qo'lda yoza olish va Big O ni tushuntira olish muhim ko'nikma.</li><li><strong>Maxsus holatlar:</strong> tashqi saralash (juda katta fayllar) yoki maxsus xotira cheklovlari bo'lsagina qo'lda algoritm kerak bo'lishi mumkin.</li></ul>
 <div class="tip">Intervyularda merge sort va quick sortni tushuntira olish, ularning Big O va barqarorlik farqini bilish talab qilinadi. Real ish kodida esa deyarli har doim built-in <code>sort()</code> — bu ikki dunyoni ajrata bilish yetuk dasturchining belgisi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Divide and conquer — masalani teng bo'lib, yechib, birlashtirish; O(n log n) ga olib keladi.</li><li>Merge sort — bo'l, rekursiv sarala, birlashtir; doim O(n log n), xotira O(n), barqaror.</li><li>Quick sort — pivot tanla, partition qil, rekursiv sarala; o'rtacha O(n log n), eng yomon O(n²), xotira O(log n), barqaror emas.</li><li>Pivot tanlash quick sort tezligini belgilaydi — tasodifiy pivot yomon holatdan himoya qiladi.</li><li>JS'ning <code>sort()</code> barqaror va tez; sonlarda doim <code>(a, b) => a - b</code> bering, aks holda leksikografik xato bo'ladi.</li><li>Real kodda built-in sort, intervyuda esa merge/quick sortni tushuntira olish kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="sorting-oddiy.html"><span class="dir">← Oldingi</span><span class="ttl">Oddiy saralashlar: Bubble, Selection, Insertion</span></a>
@@ -775,6 +795,6 @@ console.log(odamlar.map(o =&gt; o.ism));
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

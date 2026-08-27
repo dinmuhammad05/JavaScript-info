@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Statik saytga xizmat ko'rsatish — Kodla</title>
   <meta name="description" content="Statik HTML/CSS/JS saytni Nginx orqali chiqarish: root va index, location bilan yo'llar, try_files, 404 sahifasi, gzip yoqish va kesh sarlavhalari. To'liq server bloki namunasi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Nginx</div>
 <h1>Statik saytga xizmat ko'rsatish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#oddiy-statik-sayt-uchun-config">Oddiy statik sayt uchun config</a></li>
+<li class="lvl2"><a href="#root-va-index-ni-tushunish">root va index'ni tushunish</a></li>
+<li class="lvl2"><a href="#try-files-direktivasi">try_files direktivasi</a></li>
+<li class="lvl2"><a href="#location-bilan-yo-llarni-boshqarish">location bilan yo'llarni boshqarish</a></li>
+<li class="lvl2"><a href="#maxsus-404-sahifasi">Maxsus 404 sahifasi</a></li>
+<li class="lvl2"><a href="#gzip-siqishni-yoqish">gzip siqishni yoqish</a></li>
+<li class="lvl2"><a href="#kesh-sarlavhalari">Kesh sarlavhalari</a></li>
+<li class="lvl2"><a href="#to-liq-namuna">To'liq namuna</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Nginx'ning eng asosiy va eng ko'p ishlatiladigan vazifasi — <strong>statik saytga xizmat ko'rsatish</strong>. Ya'ni disk'da yotgan HTML, CSS, JavaScript fayllar va rasmlarni brauzerga uzatish. Ushbu darsda oddiy statik saytni to'liq sozlashni, <code>try_files</code>, 404 sahifasi, gzip siqish va keshlashni batafsil o'rganamiz.</p>
-<h2>Oddiy statik sayt uchun config</h2>
+<h2 id="oddiy-statik-sayt-uchun-config">Oddiy statik sayt uchun config</h2>
 <p>Faraz qilaylik, saytimiz fayllari <code>/var/www/mysite</code> papkasida (ichida <code>index.html</code>, <code>style.css</code> va h.k.). Eng sodda config quyidagicha:</p>
 <pre class="code"><code>server {
     listen 80;
@@ -614,19 +631,19 @@
 <pre class="code"><code>sudo ln -s /etc/nginx/sites-available/mysite /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo nginx -s reload</code></pre>
-<h2>root va index'ni tushunish</h2>
+<h2 id="root-va-index-ni-tushunish">root va index'ni tushunish</h2>
 <p><code>root</code> — bu saytning "ildiz" papkasi. Brauzerdan kelgan yo'l shu papkaga qo'shiladi:</p>
 <ul><li>So'rov <code>/</code> &rarr; Nginx <code>/var/www/mysite/</code> papkasiga qaraydi;</li><li>So'rov <code>/style.css</code> &rarr; Nginx <code>/var/www/mysite/style.css</code> faylini beradi;</li><li>So'rov <code>/blog/post.html</code> &rarr; Nginx <code>/var/www/mysite/blog/post.html</code> faylini beradi.</li></ul>
 <p><code>index</code> esa papka so'ralganda (fayl nomi ko'rsatilmaganda) qaysi faylni ochishni bildiradi. <code>index index.html;</code> bo'lsa, <code>/</code> so'ralganda <code>/var/www/mysite/index.html</code> qaytariladi.</p>
 <div class="note"><code>root</code> va <code>index</code> ni <code>server</code> darajasida bir marta yozsangiz, ular ichdagi barcha <code>location</code> bloklariga ta'sir qiladi. Bu takrorlashning oldini oladi.</div>
-<h2>try_files direktivasi</h2>
+<h2 id="try-files-direktivasi">try_files direktivasi</h2>
 <p><code>try_files</code> — statik sayt uchun eng muhim direktivalardan biri. U Nginx'ga bir nechta variantni <strong>navbat bilan</strong> sinab ko'rishni buyuradi. Birinchi topilgan faylni qaytaradi:</p>
 <pre class="code"><code>try_files $uri $uri/ =404;</code></pre>
 <p>Bu qatordagi har bir bo'lak alohida ma'noga ega:</p>
 <ul><li><code>$uri</code> — avval so'ralgan yo'lga aniq mos fayl bor-yo'qligini tekshiradi (masalan, <code>/about.html</code>);</li><li><code>$uri/</code> — agar fayl topilmasa, o'sha nomdagi <strong>papka</strong> bormi tekshiradi (va ichidagi <code>index</code> faylni beradi);</li><li><code>=404</code> — agar ikkalasi ham topilmasa, 404 (topilmadi) xatoligini qaytaradi.</li></ul>
 <p><code>$uri</code> — bu Nginx'ning <strong>ichki o'zgaruvchisi</strong>: u joriy so'rov yo'lini bildiradi. Nginx'da bunday o'zgaruvchilar <code>$</code> belgisi bilan boshlanadi (masalan, <code>$host</code>, <code>$remote_addr</code>).</p>
 <div class="tip">Agar bu bir sahifali ilova (SPA — React/Vue) bo'lsa, marshrutlashni ilovaning o'zi boshqaradi. Bunda <code>try_files $uri $uri/ /index.html;</code> yoziladi — topilmagan har qanday yo'l uchun <code>index.html</code> qaytariladi, ilova esa sahifani o'zi ko'rsatadi.</div>
-<h2>location bilan yo'llarni boshqarish</h2>
+<h2 id="location-bilan-yo-llarni-boshqarish">location bilan yo'llarni boshqarish</h2>
 <p>Turli fayl turlariga turli qoidalar berish uchun <code>location</code> ishlatamiz. Masalan, rasm va statik resurslarni alohida ajratish:</p>
 <pre class="code"><code>server {
     listen 80;
@@ -645,7 +662,7 @@ sudo nginx -s reload</code></pre>
     }
 }</code></pre>
 <p>Bu yerda <code>~*</code> — registrga sezgir bo'lmagan regulyar ifoda mosligi. Ya'ni <code>.jpg</code> ham, <code>.JPG</code> ham mos keladi.</p>
-<h2>Maxsus 404 sahifasi</h2>
+<h2 id="maxsus-404-sahifasi">Maxsus 404 sahifasi</h2>
 <p>Foydalanuvchi mavjud bo'lmagan sahifani so'raganda standart, quruq 404 o'rniga o'zingizning chiroyli sahifangizni ko'rsatishingiz mumkin. Buning uchun <code>error_page</code> direktivasidan foydalanamiz:</p>
 <pre class="code"><code>server {
     listen 80;
@@ -666,7 +683,7 @@ sudo nginx -s reload</code></pre>
 }</code></pre>
 <p>Bu yerda <code>error_page 404 /404.html;</code> — 404 xatolik yuz berganda <code>/404.html</code> faylini ko'rsatishni buyuradi. <code>location = /404.html { internal; }</code> esa bu sahifaga faqat Nginx ichidan (foydalanuvchi to'g'ridan-to'g'ri emas) kirilishini ta'minlaydi.</p>
 <div class="note">Xuddi shu tarzda server xatoliklari (500, 502, 503, 504) uchun ham maxsus sahifa berish mumkin: <code>error_page 500 502 503 504 /50x.html;</code></div>
-<h2>gzip siqishni yoqish</h2>
+<h2 id="gzip-siqishni-yoqish">gzip siqishni yoqish</h2>
 <p><strong>gzip</strong> — matnli fayllarni (HTML, CSS, JS, JSON) brauzerga uzatishdan oldin siqib, hajmini kichraytiradigan mexanizm. Bu sahifa yuklanishini sezilarli tezlashtiradi, chunki tarmoq orqali kamroq ma'lumot yuboriladi. Odatda <code>http</code> kontekstida yoqiladi:</p>
 <pre class="code"><code>http {
     gzip on;
@@ -676,7 +693,7 @@ sudo nginx -s reload</code></pre>
 }</code></pre>
 <ul><li><code>gzip on;</code> — siqishni yoqadi;</li><li><code>gzip_types</code> — qaysi fayl turlarini siqish kerakligini belgilaydi (rasmlar allaqachon siqilgan, ularni qayta siqish shart emas);</li><li><code>gzip_min_length 1000;</code> — faqat 1000 baytdan katta fayllar siqiladi (kichik fayllarni siqishning foydasi yo'q);</li><li><code>gzip_comp_level 5;</code> — siqish darajasi (1 dan 9 gacha; balandroq — kuchliroq siqish, lekin ko'proq CPU sarfi).</li></ul>
 <div class="tip">gzip'ni yoqish saytning tezligiga eng sodda va samarali ta'sir qiluvchi optimizatsiyalardan biri. Odatda HTML/CSS/JS fayllar hajmini 60-80% ga kamaytiradi.</div>
-<h2>Kesh sarlavhalari</h2>
+<h2 id="kesh-sarlavhalari">Kesh sarlavhalari</h2>
 <p>Rasm, CSS va JS kabi <strong>kamdan-kam o'zgaradigan</strong> fayllarni brauzer o'z xotirasida (keshda) saqlab, keyingi tashriflarda serverdan qayta so'ramasligi mumkin. Buni <code>expires</code> direktivasi orqali sozlaymiz:</p>
 <pre class="code"><code>location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff2)$ {
     expires 30d;
@@ -684,7 +701,7 @@ sudo nginx -s reload</code></pre>
 }</code></pre>
 <ul><li><code>expires 30d;</code> — brauzerga bu faylni 30 kun davomida keshda saqlashni aytadi (mos <code>Expires</code> va <code>Cache-Control</code> sarlavhalarini avtomatik qo'shadi);</li><li><code>add_header Cache-Control "public";</code> — faylni har qanday kesh (brauzer, proxy) saqlashi mumkinligini bildiradi.</li></ul>
 <div class="warn">Uzoq muddatli keshlashning bir muammosi bor: agar CSS/JS faylni yangilasangiz, brauzer eski nusxani ko'rsatishda davom etishi mumkin. Buning yechimi — fayl nomiga versiya qo'shish (masalan, <code>style.v2.css</code> yoki <code>style.css?v=2</code>). Zamonaviy qurish vositalari (build tools) buni avtomatik bajaradi.</div>
-<h2>To'liq namuna</h2>
+<h2 id="to-liq-namuna">To'liq namuna</h2>
 <p>Yuqoridagi barcha elementlarni birlashtirgan to'liq, ishlatishga tayyor <code>server</code> bloki:</p>
 <pre class="code"><code>server {
     listen 80;
@@ -713,7 +730,7 @@ sudo nginx -s reload</code></pre>
     gzip on;
     gzip_types text/css application/javascript application/json;
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Statik sayt uchun asosiy sozlamalar: <code>root</code>, <code>index</code> va <code>location /</code>;</li><li><code>try_files $uri $uri/ =404;</code> faylni, so'ng papkani sinab ko'radi, topmasa 404 beradi;</li><li>SPA uchun <code>try_files $uri $uri/ /index.html;</code> ishlatiladi;</li><li><code>error_page</code> maxsus 404 va boshqa xato sahifalarini beradi;</li><li><code>gzip on;</code> matnli fayllarni siqib, saytni tezlashtiradi;</li><li><code>expires</code> va <code>Cache-Control</code> statik resurslarni brauzer keshida saqlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="nginx-config.html"><span class="dir">← Oldingi</span><span class="ttl">Konfiguratsiya asoslari</span></a>
@@ -727,6 +744,6 @@ sudo nginx -s reload</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

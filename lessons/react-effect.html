@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>useEffect va yon effektlar — Kodla</title>
   <meta name="description" content="useEffect hook, dependency array, fetch bilan ma'lumot yuklash, cleanup funksiya va effekt qachon ishga tushishi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,24 @@
 <main class="content article">
 <div class="crumbs">React</div>
 <h1>useEffect va yon effektlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#yon-effekt-side-effect-nima">Yon effekt (side effect) nima?</a></li>
+<li class="lvl2"><a href="#useeffect-asoslari">useEffect asoslari</a></li>
+<li class="lvl2"><a href="#dependency-array-bog-liqliklar-massivi">Dependency array — bog'liqliklar massivi</a></li>
+<li class="lvl2"><a href="#fetch-bilan-ma-lumot-yuklash">fetch bilan ma'lumot yuklash</a></li>
+<li class="lvl2"><a href="#cleanup-funksiyasi-tozalash">Cleanup funksiyasi — tozalash</a></li>
+<li class="lvl2"><a href="#effekt-qachon-va-qanday-tartibda-ishlaydi">Effekt qachon va qanday tartibda ishlaydi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan komponent shunchaki ekranga chizishdan tashqari ish bajarishi kerak: serverdan ma'lumot yuklash, timer o'rnatish, hujjat sarlavhasini o'zgartirish. Bunday amallar <strong>yon effektlar</strong> (side effects) deb ataladi. Ular uchun React'da <strong><code>useEffect</code></strong> hook mavjud.</p>
-<h2>Yon effekt (side effect) nima?</h2>
+<h2 id="yon-effekt-side-effect-nima">Yon effekt (side effect) nima?</h2>
 <p>React komponentining asosiy vazifasi — props va state asosida JSX qaytarish (ya'ni ekranni chizish). Bu — "sof" hisoblash. Lekin ba'zan komponent <em>tashqi dunyo</em> bilan aloqa qilishi kerak. Ana shunday amallar <strong>yon effekt</strong> deyiladi:</p>
 <ul><li>Server (API) dan ma'lumot yuklash (<code>fetch</code>);</li><li>Timer yoki interval o'rnatish (<code>setInterval</code>);</li><li>Hujjat sarlavhasini (<code>document.title</code>) o'zgartirish;</li><li>Brauzer hodisalariga obuna bo'lish (<code>addEventListener</code>);</li><li><code>localStorage</code> bilan ishlash.</li></ul>
 <p>Bunday amallarni to'g'ridan-to'g'ri komponent tanasiga yozib bo'lmaydi — chunki komponent har render'da qayta ishga tushadi, natijada effekt behuda ko'p marta bajarilib qolardi. Buning uchun <code>useEffect</code> ishlatiladi.</p>
-<h2>useEffect asoslari</h2>
+<h2 id="useeffect-asoslari">useEffect asoslari</h2>
 <p><code>useEffect</code> ni ham React'dan import qilamiz. U ikki argument oladi: <strong>funksiya</strong> (effekt) va <strong>dependency array</strong> (bog'liqliklar massivi):</p>
 <pre class="code"><code>import { useEffect } from "react";
 
@@ -621,7 +636,7 @@ function Sarlavha() {
   return &lt;button onClick={() =&gt; setCount(count + 1)}&gt;+1&lt;/button&gt;;
 }</code></pre>
 <p>Bu yerda har safar <code>count</code> o'zgarganda, effekt ishga tushib, brauzer tabidagi sarlavhani yangilaydi.</p>
-<h2>Dependency array — bog'liqliklar massivi</h2>
+<h2 id="dependency-array-bog-liqliklar-massivi">Dependency array — bog'liqliklar massivi</h2>
 <p>Ikkinchi argument — <strong>dependency array</strong> — effekt <em>qachon</em> qayta ishga tushishini boshqaradi. Uchta asosiy holat bor:</p>
 <pre class="code"><code>// 1) Har render'dan keyin ishga tushadi (massiv YO'Q)
 useEffect(() =&gt; {
@@ -640,7 +655,7 @@ useEffect(() =&gt; {
 <p>Buni jadval sifatida esda tuting:</p>
 <ul><li><strong>Massiv umuman yo'q</strong> — effekt <em>har render'da</em> ishlaydi (kamdan-kam kerak bo'ladi);</li><li><strong>Bo'sh massiv <code>[]</code></strong> — effekt <em>faqat bir marta</em>, komponent birinchi ekranga chizilganda ishlaydi;</li><li><strong>Qiymatli massiv <code>[a, b]</code></strong> — effekt <em>shu qiymatlardan biri o'zgarganda</em> qayta ishlaydi.</li></ul>
 <div class="warn">Effekt ichida ishlatilgan har qanday state yoki prop dependency massivida ko'rsatilishi kerak. Aks holda effekt eski qiymatlar bilan ishlab, chalkash xatolar yuzaga keladi. Bo'sh massiv <code>[]</code> berishdan oldin, effekt tashqi qiymatlarga bog'liq emasligiga ishonch hosil qiling.</div>
-<h2>fetch bilan ma'lumot yuklash</h2>
+<h2 id="fetch-bilan-ma-lumot-yuklash">fetch bilan ma'lumot yuklash</h2>
 <p><code>useEffect</code>ning eng ko'p uchraydigan qo'llanilishi — komponent paydo bo'lganda serverdan ma'lumot yuklash. Buning uchun bo'sh massiv <code>[]</code> ishlatamiz (bir marta yuklansin) va natijani state'ga saqlaymiz:</p>
 <pre class="code"><code>import { useState, useEffect } from "react";
 
@@ -679,7 +694,7 @@ function Foydalanuvchilar() {
   return &lt;ul&gt;{users.map(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
 }</code></pre>
 <div class="note">Effekt funksiyasini <code>async</code> qilib bo'lmaydi. Buning o'rniga effekt ichida alohida async funksiya yozib, uni chaqirasiz, yoki yuqoridagidek <code>.then()</code> ishlatasiz.</div>
-<h2>Cleanup funksiyasi — tozalash</h2>
+<h2 id="cleanup-funksiyasi-tozalash">Cleanup funksiyasi — tozalash</h2>
 <p>Ba'zi effektlar "o'zidan keyin tozalash"ni talab qiladi. Masalan, agar siz timer o'rnatgan yoki hodisaga obuna bo'lgan bo'lsangiz, komponent yo'qolganda ularni <em>bekor qilish</em> kerak — aks holda xotira sizib chiqadi (memory leak). Buning uchun effekt funksiyasidan <strong>tozalash funksiyasini qaytaramiz</strong>:</p>
 <pre class="code"><code>useEffect(() =&gt; {
   const id = setInterval(() =&gt; {
@@ -707,11 +722,11 @@ function Foydalanuvchilar() {
   return &lt;p&gt;O'tgan vaqt: {soniya} soniya&lt;/p&gt;;
 }</code></pre>
 <div class="tip">Agar cleanup'ni unutsangiz, har render'da yangi interval ochilib, eskisi to'xtamay qoladi — natijada bir necha timer parallel ishlab ketadi. Doim tozalashni yodda tuting.</div>
-<h2>Effekt qachon va qanday tartibda ishlaydi</h2>
+<h2 id="effekt-qachon-va-qanday-tartibda-ishlaydi">Effekt qachon va qanday tartibda ishlaydi</h2>
 <p>Effektlarning ish tartibini yaxlit ko'rib chiqamiz. Komponent hayoti davomida:</p>
 <ol><li>Komponent birinchi bor chiziladi (mount) → effekt ishga tushadi;</li><li>Dependency o'zgaradi → avval eski effekt <strong>cleanup</strong>i chaqiriladi → so'ng yangi effekt ishlaydi;</li><li>Komponent yo'qoladi (unmount) → oxirgi <strong>cleanup</strong> chaqiriladi.</li></ol>
 <p>Muhim: effekt har doim ekran <em>chizilgandan keyin</em> ishlaydi. Ya'ni foydalanuvchi avval interfeysni ko'radi, so'ng effekt (masalan, ma'lumot yuklash) ishga tushadi. Bu interfeysni bloklamaslik uchun shunday qilingan.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Yon effekt</strong> — komponentning tashqi dunyo bilan aloqasi (fetch, timer, DOM o'zgartirish, obuna);</li><li><strong><code>useEffect(fn, deps)</code></strong> effektni ekran chizilgandan keyin ishga tushiradi;</li><li><strong>Dependency array</strong> effekt qachon qayta ishlashini boshqaradi: <code>[]</code> — bir marta, <code>[x]</code> — <code>x</code> o'zgarganda, yo'q bo'lsa — har render'da;</li><li>Ma'lumot yuklash uchun <code>fetch</code>ni <code>useEffect(..., [])</code> ichida ishlatib, natijani state'ga saqlaymiz;</li><li>Effektdan qaytarilgan <strong>cleanup funksiyasi</strong> timer/obunalarni tozalaydi — xotira sizishining oldini oladi;</li><li>Effekt ichida ishlatilgan barcha state/prop'lar dependency massivida bo'lishi kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="react-state.html"><span class="dir">← Oldingi</span><span class="ttl">State va useState</span></a>
@@ -725,6 +740,6 @@ function Foydalanuvchilar() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

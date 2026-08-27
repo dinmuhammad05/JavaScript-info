@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maxsus xatoliklar, Error'ni kengaytirish — Kodla</title>
   <meta name="description" content="Error'dan extends qilish, o'z xato klasslari, instanceof, xatoliklar ierarxiyasi va wrapping.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,22 @@
 <main class="content article">
 <div class="crumbs">Xatoliklarni boshqarish</div>
 <h1>Maxsus xatoliklar, Error'ni kengaytirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-error-ni-kengaytiramiz">Nega Error'ni kengaytiramiz?</a></li>
+<li class="lvl2"><a href="#error-dan-extends-qilish">Error'dan extends qilish</a></li>
+<li class="lvl2"><a href="#instanceof-bilan-tekshirish">instanceof bilan tekshirish</a></li>
+<li class="lvl2"><a href="#xatoliklar-ierarxiyasi">Xatoliklar ierarxiyasi</a></li>
+<li class="lvl2"><a href="#xatolarni-o-rash-wrapping-exceptions">Xatolarni o'rash (Wrapping exceptions)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ilovamiz murakkablashgani sari, bizga o'z <em>maxsus xato turlari</em> kerak bo'ladi. Masalan, tarmoq operatsiyasida <code>HttpError</code>, ma'lumotlarni tekshirishda <code>ValidationError</code> va hokazo. Bunday xatolar HTTP status kodi yoki noto'g'ri maydon nomi kabi qo'shimcha ma'lumotlarni saqlashi kerak. JavaScriptda o'z xatolarimizni yaratish uchun ularni <code>Error</code>dan meros olib (<code>extends</code>) yasaymiz.</p>
-<h2>Nega Error'ni kengaytiramiz?</h2>
+<h2 id="nega-error-ni-kengaytiramiz">Nega Error'ni kengaytiramiz?</h2>
 <p>Faraz qilaylik, bizda <code>readUser(json)</code> funksiyasi bor — u JSON matnini o'qiydi. To'liq ishlashi uchun foydalanuvchida <code>name</code> va <code>age</code> maydonlari bo'lishi kerak. Agar ular bo'lmasa, bu <code>SyntaxError</code> emas — chunki JSON o'zi to'g'ri. Bu <em>boshqa</em> turdagi xato. Uni <code>ValidationError</code> deb ataymiz.</p>
 <p>Bizning xato klassimiz standart xatolar kabi <code>message</code>, <code>name</code>, <code>stack</code> xususiyatlarini qo'llab-quvvatlashi kerak. Buning uchun eng oson yo'l — o'rnatilgan <code>Error</code> klassidan meros olish.</p>
-<h2>Error'dan extends qilish</h2>
+<h2 id="error-dan-extends-qilish">Error'dan extends qilish</h2>
 <p><code>Error</code> klassini kengaytiramiz. <code>Error</code>ning tuzilishi taxminan shunday (soddalashtirilgan):</p>
 <pre class="code"><code>// JavaScript'ning ichki o'rnatilgan Error klassi (taxminan)
 class Error {
@@ -630,7 +644,7 @@ try {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Muhim jihatlar:</p>
 <ul><li><code>super(message)</code>ni chaqirish shart — bu <code>Error</code> konstruktoriga <code>message</code>ni beradi va <code>this.message</code>ni to'g'ri o'rnatadi;</li><li><code>this.name</code>ni o'zimiz belgilaymiz — chunki <code>Error</code> konstruktori uni <code>"Error"</code> qilib qo'yadi. Odatda klass nomi bilan bir xil qilinadi.</li></ul>
-<h2>instanceof bilan tekshirish</h2>
+<h2 id="instanceof-bilan-tekshirish">instanceof bilan tekshirish</h2>
 <p>Endi <code>readUser</code>ni yozamiz va <code>ValidationError</code> tashlaymiz. Xatoni ushlaganda uning aynan qaysi tur ekanligini <code>instanceof</code> orqali aniqlaymiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>instanceof.js</span></div><textarea spellcheck="false">class ValidationError extends Error {
   constructor(message) {
@@ -676,7 +690,7 @@ console.log(err instanceof ValidationError); // true
 console.log(err instanceof Error);           // true — chunki meros olingan!
 console.log(err.name);                       // ValidationError</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Xatoni tekshirishda odatda aniq (<code>ValidationError</code>) turdan umumiy (<code>Error</code>) tur tomon boradigan tartibda <code>instanceof</code> ishlatiladi. Aks holda umumiy tur birinchi bo'lib "ushlab olib", aniq shohobchalarga yetib bormaydi.</div>
-<h2>Xatoliklar ierarxiyasi</h2>
+<h2 id="xatoliklar-ierarxiyasi">Xatoliklar ierarxiyasi</h2>
 <p>Ilova o'sgani sari, xatolar ham ko'payadi. Masalan, <code>PropertyRequiredError</code> — aynan qaysi maydon yetishmayotganini bildiradigan aniqroq xato. U <code>ValidationError</code>dan meros olishi mumkin. Shunday qilib <em>ierarxiya</em> (daraxt) hosil bo'ladi:</p>
 <pre class="code"><code>Error
  └── ValidationError
@@ -736,7 +750,7 @@ class PropertyRequiredError extends ValidationError {
 }
 
 console.log(new PropertyRequiredError("email").name); // PropertyRequiredError</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xatolarni o'rash (Wrapping exceptions)</h2>
+<h2 id="xatolarni-o-rash-wrapping-exceptions">Xatolarni o'rash (Wrapping exceptions)</h2>
 <p>Ierarxiya foydali, lekin muammosi bor. Faraz qilaylik, <code>readUser</code>ni chaqiruvchi kod turli-tuman xatolar (<code>ValidationError</code>, <code>SyntaxError</code>, kelajakda yana boshqalar) haqida qayg'urishi kerak. Har safar yangi xato turi qo'shilganda, uni chaqiruvchi <em>hamma</em> joyda tekshiruvni yangilashimiz kerak bo'ladi. Bu noqulay.</p>
 <p>Yechim — <strong>wrapping</strong> (o'rash) texnikasi:</p>
 <ol><li>Barcha "quyi darajali" xatolarni umumlashtiruvchi bitta klass yaratamiz — masalan, <code>ReadError</code>;</li><li><code>readUser</code> ichidagi <code>try...catch</code> quyi darajali xatolarni (<code>ValidationError</code>, <code>SyntaxError</code>) ushlaydi;</li><li>So'ng ularni bitta umumiy <code>ReadError</code> ichiga "o'rab", uni tashlaydi. Asl xato esa <code>cause</code> (sabab) xususiyatida saqlanadi.</li></ol>
@@ -828,7 +842,7 @@ try {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Zamonaviy JavaScriptda <code>Error</code> konstruktori ikkinchi argument sifatida <code>{ cause }</code> obyektini qabul qiladi: <code>new Error("...", { cause: err })</code>. Bu <code>cause</code>ni saqlashning standart usuli. Yuqorida biz uni sodda ko'rinishda qo'lda o'rnatdik.</div>
 <div class="tip">Wrapping'ning asosiy foydasi — <em>abstraksiya darajasi</em>. Chaqiruvchi kod pastki qavatdagi barcha xato turlarini bilishi shart emas; u faqat "o'qishda xato bo'ldi" (<code>ReadError</code>) degan umumiy ma'lumotni oladi, kerak bo'lganda esa <code>cause</code> orqali chuqurroq kirib ko'radi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>O'z xatolarimizni <code>class MyError extends Error</code> ko'rinishida yasaymiz;</li><li>Konstruktorda <code>super(message)</code>ni chaqirish va <code>this.name</code>ni belgilash shart;</li><li>Xatolarni <code>err instanceof MyError</code> orqali tekshiramiz — u ota-klasslarni ham qamrab oladi;</li><li>Xatolardan <strong>ierarxiya</strong> (daraxt) yasash mumkin: aniqroq xatolar umumiyroqlaridan meros oladi;</li><li><code>this.name = this.constructor.name</code> nomni avtomatik olishga yordam beradi;</li><li><strong>Wrapping</strong>: past darajali xatolarni bitta umumiy xatoga o'rab, aslini <code>cause</code>da saqlaymiz — bu chaqiruvchi kodni soddalashtiradi.</li></ul>
 <nav class="lesson-nav">
   <a href="try-catch.html"><span class="dir">← Oldingi</span><span class="ttl">Xatoliklarni boshqarish, try...catch</span></a>
@@ -842,6 +856,6 @@ try {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

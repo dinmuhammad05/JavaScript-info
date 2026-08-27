@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Git asosiy buyruqlari — Kodla</title>
   <meta name="description" content="git init bilan repozitoriy yaratish; git status; git add (fayl va nuqta); git commit -m; git log va --oneline; ishchi katalog, staging va repozitoriy tushunchalari; faylni o'zgartirish oqimi; git diff bilan farqlarni ko'rish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>Git asosiy buyruqlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#git-ning-uch-bo-limi-ishchi-katalog-staging-repozitoriy">Git'ning uch bo'limi: ishchi katalog, staging, repozitoriy</a></li>
+<li class="lvl2"><a href="#git-init-repozitoriy-yaratish">git init — repozitoriy yaratish</a></li>
+<li class="lvl2"><a href="#git-status-hozirgi-holatni-ko-rish">git status — hozirgi holatni ko'rish</a></li>
+<li class="lvl2"><a href="#git-add-o-zgarishlarni-staging-ga-qo-shish">git add — o'zgarishlarni staging'ga qo'shish</a></li>
+<li class="lvl2"><a href="#git-commit-o-zgarishlarni-saqlash">git commit — o'zgarishlarni saqlash</a></li>
+<li class="lvl2"><a href="#git-log-commit-tarixini-ko-rish">git log — commit tarixini ko'rish</a></li>
+<li class="lvl2"><a href="#faylni-o-zgartirish-oqimi-to-liq-misol">Faylni o'zgartirish oqimi (to'liq misol)</a></li>
+<li class="lvl2"><a href="#git-diff-farqlarni-ko-rish">git diff — farqlarni ko'rish</a></li>
+<li class="lvl2"><a href="#kundalik-buyruqlar-tartibi-qisqa-eslatma">Kundalik buyruqlar tartibi (qisqa eslatma)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi Git bilan haqiqiy ish boshlaymiz. Bu darsda kundalik amaliyotda eng ko'p ishlatiladigan buyruqlarni — repozitoriy yaratishdan tortib o'zgarishlarni saqlashgacha — real misollar bilan bosqichma-bosqich o'rganamiz. Har bir buyruqni yozib, natijasini ko'rib chiqamiz.</p>
-<h2>Git'ning uch bo'limi: ishchi katalog, staging, repozitoriy</h2>
+<h2 id="git-ning-uch-bo-limi-ishchi-katalog-staging-repozitoriy">Git'ning uch bo'limi: ishchi katalog, staging, repozitoriy</h2>
 <p>Git'ni tushunish uchun uning uch asosiy <em>hududini</em> bilish shart. Bir fayl ushbu bo'limlar orasida harakatlanadi:</p>
 <ul><li><strong>Ishchi katalog (working directory):</strong> haqiqiy fayllaringiz joylashgan papka — siz tahrirlayotgan joy;</li><li><strong>Staging (indeks, sahna):</strong> keyingi commit'ga <em>tayyorlangan</em> o'zgarishlar to'plami. Bu "vaqtincha savat" kabi — nimani saqlashni shu yerda tanlaysiz;</li><li><strong>Repozitoriy (.git):</strong> commit qilingan o'zgarishlar doimiy saqlanadigan tarix.</li></ul>
 <pre class="code"><code>Ishchi katalog        Staging            Repozitoriy
@@ -605,7 +623,7 @@
                  add               commit</code></pre>
 <p>Ya'ni fayl avval <code>git add</code> bilan staging'ga qo'yiladi, so'ng <code>git commit</code> bilan repozitoriyga doimiy yoziladi. Bu ikki bosqichli tizim sizga <em>aynan nimani</em> saqlashni aniq nazorat qilish imkonini beradi.</p>
 <div class="note">Nega ikki bosqich? Tasavvur qiling, siz o'nlab faylni o'zgartirdingiz, ammo faqat 2 tasini birga saqlamoqchisiz. Staging aynan shuni imkon beradi: kerakli fayllarni <code>add</code> qilib, faqat ularni commit qilasiz.</div>
-<h2>git init — repozitoriy yaratish</h2>
+<h2 id="git-init-repozitoriy-yaratish">git init — repozitoriy yaratish</h2>
 <p>Har qanday papkani Git repozitoriysiga aylantirish uchun <code>git init</code> buyrug'i ishlatiladi. Avval loyiha papkangizga o'ting, so'ng buyruqni bajaring:</p>
 <pre class="code"><code>mkdir mening-loyiham
 cd mening-loyiham
@@ -614,7 +632,7 @@ git init</code></pre>
 <pre class="code"><code>Initialized empty Git repository in /home/ali/mening-loyiham/.git/</code></pre>
 <p>Aslida <code>git init</code> qiladigan yagona ish — papka ichida yashirin <code>.git</code> nomli katalog yaratish. Aynan shu katalogda Git barcha tarixni saqlaydi. Uni o'chirsangiz, papka oddiy papkaga aylanadi (fayllar qoladi, lekin tarix yo'qoladi).</p>
 <div class="warn"><code>git init</code>ni uy papkangizda yoki noto'g'ri joyda tasodifan bajarmang. Uni faqat aniq loyiha papkangiz ichida ishga tushiring, aks holda butun kompyuteringizni kuzatishga urinib, chalkashlik yuzaga keladi.</div>
-<h2>git status — hozirgi holatni ko'rish</h2>
+<h2 id="git-status-hozirgi-holatni-ko-rish">git status — hozirgi holatni ko'rish</h2>
 <p><code>git status</code> — Git bilan ishlashda eng ko'p ishlatiladigan buyruq. U hozirgi holatni ko'rsatadi: qaysi fayllar o'zgargan, qaysilari staging'da, qaysilari hali kuzatilmayapti. Har bir amaldan oldin va keyin uni ishlatish yaxshi odat.</p>
 <pre class="code"><code>git status</code></pre>
 <p>Yangi, bo'sh repozitoriyda natija shunday bo'ladi:</p>
@@ -637,7 +655,7 @@ Untracked files:
 
 nothing added to commit but untracked files present</code></pre>
 <div class="note"><strong>Untracked</strong> (kuzatilmagan) fayl — Git hali "bilmaydigan" yangi fayl. Uni tarixga qo'shish uchun avval <code>git add</code> qilish kerak. Git chiqarayotgan xabarlar odatda keyingi qadamni ham aytib beradi — ularni o'qish foydali.</div>
-<h2>git add — o'zgarishlarni staging'ga qo'shish</h2>
+<h2 id="git-add-o-zgarishlarni-staging-ga-qo-shish">git add — o'zgarishlarni staging'ga qo'shish</h2>
 <p><code>git add</code> fayllarni <em>ishchi katalogdan</em> <em>staging'ga</em> ko'chiradi — ya'ni ularni keyingi commit uchun tayyorlaydi. Bitta faylni qo'shish uchun uning nomini yozing:</p>
 <pre class="code"><code>git add README.md</code></pre>
 <p>Endi <code>git status</code> faylni yashil rangda, staging'ga qo'shilgan ("changes to be committed") holida ko'rsatadi:</p>
@@ -655,7 +673,7 @@ Changes to be committed:
 git add .</code></pre>
 <p>Bu yerda <code>git add .</code> — joriy papka va uning barcha ostki papkalaridagi o'zgargan/yangi fayllarni bir vaqtda staging'ga qo'shadi. Bu eng ko'p ishlatiladigan shakl.</p>
 <div class="tip"><code>git add .</code> qulay, lekin ehtiyot bo'ling — u <em>hamma narsani</em> qo'shadi. Muhim bo'lmagan yoki maxfiy fayllar (masalan parollar) tasodifan qo'shilmasligi uchun <code>.gitignore</code> faylidan foydalaning va vaqti-vaqti bilan <code>git status</code>ni tekshiring.</div>
-<h2>git commit — o'zgarishlarni saqlash</h2>
+<h2 id="git-commit-o-zgarishlarni-saqlash">git commit — o'zgarishlarni saqlash</h2>
 <p>Staging'dagi o'zgarishlarni doimiy tarixga yozish uchun <code>git commit</code> ishlatiladi. Har bir commit'ga qisqa <em>izoh</em> (message) yozish shart — u nima o'zgarganini tushuntiradi. Izohni <code>-m</code> bayrog'i bilan beriladi:</p>
 <pre class="code"><code>git commit -m "Birinchi commit: README qo'shildi"</code></pre>
 <p>Muvaffaqiyatli bajarilgach, Git commit haqida qisqa ma'lumot chiqaradi:</p>
@@ -673,7 +691,7 @@ git commit -m "tuzatish"
 # Yaxshi (aniq):
 git commit -m "Kirish formasiga email tekshiruvi qo'shildi"
 git commit -m "Bosh sahifadagi sarlavha xatosi tuzatildi"</code></pre>
-<h2>git log — commit tarixini ko'rish</h2>
+<h2 id="git-log-commit-tarixini-ko-rish">git log — commit tarixini ko'rish</h2>
 <p>Qilingan barcha commit'larni ko'rish uchun <code>git log</code> ishlatiladi. U eng yangi commit'dan boshlab, har birining hash'i, muallifi, sanasi va izohini ko'rsatadi:</p>
 <pre class="code"><code>git log</code></pre>
 <pre class="code"><code>commit a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0
@@ -689,7 +707,7 @@ a1b2c3d Birinchi commit: README qo'shildi</code></pre>
 <p>Bu ko'rinishda har commit qisqa hash va izoh bilan bir qatorga sig'adi — tarixni tez ko'zdan kechirish uchun juda qulay. Yana bir foydali variant — commit'lar va tarmoqlarni grafik ko'rinishda chiqarish:</p>
 <pre class="code"><code>git log --oneline --graph --all</code></pre>
 <div class="tip"><code>git log</code> ochilganda ekran ba'zan "to'xtab" qoladi (pager rejimi). Undan chiqish uchun <strong>q</strong> (quit) harfini bosing. Yuqoriga-pastga strelka tugmalari bilan yurish mumkin.</div>
-<h2>Faylni o'zgartirish oqimi (to'liq misol)</h2>
+<h2 id="faylni-o-zgartirish-oqimi-to-liq-misol">Faylni o'zgartirish oqimi (to'liq misol)</h2>
 <p>Endi barcha buyruqlarni birga, real ish oqimi ko'rinishida ko'raylik. Aytaylik, mavjud <code>README.md</code> faylini o'zgartiramiz:</p>
 <pre class="code"><code># 1. Faylni o'zgartiramiz (yangi qator qo'shamiz)
 echo "Bu loyiha Git o'rganish uchun." &gt;&gt; README.md
@@ -710,7 +728,7 @@ git log --oneline</code></pre>
   (use "git add &lt;file&gt;..." to update what will be committed)
         modified:   README.md</code></pre>
 <div class="note">E'tibor bering: yangi fayl <strong>untracked</strong>, avval commit qilinib keyin o'zgartirilgan fayl esa <strong>modified</strong> deb belgilanadi. Ikkalasi ham <code>git add</code> orqali staging'ga qo'shiladi — jarayon bir xil.</div>
-<h2>git diff — farqlarni ko'rish</h2>
+<h2 id="git-diff-farqlarni-ko-rish">git diff — farqlarni ko'rish</h2>
 <p><code>git diff</code> fayllardagi <em>aniq nima o'zgarganini</em> qator-qatorlab ko'rsatadi. Bu commit qilishdan oldin "men nima o'zgartirdim?" degan savolga javob beradi. Staging'ga qo'yilmagan o'zgarishlarni ko'rish uchun:</p>
 <pre class="code"><code>git diff</code></pre>
 <p>Natijada qo'shilgan qatorlar <code>+</code> bilan, o'chirilgan qatorlar esa <code>-</code> bilan ko'rsatiladi:</p>
@@ -725,7 +743,7 @@ index 1a2b3c4..5d6e7f8 100644
 <pre class="code"><code>git diff --staged</code></pre>
 <p>Amaliyotdagi tartib odatda shunday: avval <code>git diff</code> bilan o'zgarishlarni ko'rib chiqasiz, so'ng ishonch hosil qilib, <code>git add</code> va <code>git commit</code> qilasiz.</p>
 <div class="tip">Commit qilishdan oldin <code>git diff</code> yoki <code>git status</code>ni ko'rib chiqishni odat qiling. Bu tasodifan kerakmas o'zgarish yoki maxfiy ma'lumotni saqlab qo'yishning oldini oladi.</div>
-<h2>Kundalik buyruqlar tartibi (qisqa eslatma)</h2>
+<h2 id="kundalik-buyruqlar-tartibi-qisqa-eslatma">Kundalik buyruqlar tartibi (qisqa eslatma)</h2>
 <p>Yuqoridagi barcha buyruqlarni bitta ketma-ketlikda jamlaymiz — bu Git bilan har kungi ishning asosiy takrorlanadigan sikli:</p>
 <pre class="code"><code>git status                 # nima o'zgarganini ko'rish
 git diff                   # aniq farqlarni ko'rish
@@ -733,7 +751,7 @@ git add .                  # o'zgarishlarni tayyorlash
 git commit -m "izoh"        # saqlash
 git log --oneline          # tarixni tekshirish</code></pre>
 <div class="note">Bu besh buyruq Git ishining 80% ni tashkil etadi. Ularni yaxshi o'zlashtirib olsangiz, keyingi darslardagi murakkabroq mavzular (tarmoqlar, GitHub'ga yuborish) ancha oson tuyuladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Git uch hududdan iborat: <strong>ishchi katalog</strong>, <strong>staging</strong> (tayyorlangan o'zgarishlar) va <strong>repozitoriy</strong> (saqlangan tarix);</li><li><code>git init</code> papkani repozitoriyga aylantiradi (yashirin <code>.git</code> katalogini yaratadi);</li><li><code>git status</code> hozirgi holatni ko'rsatadi — eng ko'p ishlatiladigan tekshiruv buyrug'i;</li><li><code>git add fayl</code> yoki <code>git add .</code> o'zgarishlarni staging'ga qo'yadi;</li><li><code>git commit -m "izoh"</code> o'zgarishlarni doimiy tarixga aniq izoh bilan saqlaydi;</li><li><code>git log</code> tarixni, <code>git log --oneline</code> esa uni ixcham ko'rinishda ko'rsatadi;</li><li><code>git diff</code> staging'ga qo'yilmagan, <code>git diff --staged</code> esa tayyorlangan farqlarni ko'rsatadi;</li><li>Kundalik sikl: <code>status</code> &rarr; <code>diff</code> &rarr; <code>add</code> &rarr; <code>commit</code> &rarr; <code>log</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="git-ornatish.html"><span class="dir">← Oldingi</span><span class="ttl">Git o'rnatish va sozlash</span></a>
@@ -747,6 +765,6 @@ git log --oneline          # tarixni tekshirish</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

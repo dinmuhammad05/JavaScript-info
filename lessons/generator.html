@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generatorlar — Kodla</title>
   <meta name="description" content="function* va yield yordamida qiymatlarni birma-bir, talab bo'yicha ishlab chiqaruvchi maxsus funksiyalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Generatorlar, ilg'or iteratsiya</div>
 <h1>Generatorlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#generator-funksiyasi">Generator funksiyasi</a></li>
+<li class="lvl2"><a href="#yield-asosiy-metod">yield — asosiy metod</a></li>
+<li class="lvl2"><a href="#generatorlar-iterativlar-iterable">Generatorlar — iterativlar (iterable)</a></li>
+<li class="lvl2"><a href="#spread-sintaksisi-bilan">Spread sintaksisi bilan</a></li>
+<li class="lvl2"><a href="#iterativlar-o-rniga-generatorlardan-foydalanish">Iterativlar o'rniga generatorlardan foydalanish</a></li>
+<li class="lvl2"><a href="#cheksiz-generatorlar">Cheksiz generatorlar</a></li>
+<li class="lvl2"><a href="#generator-kompozitsiyasi-yield">Generator kompozitsiyasi: yield*</a></li>
+<li class="lvl2"><a href="#next-qiymat-orqali-ma-lumot-uzatish">next(qiymat) orqali ma'lumot uzatish</a></li>
+<li class="lvl2"><a href="#generator-return-va-generator-throw">generator.return va generator.throw</a></li>
+<li class="lvl2"><a href="#amaliy-qo-llanishi">Amaliy qo'llanishi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Oddiy funksiya bir marta ishga tushib, bir marta qiymat qaytaradi va tugaydi. <strong>Generator</strong> esa boshqacha — u bir necha marta "to'xtab", bir necha bor qiymat qaytara oladi va keyin qoldirilgan joyidan davom etadi. Generatorlar iteratorlar bilan birga ishlaganda ma'lumotlar oqimini juda oson yaratishga imkon beradi.</p>
-<h2>Generator funksiyasi</h2>
+<h2 id="generator-funksiyasi">Generator funksiyasi</h2>
 <p>Generator yaratish uchun maxsus sintaksisdan foydalaniladi: <code>function*</code> (yulduzcha bilan). Bunday funksiyalar <em>generator funksiyalari</em> deb ataladi.</p>
 <p>Yulduzchani <code>function</code> so'zidan keyin ham, funksiya nomidan oldin ham qo'yish mumkin — <code>function* gen()</code> yoki <code>function *gen()</code>. Odatda birinchi ko'rinish afzal ko'riladi.</p>
 <pre class="code"><code>function* generateSequence() {
@@ -618,7 +637,7 @@ console.log(generator);            // obyekt
 console.log(typeof generator);     // object
 console.log(String(generator));    // [object Generator]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Generator funksiyasini chaqirish uning tanasidagi kodni ishga tushirmaydi. U shunchaki kodni <strong>boshqaruvchi</strong> obyektni qaytaradi. Kod faqat <code>next()</code> chaqirilganda bajarila boshlaydi.</div>
-<h2>yield — asosiy metod</h2>
+<h2 id="yield-asosiy-metod">yield — asosiy metod</h2>
 <p>Generatorning yuragi — <code>yield</code> operatori. Aynan u generatorni oddiy funksiyadan ajratib turadi. <code>yield</code> ma'nosi: "bu yerda to'xta, qiymat qaytar va meni kutib tur".</p>
 <p>Generator ishlashi uchun uning <code>next()</code> metodi chaqirilishi kerak. <code>next()</code> chaqirilganda kod eng yaqin <code>yield &lt;qiymat&gt;</code> gacha bajariladi (qiymat tashlab yuborilishi mumkin, u holda <code>undefined</code> bo'ladi). So'ng bajarilish to'xtaydi va qiymat tashqariga qaytariladi.</p>
 <p><code>next()</code> ning natijasi — doim ikkita xususiyatli obyekt:</p>
@@ -642,7 +661,7 @@ console.log(JSON.stringify(three)); // {"value":3,"done":true}</textarea><div cl
 <p>Diqqat qiling: birinchi <code>next()</code> birinchi <code>yield 1</code> gacha bajarildi va <code>{value: 1, done: false}</code> qaytardi. Ikkinchisi <code>yield 2</code> gacha davom etib, <code>{value: 2, done: false}</code> qaytardi. Uchinchisi <code>return 3</code> gacha yetib bordi — bu generatorning tugashini bildiradi, shuning uchun <code>done: true</code>.</p>
 <div class="warn">Generator tugagach (<code>done: true</code>), keyingi <code>next()</code> chaqiruvlari doim <code>{value: undefined, done: true}</code> qaytaradi. Tugagan generatorni qayta ishga tushirib bo'lmaydi — buning uchun yangi generator obyekti yaratish kerak.</div>
 <div class="note"><code>yield</code> va <code>return</code> orasidagi farq: <code>yield</code> to'xtatadi lekin generator hali <em>done</em> emas; <code>return</code> esa generatorni butunlay tugatadi. Shuning uchun <code>for..of</code> <code>return</code> qiymatini e'tiborsiz qoldiradi (buni pastda ko'ramiz).</div>
-<h2>Generatorlar — iterativlar (iterable)</h2>
+<h2 id="generatorlar-iterativlar-iterable">Generatorlar — iterativlar (iterable)</h2>
 <p>Generator obyektlari <em>iterativ</em> (iterable) hisoblanadi. Bu degani, ularni <code>for..of</code> sikli bilan aylanib chiqish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for-of.js</span></div><textarea spellcheck="false">function* generateSequence() {
   yield 1;
@@ -669,7 +688,7 @@ for (let value of gen()) {
   natija.push(value);
 }
 console.log(natija); // [1, 2] — 3 yo'q!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Spread sintaksisi bilan</h2>
+<h2 id="spread-sintaksisi-bilan">Spread sintaksisi bilan</h2>
 <p>Generatorlar iterativ bo'lgani uchun, spread sintaksisi <code>...</code> ham ular bilan ishlaydi. Bu generator natijalarini massivga aylantirishning qulay usuli:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>spread.js</span></div><textarea spellcheck="false">function* generateSequence() {
   yield 1;
@@ -681,7 +700,7 @@ let sequence = [0, ...generateSequence()];
 console.log(sequence);        // [0, 1, 2, 3]
 console.log(sequence.length); // 4</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Endilikda massiv, string, <code>Map</code>, <code>Set</code> ishlaydigan har qanday joyda generatorlarni ham ishlata olasiz — chunki ularning barchasi umumiy <em>iteratsiya</em> protokoliga bo'ysunadi.</div>
-<h2>Iterativlar o'rniga generatorlardan foydalanish</h2>
+<h2 id="iterativlar-o-rniga-generatorlardan-foydalanish">Iterativlar o'rniga generatorlardan foydalanish</h2>
 <p>Ilgari (masalan, iteratorlar mavzusida) biz <code>range</code> obyektiga <code>Symbol.iterator</code> qo'shib, uni iterativ qilgan bo'lishimiz mumkin. Generatorlar bu ishni ancha soddalashtiradi. Quyida — generatorli, sodda va o'qishga oson variant:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>range-generator.js</span></div><textarea spellcheck="false">let range = {
   from: 1,
@@ -702,7 +721,7 @@ for (let num of range) {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu ishlaydi, chunki <code>range[Symbol.iterator]()</code> endi generatorni qaytaradi, generator obyektida esa <code>next()</code> metodi va <code>[Symbol.iterator]</code> allaqachon mavjud. Ya'ni generator obyektining o'zi ham iterator, ham iterativ.</p>
 <div class="note"><code>*[Symbol.iterator]() { ... }</code> — bu obyekt metodini generator sifatida e'lon qilishning qisqa yozuvi. Yulduzcha (<code>*</code>) metodni generatorga aylantiradi.</div>
-<h2>Cheksiz generatorlar</h2>
+<h2 id="cheksiz-generatorlar">Cheksiz generatorlar</h2>
 <p>Generatorlar <em>dangasa</em> (lazy) — ular qiymatni faqat so'ralganda ishlab chiqaradi. Shu sabab, cheksiz ketma-ketliklarni ham yaratish mumkin. Muhimi — bunday generatorni cheksiz aylantirmang, aks holda dastur qotib qoladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>cheksiz.js</span></div><textarea spellcheck="false">function* naturalNumbers() {
   let n = 1;
@@ -720,7 +739,7 @@ console.log(gen.next().value); // 2
 console.log(gen.next().value); // 3
 console.log(gen.next().value); // 4</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Cheksiz generatorni <code>for..of</code> yoki <code>[...gen]</code> bilan to'liq aylanib chiqmang — bu abadiy sikl va dastur to'xtab qolishiga olib keladi. Ulardan doim <code>next()</code> orqali, kerakli miqdorda qiymat oling.</div>
-<h2>Generator kompozitsiyasi: yield*</h2>
+<h2 id="generator-kompozitsiyasi-yield">Generator kompozitsiyasi: yield*</h2>
 <p><strong>Generator kompozitsiyasi</strong> — bir generatorni boshqasining ichiga "joylash" (embed qilish) imkoniyati. Buning uchun maxsus <code>yield*</code> sintaksisidan foydalaniladi.</p>
 <p>Misol uchun, ketma-ket sonlar generatorimiz bo'lsin, keyin uni raqamlar va harflar ketma-ketligini yaratish uchun qayta ishlataylik:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>yield-delegatsiya.js</span></div><textarea spellcheck="false">function* generateSequence(start, end) {
@@ -768,7 +787,7 @@ console.log([...manual()]);   // [1, 2, 3]</textarea><div class="pg-actions"><bu
   yield* 'ab';
 }
 console.log([...gen()]); // [1, 2, 3, "a", "b"]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>next(qiymat) orqali ma'lumot uzatish</h2>
+<h2 id="next-qiymat-orqali-ma-lumot-uzatish">next(qiymat) orqali ma'lumot uzatish</h2>
 <p>Hozirgacha generatorlar ma'lumot manbaiga o'xshardi — ular qiymat <em>chiqarardi</em>. Ammo generatorlar ikki tomonlama aloqa quroli: ularga <strong>ichkariga ham qiymat uzatish</strong> mumkin. Buning uchun <code>generator.next(qiymat)</code> ga argument beriladi.</p>
 <p>Bu qiymat <code>yield</code> ifodasining <strong>natijasi</strong> bo'lib qaytadi. Ya'ni <code>let result = yield ...</code> yozganda, <code>result</code> ga aynan keyingi <code>next(qiymat)</code> dagi qiymat tushadi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>next-argument.js</span></div><textarea spellcheck="false">function* gen() {
@@ -799,7 +818,7 @@ console.log(g.next().value);   // "Birinchi son?"
 console.log(g.next(3).value);  // "Ikkinchi son?"
 console.log(g.next(5).value);  // "Yig'indi: 8"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>next(qiymat)</code> ni tushunishning eng oson yo'li: <code>yield</code> — bu "ikki tomonli darvoza". Undan <em>chiqadigan</em> qiymat <code>yield</code> dan keyin yoziladi, unga <em>kiradigan</em> qiymat esa keyingi <code>next()</code> dan keladi.</div>
-<h2>generator.return va generator.throw</h2>
+<h2 id="generator-return-va-generator-throw">generator.return va generator.throw</h2>
 <p>Generatorlarda <code>next()</code> dan tashqari yana ikki metod bor:</p>
 <ul><li><code>generator.return(qiymat)</code> — generatorni majburan tugatadi va berilgan qiymatni qaytaradi;</li><li><code>generator.throw(xato)</code> — generator ichida, joriy <code>yield</code> o'rnida xatolik (exception) chiqaradi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>return-metod.js</span></div><textarea spellcheck="false">function* gen() {
@@ -813,7 +832,7 @@ console.log(JSON.stringify(g.next()));     // {"value":1,"done":false}
 console.log(JSON.stringify(g.return(99))); // {"value":99,"done":true}
 console.log(JSON.stringify(g.next()));     // {"value":undefined,"done":true}</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>return()</code> chaqirilgach generator tugaydi — keyingi barcha <code>next()</code> lar <code>{value: undefined, done: true}</code> qaytaradi.</div>
-<h2>Amaliy qo'llanishi</h2>
+<h2 id="amaliy-qo-llanishi">Amaliy qo'llanishi</h2>
 <p>Generatorlar aynan qaysi vaziyatlarda foydali?</p>
 <ul><li><strong>Ketma-ketliklar</strong> — sonlar oqimi, ID generatorlar, sahifalash (pagination) kabi cheksiz yoki katta ma'lumot oqimlarini dangasa hosil qilish;</li><li><strong>Maxsus iterativlar</strong> — o'z obyektlaringizni <code>for..of</code> bilan ishlaydigan qilish (yuqoridagi <code>range</code> misoli);</li><li><strong>Murakkab tuzilmalarni tekislash</strong> — daraxtsimon (tree) tuzilmalarni <code>yield*</code> orqali oson rekursiv aylanib chiqish;</li><li><strong>Holatni saqlash</strong> — generator o'z bajarilish holatini (o'zgaruvchilar, joyi) o'zida saqlaydi, bu ba'zi vazifalarni soddalashtiradi.</li></ul>
 <p>Quyida — noyob ID generator, amaliy va foydali namuna:</p>
@@ -848,7 +867,7 @@ function* walk(node) {
 }
 
 console.log([...walk(tree)]); // [1, 2, 3, 4]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Generatorlar <code>function*</code> orqali yaratiladi va chaqirilganda <strong>generator obyekti</strong> qaytaradi (kod darhol bajarilmaydi);</li><li><code>yield</code> generatorni to'xtatadi va qiymat qaytaradi; <code>next()</code> uni davom ettiradi;</li><li><code>next()</code> natijasi — <code>{value, done}</code> obyekti;</li><li>Generatorlar iterativ — ular <code>for..of</code>, spread <code>...</code> bilan ishlaydi (lekin <code>return</code> qiymati <code>for..of</code> da ko'rinmaydi);</li><li><code>yield*</code> boshqa generator yoki iterativga delegatsiya qiladi;</li><li><code>next(qiymat)</code> generatorning ichiga qiymat uzatadi — bu <code>yield</code> ifodasining natijasi bo'ladi;</li><li>Generatorlar dangasa hisoblanadi — cheksiz ketma-ketliklar, ID generatorlar, maxsus iterativlar uchun ideal.</li></ul>
 <nav class="lesson-nav">
   <a href="async-await.html"><span class="dir">← Oldingi</span><span class="ttl">Async/await</span></a>
@@ -862,6 +881,6 @@ console.log([...walk(tree)]); // [1, 2, 3, 4]</textarea><div class="pg-actions">
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

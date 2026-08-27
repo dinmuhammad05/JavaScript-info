@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArrayBuffer, TypedArray — Kodla</title>
   <meta name="description" content="Ikkilik ma'lumotning asosi: ArrayBuffer xotira bloki, uning ustidagi ko'rinishlar (Uint8Array, Int32Array va boshqalar), indeks bilan ishlash, TypedArray metodlari va DataView.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Ikkilik ma'lumot va fayllar</div>
 <h1>ArrayBuffer, TypedArray</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#arraybuffer-xom-xotira-bloki">ArrayBuffer — xom xotira bloki</a></li>
+<li class="lvl2"><a href="#typedarray-ko-rinishlari">TypedArray ko'rinishlari</a></li>
+<li class="lvl2"><a href="#indeks-bilan-ishlash">Indeks bilan ishlash</a></li>
+<li class="lvl2"><a href="#bufer-va-ko-rinish-bir-xotirani-baham-ko-radi">Bufer va ko'rinish bir xotirani baham ko'radi</a></li>
+<li class="lvl2"><a href="#typedarray-metodlari">TypedArray metodlari</a></li>
+<li class="lvl2"><a href="#dataview-moslashuvchan-ko-rinish">DataView — moslashuvchan ko'rinish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Web-ishlab chiqishda biz ko'pincha ikkilik (binary) ma'lumot bilan ishlashga to'g'ri kelamiz — rasm fayllari, tarmoqdan kelgan baytlar, arxivlar va hokazo. JavaScriptda bularning barchasi zamirida <code>ArrayBuffer</code> turadi: bu — belgilangan uzunlikdagi <strong>xom baytlar</strong> saqlanadigan xotira bloki. Buferning o'zi bilan bevosita ishlab bo'lmaydi — uning ustiga <em>ko'rinish</em> (view), ya'ni <code>TypedArray</code> yoki <code>DataView</code> qo'yiladi.</p>
-<h2>ArrayBuffer — xom xotira bloki</h2>
+<h2 id="arraybuffer-xom-xotira-bloki">ArrayBuffer — xom xotira bloki</h2>
 <p><code>ArrayBuffer</code> — konstruktor bo'lib, u belgilangan baytlar sonidan iborat, nol bilan to'ldirilgan uzluksiz xotira maydonini yaratadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>buffer-yaratish.js</span></div><textarea spellcheck="false">let buffer = new ArrayBuffer(16); // 16 baytlik blok
 
@@ -605,7 +620,7 @@ console.log(buffer.byteLength); // 16</textarea><div class="pg-actions"><button 
 <p>Bu yerda 16 baytlik maydon ajratildi va u nollar bilan to'ldirildi. <code>byteLength</code> xususiyati buferning uzunligini (baytlarda) qaytaradi.</p>
 <div class="warn"><code>ArrayBuffer</code> — bu <strong>oddiy massiv emas</strong>! Uni <code>Array</code> bilan aralashtirmang. Muhim farqlar: uning uzunligi qat'iy belgilangan (o'zgartirib bo'lmaydi), u aynan shuncha baytni band qiladi, va uning elementiga <code>buffer[0]</code> deb murojaat qilib bo'lmaydi. <code>ArrayBuffer</code> — bu shunchaki xotira bo'lagi, unda nima saqlanayotgani noma'lum, u faqat baytlar ketma-ketligi.</div>
 <p>Buferdagi baytlarga kirish uchun bizga <em>ko'rinish obyekti</em> kerak. Ko'rinish o'zida hech qanday ma'lumot saqlamaydi — u faqat buferdagi baytlarni qanday <strong>talqin qilishni</strong> belgilaydigan "oyna"dir.</p>
-<h2>TypedArray ko'rinishlari</h2>
+<h2 id="typedarray-ko-rinishlari">TypedArray ko'rinishlari</h2>
 <p>Ko'rinishlarning umumiy nomi — <code>TypedArray</code> (turlangan massiv). Bu bitta konstruktor emas, balki bir necha konstruktorlarning umumiy nomi. Ular buferdagi baytlarni turli formatlarda talqin qiladi:</p>
 <ul><li><code>Uint8Array</code> — har bir element bitta bayt (8 bit), 0..255 oralig'idagi butun son;</li><li><code>Uint16Array</code> — har bir element 2 bayt (16 bit), 0..65535;</li><li><code>Uint32Array</code> — har bir element 4 bayt (32 bit), 0..4294967295;</li><li><code>Int8Array</code>, <code>Int16Array</code>, <code>Int32Array</code> — ishorali (musbat/manfiy) butun sonlar;</li><li><code>Uint8ClampedArray</code> — 0..255, lekin chegaradan chiqqan qiymatni "kesib" chegaraga tenglaydi (rasm bilan ishlashda qulay);</li><li><code>Float32Array</code>, <code>Float64Array</code> — kasrli (suzuvchi nuqtali) sonlar, 4 va 8 bayt.</li></ul>
 <p>Nomdagi son bitlar sonini bildiradi. Masalan, <code>Uint16Array</code> — har bir raqamga 16 bit (2 bayt) ajratadi. Shu sabab 16 baytlik bufer <code>Uint16Array</code> orqali 8 ta element, <code>Uint32Array</code> orqali 4 ta element bo'lib ko'rinadi:</p>
@@ -620,7 +635,7 @@ console.log(view16.length); // 8 (16 bayt / 2 bayt)
 let view32 = new Uint32Array(buffer);
 console.log(view32.length); // 4 (16 bayt / 4 bayt)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>length</code> — ko'rinishdagi <strong>elementlar</strong> soni, <code>byteLength</code> esa <strong>baytlar</strong> soni. Ular har xil ko'rinishlar uchun turlicha bo'ladi, chunki har bir element turli miqdorda bayt egallaydi.</div>
-<h2>Indeks bilan ishlash</h2>
+<h2 id="indeks-bilan-ishlash">Indeks bilan ishlash</h2>
 <p>TypedArray oddiy massivga juda o'xshaydi: unga indeks orqali murojaat qilish, qiymat yozish va o'qish mumkin:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indeks-yozish.js</span></div><textarea spellcheck="false">let arr = new Uint8Array(4); // 4 baytlik ko'rinish (buferi bilan)
 
@@ -643,7 +658,7 @@ clamped[2] = 100;  // o'zgarishsiz
 console.log(clamped[0]); // 255
 console.log(clamped[1]); // 0
 console.log(clamped[2]); // 100</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Bufer va ko'rinish bir xotirani baham ko'radi</h2>
+<h2 id="bufer-va-ko-rinish-bir-xotirani-baham-ko-radi">Bufer va ko'rinish bir xotirani baham ko'radi</h2>
 <p>Bu — eng muhim tushunchalardan biri. Bir xil buferga bir nechta ko'rinish qo'yish mumkin. Ular <strong>bitta xotirani</strong> ko'rsatadi, shuning uchun biri orqali yozilgan bayt boshqasi orqali darhol ko'rinadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bir-xotira.js</span></div><textarea spellcheck="false">let buffer = new ArrayBuffer(4);
 
@@ -666,7 +681,7 @@ let b = new Uint16Array(a.buffer);
 
 console.log(b[0]); // 5 (a[0]=5 bo'lgani uchun)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">TypedArrayni yaratishning ikki yo'li bor: (1) mavjud buferni berish — <code>new Uint8Array(buffer)</code>; (2) uzunlik berish — <code>new Uint8Array(8)</code>, bunda ichida yangi bufer avtomatik yaratiladi. Ikkinchi holatda ham <code>arr.buffer</code> mavjud bo'ladi.</div>
-<h2>TypedArray metodlari</h2>
+<h2 id="typedarray-metodlari">TypedArray metodlari</h2>
 <p>TypedArray oddiy <code>Array</code>ning deyarli barcha metodlarini qo'llab-quvvatlaydi: <code>map</code>, <code>forEach</code>, <code>filter</code>, <code>reduce</code>, <code>find</code>, <code>slice</code>, <code>indexOf</code> va hokazo:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>typedarray-metodlar.js</span></div><textarea spellcheck="false">let arr = new Uint8Array([10, 20, 30, 40]);
 
@@ -694,7 +709,7 @@ console.log(qism.join(",")); // 20,30,40
 qism[0] = 99;          // qism orqali o'zgartiramiz
 console.log(arr[1]);   // 99 (asl massiv ham o'zgardi!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>slice</code> va <code>subarray</code> farqi: <code>slice</code> ma'lumotni <strong>nusxalaydi</strong> (yangi bufer), <code>subarray</code> esa faqat yangi <strong>oyna</strong> beradi (bir xil bufer). Xotira tejash kerak bo'lsa <code>subarray</code> tezroq va arzonroq.</div>
-<h2>DataView — moslashuvchan ko'rinish</h2>
+<h2 id="dataview-moslashuvchan-ko-rinish">DataView — moslashuvchan ko'rinish</h2>
 <p><code>DataView</code> — buferga eng past darajadagi, eng moslashuvchan kirish usuli. TypedArraydan farqi: DataViewda format oldindan qat'iy belgilanmaydi. Aksincha, har bir o'qish/yozishda formatni siz o'zingiz aytasiz — <code>getUint8</code>, <code>getInt32</code>, <code>getFloat64</code> va hokazo:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>dataview.js</span></div><textarea spellcheck="false">let buffer = new ArrayBuffer(8);
 let view = new DataView(buffer);
@@ -719,7 +734,7 @@ let bytes = new Uint8Array(buffer);
 console.log(bytes[0].toString(16)); // 78 (kichik bayt oldinda)
 console.log(bytes[3].toString(16)); // 12</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Ko'p platformalarda xotira <strong>little-endian</strong> (kichik bayt oldinda) tartibida saqlanadi. Tarmoq protokollarida esa ko'pincha <strong>big-endian</strong> ishlatiladi. Fayl yoki tarmoq formati bilan ishlaganda tartibni albatta tekshiring — noto'g'ri tartib qiymatlarni buzadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>ArrayBuffer</code> — belgilangan uzunlikdagi xom baytlar bloki; u bilan bevosita ishlab bo'lmaydi;</li><li>Ma'lumotga kirish uchun <strong>ko'rinish</strong> kerak: <code>TypedArray</code> yoki <code>DataView</code>;</li><li><code>Uint8Array</code>, <code>Int32Array</code>, <code>Float64Array</code> va boshqalar — baytlarni ma'lum formatda talqin qiladi;</li><li>Bir buferga bir nechta ko'rinish qo'yilsa, ular <strong>bitta xotirani</strong> baham ko'radi;</li><li>TypedArrayda <code>map</code>, <code>set</code>, <code>subarray</code> bor, lekin <code>push</code>/<code>pop</code> yo'q;</li><li><code>DataView</code> — har bir amalda formatni tanlash imkonini beruvchi eng moslashuvchan ko'rinish.</li></ul>
 <nav class="lesson-nav">
   <a href="clickjacking.html"><span class="dir">← Oldingi</span><span class="ttl">Clickjacking hujumi</span></a>
@@ -733,6 +748,6 @@ console.log(bytes[3].toString(16)); // 12</textarea><div class="pg-actions"><but
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

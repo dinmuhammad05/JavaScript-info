@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promise API — Kodla</title>
   <meta name="description" content="Promise klassining statik metodlari: all, allSettled, race, any, resolve va reject.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Promise, async/await</div>
 <h1>Promise API</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#promise-all">Promise.all</a></li>
+<li class="lvl2"><a href="#promise-allsettled">Promise.allSettled</a></li>
+<li class="lvl2"><a href="#promise-race">Promise.race</a></li>
+<li class="lvl2"><a href="#promise-any">Promise.any</a></li>
+<li class="lvl2"><a href="#promise-resolve-va-promise-reject">Promise.resolve va Promise.reject</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>Promise</code> klassida bir nechta foydali <em>statik</em> metod bor. Ular bir nechta promise'ni birga boshqarishga yordam beradi. Ushbu darsda ularning har birini misol bilan ko'rib chiqamiz.</p>
-<h2>Promise.all</h2>
+<h2 id="promise-all">Promise.all</h2>
 <p>Ko'pincha bir nechta promise'ni <strong>parallel</strong> ishga tushirib, hammasi tugashini kutish kerak bo'ladi. Masalan, bir nechta URL'dan ma'lumot yuklab, hammasi kelgach ishlov berish. Aynan shu uchun <code>Promise.all</code> mavjud.</p>
 <p><code>Promise.all</code> promise'lar (yoki iteratsiyalanadigan obyekt, odatda massiv) qabul qiladi va yangi promise qaytaradi. Bu yangi promise barcha berilgan promise'lar bajarilganda (fulfilled) <strong>natijalar massivi</strong> bilan tugaydi.</p>
 <pre class="code"><code>Promise.all([
@@ -630,7 +644,7 @@ Promise.all(requests)
   new Promise((resolve, reject) =&gt; setTimeout(() =&gt; resolve(3), 3000))
 ]).catch(console.log); // Error: Xatolik!</code></pre>
 <p>Yuqoridagi misolda ikkinchi promise 2 soniyadan keyin reject bo'ladi. Shu zahoti <code>Promise.all</code> ham reject bo'ladi va <code>catch</code> ishga tushadi. Uchinchi promise (3 soniya) hali tugamagan bo'lsa ham, uning natijasi hech qayerda ko'rinmaydi.</p>
-<h2>Promise.allSettled</h2>
+<h2 id="promise-allsettled">Promise.allSettled</h2>
 <p><code>Promise.all</code> birinchi xatoda to'xtaydi. Ba'zan esa bizga <strong>har bir</strong> promise natijasi kerak — qaysi biri muvaffaqiyatli, qaysi biri xato bo'lganidan qat'i nazar. Aynan shunda <code>Promise.allSettled</code> ishlatiladi.</p>
 <p><code>Promise.allSettled</code> barcha promise'lar <em>settled</em> (yakunlangan — fulfilled yoki rejected) bo'lishini kutadi va hech qachon reject bo'lmaydi. U natijalar massivini qaytaradi, unda har bir element quyidagicha:</p>
 <ul><li><code>{status: "fulfilled", value: natija}</code> — muvaffaqiyatli tugagan bo'lsa;</li><li><code>{status: "rejected", reason: xato}</code> — xatoga uchragan bo'lsa.</li></ul>
@@ -658,7 +672,7 @@ Promise.allSettled(urls.map(url =&gt; fetch(url)))
   {status: 'rejected', reason: ...xato obyekti...}
 ]</code></pre>
 <div class="tip">Ya'ni har bir promise uchun status va uning qiymati (yoki xato sababi) mavjud. Bu bir nechta so'rovdan bir qismi muvaffaqiyatsiz bo'lsa ham, qolganlarini qayta ishlashga imkon beradi.</div>
-<h2>Promise.race</h2>
+<h2 id="promise-race">Promise.race</h2>
 <p><code>Promise.race</code> <code>Promise.all</code>ga o'xshaydi, lekin faqat <strong>birinchi yakunlangan</strong> promise'ni kutadi. "Race" — poyga degani: qaysi promise birinchi tugasa (fulfilled yoki rejected — farqi yo'q), uning natijasi/xatosi butun natija bo'ladi.</p>
 <pre class="code"><code>Promise.race([
   new Promise((resolve, reject) =&gt; setTimeout(() =&gt; resolve(1), 1000)),
@@ -667,7 +681,7 @@ Promise.allSettled(urls.map(url =&gt; fetch(url)))
 ]).then(console.log); // 1</code></pre>
 <p>Bu yerda birinchi promise eng tez (1 soniya) tugadi, shuning uchun natija <code>1</code> bo'ldi. Undan keyingi promise'lar natijasi butunlay e'tiborga olinmaydi.</p>
 <div class="note"><code>Promise.race</code> birinchi yakunlangan promise reject bo'lsa, o'zi ham reject bo'ladi. Ya'ni g'olib promise xato bilan tugasa, natija ham xato bo'ladi.</div>
-<h2>Promise.any</h2>
+<h2 id="promise-any">Promise.any</h2>
 <p><code>Promise.any</code> <code>Promise.race</code>ga o'xshaydi, lekin faqat birinchi <strong>muvaffaqiyatli</strong> (fulfilled) promise'ni kutadi. Ya'ni u xatolarni "tashlab", birinchi muvaffaqiyatli natijani qaytaradi.</p>
 <pre class="code"><code>Promise.any([
   new Promise((resolve, reject) =&gt; setTimeout(() =&gt; reject(new Error('Xatolik!')), 1000)),
@@ -684,7 +698,7 @@ Promise.allSettled(urls.map(url =&gt; fetch(url)))
   console.log(error.errors[0]); // Error: Xato 1
   console.log(error.errors[1]); // Error: Xato 2
 });</code></pre>
-<h2>Promise.resolve va Promise.reject</h2>
+<h2 id="promise-resolve-va-promise-reject">Promise.resolve va Promise.reject</h2>
 <p>Zamonaviy kodda bu ikki metod kamdan-kam kerak bo'ladi, chunki <code>async/await</code> ularning o'rnini bosadi. Ammo ularni bilib qo'yish foydali.</p>
 <p><code>Promise.resolve(value)</code> — natijasi <code>value</code> bo'lgan <strong>bajarilgan (resolved)</strong> promise yaratadi:</p>
 <pre class="code"><code>let promise = Promise.resolve(value);
@@ -706,7 +720,7 @@ function loadCached(url) {
     });
 }</code></pre>
 <p><code>Promise.reject(error)</code> — natijasi <code>error</code> bo'lgan <strong>reject qilingan</strong> promise yaratadi. U amalda deyarli ishlatilmaydi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Promise klassining 6 ta statik metodi:</p>
 <ul><li><code>Promise.all(promises)</code> — hammasini kutadi, natijalar massivini beradi. Bittasi xato bo'lsa — hammasi xato;</li><li><code>Promise.allSettled(promises)</code> — hammasini kutadi, har biri uchun <code>status</code> va natija/xato beradi;</li><li><code>Promise.race(promises)</code> — birinchi yakunlangan (fulfilled yoki rejected) natijani beradi;</li><li><code>Promise.any(promises)</code> — birinchi muvaffaqiyatli natijani beradi; hammasi xato bo'lsa — <code>AggregateError</code>;</li><li><code>Promise.resolve(value)</code> — tayyor bajarilgan promise yaratadi;</li><li><code>Promise.reject(error)</code> — tayyor reject qilingan promise yaratadi.</li></ul>
 <nav class="lesson-nav">
@@ -721,6 +735,6 @@ function loadCached(url) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

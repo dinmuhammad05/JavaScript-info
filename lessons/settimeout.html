@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>setTimeout va setInterval — Kodla</title>
   <meta name="description" content="Kodni kechiktirib yoki takroran bajarish: setTimeout, clearTimeout, setInterval, clearInterval, nolinchi kechikish va ichma-ich setTimeout.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,20 @@
 <main class="content article">
 <div class="crumbs">Funksiyalar bilan chuqur ishlash</div>
 <h1>setTimeout va setInterval</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#settimeout-bir-marta-kechiktirish">setTimeout — bir marta kechiktirish</a></li>
+<li class="lvl2"><a href="#cleartimeout-bekor-qilish">clearTimeout — bekor qilish</a></li>
+<li class="lvl2"><a href="#setinterval-takroran-bajarish">setInterval — takroran bajarish</a></li>
+<li class="lvl2"><a href="#ichma-ich-settimeout">Ichma-ich setTimeout</a></li>
+<li class="lvl2"><a href="#nolinchi-kechikish-settimeout-func-0">Nolinchi kechikish: setTimeout(func, 0)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan funksiyani darhol emas, balki <strong>ma'lum vaqtdan keyin</strong> yoki <strong>muntazam takror</strong> bajarish kerak bo'ladi. Buning uchun ikkita asosiy metod bor: <code>setTimeout</code> va <code>setInterval</code>. Bu metodlar spetsifikatsiyaning bir qismi emas, lekin brauzer ham, Node.js ham ularni qo'llab-quvvatlaydi.</p>
 <div class="warn">Bu darsdagi ko'p misollar <strong>statik kod</strong> shaklida berilgan. Sabab: maydoncha (playground) faqat <code>console.log</code>/<code>return</code> natijasini <em>darhol</em> ko'rsatadi, <code>setTimeout</code>/<code>setInterval</code> esa natijani kechikish bilan chiqaradi — u maydonchada ko'rinmaydi. Kodlarni brauzer konsolida sinab ko'ring.</div>
-<h2>setTimeout — bir marta kechiktirish</h2>
+<h2 id="settimeout-bir-marta-kechiktirish">setTimeout — bir marta kechiktirish</h2>
 <p><code>setTimeout</code> funksiyani berilgan vaqtdan (millisekundlarda) keyin <strong>bir marta</strong> bajaradi. Sintaksisi:</p>
 <pre class="code"><code>let timerId = setTimeout(func, delay, arg1, arg2, ...);</code></pre>
 <ul><li><code>func</code> — bajariladigan funksiya;</li><li><code>delay</code> — kechikish millisekundlarda (1000 ms = 1 soniya), standart 0;</li><li><code>arg1, arg2...</code> — funksiyaga uzatiladigan argumentlar.</li></ul>
@@ -616,7 +630,7 @@ function xabar(kim, matn) {
 setTimeout(xabar, 1000, "Ali", "Assalomu alaykum");
 // 1 soniyadan keyin: Assalomu alaykum, Ali</code></pre>
 <div class="warn">Funksiyani <strong>chaqirmasdan</strong> uzating: <code>setTimeout(salomBer, 1000)</code> to'g'ri. Agar qavs bilan <code>setTimeout(salomBer(), 1000)</code> yozsangiz — <code>salomBer()</code> darhol bajariladi va uning <em>natijasi</em> (odatda <code>undefined</code>) uzatiladi. Bu keng tarqalgan xato.</div>
-<h2>clearTimeout — bekor qilish</h2>
+<h2 id="cleartimeout-bekor-qilish">clearTimeout — bekor qilish</h2>
 <p><code>setTimeout</code> chaqirilganda "timer identifikatori"ni qaytaradi. Uni <code>clearTimeout</code>ga berib, rejalashtirilgan bajarishni <strong>bekor qilish</strong> mumkin:</p>
 <pre class="code"><code>let timerId = setTimeout(function() {
   console.log("Bu hech qachon chiqmaydi");
@@ -625,7 +639,7 @@ setTimeout(xabar, 1000, "Ali", "Assalomu alaykum");
 clearTimeout(timerId); // taymerni bekor qildik
 // funksiya ishga tushmaydi</code></pre>
 <div class="note">Timerni bekor qilgandan keyin ham identifikator qiymati saqlanib qoladi — u "tozalanmaydi", lekin qayta ishlatilmaydi. Bekor qilish faqat rejalashtirilgan bajarishni to'xtatadi.</div>
-<h2>setInterval — takroran bajarish</h2>
+<h2 id="setinterval-takroran-bajarish">setInterval — takroran bajarish</h2>
 <p><code>setInterval</code> sintaksisi <code>setTimeout</code> bilan bir xil, lekin farqi shundaki, funksiya <strong>bir marta emas, muntazam</strong> — har <code>delay</code> millisekundda takror bajariladi:</p>
 <pre class="code"><code>// Har 2 soniyada bir marta xabar:
 let timerId = setInterval(function() {
@@ -641,7 +655,7 @@ setTimeout(function() {
 // Natija (konsolda): tik, tik, to'xtatildi</code></pre>
 <p><code>clearInterval(timerId)</code> — takrorlashni to'xtatadi. Aks holda funksiya cheksiz takrorlanaveradi.</p>
 <div class="tip">Ko'pchilik brauzerlarda tab (varaq) faol bo'lmaganda (fonda) <code>setInterval</code> ohangini sekinlashtiradi yoki to'xtatadi — bu resurslarni tejash uchun. Aniq vaqtga tayanadigan hisob-kitoblarda buni yodda tuting.</div>
-<h2>Ichma-ich setTimeout</h2>
+<h2 id="ichma-ich-settimeout">Ichma-ich setTimeout</h2>
 <p>Muntazam bajarishning yana bir usuli — <code>setInterval</code> o'rniga <strong>ichma-ich (nested) setTimeout</strong>. Funksiya har safar o'zi uchun keyingi <code>setTimeout</code>ni rejalashtiradi:</p>
 <pre class="code"><code>let timerId = setTimeout(function tick() {
   console.log("tik");
@@ -652,7 +666,7 @@ setTimeout(function() {
 <p>Ichma-ich <code>setTimeout</code> <code>setInterval</code>dan quyidagi jihatlar bilan afzal:</p>
 <ol><li><strong>Kechikishni moslashuvchan boshqarish</strong> — har bir chaqiruvdan keyin kechikishni o'zgartirish mumkin (masalan, serverda yuklama oshsa, so'rovlar oralig'ini kattalashtirish);</li><li><strong>Aniqroq oraliq kafolati</strong> — keyingi chaqiruv oldingisi <em>tugagach</em> rejalashtiriladi, shuning uchun bajarishlar bir-birining ustiga chiqmaydi.</li></ol>
 <div class="note"><code>setInterval</code>da ichki kechikish funksiya bajarilish vaqtini <em>o'z ichiga oladi</em>. Agar funksiya uzoq ishlasa, real oraliq belgilangandan kichik bo'lishi (yoki chaqiruvlar navbatga to'planishi) mumkin. Ichma-ich <code>setTimeout</code> bu muammoni hal qiladi.</div>
-<h2>Nolinchi kechikish: setTimeout(func, 0)</h2>
+<h2 id="nolinchi-kechikish-settimeout-func-0">Nolinchi kechikish: setTimeout(func, 0)</h2>
 <p>Maxsus hol — <code>setTimeout(func, 0)</code> yoki oddiy <code>setTimeout(func)</code>. Bu funksiyani "iloji boricha tez", lekin <strong>joriy kod to'liq tugagandan keyin</strong> bajarishni rejalashtiradi.</p>
 <pre class="code"><code>console.log("Boshlanish");
 
@@ -668,7 +682,7 @@ console.log("Tugash");
 // Kechikkan (0 ms)</code></pre>
 <p>"Kechikkan" xabari oxirida chiqadi — chunki <code>setTimeout</code> funksiyani navbatga qo'yadi va u joriy skript to'liq bajarilib bo'lgach ishga tushadi. Bu "joriy kodni bloklamasdan, keyinroq bajarish" uchun ishlatiladigan usul.</p>
 <div class="warn">Brauzerlarda ichma-ich <code>setTimeout</code> 5 martadan keyin minimal kechikishni ~4 ms ga majburiy oshiradi (HTML standarti talabi). Shuning uchun "0 ms" aslida bir necha millisekundga aylanishi mumkin. Node.js'da bu cheklov boshqacha.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>setTimeout(func, delay)</code> — funksiyani <strong>bir marta</strong> kechikish bilan bajaradi;</li><li><code>setInterval(func, delay)</code> — funksiyani <strong>muntazam</strong> takror bajaradi;</li><li><code>clearTimeout(id)</code> / <code>clearInterval(id)</code> — rejalashtirilganni bekor qiladi;</li><li>Funksiyani qavssiz uzating: <code>setTimeout(f, 1000)</code>, <code>setTimeout(f(), 1000)</code> emas;</li><li><strong>Ichma-ich setTimeout</strong> — kechikishni moslashuvchan boshqarish va aniq oraliq kafolati beradi;</li><li><code>setTimeout(f, 0)</code> — funksiyani joriy kod tugagach bajaradi.</li></ul>
 <nav class="lesson-nav">
   <a href="new-function.html"><span class="dir">← Oldingi</span><span class="ttl">new Function sintaksisi</span></a>
@@ -682,6 +696,6 @@ console.log("Tugash");
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

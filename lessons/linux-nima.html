@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Linux va terminal nima? — Kodla</title>
   <meta name="description" content="Operatsion tizim nima, Linux va uning distributivlari (Ubuntu, Debian, Fedora), shell va bash, terminal, GUI va CLI o'rtasidagi farq hamda nega dasturchiga terminal shart.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,49 +599,63 @@
 <main class="content article">
 <div class="crumbs">Linux va terminal</div>
 <h1>Linux va terminal nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#operatsion-tizim-nima">Operatsion tizim nima?</a></li>
+<li class="lvl2"><a href="#linux-nima-va-u-qayerdan-kelib-chiqqan">Linux nima va u qayerdan kelib chiqqan?</a></li>
+<li class="lvl2"><a href="#distributivlar-distros">Distributivlar (distros)</a></li>
+<li class="lvl2"><a href="#shell-va-bash">Shell va bash</a></li>
+<li class="lvl2"><a href="#terminal-nima">Terminal nima?</a></li>
+<li class="lvl2"><a href="#gui-va-cli-ikki-xil-muloqot-usuli">GUI va CLI: ikki xil muloqot usuli</a></li>
+<li class="lvl2"><a href="#nega-dasturchiga-terminal-kerak">Nega dasturchiga terminal kerak?</a></li>
+<li class="lvl2"><a href="#windows-foydalanuvchisi-nima-qiladi">Windows foydalanuvchisi nima qiladi?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har bir dasturchi ertami-kechmi <strong>terminal</strong> bilan yuzma-yuz keladi: server sozlash, loyihani ishga tushirish, <code>git</code> bilan ishlash, paket o'rnatish — bularning barchasi ko'pincha qora ekranda, matnli buyruqlar orqali bajariladi. Ushbu bobda biz Linux operatsion tizimi va uning buyruq qatorini (terminalni) noldan o'rganamiz. Bu darsda esa asosiy tushunchalarni — <em>operatsion tizim</em>, <em>Linux</em>, <em>shell</em>, <em>terminal</em> — oydinlashtiramiz.</p>
-<h2>Operatsion tizim nima?</h2>
+<h2 id="operatsion-tizim-nima">Operatsion tizim nima?</h2>
 <p><strong>Operatsion tizim</strong> (OT, ingliz tilida <em>operating system</em>, qisqacha OS) — bu kompyuter apparatlari (protsessor, xotira, disk, tarmoq kartasi) bilan dasturlar o'rtasida vositachi bo'lib turadigan asosiy dastur. U diskdagi fayllarni boshqaradi, xotirani taqsimlaydi, jarayonlarni ishga tushiradi va foydalanuvchiga kompyuter bilan muloqot qilish imkonini beradi.</p>
 <p>Eng mashhur operatsion tizimlar:</p>
 <ul><li><strong>Windows</strong> — Microsoft ishlab chiqaradi, uy va ofis kompyuterlarida keng tarqalgan;</li><li><strong>macOS</strong> — Apple kompyuterlarida (MacBook, iMac) ishlaydi, Unix asosida qurilgan;</li><li><strong>Linux</strong> — bepul va ochiq kodli tizim; serverlar, bulut, Android telefonlar va dasturchilar orasida hukmron;</li></ul>
 <p>Dasturchilar dunyosida <strong>Linux</strong> alohida o'rin tutadi: internetdagi serverlarning katta qismi, Docker konteynerlari, bulutli platformalar (AWS, Google Cloud) — deyarli hammasi Linuxda ishlaydi. Shu sabab terminal va Linux buyruqlarini bilish — dasturchi uchun asosiy ko'nikma.</p>
-<h2>Linux nima va u qayerdan kelib chiqqan?</h2>
+<h2 id="linux-nima-va-u-qayerdan-kelib-chiqqan">Linux nima va u qayerdan kelib chiqqan?</h2>
 <p><strong>Linux</strong> — 1991-yilda finlandiyalik talaba <em>Linus Torvalds</em> tomonidan yaratilgan operatsion tizim <strong>yadrosi</strong> (kernel). Yadro — bu OTning eng markaziy qismi bo'lib, u apparat bilan bevosita muloqot qiladi. Linux <strong>bepul</strong> va <strong>ochiq kodli</strong> (open source): uning ichki tuzilishini istalgan odam ko'rishi, o'zgartirishi va tarqatishi mumkin.</p>
 <div class="note">Aslida "Linux" so'zi qat'iy ma'noda faqat <strong>yadroni</strong> bildiradi. To'liq ishlaydigan tizim esa yadro ustiga qo'shilgan ko'plab dasturlar (masalan, GNU vositalar) bilan birgalikda hosil bo'ladi. Shu bois ba'zan uni to'liqroq "GNU/Linux" deb ham atashadi. Amalda esa hamma qisqacha "Linux" deb qo'ya qoladi.</div>
-<h2>Distributivlar (distros)</h2>
+<h2 id="distributivlar-distros">Distributivlar (distros)</h2>
 <p>Linux yadrosi o'zicha to'liq operatsion tizim emas. Odatda uni dasturlar to'plami, o'rnatuvchi (installer) va grafik muhit bilan birga <strong>distributiv</strong> (qisqacha <em>distro</em>) shaklida tarqatishadi. Distributiv — bu "ishga tayyor to'plam": yadro + kerakli dasturlar + paket menejeri.</p>
 <p>Eng ko'p uchraydigan distributivlar:</p>
 <ul><li><strong>Ubuntu</strong> — yangi boshlovchilar uchun eng mashhur, do'stona; server va ish stoli versiyalari bor;</li><li><strong>Debian</strong> — juda barqaror, Ubuntu ham aynan shuning asosida qurilgan;</li><li><strong>Fedora</strong> — eng yangi texnologiyalarni birinchi bo'lib sinaydi, Red Hat kompaniyasi homiylik qiladi;</li><li><strong>CentOS / Rocky Linux / AlmaLinux</strong> — serverlar uchun, korxonalarda keng ishlatiladi;</li><li><strong>Arch Linux</strong> — tajribali foydalanuvchilar uchun, hamma narsani qo'lda sozlaydigan;</li><li><strong>Linux Mint</strong> — Windowsdan o'tayotganlar uchun qulay, Ubuntu asosida.</li></ul>
 <div class="tip">Yangi boshlovchi uchun eng yaxshi tanlov — <strong>Ubuntu</strong>. Uning buyruqlari, paket menejeri (<code>apt</code>) va hujjatlari internet forumlarida keng muhokama qilingan, muammoni izlab topish oson. Shu bobdagi barcha misollar Ubuntu/Debian oilasiga mo'ljallangan.</div>
-<h2>Shell va bash</h2>
+<h2 id="shell-va-bash">Shell va bash</h2>
 <p><strong>Shell</strong> (qobiq) — bu siz yozgan matnli buyruqlarni qabul qilib, operatsion tizimga yetkazadigan dastur. Siz "faylni ko'chir", "papkaga kir", "dasturni ishga tushir" deb yozasiz — shell bu buyruqni tushunib, yadroga bajarishni topshiradi. Shell — foydalanuvchi bilan tizim o'rtasidagi <em>tarjimon</em>.</p>
 <p>Linuxda bir necha xil shell mavjud, eng mashhurlari:</p>
 <ul><li><strong>bash</strong> (Bourne Again SHell) — eng keng tarqalgan, aksariyat distributivlarda standart;</li><li><strong>zsh</strong> — bashning kuchaytirilgan varianti, macOSda standart bo'lib qolgan;</li><li><strong>sh</strong> — eng eski, sodda shell; skriptlarda mosligini saqlash uchun ishlatiladi;</li><li><strong>fish</strong> — do'stona, aqlli avto-to'ldirishli zamonaviy shell.</li></ul>
 <p>Biz butun bob davomida <strong>bash</strong> bilan ishlaymiz, chunki u eng keng tarqalgan. Qaysi shellda ekaningizni bilish uchun quyidagi buyruqni tering:</p>
 <pre class="code"><code>echo $SHELL</code></pre>
 <p>Bu buyruq joriy shellning yo'lini chiqaradi, masalan <code>/bin/bash</code>. Bu yerda <code>echo</code> — ekranga matn chiqaruvchi buyruq, <code>$SHELL</code> esa joriy shellni saqlaydigan <em>muhit o'zgaruvchisi</em>.</p>
-<h2>Terminal nima?</h2>
+<h2 id="terminal-nima">Terminal nima?</h2>
 <p><strong>Terminal</strong> (yoki terminal-emulyator) — bu shell ishlaydigan <em>oyna</em>, ya'ni siz buyruqlarni yozadigan va natijalarni ko'radigan dastur. Ko'pincha "terminal", "konsol", "buyruq qatori" (command line) so'zlari bir-birining o'rnida ishlatiladi.</p>
 <p>Munosabatni sodda qilib aytsak:</p>
 <ul><li><strong>Terminal</strong> — oyna (ekran), unda siz yozasiz va o'qiysiz;</li><li><strong>Shell</strong> (masalan, bash) — o'sha oyna ichida ishlaydigan, buyruqlaringizni tushunadigan dastur;</li><li><strong>Yadro</strong> (kernel) — shell topshiriqni yetkazadigan eng past qatlam.</li></ul>
 <p>Terminalni ochganingizda odatda quyidagiga o'xshash yozuv (<strong>prompt</strong>) ko'rasiz:</p>
 <pre class="code"><code>aziz@ubuntu:~$</code></pre>
 <p>Buni o'qib olaylik: <code>aziz</code> — foydalanuvchi nomi, <code>ubuntu</code> — kompyuter (host) nomi, <code>~</code> — joriy papka (bu yerda uy papkasi), <code>$</code> — oddiy foydalanuvchi belgisi. Agar <code>$</code> o'rniga <code>#</code> tursa, siz <em>root</em> (bosh administrator) sifatida ishlayapsiz degani (bu haqda "Ruxsatlar" darsida gaplashamiz).</p>
-<h2>GUI va CLI: ikki xil muloqot usuli</h2>
+<h2 id="gui-va-cli-ikki-xil-muloqot-usuli">GUI va CLI: ikki xil muloqot usuli</h2>
 <p>Kompyuter bilan ikki xil usulda muloqot qilish mumkin:</p>
 <ul><li><strong>GUI</strong> (Graphical User Interface) — grafik interfeys: sichqoncha, tugmalar, oynalar, ikonkalar. Windows ish stoli, brauzer — hammasi GUI;</li><li><strong>CLI</strong> (Command Line Interface) — buyruq qatori: hamma narsani matnli buyruqlar bilan bajarasiz.</li></ul>
 <p>Boshda GUI qulayroq tuyuladi, lekin CLIning katta afzalliklari bor:</p>
 <ul><li><strong>Tezlik</strong> — bir buyruq bilan minglab faylni bir zumda o'zgartirish mumkin;</li><li><strong>Avtomatlashtirish</strong> — buyruqlarni skriptga yozib, takrorlanuvchi ishlarni avtomatlashtirasiz;</li><li><strong>Masofadan boshqarish</strong> — serverlarda odatda grafik interfeys umuman bo'lmaydi, faqat terminal orqali kirasiz (<code>ssh</code>);</li><li><strong>Aniqlik va kuch</strong> — ba'zi imkoniyatlar faqat CLIda mavjud.</li></ul>
 <div class="tip">Grafik interfeysda "1000 ta faylni qayta nomlash" — soatlab qo'l ishi. Terminalda esa bu bitta qatorlik buyruq. Aynan shuning uchun tajribali dasturchilar terminalni afzal ko'radi.</div>
-<h2>Nega dasturchiga terminal kerak?</h2>
+<h2 id="nega-dasturchiga-terminal-kerak">Nega dasturchiga terminal kerak?</h2>
 <p>Zamonaviy dasturchilikda terminalsiz yashab bo'lmaydi. Mana amaliy sabablar:</p>
 <ul><li><code>git</code> bilan versiyalarni boshqarish — commit, push, pull, branch;</li><li><code>npm</code>, <code>node</code>, <code>python</code> kabi vositalarni ishga tushirish;</li><li>Server sozlash: Nginx, PostgreSQL, Docker — hammasi terminaldan;</li><li>Loyihani ishga tushirish, log'larni kuzatish, xatolarni tekshirish;</li><li>Bulutli xizmatlar (AWS, DigitalOcean) bilan ishlash;</li><li>Katta hajmdagi fayllarni tez qidirish, filtrlash, qayta ishlash.</li></ul>
 <div class="warn">Terminalda ko'p buyruqlar tasdiq so'ramasdan darhol bajariladi va "Savatga" (Recycle Bin) tushmaydi. Masalan, <code>rm</code> bilan o'chirilgan fayl butunlay yo'qoladi. Shu bois har bir buyruqni yozishdan oldin uni yaxshilab o'qing. Keyingi darslarda bu haqda alohida ogohlantiramiz.</div>
-<h2>Windows foydalanuvchisi nima qiladi?</h2>
+<h2 id="windows-foydalanuvchisi-nima-qiladi">Windows foydalanuvchisi nima qiladi?</h2>
 <p>Linux o'rnatishingiz shart emas. Windowsda ham Linux buyruqlarini o'rganish yo'llari bor:</p>
 <ul><li><strong>WSL</strong> (Windows Subsystem for Linux) — Windows ichida to'liq Ubuntu ishga tushiradi, eng qulay yo'l;</li><li><strong>Virtual mashina</strong> — VirtualBox yoki VMware orqali Linuxni alohida oynada;</li><li><strong>Git Bash</strong> — Git bilan birga o'rnatiladigan, ko'p Linux buyruqlarini qo'llab-quvvatlaydigan mini-terminal;</li><li><strong>Onlayn terminallar</strong> — brauzerda Linuxni sinash uchun (masalan, o'quv maqsadida).</li></ul>
 <div class="tip">Agar Windows 10/11 ishlatsangiz, PowerShellda <code>wsl --install</code> buyrug'i bir zumda Ubuntuni o'rnatib beradi. Bu — dasturchilar uchun eng ommabop yo'l.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Operatsion tizim</strong> — apparat bilan dasturlar o'rtasidagi vositachi (Windows, macOS, Linux);</li><li><strong>Linux</strong> — bepul, ochiq kodli tizim; serverlar va dasturchilar dunyosida hukmron;</li><li><strong>Distributiv</strong> — ishga tayyor Linux to'plami (Ubuntu, Debian, Fedora va boshqalar);</li><li><strong>Shell</strong> (bash) — buyruqlaringizni tushunib tizimga yetkazadigan tarjimon;</li><li><strong>Terminal</strong> — shell ishlaydigan oyna, buyruq yozadigan joy;</li><li><strong>CLI</strong> tezlik, avtomatlashtirish va masofadan boshqarish imkonini beradi;</li><li>Dasturchiga terminal git, npm, server va bulut bilan ishlash uchun shart.</li></ul>
 <nav class="lesson-nav">
   <a href="nginx-ssl.html"><span class="dir">← Oldingi</span><span class="ttl">SSL/HTTPS sozlash</span></a>
@@ -652,6 +669,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

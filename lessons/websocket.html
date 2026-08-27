@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebSocket — Kodla</title>
   <meta name="description" content="Server bilan real vaqtda ikki tomonlama aloqa: new WebSocket, open/message/close/error hodisalari, send, qayta ulanish va fetch bilan farqi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,17 +599,32 @@
 <main class="content article">
 <div class="crumbs">Tarmoq so'rovlari</div>
 <h1>WebSocket</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#websocket-nima-uchun-kerak">WebSocket nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#ulanishni-o-rnatish">Ulanishni o'rnatish</a></li>
+<li class="lvl2"><a href="#asosiy-hodisalar">Asosiy hodisalar</a></li>
+<li class="lvl2"><a href="#xabar-yuborish-send">Xabar yuborish: send</a></li>
+<li class="lvl2"><a href="#readystate-ulanish-holati">readyState — ulanish holati</a></li>
+<li class="lvl2"><a href="#ulanishni-yopish">Ulanishni yopish</a></li>
+<li class="lvl2"><a href="#qayta-ulanish-reconnection">Qayta ulanish (reconnection)</a></li>
+<li class="lvl2"><a href="#to-liq-amaliy-misol-oddiy-chat">To'liq amaliy misol: oddiy chat</a></li>
+<li class="lvl2"><a href="#websocket-va-fetch-farqi">WebSocket va fetch: farqi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>WebSocket</strong> — bu server bilan <em>doimiy</em>, <em>ikki tomonlama</em> aloqa kanalini o'rnatuvchi protokol. <code>fetch</code>dan farqli o'laroq, u so'rov-javob modelida ishlamaydi: ulanish bir marta o'rnatiladi va ochiq turadi — server istagan paytda mijozga xabar yubora oladi. Bu real vaqt ilovalari uchun ajralmas: chat, o'yin, jonli bildirishnomalar, birja narxlari va h.k.</p>
-<h2>WebSocket nima uchun kerak?</h2>
+<h2 id="websocket-nima-uchun-kerak">WebSocket nima uchun kerak?</h2>
 <p>Oddiy <code>fetch</code> yoki XHR bilan server <strong>faqat so'rovga javob</strong> bera oladi — mijoz so'ramaguncha, server o'zidan xabar yubora olmaydi. Ammo real vaqt ilovalarida server o'zi xabar yuborishi kerak bo'ladi:</p>
 <ul><li><strong>Chat:</strong> boshqa foydalanuvchi xabar yozsa, u darhol ko'rinishi kerak;</li><li><strong>Bildirishnomalar:</strong> server yangi voqea haqida darhol xabar berishi kerak;</li><li><strong>Jonli ma'lumotlar:</strong> birja narxlari, sport natijalari, onlayn o'yinlar.</li></ul>
 <p>WebSocket aynan shu muammoni hal qiladi: ulanish ochiq turadi va <strong>ikkala tomon</strong> ham istagan paytda xabar yubora oladi.</p>
-<h2>Ulanishni o'rnatish</h2>
+<h2 id="ulanishni-o-rnatish">Ulanishni o'rnatish</h2>
 <p>WebSocket ulanishi <code>new WebSocket(url)</code> orqali yaratiladi. Manzil <code>http://</code> emas, <code>ws://</code> (yoki xavfsiz <code>wss://</code>) protokoli bilan boshlanadi:</p>
 <pre class="code"><code>let socket = new WebSocket('wss://example.com/chat');</code></pre>
 <ul><li><code>ws://</code> — oddiy (shifrlanmagan) ulanish;</li><li><code>wss://</code> — xavfsiz, shifrlangan ulanish (HTTPS'ga o'xshab). Doim <code>wss://</code>dan foydalanish tavsiya etiladi.</li></ul>
 <div class="note"><code>wss://</code> — bu shifrlangan WebSocket. U nafaqat xavfsizroq, balki turli proksi-serverlar orqali ham ishonchliroq o'tadi. Amaliyotda deyarli doim <code>wss://</code> ishlatiladi.</div>
-<h2>Asosiy hodisalar</h2>
+<h2 id="asosiy-hodisalar">Asosiy hodisalar</h2>
 <p>Ulanish o'rnatilgach, uning hayotini <strong>to'rtta hodisa</strong> boshqaradi:</p>
 <ul><li><code>open</code> — ulanish muvaffaqiyatli o'rnatildi;</li><li><code>message</code> — serverdan xabar keldi;</li><li><code>error</code> — xatolik yuz berdi;</li><li><code>close</code> — ulanish yopildi.</li></ul>
 <pre class="code"><code>let socket = new WebSocket('wss://example.com/chat');
@@ -631,7 +649,7 @@ socket.onclose = function (event) {
   }
   console.log('Kod: ' + event.code + ', sabab: ' + event.reason);
 };</code></pre>
-<h2>Xabar yuborish: send</h2>
+<h2 id="xabar-yuborish-send">Xabar yuborish: send</h2>
 <p>Serverga xabar yuborish uchun <code>socket.send()</code> ishlatiladi. Uni matn (string) yoki binar ma'lumot (Blob, ArrayBuffer) bilan chaqirish mumkin:</p>
 <pre class="code"><code>// Matn yuborish
 socket.send('Salom, server!');
@@ -646,7 +664,7 @@ socket.send(JSON.stringify({
   // Endi yuborish xavfsiz
   socket.send('Ulanish tayyor, salom!');
 };</code></pre>
-<h2>readyState — ulanish holati</h2>
+<h2 id="readystate-ulanish-holati">readyState — ulanish holati</h2>
 <p><code>socket.readyState</code> ulanishning hozirgi holatini bildiradi:</p>
 <ul><li><code>0</code> (<code>CONNECTING</code>) — ulanmoqda, hali tayyor emas;</li><li><code>1</code> (<code>OPEN</code>) — ulanish ochiq, xabar yuborish mumkin;</li><li><code>2</code> (<code>CLOSING</code>) — yopilmoqda;</li><li><code>3</code> (<code>CLOSED</code>) — yopilgan.</li></ul>
 <pre class="code"><code>if (socket.readyState === WebSocket.OPEN) {
@@ -654,7 +672,7 @@ socket.send(JSON.stringify({
 } else {
   console.log('Ulanish hali tayyor emas');
 }</code></pre>
-<h2>Ulanishni yopish</h2>
+<h2 id="ulanishni-yopish">Ulanishni yopish</h2>
 <p>Ulanishni tugatish uchun <code>socket.close()</code> ishlatiladi. Ixtiyoriy ravishda yopilish kodi va sababini berish mumkin:</p>
 <pre class="code"><code>// Oddiy yopish
 socket.close();
@@ -663,7 +681,7 @@ socket.close();
 socket.close(1000, 'Ish tugadi');
 // 1000 — normal yopilish kodi</code></pre>
 <div class="note"><code>close</code> hodisasidagi <code>event.code</code> yopilish sababini bildiradi. <code>1000</code> — normal yopilish. Boshqa kodlar (masalan, <code>1006</code>) g'ayritabiiy uzilishni bildiradi.</div>
-<h2>Qayta ulanish (reconnection)</h2>
+<h2 id="qayta-ulanish-reconnection">Qayta ulanish (reconnection)</h2>
 <p>Real ilovalarda tarmoq uzilishi mumkin. Ulanish uzilganda uni <strong>avtomatik qayta tiklash</strong> muhim. Buning uchun <code>close</code> hodisasida yangi ulanish yaratamiz:</p>
 <pre class="code"><code>function ulanish() {
   let socket = new WebSocket('wss://example.com/chat');
@@ -691,7 +709,7 @@ socket.close(1000, 'Ish tugadi');
 
 ulanish();</code></pre>
 <div class="tip">Amaliyotda "eksponensial kutish" (exponential backoff) qo'llaniladi: har muvaffaqiyatsiz urinishdan keyin kutish vaqtini oshirib borish (3s, 6s, 12s ...). Bu serverga ortiqcha yuk tushmasligini ta'minlaydi.</div>
-<h2>To'liq amaliy misol: oddiy chat</h2>
+<h2 id="to-liq-amaliy-misol-oddiy-chat">To'liq amaliy misol: oddiy chat</h2>
 <p>Xabar qabul qilish va yuborishni birlashtirgan soddalashtirilgan chat mijozi:</p>
 <pre class="code"><code>let socket = new WebSocket('wss://example.com/chat');
 
@@ -718,11 +736,11 @@ function xabarYubor(matn) {
 
 // Foydalanish (masalan, tugma bosilganda):
 // xabarYubor('Salom hammaga!');</code></pre>
-<h2>WebSocket va fetch: farqi</h2>
+<h2 id="websocket-va-fetch-farqi">WebSocket va fetch: farqi</h2>
 <p>Ikki texnologiya butunlay boshqa maqsadlar uchun:</p>
 <ul><li><strong>Aloqa modeli:</strong> <code>fetch</code> — so'rov/javob (mijoz so'raydi, server javob beradi va tugaydi); WebSocket — doimiy ochiq kanal;</li><li><strong>Yo'nalish:</strong> <code>fetch</code> — asosan bir tomonlama (mijoz boshlaydi); WebSocket — ikki tomonlama (ikkalasi ham xabar yuboradi);</li><li><strong>Serverning tashabbusi:</strong> <code>fetch</code>da server o'zi xabar yubora olmaydi; WebSocketda yubora oladi;</li><li><strong>Protokol:</strong> <code>fetch</code> — <code>http/https</code>; WebSocket — <code>ws/wss</code>;</li><li><strong>Qachon ishlatiladi:</strong> <code>fetch</code> — oddiy ma'lumot olish/yuborish; WebSocket — real vaqt (chat, o'yin, jonli yangilanishlar).</li></ul>
 <div class="note">Qoida oddiy: agar sizga <strong>faqat so'raganda</strong> ma'lumot kerak bo'lsa — <code>fetch</code>. Agar server <strong>o'zi</strong> xabar yuborishi va aloqa <strong>real vaqtda</strong> bo'lishi kerak bo'lsa — WebSocket.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>WebSocket</strong> — server bilan doimiy, ikki tomonlama, real vaqt aloqa kanali;</li><li>Ulanish: <code>new WebSocket('wss://...')</code> — <code>wss://</code> xavfsiz variantdir;</li><li>To'rt asosiy hodisa: <code>open</code> (ulandi), <code>message</code> (xabar keldi), <code>error</code> (xatolik), <code>close</code> (yopildi);</li><li>Xabar yuborish: <code>socket.send(...)</code> — faqat <code>open</code>dan keyin;</li><li><code>socket.readyState</code> — ulanish holatini bildiradi (CONNECTING, OPEN, CLOSING, CLOSED);</li><li>Tarmoq uzilsa, <code>close</code> hodisasida <code>setTimeout</code> bilan <strong>qayta ulanish</strong> qo'llaniladi;</li><li><code>fetch</code> — so'rov/javob uchun; WebSocket — real vaqt, ikki tomonlama aloqa uchun.</li></ul>
 <nav class="lesson-nav">
   <a href="xhr.html"><span class="dir">← Oldingi</span><span class="ttl">XMLHttpRequest</span></a>
@@ -736,6 +754,6 @@ function xabarYubor(matn) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Langarlar: ^ va $, ko'p qatorli rejim — Kodla</title>
   <meta name="description" content="Boshlanish langari ^, tugash langari $, to'liq moslikni tekshirish, ko'p qatorli m rejimi va so'z chegarasi \b.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Muntazam ifodalar (RegExp)</div>
 <h1>Langarlar: ^ va $, ko'p qatorli rejim</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#langar-nima">Langar nima?</a></li>
+<li class="lvl2"><a href="#matnning-boshi">^ — matnning boshi</a></li>
+<li class="lvl2"><a href="#matnning-oxiri">$ — matnning oxiri</a></li>
+<li class="lvl2"><a href="#to-liq-moslikni-tekshirish">To'liq moslikni tekshirish: ^...$</a></li>
+<li class="lvl2"><a href="#m-flagi-ko-p-qatorli-rejim">m flagi — ko'p qatorli rejim</a></li>
+<li class="lvl2"><a href="#b-so-z-chegarasi">\b — so'z chegarasi</a></li>
+<li class="lvl2"><a href="#amaliy-misol-so-zni-almashtirish">Amaliy misol: so'zni almashtirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Langarlar</strong> (anchors) — muntazam ifodada belgiga emas, balki <em>pozitsiyaga</em> mos keluvchi maxsus belgilardir. Ular hech qanday belgini "iste'mol qilmaydi", faqat satrning boshi, oxiri yoki so'z chegarasi kabi maxsus joylarni belgilaydi. Ushbu darsda <code>^</code>, <code>$</code> langarlarini, ko'p qatorli rejimni va so'z chegarasi <code>\b</code>ni chuqur o'rganamiz.</p>
-<h2>Langar nima?</h2>
+<h2 id="langar-nima">Langar nima?</h2>
 <p>Oddiy belgi sinflari (<code>\d</code>, <code>\w</code> va h.k.) belgiga mos keladi. Langarlar esa <strong>pozitsiyaga</strong> mos keladi. Ular quyidagilar:</p>
 <ul><li><code>^</code> (karet) — matnning <strong>boshiga</strong> mos keladi;</li><li><code>$</code> (dollar) — matnning <strong>oxiriga</strong> mos keladi.</li></ul>
 <p>Boshqacha aytganda, <code>^</code> "bu yerdan naqsh <em>boshlanishi</em> kerak", <code>$</code> esa "bu yerda naqsh <em>tugashi</em> kerak" deganidir.</p>
-<h2>^ — matnning boshi</h2>
+<h2 id="matnning-boshi">^ — matnning boshi</h2>
 <p>Karet <code>^</code> naqsh matnning aynan <strong>boshidan</strong> boshlanishini talab qiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>karet.js</span></div><textarea spellcheck="false">// matn 'Salom' bilan boshlanadimi?
 console.log(/^Salom/.test('Salom dunyo')); // true
@@ -609,14 +625,14 @@ console.log(/^Salom/.test('Ha, Salom'));   // false — boshida emas
 
 // pozitsiyani ko'ramiz
 console.log('Salom dunyo'.match(/^Salom/)[0]); // Salom</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>$ — matnning oxiri</h2>
+<h2 id="matnning-oxiri">$ — matnning oxiri</h2>
 <p>Dollar <code>$</code> naqsh matnning aynan <strong>oxiriga</strong> to'g'ri kelishini talab qiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>dollar.js</span></div><textarea spellcheck="false">// matn 'dunyo' bilan tugaydimi?
 console.log(/dunyo$/.test('Salom dunyo')); // true
 console.log(/dunyo$/.test('dunyo bor'));   // false — oxirida emas
 
 console.log('Salom dunyo'.match(/dunyo$/)[0]); // dunyo</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>To'liq moslikni tekshirish: ^...$</h2>
+<h2 id="to-liq-moslikni-tekshirish">To'liq moslikni tekshirish: ^...$</h2>
 <p><code>^</code> va <code>$</code> ni <strong>birga</strong> ishlatish juda kuchli usul — u naqsh butun matnga <em>to'liq</em> mos kelishini tekshiradi, ya'ni matnning bir qismiga emas, balki hammasiga. Bu forma tekshiruvida (validatsiya) juda muhim:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>toliq-moslik.js</span></div><textarea spellcheck="false">// faqat raqamlardan iborat matnmi? (validatsiya)
 let regexp = /^\d+$/;
@@ -632,7 +648,7 @@ let vaqtRegexp = /^\d\d:\d\d$/;
 console.log(vaqtRegexp.test('12:30')); // true
 console.log(vaqtRegexp.test('9:30'));  // false — bitta raqam
 console.log(vaqtRegexp.test('12:300')); // false — ortiqcha raqam</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>m flagi — ko'p qatorli rejim</h2>
+<h2 id="m-flagi-ko-p-qatorli-rejim">m flagi — ko'p qatorli rejim</h2>
 <p>Odatiy holda <code>^</code> va <code>$</code> butun matnning <strong>boshi va oxiriga</strong> mos keladi, matn ichidagi qator uzilishlarini hisobga olmaydi. <code>m</code> (multiline) flagi bu xatti-harakatni o'zgartiradi: <code>^</code> va <code>$</code> endi <strong>har bir qatorning</strong> boshi va oxiriga mos keladi.</p>
 <p>Avval flagsiz holatni ko'ramiz — faqat birinchi qator boshiga mos keladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>m-flagsiz.js</span></div><textarea spellcheck="false">let matn = '1-qator\n2-qator\n3-qator';
@@ -650,7 +666,7 @@ console.log(matn.match(/^\d/gm)); // ['1', '2', '3']</textarea><div class="pg-ac
 // har qator oxiridagi raqam
 console.log(matn.match(/\d$/gm)); // ['1', '2', '3']</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>m</code> flagini <code>s</code> flagi bilan aralashtirib yubormang. <code>m</code> — <code>^</code> va <code>$</code> langarlarining har qatorga ta'sirini yoqadi. <code>s</code> — nuqta <code>.</code> ning <code>\n</code> ga mos kelishini yoqadi. Ular butunlay boshqa vazifalarni bajaradi.</div>
-<h2>\b — so'z chegarasi</h2>
+<h2 id="b-so-z-chegarasi">\b — so'z chegarasi</h2>
 <p><code>\b</code> — bu <strong>so'z chegarasi</strong> (word boundary) langari. U so'z belgisi (<code>\w</code>) va so'z belgisi bo'lmagan belgi (<code>\W</code>) orasidagi pozitsiyaga mos keladi. Boshqacha aytganda, u "so'zning boshi yoki oxiri" degan joyni belgilaydi.</p>
 <p>So'z chegarasi uchta holatda mavjud bo'ladi:</p>
 <ul><li>matn boshida, agar birinchi belgi so'z belgisi (<code>\w</code>) bo'lsa;</li><li>matn oxirida, agar oxirgi belgi so'z belgisi bo'lsa;</li><li>matn ichida, so'z belgisi va so'z bo'lmagan belgi tutashgan joyda.</li></ul>
@@ -675,7 +691,7 @@ console.log('bir 25 uch'.match(/\b\d+\b/)); // ['25', ...]
 
 // chegarani so'z bilan izohlash:
 // probel/matn oxiri bilan o'ralgan raqam guruhi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Amaliy misol: so'zni almashtirish</h2>
+<h2 id="amaliy-misol-so-zni-almashtirish">Amaliy misol: so'zni almashtirish</h2>
 <p><code>\b</code> va langarlarni birga ishlatib, matndagi aynan kerakli so'zni xavfsiz almashtirish mumkin — so'zning boshqa so'zlar ichiga kirib ketgan qismlariga tegmasdan:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>b-almashtirish.js</span></div><textarea spellcheck="false">let matn = 'kot kotlet kotel';
 
@@ -683,7 +699,7 @@ console.log('bir 25 uch'.match(/\b\d+\b/)); // ['25', ...]
 let natija = matn.replace(/\bkot\b/g, 'MUSHUK');
 
 console.log(natija); // MUSHUK kotlet kotel</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>langarlar belgiga emas, <strong>pozitsiyaga</strong> mos keladi va hech qanday belgini iste'mol qilmaydi;</li><li><code>^</code> — matn (yoki <code>m</code> flagida qator) boshi; <code>$</code> — matn (yoki qator) oxiri;</li><li><code>^...$</code> birga — naqsh butun matnga <strong>to'liq</strong> mos kelishini tekshiradi (validatsiya uchun ideal);</li><li><code>m</code> (multiline) flagi <code>^</code> va <code>$</code> ni har bir qatorning boshi/oxiriga mos qiladi;</li><li><code>\b</code> — so'z chegarasi; <code>\w</code> va <code>\W</code> tutashgan joyga mos keladi va butun so'zni topishga yordam beradi;</li><li><code>\b</code> lotin harflari va raqamlar bilan ishlaydi, lekin lotin bo'lmagan alifbolarda ishonchli emas.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-belgilar.html"><span class="dir">← Oldingi</span><span class="ttl">Belgilar sinflari</span></a>
@@ -697,6 +713,6 @@ console.log(natija); // MUSHUK kotlet kotel</textarea><div class="pg-actions"><b
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

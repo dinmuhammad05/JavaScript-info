@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Middleware va xatoliklar — Kodla</title>
   <meta name="description" content="Middleware nima, zanjir, next(), express.json(), express.static(), maxsus logger middleware, xatolarni boshqarish middleware va 404.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Node.js va Express</div>
 <h1>Middleware va xatoliklar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#middleware-nima">Middleware nima?</a></li>
+<li class="lvl2"><a href="#next-va-zanjir">next() va zanjir</a></li>
+<li class="lvl2"><a href="#o-rnatilgan-middleware-express-json">O'rnatilgan middleware: express.json()</a></li>
+<li class="lvl2"><a href="#statik-fayllar-express-static">Statik fayllar: express.static()</a></li>
+<li class="lvl2"><a href="#maxsus-middleware-logger">Maxsus middleware: logger</a></li>
+<li class="lvl2"><a href="#404-topilmadi">404 — topilmadi</a></li>
+<li class="lvl2"><a href="#xatoliklarni-boshqarish-middleware">Xatoliklarni boshqarish middleware</a></li>
+<li class="lvl2"><a href="#to-liq-misol">To'liq misol</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Express'ning eng kuchli va o'ziga xos g'oyasi — <strong>middleware</strong>. So'rov serverga kelgandan javob jo'natilgungacha bo'lgan yo'lda bir necha bosqichdan o'tadi, va har bir bosqich — middleware. Ushbu darsda middleware'larni, ular zanjirini va xatoliklarni to'g'ri boshqarishni o'rganamiz.</p>
-<h2>Middleware nima?</h2>
+<h2 id="middleware-nima">Middleware nima?</h2>
 <p><strong>Middleware</strong> — bu so'rov (<code>req</code>) va javob (<code>res</code>) obyektlariga kirish huquqiga ega bo'lgan, so'rovni qayta ishlash zanjiridagi <strong>oraliq funksiya</strong>. U so'rovni o'zgartirishi, tekshirishi yoki keyingi bosqichga uzatishi mumkin.</p>
 <p>Middleware funksiyasi uchta argument oladi:</p>
 <pre class="code"><code>function mening_middleware(req, res, next) {
@@ -605,7 +622,7 @@
   next(); // keyingi bosqichga o'tkazamiz
 }</code></pre>
 <p>Middleware ilovaga <code>app.use()</code> bilan qo'shiladi va u har bir so'rovda ishlaydi.</p>
-<h2>next() va zanjir</h2>
+<h2 id="next-va-zanjir">next() va zanjir</h2>
 <p>Middleware'lar <strong>zanjir</strong> hosil qiladi. So'rov birinchi middleware'ga kiradi, u <code>next()</code>ni chaqirsa — so'rov keyingisiga o'tadi, va hokazo — oxirida route funksiyasiga yetadi:</p>
 <pre class="code"><code>const express = require('express');
 const app = express();
@@ -627,7 +644,7 @@ app.get('/', (req, res) =&gt; {
 // Konsolda: 1-middleware, 2-middleware, Route</code></pre>
 <div class="warn">Agar middleware'da <code>next()</code>ni chaqirishni <strong>unutsangiz</strong> va javob ham jo'natmasangiz, so'rov o'sha yerda "osilib" qoladi — brauzer javobni cheksiz kutadi. Har bir middleware yo <code>next()</code>ni chaqirishi, yo javobni jo'natishi shart.</div>
 <div class="note">Middleware'lar <strong>tartibda</strong> ishlaydi — kodda yuqorida yozilgani birinchi ishlaydi. Shuning uchun tartib muhim: masalan, <code>express.json()</code> route'lardan oldin turishi kerak, aks holda route'da <code>req.body</code> bo'sh bo'ladi.</div>
-<h2>O'rnatilgan middleware: express.json()</h2>
+<h2 id="o-rnatilgan-middleware-express-json">O'rnatilgan middleware: express.json()</h2>
 <p>Express bir nechta tayyor middleware bilan keladi. Eng muhimi — <code>express.json()</code>. U kiruvchi so'rovning JSON tanasini o'qib, <code>req.body</code>ga joylaydi:</p>
 <pre class="code"><code>app.use(express.json());
 
@@ -637,7 +654,7 @@ app.post('/data', (req, res) =&gt; {
 });</code></pre>
 <p>Yana bir foydalisi — <code>express.urlencoded()</code>, u HTML formalaridan kelgan ma'lumotni (<code>application/x-www-form-urlencoded</code>) o'qiydi:</p>
 <pre class="code"><code>app.use(express.urlencoded({ extended: true }));</code></pre>
-<h2>Statik fayllar: express.static()</h2>
+<h2 id="statik-fayllar-express-static">Statik fayllar: express.static()</h2>
 <p>Ko'pincha server rasmlar, CSS, HTML va boshqa <strong>statik fayllarni</strong> ham berishi kerak. <code>express.static()</code> middleware'i ma'lum bir papkadagi fayllarni avtomatik uzatadi:</p>
 <pre class="code"><code>// 'public' papkasidagi fayllarni uzatish:
 app.use(express.static('public'));
@@ -646,7 +663,7 @@ app.use(express.static('public'));
 // http://localhost:3000/rasm.png</code></pre>
 <p>Agar <code>public</code> papkasida <code>index.html</code> bo'lsa, u bosh sahifada (<code>/</code>) avtomatik ko'rsatiladi. Bu — statik veb-saytni joylashtirishning eng oson yo'li.</p>
 <div class="tip">Xavfsizlik uchun mutlaq yo'l berish tavsiya etiladi: <code>app.use(express.static(path.join(__dirname, 'public')))</code>. Bu server qayerdan ishga tushirilishidan qat'i nazar, to'g'ri papkani topadi.</div>
-<h2>Maxsus middleware: logger</h2>
+<h2 id="maxsus-middleware-logger">Maxsus middleware: logger</h2>
 <p>O'z middleware'ingizni yozish oson. Klassik misol — <strong>logger</strong>: har bir so'rovni konsolga yozib boruvchi middleware. Bu debug qilishda juda foydali:</p>
 <pre class="code"><code>// Har bir so'rovni vaqti bilan qayd etuvchi logger:
 function logger(req, res, next) {
@@ -671,14 +688,14 @@ function tekshir(req, res, next) {
 app.get('/maxfiy', tekshir, (req, res) =&gt; {
   res.send('Maxfiy ma'lumot');
 });</code></pre>
-<h2>404 — topilmadi</h2>
+<h2 id="404-topilmadi">404 — topilmadi</h2>
 <p>Agar so'rov hech qaysi route'ga mos kelmasa, uni ushlash uchun barcha route'lardan <strong>keyin</strong> maxsus middleware qo'yiladi. U hech qanday manzil belgilamagani uchun har qanday mos kelmagan so'rovni ushlaydi:</p>
 <pre class="code"><code>// Barcha route'lardan KEYIN yoziladi:
 app.use((req, res) =&gt; {
   res.status(404).json({ xato: 'Sahifa topilmadi' });
 });</code></pre>
 <div class="warn">404 middleware'i <strong>oxirida</strong> turishi shart — barcha route va boshqa middleware'lardan keyin. Agar uni yuqoriga qo'ysangiz, u barcha so'rovlarni ushlab, haqiqiy route'larga yetkazmaydi.</div>
-<h2>Xatoliklarni boshqarish middleware</h2>
+<h2 id="xatoliklarni-boshqarish-middleware">Xatoliklarni boshqarish middleware</h2>
 <p>Xatoliklarni markazlashgan tarzda boshqarish uchun Express maxsus <strong>xato middleware</strong>'ini taklif etadi. U oddiy middleware'dan farqli — <strong>to'rt argument</strong>ni oladi: birinchisi <code>err</code>:</p>
 <pre class="code"><code>// Xato middleware — DOIM 4 argument!
 app.use((err, req, res, next) =&gt; {
@@ -696,7 +713,7 @@ app.use((err, req, res, next) =&gt; {
 });</code></pre>
 <div class="note">Express funksiyaning to'rt argumentli ekanligiga qarab uni xato middleware sifatida taniydi. Shuning uchun <code>next</code> ishlatilmasa ham, uni to'rtinchi argument sifatida yozish shart: <code>(err, req, res, next)</code>.</div>
 <div class="tip">Middleware'lar tartibi odatda shunday bo'ladi: (1) logger va <code>express.json()</code> kabi umumiy middleware'lar, (2) route'lar, (3) 404 middleware, (4) xato middleware — eng oxirida. Bu tartib so'rovning to'g'ri yo'ldan o'tishini ta'minlaydi.</div>
-<h2>To'liq misol</h2>
+<h2 id="to-liq-misol">To'liq misol</h2>
 <p>Barcha tushunchalarni birlashtiruvchi to'liq server strukturasi:</p>
 <pre class="code"><code>const express = require('express');
 const app = express();
@@ -725,7 +742,7 @@ app.use((err, req, res, next) =&gt; {
 });
 
 app.listen(3000, () =&gt; console.log('Server 3000-portda'));</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Middleware</strong> — so'rovni qayta ishlash zanjiridagi oraliq funksiya (<code>req</code>, <code>res</code>, <code>next</code>);</li><li><code>next()</code> so'rovni keyingi bosqichga uzatadi; uni chaqirmasangiz, so'rov osilib qoladi;</li><li>Middleware'lar <strong>tartibda</strong> ishlaydi — koddagi joylashuvi muhim;</li><li><code>express.json()</code> — JSON tanani o'qiydi, <code>express.static()</code> — statik fayllarni uzatadi;</li><li>Maxsus middleware (masalan, logger) oson yoziladi va qayta ishlatiladi;</li><li><strong>404</strong> middleware barcha route'lardan keyin, <strong>xato middleware</strong> (4 argumentli) esa eng oxirida turadi.</li></ul>
 <nav class="lesson-nav">
   <a href="express-rest.html"><span class="dir">← Oldingi</span><span class="ttl">REST API yaratish</span></a>
@@ -739,6 +756,6 @@ app.listen(3000, () =&gt; console.log('Server 3000-portda'));</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

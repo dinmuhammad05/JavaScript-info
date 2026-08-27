@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BigInt — Kodla</title>
   <meta name="description" content="2 in 53 dan katta butun sonlar bilan aniq ishlash uchun BigInt turi: 123n yozuvi, amallar va Number bilan aralashtirmaslik.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>BigInt</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-number-chegarasi">Muammo: Number chegarasi</a></li>
+<li class="lvl2"><a href="#bigint-yaratish">BigInt yaratish</a></li>
+<li class="lvl2"><a href="#amallar">Amallar</a></li>
+<li class="lvl2"><a href="#number-bilan-aralashtirmaslik">Number bilan aralashtirmaslik</a></li>
+<li class="lvl2"><a href="#taqqoslash-va-mantiqiy-kontekst">Taqqoslash va mantiqiy kontekst</a></li>
+<li class="lvl2"><a href="#qo-llanilishi">Qo'llanilishi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Oddiy <code>Number</code> turi taxminan <code>2**53</code> dan katta butun sonlarni <strong>aniq</strong> saqlay olmaydi. <code>BigInt</code> — bu cheklovsiz uzunlikdagi butun sonlar bilan ishlash uchun maxsus raqamli tur.</p>
-<h2>Muammo: Number chegarasi</h2>
+<h2 id="muammo-number-chegarasi">Muammo: Number chegarasi</h2>
 <p>Oddiy sonlarda xavfsiz butun sonlar chegarasi bor — <code>Number.MAX_SAFE_INTEGER</code>. Undan tashqarida aniqlik yo'qoladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-muammo.js</span></div><textarea spellcheck="false">console.log(Number.MAX_SAFE_INTEGER);  // 9007199254740991
 
@@ -605,7 +620,7 @@
 console.log(9007199254740991 + 1);  // 9007199254740992
 console.log(9007199254740991 + 2);  // 9007199254740992 (xato!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ikkala qo'shish ham bir xil natija berdi — bu aniqlik yo'qolganidan. Aynan shunday hollarda <code>BigInt</code> kerak.</p>
-<h2>BigInt yaratish</h2>
+<h2 id="bigint-yaratish">BigInt yaratish</h2>
 <p><code>BigInt</code> ikki usulda yoziladi: son oxiriga <code>n</code> qo'shib yoki <code>BigInt()</code> funksiyasi bilan:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-yaratish.js</span></div><textarea spellcheck="false">let katta = 1234567890123456789012345678901234567890n;
 console.log(katta);
@@ -620,7 +635,7 @@ console.log(c);  // 10n</textarea><div class="pg-actions"><button class="pg-run"
 
 console.log(x + 1n);  // 9007199254740992n
 console.log(x + 2n);  // 9007199254740993n (endi to'g'ri!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Amallar</h2>
+<h2 id="amallar">Amallar</h2>
 <p>BigInt oddiy arifmetik amallarni qo'llab-quvvatlaydi. Faqat bo'lish natijasi <strong>butunga yaxlitlanadi</strong> (kasr qismi tashlanadi):</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-amallar.js</span></div><textarea spellcheck="false">console.log(5n + 3n);   // 8n
 console.log(5n * 3n);   // 15n
@@ -629,7 +644,7 @@ console.log(5n / 2n);   // 2n (kasr tashlanadi!)
 console.log(5n % 2n);   // 1n
 console.log(2n ** 10n); // 1024n</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Unar plyus (<code>+bigint</code>) BigInt bilan <strong>ishlamaydi</strong> — u xatolik beradi. Boshqa arifmetik va taqqoslash amallari esa normal ishlaydi.</div>
-<h2>Number bilan aralashtirmaslik</h2>
+<h2 id="number-bilan-aralashtirmaslik">Number bilan aralashtirmaslik</h2>
 <p>Eng muhim qoida: BigInt va Numberni bir amalda <strong>aralashtira olmaysiz</strong> — bu <code>TypeError</code> beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-aralash.js</span></div><textarea spellcheck="false">try {
   console.log(5n + 3);  // xato!
@@ -641,7 +656,7 @@ console.log(2n ** 10n); // 1024n</textarea><div class="pg-actions"><button class
 console.log(5n + BigInt(3));   // 8n
 console.log(Number(5n) + 3);   // 8</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn"><code>BigInt</code>ni <code>Number</code>ga o'tkazganda (<code>Number(katta)</code>) katta qiymatlarda aniqlik yo'qolishi mumkin. Faqat qiymat xavfsiz chegarada bo'lsa o'tkazing.</div>
-<h2>Taqqoslash va mantiqiy kontekst</h2>
+<h2 id="taqqoslash-va-mantiqiy-kontekst">Taqqoslash va mantiqiy kontekst</h2>
 <p>Taqqoslashda esa BigInt va Number bemalol aralashadi (qiymatlari solishtiriladi), lekin qat'iy tenglik (<code>===</code>) turni ham tekshiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-taqqoslash.js</span></div><textarea spellcheck="false">console.log(5n &gt; 3);     // true
 console.log(5n == 5);    // true (qiymat teng)
@@ -656,11 +671,11 @@ if (0n) {
 <p><code>typeof</code> BigInt uchun alohida qiymat qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>bigint-typeof.js</span></div><textarea spellcheck="false">console.log(typeof 10n);        // bigint
 console.log(typeof BigInt(5));  // bigint</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Qo'llanilishi</h2>
+<h2 id="qo-llanilishi">Qo'llanilishi</h2>
 <p>BigInt qachon kerak bo'ladi?</p>
 <ul><li>Kriptografiya — juda katta sonlar bilan hisoblash;</li><li>Yuqori aniqlikdagi vaqt tamg'alari (nanosekundlar);</li><li>Katta identifikatorlar (masalan, ba'zi tizimlarning 64-bitli ID lari);</li><li>Moliyaviy hisob-kitoblar, o'lchamdan chiqib ketishi mumkin bo'lgan hollar.</li></ul>
 <div class="tip">Agar sonlaringiz <code>2**53</code> chegarasidan oshib ketmasa, oddiy <code>Number</code> yetarli va tezroq. <code>BigInt</code>ni faqat chindan zarur bo'lganda ishlating.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>BigInt</code> — cheklovsiz uzunlikdagi butun sonlar uchun tur;</li><li>Yozilishi: <code>123n</code> yoki <code>BigInt(123)</code>;</li><li>Bo'lish butunga yaxlitlanadi; unar plyus ishlamaydi;</li><li>BigInt va Numberni arifmetikada aralashtirib bo'lmaydi (<code>TypeError</code>), lekin taqqoslash mumkin;</li><li><code>typeof</code> "bigint" beradi; kriptografiya va katta ID larda foydali.</li></ul>
 <nav class="lesson-nav">
   <a href="reference-type.html"><span class="dir">← Oldingi</span><span class="ttl">Reference Type</span></a>
@@ -674,6 +689,6 @@ console.log(typeof BigInt(5));  // bigint</textarea><div class="pg-actions"><but
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

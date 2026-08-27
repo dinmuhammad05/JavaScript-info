@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nginx o'rnatish va boshqarish — Kodla</title>
   <meta name="description" content="Nginx'ni apt/yum orqali o'rnatish, systemctl bilan boshqarish (start/stop/restart/status), config testi (nginx -t), qayta yuklash (reload), fayl/papka joylashuvi va loglar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,40 +599,59 @@
 <main class="content article">
 <div class="crumbs">Nginx</div>
 <h1>Nginx o'rnatish va boshqarish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nginx-ni-o-rnatish">Nginx'ni o'rnatish</a></li>
+<li class="lvl3"><a href="#debian-ubuntu-apt">Debian / Ubuntu (apt)</a></li>
+<li class="lvl3"><a href="#centos-rhel-fedora-yum-yoki-dnf">CentOS / RHEL / Fedora (yum yoki dnf)</a></li>
+<li class="lvl2"><a href="#systemctl-bilan-boshqarish">systemctl bilan boshqarish</a></li>
+<li class="lvl3"><a href="#ishga-tushirish-start">Ishga tushirish (start)</a></li>
+<li class="lvl3"><a href="#to-xtatish-stop">To'xtatish (stop)</a></li>
+<li class="lvl3"><a href="#qayta-ishga-tushirish-restart">Qayta ishga tushirish (restart)</a></li>
+<li class="lvl3"><a href="#holatini-ko-rish-status">Holatini ko'rish (status)</a></li>
+<li class="lvl3"><a href="#avtoyuklashni-yoqish-enable">Avtoyuklashni yoqish (enable)</a></li>
+<li class="lvl2"><a href="#config-ni-tekshirish-nginx-t">Config'ni tekshirish: nginx -t</a></li>
+<li class="lvl2"><a href="#qayta-yuklash-nginx-s-reload">Qayta yuklash: nginx -s reload</a></li>
+<li class="lvl2"><a href="#fayl-va-papkalar-joylashuvi">Fayl va papkalar joylashuvi</a></li>
+<li class="lvl2"><a href="#loglar-access-log-va-error-log">Loglar: access.log va error.log</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Nginx bilan ishlashning birinchi qadami — uni serverga o'rnatish va boshqarishni o'rganish. Ushbu darsda Nginx'ni turli Linux distributivlarida o'rnatishni, uni ishga tushirish/to'xtatish/qayta yuklashni, config'ni tekshirishni hamda uning fayllari qayerda joylashishini batafsil ko'rib chiqamiz.</p>
 <div class="note">Quyidagi buyruqlar Linux serverida terminal (buyruq qatori) orqali bajariladi. Ko'pchilik buyruqlar administrator huquqini talab qiladi, shuning uchun ular oldida <code>sudo</code> yoziladi.</div>
-<h2>Nginx'ni o'rnatish</h2>
+<h2 id="nginx-ni-o-rnatish">Nginx'ni o'rnatish</h2>
 <p>O'rnatish usuli Linux distributividan bog'liq. Har bir distributivning o'z <strong>paket menejeri</strong> bor.</p>
-<h3>Debian / Ubuntu (apt)</h3>
+<h3 id="debian-ubuntu-apt">Debian / Ubuntu (apt)</h3>
 <p>Debian oilasidagi tizimlarda (Ubuntu shular jumlasidan) <code>apt</code> paket menejeri ishlatiladi. Avval paketlar ro'yxatini yangilab, keyin Nginx'ni o'rnatamiz:</p>
 <pre class="code"><code>sudo apt update
 sudo apt install nginx</code></pre>
 <p>O'rnatish tugagach, Nginx odatda avtomatik ishga tushadi. Buni brauzerda server IP manzilini ochib tekshirish mumkin — standart "Welcome to nginx!" sahifasi ko'rinishi kerak.</p>
-<h3>CentOS / RHEL / Fedora (yum yoki dnf)</h3>
+<h3 id="centos-rhel-fedora-yum-yoki-dnf">CentOS / RHEL / Fedora (yum yoki dnf)</h3>
 <p>Red Hat oilasidagi tizimlarda <code>yum</code> yoki uning yangi varianti <code>dnf</code> ishlatiladi:</p>
 <pre class="code"><code>sudo yum install nginx
 # yoki yangiroq tizimlarda:
 sudo dnf install nginx</code></pre>
 <p>Bu tizimlarda o'rnatishdan keyin Nginx'ni qo'lda ishga tushirish kerak bo'lishi mumkin (buni pastda ko'ramiz).</p>
-<h2>systemctl bilan boshqarish</h2>
+<h2 id="systemctl-bilan-boshqarish">systemctl bilan boshqarish</h2>
 <p>Zamonaviy Linux tizimlarida xizmatlar (servicelar) <strong>systemd</strong> orqali boshqariladi. Uning buyrug'i — <code>systemctl</code>. Nginx ham xizmat sifatida ro'yxatga olingani uchun uni shu buyruq bilan boshqaramiz.</p>
-<h3>Ishga tushirish (start)</h3>
+<h3 id="ishga-tushirish-start">Ishga tushirish (start)</h3>
 <pre class="code"><code>sudo systemctl start nginx</code></pre>
 <p>Bu buyruq Nginx'ni ishga tushiradi. U so'rovlarni tinglashni boshlaydi.</p>
-<h3>To'xtatish (stop)</h3>
+<h3 id="to-xtatish-stop">To'xtatish (stop)</h3>
 <pre class="code"><code>sudo systemctl stop nginx</code></pre>
 <p>Nginx'ni butunlay to'xtatadi. Bundan keyin sayt ochilmaydi, chunki so'rovlarni tinglaydigan hech kim qolmaydi.</p>
-<h3>Qayta ishga tushirish (restart)</h3>
+<h3 id="qayta-ishga-tushirish-restart">Qayta ishga tushirish (restart)</h3>
 <pre class="code"><code>sudo systemctl restart nginx</code></pre>
 <p>Nginx'ni to'xtatib, keyin qaytadan ishga tushiradi. Bu barcha ulanishlarni uzadi. Config'da katta o'zgarish qilingan bo'lsa foydalidir, lekin kichik o'zgarishlarda <code>reload</code> yaxshiroq (pastga qarang).</p>
-<h3>Holatini ko'rish (status)</h3>
+<h3 id="holatini-ko-rish-status">Holatini ko'rish (status)</h3>
 <pre class="code"><code>sudo systemctl status nginx</code></pre>
 <p>Nginx hozir ishlab turibdimi yoki yo'qmi — shuni ko'rsatadi. Chiqishida <code>active (running)</code> yozuvi bo'lsa, hammasi joyida. Xatolik bo'lsa, shu yerda dastlabki ma'lumot ko'rinadi.</p>
-<h3>Avtoyuklashni yoqish (enable)</h3>
+<h3 id="avtoyuklashni-yoqish-enable">Avtoyuklashni yoqish (enable)</h3>
 <p>Server qayta yuklanganda (reboot) Nginx avtomatik ishga tushishi uchun uni <strong>enable</strong> qilib qo'yamiz:</p>
 <pre class="code"><code>sudo systemctl enable nginx</code></pre>
 <div class="tip"><code>enable</code> — server har qayta ishga tushganda xizmatni avtomatik yoqadi. <code>start</code> esa faqat hozir ishga tushiradi. Ikkalasini birga bajarish uchun <code>sudo systemctl enable --now nginx</code> ishlatish mumkin.</div>
-<h2>Config'ni tekshirish: nginx -t</h2>
+<h2 id="config-ni-tekshirish-nginx-t">Config'ni tekshirish: nginx -t</h2>
 <p>Config'da xato qilib, keyin Nginx'ni qayta yuklash — xavfli. Agar config buzuq bo'lsa, Nginx ishga tushmay, saytingiz "o'lib" qolishi mumkin. Shuning uchun <strong>har doim</strong> avval config'ni sinab ko'ring:</p>
 <pre class="code"><code>sudo nginx -t</code></pre>
 <p>Agar hammasi to'g'ri bo'lsa, quyidagicha xabar ko'rinadi:</p>
@@ -637,28 +659,28 @@ sudo dnf install nginx</code></pre>
 nginx: configuration file /etc/nginx/nginx.conf test is successful</code></pre>
 <p>Agar xatolik bo'lsa, Nginx aynan qaysi faylning nechanchi qatorida muammo borligini aytadi.</p>
 <div class="warn"><strong>Muhim odat:</strong> config'ni o'zgartirgandan so'ng, uni ishga solishdan oldin doim <code>sudo nginx -t</code> ishlatib tekshiring. Bu ishlab turgan saytni kutilmagan uzilishdan asraydi.</div>
-<h2>Qayta yuklash: nginx -s reload</h2>
+<h2 id="qayta-yuklash-nginx-s-reload">Qayta yuklash: nginx -s reload</h2>
 <p>Config'ni o'zgartirdingiz va u sinovdan o'tdi. Endi o'zgarishni qo'llash kerak. Bunda <strong>reload</strong> ishlatiladi — bu Nginx'ni to'xtatmasdan, faqat yangi config'ni o'qib qayta yuklaydi:</p>
 <pre class="code"><code>sudo nginx -s reload
 # yoki systemctl orqali:
 sudo systemctl reload nginx</code></pre>
 <p><code>reload</code> ning <code>restart</code> dan afzalligi — u ochiq ulanishlarni uzmaydi. Nginx eski jarayonlar joriy so'rovlarni tugatguncha kutadi, yangi so'rovlarni esa yangi config bilan qabul qiladi. Foydalanuvchi hech qanday uzilishni sezmaydi.</p>
 <div class="tip">Amaliy ketma-ketlik: <strong>(1)</strong> config'ni tahrirlash, <strong>(2)</strong> <code>sudo nginx -t</code> bilan tekshirish, <strong>(3)</strong> <code>sudo nginx -s reload</code> bilan qo'llash. Har doim shu tartibda ishlang.</div>
-<h2>Fayl va papkalar joylashuvi</h2>
+<h2 id="fayl-va-papkalar-joylashuvi">Fayl va papkalar joylashuvi</h2>
 <p>Nginx'ning fayllari odatda quyidagi joylarda bo'ladi (Debian/Ubuntu misolida):</p>
 <ul><li><code>/etc/nginx/</code> — barcha konfiguratsiya fayllari shu papkada;</li><li><code>/etc/nginx/nginx.conf</code> — asosiy (bosh) config fayli;</li><li><code>/etc/nginx/sites-available/</code> — mavjud sayt konfiguratsiyalari (barchasi shu yerda saqlanadi);</li><li><code>/etc/nginx/sites-enabled/</code> — <strong>faol</strong> saytlar (bu yerda symbolik havolalar turadi);</li><li><code>/etc/nginx/conf.d/</code> — qo'shimcha config bo'laklari (ba'zi tizimlarda asosiy joy shu);</li><li><code>/var/www/html/</code> — saytning statik fayllari (HTML, CSS) uchun standart papka;</li><li><code>/var/log/nginx/</code> — log fayllar shu yerda.</li></ul>
 <p><strong>sites-available</strong> va <strong>sites-enabled</strong> juftligi Debian/Ubuntu'ning qulay yondashuvi. Siz sayt config'ini <code>sites-available</code> ichida yaratasiz, keyin uni faollashtirish uchun <code>sites-enabled</code> ichida unga symbolik havola (symlink) hosil qilasiz:</p>
 <pre class="code"><code>sudo ln -s /etc/nginx/sites-available/mening-saytim /etc/nginx/sites-enabled/</code></pre>
 <p>Saytni vaqtincha o'chirmoqchi bo'lsangiz — config'ni o'chirmasdan, faqat <code>sites-enabled</code> dagi havolani olib tashlaysiz. Config esa <code>sites-available</code> da saqlanib qoladi.</p>
 <div class="note">CentOS/RHEL tizimlarida <code>sites-available</code>/<code>sites-enabled</code> odatda bo'lmaydi — u yerda config'lar to'g'ridan-to'g'ri <code>/etc/nginx/conf.d/</code> ichiga <code>.conf</code> kengaytmasi bilan joylashtiriladi.</div>
-<h2>Loglar: access.log va error.log</h2>
+<h2 id="loglar-access-log-va-error-log">Loglar: access.log va error.log</h2>
 <p>Nginx ikki asosiy log yuritadi, ikkalasi ham <code>/var/log/nginx/</code> papkasida:</p>
 <ul><li><code>access.log</code> — <strong>har bir so'rov</strong> shu yerga yoziladi: kim, qachon, qaysi sahifani so'radi, qaysi holat kodi qaytdi;</li><li><code>error.log</code> — <strong>xatoliklar</strong> va ogohlantirishlar shu yerga yoziladi: config muammolari, topilmagan fayllar, ilovaga ulanish xatolari.</li></ul>
 <p>Loglarni real vaqtda kuzatish uchun <code>tail -f</code> ishlatiladi (yangi qatorlar paydo bo'lishi bilan ekranda ko'rinadi):</p>
 <pre class="code"><code>sudo tail -f /var/log/nginx/access.log
 sudo tail -f /var/log/nginx/error.log</code></pre>
 <div class="tip">Sayt ishlamay qolganda birinchi qaraydigan joyingiz — <code>error.log</code>. Ko'pincha muammoning aniq sababi (masalan, "Permission denied" yoki "connection refused") aynan shu yerda yoziladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Nginx <code>apt</code> (Debian/Ubuntu) yoki <code>yum</code>/<code>dnf</code> (CentOS/RHEL) orqali o'rnatiladi;</li><li>Boshqarish <code>systemctl</code> orqali: <code>start</code>, <code>stop</code>, <code>restart</code>, <code>status</code>, <code>enable</code>;</li><li>Config'ni o'zgartirgach, doim <code>nginx -t</code> bilan tekshiring, so'ng <code>nginx -s reload</code> bilan uzilishsiz qo'llang;</li><li>Asosiy config — <code>/etc/nginx/nginx.conf</code>; saytlar <code>sites-available</code>/<code>sites-enabled</code> orqali boshqariladi;</li><li>Loglar <code>/var/log/nginx/</code> da: <code>access.log</code> (so'rovlar) va <code>error.log</code> (xatolar).</li></ul>
 <nav class="lesson-nav">
   <a href="nginx-nima.html"><span class="dir">← Oldingi</span><span class="ttl">Nginx nima?</span></a>
@@ -672,6 +694,6 @@ sudo tail -f /var/log/nginx/error.log</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

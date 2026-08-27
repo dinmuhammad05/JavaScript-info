@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Funksiya ifodalari — Kodla</title>
   <meta name="description" content="Funksiya — bu qiymat. Function Expression, Function Declaration va callback funksiyalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Funksiya ifodalari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#function-expression">Function Expression</a></li>
+<li class="lvl2"><a href="#funksiya-bu-qiymat">Funksiya — bu qiymat</a></li>
+<li class="lvl2"><a href="#callback-funksiyalar">Callback funksiyalar</a></li>
+<li class="lvl2"><a href="#function-expression-va-function-declaration-farqi">Function Expression va Function Declaration farqi</a></li>
+<li class="lvl3"><a href="#function-declaration-ko-tariladi-hoisting">Function Declaration ko'tariladi (hoisting)</a></li>
+<li class="lvl3"><a href="#function-expression-ko-tarilmaydi">Function Expression ko'tarilmaydi</a></li>
+<li class="lvl2"><a href="#qaysi-birini-tanlash">Qaysi birini tanlash?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript'da funksiya alohida "til konstruksiyasi" emas — u maxsus turdagi <strong>qiymat</strong>. Oldingi darsda funksiyani <em>e'lon</em> (declaration) sifatida yaratdik. Endi funksiyani <em>ifoda</em> (expression) sifatida yaratishni ko'ramiz.</p>
-<h2>Function Expression</h2>
+<h2 id="function-expression">Function Expression</h2>
 <p>Funksiyani ifoda ko'rinishida yaratish — uni o'zgaruvchiga qiymat sifatida berish demakdir:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>func-expr.js</span></div><textarea spellcheck="false">let salomBer = function() {
   console.log("Salom!");
@@ -605,7 +621,7 @@
 
 salomBer(); // Salom!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda funksiya <em>yaratildi</em> va <code>salomBer</code> o'zgaruvchisiga <em>joylandi</em>. Diqqat qiling: <code>function()</code> dan keyin nom yo'q — bu <strong>anonim</strong> (nomsiz) funksiya. E'londan farqli o'laroq, oxirida <code>;</code> qo'yiladi, chunki bu oddiy o'zgaruvchiga qiymat berish ifodasi.</p>
-<h2>Funksiya — bu qiymat</h2>
+<h2 id="funksiya-bu-qiymat">Funksiya — bu qiymat</h2>
 <p>Funksiya — qiymat bo'lgani uchun, uni boshqa qiymatlar kabi ishlatish mumkin. Masalan, bir o'zgaruvchidan ikkinchisiga nusxalash:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>func-qiymat.js</span></div><textarea spellcheck="false">function salom() {
   console.log("Salom, dunyo!");
@@ -621,7 +637,7 @@ nusxa(); // Salom, dunyo! — xuddi shu funksiya</textarea><div class="pg-action
   console.log("Salom!");
 }
 console.log(salom); // funksiyaning o'zi (kodi) chiqadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Callback funksiyalar</h2>
+<h2 id="callback-funksiyalar">Callback funksiyalar</h2>
 <p>Funksiya qiymat bo'lgani uchun uni boshqa funksiyaga <em>argument</em> sifatida uzatish mumkin. Bunday funksiyalar <strong>callback</strong> (qayta chaqiriladigan) funksiyalar deyiladi.</p>
 <p>Quyidagi <code>sora</code> funksiyasi savol va ikkita funksiya oladi. Shartga qarab birini chaqiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>callback.js</span></div><textarea spellcheck="false">function ha() {
@@ -655,11 +671,11 @@ sora(
   function() { console.log("Rad etish"); }
 );</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Callback funksiyalar JavaScript'da juda keng qo'llaniladi — massivlar bilan ishlash (<code>forEach</code>, <code>map</code>), hodisalarni tinglash, taymer va tarmoq so'rovlarida. Bu tushunchani yaxshi o'zlashtirish muhim.</div>
-<h2>Function Expression va Function Declaration farqi</h2>
+<h2 id="function-expression-va-function-declaration-farqi">Function Expression va Function Declaration farqi</h2>
 <p>Ikki usul o'rtasida asosiy farq bor. Avvalo sintaksis:</p>
 <ul><li><strong>Declaration</strong>: alohida ifoda sifatida, asosiy kod oqimida: <code>function summa(a, b) { ... }</code>;</li><li><strong>Expression</strong>: boshqa ifoda ichida, odatda tenglik o'ng tomonida: <code>let summa = function(a, b) { ... };</code></li></ul>
 <p>Muhimroq farq — <strong>qachon yaratilishida</strong>. Bu "hoisting" (ko'tarilish) bilan bog'liq.</p>
-<h3>Function Declaration ko'tariladi (hoisting)</h3>
+<h3 id="function-declaration-ko-tariladi-hoisting">Function Declaration ko'tariladi (hoisting)</h3>
 <p>Function Declaration <em>e'lon qilinishidan oldin</em> ham chaqirilishi mumkin. JavaScript dvigateli skriptni ishga tushirishdan oldin barcha Function Declaration'larni topib, "ko'taradi":</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>hoisting-decl.js</span></div><textarea spellcheck="false">// e'londan OLDIN chaqiramiz — ishlaydi!
 salom("Ali");
@@ -667,7 +683,7 @@ salom("Ali");
 function salom(ism) {
   console.log("Salom, " + ism);
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Function Expression ko'tarilmaydi</h3>
+<h3 id="function-expression-ko-tarilmaydi">Function Expression ko'tarilmaydi</h3>
 <p>Function Expression esa faqat o'zining kod qatoriga yetganda yaratiladi. Undan oldin chaqirib bo'lmaydi:</p>
 <pre class="code"><code>// salom("Ali"); // XATO! salom hali mavjud emas
 
@@ -677,10 +693,10 @@ let salom = function(ism) {
 
 salom("Ali"); // Endi ishlaydi</code></pre>
 <div class="note">Yuqoridagi kod aynan xato holatni ko'rsatgani uchun {code} bloki sifatida berildi — uni ishga tushirsangiz, izohsiz birinchi qator <code>ReferenceError</code> beradi. Sababi: <code>let salom = function...</code> ifodasi o'z qatoriga yetgandagina bajariladi, undan oldin <code>salom</code> mavjud emas.</div>
-<h2>Qaysi birini tanlash?</h2>
+<h2 id="qaysi-birini-tanlash">Qaysi birini tanlash?</h2>
 <p>Umumiy tavsiya: iloji bo'lsa <strong>Function Declaration</strong> ni afzal ko'ring. U kodni tashkil qilishda erkinlik beradi (e'londan oldin ham ishlatish mumkin) va o'qishga qulayroq — <code>function ...</code> so'zini ko'rish bilanoq "bu funksiya" ekanini bilamiz.</p>
 <p>Function Expression esa Declaration mos kelmagan hollarda ishlatiladi — masalan, funksiyani shartga qarab yaratish yoki uni argument (callback) sifatida uzatishda.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Funksiya — bu <strong>qiymat</strong>; uni nusxalash, uzatish va o'zgaruvchida saqlash mumkin;</li><li><strong>Function Declaration</strong>: <code>function nom() {}</code> — asosiy kod oqimida, alohida;</li><li><strong>Function Expression</strong>: <code>let nom = function() {};</code> — ifoda ichida;</li><li><strong>Callback</strong> — boshqa funksiyaga argument sifatida uzatilgan funksiya;</li><li>Declaration <strong>ko'tariladi</strong> (e'londan oldin chaqirsa bo'ladi), Expression esa <strong>ko'tarilmaydi</strong>;</li><li>Umuman Function Declaration afzalroq, callback va shartli yaratishda Expression qulay.</li></ul>
 <nav class="lesson-nav">
   <a href="funksiyalar.html"><span class="dir">← Oldingi</span><span class="ttl">Funksiyalar</span></a>
@@ -694,6 +710,6 @@ salom("Ali"); // Endi ishlaydi</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

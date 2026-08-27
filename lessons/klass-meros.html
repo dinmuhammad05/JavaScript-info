@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Klass merosi — Kodla</title>
   <meta name="description" content="extends kalit so'zi, super() konstruktorda, super.method() va metodlarni qayta aniqlash (override).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Klasslar</div>
 <h1>Klass merosi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#extends-kalit-so-zi">"extends" kalit so'zi</a></li>
+<li class="lvl2"><a href="#metodni-qayta-aniqlash-override">Metodni qayta aniqlash (override)</a></li>
+<li class="lvl2"><a href="#super-orqali-ota-metodni-chaqirish">super orqali ota metodni chaqirish</a></li>
+<li class="lvl2"><a href="#konstruktorni-qayta-aniqlash">Konstruktorni qayta aniqlash</a></li>
+<li class="lvl2"><a href="#nima-uchun-super-shart">Nima uchun super() shart?</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Klass merosi (inheritance) — bir klassning imkoniyatlarini boshqa klass asosida kengaytirish usuli. Bu bizga mavjud funksionallikni takrorlamasdan qayta ishlatish imkonini beradi.</p>
-<h2>"extends" kalit so'zi</h2>
+<h2 id="extends-kalit-so-zi">"extends" kalit so'zi</h2>
 <p>Aytaylik, <code>Animal</code> (hayvon) klassimiz bor:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>meros-animal.js</span></div><textarea spellcheck="false">class Animal {
   constructor(name) {
@@ -650,7 +664,7 @@ console.log(rabbit.hide()); // Rabbit'dan</textarea><div class="pg-actions"><but
 class User extends f("Salom") {}
 
 console.log(new User().sayHi()); // Salom</code></pre>
-<h2>Metodni qayta aniqlash (override)</h2>
+<h2 id="metodni-qayta-aniqlash-override">Metodni qayta aniqlash (override)</h2>
 <p>Endi keling, oldinga borib, metodni <strong>qayta aniqlaymiz</strong> (override qilamiz). Standart holatda <code>Rabbit</code>da aniqlanmagan barcha metodlar <code>Animal</code>dan "o'z holicha" olinadi. Ammo agar biz <code>Rabbit</code>da o'z <code>stop()</code>imizni yozsak, u ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>meros-override.js</span></div><textarea spellcheck="false">class Animal {
   constructor(name) { this.name = name; }
@@ -664,7 +678,7 @@ class Rabbit extends Animal {
 }
 
 console.log(new Rabbit("Quyon").stop());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>super orqali ota metodni chaqirish</h2>
+<h2 id="super-orqali-ota-metodni-chaqirish">super orqali ota metodni chaqirish</h2>
 <p>Ko'pincha biz ota metodni butunlay almashtirmoqchi emasmiz — uni asos qilib, ustiga qo'shimcha qilmoqchimiz. Buning uchun <code>super.method(...)</code> orqali ota klassdagi metodni chaqiramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>meros-super-method.js</span></div><textarea spellcheck="false">class Animal {
   constructor(name) { this.name = name; this.speed = 0; }
@@ -686,7 +700,7 @@ console.log(rabbit.run(5));
 console.log(rabbit.stop());</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>Rabbit</code>ning <code>stop()</code> metodi o'zining zanjiridagi <code>super.stop()</code>ni chaqiradi — ya'ni <code>Animal.prototype.stop</code>ni.</p>
 <div class="warn">Strelka funksiyalarda o'zining <code>super</code>si yo'q. Agar strelka funksiya ichida <code>super</code>ga murojaat qilsangiz, u tashqi metoddan olinadi. Bu ko'pincha foydali xususiyat, chunki strelka funksiyada <code>super</code> "yo'qolib" qolmaydi.</div>
-<h2>Konstruktorni qayta aniqlash</h2>
+<h2 id="konstruktorni-qayta-aniqlash">Konstruktorni qayta aniqlash</h2>
 <p>Konstruktor bilan biroz murakkabroq. Hozirgacha <code>Rabbit</code>ning o'z <code>constructor</code>i yo'q edi. Spetsifikatsiyaga ko'ra, agar meros olgan klassda <code>constructor</code> bo'lmasa, quyidagi "bo'sh" konstruktor avtomatik yaratiladi:</p>
 <pre class="code"><code>class Rabbit extends Animal {
   // meros olgan klass uchun avtomatik generatsiya qilinadi
@@ -713,7 +727,7 @@ let rabbit = new Rabbit("Oq quyon", 10);
 console.log(rabbit.name);
 console.log(rabbit.speed);
 console.log(rabbit.earLength);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Nima uchun super() shart?</h2>
+<h2 id="nima-uchun-super-shart">Nima uchun super() shart?</h2>
 <p>Meros olgan klass konstruktorlari maxsus ichki <code>[[ConstructorKind]]: "derived"</code> belgisiga ega. Bu farq juda muhim:</p>
 <ul><li>Oddiy klassda <code>new</code> paytida bo'sh <code>this</code> obyekti darhol yaratiladi;</li><li>Meros olgan klass konstruktori esa bu ishni <strong>o'zi bajarmaydi</strong> — u buni ota konstruktordan kutadi. Shuning uchun <code>this</code>ni ishlatishdan oldin <code>super()</code>ni chaqirish shart.</li></ul>
 <div class="warn">Agar meros olgan konstruktorda <code>super()</code>ni chaqirmasangiz yoki <code>this</code>ga undan oldin murojaat qilsangiz, xatolik chiqadi: <em>"Must call super constructor before accessing 'this'"</em>.</div>
@@ -736,7 +750,7 @@ class Rabbit extends Animal {
 
 let r = new Rabbit("Quyon");
 console.log(r.name, r.type);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>class Child extends Parent</code> — <code>Child</code>ni <code>Parent</code>dan meros oldiradi;</li><li><code>super.method()</code> — ota klass metodini chaqiradi;</li><li><code>super(...)</code> — ota konstruktorini chaqiradi (faqat meros olgan konstruktor ichida);</li><li>Meros olgan konstruktorda <code>this</code>ni ishlatishdan oldin <code>super()</code> chaqirilishi shart;</li><li>Metodni qayta yozib (override), <code>super</code> orqali eskisini ham ishlatish mumkin.</li></ul>
 <nav class="lesson-nav">
   <a href="klass-asoslari.html"><span class="dir">← Oldingi</span><span class="ttl">Klass asosiy sintaksisi</span></a>
@@ -750,6 +764,6 @@ console.log(r.name, r.type);</textarea><div class="pg-actions"><button class="pg
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

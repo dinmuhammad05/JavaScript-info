@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shartli operatorlar: if, ? — Kodla</title>
   <meta name="description" content="if/else if/else konstruksiyasi, shartning boolean'ga o'girilishi va ternar operator ? :.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Shartli operatorlar: if, ?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#if-operatori">if operatori</a></li>
+<li class="lvl2"><a href="#shart-boolean-ga-o-giriladi">Shart boolean'ga o'giriladi</a></li>
+<li class="lvl2"><a href="#else-bloki">else bloki</a></li>
+<li class="lvl2"><a href="#bir-nechta-shart-else-if">Bir nechta shart: else if</a></li>
+<li class="lvl2"><a href="#ternar-operator">Ternar operator ? :</a></li>
+<li class="lvl2"><a href="#ichma-ich-nested-ternar">Ichma-ich (nested) ternar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan turli shartlarga qarab turli amallarni bajarish kerak bo'ladi. Buning uchun <code>if</code> operatoridan va "savol belgisi" deb ataluvchi ternar operatordan <code>?</code> foydalanamiz.</p>
-<h2>if operatori</h2>
+<h2 id="if-operatori">if operatori</h2>
 <p><code>if(...)</code> operatori qavs ichidagi shartni hisoblaydi va uni <code>true</code> ga o'girsa, ichidagi kodni bajaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>if-oddiy.js</span></div><textarea spellcheck="false">let yosh = 20;
 
@@ -610,7 +625,7 @@ if (yosh &gt; 100) {
   console.log("Bu satr chiqmaydi");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Agar blok ichida bitta amal bo'lsa ham, uni <code>{ }</code> qavs ichiga olish tavsiya etiladi — bu kodni o'qishni osonlashtiradi va xatolarning oldini oladi.</div>
-<h2>Shart boolean'ga o'giriladi</h2>
+<h2 id="shart-boolean-ga-o-giriladi">Shart boolean'ga o'giriladi</h2>
 <p><code>if</code> qavs ichidagi ifodani hisoblab, natijasini <strong>boolean</strong> turiga o'giradi. Bu o'zgartirish oldingi darsdagi qoidalar bo'yicha ketadi. Eslatib o'tsak:</p>
 <ul><li><code>0</code>, bo'sh matn <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code> &mdash; <strong>false</strong> ("falsy" qiymatlar);</li><li>Boshqa barcha qiymatlar &mdash; <strong>true</strong> ("truthy" qiymatlar).</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>if-boolean.js</span></div><textarea spellcheck="false">if (0) {
@@ -626,7 +641,7 @@ if (ism) { // bo'sh bo'lmagan matn -&gt; true
   console.log("Ism kiritilgan: " + ism);
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Shartni oldindan hisoblab, keyin <code>if</code> ga berish ham mumkin: <code>let shart = (yosh &gt;= 18); if (shart) {...}</code>. Bu murakkab shartlarni o'qishni osonlashtiradi.</div>
-<h2>else bloki</h2>
+<h2 id="else-bloki">else bloki</h2>
 <p><code>if</code> ga ixtiyoriy <code>else</code> bloki qo'shsa bo'ladi. U shart <strong>false</strong> bo'lganda bajariladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>if-else.js</span></div><textarea spellcheck="false">let yosh = 15;
 
@@ -636,7 +651,7 @@ if (yosh &gt;= 18) {
   console.log("Hali voyaga yetmagansiz");
 }
 // Chiqadi: Hali voyaga yetmagansiz</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Bir nechta shart: else if</h2>
+<h2 id="bir-nechta-shart-else-if">Bir nechta shart: else if</h2>
 <p>Ba'zan bir nechta variantni tekshirish kerak. Buning uchun <code>else if</code> ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>else-if.js</span></div><textarea spellcheck="false">let baho = 4;
 
@@ -651,7 +666,7 @@ if (baho === 5) {
 }
 // Chiqadi: Yaxshi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Shartlar yuqoridan pastga ketma-ket tekshiriladi. Qaysi biri birinchi bo'lib <code>true</code> bersa, o'sha blok ishlaydi va qolganlari tekshirilmaydi. Agar hech biri mos kelmasa — oxirgi <code>else</code> ishlaydi.</p>
-<h2>Ternar operator ? :</h2>
+<h2 id="ternar-operator">Ternar operator ? :</h2>
 <p>Ba'zan bir shartga qarab o'zgaruvchiga qiymat tayinlash kerak bo'ladi. Buni <code>if</code> bilan yozsak, uzun bo'ladi:</p>
 <pre class="code"><code>let ruxsat;
 let yosh = 20;
@@ -673,7 +688,7 @@ let narx = 1000;
 let xabar = (narx &gt; 500) ? "qimmat" : "arzon";
 console.log(xabar); // "qimmat"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Shart atrofidagi qavs shart emas, lekin u kodni o'qishni osonlashtiradi. Yuqoridagi <code>yosh &gt;= 18</code> allaqachon boolean qaytargani uchun <code>? true : false</code> ortiqcha — <code>let ruxsat = (yosh &gt;= 18);</code> deb yozish yetarli. Ternar boshqa qiymatlar qaytaradigan hollarda foydali.</div>
-<h2>Ichma-ich (nested) ternar</h2>
+<h2 id="ichma-ich-nested-ternar">Ichma-ich (nested) ternar</h2>
 <p>Bir nechta shartni ternar orqali ketma-ket tekshirsa bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>nested-ternar.js</span></div><textarea spellcheck="false">let yosh = 25;
 
@@ -686,7 +701,7 @@ console.log(toifa); // "kattalar"</textarea><div class="pg-actions"><button clas
 <p>Bu qanday ishlashini ko'raylik. Avval <code>yosh &lt; 13</code> tekshiriladi — false. So'ng <code>yosh &lt; 18</code> — false. Keyin <code>yosh &lt; 65</code> — true, demak <code>"kattalar"</code> qaytariladi.</p>
 <div class="warn">Ichma-ich ternarni ehtiyotkorlik bilan ishlating. Ikki-uchtadan ortiq shart bo'lsa, kodni o'qish qiyinlashadi. Bunday holatda <code>if / else if</code> ni afzal ko'ring — u aniqroq va tushunarliroq.</div>
 <div class="tip">Ternarni faqat qiymat qaytarish uchun ishlating. Agar shartga qarab bir nechta amal bajarish kerak bo'lsa (masalan, funksiyalar chaqirish), <code>if</code> dan foydalaning — bu to'g'ri va tushunarli yondashuv.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>if(shart) { ... }</code> — shart true bo'lsa blok bajariladi;</li><li>Shart avtomatik boolean'ga o'giriladi (falsy va truthy qoidalari bo'yicha);</li><li><code>else</code> — shart false bo'lgandagi holat; <code>else if</code> — bir nechta variant;</li><li>Ternar <code>shart ? a : b</code> — qisqa, qiymat qaytarish uchun ideal;</li><li>Ichma-ich ternar mumkin, lekin uni oddiy holatlar bilan cheklang.</li></ul>
 <nav class="lesson-nav">
   <a href="taqqoslashlar.html"><span class="dir">← Oldingi</span><span class="ttl">Taqqoslashlar</span></a>
@@ -700,6 +715,6 @@ console.log(toifa); // "kattalar"</textarea><div class="pg-actions"><button clas
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

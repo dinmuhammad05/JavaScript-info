@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raqamli imzo va butunlik — Kodla</title>
   <meta name="description" content="Ma'lumot butunligi muammosi; hash bilan butunlikni tekshirish (checksum); raqamli imzo (maxfiy kalit bilan imzolash, ochiq kalit bilan tekshirish); autentifikatsiya, butunlik, rad eta olmaslik; dastur imzolash, JWT, sertifikatlar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Kriptografiya asoslari</div>
 <h1>Raqamli imzo va butunlik</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ma-lumot-butunligi-muammosi">Ma'lumot butunligi muammosi</a></li>
+<li class="lvl2"><a href="#hash-bilan-butunlikni-tekshirish-checksum">Hash bilan butunlikni tekshirish: checksum</a></li>
+<li class="lvl2"><a href="#raqamli-imzo-g-oyasi">Raqamli imzo g'oyasi</a></li>
+<li class="lvl2"><a href="#imzo-qanday-hosil-bo-ladi">Imzo qanday hosil bo'ladi</a></li>
+<li class="lvl2"><a href="#raqamli-imzo-nima-beradi">Raqamli imzo nima beradi</a></li>
+<li class="lvl2"><a href="#qo-llanishlar">Qo'llanishlar</a></li>
+<li class="lvl2"><a href="#amaliy-eslatma">Amaliy eslatma</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ba'zan ma'lumotni yashirish emas, uning <em>o'zgarmaganini</em> va <em>kimdan kelganini</em> isbotlash muhim. Dastur yangilanishi haqiqatan ishlab chiquvchidanmi? Yuklangan fayl yo'lda buzilmadimi? Ushbu darsda ma'lumot butunligi (integrity) muammosini, uni hash bilan tekshirishni va raqamli imzolar qanday ishlashini o'rganamiz.</p>
-<h2>Ma'lumot butunligi muammosi</h2>
+<h2 id="ma-lumot-butunligi-muammosi">Ma'lumot butunligi muammosi</h2>
 <p><strong>Butunlik (integrity)</strong> — ma'lumot yaratilgandan beri o'zgarmagani kafolati. Shifrlash ma'lumotni <em>yashiradi</em>, lekin uning o'zgartirilmaganini o'zi kafolatlamaydi. Bir nechta vaziyatni ko'raylik:</p>
 <ul><li>Siz internetdan dastur yuklab olyapsiz — u yo'lda o'zgartirilib, zararli kod qo'shilmaganmi?</li><li>Fayl yuklanish paytida buzilmadimi (tarmoq xatosi tufayli)?</li><li>Serverga kelgan buyruq haqiqatan ruxsati bor foydalanuvchidanmi?</li></ul>
 <p>Bu savollarga javob berish uchun bizga ikki xil vosita kerak: oddiy <strong>xatolik/o'zgarishni aniqlash</strong> (hash/checksum) va <strong>kim yuborganini ham isbotlash</strong> (raqamli imzo).</p>
-<h2>Hash bilan butunlikni tekshirish: checksum</h2>
+<h2 id="hash-bilan-butunlikni-tekshirish-checksum">Hash bilan butunlikni tekshirish: checksum</h2>
 <p>Eng oddiy butunlik tekshiruvi — <strong>checksum</strong> (nazorat yig'indisi). Fayl uchun uning hashini (masalan, SHA-256) e'lon qilib qo'yiladi. Siz faylni yuklab olgach, o'zingiz hashini hisoblab, e'lon qilingani bilan solishtirasiz:</p>
 <ul><li>Hashlar <strong>mos kelsa</strong> — fayl o'zgarmagan, butunligi saqlangan;</li><li>Hashlar <strong>farq qilsa</strong> — fayl o'zgartirilgan yoki buzilgan (bitta bit ham avalanche effektidan hashni butunlay o'zgartiradi).</li></ul>
 <pre class="code"><code>// Checksum g'oyasi: faylni yuklab, hashini solishtirish (DEMO).
@@ -622,26 +638,26 @@ console.log('O'zgarmagan:', checksum(yuklangan1) === eelonQilingan);
 const yuklangan2 = 'dastur-v1.0-VIRUS';
 console.log('Buzilgan:', checksum(yuklangan2) === eelonQilingan);</code></pre>
 <div class="warn">Checksum faqat <em>tasodifiy</em> buzilishni yaxshi aniqlaydi. Lekin agar hujumchi faylni ham, e'lon qilingan hashni ham o'zgartira olsa, oddiy checksum yordam bermaydi. Aynan shu yerda <strong>raqamli imzo</strong> kerak bo'ladi.</div>
-<h2>Raqamli imzo g'oyasi</h2>
+<h2 id="raqamli-imzo-g-oyasi">Raqamli imzo g'oyasi</h2>
 <p><strong>Raqamli imzo</strong> — bu asimmetrik kriptografiyaning nafis qo'llanilishi. Eslang, shifrlashda ochiq kalit bilan shifrlab, maxfiy kalit bilan ochardik. Imzolashda esa <em>teskari</em> ishlatiladi:</p>
 <ul><li><strong>Imzolash:</strong> yuboruvchi ma'lumotni o'z <em>maxfiy</em> kaliti bilan imzolaydi;</li><li><strong>Tekshirish:</strong> har kim yuboruvchining <em>ochiq</em> kaliti bilan imzoni tekshira oladi.</li></ul>
 <p>Faqat maxfiy kalit egasi to'g'ri imzo yarata oladi, lekin uni <em>hamma</em> ochiq kalit bilan tekshira oladi. Bu "faqat men yoza olaman, lekin hamma o'qiy va tasdiqlay oladi" degani.</p>
-<h2>Imzo qanday hosil bo'ladi</h2>
+<h2 id="imzo-qanday-hosil-bo-ladi">Imzo qanday hosil bo'ladi</h2>
 <p>Amalda butun ma'lumotni imzolash sekin bo'lgani uchun, jarayon hash bilan birlashtiriladi:</p>
 <ol><li>Yuboruvchi ma'lumotning <strong>hashini</strong> hisoblaydi;</li><li>Shu hashni o'z <strong>maxfiy kaliti</strong> bilan shifrlab, <em>imzoni</em> hosil qiladi;</li><li>Ma'lumot va imzo birga yuboriladi;</li><li>Qabul qiluvchi ma'lumotning hashini o'zi hisoblaydi;</li><li>Imzoni yuboruvchining <strong>ochiq kaliti</strong> bilan ochib, undagi hashni oladi;</li><li>Ikki hashni solishtiradi — mos kelsa, imzo haqiqiy va ma'lumot o'zgarmagan.</li></ol>
 <div class="note">Agar ma'lumot yo'lda bir bit ham o'zgartirilsa, qabul qiluvchi hisoblagan hash imzodagi hashga mos kelmaydi — imzo darhol yaroqsiz bo'ladi. Hujumchi to'g'ri imzo yarata olmaydi, chunki maxfiy kalit unda yo'q.</div>
-<h2>Raqamli imzo nima beradi</h2>
+<h2 id="raqamli-imzo-nima-beradi">Raqamli imzo nima beradi</h2>
 <p>Raqamli imzo bir vaqtning o'zida uch narsani kafolatlaydi:</p>
 <ul><li><strong>Autentifikatsiya:</strong> ma'lumot haqiqatan ham maxfiy kalit egasidan kelgan;</li><li><strong>Butunlik:</strong> ma'lumot yuborilgandan beri o'zgartirilmagan;</li><li><strong>Rad eta olmaslik (non-repudiation):</strong> yuboruvchi "men bu ma'lumotni yubormaganman" deb tona olmaydi — chunki imzo faqat uning maxfiy kaliti bilan yaratilishi mumkin edi.</li></ul>
 <p>Bu shifrlashdan farqli maqsad. Shifrlash <em>maxfiylikni</em> beradi (kim o'qiy oladi), raqamli imzo esa <em>autentiklik va butunlikni</em> beradi (kim yozgan va o'zgarmaganmi). Ular ko'pincha birga ishlatiladi.</p>
-<h2>Qo'llanishlar</h2>
+<h2 id="qo-llanishlar">Qo'llanishlar</h2>
 <p>Raqamli imzolar zamonaviy texnologiyaning ko'p joyida uchraydi:</p>
 <ul><li><strong>Dastur imzolash (code signing):</strong> operatsion tizim faqat ishonchli ishlab chiquvchi imzolagan dasturlarni ishga tushiradi;</li><li><strong>Dastur yangilanishlari:</strong> qurilma yangilanish haqiqatan ishlab chiqaruvchidan kelganini imzo orqali tekshiradi;</li><li><strong>TLS sertifikatlari:</strong> CA sertifikatni o'z maxfiy kaliti bilan imzolaydi (o'tgan dars);</li><li><strong>JWT (JSON Web Token):</strong> token imzosi uning serverdan kelgani va o'zgartirilmaganini isbotlaydi;</li><li><strong>Git commit'lari va paketlar:</strong> mualliflikni tasdiqlash uchun imzolanadi.</li></ul>
 <div class="note"><strong>JWT imzosi</strong> aynan shu prinsipda ishlaydi: server token mazmunini o'z kaliti bilan imzolaydi. Foydalanuvchi token mazmunini o'zgartira olmaydi (masalan, o'zini admin qilib) — chunki u to'g'ri imzoni qayta yarata olmaydi. Server har so'rovda imzoni tekshiradi.</div>
-<h2>Amaliy eslatma</h2>
+<h2 id="amaliy-eslatma">Amaliy eslatma</h2>
 <p>Node.js'da raqamli imzolar o'rnatilgan <code>crypto</code> moduli orqali ishlatiladi (<code>crypto.sign</code> va <code>crypto.verify</code>). JWT uchun esa <code>jsonwebtoken</code> kabi sinovdan o'tgan kutubxonalar bor. Bu yerda ham asosiy qoida amal qiladi:</p>
 <div class="warn">Imzolash algoritmini o'zingiz yozmang. O'rnatilgan <code>crypto</code> modulidan yoki tekshirilgan kutubxonalardan foydalaning. Kalitlarni himoyalang — maxfiy kalit sizib ketsa, hujumchi sizning nomingizdan imzo qo'ya oladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Butunlik</strong> — ma'lumot o'zgarmagani kafolati; shifrlashdan alohida muammo;</li><li><strong>Checksum</strong> (hash) tasodifiy buzilishni aniqlaydi, lekin ataylab qilingan almashtirishdan himoya qilmaydi;</li><li><strong>Raqamli imzo</strong>: maxfiy kalit bilan imzolanadi, ochiq kalit bilan tekshiriladi — shifrlashning teskarisi;</li><li>Imzo uch narsani beradi: <strong>autentifikatsiya</strong>, <strong>butunlik</strong> va <strong>rad eta olmaslik</strong>;</li><li>Qo'llanishlar: dastur imzolash, yangilanishlar, TLS sertifikatlari, <strong>JWT imzosi</strong>, Git;</li><li>Imzo algoritmini o'zingiz yozmang — <code>crypto</code> moduli yoki ishonchli kutubxonadan foydalaning.</li></ul>
 <nav class="lesson-nav">
   <a href="tls-https-qanday.html"><span class="dir">← Oldingi</span><span class="ttl">TLS/HTTPS qanday ishlaydi</span></a>
@@ -655,6 +671,6 @@ console.log('Buzilgan:', checksum(yuklangan2) === eelonQilingan);</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

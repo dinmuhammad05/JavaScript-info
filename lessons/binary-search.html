@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ikkilik qidiruv (Binary Search) — Kodla</title>
   <meta name="description" content="Saralangan massivda O(log n) da qidirish, chap/o'ng chegaralar, klassik xatolar va binary search ustidagi variatsiyalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,26 @@
 <main class="content article">
 <div class="crumbs">Qidiruv va saralash</div>
 <h1>Ikkilik qidiruv (Binary Search)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-chiziqli-qidiruv-sekin">Muammo: chiziqli qidiruv sekin</a></li>
+<li class="lvl2"><a href="#g-oya-har-qadamda-yarmini-tashla">G'oya: har qadamda yarmini tashla</a></li>
+<li class="lvl2"><a href="#iterativ-algoritm-low-high-mid">Iterativ algoritm: low, high, mid</a></li>
+<li class="lvl2"><a href="#nega-o-log-n">Nega O(log n)?</a></li>
+<li class="lvl3"><a href="#big-o-xulosasi">Big O xulosasi</a></li>
+<li class="lvl2"><a href="#rekursiv-versiya">Rekursiv versiya</a></li>
+<li class="lvl2"><a href="#klassik-xatolar">Klassik xatolar</a></li>
+<li class="lvl3"><a href="#1-mid-ni-hisoblashda-ehtiyotkorlik">1. mid ni hisoblashda ehtiyotkorlik</a></li>
+<li class="lvl3"><a href="#2-sikl-sharti-yoki">2. Sikl sharti: &lt;= yoki &lt;</a></li>
+<li class="lvl2"><a href="#variatsiya-birinchi-va-oxirgi-uchrash">Variatsiya: birinchi va oxirgi uchrash</a></li>
+<li class="lvl2"><a href="#variatsiya-javobni-qidirish-maydoni-da-izlash">Variatsiya: javobni "qidirish maydoni"da izlash</a></li>
+<li class="lvl2"><a href="#asosiy-shart-massiv-saralangan-bo-lishi-kerak">Asosiy shart: massiv saralangan bo'lishi kerak</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Tasavvur qiling, qo'lingizda ming sahifalik lug'at bor va siz "salom" so'zini qidiryapsiz. Hech kim lug'atni birinchi sahifadan boshlab, so'z-ba-so'z varaqlamaydi. Aksincha, taxminan o'rtasini ochamiz, harfga qaraymiz va "chapdami yoki o'ngda" degan qarorni bir zumda qabul qilamiz. Aynan shu oddiy odat — kompyuter fanidagi eng nafis algoritmlardan biri: ikkilik qidiruv. Bu darsda uni noldan quramiz, Big O bilan tahlil qilamiz va professional dasturchilar ham qiladigan klassik xatolardan qochishni o'rganamiz.</p>
-<h2>Muammo: chiziqli qidiruv sekin</h2>
+<h2 id="muammo-chiziqli-qidiruv-sekin">Muammo: chiziqli qidiruv sekin</h2>
 <p>Massivda biror qiymatni topishning eng sodda usuli — <strong>chiziqli qidiruv</strong> (linear search): birinchi elementdan boshlab, oxirigacha bittalab tekshirib chiqamiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>linear-search.js</span></div><textarea spellcheck="false">function chiziqliQidiruv(massiv, nishon) {
   for (let i = 0; i &lt; massiv.length; i++) {
@@ -613,12 +634,12 @@ console.log(chiziqliQidiruv(sonlar, 25));  // 4
 console.log(chiziqliQidiruv(sonlar, 100)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu ishlaydi, lekin sekin. Agar massivda million element bo'lsa va qidirayotgan qiymatimiz oxirida (yoki umuman yo'q) bo'lsa, million marta taqqoslash qilamiz. Bu <strong>O(n)</strong> — elementlar soni ortishi bilan ish vaqti ham chiziqli o'sadi.</p>
 <p>Chiziqli qidiruvning kuchli tomoni bor: u massiv <em>qanday</em> tartibda bo'lishidan qat'i nazar ishlaydi. Ammo agar massivimiz allaqachon <strong>saralangan</strong> bo'lsa, biz bu tartibdan foydalanib, qidiruvni bir necha barobar tezlashtira olamiz.</p>
-<h2>G'oya: har qadamda yarmini tashla</h2>
+<h2 id="g-oya-har-qadamda-yarmini-tashla">G'oya: har qadamda yarmini tashla</h2>
 <p>Ikkilik qidiruvning butun sehri bitta kuzatuvda: agar massiv saralangan bo'lsa, o'rtadagi elementga qarab, javob qayerda bo'lishi <em>mumkin emasligini</em> aniqlay olamiz.</p>
 <ul><li>Massivning o'rtasidagi elementni olamiz.</li><li>Agar u nishonga teng bo'lsa — topdik, tamom.</li><li>Agar o'rtadagi element nishondan <strong>katta</strong> bo'lsa — nishon faqat chap yarmda bo'lishi mumkin, o'ng yarmni butunlay tashlaymiz.</li><li>Agar o'rtadagi element nishondan <strong>kichik</strong> bo'lsa — nishon faqat o'ng yarmda, chap yarmni tashlaymiz.</li></ul>
 <p>Har bir taqqoslashda qidiruv maydonini yarmiga qisqartiramiz. Millionlik massiv taxminan 20 qadamda tugaydi — million emas, 20 ta!</p>
 <div class="note">Diqqat qiling: bu "yarmini tashlash" faqat massiv saralangan bo'lsagina ishlaydi. Saralanmagan massivda o'rtadagi element bizga chap yoki o'ng haqida hech narsa aytmaydi.</div>
-<h2>Iterativ algoritm: low, high, mid</h2>
+<h2 id="iterativ-algoritm-low-high-mid">Iterativ algoritm: low, high, mid</h2>
 <p>Amalda biz qidiruv maydonini ikkita chegara bilan belgilaymiz: <code>low</code> (chap chegara) va <code>high</code> (o'ng chegara). Boshida ular butun massivni qamrab oladi. Har qadamda o'rtani (<code>mid</code>) hisoblab, chegaralarni siljitamiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>binary-search.js</span></div><textarea spellcheck="false">function ikkilikQidiruv(massiv, nishon) {
   let low = 0;
@@ -645,7 +666,7 @@ console.log(ikkilikQidiruv(sonlar, 60));  // 8
 console.log(ikkilikQidiruv(sonlar, 100)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Sikldagi uchta holatni yana bir bor ko'zdan kechiring. <code>while (low &lt;= high)</code> — qidiruv maydoni bo'sh bo'lmaguncha davom etamiz. <code>mid</code> topilsa qaytaramiz; nishon kattaroq bo'lsa <code>low</code> ni <code>mid + 1</code> ga suramiz; kichikroq bo'lsa <code>high</code> ni <code>mid - 1</code> ga suramiz. Har safar maydonimiz yarmiga qisqaradi.</p>
 <div class="tip">Har qadamda qanday qadam bosilayotganini ko'rish uchun sikl ichiga <code>console.log(low, mid, high)</code> qo'shib sinab ko'ring — algoritmning "yarmni tashlash" ritmini ko'zingiz bilan ko'rasiz.</div>
-<h2>Nega O(log n)?</h2>
+<h2 id="nega-o-log-n">Nega O(log n)?</h2>
 <p>Ikkilik qidiruvning ish vaqti — <strong>O(log n)</strong>. Bu "logaritm" so'zidan qo'rqmang, mohiyati juda oddiy: <em>n ni necha marta 2 ga bo'lib, 1 ga yetkazish mumkin?</em> — javob shu qadamlar soni.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>log-qadamlar.js</span></div><textarea spellcheck="false">// n ni necha marta yarimga bo'lsak 1 ga tushadi?
 function nechaQadam(n) {
@@ -662,9 +683,9 @@ console.log(nechaQadam(1000));     // 9
 console.log(nechaQadam(1000000)); // 19
 // Millionlik massiv bor-yo'g'i ~20 qadamda tugaydi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Elementlar sonini <strong>ikki barobar</strong> oshirsangiz, ikkilik qidiruvga faqat <strong>bitta</strong> qo'shimcha qadam kerak bo'ladi. Chiziqli qidiruv esa ikki barobar ko'p vaqt talab qiladi. Aynan shu farq katta ma'lumotlarda o'lchovga sig'maydigan tezlik beradi.</p>
-<h3>Big O xulosasi</h3>
+<h3 id="big-o-xulosasi">Big O xulosasi</h3>
 <ul><li><strong>Eng yaxshi holat:</strong> O(1) — nishon aynan o'rtada bo'lsa, birinchi taqqoslashda topamiz.</li><li><strong>O'rtacha holat:</strong> O(log n).</li><li><strong>Eng yomon holat:</strong> O(log n) — element yo'q yoki chetda bo'lsa.</li><li><strong>Xotira:</strong> O(1) — faqat bir nechta o'zgaruvchi (low, high, mid), qo'shimcha massiv yaratmaymiz.</li></ul>
-<h2>Rekursiv versiya</h2>
+<h2 id="rekursiv-versiya">Rekursiv versiya</h2>
 <p>Xuddi shu g'oyani rekursiya bilan ham yozish mumkin. Bunda chegaralarni funksiya argumenti sifatida uzatamiz va har chaqiruvda maydonni yarmiga qisqartiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>binary-recursive.js</span></div><textarea spellcheck="false">function ikkilikRekursiv(massiv, nishon, low = 0, high = massiv.length - 1) {
   if (low &gt; high) {
@@ -687,9 +708,9 @@ console.log(ikkilikRekursiv(sonlar, 17)); // 3
 console.log(ikkilikRekursiv(sonlar, 8));  // 1
 console.log(ikkilikRekursiv(sonlar, 99)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Rekursiv versiya ko'pincha tushunarliroq ko'rinadi, ammo har chaqiruv uchun stekda joy egallaydi — shuning uchun xotira O(log n) bo'ladi. Iterativ versiya esa O(1) xotira ishlatadi. Amalda ikkalasi ham to'g'ri, tanlov did masalasi.</p>
-<h2>Klassik xatolar</h2>
+<h2 id="klassik-xatolar">Klassik xatolar</h2>
 <p>Ikkilik qidiruv oddiy ko'rinadi, lekin uni to'g'ri yozish tarixan qiyin bo'lgan. Mana eng ko'p uchraydigan tuzoqlar.</p>
-<h3>1. mid ni hisoblashda ehtiyotkorlik</h3>
+<h3 id="1-mid-ni-hisoblashda-ehtiyotkorlik">1. mid ni hisoblashda ehtiyotkorlik</h3>
 <p>Biz <code>mid = Math.floor((low + high) / 2)</code> yozdik. Katta sonlar bilan ishlaydigan ba'zi tillarda (masalan Java, C++) <code>low + high</code> son sig'imidan oshib ketishi (overflow) mumkin. Xavfsizroq shakl:</p>
 <pre class="code"><code>// Overflow xavfini oldini oluvchi klassik shakl:
 const mid = low + Math.floor((high - low) / 2);
@@ -697,10 +718,10 @@ const mid = low + Math.floor((high - low) / 2);
 // (high - low) hech qachon massiv uzunligidan oshmaydi,
 // shuning uchun qo'shishda toshib ketish bo'lmaydi.</code></pre>
 <div class="note">JavaScript'da <code>Number</code> juda katta bo'lgani uchun bu overflow amalda deyarli uchramaydi. Ammo bu shaklni bilish muhim — intervyularda va boshqa tillarda bu "to'g'ri" javob hisoblanadi.</div>
-<h3>2. Sikl sharti: <= yoki <</h3>
+<h3 id="2-sikl-sharti-yoki">2. Sikl sharti: <= yoki <</h3>
 <p><code>while (low &lt;= high)</code> va <code>while (low &lt; high)</code> — bir belgi farq, ammo natija butunlay boshqacha. Bizning versiyamizda <code>&lt;=</code> to'g'ri: chunki <code>low === high</code> bo'lganda ham tekshirilishi kerak bo'lgan bitta element qoladi. Agar <code>&lt;</code> ishlatsak, oxirgi elementni umuman ko'rmay o'tkazib yuborishimiz mumkin.</p>
 <div class="warn">Chegara shartlari (<code>&lt;=</code> vs <code>&lt;</code>, <code>mid + 1</code> vs <code>mid</code>) — ikkilik qidiruvdagi cheksiz sikl va topilmagan elementlarning asosiy sababi. Yangi variatsiya yozganingizda, doim kichik massivda (1, 2, 3 elementli) qo'lda yurib chiqing.</div>
-<h2>Variatsiya: birinchi va oxirgi uchrash</h2>
+<h2 id="variatsiya-birinchi-va-oxirgi-uchrash">Variatsiya: birinchi va oxirgi uchrash</h2>
 <p>Massivda takrorlanuvchi qiymatlar bo'lsa-chi? Masalan <code>[1, 2, 2, 2, 3]</code> da <code>2</code> ning <strong>birinchi</strong> yoki <strong>oxirgi</strong> indeksini topmoqchimiz. Oddiy ikkilik qidiruv har qanday <code>2</code> ni qaytaradi. Kerakli chetni topish uchun, topgach ham to'xtamay, kerakli tomonga qidiruvni davom ettiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>first-occurrence.js</span></div><textarea spellcheck="false">function birinchiUchrash(massiv, nishon) {
   let low = 0;
@@ -726,7 +747,7 @@ const massiv = [1, 2, 2, 2, 2, 3, 4];
 console.log(birinchiUchrash(massiv, 2)); // 1 (birinchi 2 ning indeksi)
 console.log(birinchiUchrash(massiv, 5)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Hiyla shundaki: <code>2</code> ni topganimizda darrov qaytarmaymiz, balki indeksni eslab qolib, <code>high = mid - 1</code> qilib <em>yana chaproqda</em> qidirishda davom etamiz. Oxirgi uchrashni topish uchun esa aksincha <code>low = mid + 1</code> qilib o'ng tomonga suriladi.</p>
-<h2>Variatsiya: javobni "qidirish maydoni"da izlash</h2>
+<h2 id="variatsiya-javobni-qidirish-maydoni-da-izlash">Variatsiya: javobni "qidirish maydoni"da izlash</h2>
 <p>Ikkilik qidiruvning eng kuchli qo'llanishi — u faqat massivda emas, balki <strong>javoblar oralig'ida</strong> ham ishlaydi. Klassik misol: butun kvadrat ildizni topish. Javob 0 dan n gacha bo'lgan sonlar oralig'ida yotadi va bu oraliq "saralangan" — shuning uchun uni ham yarmga bo'lib qidirsa bo'ladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>binary-sqrt.js</span></div><textarea spellcheck="false">// n ning butun kvadrat ildizini ikkilik qidiruv bilan topamiz
 function butunIldiz(n) {
@@ -757,7 +778,7 @@ console.log(butunIldiz(25)); // 5
 console.log(butunIldiz(20)); // 4 (chunki 4*4=16 &lt;= 20 &lt; 25=5*5)
 console.log(butunIldiz(1));  // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda massiv umuman yo'q! Biz shunchaki 1 dan n gacha bo'lgan tasavvuriy "saralangan" oraliqni yarimlab qidiryapmiz. Bu — ikkilik qidiruvni chinakam tushunganingizning belgisi: g'oya massivga emas, <strong>monoton (bir tomonga o'sadigan) qidiruv maydoniga</strong> bog'liq.</p>
-<h2>Asosiy shart: massiv saralangan bo'lishi kerak</h2>
+<h2 id="asosiy-shart-massiv-saralangan-bo-lishi-kerak">Asosiy shart: massiv saralangan bo'lishi kerak</h2>
 <p>Butun algoritm bitta shartga tayanadi: <strong>massiv saralangan</strong>. Agar u saralanmagan bo'lsa, o'rtadagi element bizga "chapdami yoki o'ngda" haqida hech narsa aytmaydi va natija xato bo'ladi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sorted-required.js</span></div><textarea spellcheck="false">// Saralanmagan massivda ikkilik qidiruv YOLG'ON javob berishi mumkin:
 function ikkilikQidiruv(massiv, nishon) {
@@ -779,7 +800,7 @@ const saralangan = [...saralanmagan].sort((a, b) =&gt; a - b);
 console.log(ikkilikQidiruv(saralangan, 40));   // to'g'ri topadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">Ikkilik qidiruvdan oldin massiv saralangan ekaniga ishonch hosil qiling. Agar massivni bir marta saralab, keyin ko'p marta qidirsangiz — bu ajoyib kelishuv (saralash O(n log n), keyin har qidiruv O(log n)). Ammo agar faqat bir marta qidirsangiz, saralash uchun sarflangan vaqt chiziqli qidiruvdan qimmatroqqa tushishi mumkin.</div>
 <div class="tip">Amaliy qoida: masala matnida "<strong>saralangan massiv</strong>" yoki "<strong>saralangan ro'yxatda toping</strong>" degan so'zlarni ko'rsangiz, birinchi navbatda ikkilik qidiruv haqida o'ylang. Bu deyarli har doim kutilayotgan yechim.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Ikkilik qidiruv saralangan massivda O(log n) da qidiradi — chiziqli O(n) dan tubdan tez.</li><li>G'oya: <code>low</code>, <code>high</code>, <code>mid</code> bilan har qadamda qidiruv maydonining yarmini tashlab yuborish.</li><li>Xotira O(1) (iterativ) yoki O(log n) (rekursiv).</li><li>Klassik xatolar: mid ni overflow'siz hisoblash va chegara shartlari (<code>&lt;=</code> vs <code>&lt;</code>).</li><li>Variatsiyalar: birinchi/oxirgi uchrash, va javobni monoton qidiruv maydonida izlash (masalan butun ildiz).</li><li>Asosiy shart: massiv saralangan bo'lishi shart.</li></ul>
 <nav class="lesson-nav">
   <a href="hash-map.html"><span class="dir">← Oldingi</span><span class="ttl">Xesh-jadval (HashMap) — kalit-qiymat sehri</span></a>
@@ -793,6 +814,6 @@ console.log(ikkilikQidiruv(saralangan, 40));   // to'g'ri topadi</textarea><div 
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

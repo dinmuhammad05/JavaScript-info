@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>State va useState — Kodla</title>
   <meta name="description" content="Holat (state) tushunchasi, useState hook, holatni yangilash, onClick bilan hodisalarni qayta ishlash, re-render va hisoblagich misoli.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">React</div>
 <h1>State va useState</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#state-holat-nima">State (holat) nima?</a></li>
+<li class="lvl2"><a href="#usestate-hook">useState hook</a></li>
+<li class="lvl2"><a href="#holatni-yangilash-va-re-render">Holatni yangilash va re-render</a></li>
+<li class="lvl2"><a href="#hodisalarni-qayta-ishlash-event-handling">Hodisalarni qayta ishlash (event handling)</a></li>
+<li class="lvl2"><a href="#to-liq-hisoblagich-misoli">To'liq hisoblagich misoli</a></li>
+<li class="lvl2"><a href="#oldingi-holatga-asoslanib-yangilash">Oldingi holatga asoslanib yangilash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Props — o'zgarmas ma'lumot edi. Lekin real ilovalarda ma'lumot doimo o'zgaradi: foydalanuvchi tugmani bosadi, formaga yozadi, ro'yxatga element qo'shadi. Vaqt o'tishi bilan o'zgaradigan ma'lumotni React'da <strong>state</strong> (holat) boshqaradi. Ushbu dars — React'ning yuragi.</p>
-<h2>State (holat) nima?</h2>
+<h2 id="state-holat-nima">State (holat) nima?</h2>
 <p><strong>State</strong> — bu komponentning "xotirasi". Bu — vaqt o'tishi bilan o'zgaradigan va shu o'zgarish ekranda aks etishi kerak bo'lgan ma'lumot. Masalan:</p>
 <ul><li>Hisoblagichning joriy qiymati;</li><li>Formadagi matn maydoniga foydalanuvchi yozgan matn;</li><li>Modal oyna ochiqmi yoki yopiqmi;</li><li>Serverdan yuklangan foydalanuvchilar ro'yxati.</li></ul>
 <p>Muhim savol: nega oddiy o'zgaruvchi ishlatmaymiz? Chunki oddiy o'zgaruvchini o'zgartirsak, React bundan <em>xabar topmaydi</em> va ekranni yangilamaydi. Quyidagi kod <strong>ishlamaydi</strong>:</p>
@@ -613,7 +628,7 @@
   return &lt;button onClick={bosildi}&gt;{count}&lt;/button&gt;;
 }</code></pre>
 <p>Bu yerda <code>count</code> konsolda oshsa-da, ekran yangilanmaydi. Sababi: React ekranni faqat <em>maxsus signal</em> olganda qayta chizadi. Ana shu signalni <strong>state</strong> beradi.</p>
-<h2>useState hook</h2>
+<h2 id="usestate-hook">useState hook</h2>
 <p>State bilan ishlash uchun React <strong><code>useState</code></strong> nomli <em>hook</em>dan foydalanadi. Hook — bu <code>use</code> so'zi bilan boshlanadigan maxsus funksiya bo'lib, komponentga React imkoniyatlarini "ulaydi". Avval uni import qilamiz:</p>
 <pre class="code"><code>import { useState } from "react";</code></pre>
 <p><code>useState</code> boshlang'ich qiymatni argument sifatida oladi va <strong>ikki elementli massiv</strong> qaytaradi: joriy qiymat va uni o'zgartiruvchi funksiya. Bu massivni destructuring bilan olamiz:</p>
@@ -621,7 +636,7 @@
 <p>Bu qatorni tahlil qilamiz:</p>
 <ul><li><code>count</code> — holatning <strong>joriy qiymati</strong> (boshida <code>0</code>);</li><li><code>setCount</code> — holatni <strong>yangilovchi funksiya</strong> (odat bo'yicha <code>set</code> + holat nomi);</li><li><code>useState(0)</code> — <code>0</code> — bu <strong>boshlang'ich qiymat</strong>.</li></ul>
 <div class="note"><strong>Hook qoidasi:</strong> hook'lar (masalan <code>useState</code>) faqat komponentning eng yuqori darajasida chaqirilishi kerak. Ularni <code>if</code>, <code>for</code> yoki oddiy funksiyalar ichida chaqirmang.</div>
-<h2>Holatni yangilash va re-render</h2>
+<h2 id="holatni-yangilash-va-re-render">Holatni yangilash va re-render</h2>
 <p>Holatni to'g'ridan-to'g'ri o'zgartirmaymiz. Uning o'rniga <strong>yangilovchi funksiyani</strong> (<code>setCount</code>) chaqiramiz. Bu funksiya ikki ish qiladi:</p>
 <ol><li>Holatning yangi qiymatini saqlaydi;</li><li>Komponentni <strong>qayta render qiladi</strong> (re-render) — ya'ni komponent funksiyasi qaytadan ishga tushib, ekran yangilanadi.</li></ol>
 <p>Mana to'g'ri ishlaydigan hisoblagich:</p>
@@ -638,7 +653,7 @@ function Hisoblagich() {
 }</code></pre>
 <p>Endi tugma bosilganda: <code>setCount</code> yangi qiymatni saqlaydi va React komponentni qaytadan chizadi. Yangi <code>count</code> qiymati ekranda ko'rinadi. Aynan shu — React'ning deklarativ ishlash mexanizmi.</p>
 <div class="warn">Holatni <strong>hech qachon to'g'ridan-to'g'ri</strong> o'zgartirmang: <code>count = count + 1</code> yoki <code>count++</code> ishlamaydi va xato hisoblanadi. Har doim <code>setCount(...)</code> orqali yangilang.</div>
-<h2>Hodisalarni qayta ishlash (event handling)</h2>
+<h2 id="hodisalarni-qayta-ishlash-event-handling">Hodisalarni qayta ishlash (event handling)</h2>
 <p>React'da hodisalar (events) JSX atributlari orqali biriktiriladi. Ular <strong>camelCase</strong>da yoziladi va qiymat sifatida <em>funksiyani</em> qabul qiladi:</p>
 <ul><li><code>onClick</code> — bosilganda;</li><li><code>onChange</code> — qiymat o'zgarganda (input uchun);</li><li><code>onSubmit</code> — forma yuborilganda;</li><li><code>onMouseEnter</code>, <code>onKeyDown</code> va boshqalar.</li></ul>
 <p>Muhim nozik jihat: funksiyani <strong>chaqirmasdan</strong> uzatamiz — nomini <code>{ }</code> ichida beramiz:</p>
@@ -651,7 +666,7 @@ function Hisoblagich() {
 <pre class="code"><code>&lt;button onClick={() =&gt; setCount(count + 1)}&gt;+1&lt;/button&gt;
 &lt;button onClick={() =&gt; setCount(0)}&gt;Tozalash&lt;/button&gt;</code></pre>
 <div class="tip">Hodisa funksiyasi hodisa obyektini (event) qabul qiladi: <code>onClick={(e) => console.log(e)}</code>. Undan, masalan, input qiymatini olishda foydalanamiz (keyingi darsda ko'ramiz).</div>
-<h2>To'liq hisoblagich misoli</h2>
+<h2 id="to-liq-hisoblagich-misoli">To'liq hisoblagich misoli</h2>
 <p>Endi bir necha tugmali to'liq hisoblagichni yig'amiz — oshirish, kamaytirish va tozalash:</p>
 <pre class="code"><code>import { useState } from "react";
 
@@ -670,7 +685,7 @@ function Hisoblagich() {
 
 export default Hisoblagich;</code></pre>
 <p>Bu komponent to'liq ishlaydi: har bir tugma <code>setCount</code>ni chaqiradi, React qayta render qiladi va yangi qiymat <code>&lt;h2&gt;</code>da ko'rinadi.</p>
-<h2>Oldingi holatga asoslanib yangilash</h2>
+<h2 id="oldingi-holatga-asoslanib-yangilash">Oldingi holatga asoslanib yangilash</h2>
 <p>Agar yangi qiymat <em>eski qiymatga bog'liq</em> bo'lsa (masalan, oshirish), <code>setCount</code>ga qiymat o'rniga <strong>funksiya</strong> berish xavfsizroq. React bu funksiyaga eng so'nggi holatni uzatadi:</p>
 <pre class="code"><code>// Yaxshiroq usul:
 setCount(prev =&gt; prev + 1);
@@ -684,7 +699,7 @@ function ucchiOshir() {
 }</code></pre>
 <p>Agar <code>setCount(count + 1)</code> ni uch marta yozsangiz, natija kutilganidek bo'lmaydi — chunki <code>count</code> bitta render davomida o'zgarmaydi. Funksiya shaklida (<code>prev =&gt; prev + 1</code>) esa har safar eng so'nggi qiymat olinadi.</p>
 <div class="note">Eslatma: <code>setCount</code> holatni <em>darhol</em> o'zgartirmaydi. React yangilanishlarni to'plab, so'ng bir marta qayta render qiladi (batching). Shuning uchun yangilashdan keyin darrov <code>count</code>ni o'qisangiz, eski qiymatni ko'rasiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>State</strong> — komponentning vaqt o'tishi bilan o'zgaradigan xotirasi; oddiy o'zgaruvchi bu vazifani bajara olmaydi;</li><li><strong><code>useState</code></strong> hook joriy qiymat va yangilovchi funksiyani qaytaradi: <code>const [x, setX] = useState(boshlang'ich)</code>;</li><li>Holatni faqat <strong>set-funksiya</strong> orqali yangilaymiz — to'g'ridan-to'g'ri o'zgartirmaymiz;</li><li>Holat o'zgarganda React komponentni <strong>qayta render qiladi</strong> va ekran yangilanadi;</li><li>Hodisalar <strong>camelCase</strong>da (<code>onClick</code>) yoziladi va funksiya qabul qiladi — uni chaqirmang, uzating;</li><li>Eski holatga bog'liq yangilashda funksiya shaklidan foydalaning: <code>setX(prev =&gt; prev + 1)</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="react-props.html"><span class="dir">← Oldingi</span><span class="ttl">Props</span></a>
@@ -698,6 +713,6 @@ function ucchiOshir() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

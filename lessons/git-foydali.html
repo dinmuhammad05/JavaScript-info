@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Foydali vositalar: .gitignore, undo, stash — Kodla</title>
   <meta name="description" content=".gitignore fayli va namunasi, allaqachon kuzatilayotgan faylni git rm --cached bilan chiqarish, o'zgarishni bekor qilish (git restore, git reset, git revert farqi), git stash bilan ishni vaqtincha yashirish, git tag qisqacha, yaxshi commit xabari yozish qoidalari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,28 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>Foydali vositalar: .gitignore, undo, stash</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#gitignore-fayli-nima">.gitignore fayli nima?</a></li>
+<li class="lvl2"><a href="#gitignore-namunasi">.gitignore namunasi</a></li>
+<li class="lvl2"><a href="#allaqachon-kuzatilayotgan-faylni-chiqarish-git-rm-cached">Allaqachon kuzatilayotgan faylni chiqarish: git rm --cached</a></li>
+<li class="lvl2"><a href="#o-zgarishni-bekor-qilish-restore-reset-revert">O'zgarishni bekor qilish: restore, reset, revert</a></li>
+<li class="lvl3"><a href="#git-restore-saqlanmagan-o-zgarishni-tashlash">git restore — saqlanmagan o'zgarishni tashlash</a></li>
+<li class="lvl3"><a href="#git-reset-commitni-orqaga-surish">git reset — commitni orqaga surish</a></li>
+<li class="lvl3"><a href="#git-revert-xavfsiz-bekor-qilish">git revert — xavfsiz bekor qilish</a></li>
+<li class="lvl2"><a href="#ishni-vaqtincha-yashirish-git-stash">Ishni vaqtincha yashirish: git stash</a></li>
+<li class="lvl2"><a href="#versiyalarni-belgilash-git-tag-qisqacha">Versiyalarni belgilash: git tag qisqacha</a></li>
+<li class="lvl2"><a href="#yaxshi-commit-xabari-yozish-qoidalari">Yaxshi commit xabari yozish qoidalari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Git kundalik ishda bir qancha juda foydali vositalarga ega: keraksiz fayllarni e'tiborsiz qoldirish (<code>.gitignore</code>), xatolarni orqaga qaytarish (undo), ishni vaqtincha yashirish (stash) va versiyalarni belgilash (tag). Ushbu darsda ushbu amaliy vositalarni va yaxshi commit xabari yozish qoidalarini chuqur o'rganamiz. Bular sizning ishingizni ancha tozaroq va xavfsizroq qiladi.</p>
 <div class="note">Bu darsdagi buyruqlar terminalda, mahalliy Git omborida ishlaydi. Kurs playground'ida ular ishlamaydi — quyidagi bloklar statik misol sifatida keltiriladi. Ularni o'z kompyuteringizdagi haqiqiy omborda sinab ko'ring.</div>
-<h2>.gitignore fayli nima?</h2>
+<h2 id="gitignore-fayli-nima">.gitignore fayli nima?</h2>
 <p>Har bir loyihada Git kuzatishi <strong>shart bo'lmagan</strong> fayllar bo'ladi: vaqtinchalik fayllar, o'rnatilgan kutubxonalar, maxfiy parollar, tahrirlagich sozlamalari. Bularni omborga qo'shish keraksiz — ular joyni to'ldiradi, xavfsizlikka putur yetkazadi va boshqa kompyuterlarda muammo tug'diradi.</p>
 <p><strong>.gitignore</strong> — bu maxsus fayl bo'lib, unda Git e'tiborsiz qoldirishi kerak bo'lgan fayl va papkalar ro'yxati yoziladi. U loyihaning ildiz (root) papkasida joylashadi. Bu faylda ko'rsatilgan narsalar <code>git status</code>da umuman ko'rinmaydi va tasodifan commit qilib bo'lmaydi.</p>
-<h2>.gitignore namunasi</h2>
+<h2 id="gitignore-namunasi">.gitignore namunasi</h2>
 <p>Mana tipik <code>.gitignore</code> fayli namunasi. Har bir qator — bir naqsh (pattern):</p>
 <pre class="code"><code># Node.js bog'liqliklari (juda katta, kuzatilmaydi)
 node_modules/
@@ -629,7 +648,7 @@ build/</code></pre>
 <ul><li><code>node_modules/</code> — oxiridagi <code>/</code> bu <strong>papka</strong> ekanligini bildiradi;</li><li><code>*.log</code> — yulduzcha (<code>*</code>) istalgan nomga mos keladi; bu <em>barcha</em> <code>.log</code> bilan tugaydigan fayllarni e'tiborsiz qoldiradi;</li><li><code># bilan boshlanadigan qator</code> — bu <strong>izoh</strong>, Git uni o'qimaydi;</li><li><code>.env</code> — aniq fayl nomi; xavfsizlik uchun parol va kalitlar shu yerda saqlanib, hech qachon commit qilinmaydi.</li></ul>
 <div class="tip">Har bir dasturlash tili va vositasi uchun tayyor <code>.gitignore</code> shablonlari bor. github.com/github/gitignore omborida yuzlab tilga mos namunalar mavjud. Yangi loyiha ochganingizda o'z tilingizga mos shablonni oling va kerakli qatorlarni qo'shing.</div>
 <div class="warn"><strong>Maxfiy ma'lumotlarni</strong> (parol, API kalitlari, tokenlar) hech qachon commit qilmang! Ularni <code>.env</code>ga yozib, <code>.env</code>ni <code>.gitignore</code>ga qo'shing. Agar tasodifan maxfiy ma'lumot GitHub'ga tushib qolsa — uni darhol <strong>bekor qiling (o'zgartiring)</strong>, chunki commit tarixidan uni butunlay o'chirish qiyin va u allaqachon ko'rilgan bo'lishi mumkin.</div>
-<h2>Allaqachon kuzatilayotgan faylni chiqarish: git rm --cached</h2>
+<h2 id="allaqachon-kuzatilayotgan-faylni-chiqarish-git-rm-cached">Allaqachon kuzatilayotgan faylni chiqarish: git rm --cached</h2>
 <p>Muhim nuance: <code>.gitignore</code> faqat <strong>hali kuzatilmagan</strong> (Git bilmaydigan) fayllarga ta'sir qiladi. Agar fayl allaqachon commit qilingan bo'lsa, uni <code>.gitignore</code>ga qo'shish yetarli emas — Git uni kuzatishda davom etadi.</p>
 <p>Masalan, siz <code>.env</code>ni adashib commit qildingiz, keyin <code>.gitignore</code>ga qo'shdingiz — lekin u hali ham kuzatilmoqda. Uni kuzatuvdan chiqarish uchun <code>git rm --cached</code>:</p>
 <pre class="code"><code># faylni kuzatuvdan chiqaramiz, lekin diskda saqlaymiz
@@ -642,11 +661,11 @@ $ git commit -m '.env faylini kuzatuvdan chiqardim'</code></pre>
 <p>Papka uchun <code>-r</code> (recursive) qo'shiladi:</p>
 <pre class="code"><code># butun papkani kuzatuvdan chiqarish
 $ git rm -r --cached node_modules/</code></pre>
-<h2>O'zgarishni bekor qilish: restore, reset, revert</h2>
+<h2 id="o-zgarishni-bekor-qilish-restore-reset-revert">O'zgarishni bekor qilish: restore, reset, revert</h2>
 <p>Xatolar bo'ladi — Git ularni orqaga qaytarishning uch xil vositasini beradi. Ularni chalkashtirmaslik juda muhim, chunki ular <strong>turli darajada</strong> ishlaydi:</p>
 <ul><li><code>git restore</code> — <strong>saqlanmagan</strong> (commit qilinmagan) o'zgarishlarni bekor qiladi;</li><li><code>git reset</code> — commitlarni <strong>orqaga suradi</strong> (tarixni o'zgartiradi);</li><li><code>git revert</code> — mavjud commit'ni bekor qiluvchi <strong>yangi commit</strong> yaratadi (tarixni saqlaydi).</li></ul>
 <p>Har birini alohida ko'ramiz.</p>
-<h3>git restore — saqlanmagan o'zgarishni tashlash</h3>
+<h3 id="git-restore-saqlanmagan-o-zgarishni-tashlash">git restore — saqlanmagan o'zgarishni tashlash</h3>
 <p>Faylni o'zgartirdingiz-u, lekin bu o'zgarish yoqmadi va oxirgi commit holatiga qaytarmoqchisiz. <code>git restore</code>:</p>
 <pre class="code"><code># bitta faylni oxirgi commit holatiga qaytarish
 $ git restore index.html
@@ -654,7 +673,7 @@ $ git restore index.html
 # barcha o'zgarishlarni bekor qilish
 $ git restore .</code></pre>
 <div class="warn"><code>git restore</code> saqlanmagan o'zgarishlarni <strong>butunlay yo'qotadi</strong> — ularni qaytarib bo'lmaydi. Faqat rostdan kerak emasligiga ishonganingizda ishlating. Agar faylni <code>git add</code> qilib bo'lgan bo'lsangiz, uni staging'dan chiqarish uchun: <code>git restore --staged fayl</code>.</div>
-<h3>git reset — commitni orqaga surish</h3>
+<h3 id="git-reset-commitni-orqaga-surish">git reset — commitni orqaga surish</h3>
 <p><code>git reset</code> branch ko'rsatkichini oldingi commit'ga qaytaradi. Uch rejim bor:</p>
 <ul><li><code>--soft</code> — commit bekor qilinadi, lekin o'zgarishlar staging'da (add qilingan holatda) qoladi;</li><li><code>--mixed</code> (standart) — commit bekor qilinadi, o'zgarishlar saqlanadi lekin staging'dan chiqadi;</li><li><code>--hard</code> — commit ham, o'zgarishlar ham <strong>butunlay o'chadi</strong>.</li></ul>
 <pre class="code"><code># oxirgi commit'ni bekor qilib, o'zgarishlarni saqlash
@@ -664,13 +683,13 @@ $ git reset --soft HEAD~1
 $ git reset --hard HEAD~1</code></pre>
 <p>Bu yerda <code>HEAD~1</code> "oxirgi commit'dan bitta oldingisi" degani.</p>
 <div class="warn"><code>git reset</code> tarixni o'zgartiradi. <strong>Allaqachon push qilingan</strong> commitlarga <code>reset</code> qilmang — bu jamoadoshlaringiz uchun katta muammo tug'diradi. Push qilingan o'zgarishni bekor qilish uchun <code>git revert</code>dan foydalaning.</div>
-<h3>git revert — xavfsiz bekor qilish</h3>
+<h3 id="git-revert-xavfsiz-bekor-qilish">git revert — xavfsiz bekor qilish</h3>
 <p><code>git revert</code> eski commit'ni o'chirmaydi — uning ta'sirini bekor qiluvchi <strong>yangi commit</strong> yaratadi. Bu tarixni saqlaydi va push qilingan commitlar uchun xavfsiz:</p>
 <pre class="code"><code># ma'lum bir commit'ni bekor qiluvchi yangi commit yaratish
 $ git revert 1a2b3c4
 [main 8h9i0j1] Revert 'Xato funksiya qoshildi'</code></pre>
 <div class="note">Amaliy qoida: <strong>mahalliy</strong>, hali push qilinmagan xatolar uchun <code>reset</code> qulay. <strong>Push qilingan</strong> (jamoa ko'rgan) commitlar uchun esa <strong>doim</strong> <code>revert</code> ishlating — u tarixni buzmaydi va hamma xavfsiz sinxron qoladi.</div>
-<h2>Ishni vaqtincha yashirish: git stash</h2>
+<h2 id="ishni-vaqtincha-yashirish-git-stash">Ishni vaqtincha yashirish: git stash</h2>
 <p>Ba'zan yarim tayyor ish ustida turasiz-u, to'satdan boshqa narsaga o'tishga to'g'ri keladi (masalan, shoshilinch xato tuzatish). Lekin yarim ishni commit qilishni istamaysiz. <strong>git stash</strong> — o'zgarishlarni vaqtincha <em>yashiradi</em> va ish stolini tozalaydi:</p>
 <pre class="code"><code># joriy o'zgarishlarni yashiramiz
 $ git stash
@@ -689,7 +708,7 @@ stash@{0}: WIP on main: 5d6e7f8 oxirgi commit</code></pre>
 <p>Asosiy stash buyruqlari:</p>
 <ul><li><code>git stash</code> — joriy o'zgarishlarni yashirish;</li><li><code>git stash list</code> — yashirilganlar ro'yxati;</li><li><code>git stash pop</code> — oxirgi yashiringanni qaytarish va ro'yxatdan o'chirish;</li><li><code>git stash apply</code> — qaytarish, lekin ro'yxatda saqlab qolish;</li><li><code>git stash drop</code> — yashirilganni o'chirish;</li><li><code>git stash clear</code> — barcha yashiringanlarni tozalash.</li></ul>
 <div class="tip">Stash — vaqtinchalik yechim. Uni uzoq muddat saqlamang, aks holda unutib qolasiz. Agar ish jiddiyroq bo'lsa, stash o'rniga alohida branch ochib, u yerda commit qilgan ma'qul.</div>
-<h2>Versiyalarni belgilash: git tag qisqacha</h2>
+<h2 id="versiyalarni-belgilash-git-tag-qisqacha">Versiyalarni belgilash: git tag qisqacha</h2>
 <p><strong>Tag</strong> — bu ma'lum bir commit'ga qo'yilgan doimiy nom (yorliq). U ko'pincha loyiha versiyalarini belgilash uchun ishlatiladi: <code>v1.0.0</code>, <code>v2.1.3</code> va h.k. Branch'dan farqli, tag siljimaydi — u doim bir commit'ga ishora qiladi.</p>
 <pre class="code"><code># joriy commit'ga versiya tegi qo'yish
 $ git tag v1.0.0
@@ -704,7 +723,7 @@ v1.0.0
 # teglarni GitHub'ga yuborish (push ularni avtomatik yubormaydi!)
 $ git push origin v1.0.0</code></pre>
 <div class="note">Oddiy <code>git push</code> teglarni <strong>yubormaydi</strong> — ularni alohida push qilish kerak. Barcha teglarni birdan yuborish uchun: <code>git push origin --tags</code>. Teglar ko'pincha GitHub'da "Releases" (chiqarilishlar) yaratish uchun asos bo'ladi.</div>
-<h2>Yaxshi commit xabari yozish qoidalari</h2>
+<h2 id="yaxshi-commit-xabari-yozish-qoidalari">Yaxshi commit xabari yozish qoidalari</h2>
 <p>Commit xabari — bu kelajakdagi o'zingiz va jamoadoshlaringiz uchun izoh. Yaxshi xabar kodni tushunishni osonlashtiradi. Mana asosiy qoidalar:</p>
 <ul><li><strong>Qisqa va aniq sarlavha</strong> — 50 belgidan oshmasin; nima qilinganini aniq bildirsin;</li><li><strong>Buyruq ohangi</strong> — "Login xatosini tuzatdim" yoki "Fix login bug" kabi; "tuzatilyapti" emas;</li><li><strong>Nimani va nima uchun</strong> — sarlavhada nima o'zgargani, kerak bo'lsa tavsifda nima uchun o'zgargani;</li><li><strong>Bitta commit — bitta mantiqiy o'zgarish</strong> — bir nechta bog'liq bo'lmagan o'zgarishni bitta commit'ga aralashtirmang;</li><li><strong>Ma'nosiz xabarlardan qoching</strong> — "tuzatildi", "o'zgarish", "asdf" kabilar keyinchalik hech narsa aytmaydi.</li></ul>
 <p>Yomon va yaxshi misollarni solishtiring:</p>
@@ -727,7 +746,7 @@ Avvalgi qidiruv har bir bosishda serverga so'rov yuborardi,
 bu esa yukni oshirardi. Endi 300ms kechikish (debounce)
 qo'shildi — so'rovlar soni sezilarli kamaydi.</code></pre>
 <div class="tip">Ko'p jamoalar <strong>Conventional Commits</strong> kelishuviga amal qiladi: <code>feat:</code> (yangi funksiya), <code>fix:</code> (xato tuzatish), <code>docs:</code> (hujjat), <code>refactor:</code> (qayta yozish). Masalan: <code>feat: qidiruv paneli qoshildi</code>. Bu tarixni o'qishni va avtomatlashtirishni osonlashtiradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>.gitignore</strong> — kuzatilishi shart bo'lmagan fayllar (node_modules, .env, *.log) ro'yxati;</li><li><code>git rm --cached fayl</code> — allaqachon kuzatilayotgan faylni kuzatuvdan chiqarish (diskda qoldirib);</li><li><code>git restore</code> — saqlanmagan o'zgarishni bekor qilish;</li><li><code>git reset</code> — commitni orqaga surish (mahalliy, push qilinmagan uchun);</li><li><code>git revert</code> — bekor qiluvchi yangi commit (push qilingan uchun xavfsiz);</li><li><code>git stash</code> — ishni vaqtincha yashirish, <code>git stash pop</code> — qaytarish;</li><li><code>git tag v1.0.0</code> — versiyalarni belgilash (push uchun <code>--tags</code>);</li><li><strong>yaxshi commit xabari</strong> — qisqa, aniq, buyruq ohangida, ma'noli.</li></ul>
 <p>Ushbu vositalar bilan siz Git'ni ishonchli va toza tarzda ishlata olasiz. Bu — professional dasturchining kundalik asboblar to'plami. Tabriklaymiz, Git va GitHub bo'limini yakunladingiz!</p>
 <nav class="lesson-nav">
@@ -742,6 +761,6 @@ qo'shildi — so'rovlar soni sezilarli kamaydi.</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

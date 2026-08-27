@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Karrilash (Currying) — Kodla</title>
   <meta name="description" content="Ko'p argumentli funksiyani f(a)(b)(c) ko'rinishidagi bir argumentli funksiyalar zanjiriga aylantirish va qisman qo'llash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,18 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>Karrilash (Currying)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#oddiy-misol">Oddiy misol</a></li>
+<li class="lvl2"><a href="#qisman-qo-llash">Qisman qo'llash</a></li>
+<li class="lvl2"><a href="#ilg-or-curry-yordamchisi">Ilg'or curry yordamchisi</a></li>
+<li class="lvl2"><a href="#amaliy-foyda-log-funksiyasi">Amaliy foyda: log funksiyasi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><em>Karrilash</em> (currying) — <code>f(a, b, c)</code> ko'rinishida chaqiriladigan funksiyani <code>f(a)(b)(c)</code> ko'rinishida chaqiriladigan qilib aylantirish usuli. Bu funksiyani "o'chirmaydi", faqat qayta o'raydi. U <em>qisman qo'llash</em> (partial application) uchun juda qulay.</p>
-<h2>Oddiy misol</h2>
+<h2 id="oddiy-misol">Oddiy misol</h2>
 <p>Ikki argumentli funksiyani qo'lda karrilaymiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>curry-oddiy.js</span></div><textarea spellcheck="false">function karrila(f) {
   return function(a) {
@@ -615,7 +628,7 @@ let karrilangan = karrila(yigindi);
 
 console.log(karrilangan(1)(2));  // 3</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>karrilangan(1)</code> chaqirilganda argument "eslab qolinadi" va yangi funksiya qaytadi. Keyin <code>(2)</code> chaqirilganda haqiqiy hisob amalga oshadi.</p>
-<h2>Qisman qo'llash</h2>
+<h2 id="qisman-qo-llash">Qisman qo'llash</h2>
 <p>Karrilashning asosiy foydasi — funksiyani <strong>qisman</strong> chaqirib, oldindan sozlangan yangi funksiya olish:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>curry-qisman.js</span></div><textarea spellcheck="false">function karrila(f) {
   return function(a) {
@@ -636,7 +649,7 @@ let ikkiBarobar = karrilangan(2);   // b'ni kutayotgan funksiya
 console.log(ikkiBarobar(5));   // 10
 console.log(ikkiBarobar(8));   // 16</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>ikkiBarobar</code> — birinchi argumenti <code>2</code> deb qotirilgan yangi funksiya. Bu <em>qisman qo'llash</em>: funksiyaning bir qismini oldindan to'ldirib qo'yamiz.</div>
-<h2>Ilg'or curry yordamchisi</h2>
+<h2 id="ilg-or-curry-yordamchisi">Ilg'or curry yordamchisi</h2>
 <p>Amaliy <code>curry</code> odatda <strong>ikkala</strong> ko'rinishda ham chaqirilishga ruxsat beradi: <code>curry(f)(a)(b)(c)</code> ham, <code>curry(f)(a, b, c)</code> ham. Agar yetarli argument berilsa, funksiya darhol chaqiriladi; aks holda kutuvchi funksiya qaytadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>curry-universal.js</span></div><textarea spellcheck="false">function curry(func) {
   return function curried(...args) {
@@ -661,7 +674,7 @@ console.log(s(1)(2)(3));   // 6
 console.log(s(1, 2)(3));   // 6</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda <code>func.length</code> — funksiyaning e'lon qilingan argumentlari soni. Agar to'plangan argumentlar shu songa yetsa, funksiya chaqiriladi.</p>
 <div class="warn">Bu ko'rinishdagi karrilash <strong>faqat qat'iy sondagi argumentli</strong> funksiyalar uchun ishlaydi. <code>...rest</code> parametrli yoki noaniq argumentli funksiyalarda <code>func.length</code> to'g'ri hisoblanmaydi.</div>
-<h2>Amaliy foyda: log funksiyasi</h2>
+<h2 id="amaliy-foyda-log-funksiyasi">Amaliy foyda: log funksiyasi</h2>
 <p>Karrilashning klassik amaliy misoli — sozlanadigan <code>log</code> funksiyasi. Vaqt, jurnal darajasi va xabarni oladigan funksiyani karrilaymiz, so'ng ma'lum darajalar uchun tayyor funksiyalar yasaymiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>curry-log.js</span></div><textarea spellcheck="false">function curry(func) {
   return function curried(...args) {
@@ -688,7 +701,7 @@ let debug9 = clog(9)("DEBUG");
 console.log(debug9("ulanish tekshirildi"));
 // [9:00] [DEBUG] ulanish tekshirildi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Karrilash sizga bitta umumiy funksiyadan <strong>maxsuslashtirilgan</strong> funksiyalar oilasini yasash imkonini beradi — kodni takrorlamasdan.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Karrilash <code>f(a, b, c)</code>ni <code>f(a)(b)(c)</code>ga aylantiradi, funksiyani o'zgartirmaydi;</li><li>Asosiy foydasi — <em>qisman qo'llash</em>: argumentlarni oldindan qotirib, yangi funksiya olish;</li><li>Ilg'or <code>curry</code> yordamchisi ikkala chaqirish uslubini ham qo'llab-quvvatlaydi;</li><li>U <code>func.length</code>ga tayanadi, shuning uchun qat'iy argumentli funksiyalar uchun mos;</li><li>Amaliy qo'llanishi: sozlanadigan log, formatlash, tayyor filtrlar.</li></ul>
 <nav class="lesson-nav">
   <a href="eval.html"><span class="dir">← Oldingi</span><span class="ttl">Eval: kod satrini ishga tushirish</span></a>
@@ -702,6 +715,6 @@ console.log(debug9("ulanish tekshirildi"));
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

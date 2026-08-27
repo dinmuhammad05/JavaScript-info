@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bog'liqliklar xavfsizligi (npm audit, SCA) — Kodla</title>
   <meta name="description" content="Uchinchi tomon paketlaridagi ma'lum zaifliklar, npm audit, SCA g'oyasi, avtomatik yangilash va supply chain hujumlaridan himoya.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,22 @@
 <main class="content article">
 <div class="crumbs">Amaliy himoya va DevSecOps</div>
 <h1>Bog'liqliklar xavfsizligi (npm audit, SCA)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ma-lum-zaifliklar-cve">Ma'lum zaifliklar (CVE)</a></li>
+<li class="lvl2"><a href="#npm-audit-birinchi-qadam">npm audit — birinchi qadam</a></li>
+<li class="lvl2"><a href="#sca-bog-liqliklar-tahlili">SCA — bog'liqliklar tahlili</a></li>
+<li class="lvl2"><a href="#avtomatik-yangilash-dependabot-va-renovate">Avtomatik yangilash: Dependabot va Renovate</a></li>
+<li class="lvl2"><a href="#supply-chain-hujumlari">Supply chain hujumlari</a></li>
+<li class="lvl2"><a href="#lock-fayl-nega-muhim">Lock fayl nega muhim</a></li>
+  </ul>
+</details>
 <p class="lead">Zamonaviy JavaScript loyihasini oching-da, <code>node_modules</code> jildiga qarang. U yerda yuzlab, ba'zan minglab paket bor — va ularning aksariyatini siz atayin o'rnatmagansiz. Ular sizning bir nechta paketingizning bog'liqliklari (dependencies). Har bir paket — bu kimdir yozgan, sizning ilovangiz ichida ishlaydigan begona kod. Demak, har biri — potensial xavf manbai. Kodingiz qanchalik xavfsiz bo'lmasin, agar u ishonadigan paketda zaiflik bo'lsa, siz ham zaifsiz.</p>
-<h2>Ma'lum zaifliklar (CVE)</h2>
+<h2 id="ma-lum-zaifliklar-cve">Ma'lum zaifliklar (CVE)</h2>
 <p>Xavfsizlik olamida topilgan har bir jiddiy zaiflikka rasmiy raqam beriladi — <code>CVE</code> (Common Vulnerabilities and Exposures). Masalan, mashhur bir paketda "maxsus tuzilgan kiritma orqali serverni qotirib qo'yish mumkin" degan zaiflik topilsa, u <code>CVE-2024-XXXXX</code> shaklida ro'yxatga olinadi va ommaga e'lon qilinadi.</p>
 <p>Bu ikki tomonlama qilich. Bir tomondan — zaiflik oshkor bo'lgani yaxshi, endi uni tuzatish mumkin. Boshqa tomondan — hujumchilar ham o'sha ro'yxatni o'qiydi va eski, yangilanmagan ilovalarni qidiradi. Shu bois zaiflik e'lon qilinishi bilan yangilanish — poyga masalasiga aylanadi.</p>
-<h2>npm audit — birinchi qadam</h2>
+<h2 id="npm-audit-birinchi-qadam">npm audit — birinchi qadam</h2>
 <p>Node.js ekotizimida sizda tayyor vosita bor: <code>npm audit</code>. U loyihangizdagi barcha paketlarni ma'lum zaifliklar bazasi bilan solishtiradi va hisobot beradi:</p>
 <pre class="code"><code># Loyihadagi zaifliklarni tekshirish:
 npm audit
@@ -618,19 +632,19 @@ npm audit fix --force
 #   diqqat: --force buzilishlarga olib kelishi mumkin,
 #   shuning uchun keyin testlarni albatta ishga tushiring.</code></pre>
 <div class="warn"><code>--force</code> katta versiya sakrashlarini majburlaydi va ilovangizni buzishi mumkin. Uni faqat testlaringiz mavjud bo'lganda va natijani tekshirish imkoni borida ishlating. "Yashil" audit deb ko'r-ko'rona <code>--force</code> bosaverish — o'zi bir xavf.</div>
-<h2>SCA — bog'liqliklar tahlili</h2>
+<h2 id="sca-bog-liqliklar-tahlili">SCA — bog'liqliklar tahlili</h2>
 <p><code>npm audit</code> — <strong>SCA</strong> (<em>Software Composition Analysis</em>, dasturiy ta'minot tarkibini tahlil qilish) deb ataladigan kengroq g'oyaning oddiy ko'rinishidir. SCA'ning maqsadi — loyihangizdagi barcha uchinchi tomon komponentlarini ro'yxatga olish va ularning har birida ma'lum zaiflik yoki muammoli litsenziya bor-yo'qligini kuzatib borish.</p>
 <p>Yirik loyihalarda maxsus SCA vositalari CI quvuriga ulanadi: har bir kod yuborilganda bog'liqliklar avtomatik skanerlanadi, va yangi zaiflik topilsa, jamoa darhol xabardor qilinadi. G'oya oddiy: siz ishlatayotgan kutubxonaning ichida nima borligini bilib turing.</p>
-<h2>Avtomatik yangilash: Dependabot va Renovate</h2>
+<h2 id="avtomatik-yangilash-dependabot-va-renovate">Avtomatik yangilash: Dependabot va Renovate</h2>
 <p>Qo'lda har hafta <code>npm audit</code> yugurtirish charchatadi va unutiladi. Shu bois avtomatlashtiruvchi vositalar mavjud:</p>
 <ul><li><strong>Dependabot</strong> — GitHub'ga o'rnatilgan; bog'liqliklaringizni kuzatib turadi va yangi (xususan xavfsizlik) versiya chiqqanda avtomatik Pull Request ochadi;</li><li><strong>Renovate</strong> — shunga o'xshash, ammo yanada moslashuvchan; qaysi paketni qanchalik tez-tez yangilashni batafsil sozlash mumkin.</li></ul>
 <p>Ikkalasining ham g'oyasi bir xil: yangilanishni odam esidan chiqaradigan vazifadan — mashina bajaradigan avtomatik jarayonga aylantirish. Sizga esa faqat kelgan PR'ni ko'rib, testlar o'tganini tekshirib, tasdiqlash qoladi.</p>
-<h2>Supply chain hujumlari</h2>
+<h2 id="supply-chain-hujumlari">Supply chain hujumlari</h2>
 <p>Eng ayyor hujumlardan biri — <strong>ta'minot zanjiri (supply chain)</strong> hujumi. Bunda hujumchi sizning kodingizga emas, balki siz <em>ishonadigan</em> paketga hujum qiladi. Bir necha ko'rinishi bor:</p>
 <ul><li><strong>Typosquatting</strong> — mashhur paket nomiga o'xshash, bir harf farqli zararli paket joylash (masalan, haqiqiy nom o'rniga chalg'ituvchi nom). Xato yozib o'rnatgan odam zararli kodni yuklab oladi;</li><li><strong>Zararli yangilanish</strong> — hujumchi haqiqiy paketni egallab olib (masalan, muallif hisobini buzib), unga yangi "yangilanish"da zararli kod qo'shadi;</li><li><strong>Tashlab ketilgan paket</strong> — egasi qarovsiz qoldirgan paketni boshqa birov o'z qo'liga olib, zararli o'zgarish kiritishi.</li></ul>
 <p>Himoya konseptual jihatdan oddiy, ammo intizom talab qiladi: paket nomini o'rnatishdan oldin diqqat bilan tekshiring; paketning yuklab olinishlar soni, oxirgi yangilanishi va manba kodiga qarang; kerak bo'lmagan bog'liqlikni umuman o'rnatmang — har bir qo'shimcha paket sizning hujum yuzangizni kengaytiradi.</p>
 <div class="warn">Noma'lum yoki kam ishlatiladigan paketni tekshirmasdan o'rnatmang. Bir daqiqalik e'tibor — kutilmagan zararli koddan yaxshiroq. "Bir paketgina-ku" deb o'rnatilgan narsa butun tizimingizga eshik ochishi mumkin.</div>
-<h2>Lock fayl nega muhim</h2>
+<h2 id="lock-fayl-nega-muhim">Lock fayl nega muhim</h2>
 <p><code>package-lock.json</code> (yoki <code>yarn.lock</code>) faylining vazifasi — har bir paketning <em>aniq</em> versiyasi va hatto uning kriptografik xesh (integrity) qiymatini qayd etib qo'yish. Bu ikki narsani kafolatlaydi: siz, sherigingiz va serveringiz hammasi <em>bir xil</em> kod ustida ishlaydi; hamda o'rnatilayotgan paket yo'lda o'zgartirilmaganini xesh orqali tekshirish mumkin.</p>
 <p>Shu bois lock faylni doim git'ga qo'shing va uni "shunchaki avtomatik fayl" deb yengil qaramang. U — sizning bog'liqliklaringiz haqiqatining muhrlangan surati.</p>
 <div class="note">Bog'liqliklar xavfsizligi bir martalik ish emas, balki doimiy jarayon. Bugun xavfsiz paket ertaga zaif deb topilishi mumkin. Shu bois audit va yangilashni loyihaning muntazam "gigienasi"ga aylantiring.</div>
@@ -646,6 +660,6 @@ npm audit fix --force
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

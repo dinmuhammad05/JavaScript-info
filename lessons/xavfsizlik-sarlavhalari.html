@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HTTP xavfsizlik sarlavhalari (CSP, HSTS...) — Kodla</title>
   <meta name="description" content="Brauzerga xavfsiz xatti-harakatni buyuruvchi HTTP sarlavhalari: CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy va Permissions-Policy; ularni nginx va Express'da sozlash hamda cookie bayroqlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,28 @@
 <main class="content article">
 <div class="crumbs">Tarmoq va tizim xavfsizligi</div>
 <h1>HTTP xavfsizlik sarlavhalari (CSP, HSTS...)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-xavfsizlik-sarlavhalari-muhim">Nega xavfsizlik sarlavhalari muhim?</a></li>
+<li class="lvl2"><a href="#content-security-policy-csp">Content-Security-Policy (CSP)</a></li>
+<li class="lvl2"><a href="#strict-transport-security-hsts">Strict-Transport-Security (HSTS)</a></li>
+<li class="lvl2"><a href="#x-content-type-options-va-x-frame-options">X-Content-Type-Options va X-Frame-Options</a></li>
+<li class="lvl2"><a href="#referrer-policy-va-permissions-policy">Referrer-Policy va Permissions-Policy</a></li>
+<li class="lvl2"><a href="#sarlavhalarni-serverda-qo-shish">Sarlavhalarni serverda qo'shish</a></li>
+<li class="lvl2"><a href="#cookie-bayroqlari">Cookie bayroqlari</a></li>
+<li class="lvl2"><a href="#samesite-qiymatlarini-tushunish">SameSite qiymatlarini tushunish</a></li>
+<li class="lvl2"><a href="#sarlavhalarni-sinash-va-nazorat-qilish">Sarlavhalarni sinash va nazorat qilish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Server brauzerga javob qaytarganda, u nafaqat HTML sahifani, balki bir qator <strong>HTTP sarlavhalarini</strong> ham yuboradi. Bu sarlavhalar orqali biz brauzerga: "faqat shu manbalarga ishon", "meni doim shifrlangan ulanish orqali och", "meni ramka ichiga qo'yma" kabi buyruqlar bera olamiz. Bir necha qator sozlama qo'shish bilan biz butun bir sinf hujumlarni oldindan yopamiz. Ushbu darsda asosiy xavfsizlik sarlavhalarini va ularni haqiqiy serverda qanday yoqishni o'rganamiz.</p>
 <div class="note">Bu bob to'liq <strong>himoya</strong> yo'nalishida yozilgan. Maqsad — serveringizni va tarmog'ingizni qanday mustahkamlashni o'rganish. Hech qanday hujum vositasi yoki yo'riqnomasi berilmaydi.</div>
-<h2>Nega xavfsizlik sarlavhalari muhim?</h2>
+<h2 id="nega-xavfsizlik-sarlavhalari-muhim">Nega xavfsizlik sarlavhalari muhim?</h2>
 <p>Zamonaviy brauzer — bu juda kuchli, ammo ayni paytda xavfli muhit. U sizning saytingizdagi skriptlarni ishga tushiradi, boshqa saytlarga so'rov yuboradi, ma'lumotni saqlaydi. Agar biror joyda nazorat zaif bo'lsa, niyati buzuq kishi foydalanuvchi brauzerida zararli kod ishga tushirishga urinishi mumkin.</p>
 <p>Xavfsizlik sarlavhalari — bu <strong>brauzerga beriladigan qat'iy ko'rsatmalar</strong>. Ular hujum yuzasini (attack surface) kamaytiradi: brauzer o'zi allaqachon himoya mexanizmlariga ega, biz shunchaki ularni yoqamiz va to'g'ri sozlaymiz.</p>
 <ul><li>Ular arzon: ko'pincha bir necha qator konfiguratsiya;</li><li>Ular kuchli: butun bir sinf hujumlarni (XSS, clickjacking, protokol pasaytirish) qiyinlashtiradi;</li><li>Ular <em>chuqurlashtirilgan himoyaning</em> (defense in depth) bir qatlami: boshqa himoyalar ustiga qo'shiladi.</li></ul>
-<h2>Content-Security-Policy (CSP)</h2>
+<h2 id="content-security-policy-csp">Content-Security-Policy (CSP)</h2>
 <p><strong>CSP</strong> — bu eng kuchli va ayni paytda eng nozik sarlavha. U brauzerga sahifa qaysi manbalardan skript, stil, rasm va boshqa resurslarni yuklashi mumkinligini aytadi. Agar zararli skript sahifaga qandaydir tarzda kirib qolsa ham, CSP uni ishga tushirishga yo'l qo'ymasligi mumkin.</p>
 <p>Masalan, siz brauzerga: "skriptlarni faqat mening domenimdan yukla, tashqi <em>inline</em> skriptlarni umuman ishga tushirma" deb ayta olasiz. Bu XSS hujumlarining ta'sirini keskin kamaytiradi.</p>
 <pre class="code"><code># CSP misoli: faqat o'z domenimizdan resurs yuklash
@@ -612,7 +630,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'
 # script-src 'self'   -&gt; skriptlar faqat o'z domendan
 # object-src 'none'   -&gt; &lt;object&gt;/&lt;embed&gt; umuman taqiqlangan</code></pre>
 <div class="warn">CSP'ni <code>'unsafe-inline'</code> yoki <code>'unsafe-eval'</code> bilan bo'shashtirmang — bu himoyaning aksariyat qiymatini yo'qotadi. Siyosatni qat'iy boshlab, kerak bo'lganda ehtiyotkorlik bilan yumshating.</div>
-<h2>Strict-Transport-Security (HSTS)</h2>
+<h2 id="strict-transport-security-hsts">Strict-Transport-Security (HSTS)</h2>
 <p><strong>HSTS</strong> brauzerga: "bundan buyon meni faqat HTTPS orqali och, agar kimdir HTTP'ga tushirmoqchi bo'lsa — rad et" deb aytadi. Bu foydalanuvchi tasodifan yoki hujum natijasida shifrlanmagan HTTP ulanishga tushib qolishining oldini oladi.</p>
 <pre class="code"><code># HSTS: bir yil davomida faqat HTTPS, barcha subdomenlar bilan
 Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
@@ -621,7 +639,7 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 # includeSubDomains -&gt; barcha subdomenlarga ham amal qiladi
 # preload           -&gt; brauzerlarning oldindan yuklangan ro'yxatiga</code></pre>
 <div class="note">HSTS'ni yoqishdan oldin saytingiz to'liq HTTPS'da ishonchli ishlayotganiga amin bo'ling. <code>max-age</code> katta bo'lgani uchun xato sozlama foydalanuvchilarni uzoq vaqt qiynashi mumkin — avval kichik <code>max-age</code> bilan sinab ko'ring.</div>
-<h2>X-Content-Type-Options va X-Frame-Options</h2>
+<h2 id="x-content-type-options-va-x-frame-options">X-Content-Type-Options va X-Frame-Options</h2>
 <p><strong>X-Content-Type-Options: nosniff</strong> — brauzerga fayl turini o'zicha "taxmin qilishni" (MIME sniffing) taqiqlaydi. Bu, masalan, rasm sifatida yuklangan faylni brauzer skript deb ishga tushirib yuborishining oldini oladi.</p>
 <p><strong>X-Frame-Options</strong> — clickjacking hujumidan himoya qiladi. Clickjacking'da hujumchi sizning saytingizni ko'rinmas ramka (iframe) ichiga joylab, foydalanuvchini aldab "boshqa narsani bosayapman" deb o'ylatgan holda sizning saytingizdagi tugmani bostiradi. Bu sarlavha saytingizni ramkaga qo'yishni taqiqlaydi.</p>
 <pre class="code"><code># Faylni brauzer o'zicha talqin qilmasin
@@ -633,7 +651,7 @@ X-Frame-Options: DENY
 # yoki faqat o'z domeningizga ruxsat berish:
 # X-Frame-Options: SAMEORIGIN</code></pre>
 <p>Zamonaviy yondashuvda <code>X-Frame-Options</code> o'rniga (yoki u bilan birga) CSP'ning <code>frame-ancestors</code> ko'rsatmasi ham ishlatiladi: <code>Content-Security-Policy: frame-ancestors 'none'</code>.</p>
-<h2>Referrer-Policy va Permissions-Policy</h2>
+<h2 id="referrer-policy-va-permissions-policy">Referrer-Policy va Permissions-Policy</h2>
 <p><strong>Referrer-Policy</strong> — foydalanuvchi sizning saytingizdan boshqa saytga o'tganda, qancha ma'lumot (qaysi sahifadan kelgani) uzatilishini boshqaradi. Bu maxfiylikni himoya qiladi: ba'zan URL'da nozik ma'lumot bo'lishi mumkin.</p>
 <p><strong>Permissions-Policy</strong> — sahifa qaysi qurilma imkoniyatlaridan (kamera, mikrofon, geolokatsiya) foydalana olishini cheklaydi. Agar saytingizga kamera kerak bo'lmasa, uni butunlay o'chirib qo'ying.</p>
 <pre class="code"><code># Boshqa saytga faqat cheklangan referrer ma'lumoti yuborish
@@ -641,7 +659,7 @@ Referrer-Policy: strict-origin-when-cross-origin
 
 # Kamera, mikrofon va geolokatsiyani butunlay o'chirish
 Permissions-Policy: camera=(), microphone=(), geolocation=()</code></pre>
-<h2>Sarlavhalarni serverda qo'shish</h2>
+<h2 id="sarlavhalarni-serverda-qo-shish">Sarlavhalarni serverda qo'shish</h2>
 <p>Endi bu sarlavhalarni haqiqiy serverga qanday joylashni ko'raylik. Avval <strong>nginx</strong> misoli. Sarlavhalar server yoki location blokida <code>add_header</code> orqali qo'shiladi:</p>
 <pre class="code"><code># nginx: server bloki ichida
 server {
@@ -671,7 +689,7 @@ app.use(helmet.contentSecurityPolicy({
     objectSrc: ["'none'"]
   }
 }));</code></pre>
-<h2>Cookie bayroqlari</h2>
+<h2 id="cookie-bayroqlari">Cookie bayroqlari</h2>
 <p>Sarlavhalar bilan bir qatorda, sessiya <strong>cookie</strong>'larini ham to'g'ri belgilash muhim. Uch muhim bayroq bor:</p>
 <ul><li><strong>HttpOnly:</strong> cookie'ga JavaScript orqali kirib bo'lmaydi. Bu XSS hujumida sessiya cookie'sining o'g'irlanishini qiyinlashtiradi;</li><li><strong>Secure:</strong> cookie faqat HTTPS orqali yuboriladi, shifrlanmagan HTTP'da emas;</li><li><strong>SameSite:</strong> cookie'ning boshqa saytdan kelgan so'rovlarda yuborilishini cheklaydi — bu CSRF hujumidan himoya qiladi.</li></ul>
 <pre class="code"><code>// Express'da sessiya cookie'sini xavfsiz sozlash
@@ -682,11 +700,11 @@ res.cookie('sessiya', token, {
   maxAge: 1000 * 60 * 60 // 1 soat
 });</code></pre>
 <div class="tip">Saytingizni yozib bo'lgach, uni <code>securityheaders.com</code> saytida tekshiring: u sarlavhalaringizni tahlil qilib, baho beradi va nima yetishmayotganini ko'rsatadi. Bu tez va bepul o'zini-o'zi tekshirish usuli.</div>
-<h2>SameSite qiymatlarini tushunish</h2>
+<h2 id="samesite-qiymatlarini-tushunish">SameSite qiymatlarini tushunish</h2>
 <p><code>SameSite</code> bayrog'ining uch qiymati bor va ular xatti-harakatni sezilarli o'zgartiradi. Kerak bo'lmasa, eng qat'iysini tanlang:</p>
 <ul><li><strong>Strict:</strong> cookie faqat saytning o'zidan kelgan so'rovlarda yuboriladi — eng xavfsiz, ammo ba'zan noqulay (boshqa saytdan havola orqali kirganda sessiya ko'rinmaydi);</li><li><strong>Lax:</strong> asosiy navigatsiyada (havola bosish) yuboriladi, ammo fon so'rovlarida yo'q — ko'p sayt uchun oqilona standart;</li><li><strong>None:</strong> har doim yuboriladi, ammo majburan <code>Secure</code> bilan birga bo'lishi kerak — faqat haqiqatan zarur bo'lganda ishlating.</li></ul>
 <p>Amalda ko'pchilik sessiya cookie'lari uchun <code>Lax</code> yoki <code>Strict</code> to'g'ri tanlov bo'ladi. <code>None</code> ni faqat saytlararo integratsiya majbur qilganda ishlating.</p>
-<h2>Sarlavhalarni sinash va nazorat qilish</h2>
+<h2 id="sarlavhalarni-sinash-va-nazorat-qilish">Sarlavhalarni sinash va nazorat qilish</h2>
 <p>Sarlavhalarni sozlaganingizdan so'ng, ular haqiqatan javobda kelayotganini tekshirish muhim. Buni <code>curl</code> bilan tez ko'rish mumkin — u faqat sarlavhalarni chiqaradi:</p>
 <pre class="code"><code># Serverdan qaytgan sarlavhalarni ko'rish (-I: faqat sarlavhalar)
 curl -I https://misol.uz
@@ -697,7 +715,7 @@ curl -I https://misol.uz
 # X-Content-Type-Options: nosniff
 # X-Frame-Options: DENY</code></pre>
 <div class="note">Sarlavhalarni bir marta qo'yib qo'yish yetarli emas. Ilova o'zgargani sayin (yangi domendan skript, yangi rasm manbasi) CSP siyosatini yangilash kerak bo'lishi mumkin. Uni deploy jarayonining bir qismi sifatida muntazam tekshiring.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Xavfsizlik sarlavhalari — bu eng arzon va samarali himoya qatlamlaridan biri. Bir necha qator konfiguratsiya bilan siz XSS, clickjacking, protokol pasaytirish va cookie o'g'irlash kabi bir qancha hujumni qiyinlashtirasiz.</p>
 <p>Eslab qoling: bu sarlavhalar <strong>boshqa himoyalarni almashtirmaydi</strong>, balki ular ustiga qo'shiladi. Server tomonidagi validatsiya, HTTPS va to'g'ri autentifikatsiya baribir zarur. Keyingi darsda tarmoq darajasidagi himoyaga — firewall, portlar va VPN mavzusiga o'tamiz.</p>
 <nav class="lesson-nav">
@@ -712,6 +730,6 @@ curl -I https://misol.uz
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

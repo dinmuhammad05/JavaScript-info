@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Asosiy Docker buyruqlari — Kodla</title>
   <meta name="description" content="Kundalik ishda kerak bo'ladigan buyruqlar: ps, images, pull, run bayroqlari (-d -p -e -v --name), stop/start/rm, rmi, exec -it va logs.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Docker</div>
 <h1>Asosiy Docker buyruqlari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#docker-ps-ishlab-turgan-konteynerlar">docker ps — ishlab turgan konteynerlar</a></li>
+<li class="lvl2"><a href="#docker-images-mavjud-image-lar">docker images — mavjud image'lar</a></li>
+<li class="lvl2"><a href="#docker-pull-image-yuklab-olish">docker pull — image yuklab olish</a></li>
+<li class="lvl2"><a href="#docker-run-konteyner-ishga-tushirish-va-bayroqlari">docker run — konteyner ishga tushirish va bayroqlari</a></li>
+<li class="lvl2"><a href="#docker-stop-start-rm-boshqarish">docker stop / start / rm — boshqarish</a></li>
+<li class="lvl2"><a href="#docker-rmi-image-o-chirish">docker rmi — image o'chirish</a></li>
+<li class="lvl2"><a href="#docker-exec-it-ishlab-turgan-konteynerga-kirish">docker exec -it — ishlab turgan konteynerga kirish</a></li>
+<li class="lvl2"><a href="#docker-logs-konteyner-jurnallari">docker logs — konteyner jurnallari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Docker bilan samarali ishlash uchun bir nechta asosiy buyruqni bilish kifoya. Ushbu darsda konteyner va image'larni ko'rish, ishga tushirish, to'xtatish va o'chirish uchun kerak bo'ladigan barcha buyruqlarni misollar bilan o'rganamiz. Bu darsni ko'proq amaliyot bilan mustahkamlang.</p>
-<h2>docker ps — ishlab turgan konteynerlar</h2>
+<h2 id="docker-ps-ishlab-turgan-konteynerlar">docker ps — ishlab turgan konteynerlar</h2>
 <p><code>docker ps</code> buyrug'i ayni paytda <strong>ishlab turgan</strong> konteynerlar ro'yxatini ko'rsatadi:</p>
 <pre class="code"><code>docker ps</code></pre>
 <pre class="code"><code>CONTAINER ID   IMAGE   COMMAND                  STATUS         PORTS                  NAMES
@@ -605,7 +622,7 @@ a1b2c3d4e5f6   nginx   "/docker-entrypoint."   Up 5 minutes   0.0.0.0:8080-&gt;8
 <p>Har bir konteyner haqida ID, image nomi, holati, portlari va nomi ko'rsatiladi. Ammo bu faqat ishlab turgan konteynerlarni beradi. To'xtatilganlarini ham ko'rish uchun <code>-a</code> (all) bayrog'ini qo'shamiz:</p>
 <pre class="code"><code>docker ps -a</code></pre>
 <p><code>-a</code> bilan barcha konteynerlar ko'rinadi — ishlab turganlari ham, to'xtaganlari ham. Bu ayniqsa xatoliklarni topishda foydali: konteyner darhol to'xtab qolgan bo'lsa, uni faqat <code>-a</code> bilan ko'rasiz.</p>
-<h2>docker images — mavjud image'lar</h2>
+<h2 id="docker-images-mavjud-image-lar">docker images — mavjud image'lar</h2>
 <p>Kompyuteringizga yuklab olingan image'lar ro'yxatini ko'rish uchun:</p>
 <pre class="code"><code>docker images</code></pre>
 <pre class="code"><code>REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
@@ -613,7 +630,7 @@ nginx        latest    a1b2c3d4e5f6   2 weeks ago    187MB
 node         20        f6e5d4c3b2a1   3 weeks ago    1.1GB
 ubuntu       latest    1a2b3c4d5e6f   1 month ago    77.9MB</code></pre>
 <p>Bu yerda image nomi (REPOSITORY), versiyasi (TAG), noyob ID'si, yaratilgan vaqti va hajmi ko'rinadi. <code>TAG</code> — bu versiya belgisi. Agar tag ko'rsatilmasa, standart holatda <code>latest</code> ishlatiladi.</p>
-<h2>docker pull — image yuklab olish</h2>
+<h2 id="docker-pull-image-yuklab-olish">docker pull — image yuklab olish</h2>
 <p>Image'ni oldindan yuklab olish uchun <code>docker pull</code> ishlatiladi. Odatda <code>docker run</code> buni avtomatik qiladi, ammo ba'zan image'ni oldindan tayyorlab qo'yish qulay:</p>
 <pre class="code"><code># Standart (latest) versiyasini yuklash
 docker pull nginx
@@ -622,7 +639,7 @@ docker pull nginx
 docker pull node:20
 docker pull postgres:16</code></pre>
 <div class="tip">Ishlab chiqarishda (production) doim <strong>aniq versiya</strong> (tag) ko'rsating, masalan <code>node:20</code>, <code>latest</code> emas. Chunki <code>latest</code> vaqt o'tishi bilan o'zgaradi va ilovangiz kutilmaganda buzilishi mumkin.</div>
-<h2>docker run — konteyner ishga tushirish va bayroqlari</h2>
+<h2 id="docker-run-konteyner-ishga-tushirish-va-bayroqlari">docker run — konteyner ishga tushirish va bayroqlari</h2>
 <p><code>docker run</code> — asosiy buyruq. Uning eng muhim bayroqlari:</p>
 <ul><li><code>-d</code> — fonda (detached) ishga tushirish;</li><li><code>-p host:container</code> — port bog'lash;</li><li><code>-e KALIT=qiymat</code> — muhit o'zgaruvchisi (environment variable) berish;</li><li><code>-v host_yo'l:container_yo'l</code> — papka yoki volume ulash (ma'lumotni saqlash);</li><li><code>--name nom</code> — konteynerga nom berish;</li><li><code>--rm</code> — konteyner to'xtagach, uni avtomatik o'chirish.</li></ul>
 <p>Barcha bayroqlarni birlashtirgan to'liq misol — PostgreSQL ma'lumotlar bazasini ishga tushirish:</p>
@@ -635,7 +652,7 @@ docker pull postgres:16</code></pre>
   postgres:16</code></pre>
 <p>Bu yerda: <code>-e</code> orqali parol va baza nomi beriladi, <code>-p</code> orqali port ochiladi, <code>-v</code> orqali ma'lumot saqlanadigan volume ulanadi. Endi PostgreSQL fonda ishlab turadi.</p>
 <div class="note"><code>-e</code> (environment) juda muhim: ko'plab image'lar o'z sozlamalarini muhit o'zgaruvchilari orqali oladi. Masalan, <code>postgres</code> image'i parolni <code>POSTGRES_PASSWORD</code> orqali kutadi. Har bir image hujjatida qanday o'zgaruvchilar kerakligi yozilgan.</div>
-<h2>docker stop / start / rm — boshqarish</h2>
+<h2 id="docker-stop-start-rm-boshqarish">docker stop / start / rm — boshqarish</h2>
 <p>Konteynerlarni to'xtatish, qayta ishga tushirish va o'chirish uchun quyidagi buyruqlar ishlatiladi:</p>
 <pre class="code"><code># Konteynerni to'xtatish
 docker stop mening-serverim
@@ -650,7 +667,7 @@ docker rm mening-serverim
 docker rm -f mening-serverim</code></pre>
 <p>Muhim farq: <code>stop</code> konteynerni <em>to'xtatadi</em>, ammo o'chirmaydi — u <code>docker ps -a</code>da qoladi va qayta ishga tushirilishi mumkin. <code>rm</code> esa konteynerni <em>butunlay</em> yo'q qiladi.</p>
 <div class="warn"><code>docker rm</code> bilan o'chirilgan konteyner ichidagi ma'lumotlar (agar volume ishlatilmagan bo'lsa) <strong>butunlay yo'qoladi</strong>. Muhim ma'lumotni doim volume orqali saqlang — bu haqda alohida darsda gaplashamiz.</div>
-<h2>docker rmi — image o'chirish</h2>
+<h2 id="docker-rmi-image-o-chirish">docker rmi — image o'chirish</h2>
 <p>Endi keraksiz image'ni o'chirish. Diqqat: bu <code>rm</code> emas, <code>rmi</code> (remove image):</p>
 <pre class="code"><code># Image'ni nomi bilan o'chirish
 docker rmi nginx
@@ -658,13 +675,13 @@ docker rmi nginx
 # Image'ni ID orqali o'chirish
 docker rmi a1b2c3d4e5f6</code></pre>
 <div class="warn">Agar image'dan foydalanayotgan konteynerlar mavjud bo'lsa, <code>docker rmi</code> xatolik beradi. Avval o'sha konteynerlarni o'chirishingiz kerak. Keraksiz image'lar diskda ko'p joy egallaydi, shuning uchun vaqti-vaqti bilan tozalab turing.</div>
-<h2>docker exec -it — ishlab turgan konteynerga kirish</h2>
+<h2 id="docker-exec-it-ishlab-turgan-konteynerga-kirish">docker exec -it — ishlab turgan konteynerga kirish</h2>
 <p>Ba'zan ishlab turgan konteyner ichiga kirib, buyruq berish kerak bo'ladi (masalan, xatolikni tekshirish yoki fayllarni ko'rish uchun). Buning uchun <code>docker exec</code> ishlatiladi:</p>
 <pre class="code"><code>docker exec -it mening-serverim bash</code></pre>
 <p>Bu buyruq ishlab turgan <code>mening-serverim</code> konteyneri ichida interaktiv <code>bash</code> terminalini ochadi. Endi siz konteyner ichidasiz va uning fayl tizimini ko'rishingiz mumkin. Chiqish uchun <code>exit</code> yozing.</p>
 <p><code>-it</code> ikkita bayroqning birlashmasi: <code>-i</code> (interactive) — kiritishga imkon beradi, <code>-t</code> (tty) — terminal muhitini yaratadi. Ular deyarli doim birga ishlatiladi.</p>
 <div class="tip">Ba'zi yengil image'larda (masalan, <code>alpine</code>) <code>bash</code> bo'lmaydi. Bunday holatda <code>sh</code> ishlatiladi: <code>docker exec -it konteyner sh</code>.</div>
-<h2>docker logs — konteyner jurnallari</h2>
+<h2 id="docker-logs-konteyner-jurnallari">docker logs — konteyner jurnallari</h2>
 <p>Fonda ishlab turgan konteyner nima qilayotganini, xatolar bor-yo'qligini ko'rish uchun uning jurnallarini (logs) o'qiymiz:</p>
 <pre class="code"><code># Barcha jurnallarni ko'rsatish
 docker logs mening-serverim
@@ -676,7 +693,7 @@ docker logs -f mening-serverim
 docker logs --tail 50 mening-serverim</code></pre>
 <p><code>-f</code> (follow) bayrog'i jurnalni jonli kuzatadi — bu ilova ishlashini real vaqtda kuzatish uchun juda foydali. Kuzatishni to'xtatish uchun <code>Ctrl+C</code> bosing (bu konteynerni to'xtatmaydi, faqat kuzatishni tugatadi).</p>
 <div class="note"><code>docker logs</code> — nosozliklarni tuzatishda (debugging) birinchi murojaat qiladigan buyruqingiz bo'lishi kerak. Konteyner darhol to'xtab qolsa, sababini deyarli har doim loglarda topasiz.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>docker ps</code> — ishlab turgan, <code>docker ps -a</code> — barcha konteynerlar;</li><li><code>docker images</code> — mavjud image'lar, <code>docker pull</code> — image yuklab olish;</li><li><code>docker run</code> bayroqlari: <code>-d</code> (fon), <code>-p</code> (port), <code>-e</code> (muhit), <code>-v</code> (volume), <code>--name</code> (nom);</li><li><code>docker stop/start</code> — to'xtatish/qayta ishga tushirish, <code>docker rm</code> — konteyner o'chirish, <code>docker rmi</code> — image o'chirish;</li><li><code>docker exec -it konteyner bash</code> — ishlab turgan konteynerga kirish;</li><li><code>docker logs -f</code> — jurnallarni jonli kuzatish, nosozliklarni topishda birinchi vosita.</li></ul>
 <nav class="lesson-nav">
   <a href="docker-ornatish.html"><span class="dir">← Oldingi</span><span class="ttl">Docker o'rnatish va birinchi konteyner</span></a>
@@ -690,6 +707,6 @@ docker logs --tail 50 mening-serverim</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prototip metodlari, __proto__siz obyektlar — Kodla</title>
   <meta name="description" content="Object.create, Object.getPrototypeOf/setPrototypeOf, __proto__ nima uchun eskirgan va Object.create(null).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Prototiplar, meros</div>
 <h1>Prototip metodlari, __proto__siz obyektlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#zamonaviy-metodlar">Zamonaviy metodlar</a></li>
+<li class="lvl2"><a href="#object-create-bilan-deskriptorlar">Object.create bilan deskriptorlar</a></li>
+<li class="lvl2"><a href="#nima-uchun-proto-eskirgan">Nima uchun __proto__ eskirgan?</a></li>
+<li class="lvl2"><a href="#object-create-null-toza-obyekt">Object.create(null) — "toza" obyekt</a></li>
+<li class="lvl2"><a href="#barcha-xossalarni-olish-metodlari">Barcha xossalarni olish metodlari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>__proto__</code> — <code>[[Prototype]]</code> ni o'rnatish va o'qishning eng eski usuli, lekin u eskirgan (deprecated) hisoblanadi. Zamonaviy JavaScript prototiplar bilan ishlash uchun boshqa, ishonchliroq metodlarni taklif etadi. Bu darsda o'sha metodlar bilan tanishamiz.</p>
-<h2>Zamonaviy metodlar</h2>
+<h2 id="zamonaviy-metodlar">Zamonaviy metodlar</h2>
 <p>Prototiplar bilan ishlashning uchta asosiy zamonaviy usuli bor:</p>
 <ul><li><code>Object.getPrototypeOf(obj)</code> — <code>obj</code> ning <code>[[Prototype]]</code> sini QAYTARADI (o'qiydi);</li><li><code>Object.setPrototypeOf(obj, proto)</code> — <code>obj</code> ning <code>[[Prototype]]</code> sini <code>proto</code> ga O'RNATADI;</li><li><code>Object.create(proto, [descriptors])</code> — berilgan <code>proto</code> ni prototip qilib, YANGI bo'sh obyekt yaratadi (ixtiyoriy ravishda xossa deskriptorlari bilan).</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>methods-basic.js</span></div><textarea spellcheck="false">let animal = {
@@ -619,7 +633,7 @@ Object.setPrototypeOf(rabbit, plant);
 console.log(rabbit.eats);   // undefined (endi prototip plant)
 console.log(rabbit.water);  // true</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Bu uch metod aynan bir vazifani <code>__proto__</code> orqasidagi <code>[[Prototype]]</code> bilan bajaradi, lekin ishonchliroq va standart usulda. Zamonaviy kodda aynan shulardan foydalaning.</div>
-<h2>Object.create bilan deskriptorlar</h2>
+<h2 id="object-create-bilan-deskriptorlar">Object.create bilan deskriptorlar</h2>
 <p><code>Object.create</code> ning ikkinchi argumenti ixtiyoriy — u xossa deskriptorlarini beradi. Bu bir chaqiruvda ham prototip, ham xossalarni o'rnatishga imkon beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>methods-descriptors.js</span></div><textarea spellcheck="false">let animal = {
   eats: true
@@ -645,7 +659,7 @@ let clone = Object.create(
 console.log(clone.a); // 1
 console.log(clone.b); // 2
 console.log(clone === obj); // false (alohida obyekt)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Nima uchun __proto__ eskirgan?</h2>
+<h2 id="nima-uchun-proto-eskirgan">Nima uchun __proto__ eskirgan?</h2>
 <p><code>__proto__</code> texnik jihatdan tilning yadrosida emas, brauzerlar uchun qo'shimcha standart (Annex B) sifatida ta'riflangan. Undan qochishning bir necha sabablari bor:</p>
 <ul><li>U <em>getter/setter</em> bo'lgani uchun <code>Object.prototype</code> da yashaydi — server (Node.js) muhitida boshqacha ishlashi mumkin;</li><li>Ishlash tezligi past — <code>Object.setPrototypeOf</code> yoki <code>Object.create</code> odatda samaraliroq;</li><li>Eng jiddiy muammo — foydalanuvchidan kelgan kalitlar bilan ishlaganda xavfsizlik teshigi paydo bo'lishi mumkin.</li></ul>
 <div class="warn">Agar kalitlar tashqi (foydalanuvchi) manbadan kelsa, <code>__proto__</code> maxsus kalit sifatida g'alati xatti-harakat qilishi mumkin. Masalan, foydalanuvchi <code>__proto__</code> nomli "kalit" kiritsa, oddiy tayinlash prototipni buzishga urinadi. Buni quyida ko'ramiz.</div>
@@ -658,7 +672,7 @@ obj[key] = "salom";
 console.log(obj[key]);              // [object Object] yoki undefined turi
 console.log(typeof obj.__proto__); // "object" (satr O'RNATILMADI!)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rib turganingizdek, <code>__proto__</code> kaliti oddiy ma'lumot kaliti kabi ishlamaydi — u prototipni o'zgartirishga urinadi. Bu obyektni oddiy lug'at (map) sifatida ishlatganda jiddiy xatolarga olib keladi.</p>
-<h2>Object.create(null) — "toza" obyekt</h2>
+<h2 id="object-create-null-toza-obyekt">Object.create(null) — "toza" obyekt</h2>
 <p>Yuqoridagi muammoning yechimi — prototipi umuman yo'q obyekt yaratish. <code>Object.create(null)</code> prototipi <code>null</code> bo'lgan "toza" (chinakam bo'sh) obyekt yasaydi. Bunday obyektda <code>__proto__</code> maxsus getter/setter'i yo'q, shuning uchun u oddiy kalit sifatida ishlaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>methods-clean.js</span></div><textarea spellcheck="false">let obj = Object.create(null);
 
@@ -681,7 +695,7 @@ console.log(typeof obj.toString); // undefined
 console.log(Object.keys(obj));   // ["name", "age"]
 console.log(Object.values(obj)); // ["Ali", 25]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Foydalanuvchidan kelgan kalitlar bilan lug'at (dictionary) tuzayotganingizda <code>Object.create(null)</code> yoki <code>Map</code> dan foydalaning. Ular <code>__proto__</code> kabi maxsus kalitlar keltirib chiqaradigan xavfsizlik va mantiq muammolaridan xoli bo'ladi.</div>
-<h2>Barcha xossalarni olish metodlari</h2>
+<h2 id="barcha-xossalarni-olish-metodlari">Barcha xossalarni olish metodlari</h2>
 <p>Obyekt xossalarini olishning turli metodlari mavjud. Ularning barchasi obyektning O'Z xossalari ustida ishlaydi (prototipdagilar hisobga olinmaydi):</p>
 <ul><li><code>Object.keys(obj)</code> / <code>Object.values(obj)</code> / <code>Object.entries(obj)</code> — sanaladigan (enumerable) satr kalitlar/qiymatlar/juftliklar massivini qaytaradi;</li><li><code>Object.getOwnPropertyNames(obj)</code> — barcha satr kalitlarni (sanalmaydiganlar ham) qaytaradi;</li><li><code>Object.getOwnPropertySymbols(obj)</code> — barcha simvolli (symbol) kalitlarni qaytaradi;</li><li><code>Reflect.ownKeys(obj)</code> — mutlaqo barcha kalitlarni qaytaradi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>methods-keys.js</span></div><textarea spellcheck="false">let obj = {
@@ -692,7 +706,7 @@ console.log(Object.values(obj)); // ["Ali", 25]</textarea><div class="pg-actions
 console.log(Object.keys(obj));    // ["name", "age"]
 console.log(Object.values(obj));  // ["Ali", 25]
 console.log(Object.entries(obj)); // [["name","Ali"],["age",25]]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Zamonaviy kodda prototip bilan ishlash uchun <code>Object.create</code>, <code>Object.getPrototypeOf</code>, <code>Object.setPrototypeOf</code> dan foydalaning;</li><li><code>__proto__</code> eskirgan — tezlik va xavfsizlik sabab undan qoching;</li><li><code>Object.create(proto, descriptors)</code> obyektni aniq nusxalash uchun ham qulay;</li><li>Foydalanuvchidan kelgan kalitlar <code>__proto__</code> orqali obyektni buzishi mumkin;</li><li><code>Object.create(null)</code> prototipsiz "toza" obyekt yaratadi — u lug'at (dictionary) sifatida xavfsiz;</li><li><code>Object.keys/values/entries</code> va boshqalar obyektning faqat o'z xossalari ustida ishlaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="native-prototype.html"><span class="dir">← Oldingi</span><span class="ttl">Tug'ma prototiplar</span></a>
@@ -706,6 +720,6 @@ console.log(Object.entries(obj)); // [["name","Ali"],["age",25]]</textarea><div 
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

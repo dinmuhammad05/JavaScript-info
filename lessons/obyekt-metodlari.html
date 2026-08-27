@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Obyekt metodlari, this — Kodla</title>
   <meta name="description" content="Obyektga metod qo'shish, this kalit so'zi, this'ning chaqiruvga bog'liqligi va strelka funksiyalarda this yo'qligi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Obyektlar: asoslar</div>
 <h1>Obyekt metodlari, this</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#metod-nima">Metod nima?</a></li>
+<li class="lvl2"><a href="#metod-qisqartmasi">Metod qisqartmasi</a></li>
+<li class="lvl2"><a href="#this-kalit-so-zi">"this" kalit so'zi</a></li>
+<li class="lvl2"><a href="#this-bog-lanmagan-chaqiruvga-bog-liq">"this" bog'lanmagan (chaqiruvga bog'liq)</a></li>
+<li class="lvl2"><a href="#obyektsiz-chaqiruv">Obyektsiz chaqiruv</a></li>
+<li class="lvl2"><a href="#strelka-funksiyalarda-this-yo-q">Strelka funksiyalarda "this" yo'q</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Obyektlar odatda real dunyodagi mavjudotlarni ifodalaydi: foydalanuvchi, buyurtma, mahsulot va h.k. Real dunyoda foydalanuvchi harakat qila oladi — savatga qo'sha oladi, chiqa oladi, xarid qila oladi. Bunday harakatlar kodda <strong>metodlar</strong> — obyektga tegishli funksiyalar orqali ifodalanadi.</p>
-<h2>Metod nima?</h2>
+<h2 id="metod-nima">Metod nima?</h2>
 <p>Obyekt xossasi qiymat sifatida funksiyaga ega bo'lsa, bu funksiya <strong>metod</strong> deb ataladi. Keling, <code>user</code>ga salomlashadigan metod qo'shamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>metod.js</span></div><textarea spellcheck="false">let user = {
   name: "Jaloliddin",
@@ -610,7 +625,7 @@ user.sayHi = function() {
 
 user.sayHi(); // Salom!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda biz funksiya yaratib, uni <code>user</code> obyektining <code>sayHi</code> xossasiga tayinladik. So'ng <code>user.sayHi()</code> orqali uni chaqirdik. Endi <code>user</code> gapira oladigan bo'ldi.</p>
-<h2>Metod qisqartmasi</h2>
+<h2 id="metod-qisqartmasi">Metod qisqartmasi</h2>
 <p>Obyekt literalida metod yozishning qisqaroq, chiroyliroq usuli bor:</p>
 <pre class="code"><code>// oddiy yozuv
 let user = {
@@ -634,7 +649,7 @@ let user = {
 };
 
 user.sayHi(); // Salom, dunyo!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>"this" kalit so'zi</h2>
+<h2 id="this-kalit-so-zi">"this" kalit so'zi</h2>
 <p>Metod ko'pincha o'zi tegishli obyektning ma'lumotlariga murojaat qilishi kerak. Masalan, <code>user</code> nomini aytmoqchi bo'lsak. Buning uchun metod ichida <strong><code>this</code></strong> kalit so'zi ishlatiladi.</p>
 <p><code>this</code> qiymati — bu metod <em>chaqirilgan</em> obyektga havola, ya'ni "nuqtadan oldingi" obyekt:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>this.js</span></div><textarea spellcheck="false">let user = {
@@ -650,7 +665,7 @@ user.sayHi(); // Salom, dunyo!</textarea><div class="pg-actions"><button class="
 user.sayHi(); // Jaloliddin</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><code>user.sayHi()</code> chaqirilganda <code>this</code> aynan <code>user</code>ga teng bo'ladi. Shuning uchun <code>this.name</code> — <code>user.name</code>, ya'ni "Jaloliddin".</p>
 <div class="note">Texnik jihatdan <code>this</code>siz, tashqi o'zgaruvchi orqali ham murojaat qilish mumkin edi (<code>user.name</code>). Ammo bu xavfli: agar <code>user</code>ni boshqa o'zgaruvchiga ko'chirsak yoki <code>null</code> qilsak, metod xato beradi. <code>this</code> esa har doim to'g'ri obyektga ishora qiladi.</div>
-<h2>"this" bog'lanmagan (chaqiruvga bog'liq)</h2>
+<h2 id="this-bog-lanmagan-chaqiruvga-bog-liq">"this" bog'lanmagan (chaqiruvga bog'liq)</h2>
 <p>JavaScript'da <code>this</code> boshqa ko'p tillardan farq qiladi: u istalgan funksiyada ishlatilishi mumkin va uning qiymati funksiya <strong>qanday chaqirilishiga</strong> qarab, ish vaqtida (runtime) aniqlanadi. Bu — "free this" (erkin this) tushunchasi.</p>
 <p>Bir metodni ikki xil obyektda chaqirsak, <code>this</code> ham har xil bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>this-call.js</span></div><textarea spellcheck="false">let user = { name: "Jaloliddin" };
@@ -667,7 +682,7 @@ admin.f = sayHi;
 user.f();  // Jaloliddin (this === user)
 admin.f(); // Nilufar (this === admin)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'ryapsizmi — funksiya bitta, ammo <code>this.name</code> har xil. Chunki <code>this</code> "nuqtadan oldingi" obyektni oladi. <code>user.f()</code>da bu <code>user</code>, <code>admin.f()</code>da esa <code>admin</code>.</p>
-<h2>Obyektsiz chaqiruv</h2>
+<h2 id="obyektsiz-chaqiruv">Obyektsiz chaqiruv</h2>
 <p>Agar funksiya obyektsiz, oddiygina chaqirilsa-chi? Bunday holatda qat'iy rejimda (<code>"use strict"</code>) <code>this</code> qiymati <code>undefined</code> bo'ladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>this-yolgiz.js</span></div><textarea spellcheck="false">"use strict";
 
@@ -678,7 +693,7 @@ function sayHi() {
 sayHi(); // undefined (qat'iy rejimda)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bunday kodda <code>this.name</code> yozsak, u xato beradi, chunki <code>undefined</code>ning xossasi yo'q. Qat'iy rejimsiz (eski kodda) <code>this</code> global obyektga teng bo'lardi — bu odatda xatolik belgisi.</p>
 <div class="warn">Metodni obyektsiz chaqirish odatda xatodir. <code>this</code>dan foydalanadigan funksiyani doim uning obyekti orqali (<code>obj.method()</code>) chaqiring.</div>
-<h2>Strelka funksiyalarda "this" yo'q</h2>
+<h2 id="strelka-funksiyalarda-this-yo-q">Strelka funksiyalarda "this" yo'q</h2>
 <p>Strelka funksiyalari (<code>=&gt;</code>) maxsus: ularning O'Z <code>this</code>i <strong>yo'q</strong>. Strelka funksiyasi ichida <code>this</code> ishlatilsa, u <em>tashqi</em> (o'rab turgan) funksiyadan olinadi. Bu ba'zan juda foydali:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>strelka-this.js</span></div><textarea spellcheck="false">let user = {
   firstName: "Jaloliddin",
@@ -693,7 +708,7 @@ sayHi(); // undefined (qat'iy rejimda)</textarea><div class="pg-actions"><button
 user.sayHi(); // Jaloliddin</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda ichki strelka funksiyaning <code>this</code>i <code>sayHi</code> metodining <code>this</code>iga (ya'ni <code>user</code>ga) teng. Agar oddiy <code>function() {}</code> ishlatganimizda, ichki funksiya obyektsiz chaqirilib, <code>this</code> <code>undefined</code> bo'lardi.</p>
 <div class="note">Aynan shuning uchun obyekt metodi sifatida strelka funksiya YOZMANG: <code>{ sayHi: () =&gt; console.log(this.name) }</code> ishlamaydi, chunki strelka o'z <code>this</code>iga ega emas — u obyektni emas, tashqi (global) kontekstni oladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Obyekt xossasi qiymati funksiya bo'lsa, u <strong>metod</strong> deyiladi;</li><li>Metodni <code>method()</code> yoki qisqartma bilan (<code>method() {...}</code>) yozish mumkin;</li><li>Metod ichida <code>this</code> — "joriy obyekt", ya'ni chaqiruvda "nuqtadan oldingi" obyekt;</li><li><code>this</code> qiymati <strong>ish vaqtida</strong>, funksiya QANDAY chaqirilishiga qarab aniqlanadi;</li><li>Obyektsiz chaqirilsa, qat'iy rejimda <code>this === undefined</code>;</li><li>Strelka funksiyalarning o'z <code>this</code>i yo'q — ular tashqi <code>this</code>ni oladi; shuning uchun metod sifatida ishlatilmaydi.</li></ul>
 <nav class="lesson-nav">
   <a href="garbage-collection.html"><span class="dir">← Oldingi</span><span class="ttl">Axlat yig'ish (Garbage collection)</span></a>
@@ -707,6 +722,6 @@ user.sayHi(); // Jaloliddin</textarea><div class="pg-actions"><button class="pg-
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

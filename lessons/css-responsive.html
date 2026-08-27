@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive dizayn — Kodla</title>
   <meta name="description" content="Sayt barcha ekran o'lchamlariga moslashishi. Birliklar (px, %, em, rem, vw/vh), media query (@media), mobile-first yondashuv, moslashuvchan rasm va matn, breakpointlar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,34 @@
 <main class="content article">
 <div class="crumbs">CSS</div>
 <h1>Responsive dizayn</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-px-yetarli-emas">Nega px yetarli emas?</a></li>
+<li class="lvl2"><a href="#css-birliklari">CSS birliklari</a></li>
+<li class="lvl3"><a href="#px-piksel-mutlaq">px — piksel (mutlaq)</a></li>
+<li class="lvl3"><a href="#foiz-nisbiy">% — foiz (nisbiy)</a></li>
+<li class="lvl3"><a href="#em-ota-shriftga-nisbatan">em — ota shriftga nisbatan</a></li>
+<li class="lvl3"><a href="#rem-ildiz-shriftga-nisbatan-eng-tavsiya-etiladigan">rem — ildiz shriftga nisbatan (eng tavsiya etiladigan)</a></li>
+<li class="lvl3"><a href="#vw-va-vh-ekran-o-lchamiga-nisbatan">vw va vh — ekran o'lchamiga nisbatan</a></li>
+<li class="lvl2"><a href="#viewport-meta-tegi-birinchi-qadam">Viewport meta tegi — birinchi qadam</a></li>
+<li class="lvl2"><a href="#media-query-media">Media query — @media</a></li>
+<li class="lvl2"><a href="#mobile-first-yondashuv">Mobile-first yondashuv</a></li>
+<li class="lvl2"><a href="#breakpointlar">Breakpointlar</a></li>
+<li class="lvl2"><a href="#moslashuvchan-rasm-va-matn">Moslashuvchan rasm va matn</a></li>
+<li class="lvl2"><a href="#amaliy-misol-moslashuvchan-karta-panjarasi">Amaliy misol: moslashuvchan karta panjarasi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Responsive dizayn</strong> (moslashuvchan dizayn) — saytning telefon, planshet va kompyuterning turli ekran o'lchamlarida bir xil chiroyli va qulay ko'rinishini ta'minlash usuli. Bugungi kunda internet trafikning katta qismi telefonlardan keladi, shuning uchun sayt <strong>har qanday ekranga moslashishi</strong> — majburiy talab. Bu darsda saytni moslashuvchan qilishning barcha asosiy vositalarini o'rganamiz.</p>
 <div class="note">Responsive dizaynning uch ustuni: <strong>moslashuvchan birliklar</strong> (px o'rniga %, rem, vw), <strong>media query'lar</strong> (ekran o'lchamiga qarab uslubni o'zgartirish) va <strong>moslashuvchan rasmlar</strong>. Bularni birga ishlatib, bitta kod bilan barcha qurilmalarga xizmat qilasiz.</div>
-<h2>Nega px yetarli emas?</h2>
+<h2 id="nega-px-yetarli-emas">Nega px yetarli emas?</h2>
 <p><code>px</code> (piksel) — qat'iy (fixed) birlik. Agar butun saytni piksellar bilan qursangiz (masalan, <code>width: 960px</code>), u telefon ekranida (kengligi ~360px) sig'may qoladi va foydalanuvchi gorizontal aylantirishga majbur bo'ladi. Shuning uchun moslashuvchan birliklar kerak.</p>
-<h2>CSS birliklari</h2>
+<h2 id="css-birliklari">CSS birliklari</h2>
 <p>Bir necha muhim birlik bor. Ularni to'g'ri tanlash — responsive dizaynning yarmini hal qiladi:</p>
-<h3>px — piksel (mutlaq)</h3>
+<h3 id="px-piksel-mutlaq">px — piksel (mutlaq)</h3>
 <p>Qat'iy o'lcham. Chegara qalinligi (<code>border</code>) yoki juda aniq bo'lishi kerak bo'lgan kichik o'lchamlar uchun mos. Katta joylashuvlar uchun tavsiya etilmaydi.</p>
-<h3>% — foiz (nisbiy)</h3>
+<h3 id="foiz-nisbiy">% — foiz (nisbiy)</h3>
 <p><strong>Ota elementga nisbatan</strong> o'lcham. <code>width: 50%</code> — ota elementning yarmi kengligi. Ota o'zgarsa, farzand ham moslashadi. Moslashuvchan kengliklar uchun juda foydali.</p>
 <pre class="code"><code>.yon-panel {
   width: 30%;
@@ -612,9 +634,9 @@
 .asosiy {
   width: 70%;
 }</code></pre>
-<h3>em — ota shriftga nisbatan</h3>
+<h3 id="em-ota-shriftga-nisbatan">em — ota shriftga nisbatan</h3>
 <p><code>1em</code> = ota elementning shrift o'lchami. Agar ota shrifti 16px bo'lsa, <code>2em</code> = 32px. Muammosi: em'lar bir-birining ichida <strong>ko'payib ketishi</strong> mumkin (ichma-ich elementlarda).</p>
-<h3>rem — ildiz shriftga nisbatan (eng tavsiya etiladigan)</h3>
+<h3 id="rem-ildiz-shriftga-nisbatan-eng-tavsiya-etiladigan">rem — ildiz shriftga nisbatan (eng tavsiya etiladigan)</h3>
 <p><code>rem</code> (root em) har doim <strong>ildiz elementga</strong> (<code>&lt;html&gt;</code>) nisbatan hisoblanadi. Standart holatda <code>html</code> shrifti 16px, demak <code>1rem = 16px</code>, <code>1.5rem = 24px</code>. em'ning ko'payib ketish muammosi rem'da yo'q, shuning uchun rem — o'lcham va masofalar uchun eng ishonchli tanlov.</p>
 <pre class="code"><code>html {
   font-size: 16px;   /* 1rem = 16px */
@@ -627,17 +649,17 @@ h1 {
   padding: 1.5rem;   /* 24px */
 }</code></pre>
 <div class="tip">Amaliy maslahat: shriftlar va masofalar (padding, margin) uchun <strong>rem</strong>ni asosiy birlik qiling. Foydalanuvchi brauzer sozlamasida shrift o'lchamini kattalashtirsa, butun sayt (rem'ga asoslangani uchun) mutanosib ravishda kattalashadi — bu qulaylik uchun juda muhim.</div>
-<h3>vw va vh — ekran o'lchamiga nisbatan</h3>
+<h3 id="vw-va-vh-ekran-o-lchamiga-nisbatan">vw va vh — ekran o'lchamiga nisbatan</h3>
 <p><code>vw</code> (viewport width) — ekran kengligining 1%'i; <code>vh</code> (viewport height) — ekran balandligining 1%'i. <code>100vw</code> = butun ekran kengligi, <code>100vh</code> = butun ekran balandligi. To'liq ekranli bo'limlar (hero section) uchun juda qulay:</p>
 <pre class="code"><code>.hero {
   width: 100vw;
   height: 100vh;   /* butun ekranni egallaydi */
 }</code></pre>
-<h2>Viewport meta tegi — birinchi qadam</h2>
+<h2 id="viewport-meta-tegi-birinchi-qadam">Viewport meta tegi — birinchi qadam</h2>
 <p>Responsive sayt yaratishning <strong>eng birinchi</strong> va majburiy qadami — HTML'ning <code>&lt;head&gt;</code> qismiga viewport meta tegini qo'yish. Usiz media query'lar telefonda to'g'ri ishlamaydi:</p>
 <pre class="code"><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
 <div class="warn">Bu qatorni unutmang! U bo'lmasa, telefon saytni kompyuter kengligida ko'rsatib, keyin kichraytiradi — natijada matn juda mayda bo'lib qoladi va media query'lar ishlamaydi. Bu — boshlang'ich dasturchilarning eng ko'p qiladigan xatosi.</div>
-<h2>Media query — @media</h2>
+<h2 id="media-query-media">Media query — @media</h2>
 <p><strong>Media query</strong> — ekran o'lchamiga (yoki boshqa shartga) qarab turli CSS qoidalarini qo'llash imkonini beradi. U <code>@media</code> bilan boshlanadi va ichida shart hamda odatiy CSS qoidalari bo'ladi:</p>
 <pre class="code"><code>/* Ekran kengligi 600px yoki undan kichik bo'lsa */
 @media (max-width: 600px) {
@@ -650,7 +672,7 @@ h1 {
 }</code></pre>
 <p>Bu shunday ishlaydi: ekran 600px'dan keng bo'lsa, ichkaridagi qoidalar <strong>e'tiborga olinmaydi</strong>; ekran 600px yoki tor bo'lsa, ular qo'llaniladi. Shu tarzda telefonda joylashuvni gorizontaldan vertikalga o'zgartirasiz.</p>
 <ul><li><code>max-width: 600px</code> — ekran shu qiymat yoki undan <strong>tor</strong> bo'lganda;</li><li><code>min-width: 600px</code> — ekran shu qiymat yoki undan <strong>keng</strong> bo'lganda.</li></ul>
-<h2>Mobile-first yondashuv</h2>
+<h2 id="mobile-first-yondashuv">Mobile-first yondashuv</h2>
 <p>Ikki xil yondashuv bor: <strong>desktop-first</strong> (avval katta ekran, keyin <code>max-width</code> bilan kichraytirish) va <strong>mobile-first</strong> (avval telefon, keyin <code>min-width</code> bilan kattalashtirish). Zamonaviy amaliyot — <strong>mobile-first</strong>.</p>
 <p>Mobile-first'da asosiy CSS'ni eng kichik (telefon) ekran uchun yozasiz, so'ng <code>min-width</code> media query'lari bilan kattaroq ekranlarga qo'shimchalar qo'shasiz:</p>
 <pre class="code"><code>/* Asosiy uslub — telefon uchun (mobile-first) */
@@ -672,11 +694,11 @@ h1 {
   }
 }</code></pre>
 <div class="tip">Mobile-first afzalliklari: telefonlar ko'pchilikda, shuning uchun asosiy kod ular uchun optimallashadi; kod soddaroq va progressiv (kichikdan kattaga) bo'ladi; kam quvvatli qurilmalar keraksiz uslublarni yuklamaydi.</div>
-<h2>Breakpointlar</h2>
+<h2 id="breakpointlar">Breakpointlar</h2>
 <p><strong>Breakpoint</strong> — joylashuv o'zgaradigan ekran kengligi (media query'dagi qiymat). Universal standart yo'q, lekin keng tarqalgan qiymatlar:</p>
 <ul><li><strong>~480px</strong> — kichik telefonlar;</li><li><strong>~768px</strong> — planshetlar;</li><li><strong>~1024px</strong> — kichik noutbuklar;</li><li><strong>~1280px va undan katta</strong> — katta ekranlar.</li></ul>
 <div class="note">Breakpointlarni qat'iy qurilma o'lchamiga emas, saytingiz <strong>joylashuvi buzilgan</strong> nuqtaga qarab tanlang. Sahifani asta-sekin toraytirib, dizayn qachon "buzila" boshlasa, o'sha yerga breakpoint qo'ying — bu eng amaliy usul.</div>
-<h2>Moslashuvchan rasm va matn</h2>
+<h2 id="moslashuvchan-rasm-va-matn">Moslashuvchan rasm va matn</h2>
 <p>Rasmlar ota elementdan chiqib ketmasligi uchun ularga oddiy, lekin muhim qoida beriladi:</p>
 <pre class="code"><code>img {
   max-width: 100%;
@@ -689,7 +711,7 @@ h1 {
   font-size: clamp(1.5rem, 5vw, 3rem);
 }</code></pre>
 <p>Bu shuni anglatadi: shrift ekran bilan (5vw) o'sadi, lekin hech qachon 1.5rem'dan kichik yoki 3rem'dan katta bo'lmaydi. Media query'siz moslashuvchan sarlavha!</p>
-<h2>Amaliy misol: moslashuvchan karta panjarasi</h2>
+<h2 id="amaliy-misol-moslashuvchan-karta-panjarasi">Amaliy misol: moslashuvchan karta panjarasi</h2>
 <p>Grid va media query birgalikda — telefonda 1 ustun, planshetda 2, kompyuterda 3 ustunli galereya:</p>
 <pre class="code"><code>/* Mobile-first: 1 ustun */
 .galereya {
@@ -705,7 +727,7 @@ h1 {
 @media (min-width: 1024px) {
   .galereya { grid-template-columns: repeat(3, 1fr); }
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Responsive dizayn</strong> — sayt barcha ekranlarga moslashishi;</li><li>Birliklar: <code>px</code> (qat'iy), <code>%</code> (otaga nisbatan), <code>rem</code> (ildizga — tavsiya etiladi), <code>vw</code>/<code>vh</code> (ekranga);</li><li>Majburiy birinchi qadam — <strong>viewport meta tegi</strong>;</li><li><code>@media</code> — ekran o'lchamiga qarab uslubni o'zgartiradi (<code>min-width</code>/<code>max-width</code>);</li><li><strong>Mobile-first</strong> — avval telefon uchun, keyin <code>min-width</code> bilan kattalashtirish;</li><li><strong>Breakpoint</strong>larni dizayn buzilgan nuqtaga qarab tanlang;</li><li><code>img { max-width: 100%; height: auto; }</code> — moslashuvchan rasm;</li><li><code>clamp()</code> — media query'siz moslashuvchan shrift o'lchami.</li></ul>
 <nav class="lesson-nav">
   <a href="css-grid.html"><span class="dir">← Oldingi</span><span class="ttl">CSS Grid</span></a>
@@ -719,6 +741,6 @@ h1 {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

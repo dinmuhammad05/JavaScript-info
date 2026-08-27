@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skroll — Kodla</title>
   <meta name="description" content="scroll hodisasi; skrollni event bilan to'xtatib bo'lmasligi va uni oldini olishning to'g'ri usullari; &quot;cheksiz sahifa&quot; (infinite scroll) g'oyasi va uni amalga oshirish yondashuvi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,20 @@
 <main class="content article">
 <div class="crumbs">UI hodisalari</div>
 <h1>Skroll</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#scroll-hodisasi">scroll hodisasi</a></li>
+<li class="lvl2"><a href="#skrollni-scroll-hodisasi-bilan-to-xtatib-bo-lmaydi">Skrollni scroll hodisasi bilan to'xtatib bo'lmaydi</a></li>
+<li class="lvl3"><a href="#skrollni-to-g-ri-oldini-olish-usullari">Skrollni to'g'ri oldini olish usullari</a></li>
+<li class="lvl2"><a href="#amaliy-misol-yuqoriga-tugmasi">Amaliy misol: "Yuqoriga" tugmasi</a></li>
+<li class="lvl2"><a href="#cheksiz-sahifa-infinite-scroll">Cheksiz sahifa (infinite scroll)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>scroll</code> hodisasi foydalanuvchi sahifani yoki elementni skroll qilganda ishga tushadi. Bundan foydali narsalar qilish mumkin: skroll pozitsiyasiga qarab qo'shimcha kontent yuklash, "yuqoriga" tugmasini ko'rsatish, yoki skroll bo'yicha animatsiyalar qilish. Bu darsda skrollning o'ziga xosliklarini chuqur ko'rib chiqamiz.</p>
 <div class="warn">Bu darsdagi misollar statik — skroll hodisasi playground'da ishlamaydi. Ularni haqiqiy sahifada sinang.</div>
-<h2>scroll hodisasi</h2>
+<h2 id="scroll-hodisasi">scroll hodisasi</h2>
 <p><code>scroll</code> hodisasi <code>window</code>da (butun sahifa skrolli uchun) yoki istalgan skrollanadigan elementda ishlaydi:</p>
 <pre class="code"><code>window.addEventListener('scroll', function() {
   console.log('Skroll pozitsiyasi: ' + window.pageYOffset);
@@ -615,14 +629,14 @@
   }
 });</code></pre>
 <div class="tip"><code>scroll</code> hodisasi juda tez-tez ishga tushadi (foydalanuvchi skroll qilganda har lahzada). Shuning uchun ishlov beruvchi ichida og'ir hisob-kitob qilmang. Zarur bo'lsa, throttle (chastotani cheklash) yoki <code>requestAnimationFrame</code> texnikasini qo'llang — aks holda sahifa "sekinlashadi" (lag).</div>
-<h2>Skrollni scroll hodisasi bilan to'xtatib bo'lmaydi</h2>
+<h2 id="skrollni-scroll-hodisasi-bilan-to-xtatib-bo-lmaydi">Skrollni scroll hodisasi bilan to'xtatib bo'lmaydi</h2>
 <p>Muhim va ko'pincha adashtiradigan nuqta: <code>scroll</code> hodisasida <code>event.preventDefault()</code> chaqirsangiz ham, skroll <strong>to'xtamaydi</strong>.</p>
 <p>Sabab: <code>scroll</code> hodisasi skroll <strong>allaqachon sodir bo'lgandan keyin</strong> ishga tushadi — ya'ni u "xabar berish" (reaksiya) hodisasi, boshqarish hodisasi emas. Uni bekor qilib skrollni orqaga qaytarib bo'lmaydi.</p>
 <pre class="code"><code>// BU ISHLAMAYDI — skroll baribir sodir bo'ladi:
 window.addEventListener('scroll', function(event) {
   event.preventDefault(); // hech qanday ta'sir yo'q
 });</code></pre>
-<h3>Skrollni to'g'ri oldini olish usullari</h3>
+<h3 id="skrollni-to-g-ri-oldini-olish-usullari">Skrollni to'g'ri oldini olish usullari</h3>
 <p>Skrollning oldini olish uchun uni <strong>keltirib chiqaruvchi</strong> hodisani to'xtatish kerak. Masalan, klaviatura yoki sichqoncha g'ildiragi (wheel) hodisasini:</p>
 <ul><li><code>keydown</code> hodisasida <code>PageDown</code>, <code>ArrowDown</code> kabi skroll qiluvchi tugmalarni <code>preventDefault()</code> bilan to'xtatish.</li><li><code>wheel</code> hodisasida (sichqoncha g'ildiragi) <code>preventDefault()</code> ishlatish.</li></ul>
 <p>Eng ishonchli va oddiy yechim esa CSS orqali: elementga <code>overflow: hidden</code> berish skrollni butunlay o'chiradi. Modal oynalar ochilganda tagdagi sahifa skrollini bloklashda aynan shu ishlatiladi:</p>
@@ -632,7 +646,7 @@ document.body.style.overflow = 'hidden';
 // Modal yopilganda tiklash:
 document.body.style.overflow = '';</code></pre>
 <div class="note">Yana bir zamonaviy CSS xossasi — <code>overscroll-behavior</code>. U skroll bir elementdan otasiga "o'tib ketishini" (scroll chaining) nazorat qiladi. Masalan, ichki panel oxiriga yetganda butun sahifaning skroll bo'lib ketishini oldini olishda foydali.</div>
-<h2>Amaliy misol: "Yuqoriga" tugmasi</h2>
+<h2 id="amaliy-misol-yuqoriga-tugmasi">Amaliy misol: "Yuqoriga" tugmasi</h2>
 <p>Skrollga qarab tugmani ko'rsatish/yashirishning oddiy misoli. Foydalanuvchi ma'lum masofaga pastga tushganda "yuqoriga qaytish" tugmasi paydo bo'ladi:</p>
 <pre class="code"><code>window.addEventListener('scroll', function() {
   if (window.pageYOffset &gt; 500) {
@@ -645,7 +659,7 @@ document.body.style.overflow = '';</code></pre>
 upButton.onclick = function() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };</code></pre>
-<h2>Cheksiz sahifa (infinite scroll)</h2>
+<h2 id="cheksiz-sahifa-infinite-scroll">Cheksiz sahifa (infinite scroll)</h2>
 <p>"Cheksiz sahifa" — bu ko'p ijtimoiy tarmoqlarda ko'radigan xatti-harakat: foydalanuvchi pastga skroll qilgani sari yangi kontent avtomatik yuklanadi va sahifa "tugamaydi". Bunga <code>scroll</code> hodisasi asosida erishiladi.</p>
 <p>G'oya sodda: har bir skrollda hujjat oxiriga qancha yaqin qolganini tekshiramiz. Agar yetarlicha yaqin bo'lsak — yangi kontent bo'lagini yuklab, sahifa oxiriga qo'shamiz:</p>
 <pre class="code"><code>window.addEventListener('scroll', function() {
@@ -674,7 +688,7 @@ window.addEventListener('scroll', function() {
   }
 });</code></pre>
 <div class="tip">Zamonaviy loyihalarda cheksiz skroll uchun <code>scroll</code> hodisasi o'rniga ko'pincha <code>IntersectionObserver</code> ishlatiladi — u sahifa oxiriga qo'yilgan "nishon" element ko'rinishga kirganini samaraliroq va tejamli kuzatadi. <code>scroll</code> hodisasidan farqli, u har lahzada ishga tushmaydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>scroll</code> hodisasi <code>window</code>da yoki skrollanadigan elementda skrolldan <strong>keyin</strong> ishga tushadi.</li><li>Uni <code>preventDefault()</code> bilan to'xtatib bo'lmaydi — skrollni oldini olish uchun uni keltirib chiqaruvchi hodisani (<code>keydown</code>, <code>wheel</code>) yoki CSS'ni (<code>overflow: hidden</code>) ishlating.</li><li><code>scroll</code> juda tez-tez ishga tushadi — og'ir hisob-kitobdan saqlaning, throttle yoki <code>requestAnimationFrame</code> qo'llang.</li><li>Cheksiz sahifa (infinite scroll) — sahifa oxiriga yaqinlashganda kontent yuklab qo'shish; yuklanish bayrog'i bilan takroriy so'rovlarni oldini oling.</li><li>Zamonaviy muqobil — <code>IntersectionObserver</code>, u samaraliroq.</li></ul>
 <nav class="lesson-nav">
   <a href="klaviatura.html"><span class="dir">← Oldingi</span><span class="ttl">Klaviatura: keydown va keyup</span></a>
@@ -688,6 +702,6 @@ window.addEventListener('scroll', function() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

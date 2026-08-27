@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ruxsatlar va egalik — Kodla</title>
   <meta name="description" content="rwx ruxsatlar, chmod (raqamli va belgili), chown, foydalanuvchi va guruh tushunchasi, sudo va root, su buyrug'i.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,18 +599,32 @@
 <main class="content article">
 <div class="crumbs">Linux va terminal</div>
 <h1>Ruxsatlar va egalik</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#ruxsatlarni-ko-rish">Ruxsatlarni ko'rish</a></li>
+<li class="lvl2"><a href="#rwx-uch-xil-ruxsat">rwx — uch xil ruxsat</a></li>
+<li class="lvl2"><a href="#chmod-ruxsatlarni-o-zgartirish-raqamli-usul">chmod — ruxsatlarni o'zgartirish (raqamli usul)</a></li>
+<li class="lvl2"><a href="#chmod-belgili-usul">chmod — belgili usul</a></li>
+<li class="lvl2"><a href="#foydalanuvchi-va-guruh">Foydalanuvchi va guruh</a></li>
+<li class="lvl2"><a href="#chown-egani-o-zgartirish">chown — egani o'zgartirish</a></li>
+<li class="lvl2"><a href="#root-va-sudo">root va sudo</a></li>
+<li class="lvl2"><a href="#su-foydalanuvchini-almashtirish">su — foydalanuvchini almashtirish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Linux — ko'p foydalanuvchili tizim. Shu bois har bir faylning kim o'qiy oladi, kim o'zgartira oladi, kim ishga tushira oladi degan qat'iy qoidalari bor. Bu darsda <strong>ruxsatlar</strong> (permissions) va <strong>egalik</strong> (ownership) tizimini, hamda administrator huquqlari bilan ishlashni o'rganamiz.</p>
-<h2>Ruxsatlarni ko'rish</h2>
+<h2 id="ruxsatlarni-ko-rish">Ruxsatlarni ko'rish</h2>
 <p><code>ls -l</code> natijasining eng chapidagi belgilar aynan ruxsatlarni bildiradi:</p>
 <pre class="code"><code>-rw-r--r-- 1 aziz dasturchilar 2048 Jul  1 10:30 hujjat.txt</code></pre>
 <p>Boshidagi 10 belgini bo'lib olaylik: <code>-</code> <code>rw-</code> <code>r--</code> <code>r--</code>.</p>
 <ul><li>1-belgi (<code>-</code>) — <strong>tur</strong>: <code>-</code> oddiy fayl, <code>d</code> papka, <code>l</code> havola (link);</li><li>keyingi 3 (<code>rw-</code>) — <strong>egasi</strong> (owner) uchun ruxsatlar;</li><li>keyingi 3 (<code>r--</code>) — <strong>guruh</strong> (group) uchun ruxsatlar;</li><li>oxirgi 3 (<code>r--</code>) — <strong>boshqalar</strong> (others) uchun ruxsatlar.</li></ul>
-<h2>rwx — uch xil ruxsat</h2>
+<h2 id="rwx-uch-xil-ruxsat">rwx — uch xil ruxsat</h2>
 <p>Har bir uchlikda uchta harf bo'lishi mumkin:</p>
 <ul><li><code>r</code> (read) — <strong>o'qish</strong>: fayl mazmunini ko'rish; papka uchun — ichidagilar ro'yxatini olish;</li><li><code>w</code> (write) — <strong>yozish</strong>: fayl mazmunini o'zgartirish; papka uchun — ichida fayl yaratish/o'chirish;</li><li><code>x</code> (execute) — <strong>bajarish</strong>: faylni dastur sifatida ishga tushirish; papka uchun — ichiga <code>cd</code> bilan kirish.</li></ul>
 <p>Agar ruxsat bo'lmasa, o'sha o'rinda <code>-</code> turadi. Masalan, <code>rw-</code> — o'qish va yozish bor, bajarish yo'q. <code>r-x</code> — o'qish va bajarish bor, yozish yo'q.</p>
 <p>Demak, <code>-rw-r--r--</code> shuni bildiradi: egasi o'qiy va yoza oladi, guruh faqat o'qiy oladi, boshqalar ham faqat o'qiy oladi.</p>
-<h2>chmod — ruxsatlarni o'zgartirish (raqamli usul)</h2>
+<h2 id="chmod-ruxsatlarni-o-zgartirish-raqamli-usul">chmod — ruxsatlarni o'zgartirish (raqamli usul)</h2>
 <p><code>chmod</code> (change mode) ruxsatlarni o'zgartiradi. Eng ko'p ishlatiladigan <strong>raqamli</strong> (octal) usulda har bir ruxsatga son beriladi:</p>
 <ul><li><code>r</code> = <strong>4</strong></li><li><code>w</code> = <strong>2</strong></li><li><code>x</code> = <strong>1</strong></li></ul>
 <p>Har uchlik uchun kerakli ruxsatlar yig'indisi hisoblanadi. Masalan: <code>rwx</code> = 4+2+1 = <strong>7</strong>; <code>rw-</code> = 4+2 = <strong>6</strong>; <code>r-x</code> = 4+1 = <strong>5</strong>; <code>r--</code> = <strong>4</strong>. Uch uchlik uchun uch raqam yoziladi (egasi, guruh, boshqalar):</p>
@@ -617,7 +634,7 @@ chmod 600 maxfiy.txt    # rw------- (faqat egasi o'qiy/yoza oladi)
 chmod 777 hamma.txt     # rwxrwxrwx (hamma hamma narsa qila oladi)</code></pre>
 <p>Eng ko'p uchraydigan qiymatlar: <code>644</code> — oddiy fayllar uchun, <code>755</code> — papkalar va skriptlar uchun, <code>600</code> — maxfiy fayllar (parollar, kalitlar) uchun.</p>
 <div class="warn"><code>chmod 777</code> — "hamma hamma narsa qila oladi" degani. Bu <strong>xavfsizlik uchun juda yomon</strong>! Boshqa foydalanuvchilar faylingizni o'zgartira, o'chira oladi. Muammoni hal qildim deb <code>777</code> qo'yish — yangi boshlovchining eng ko'p qiladigan xatosi. Aniq kerakli minimal ruxsatni bering.</div>
-<h2>chmod — belgili usul</h2>
+<h2 id="chmod-belgili-usul">chmod — belgili usul</h2>
 <p>Ruxsatlarni harflar bilan ham o'zgartirish mumkin. Bu usulda kimga (<code>u</code>=egasi, <code>g</code>=guruh, <code>o</code>=boshqalar, <code>a</code>=hammasi), qanday amal (<code>+</code>=qo'shish, <code>-</code>=olib tashlash, <code>=</code>=aniq belgilash) va qaysi ruxsat (<code>r</code>/<code>w</code>/<code>x</code>) ko'rsatiladi:</p>
 <pre class="code"><code>chmod +x skript.sh       # hammaga bajarish ruxsatini qo'shish
 chmod u+x skript.sh      # faqat egasiga bajarish ruxsati
@@ -625,13 +642,13 @@ chmod g-w hujjat.txt     # guruhdan yozish ruxsatini olib tashlash
 chmod o-r maxfiy.txt     # boshqalardan o'qish ruxsatini olib tashlash
 chmod a+r ochiq.txt      # hammaga o'qish ruxsati</code></pre>
 <div class="tip">Skriptni ishga tushirib bo'lmayotgan bo'lsa ("Permission denied"), deyarli har doim sabab — bajarish ruxsati yo'qligi. Yechim: <code>chmod +x skript.sh</code>. Buni bash skriptlari darsida yana ko'ramiz.</div>
-<h2>Foydalanuvchi va guruh</h2>
+<h2 id="foydalanuvchi-va-guruh">Foydalanuvchi va guruh</h2>
 <p>Har bir faylning bir <strong>egasi</strong> (user) va bir <strong>guruhi</strong> (group) bo'ladi. Guruh — bir necha foydalanuvchini birlashtiradigan tushuncha. Masalan, "dasturchilar" guruhidagi hamma a'zo shu guruhga tegishli fayllarga birdek ruxsat oladi.</p>
 <p>Joriy foydalanuvchi va uning guruhlarini ko'rish:</p>
 <pre class="code"><code>whoami    # joriy foydalanuvchi nomi
 id        # foydalanuvchi va guruh ID'lari
 groups    # a'zo bo'lgan guruhlar ro'yxati</code></pre>
-<h2>chown — egani o'zgartirish</h2>
+<h2 id="chown-egani-o-zgartirish">chown — egani o'zgartirish</h2>
 <p><code>chown</code> (change owner) faylning egasini va/yoki guruhini o'zgartiradi. Sintaksis: <code>chown egasi:guruh fayl</code>:</p>
 <pre class="code"><code>chown aziz hujjat.txt              # egasini 'aziz' qilish
 chown aziz:dasturchilar hujjat.txt # egasi va guruhni birga
@@ -639,7 +656,7 @@ chown :dasturchilar hujjat.txt     # faqat guruhni o'zgartirish</code></pre>
 <p>Papka va ichidagi hamma narsani birdaniga o'zgartirish uchun <code>-R</code> (rekursiv):</p>
 <pre class="code"><code>chown -R aziz:aziz /home/aziz/loyiha</code></pre>
 <div class="note">Egalikni o'zgartirish odatda administrator (root) huquqini talab qiladi, chunki boshqa birovning faylini o'zlashtirib olish xavfli bo'lardi. Shu bois <code>chown</code> ko'pincha <code>sudo</code> bilan ishlatiladi (quyida).</div>
-<h2>root va sudo</h2>
+<h2 id="root-va-sudo">root va sudo</h2>
 <p><strong>root</strong> — Linuxdagi bosh administrator, cheksiz huquqli "super foydalanuvchi". U istalgan faylni o'zgartira, o'chira, tizim sozlamalarini o'zgartira oladi. Kundalik ishda root sifatida ishlash <strong>xavfli</strong> — bitta xato butun tizimni buzishi mumkin.</p>
 <p>Shu sabab odatda oddiy foydalanuvchi sifatida ishlaymiz, faqat administrator huquqi kerak bo'lganda <strong>sudo</strong> (superuser do) buyrug'ini oldiga qo'shamiz:</p>
 <pre class="code"><code>sudo apt update              # paket ro'yxatini yangilash
@@ -647,13 +664,13 @@ sudo chown aziz fayl.txt     # egalikni o'zgartirish
 sudo nano /etc/hosts         # tizim faylini tahrirlash</code></pre>
 <p><code>sudo</code> yozganingizda tizim <strong>parolingizni</strong> so'raydi. To'g'ri kiritsangiz, buyruq administrator huquqi bilan bajariladi. Parol yozayotganda ekranda hech narsa ko'rinmaydi — bu normal, xavfsizlik uchun shunday.</p>
 <div class="warn"><code>sudo</code> — o'tkir pichoq: to'g'ri ishlatilsa foydali, ehtiyotsizlik esa tizimni buzadi. Internetdan ko'chirib olgan har qanday <code>sudo</code> buyrug'ini yaxshilab tushunmasdan ishga tushirmang. Ayniqsa <code>sudo rm -rf</code> kabi buyruqlardan ehtiyot bo'ling.</div>
-<h2>su — foydalanuvchini almashtirish</h2>
+<h2 id="su-foydalanuvchini-almashtirish">su — foydalanuvchini almashtirish</h2>
 <p><code>su</code> (switch user) boshqa foydalanuvchiga o'tish imkonini beradi:</p>
 <pre class="code"><code>su aziz        # 'aziz' foydalanuvchiga o'tish (uning parolini so'raydi)
 su -           # root'ga to'liq o'tish (root parolini so'raydi)</code></pre>
 <p><code>su -</code> (chiziqcha bilan) — nafaqat foydalanuvchini, balki uning muhitini (uy papkasi, o'zgaruvchilar) ham to'liq oladi. Root sessiyasidan chiqish uchun <code>exit</code> yoki <strong>Ctrl+D</strong> bosiladi.</p>
 <div class="note">Ubuntuda root paroli odatda o'rnatilmagan, shuning uchun <code>su -</code> o'rniga <code>sudo -i</code> ishlatiladi — bu joriy foydalanuvchi paroli bilan root qobig'iga o'tkazadi. Amalda <code>sudo</code> yondashuvi <code>su</code>dan xavfsizroq hisoblanadi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Har fayl uch guruh uchun ruxsatga ega: <strong>egasi</strong>, <strong>guruh</strong>, <strong>boshqalar</strong>;</li><li><code>r</code>=o'qish (4), <code>w</code>=yozish (2), <code>x</code>=bajarish (1);</li><li><code>chmod 644</code>/<code>755</code>/<code>600</code> — raqamli usul; <code>chmod +x</code> — belgili usul;</li><li><code>chmod 777</code>dan qoching — bu jiddiy xavfsizlik teshigi;</li><li><code>chown egasi:guruh fayl</code> — egalikni o'zgartiradi (odatda <code>sudo</code> bilan);</li><li><strong>root</strong> — cheksiz huquqli administrator; kundalik ishda undan foydalanmang;</li><li><code>sudo</code> — bitta buyruqni administrator huquqi bilan bajaradi (parol so'raydi);</li><li><code>su</code> — boshqa foydalanuvchiga o'tadi; Ubuntuda <code>sudo -i</code> afzal.</li></ul>
 <nav class="lesson-nav">
   <a href="fayl-buyruqlar.html"><span class="dir">← Oldingi</span><span class="ttl">Fayllar bilan ishlash</span></a>
@@ -667,6 +684,6 @@ su -           # root'ga to'liq o'tish (root parolini so'raydi)</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

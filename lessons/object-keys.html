@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Object.keys, values, entries — Kodla</title>
   <meta name="description" content="Obyekt kalitlari, qiymatlari va juftliklarini massiv sifatida olish; ular ustida aylanish va qayta yig'ish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,24 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Object.keys, values, entries</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nima-uchun-kerak">Nima uchun kerak?</a></li>
+<li class="lvl2"><a href="#sintaksis-va-birinchi-misol">Sintaksis va birinchi misol</a></li>
+<li class="lvl2"><a href="#for-of-bilan-aylanish">for..of bilan aylanish</a></li>
+<li class="lvl2"><a href="#amaliy-misol-qiymatlar-yig-indisi">Amaliy misol: qiymatlar yig'indisi</a></li>
+<li class="lvl2"><a href="#obyektni-o-zgartirish-entries-fromentries">Obyektni o'zgartirish: entries + fromEntries</a></li>
+<li class="lvl2"><a href="#map-bilan-farqi">Map bilan farqi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Massivlarda <code>map</code>, <code>filter</code>, <code>reduce</code> kabi qulay metodlar bor edi. Oddiy obyektlar uchun ham xuddi shunga o'xshash universal metodlar mavjud: <code>Object.keys</code>, <code>Object.values</code> va <code>Object.entries</code>. Ushbu darsda ular bilan chuqur tanishamiz.</p>
-<h2>Nima uchun kerak?</h2>
+<h2 id="nima-uchun-kerak">Nima uchun kerak?</h2>
 <p>Ba'zan obyektning barcha kalitlari yoki qiymatlari ustida aylanish (iteratsiya) kerak bo'ladi. Buni <code>for..in</code> orqali qilsak bo'ladi, ammo ko'pincha bizga <strong>massiv</strong> qulayroq — chunki massivda <code>map</code>, <code>filter</code>, <code>sort</code> kabi kuchli metodlar bor.</p>
 <p>Aynan shu yerda uch metod yordamga keladi. Ular obyektni <strong>massivga</strong> aylantirib beradi:</p>
 <ul><li><code>Object.keys(obj)</code> — kalitlar massivini qaytaradi;</li><li><code>Object.values(obj)</code> — qiymatlar massivini qaytaradi;</li><li><code>Object.entries(obj)</code> — <code>[kalit, qiymat]</code> juftliklari massivini qaytaradi.</li></ul>
-<h2>Sintaksis va birinchi misol</h2>
+<h2 id="sintaksis-va-birinchi-misol">Sintaksis va birinchi misol</h2>
 <p>E'tibor bering: bu metodlar <code>obj.keys()</code> emas, balki <code>Object.keys(obj)</code> ko'rinishida chaqiriladi — ya'ni obyekt argument sifatida uzatiladi. Bu ataylab shunday qilingan, sababini keyinroq tushuntiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>object-keys.js</span></div><textarea spellcheck="false">let user = {
   ism: "Jasur",
@@ -613,7 +628,7 @@ console.log( Object.values(user) );  // [ 'Jasur', 30 ]
 console.log( Object.entries(user) ); // [ [ 'ism', 'Jasur' ], [ 'yosh', 30 ] ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Ko'rib turganingizdek, uchala metod ham natijani <strong>haqiqiy massiv</strong> sifatida qaytaradi. Demak, ular ustida massivning barcha metodlarini bemalol ishlatishimiz mumkin.</p>
 <div class="note">Bu metodlar faqat obyektning <strong>o'ziga tegishli</strong> (own) kalitlarini oladi — prototipdan meros qilib olingan xossalarni hisobga olmaydi. Bu odatda aynan bizga kerak bo'lgan xatti-harakat.</div>
-<h2>for..of bilan aylanish</h2>
+<h2 id="for-of-bilan-aylanish">for..of bilan aylanish</h2>
 <p>Bu metodlar massiv qaytargani uchun, ular ustida <code>for..of</code> sikli bilan qulay aylanamiz. Obyektning o'zi ustida <code>for..of</code> ishlamaydi (chunki oddiy obyekt iterable emas), lekin metodlar qaytargan massiv ustida ishlaydi.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for-of-values.js</span></div><textarea spellcheck="false">let narxlar = {
   non: 4000,
@@ -645,7 +660,7 @@ for (let [mahsulot, narx] of Object.entries(narxlar)) {
 // non: 4000 so'm
 // sut: 12000 so'm
 // choy: 8000 so'm</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Amaliy misol: qiymatlar yig'indisi</h2>
+<h2 id="amaliy-misol-qiymatlar-yig-indisi">Amaliy misol: qiymatlar yig'indisi</h2>
 <p>Aytaylik, barcha narxlar yig'indisini hisoblamoqchimiz. <code>Object.values</code> massiv qaytargani uchun, biz massivning <code>reduce</code> metodidan foydalanamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>values-sum.js</span></div><textarea spellcheck="false">let narxlar = {
   non: 4000,
@@ -657,7 +672,7 @@ let jami = Object.values(narxlar).reduce((sum, narx) =&gt; sum + narx, 0);
 
 console.log(jami); // 24000</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Xuddi shunday, obyektning qiymatlarini filtrlash, saralash yoki o'zgartirish kerak bo'lsa — avval <code>Object.values</code> (yoki <code>entries</code>) bilan massivga o'ting, so'ng massiv metodlaridan foydalaning.</div>
-<h2>Obyektni o'zgartirish: entries + fromEntries</h2>
+<h2 id="obyektni-o-zgartirish-entries-fromentries">Obyektni o'zgartirish: entries + fromEntries</h2>
 <p>Massivlarda <code>map</code>, <code>filter</code> bor, lekin obyektlarda yo'q. Shuning uchun obyektni o'zgartirishning eng qulay yo'li shunday:</p>
 <ol><li><code>Object.entries(obj)</code> orqali <code>[kalit, qiymat]</code> juftliklari massivini olamiz;</li><li>Massivning <code>map</code> yoki <code>filter</code> metodini qo'llaymiz;</li><li>Natijani <code>Object.fromEntries(massiv)</code> orqali yana obyektga aylantiramiz.</li></ol>
 <p><code>Object.fromEntries</code> — bu <code>Object.entries</code>ning teskarisi: u <code>[kalit, qiymat]</code> juftliklari massivini olib, obyekt yasaydi.</p>
@@ -688,12 +703,12 @@ let qimmatlar = Object.fromEntries(
 );
 
 console.log( Object.keys(qimmatlar) ); // [ 'sut', 'yogh' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Map bilan farqi</h2>
+<h2 id="map-bilan-farqi">Map bilan farqi</h2>
 <p><code>Map</code>, <code>Set</code> kabi ma'lumot tuzilmalarida ham <code>keys()</code>, <code>values()</code>, <code>entries()</code> metodlari bor. Ammo ular orasida muhim farqlar mavjud:</p>
 <ul><li><strong>Chaqirish shakli:</strong> Map'da bu <code>map.keys()</code> (metod sifatida), oddiy obyektda esa <code>Object.keys(obj)</code> (statik funksiya sifatida);</li><li><strong>Qaytaradigan qiymat:</strong> Map'ning metodlari <em>iterable</em> obyekt qaytaradi (haqiqiy massiv emas), obyektning metodlari esa <strong>haqiqiy massiv</strong> qaytaradi;</li><li><strong>Kalit turlari:</strong> Map'da kalit istalgan tur bo'la oladi (obyekt, funksiya ham), oddiy obyektda esa kalitlar faqat satr yoki simvol.</li></ul>
 <p>Nima uchun <code>Object.keys(obj)</code> shaklida, ya'ni <code>obj.keys()</code> emas? Sabab — moslashuvchanlik. JavaScript'da obyektlar turli tuzilmalarning asosi bo'lib xizmat qiladi. Agar bizning obyektimizda o'zining <code>keys</code> nomli metodi bo'lsa, uni buzib qo'ymaslik uchun tashqi <code>Object.keys(obj)</code> shakli ishlatiladi.</p>
 <div class="note">Agar Map'ning metodlari qaytargan iterable ustida massiv metodlarini ishlatmoqchi bo'lsangiz, uni <code>Array.from(map.keys())</code> yoki <code>[...map.keys()]</code> orqali massivga aylantiring.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>Object.keys(obj)</code> — kalitlar massivini qaytaradi;</li><li><code>Object.values(obj)</code> — qiymatlar massivini qaytaradi;</li><li><code>Object.entries(obj)</code> — <code>[kalit, qiymat]</code> juftliklari massivini qaytaradi;</li><li>Uchala metod ham <strong>haqiqiy massiv</strong> qaytaradi va faqat o'ziga tegishli xossalarni oladi;</li><li><code>Object.fromEntries(massiv)</code> — juftliklar massivini yana obyektga aylantiradi;</li><li>Obyektni o'zgartirish uchun: <code>entries</code> → <code>map/filter</code> → <code>fromEntries</code>.</li></ul>
 <nav class="lesson-nav">
   <a href="weakmap-weakset.html"><span class="dir">← Oldingi</span><span class="ttl">WeakMap va WeakSet</span></a>
@@ -707,6 +722,6 @@ console.log( Object.keys(qimmatlar) ); // [ 'sut', 'yogh' ]</textarea><div class
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

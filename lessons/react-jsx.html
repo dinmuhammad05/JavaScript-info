@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSX va komponentlar — Kodla</title>
   <meta name="description" content="JSX sintaksisi, funksional komponent yozish, komponentni createRoot bilan render qilish, bir root element qoidasi, className va {ifoda} joylashtirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,15 +599,27 @@
 <main class="content article">
 <div class="crumbs">React</div>
 <h1>JSX va komponentlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#jsx-nima">JSX nima?</a></li>
+<li class="lvl2"><a href="#funksional-komponent">Funksional komponent</a></li>
+<li class="lvl2"><a href="#komponentni-ekranga-render-qilish">Komponentni ekranga render qilish</a></li>
+<li class="lvl2"><a href="#bitta-ildiz-element-qoidasi">Bitta ildiz element qoidasi</a></li>
+<li class="lvl2"><a href="#classname-va-html-atributlaridagi-farqlar">className va HTML atributlaridagi farqlar</a></li>
+<li class="lvl2"><a href="#jsx-ichida-javascript-ifodalari">JSX ichida JavaScript ifodalari — {}</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">React'da interfeysni tasvirlash uchun maxsus sintaksis — <strong>JSX</strong> ishlatiladi. Bu birinchi qarashda HTML ichida JavaScript kabi ko'rinadi, lekin aslida bu — JavaScript'ning kengaytmasi. Ushbu darsda JSX qanday ishlashini, komponentlarni qanday yozish va ekranga chiqarishni o'rganamiz.</p>
-<h2>JSX nima?</h2>
+<h2 id="jsx-nima">JSX nima?</h2>
 <p><strong>JSX</strong> (JavaScript XML) — bu JavaScript kodining ichida HTML'ga o'xshash markup yozish imkonini beruvchi sintaksis. Masalan, quyidagi qator — bu JSX:</p>
 <pre class="code"><code>const element = &lt;h1&gt;Salom, dunyo!&lt;/h1&gt;;</code></pre>
 <p>E'tibor bering: bu na string (tirnoqsiz), na oddiy HTML. Bu — JSX. Brauzer JSX'ni to'g'ridan-to'g'ri tushunmaydi. Vite ichidagi <em>build</em> vositasi (Babel) JSX'ni oddiy JavaScript funksiya chaqiruvlariga aylantiradi. Yuqoridagi kod aslida shunga o'giriladi:</p>
 <pre class="code"><code>const element = React.createElement("h1", null, "Salom, dunyo!");</code></pre>
 <p>Ya'ni JSX — bu shunchaki <code>React.createElement</code> uchun qulay, o'qilishi oson yozuv usuli. Uni ishlatish majburiy emas, lekin deyarli barcha React kodi JSX bilan yoziladi, chunki u ancha qulay.</p>
 <div class="note">JSX — string emas! Uni tirnoq ichiga olmang. <code>&lt;h1&gt;Salom&lt;/h1&gt;</code> to'g'ri, <code>"&lt;h1&gt;Salom&lt;/h1&gt;"</code> esa oddiy matn (string) bo'lib qoladi.</div>
-<h2>Funksional komponent</h2>
+<h2 id="funksional-komponent">Funksional komponent</h2>
 <p>React'da <strong>komponent</strong> — bu JSX qaytaruvchi oddiy JavaScript funksiyasi. Bunday komponentlar <strong>funksional komponentlar</strong> deb ataladi. Ular quyidagi ikki qoidaga bo'ysunadi:</p>
 <ul><li>Komponent nomi <strong>katta harf</strong> bilan boshlanishi kerak (masalan, <code>Salom</code>, <code>ProfileCard</code>). Bu React'ga uni oddiy HTML teg emas, komponent ekanini bildiradi;</li><li>Funksiya <strong>JSX qaytarishi</strong> kerak (yoki <code>null</code>).</li></ul>
 <p>Mana eng oddiy komponent:</p>
@@ -626,7 +641,7 @@
   );
 }</code></pre>
 <div class="tip">Komponentni bir marta yozib, uni istagancha ko'p marta ishlatish mumkin. Bu — komponentlarning asosiy kuchi: qayta ishlatiluvchanlik.</div>
-<h2>Komponentni ekranga render qilish</h2>
+<h2 id="komponentni-ekranga-render-qilish">Komponentni ekranga render qilish</h2>
 <p>Komponentni yozdik — endi uni ekranga chiqarish kerak. Buning uchun React'ning <code>react-dom/client</code> qismidan <strong>createRoot</strong> funksiyasidan foydalanamiz. Avvalo HTML faylida bitta "ildiz" element bo'lishi kerak (Vite loyihasida u tayyor keladi):</p>
 <pre class="code"><code>&lt;!-- index.html --&gt;
 &lt;div id="root"&gt;&lt;/div&gt;</code></pre>
@@ -638,7 +653,7 @@ const root = createRoot(document.getElementById("root"));
 root.render(&lt;App /&gt;);</code></pre>
 <p>Bu kod nima qiladi? <code>createRoot</code> — bizning React ilovamiz uchun "ildiz" tayinlaydi. <code>root.render(&lt;App /&gt;)</code> esa <code>App</code> komponentini shu ildiz ichida chizadi. Shu tariqa butun ilova <code>#root</code> divi ichida yashaydi.</p>
 <div class="note">Eski React (17 va undan oldingi) versiyalarida <code>ReactDOM.render()</code> ishlatilardi. React 18'dan boshlab <code>createRoot</code> standart usul hisoblanadi.</div>
-<h2>Bitta ildiz element qoidasi</h2>
+<h2 id="bitta-ildiz-element-qoidasi">Bitta ildiz element qoidasi</h2>
 <p>JSX'ning muhim qoidasi: komponent <strong>faqat bitta ildiz elementni</strong> qaytarishi kerak. Quyidagi kod <em>xato</em> beradi, chunki ikkita element yonma-yon turibdi:</p>
 <pre class="code"><code>// XATO!
 function Profile() {
@@ -666,7 +681,7 @@ function Profile() {
   );
 }</code></pre>
 <div class="tip">JSX'ni bir necha qatorga yozganingizda, uni <code>return ( ... )</code> qavslari ichiga oling. Bu JavaScript'ning avtomatik nuqta-vergul qo'yishi (ASI) sabab yuzaga keladigan xatolardan saqlaydi.</div>
-<h2>className va HTML atributlaridagi farqlar</h2>
+<h2 id="classname-va-html-atributlaridagi-farqlar">className va HTML atributlaridagi farqlar</h2>
 <p>JSX HTML'ga o'xshasa-da, aslida u JavaScript. Shuning uchun ba'zi HTML atributlari boshqacha yoziladi. Eng muhim farqlar:</p>
 <ul><li>HTML'dagi <code>class</code> o'rniga JSX'da <strong><code>className</code></strong> ishlatiladi. Sababi: <code>class</code> — JavaScript'da zahiralangan (reserved) so'z;</li><li>HTML'dagi <code>for</code> (label uchun) o'rniga <strong><code>htmlFor</code></strong> yoziladi;</li><li>Atributlar <strong>camelCase</strong> uslubida yoziladi: <code>onclick</code> emas <code>onClick</code>, <code>tabindex</code> emas <code>tabIndex</code>.</li></ul>
 <pre class="code"><code>// HTML: &lt;div class="card"&gt;
@@ -675,7 +690,7 @@ function Card() {
   return &lt;div className="card"&gt;Kontent&lt;/div&gt;;
 }</code></pre>
 <div class="note">Agar <code>class</code> deb yozib qo'ysangiz, React ogohlantirish beradi, lekin ilova baribir ishlashi mumkin. Odat sifatida darrov <code>className</code> yozishga o'rganing.</div>
-<h2>JSX ichida JavaScript ifodalari — {}</h2>
+<h2 id="jsx-ichida-javascript-ifodalari">JSX ichida JavaScript ifodalari — {}</h2>
 <p>JSX'ning eng kuchli tomoni — uning ichiga JavaScript qiymatlarini joylashtirish mumkinligi. Buning uchun <strong>jingalak qavslar</strong> <code>{ }</code> ishlatiladi. Qavs ichiga istalgan JavaScript <em>ifodasini</em> (expression) yozish mumkin:</p>
 <pre class="code"><code>function Salom() {
   const ism = "Ali";
@@ -700,7 +715,7 @@ function Card() {
   return &lt;img src={url} alt="Logo" /&gt;;
 }</code></pre>
 <div class="warn">Qavs ichiga faqat <strong>ifoda</strong> (expression — qiymat qaytaradigan narsa) yozish mumkin. <code>if</code>, <code>for</code> kabi <em>buyruqlar</em> (statements) to'g'ridan-to'g'ri ishlamaydi. Shart uchun ternar operator (<code>? :</code>) ishlatiladi (bu haqda oxirgi darsda gaplashamiz).</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>JSX</strong> — JavaScript ichida HTML'ga o'xshash markup yozish sintaksisi; u <code>React.createElement</code> chaqiruvlariga aylanadi;</li><li><strong>Komponent</strong> — JSX qaytaruvchi funksiya; nomi <strong>katta harf</strong> bilan boshlanadi;</li><li>Komponentni ekranga <code>createRoot(...).render(&lt;App /&gt;)</code> orqali chiqaramiz;</li><li>Komponent <strong>bitta ildiz element</strong> qaytarishi kerak — <code>&lt;div&gt;</code> yoki <strong>Fragment</strong> (<code>&lt;&gt;&lt;/&gt;</code>) bilan o'raymiz;</li><li>HTML'dagi <code>class</code> o'rniga <strong><code>className</code></strong>, atributlar <strong>camelCase</strong>da;</li><li>JSX ichiga JavaScript ifodalarini <code>{ }</code> qavslar orqali joylashtiramiz.</li></ul>
 <nav class="lesson-nav">
   <a href="react-nima.html"><span class="dir">← Oldingi</span><span class="ttl">React nima?</span></a>
@@ -714,6 +729,6 @@ function Card() {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

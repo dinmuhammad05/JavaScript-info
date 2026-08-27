@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mutation observer — Kodla</title>
   <meta name="description" content="MutationObserver bilan DOM daraxtidagi o'zgarishlarni — element qo'shilishi, o'chirilishi, atribut va matn o'zgarishlarini — kuzatish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,11 +599,26 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha brauzer mavzulari</div>
 <h1>Mutation observer</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nima-uchun-kerak">Nima uchun kerak</a></li>
+<li class="lvl2"><a href="#sintaksis">Sintaksis</a></li>
+<li class="lvl2"><a href="#oddiy-misol">Oddiy misol</a></li>
+<li class="lvl2"><a href="#mutationrecord-obyekti">MutationRecord obyekti</a></li>
+<li class="lvl2"><a href="#qo-llanish-keraksiz-elementni-o-chirish">Qo'llanish: keraksiz elementni o'chirish</a></li>
+<li class="lvl2"><a href="#qo-llanish-kutubxona-integratsiyasi">Qo'llanish: kutubxona integratsiyasi</a></li>
+<li class="lvl2"><a href="#observe-konfiguratsiya-kombinatsiyalari">observe konfiguratsiya kombinatsiyalari</a></li>
+<li class="lvl2"><a href="#disconnect-va-takerecords">disconnect va takeRecords</a></li>
+<li class="lvl2"><a href="#xotira-boshqaruvi">Xotira boshqaruvi</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><code>MutationObserver</code> — bu DOM daraxtini kuzatib turuvchi va unda <strong>o'zgarish</strong> ro'y berganda (element qo'shilganda yoki o'chirilganda, atribut o'zgarganda, matn tahrirlanganda) sizga xabar beruvchi maxsus obyekt. U ayniqsa sahifaga tashqaridan kelgan kodni (masalan, uchinchi tomon skriptlari yoki reklama bloklari) nazorat qilishda, redaktorlarni yozishda va kutubxonalarni integratsiya qilishda juda qadrli.</p>
-<h2>Nima uchun kerak</h2>
+<h2 id="nima-uchun-kerak">Nima uchun kerak</h2>
 <p>Tasavvur qiling, siz sahifaga uchinchi tomon skriptini qo'shdingiz — u foydali kontent bilan birga o'zining reklamasini yoki keraksiz <code>&lt;div&gt;</code>larini ham qo'shadi. Bu skriptning ichiga kira olmaysiz. Lekin uning DOMga qanday o'zgarish kiritishini kuzatib, keraksiz elementni darhol o'chirib tashlashingiz mumkin. Aynan shu vazifani <code>MutationObserver</code> bajaradi.</p>
 <p>Yana bir keng tarqalgan holat — sintaksisni ranglaydigan kutubxonalar (<code>Prism.js</code>, <code>highlight.js</code> kabi). Yangi kod bloki sahifaga qo'shilganda uni avtomatik ravishda bo'yash kerak bo'ladi. Buni <code>MutationObserver</code> orqali eshitib turish mumkin.</p>
-<h2>Sintaksis</h2>
+<h2 id="sintaksis">Sintaksis</h2>
 <p>Avval kuzatuvchi yaratamiz, so'ng uni biror tugunga (node) bog'laymiz:</p>
 <pre class="code"><code>let observer = new MutationObserver(callback);
 
@@ -609,7 +627,7 @@ observer.observe(node, config);</code></pre>
 <p><code>observe(node, config)</code> — qaysi tugunni va aynan qanday o'zgarishlarni kuzatishni belgilaydi. <code>config</code> — bu mantiqiy (boolean) bayroqlar to'plami:</p>
 <ul><li><code>childList</code> — <code>node</code>ning bevosita bolalari (child) qo'shilishi/o'chirilishi;</li><li><code>subtree</code> — <code>node</code>ning nafaqat bolalari, balki barcha avlodlari (nabiralari va h.k.);</li><li><code>attributes</code> — <code>node</code> atributlaridagi o'zgarishlar;</li><li><code>attributeFilter</code> — faqat sanab o'tilgan atributlar massivini kuzatish;</li><li><code>characterData</code> — <code>node.data</code> (matn tugunidagi matn) o'zgarishi;</li><li><code>attributeOldValue</code> — atributning eski qiymatini ham yozib berish;</li><li><code>characterDataOldValue</code> — matnning eski qiymatini ham yozib berish.</li></ul>
 <div class="warn"><code>config</code>da kamida <code>childList</code>, <code>attributes</code> yoki <code>characterData</code>dan bittasi <code>true</code> bo'lishi shart. Aks holda <code>observe</code> xatolik beradi — chunki nima kuzatilishi noaniq bo'lib qoladi.</div>
-<h2>Oddiy misol</h2>
+<h2 id="oddiy-misol">Oddiy misol</h2>
 <p>Quyida biror <code>&lt;div&gt;</code>ning ichidagi barcha o'zgarishlarni (butun poddaraxtni) kuzatamiz. E'tibor bering, bu kod brauzerda ishlaydi — bu yerda u statik namuna sifatida keltirilgan:</p>
 <pre class="code"><code>let elem = document.getElementById('kuzatiladigan');
 
@@ -628,7 +646,7 @@ observer.observe(elem, {
 // endi elem ichini o'zgartiramiz
 elem.innerHTML = '&lt;b&gt;Salom&lt;/b&gt; dunyo';</code></pre>
 <p>Kod ishlaganda konsolga <code>MutationRecord</code> obyektlaridan iborat massiv chiqadi.</p>
-<h2>MutationRecord obyekti</h2>
+<h2 id="mutationrecord-obyekti">MutationRecord obyekti</h2>
 <p><code>callback</code>ga tushadigan har bir o'zgarish yozuvi (record) quyidagi asosiy xususiyatlarga ega:</p>
 <ul><li><code>type</code> — o'zgarish turi: <code>'attributes'</code>, <code>'characterData'</code> yoki <code>'childList'</code>;</li><li><code>target</code> — o'zgarish qaysi tugunda ro'y berdi (atribut uchun element, matn uchun matn tuguni);</li><li><code>addedNodes</code> / <code>removedNodes</code> — qo'shilgan va olib tashlangan tugunlar ro'yxati;</li><li><code>previousSibling</code> / <code>nextSibling</code> — qo'shilgan tugunlarning yonidagi tugunlar;</li><li><code>attributeName</code> — o'zgargan atribut nomi;</li><li><code>oldValue</code> — eski qiymat (faqat <code>attributeOldValue</code> yoki <code>characterDataOldValue</code> yoqilgan bo'lsa).</li></ul>
 <p>Masalan, atribut o'zgarishini eski qiymati bilan qo'lga olamiz:</p>
@@ -648,7 +666,7 @@ observer.observe(elem, {
   attributeOldValue: true
 });</code></pre>
 <div class="note">Bir <code>callback</code> chaqiruvida bir nechta o'zgarish yig'ilib kelishi mumkin. Shuning uchun <code>records</code> — bu massiv. Brauzer o'zgarishlarni to'plab, keyin bir yo'la yetkazadi (mikrovazifa sifatida — bu haqda uchinchi darsda gaplashamiz).</div>
-<h2>Qo'llanish: keraksiz elementni o'chirish</h2>
+<h2 id="qo-llanish-keraksiz-elementni-o-chirish">Qo'llanish: keraksiz elementni o'chirish</h2>
 <p>Sahifaga qo'shilayotgan reklama <code>&lt;div&gt;</code>larini avtomatik o'chiruvchi kuzatuvchi. <code>childList</code> va <code>subtree</code> yordamida yangi qo'shilgan tugunlarni ko'ramiz:</p>
 <pre class="code"><code>let observer = new MutationObserver(records =&gt; {
   for (let record of records) {
@@ -668,7 +686,7 @@ observer.observe(document.body, {
   childList: true,
   subtree: true
 });</code></pre>
-<h2>Qo'llanish: kutubxona integratsiyasi</h2>
+<h2 id="qo-llanish-kutubxona-integratsiyasi">Qo'llanish: kutubxona integratsiyasi</h2>
 <p>Faraz qilaylik, bizda <code>highlight()</code> funksiyasi bor — u <code>&lt;pre&gt;</code> ichidagi kodni bo'yaydi. Yangi kod bloki sahifaga qanday yo'l bilan qo'shilishidan qat'i nazar (<code>innerHTML</code>, <code>append</code> yoki boshqa skript orqali), biz uni avtomatik bo'yashni istaymiz:</p>
 <pre class="code"><code>function highlight(block) {
   // ... kodni bo'yash mantig'i ...
@@ -695,10 +713,10 @@ let observer = new MutationObserver(records =&gt; {
 
 observer.observe(document.body, { childList: true, subtree: true });</code></pre>
 <div class="tip">Bu usul juda kuchli: sahifaga kim va qanday kod qo'shishidan qat'i nazar, siz uni bir joyda "ushlab" qayta ishlaysiz. Redaktor, chat, dinamik ro'yxatlar — hammasi bilan ishlaydi.</div>
-<h2>observe konfiguratsiya kombinatsiyalari</h2>
+<h2 id="observe-konfiguratsiya-kombinatsiyalari">observe konfiguratsiya kombinatsiyalari</h2>
 <p>Ba'zi keng tarqalgan sozlamalar:</p>
 <ul><li>Faqat bolalarning kelib-ketishi: <code>{ childList: true }</code>;</li><li>Butun ichki daraxt (istalgan chuqurlikda): <code>{ childList: true, subtree: true }</code>;</li><li>Faqat <code>class</code> va <code>style</code> atributlari: <code>{ attributes: true, attributeFilter: ['class', 'style'] }</code>;</li><li>Matn tahrirlarini eski qiymati bilan: <code>{ characterData: true, characterDataOldValue: true }</code>.</li></ul>
-<h2>disconnect va takeRecords</h2>
+<h2 id="disconnect-va-takerecords">disconnect va takeRecords</h2>
 <p>Kuzatishni to'xtatish uchun <code>disconnect()</code> chaqiriladi:</p>
 <pre class="code"><code>observer.disconnect();</code></pre>
 <p><code>takeRecords()</code> — hali <code>callback</code>ga yetkazilmagan, ammo qayd etilgan o'zgarishlar ro'yxatini oladi va navbatni bo'shatadi. Bu odatda <code>disconnect()</code>dan oldin, "oxirgi paytida" yig'ilib qolgan o'zgarishlarni ham qo'lda qayta ishlash uchun ishlatiladi:</p>
@@ -710,9 +728,9 @@ process(pending);
 observer.disconnect();</code></pre>
 <div class="warn"><code>disconnect()</code> chaqirilgach, <code>takeRecords()</code> endi bo'sh massiv qaytaradi — chunki navbat allaqachon bo'shatilgan bo'ladi. Shu bois <code>takeRecords()</code>ni <code>disconnect()</code>dan <strong>oldin</strong> chaqiring.</div>
 <div class="note"><code>MutationObserver</code> kuzatuvchi obyekti kuzatilayotgan tugunlarga <em>kuchsiz</em> (weak) bog'lanmaydi — u tugunga qattiq ishora saqlaydi. Kuzatuvchini <code>disconnect()</code> qilmasangiz, u va u ushlab turgan tugunlar xotirada qolib ketishi mumkin (xotira sizib chiqishi). Kerak bo'lmaganda albatta uzib qo'ying.</div>
-<h2>Xotira boshqaruvi</h2>
+<h2 id="xotira-boshqaruvi">Xotira boshqaruvi</h2>
 <p>Muhim jihat: kuzatuvchi kuzatayotgan tugunlar DOMdan olib tashlansa ham, ular xotirada saqlanib qolishi mumkin — chunki kuzatuvchi ularga ishora saqlaydi. Element endi kerak bo'lmasa, uni kuzatishdan to'xtatish yaxshi amaliyot. Odatda komponent "o'chirilganda" (unmount) <code>disconnect()</code> chaqiriladi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>MutationObserver</code> — DOM daraxtidagi o'zgarishlarni kuzatuvchi obyekt;</li><li><code>observer.observe(node, config)</code> bilan kuzatish boshlanadi; <code>config</code> nimani kuzatishni belgilaydi (<code>childList</code>, <code>subtree</code>, <code>attributes</code>, <code>characterData</code> va h.k.);</li><li><code>callback</code>ga <code>MutationRecord</code> obyektlari massivi keladi: <code>type</code>, <code>target</code>, <code>addedNodes</code>, <code>removedNodes</code>, <code>oldValue</code> va boshqalar;</li><li>Asosiy qo'llanishlar: keraksiz elementlarni tozalash, kutubxonalarni integratsiya qilish, DOM o'zgarishlarini kuzatib turish;</li><li><code>disconnect()</code> kuzatishni to'xtatadi; <code>takeRecords()</code> qayta ishlanmagan o'zgarishlarni oladi;</li><li>Xotira sizishining oldini olish uchun kerak bo'lmaganda kuzatuvchini uzing.</li></ul>
 <nav class="lesson-nav">
   <a href="resurs-yuklash.html"><span class="dir">← Oldingi</span><span class="ttl">Resurs yuklash: onload va onerror</span></a>
@@ -726,6 +744,6 @@ observer.disconnect();</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

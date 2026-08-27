@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hodisalar: change, input, cut, copy, paste — Kodla</title>
   <meta name="description" content="change va input hodisalarining farqi, matn kiritishni kuzatish, cut/copy/paste va ClipboardEvent bilan almashish buferini boshqarish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,20 @@
 <main class="content article">
 <div class="crumbs">Formalar va boshqaruv elementlari</div>
 <h1>Hodisalar: change, input, cut, copy, paste</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#change-hodisasi">change hodisasi</a></li>
+<li class="lvl2"><a href="#input-hodisasi">input hodisasi</a></li>
+<li class="lvl2"><a href="#change-va-input-solishtirma">change va input: solishtirma</a></li>
+<li class="lvl2"><a href="#cut-copy-paste-hodisalari">cut, copy, paste hodisalari</a></li>
+<li class="lvl2"><a href="#clipboarddata-nafaqat-matn">ClipboardData: nafaqat matn</a></li>
+<li class="lvl2"><a href="#xavfsizlik-cheklovlari">Xavfsizlik cheklovlari</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ma'lumot o'zgarishi va almashish buferi (clipboard) bilan bog'liq hodisalar formalar bilan ishlashda muhim o'rin tutadi. <code>change</code> va <code>input</code> qiymat o'zgarishini kuzatsa, <code>cut</code>/<code>copy</code>/<code>paste</code> nusxalash-joylashtirish amallarini boshqaradi. Ushbu darsda ularni chuqur ko'rib chiqamiz.</p>
-<h2>change hodisasi</h2>
+<h2 id="change-hodisasi">change hodisasi</h2>
 <p><code>change</code> hodisasi element o'zgartirilib bo'lgach ishga tushadi. Matnli maydonlar uchun bu element fokusni <em>yo'qotganda</em> yuz beradi — ya'ni har bir belgi kiritilganda emas, balki foydalanuvchi kiritishni tugatib, boshqa joyga o'tganda:</p>
 <pre class="code"><code>&lt;input type="text" onchange="alert(this.value)"&gt;
 &lt;input type="button" value="Tugma"&gt;
@@ -610,7 +625,7 @@
   &lt;option value="1"&gt;Bir&lt;/option&gt;
   &lt;option value="2"&gt;Ikki&lt;/option&gt;
 &lt;/select&gt;</code></pre>
-<h2>input hodisasi</h2>
+<h2 id="input-hodisasi">input hodisasi</h2>
 <p><code>input</code> hodisasi qiymat har qanday yo'l bilan o'zgargan har safar ishga tushadi. <code>change</code>dan farqli, u foydalanuvchi klaviaturadan belgi kiritganda ham, sichqoncha bilan matn joylashtirganda ham, ovoz orqali kiritganda ham darhol yuz beradi:</p>
 <pre class="code"><code>&lt;input type="text" id="input"&gt;
 O'zgardi: &lt;span id="result"&gt;&lt;/span&gt;
@@ -622,10 +637,10 @@ O'zgardi: &lt;span id="result"&gt;&lt;/span&gt;
 &lt;/script&gt;</code></pre>
 <div class="note">Agar biz foydalanuvchi kiritayotgan matnni <strong>real vaqtda</strong> kuzatmoqchi bo'lsak, aynan <code>input</code> — eng to'g'ri tanlov. U foydalanuvchi kiritishni tugatishini kutmaydi.</div>
 <div class="warn"><code>input</code> hodisasi ichida <code>event.preventDefault()</code> ishlamaydi — chunki hodisa qiymat <em>allaqachon o'zgargandan keyin</em> yuz beradi. Kiritishni oldindan to'sish uchun <code>keydown</code> yoki <code>beforeinput</code> kabi boshqa hodisalar kerak bo'ladi.</div>
-<h2>change va input: solishtirma</h2>
+<h2 id="change-va-input-solishtirma">change va input: solishtirma</h2>
 <ul><li><code>input</code> — har bir o'zgarishda (belgi yozilganda, matn joylashtirilganda) <strong>darhol</strong> ishga tushadi. Real vaqtda kuzatish uchun ideal;</li><li><code>change</code> — matnli maydonlarda fokus yo'qolganda, tanlov elementlarida (select, checkbox, radio) esa tanlov o'zgarishi bilan ishga tushadi. "Yakuniy" qiymatni olish uchun qulay.</li></ul>
 <div class="tip">Ko'p hollarda tirik (real-time) reaksiya kerak bo'lsa — <code>input</code>, faqat foydalanuvchi kiritishni yakunlagach ish qilmoqchi bo'lsangiz (masalan, server so'rovi) — <code>change</code> yoki <code>input</code> + kechiktirish (debounce) ishlatiladi.</div>
-<h2>cut, copy, paste hodisalari</h2>
+<h2 id="cut-copy-paste-hodisalari">cut, copy, paste hodisalari</h2>
 <p>Bu hodisalar mos ravishda ma'lumotni kesish, nusxalash va joylashtirish (cut/copy/paste) amallarida yuz beradi. Ular <code>ClipboardEvent</code> sinfiga tegishli bo'lib, <code>event.clipboardData</code> xossasi orqali almashish buferi ma'lumotiga kirish imkonini beradi.</p>
 <p>Ushbu amallarni <code>event.preventDefault()</code> bilan <strong>to'sib qo'yish</strong> ham mumkin. Masalan, matn nusxalash yoki joylashtirishni butunlay taqiqlaymiz:</p>
 <pre class="code"><code>&lt;input type="text" id="input"&gt;
@@ -642,7 +657,7 @@ O'zgardi: &lt;span id="result"&gt;&lt;/span&gt;
   };
 &lt;/script&gt;</code></pre>
 <p>E'tibor bering: <code>cut</code>/<code>copy</code>da nusxalanayotgan matnni <code>document.getSelection()</code> orqali, <code>paste</code>da esa joylashtirilayotgan matnni <code>event.clipboardData.getData('text/plain')</code> orqali olamiz.</p>
-<h2>ClipboardData: nafaqat matn</h2>
+<h2 id="clipboarddata-nafaqat-matn">ClipboardData: nafaqat matn</h2>
 <p><code>event.clipboardData</code> orqali biz nafaqat matn, balki boshqa formatdagi ma'lumotlarni ham o'qish/yozishimiz mumkin. Almashish buferi bir vaqtning o'zida turli formatlarda ma'lumot saqlashi mumkin:</p>
 <pre class="code"><code>// matnni olish
 let text = event.clipboardData.getData('text/plain');
@@ -652,10 +667,10 @@ event.clipboardData.setData('text/plain', 'Maxsus matn');
 event.preventDefault(); // brauzerning odatiy nusxalashini to'saylik</code></pre>
 <div class="warn">Xavfsizlik sabablari tufayli almashish buferiga kirish cheklangan. <code>event.clipboardData</code> faqat <code>cut</code>/<code>copy</code>/<code>paste</code> hodisalari ishlovchisi ichida ishlaydi. Bu hodisalardan tashqarida (masalan, oddiy <code>setTimeout</code> ichida) buferga to'g'ridan-to'g'ri kirib bo'lmaydi. Umumiy dasturiy buferga kirish uchun esa alohida <code>navigator.clipboard</code> API'si mavjud.</div>
 <div class="note"><code>navigator.clipboard</code> — buferga kirishning zamonaviy asinxron API'si (masalan, <code>navigator.clipboard.writeText('matn')</code>). Lekin u xavfsizlik cheklovlariga ega: HTTPS talab qiladi va ko'pincha foydalanuvchi ruxsatini so'raydi.</div>
-<h2>Xavfsizlik cheklovlari</h2>
+<h2 id="xavfsizlik-cheklovlari">Xavfsizlik cheklovlari</h2>
 <p>Almashish buferi — tizim darajasidagi (system-wide) resurs. Foydalanuvchi bir ilovada nusxalab, boshqasida joylashtirishi mumkin. Shuning uchun brauzerlar unga kirishni jiddiy cheklaydi:</p>
 <ul><li><code>clipboardData</code> faqat <code>cut</code>/<code>copy</code>/<code>paste</code> hodisalarida mavjud;</li><li>Buferni foydalanuvchi harakatisiz (masalan, sahifa yuklanganda avtomatik) o'qib yoki o'zgartirib bo'lmaydi;</li><li>Zamonaviy <code>navigator.clipboard</code> API ruxsat va HTTPS talab qiladi.</li></ul>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>change</code> — o'zgarish yakunlangach ishga tushadi: matnli maydonlarda fokus yo'qolganda, tanlov elementlarida darhol;</li><li><code>input</code> — qiymat o'zgargan har safar darhol ishga tushadi. Real vaqtda kuzatish uchun ideal, lekin unda <code>preventDefault()</code> ishlamaydi;</li><li><code>cut</code>/<code>copy</code>/<code>paste</code> — almashish buferi amallari hodisalari. <code>ClipboardEvent</code> sinfiga tegishli;</li><li><code>event.clipboardData</code> orqali buferga kirish mumkin, lekin faqat shu hodisalar ichida va xavfsizlik cheklovlari bilan;</li><li>Bu amallarni <code>event.preventDefault()</code> bilan to'sib qo'yish mumkin;</li><li>Umumiy dasturiy kirish uchun zamonaviy <code>navigator.clipboard</code> API ishlatiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="focus-blur.html"><span class="dir">← Oldingi</span><span class="ttl">Fokuslash: focus/blur</span></a>
@@ -669,6 +684,6 @@ event.preventDefault(); // brauzerning odatiy nusxalashini to'saylik</code></pre
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

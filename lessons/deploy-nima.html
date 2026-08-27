@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deploy nima? — Kodla</title>
   <meta name="description" content="Ishlab chiqarish (production) muhiti, lokalxost va server farqi, server turlari (VPS va PaaS/bulut), domen va DNS haqida umumiy tushuncha hamda deploy jarayonining bosqichlari.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,18 +599,33 @@
 <main class="content article">
 <div class="crumbs">Loyihani deploy qilish</div>
 <h1>Deploy nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#deploy-so-zining-ma-nosi">Deploy so'zining ma'nosi</a></li>
+<li class="lvl2"><a href="#lokalxost-va-server-farqi">Lokalxost va server farqi</a></li>
+<li class="lvl2"><a href="#ishlab-chiqarish-production-muhiti">Ishlab chiqarish (production) muhiti</a></li>
+<li class="lvl2"><a href="#server-turlari-vps-va-paas">Server turlari: VPS va PaaS</a></li>
+<li class="lvl3"><a href="#vps-virtual-xususiy-server">VPS (virtual xususiy server)</a></li>
+<li class="lvl3"><a href="#paas-platforma-xizmat-sifatida">PaaS (platforma xizmat sifatida)</a></li>
+<li class="lvl2"><a href="#domen-va-dns-haqida-umumiy-tushuncha">Domen va DNS haqida umumiy tushuncha</a></li>
+<li class="lvl2"><a href="#deploy-jarayonining-bosqichlari">Deploy jarayonining bosqichlari</a></li>
+<li class="lvl2"><a href="#docker-bilan-bog-liqlik">Docker bilan bog'liqlik</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Siz ilovani yozdingiz, u <strong>o'z kompyuteringizda</strong> mukammal ishlaydi. Lekin sizdan boshqa hech kim uni ochib ko'ra olmaydi. <strong>Deploy</strong> — bu ilovani o'z kompyuteringizdan olib, internetdagi doimo ishlab turadigan serverga joylashtirish jarayoni. Shundan so'ng har kim brauzerda manzilni yozib, ilovangizga kira oladi. Ushbu darsda deploy nima ekanligini, u qanday muhitlarda amalga oshirilishini va jarayonning umumiy bosqichlarini o'rganamiz.</p>
 <div class="note">Bu bob — <strong>server</strong> muhitiga oid. Bu yerdagi buyruqlar terminalda, Linux serverida ishlaydi. Ularni brauzerda ishga tushirib bo'lmaydi, shuning uchun barcha misollar <strong>statik</strong> — tushunib o'qish uchun keltirilgan. Har bir buyruqni mazmunini anglagan holda o'rganing.</div>
-<h2>Deploy so'zining ma'nosi</h2>
+<h2 id="deploy-so-zining-ma-nosi">Deploy so'zining ma'nosi</h2>
 <p><strong>Deploy</strong> (deployment, o'zbekcha "joylashtirish", "yetkazib berish") — bu tayyor dasturiy ta'minotni foydalanuvchilar foydalana oladigan muhitga o'rnatish va ishga tushirish jarayoni. Ya'ni kod endi faqat sizning kompyuteringizda emas, balki <strong>haqiqiy, internetga ulangan mashinada</strong> ishlaydi.</p>
 <p>Deploy — bu bir martalik hodisa emas. Odatda siz kodni ko'p marta yangilaysiz: yangi imkoniyat qo'shasiz, xatoni tuzatasiz. Har safar bu o'zgarishni serverga yetkazish ham deploy deb ataladi. Shuning uchun deploy jarayonini <strong>iloji boricha oddiy va takrorlanadigan</strong> qilish muhim.</p>
-<h2>Lokalxost va server farqi</h2>
+<h2 id="lokalxost-va-server-farqi">Lokalxost va server farqi</h2>
 <p><strong>Lokalxost</strong> (localhost) — bu sizning o'z kompyuteringiz. Node.js serverini ishga tushirganingizda u odatda <code>http://localhost:3000</code> manzilida ochiladi. Bu manzil faqat <strong>shu kompyuterda</strong> ishlaydi — internetning boshqa qismidan unga kirib bo'lmaydi.</p>
 <p><strong>Server</strong> (yoki ishlab chiqarish serveri) — bu internetga doimo ulangan, o'chirilmaydigan mashina. Uning <strong>ommaviy IP manzili</strong> (masalan, <code>203.0.113.10</code>) yoki domeni (masalan, <code>mening-saytim.uz</code>) bo'ladi, va dunyoning istalgan nuqtasidan unga kirish mumkin.</p>
 <ul><li><strong>Lokalxost</strong> — sizning kompyuteringiz; ilova siz uni ishga tushirganingizda ishlaydi; faqat siz ko'rasiz;</li><li><strong>Server</strong> — masofadagi mashina; ilova 24/7 ishlaydi; har kim ko'radi.</li></ul>
 <p>Ular orasidagi farqlar shunchaki manzil bilan cheklanmaydi. Serverda muhit boshqacha bo'ladi: operatsion tizim (odatda Linux), o'zgaruvchilar, fayllar joylashuvi, ruxsatlar. Kod lokalxostda ishlab, serverda ishlamasligi mumkin — masalan, portlar band bo'lsa, kutubxona o'rnatilmagan bo'lsa yoki fayl yo'llari boshqacha bo'lsa.</p>
 <div class="note">Ko'p tarqalgan ibora bor: "menda ishlayapti-ku" ("works on my machine"). Bu aynan lokalxost va server farqidan kelib chiqadi. Shuning uchun ilovani muhitga bog'liq bo'lmagan qilib yozish — masalan, sozlamalarni <code>.env</code> orqali berish — juda muhim. Bu haqida VPS darsida batafsil to'xtalamiz.</div>
-<h2>Ishlab chiqarish (production) muhiti</h2>
+<h2 id="ishlab-chiqarish-production-muhiti">Ishlab chiqarish (production) muhiti</h2>
 <p>Dasturchilar odatda bir necha <strong>muhit</strong> (environment) bilan ishlashadi. Muhit — bu ilova ishlaydigan alohida sozlangan makon. Uchta eng ko'p uchraydigani:</p>
 <ul><li><strong>Development</strong> (ishlab chiqish, dev) — sizning lokalxostingiz. Bu yerda kod tez-tez o'zgaradi, xatolar to'liq ko'rsatiladi, tez qayta yuklanadi;</li><li><strong>Staging</strong> (sinov, oldingi bosqich) — productionga o'xshash, lekin foydalanuvchilar uchun emas. Bu yerda oxirgi sinov o'tkaziladi;</li><li><strong>Production</strong> (ishlab chiqarish, prod) — haqiqiy foydalanuvchilar ishlatadigan muhit. Bu yerda barqarorlik, tezlik va xavfsizlik eng muhim.</li></ul>
 <p>Production muhitida ilova <em>development</em>dan farqli sozlanadi. Masalan, xato xabarlari foydalanuvchiga to'liq ko'rsatilmaydi (xavfsizlik uchun), kodlar kichraytiriladi (minify), keshlash yoqiladi. Node.js'da bu ko'pincha <code>NODE_ENV=production</code> o'zgaruvchisi orqali boshqariladi.</p>
@@ -617,18 +635,18 @@ NODE_ENV=development node server.js
 # Production rejimida ishga tushirish:
 NODE_ENV=production node server.js</code></pre>
 <div class="tip">Express kabi freymvorklar <code>NODE_ENV=production</code> bo'lganda avtomatik ravishda ba'zi optimizatsiyalarni yoqadi (masalan, shablonlarni keshlaydi, batafsil xato izlarini yashiradi). Shu sababli productionda bu o'zgaruvchini o'rnatishni unutmang.</div>
-<h2>Server turlari: VPS va PaaS</h2>
+<h2 id="server-turlari-vps-va-paas">Server turlari: VPS va PaaS</h2>
 <p>Ilovani joylashtirish uchun serverga ega bo'lish kerak. Buning ikki asosiy yondashuvi bor va ular bir-biridan tubdan farq qiladi.</p>
-<h3>VPS (virtual xususiy server)</h3>
+<h3 id="vps-virtual-xususiy-server">VPS (virtual xususiy server)</h3>
 <p><strong>VPS</strong> (Virtual Private Server) — bu sizga to'liq nazorat beriladigan virtual Linux mashinasi. Siz unga <strong>SSH</strong> orqali ulanasiz, kerakli dasturlarni o'zingiz o'rnatasiz (Node.js, Nginx, ma'lumotlar bazasi), va hamma narsani o'zingiz sozlaysiz.</p>
 <ul><li><strong>Ustunligi:</strong> to'liq erkinlik va nazorat — istalgan dasturni o'rnatishingiz mumkin; ko'pincha arzonroq;</li><li><strong>Kamchiligi:</strong> hamma narsani o'zingiz sozlashingiz kerak — xavfsizlik, yangilanishlar, monitoring sizning zimmangizda.</li></ul>
 <p>Mashhur VPS provayderlar: <strong>DigitalOcean</strong>, <strong>Hetzner</strong>, <strong>Linode</strong>, <strong>Vultr</strong>, <strong>AWS EC2</strong>. Ularda oyiga bir necha dollardan boshlanadigan tariflar bor. VPS'ga deploy qilishni keyingi darsda amalda ko'ramiz.</p>
-<h3>PaaS (platforma xizmat sifatida)</h3>
+<h3 id="paas-platforma-xizmat-sifatida">PaaS (platforma xizmat sifatida)</h3>
 <p><strong>PaaS</strong> (Platform as a Service) — bu server boshqaruvining ko'p qismini o'z zimmasiga oladigan bulut xizmati. Siz faqat kodni beryapsiz, qolganini (server, tarmoq, masshtablash) platforma o'zi bajaradi.</p>
 <ul><li><strong>Ustunligi:</strong> juda oson — ko'pincha git push qilib deploy qilasiz; server boshqaruvi bilan ovora bo'lmaysiz;</li><li><strong>Kamchiligi:</strong> kamroq nazorat; katta hajmda qimmatroq bo'lishi mumkin.</li></ul>
 <p>Backend uchun mashhur PaaS platformalar: <strong>Render</strong>, <strong>Railway</strong>, <strong>Fly.io</strong>, <strong>Heroku</strong>. Frontend/statik saytlar uchun esa <strong>Netlify</strong>, <strong>Vercel</strong>, <strong>GitHub Pages</strong> — bularni frontend darsida ko'ramiz.</p>
 <div class="note">Qaysi birini tanlash kerak? Agar siz Linux, SSH va Nginx bilan tanish bo'lsangiz va nazoratni xohlasangiz — <strong>VPS</strong>. Agar tez va oson yechim kerak bo'lsa, server boshqaruvi bilan shug'ullanishni istamasangiz — <strong>PaaS</strong>. Ko'p dasturchilar ikkalasidan ham foydalanadi: mayda loyihalar uchun PaaS, jiddiy nazorat kerak bo'lganda VPS.</div>
-<h2>Domen va DNS haqida umumiy tushuncha</h2>
+<h2 id="domen-va-dns-haqida-umumiy-tushuncha">Domen va DNS haqida umumiy tushuncha</h2>
 <p>Server IP manzilga ega bo'ladi, masalan <code>203.0.113.10</code>. Lekin foydalanuvchilar raqamlarni emas, <strong>domen nomini</strong> (masalan, <code>mening-saytim.uz</code>) yodda tutadi. <strong>Domen</strong> — bu insonlarga qulay, o'qiladigan manzil.</p>
 <p><strong>DNS</strong> (Domain Name System) — bu domen nomlarini IP manzillarga o'giradigan internetning "telefon kitobi". Foydalanuvchi brauzerda <code>mening-saytim.uz</code> yozganda, brauzer avval DNS'dan so'raydi: "bu domen qaysi IP'ga tegishli?" — javob olgach, o'sha IP'ga ulanadi.</p>
 <pre class="code"><code># Domen qaysi IP'ga ko'rsatayotganini ko'rish (statik misol):
@@ -638,15 +656,15 @@ Name:    mening-saytim.uz
 Address: 203.0.113.10</code></pre>
 <p>Ya'ni deploy zanjiri quyidagicha ishlaydi: <strong>domen → DNS → server IP → Nginx → ilovangiz</strong>. Domenni sotib olish, DNS yozuvlarini sozlash va uni serverga ulash — bularni oxirgi (domen va HTTPS) darsida batafsil ko'ramiz.</p>
 <div class="tip">Domensiz ham deploy qilish mumkin — foydalanuvchilar to'g'ridan-to'g'ri IP manzil (<code>http://203.0.113.10</code>) orqali kirishadi. Lekin bu chiroyli emas va HTTPS'ni to'g'ri sozlash uchun ham domen kerak bo'ladi. Jiddiy loyiha uchun domen deyarli har doim olinadi.</div>
-<h2>Deploy jarayonining bosqichlari</h2>
+<h2 id="deploy-jarayonining-bosqichlari">Deploy jarayonining bosqichlari</h2>
 <p>Har xil platforma va texnologiyada tafsilotlar farq qilsa-da, deploy jarayoni umumiy bosqichlarga ega. Backend ilovasini VPS'ga joylashtirishning tipik bosqichlari:</p>
 <ol><li><strong>Server tayyorlash</strong> — VPS olish, unga SSH orqali ulanish, kerakli dasturlarni o'rnatish (Node.js, Git, Nginx);</li><li><strong>Kodni yetkazish</strong> — kodni serverga olib borish, odatda <code>git clone</code> orqali;</li><li><strong>Bog'liqliklarni o'rnatish</strong> — <code>npm install</code> bilan kutubxonalarni o'rnatish;</li><li><strong>Muhitni sozlash</strong> — <code>.env</code> faylida maxfiy ma'lumotlar (parollar, kalitlar) va sozlamalarni berish;</li><li><strong>Ilovani ishga tushirish</strong> — uni doimo ishlab turadigan qilish (PM2 kabi vosita bilan);</li><li><strong>Reverse proxy sozlash</strong> — Nginx orqali 80/443 portidan ilovaga trafikni yo'naltirish;</li><li><strong>Domen va HTTPS</strong> — domenni ulash, SSL sertifikat o'rnatish.</li></ol>
 <p>Frontend/statik sayt uchun jarayon soddaroq: kodni <strong>build</strong> qilasiz (<code>npm run build</code>), natijadagi statik fayllarni hosting platformasiga yuklaysiz — tamom. Bu bosqichlar frontend darsida ko'riladi.</p>
 <div class="note">Zamonaviy loyihalarda bu bosqichlarni qo'lda emas, <strong>avtomatik</strong> bajarish odat tusiga kirgan — bunga <strong>CI/CD</strong> deyiladi. Masalan, GitHub'ga kodni push qilasiz, GitHub Actions esa avtomatik testlarni ishga tushiradi, build qiladi va serverga deploy qiladi. Lekin buni tushunish uchun avval qo'lda deploy qilishni bilish shart.</div>
-<h2>Docker bilan bog'liqlik</h2>
+<h2 id="docker-bilan-bog-liqlik">Docker bilan bog'liqlik</h2>
 <p>Agar siz Docker darsidan o'tgan bo'lsangiz, deploy jarayonini yanada ishonchli qilishning yana bir yo'lini bilasiz: ilovani <strong>konteynerga</strong> joylash. Docker ilovani barcha bog'liqliklari bilan bir "qutiga" o'raydi, shu tufayli u lokalxostda ham, serverda ham <strong>bir xil</strong> ishlaydi.</p>
 <p>Bu aynan "menda ishlayapti-ku" muammosini hal qiladi: konteyner ichidagi muhit hamma joyda bir xil. Ko'p zamonaviy deploy quvurlari (pipeline) Docker image yaratib, uni serverda ishga tushiradi. Bu bobda biz Docker'siz, klassik yondashuvni ko'ramiz — lekin ikkala yo'lni ham bilish foydali.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Deploy</strong> — ilovani lokalxostdan internetdagi serverga joylashtirib, foydalanuvchilarga ochish jarayoni;</li><li><strong>Lokalxost</strong> faqat sizda ishlaydi, <strong>server</strong> esa 24/7 internetda; muhitlar farqi "menda ishlayapti-ku" muammosini keltirib chiqaradi;</li><li>Uchta muhit bor: <strong>development</strong>, <strong>staging</strong>, <strong>production</strong>; productionda <code>NODE_ENV=production</code> o'rnatiladi;</li><li><strong>VPS</strong> — to'liq nazorat, hamma narsani o'zingiz sozlaysiz; <strong>PaaS</strong> — oson, platforma serverni boshqaradi;</li><li><strong>Domen → DNS → IP → server</strong> zanjiri foydalanuvchini ilovaga ulaydi;</li><li>Deploy bosqichlari: server tayyorlash, kod, bog'liqliklar, muhit, ishga tushirish, reverse proxy, domen/HTTPS.</li></ul>
 <nav class="lesson-nav">
   <a href="actions-deploy.html"><span class="dir">← Oldingi</span><span class="ttl">Avtomatik deploy</span></a>
@@ -660,6 +678,6 @@ Address: 203.0.113.10</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

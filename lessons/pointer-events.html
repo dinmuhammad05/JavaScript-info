@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pointer hodisalari — Kodla</title>
   <meta name="description" content="pointerdown/move/up va boshqa Pointer Events; pointerId, pointerType, isPrimary xossalari; setPointerCapture; sichqoncha, sensor va qalam (stylus) hodisalarini yagona API'da birlashtirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,16 +599,29 @@
 <main class="content article">
 <div class="crumbs">UI hodisalari</div>
 <h1>Pointer hodisalari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#qisqacha-tarix">Qisqacha tarix</a></li>
+<li class="lvl2"><a href="#pointer-hodisalari-turlari">Pointer hodisalari turlari</a></li>
+<li class="lvl2"><a href="#pointertype-qurilma-turini-aniqlash">pointerType: qurilma turini aniqlash</a></li>
+<li class="lvl2"><a href="#pointerid-bir-nechta-barmoqni-ajratish">pointerId: bir nechta barmoqni ajratish</a></li>
+<li class="lvl3"><a href="#isprimary-xossasi">isPrimary xossasi</a></li>
+<li class="lvl2"><a href="#setpointercapture-pointer-ni-ushlab-qolish">setPointerCapture: pointer'ni ushlab qolish</a></li>
+<li class="lvl2"><a href="#gotpointercapture-va-lostpointercapture">gotpointercapture va lostpointercapture</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Pointer hodisalari (Pointer Events) — sichqoncha, sensorli ekran va qalam (stylus) kabi turli ko'rsatuvchi qurilmalar bilan ishlashning zamonaviy va yagona usuli. Ular sichqoncha hodisalarining o'rnini bosishga mo'ljallangan va bugungi kunda barcha zamonaviy brauzerlarda qo'llab-quvvatlanadi.</p>
 <div class="warn">Bu darsdagi kod misollari statik — pointer hodisalari playground'da ishlamaydi. Ularni haqiqiy sahifada sinang.</div>
-<h2>Qisqacha tarix</h2>
+<h2 id="qisqacha-tarix">Qisqacha tarix</h2>
 <p>Uzoq vaqt faqat sichqoncha hodisalari mavjud edi. Keyin sensorli qurilmalar (telefon, planshet) tarqaldi va ular uchun <code>touchstart</code>, <code>touchmove</code>, <code>touchend</code> kabi Touch Events paydo bo'ldi. Muammo shundaki, dasturchilarga bir vaqtda ikki xil (sichqoncha va sensor) API'ni qo'llab-quvvatlashga to'g'ri kelardi — bu ko'p takroriy kod demakdir.</p>
 <p>Buni hal qilish uchun <strong>Pointer Events</strong> standarti yaratildi. U barcha turdagi ko'rsatuvchi qurilmalarni bitta yagona API ostida birlashtiradi. Bugun eng so'nggi versiya — Pointer Events Level 2 — barcha asosiy brauzerlarda ishlaydi.</p>
-<h2>Pointer hodisalari turlari</h2>
+<h2 id="pointer-hodisalari-turlari">Pointer hodisalari turlari</h2>
 <p>Pointer hodisalarining nomlari sichqoncha hodisalariga o'xshaydi — faqat <code>mouse</code> o'rniga <code>pointer</code>:</p>
 <ul><li><code>pointerdown</code> — sichqonchaning <code>mousedown</code>iga o'xshash.</li><li><code>pointerup</code> — <code>mouseup</code>ga o'xshash.</li><li><code>pointermove</code> — <code>mousemove</code>ga o'xshash.</li><li><code>pointerover</code> / <code>pointerout</code> — <code>mouseover/mouseout</code>ga o'xshash.</li><li><code>pointerenter</code> / <code>pointerleave</code> — <code>mouseenter/mouseleave</code>ga o'xshash.</li><li><code>pointercancel</code> — ko'rsatish uzilganda (masalan, tizim harakatni o'z zimmasiga olganda).</li><li><code>gotpointercapture</code> / <code>lostpointercapture</code> — pointer ushlash (capture) olinganda/yo'qolganda.</li></ul>
 <div class="note">Ko'p hollarda mavjud <code>mouse...</code> hodisa nomlarini <code>pointer...</code>ga almashtirishning o'zi kifoya qiladi — kod sichqoncha, sensor va qalamda barobar ishlay boshlaydi. Bu Pointer Events'ning eng katta afzalligi.</div>
-<h2>pointerType: qurilma turini aniqlash</h2>
+<h2 id="pointertype-qurilma-turini-aniqlash">pointerType: qurilma turini aniqlash</h2>
 <p>Pointer hodisalari sichqoncha hodisalarining barcha xossalarini (<code>clientX/Y</code>, <code>target</code>, <code>button</code> va h.k.) meros qilib oladi. Bundan tashqari o'ziga xos yangi xossalar bor. Eng foydalisi — <code>pointerType</code>. U qaysi turdagi qurilma hodisani chaqirganini bildiradi:</p>
 <ul><li><code>'mouse'</code> — sichqoncha.</li><li><code>'pen'</code> — qalam (stylus).</li><li><code>'touch'</code> — barmoq (sensorli ekran).</li></ul>
 <pre class="code"><code>elem.onpointerdown = function(event) {
@@ -618,7 +634,7 @@
   }
 };</code></pre>
 <p>Bu bizga qurilma turiga qarab turlicha xatti-harakat qilish imkonini beradi — bir xil kod ichida, ikkita alohida API'siz.</p>
-<h2>pointerId: bir nechta barmoqni ajratish</h2>
+<h2 id="pointerid-bir-nechta-barmoqni-ajratish">pointerId: bir nechta barmoqni ajratish</h2>
 <p>Har bir ko'rsatuvchining o'ziga xos identifikatori bor — <code>pointerId</code>. Sichqoncha bilan ishlaganda bu odatda muhim emas (bitta kursor). Lekin sensorli ekranlarda ko'p barmoqli (multi-touch) harakatlar bo'lishi mumkin — masalan, ikki barmoq bilan kattalashtirish (pinch-zoom).</p>
 <p>Har bir barmoqqa alohida <code>pointerId</code> beriladi. Shu tufayli bir vaqtning o'zida bir nechta ko'rsatuvchini alohida-alohida kuzatish mumkin:</p>
 <pre class="code"><code>elem.onpointerdown = function(event) {
@@ -626,9 +642,9 @@
   // Har bir barmoq uchun turli pointerId keladi
 };</code></pre>
 <div class="tip">Ko'p barmoqli interfeyslar (masalan, virtual pianino yoki multi-touch chizma dasturi) yaratishda <code>pointerId</code> markaziy rol o'ynaydi — u har bir barmoqni alohida obyekt sifatida boshqarishga yordam beradi. Bu Touch Events bilan ancha mashaqqatliroq edi.</div>
-<h3>isPrimary xossasi</h3>
+<h3 id="isprimary-xossasi">isPrimary xossasi</h3>
 <p>Bir nechta ko'rsatuvchi bir vaqtda bo'lsa (masalan, bir nechta barmoq), <code>event.isPrimary</code> xossasi "birlamchi" (asosiy) ko'rsatuvchi uchun <code>true</code> qaytaradi — bu odatda birinchi tegilgan barmoq. Bu bilan asosiy harakatni ikkilamchilaridan ajratish mumkin.</p>
-<h2>setPointerCapture: pointer'ni ushlab qolish</h2>
+<h2 id="setpointercapture-pointer-ni-ushlab-qolish">setPointerCapture: pointer'ni ushlab qolish</h2>
 <p>Pointer Events'ning kuchli imkoniyatlaridan biri — <code>elem.setPointerCapture(pointerId)</code> metodi. U berilgan <code>pointerId</code>ga tegishli barcha kelgusi hodisalarni shu <code>elem</code>ga "biriktirib qo'yadi" (bind qiladi).</p>
 <p>Ya'ni <code>setPointerCapture</code> chaqirilgandan so'ng, ko'rsatuvchi qayerda bo'lishidan qat'i nazar (hatto element chegarasidan tashqariga chiqsa ham), barcha pointer hodisalari maqsad qilingan elementga yo'naltiriladi — <code>event.target</code> har doim o'sha element bo'ladi.</p>
 <pre class="code"><code>// Slayder (slider) yasashda foydali:
@@ -643,9 +659,9 @@ slider.onpointermove = function(event) {
 };</code></pre>
 <div class="note">Capture avtomatik ravishda <code>pointerup</code> yoki <code>pointercancel</code> yuzaga kelganda bekor qilinadi. Uni qo'lda bekor qilish uchun <code>elem.releasePointerCapture(pointerId)</code> ishlatiladi.</div>
 <div class="tip">Oldingi darsdagi Drag'n'Drop yoki slayder misolini eslang: u yerda <code>mousemove</code>ni <code>document</code>ga bog'lashimiz kerak edi, aks holda kursor element tashqarisiga chiqsa hodisa yo'qolardi. <code>setPointerCapture</code> bilan bu muammo o'z-o'zidan hal bo'ladi — ishlov beruvchilarni hujjatga ko'chirish shart emas, kod ancha toza bo'ladi.</div>
-<h2>gotpointercapture va lostpointercapture</h2>
+<h2 id="gotpointercapture-va-lostpointercapture">gotpointercapture va lostpointercapture</h2>
 <p>Capture olingan va yo'qolgan paytlarni kuzatish uchun ikki hodisa bor: <code>gotpointercapture</code> (element pointer'ni ushlaganda) va <code>lostpointercapture</code> (ushlash tugaganda). Odatda ular kamdan-kam kerak bo'ladi, lekin murakkab holatlarni to'g'ri boshqarishda yordam beradi.</p>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Pointer Events sichqoncha, sensor va qalam hodisalarini <strong>bitta API'da</strong> birlashtiradi — kod barcha qurilmalarda ishlaydi.</li><li><code>mouse...</code> nomlarini <code>pointer...</code>ga almashtirishning o'zi ko'pincha kifoya.</li><li><code>pointerType</code> qurilma turini (mouse/pen/touch) bildiradi.</li><li><code>pointerId</code> har bir ko'rsatuvchini alohida ajratadi — ko'p barmoqli interfeyslar uchun zarur.</li><li><code>setPointerCapture</code> pointer hodisalarini elementga biriktiradi — slayder va sudrash uchun juda qulay.</li></ul>
 <p>Zamonaviy loyihalarda interaktivlik uchun Touch Events yoki alohida sichqoncha hodisalari o'rniga Pointer Events'dan foydalanish tavsiya etiladi.</p>
 <nav class="lesson-nav">
@@ -660,6 +676,6 @@ slider.onpointermove = function(event) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

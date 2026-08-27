@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Node.js nima? — Kodla</title>
   <meta name="description" content="Server tomonda JavaScript, V8 dvigateli, bir oqimli event loop, bloklamaydigan I/O, Node.js qachon ishlatiladi, o'rnatish va birinchi skript.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,22 +599,35 @@
 <main class="content article">
 <div class="crumbs">Node.js va Express</div>
 <h1>Node.js nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#node-js-nima">Node.js nima?</a></li>
+<li class="lvl2"><a href="#v8-dvigateli">V8 dvigateli</a></li>
+<li class="lvl2"><a href="#bir-oqimli-va-event-loop">Bir oqimli va event loop</a></li>
+<li class="lvl2"><a href="#bloklamaydigan-i-o">Bloklamaydigan I/O</a></li>
+<li class="lvl2"><a href="#node-js-qachon-ishlatiladi">Node.js qachon ishlatiladi?</a></li>
+<li class="lvl2"><a href="#node-js-ni-o-rnatish">Node.js'ni o'rnatish</a></li>
+<li class="lvl2"><a href="#birinchi-skript">Birinchi skript</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Shu paytgacha siz JavaScript'ni faqat <strong>brauzerda</strong> ishlatib keldingiz: sahifadagi tugmalar, formalar, DOM bilan ishlash. Endi esa JavaScript'ni <strong>serverda</strong> — o'z kompyuteringizda yoki uzoq masofadagi mashinada — ishga tushirasiz. Bunga <strong>Node.js</strong> imkon beradi. Ushbu darsda Node.js nima ekanligini, u qanday ishlashini va nima uchun mashhurligini chuqur o'rganamiz.</p>
-<h2>Node.js nima?</h2>
+<h2 id="node-js-nima">Node.js nima?</h2>
 <p><strong>Node.js</strong> — bu JavaScript kodini brauzerdan tashqarida, ya'ni to'g'ridan-to'g'ri operatsion tizimda ishga tushirishga imkon beradigan <em>ish muhiti</em> (runtime). U 2009-yilda Ryan Dahl tomonidan yaratilgan.</p>
 <p>Brauzerda JavaScript sahifa bilan ishlaydi: <code>document</code>, <code>window</code>, <code>alert</code> kabi obyektlarga ega. Node.js'da esa bular yo'q — o'rniga serverga xos imkoniyatlar bor: fayllarni o'qish/yozish, tarmoq so'rovlarini qabul qilish, ma'lumotlar bazasiga ulanish va hokazo.</p>
 <ul><li><strong>Brauzer JavaScript</strong> — sahifa, DOM, foydalanuvchi bilan muloqot.</li><li><strong>Node.js JavaScript</strong> — server, fayllar, tarmoq, ma'lumotlar bazasi.</li></ul>
 <p>Muhimi shundaki, <strong>til bir xil</strong>. Siz bilgan <code>let</code>, funksiyalar, obyektlar, <code>Promise</code>, <code>async/await</code> — barchasi Node.js'da ham xuddi shunday ishlaydi. Faqat atrof-muhit (mavjud obyektlar va modullar) boshqacha.</p>
-<h2>V8 dvigateli</h2>
+<h2 id="v8-dvigateli">V8 dvigateli</h2>
 <p>JavaScript kodi o'zicha ishlamaydi — uni ishga tushiradigan <strong>dvigatel</strong> (engine) kerak. Google Chrome brauzeri <strong>V8</strong> nomli dvigateldan foydalanadi. V8 juda tez: u JavaScript kodini mashina kodiga (protsessor tushunadigan tilga) o'giradi.</p>
 <p>Node.js aynan <strong>shu V8 dvigatelini</strong> oladi va uning atrofiga server imkoniyatlarini qo'shadi. Ya'ni Node.js = V8 + fayl tizimi, tarmoq va boshqa modullar.</p>
 <div class="note">Shuning uchun Chrome'da ishlaydigan tezkor zamonaviy JavaScript sintaksisi Node.js'da ham ishlaydi — ikkalasi ham bir xil V8 dvigatelidan foydalanadi.</div>
-<h2>Bir oqimli va event loop</h2>
+<h2 id="bir-oqimli-va-event-loop">Bir oqimli va event loop</h2>
 <p>Node.js'ning eng muhim xususiyatlaridan biri — u <strong>bir oqimli</strong> (single-threaded). Ya'ni sizning kodingiz asosan bitta oqimda (thread) ketma-ket ishlaydi. Bu g'alati tuyulishi mumkin: bir oqimda qanday qilib minglab foydalanuvchiga xizmat ko'rsatiladi?</p>
 <p>Javob — <strong>event loop</strong> (hodisalar sikli) va <strong>bloklamaydigan (non-blocking) I/O</strong>. Buni tushunish uchun oshxonadagi bitta ofitsiantni tasavvur qiling.</p>
 <p>Ofitsiant bitta (bir oqim). U mijozdan buyurtma oladi va oshpazga uzatadi. Keyin ovqat tayyor bo'lishini kutib turmaydi — darhol boshqa mijozga o'tadi. Ovqat tayyor bo'lganda oshpaz xabar beradi, ofitsiant esa uni olib boradi. Shu tariqa bitta ofitsiant ko'plab mijozga samarali xizmat ko'rsatadi.</p>
 <p>Node.js xuddi shunday ishlaydi. <strong>Event loop</strong> — bu doimo aylanib turuvchi sikl. U bajarilishi kerak bo'lgan vazifalarni navbatga (queue) qo'yadi va birma-bir bajaradi. Uzoq davom etadigan operatsiyalar (fayl o'qish, tarmoq so'rovi) fonda bajariladi, natija tayyor bo'lganda esa callback chaqiriladi.</p>
-<h2>Bloklamaydigan I/O</h2>
+<h2 id="bloklamaydigan-i-o">Bloklamaydigan I/O</h2>
 <p><strong>I/O</strong> (Input/Output) — kirish/chiqish operatsiyalari: fayl o'qish, ma'lumotlar bazasiga so'rov, tarmoq so'rovi. Bular sekin operatsiyalar — protsessor bilan solishtirganda ular abadiyatga cho'ziladi.</p>
 <p><strong>Bloklaydigan</strong> (blocking) yondashuvda kod fayl o'qib bo'lguncha kutib turadi va boshqa hech nima qilmaydi. Bu vaqtni behuda sarflash.</p>
 <pre class="code"><code>// Bloklaydigan (sinxron) — kutib turadi:
@@ -626,11 +642,11 @@ fs.readFile('katta-fayl.txt', (err, data) =&gt; {
 console.log('Keyingi ish'); // darhol ishga tushadi, kutmaydi</code></pre>
 <p>Aynan shu bloklamaydigan model tufayli Node.js bir oqimda bo'lishiga qaramay ko'plab bir vaqtdagi (concurrent) ulanishlarni samarali boshqaradi. U kutish o'rniga boshqa vazifalarni bajaradi.</p>
 <div class="tip">Bloklamaydigan I/O va event loop tufayli Node.js ayniqsa <strong>ko'p so'rovli, kam hisob-kitobli</strong> ilovalar (API serverlari, real-time chatlar, veb-ilovalar) uchun juda mos keladi.</div>
-<h2>Node.js qachon ishlatiladi?</h2>
+<h2 id="node-js-qachon-ishlatiladi">Node.js qachon ishlatiladi?</h2>
 <p>Node.js universal vosita, lekin ayrim vazifalar uchun ayniqsa yaxshi:</p>
 <ul><li><strong>REST API</strong> va backend serverlar — mobil yoki veb-ilovaga ma'lumot beruvchi serverlar;</li><li><strong>Real-time ilovalar</strong> — chatlar, o'yinlar, jonli xabarnomalar (WebSocket bilan);</li><li><strong>Mikroservislar</strong> — kichik, mustaqil xizmatlar;</li><li><strong>Command-line vositalar</strong> (CLI) — terminal dasturlari;</li><li><strong>Build vositalari</strong> — Webpack, Vite, Babel kabi frontend asboblari ham Node.js'da ishlaydi.</li></ul>
 <p>Node.js <strong>og'ir hisob-kitob</strong> (masalan, murakkab matematik modellashtirish yoki tasvirni qayta ishlash) uchun ideal emas, chunki bir oqim uzoq hisob-kitobda band bo'lib qolsa, event loop bloklanadi. Bunday holatlar uchun boshqa yechimlar (worker threads, alohida servislar) qo'llaniladi.</p>
-<h2>Node.js'ni o'rnatish</h2>
+<h2 id="node-js-ni-o-rnatish">Node.js'ni o'rnatish</h2>
 <p>Node.js'ni <a href="https://nodejs.org">nodejs.org</a> saytidan yuklab olishingiz mumkin. Ikki versiya taklif etiladi:</p>
 <ul><li><strong>LTS</strong> (Long Term Support) — barqaror, ishlab chiqarish uchun tavsiya etiladigan versiya;</li><li><strong>Current</strong> — eng yangi imkoniyatlarga ega, lekin kamroq barqaror versiya.</li></ul>
 <p>Yangi boshlovchilar uchun <strong>LTS</strong> versiyasi tavsiya etiladi. O'rnatgach, terminalda versiyani tekshiring:</p>
@@ -641,7 +657,7 @@ npm -v
 # 10.2.4</code></pre>
 <p>Agar versiya raqamlari chiqsa — Node.js muvaffaqiyatli o'rnatilgan. <code>node</code> — Node.js'ning o'zi, <code>npm</code> esa u bilan birga keladigan paketlar menejeri (keyingi darsda batafsil).</p>
 <div class="note">Bir nechta Node.js versiyalarini boshqarish uchun <strong>nvm</strong> (Node Version Manager) vositasidan foydalanish qulay. U turli loyihalar uchun turli versiyalarni o'rnatish va almashtirishga imkon beradi.</div>
-<h2>Birinchi skript</h2>
+<h2 id="birinchi-skript">Birinchi skript</h2>
 <p>Node.js kodini yozib, ishga tushirib ko'raylik. Bir papkada <code>app.js</code> nomli fayl yarating va quyidagini yozing:</p>
 <pre class="code"><code>// app.js
 console.log('Salom, Node.js!');
@@ -655,7 +671,7 @@ console.log('Xush kelibsiz, ' + ism);</code></pre>
 Xush kelibsiz, Ali</code></pre>
 <p>Tabriklaymiz — siz brauzersiz, to'g'ridan-to'g'ri operatsion tizimda JavaScript kodini ishga tushirdingiz! Bu yerda <code>console.log</code> natija terminalga chiqadi (brauzerdagidek konsolga emas).</p>
 <div class="note"><code>node</code> buyrug'ini argumentsiz ishga tushirsangiz (shunchaki <code>node</code>), <strong>REPL</strong> (interaktiv rejim) ochiladi. Unda JavaScript ifodalarini birma-bir kiritib, natijani darhol ko'rish mumkin. Chiqish uchun <code>.exit</code> yozing yoki <code>Ctrl+C</code>ni ikki marta bosing.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Node.js</strong> — JavaScript'ni brauzerdan tashqarida, serverda ishga tushiradigan muhit;</li><li>U Chrome'ning <strong>V8</strong> dvigatelidan foydalanadi, shu sabab til brauzerdagi bilan bir xil;</li><li>Node.js <strong>bir oqimli</strong>, lekin <strong>event loop</strong> va <strong>bloklamaydigan I/O</strong> tufayli ko'plab bir vaqtdagi so'rovlarni samarali boshqaradi;</li><li>U API serverlar, real-time ilovalar, mikroservislar va CLI vositalar uchun juda mos;</li><li>O'rnatilganini <code>node -v</code> bilan tekshirasiz, skriptni <code>node app.js</code> bilan ishga tushirasiz.</li></ul>
 <nav class="lesson-nav">
   <a href="bash-skript.html"><span class="dir">← Oldingi</span><span class="ttl">Bash skript asoslari</span></a>
@@ -669,6 +685,6 @@ Xush kelibsiz, Ali</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

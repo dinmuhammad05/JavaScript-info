@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Massivlar — Kodla</title>
   <meta name="description" content="Tartiblangan ma'lumotlar to'plami: yaratish, indekslar, uzunlik, qo'shish/o'chirish metodlari va aylanish (loop).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,22 @@
 <main class="content article">
 <div class="crumbs">Ma'lumot turlari</div>
 <h1>Massivlar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#massiv-yaratish">Massiv yaratish</a></li>
+<li class="lvl2"><a href="#indekslar-orqali-murojaat">Indekslar orqali murojaat</a></li>
+<li class="lvl2"><a href="#length-uzunlik">length — uzunlik</a></li>
+<li class="lvl2"><a href="#qo-shish-va-o-chirish-metodlari">Qo'shish va o'chirish metodlari</a></li>
+<li class="lvl2"><a href="#massivning-ichki-tuzilishi">Massivning ichki tuzilishi</a></li>
+<li class="lvl2"><a href="#massiv-bo-ylab-aylanish-loop">Massiv bo'ylab aylanish (loop)</a></li>
+<li class="lvl2"><a href="#ko-p-o-lchamli-massivlar">Ko'p o'lchamli massivlar</a></li>
+<li class="lvl2"><a href="#tostring-matnga-o-girish">toString — matnga o'girish</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Obyektlar ma'lumotni nomlar bilan saqlaydi. Ammo ko'pincha bizga <strong>tartiblangan</strong> to'plam kerak bo'ladi: ro'yxat, navbat, elementlar ketma-ketligi. Buning uchun <strong>massiv</strong> (array) maxsus tur mavjud.</p>
-<h2>Massiv yaratish</h2>
+<h2 id="massiv-yaratish">Massiv yaratish</h2>
 <p>Massiv yaratishning ikki sintaksisi bor, lekin amalda deyarli har doim to'rtburchak qavs <code>[...]</code> ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>massiv-yaratish.js</span></div><textarea spellcheck="false">// bo'sh massiv
 let bosh = [];
@@ -609,7 +626,7 @@ console.log(mevalar);
 // massivda turli turdagi qiymatlar bo'la oladi
 let aralash = ["matn", 42, true, null];
 console.log(aralash);</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>Indekslar orqali murojaat</h2>
+<h2 id="indekslar-orqali-murojaat">Indekslar orqali murojaat</h2>
 <p>Massiv elementlari <strong>0 dan boshlab</strong> raqamlanadi. Bu raqam <strong>indeks</strong> deyiladi. Elementga to'rtburchak qavs orqali murojaat qilinadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>indeks.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
 
@@ -629,7 +646,7 @@ console.log(mevalar);</textarea><div class="pg-actions"><button class="pg-run">�
 
 console.log(sonlar.at(-1));  // 40 (oxirgi)
 console.log(sonlar.at(-2));  // 30</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>length — uzunlik</h2>
+<h2 id="length-uzunlik">length — uzunlik</h2>
 <p><code>length</code> xususiyati massivdagi elementlar sonini beradi. Aniqrog'i, u eng katta indeksdan bittaga ko'p qiymatni qaytaradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>length.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
 console.log(mevalar.length);  // 3
@@ -642,7 +659,7 @@ console.log(mevalar);  // [ 'olma', 'nok' ] — "uzum" yo'qoldi
 mevalar.length = 0;
 console.log(mevalar);  // []</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>length</code>ga qiymat berish orqali massivni qisqartirish mumkin. Uni <code>0</code> qilish — massivni tozalashning eng oson yo'llaridan biri.</div>
-<h2>Qo'shish va o'chirish metodlari</h2>
+<h2 id="qo-shish-va-o-chirish-metodlari">Qo'shish va o'chirish metodlari</h2>
 <p>Massiv "navbat" yoki "stek" sifatida ishlashi mumkin. Buning uchun to'rtta asosiy metod bor. Oxiri bilan ishlash tez, boshi bilan ishlash sekinroq.</p>
 <ul><li><code>push(el)</code> — <strong>oxiriga</strong> element qo'shadi;</li><li><code>pop()</code> — <strong>oxirgi</strong> elementni oladi va o'chiradi;</li><li><code>unshift(el)</code> — <strong>boshiga</strong> element qo'shadi;</li><li><code>shift()</code> — <strong>birinchi</strong> elementni oladi va o'chiradi.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>push-pop.js</span></div><textarea spellcheck="false">let navbat = ["a", "b", "c"];
@@ -659,7 +676,7 @@ console.log(navbat);         // [ 'x', 'a', 'b', 'c' ]
 console.log(navbat.shift()); // "x"
 console.log(navbat);         // [ 'a', 'b', 'c' ]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip"><code>push</code> va <code>pop</code> tez ishlaydi, chunki ular boshqa elementlarga tegmaydi. <code>shift</code> va <code>unshift</code> esa sekinroq, chunki qolgan barcha elementlarni surib chiqishga to'g'ri keladi.</div>
-<h2>Massivning ichki tuzilishi</h2>
+<h2 id="massivning-ichki-tuzilishi">Massivning ichki tuzilishi</h2>
 <p>Massiv aslida — bu maxsus turdagi <strong>obyekt</strong>. To'rtburchak qavs <code>arr[0]</code> obyekt sintaksisining qisqartmasidir. Massivni obyektdan ajratib turadigan narsa — tartiblangan sonli indekslar va <code>length</code> hamda maxsus metodlar.</p>
 <p>Aynan shu "obyekt" tabiati tufayli massivni noto'g'ri ishlatib "buzish" mumkin. Massiv bilan faqat tartibli, sonli indekslar orqali ishlash kerak:</p>
 <pre class="code"><code>let arr = [1, 2, 3];
@@ -669,7 +686,7 @@ arr.name = "salom";     // xususiyat qo'shish
 arr[99] = "uzoq";        // katta bo'shliq ("teshik")
 // bunday hollarda dvigatel massivni oddiy obyektdek sekin ishlaydi</code></pre>
 <div class="warn">Massivni qo'lda "nosonli" indeks yoki katta bo'sh oraliqlar bilan ishlatmang. Aks holda JavaScript dvigateli uni maxsus tez massiv sifatida emas, oddiy sekin obyekt sifatida ishlaydi.</div>
-<h2>Massiv bo'ylab aylanish (loop)</h2>
+<h2 id="massiv-bo-ylab-aylanish-loop">Massiv bo'ylab aylanish (loop)</h2>
 <p>Massiv elementlarini birma-bir ko'rib chiqishning ikki asosiy usuli bor. Birinchisi — klassik <code>for</code> sikli, unda indeks orqali murojaat qilamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>for.js</span></div><textarea spellcheck="false">let mevalar = ["olma", "nok", "uzum"];
 
@@ -685,7 +702,7 @@ for (let meva of mevalar) {
   console.log(meva);
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Massivda <code>for..in</code> siklini <strong>ishlatmang</strong>. U obyektlar uchun mo'ljallangan va massivda sekinroq hamda ba'zan keraksiz xususiyatlarni ham aylanib chiqadi. Massiv uchun <code>for</code> yoki <code>for..of</code> ishlating.</div>
-<h2>Ko'p o'lchamli massivlar</h2>
+<h2 id="ko-p-o-lchamli-massivlar">Ko'p o'lchamli massivlar</h2>
 <p>Massiv elementlari ham massiv bo'lishi mumkin. Bunday tuzilma <strong>ko'p o'lchamli massiv</strong> deyiladi va, masalan, jadval yoki matritsani ifodalash uchun ishlatiladi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>matritsa.js</span></div><textarea spellcheck="false">// 3x3 matritsa
 let matritsa = [
@@ -698,7 +715,7 @@ let matritsa = [
 console.log(matritsa[0][0]);  // 1 (birinchi qator, birinchi ustun)
 console.log(matritsa[1][2]);  // 6
 console.log(matritsa[2][1]);  // 8</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>toString — matnga o'girish</h2>
+<h2 id="tostring-matnga-o-girish">toString — matnga o'girish</h2>
 <p>Massivda <code>toString</code> metodi bor — u elementlarni vergul bilan birlashtirib satr qaytaradi. Massiv satr bilan birlashtirilganda ham xuddi shu ro'y beradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>tostring.js</span></div><textarea spellcheck="false">let sonlar = [1, 2, 3];
 
@@ -708,7 +725,7 @@ console.log(String(sonlar));      // "1,2,3"
 // satr bilan birlashtirish avtomatik toString chaqiradi
 console.log("Ro'yxat: " + sonlar);  // "Ro'yxat: 1,2,3"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Elementlarni boshqa ajratuvchi bilan birlashtirish uchun <code>join</code> metodini ishlatishingiz mumkin: <code>[1,2,3].join(" - ")</code> → <code>"1 - 2 - 3"</code>.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Massiv — <strong>tartiblangan</strong> to'plam, <code>[...]</code> bilan yaratiladi;</li><li>Elementlar <strong>0 dan</strong> indekslanadi; murojaat <code>arr[i]</code> yoki <code>arr.at(-1)</code> (oxiridan);</li><li><code>length</code> — uzunlik; unga qiymat berib massivni qisqartirish/tozalash mumkin;</li><li><code>push/pop</code> — oxiri bilan (tez); <code>shift/unshift</code> — boshi bilan (sekinroq);</li><li>Massiv — aslida maxsus obyekt; uni faqat sonli indekslar bilan ishlating;</li><li>Aylanish uchun <code>for</code> yoki <code>for..of</code> (lekin <code>for..in</code> emas);</li><li>Element massiv bo'lsa — ko'p o'lchamli massiv; <code>toString</code>/<code>join</code> matnga o'giradi.</li></ul>
 <nav class="lesson-nav">
   <a href="satrlar.html"><span class="dir">← Oldingi</span><span class="ttl">Satrlar</span></a>
@@ -722,6 +739,6 @@ console.log("Ro'yxat: " + sonlar);  // "Ro'yxat: 1,2,3"</textarea><div class="pg
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

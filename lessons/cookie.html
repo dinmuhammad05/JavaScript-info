@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cookie — Kodla</title>
   <meta name="description" content="document.cookie orqali cookie'larni o'qish va yozish, path/domain/expires/max-age, secure va samesite bayroqlari, httpOnly, cheklovlar va yordamchi funksiyalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,30 @@
 <main class="content article">
 <div class="crumbs">Brauzerda ma'lumot saqlash</div>
 <h1>Cookie</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#cookie-nima-va-qanday-ishlaydi">Cookie nima va qanday ishlaydi</a></li>
+<li class="lvl2"><a href="#document-cookie-orqali-o-qish">document.cookie orqali o'qish</a></li>
+<li class="lvl2"><a href="#document-cookie-orqali-yozish">document.cookie orqali yozish</a></li>
+<li class="lvl2"><a href="#path-cookie-ning-yo-l-ko-lami">path — cookie'ning yo'l ko'lami</a></li>
+<li class="lvl2"><a href="#domain-cookie-qaysi-domenda-ko-rinadi">domain — cookie qaysi domenda ko'rinadi</a></li>
+<li class="lvl2"><a href="#expires-va-max-age-amal-qilish-muddati">expires va max-age — amal qilish muddati</a></li>
+<li class="lvl3"><a href="#expires-aniq-sana">expires — aniq sana</a></li>
+<li class="lvl3"><a href="#max-age-soniyalardagi-muddat">max-age — soniyalardagi muddat</a></li>
+<li class="lvl2"><a href="#secure-va-samesite-xavfsizlik-bayroqlari">secure va samesite — xavfsizlik bayroqlari</a></li>
+<li class="lvl2"><a href="#httponly-faqat-serverdan">httpOnly — faqat serverdan</a></li>
+<li class="lvl2"><a href="#cookie-cheklovlari">Cookie cheklovlari</a></li>
+<li class="lvl2"><a href="#to-liq-yordamchi-funksiyalar">To'liq yordamchi funksiyalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Cookie'lar — brauzer tomonidan saqlanadigan kichik matnli ma'lumot bo'laklaridir. Ular HTTP protokolining bir qismi bo'lib, aksar hollarda foydalanuvchini <em>tanib olish</em> (autentifikatsiya) uchun ishlatiladi. Cookie odatda server tomonidan <code>Set-Cookie</code> sarlavhasi orqali o'rnatiladi, keyin brauzer har bir so'rovda ularni <code>Cookie</code> sarlavhasida serverga qaytaradi.</p>
-<h2>Cookie nima va qanday ishlaydi</h2>
+<h2 id="cookie-nima-va-qanday-ishlaydi">Cookie nima va qanday ishlaydi</h2>
 <p>Cookie <code> nom=qiymat</code> ko'rinishidagi juftlik bo'lib, brauzerda saqlanadi. U ma'lum bir domenga bog'langan holda saqlanadi va o'sha domenga yuborilgan har bir HTTP so'rovda avtomatik ravishda serverga qaytariladi. Aynan shu avtomatik qaytish xususiyati cookie'ni sessiyalarni saqlash uchun qulay qiladi.</p>
 <p>Odatiy senariy quyidagicha: foydalanuvchi tizimga kiradi, server autentifikatsiya sessiya identifikatorini <code>Set-Cookie</code> sarlavhasi bilan o'rnatadi, keyin brauzer har bir so'rovda o'sha sessiya cookie'sini yuboradi va server foydalanuvchini tanib oladi.</p>
 <div class="note">Cookie'lar <strong>brauzerga xos</strong> mexanizmdir. Ularni faqat brauzer muhitida ishlaydigan JavaScript koddan o'qish/yozish mumkin. Node.js yoki playground muhitida <code>document</code> obyekti bo'lmaydi, shu sabab quyidagi misollarni faqat brauzer konsolida sinab ko'ring.</div>
-<h2>document.cookie orqali o'qish</h2>
+<h2 id="document-cookie-orqali-o-qish">document.cookie orqali o'qish</h2>
 <p>Brauzer JavaScript koddan cookie'ga <code>document.cookie</code> xususiyati orqali kirish mumkin. Uni o'qishimiz barcha cookie'larni bitta satr ko'rinishida beradi, bunda juftliklar <code>; </code> (nuqta-vergul va probel) bilan ajratiladi:</p>
 <pre class="code"><code>// Brauzerda:
 let all = document.cookie;
@@ -619,7 +640,7 @@ console.log(all);
 let user = getCookie('user');
 console.log(user); // "Ali" (agar mavjud bo'lsa)</code></pre>
 <div class="note">Cookie nomi va qiymatida maxsus belgilar (probel, <code>;</code>, kirill harflar va h.k.) bo'lishi mumkin emas. Shu sabab qiymatni yozishda <code>encodeURIComponent</code>, o'qishda esa <code>decodeURIComponent</code> ishlatiladi.</div>
-<h2>document.cookie orqali yozish</h2>
+<h2 id="document-cookie-orqali-yozish">document.cookie orqali yozish</h2>
 <p><code>document.cookie</code>ga yozish alohida xususiyatga ega: u <em>o'zgartiruvchi</em> (writable) bo'lsa-da, unga qiymat berish barcha cookie'larni <strong>almashtirmaydi</strong>, balki faqat siz ko'rsatgan bitta cookie'ni o'rnatadi yoki yangilaydi:</p>
 <pre class="code"><code>// Brauzerda:
 document.cookie = 'user=Ali';
@@ -630,14 +651,14 @@ document.cookie = 'user=Ali';
 let value = 'Ali Valiyev'; // probel bor
 document.cookie = name + '=' + encodeURIComponent(value);</code></pre>
 <div class="warn"><code>document.cookie = ...</code> texnik jihatdan xususiyat bo'lsa ham, u <em>maxsus aksessor</em> (accessor) sifatida ishlaydi. Har bir yozish faqat bitta cookie'ni ta'sirlaydi — bu odatiy obyekt xususiyatidan farqli xatti-harakat. Butun ro'yxatni bir marta yozib bo'lmaydi.</div>
-<h2>path — cookie'ning yo'l ko'lami</h2>
+<h2 id="path-cookie-ning-yo-l-ko-lami">path — cookie'ning yo'l ko'lami</h2>
 <p><code>path=/...</code> parametri cookie ko'rinadigan URL yo'lini belgilaydi. Cookie faqat shu yo'l va uning ostki yo'llari uchun brauzerdan serverga yuboriladi:</p>
 <pre class="code"><code>document.cookie = 'user=Ali; path=/admin';
 // bu cookie faqat /admin, /admin/panel kabi
 // yo'llarda serverga yuboriladi, /shop'da yuborilmaydi</code></pre>
 <p>Odatda <code>path=/</code> ishlatiladi — bu cookie'ni butun sayt bo'ylab ko'rinadigan qiladi. Agar <code>path</code> ko'rsatilmasa, u joriy sahifaning yo'liga sozlanadi, bu ko'pincha kutilmagan cheklovlarga olib keladi.</p>
 <div class="tip">Deyarli har doim <code>path=/</code> qo'ying — shunda cookie saytning barcha sahifalarida ishlaydi.</div>
-<h2>domain — cookie qaysi domenda ko'rinadi</h2>
+<h2 id="domain-cookie-qaysi-domenda-ko-rinadi">domain — cookie qaysi domenda ko'rinadi</h2>
 <p><code>domain</code> parametri cookie qaysi domenda serverga yuborilishini belgilaydi. Standart holatda cookie faqat o'zi o'rnatilgan aniq domenda ko'rinadi va <strong>subdomen'larda ko'rinmaydi</strong>:</p>
 <pre class="code"><code>// site.com'da o'rnatilgan cookie standart holatda
 // forum.site.com'da KO'RINMAYDI
@@ -647,9 +668,9 @@ document.cookie = 'user=Ali';</code></pre>
 document.cookie = 'user=Ali; domain=site.com';
 // endi cookie forum.site.com, shop.site.com'da ham ko'rinadi</code></pre>
 <div class="warn">Xavfsizlik sababli cookie'ni <strong>begona domenga</strong> berib bo'lmaydi. Faqat joriy domen yoki uning yuqori (asosiy) domenini ko'rsatishingiz mumkin. Masalan <code>other.com</code>ni <code>site.com</code>dan o'rnatolmaysiz.</div>
-<h2>expires va max-age — amal qilish muddati</h2>
+<h2 id="expires-va-max-age-amal-qilish-muddati">expires va max-age — amal qilish muddati</h2>
 <p>Standart holatda cookie <em>sessiya cookie'si</em> bo'ladi — brauzer yopilganda o'chib ketadi. Cookie'ni uzoqroq saqlash uchun <code>expires</code> yoki <code>max-age</code> ishlatiladi.</p>
-<h3>expires — aniq sana</h3>
+<h3 id="expires-aniq-sana">expires — aniq sana</h3>
 <p><code>expires</code> cookie tugash sanasini GMT formatida (<code>toUTCString()</code>) belgilaydi:</p>
 <pre class="code"><code>let date = new Date(Date.now() + 86400e3); // +1 kun
 date = date.toUTCString();
@@ -657,7 +678,7 @@ document.cookie = 'user=Ali; expires=' + date + '; path=/';</code></pre>
 <p>O'tmishdagi sanani berish cookie'ni <strong>o'chiradi</strong>:</p>
 <pre class="code"><code>// cookie'ni o'chirish:
 document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';</code></pre>
-<h3>max-age — soniyalardagi muddat</h3>
+<h3 id="max-age-soniyalardagi-muddat">max-age — soniyalardagi muddat</h3>
 <p><code>max-age</code> — hozirgi vaqtdan boshlab soniyalarda ifodalangan muddat. U <code>expires</code>ga qulay muqobil:</p>
 <pre class="code"><code>// 1 soatga:
 document.cookie = 'user=Ali; max-age=3600; path=/';
@@ -665,7 +686,7 @@ document.cookie = 'user=Ali; max-age=3600; path=/';
 // darhol o'chirish (0 yoki manfiy qiymat):
 document.cookie = 'user=Ali; max-age=0; path=/';</code></pre>
 <div class="note"><code>max-age=0</code> yoki manfiy qiymat cookie'ni zudlik bilan o'chiradi. Cookie'ni o'chirishning eng ishonchli yo'li — uni bo'sh qiymat va o'tgan muddat bilan qayta o'rnatish, bunda <code>path</code> va <code>domain</code> asl o'rnatishdagidek bo'lishi kerak.</div>
-<h2>secure va samesite — xavfsizlik bayroqlari</h2>
+<h2 id="secure-va-samesite-xavfsizlik-bayroqlari">secure va samesite — xavfsizlik bayroqlari</h2>
 <p><code>secure</code> bayrog'i cookie'ni faqat HTTPS ulanishida yuborishga majbur qiladi. Bu cookie'ning shifrlanmagan HTTP orqali oshkor bo'lishining oldini oladi:</p>
 <pre class="code"><code>// faqat HTTPS orqali yuboriladi:
 document.cookie = 'user=Ali; secure; path=/';</code></pre>
@@ -673,7 +694,7 @@ document.cookie = 'user=Ali; secure; path=/';</code></pre>
 <ul><li><code>samesite=strict</code> — cookie boshqa saytdan kelgan har qanday so'rovda umuman yuborilmaydi. Hatto foydalanuvchi tashqi havoladan saytga kirsa ham, birinchi so'rovda cookie ketmaydi;</li><li><code>samesite=lax</code> — muvozanatli rejim (aksar brauzerlarda standart). Cookie xavfsiz, yuqori darajali navigatsiya so'rovlarida (masalan havolaga bosishda, GET metodida) yuboriladi, ammo tashqi saytdagi POST forma yoki rasm/iframe kabi ichki so'rovlarda yuborilmaydi;</li><li><code>samesite=none</code> — cookie barcha holatlarda yuboriladi. Bu qiymat faqat <code>secure</code> bilan birga ishlaydi.</li></ul>
 <pre class="code"><code>document.cookie = 'sessionId=abc123; samesite=strict; secure; path=/';</code></pre>
 <div class="tip">Autentifikatsiya cookie'lari uchun <code>samesite=lax</code> yoki <code>strict</code> va <code>secure</code>ni birga qo'llash tavsiya etiladi — bu CSRF hujumlaridan jiddiy himoya beradi.</div>
-<h2>httpOnly — faqat serverdan</h2>
+<h2 id="httponly-faqat-serverdan">httpOnly — faqat serverdan</h2>
 <p><code>httpOnly</code> bayrog'i — bu <strong>JavaScript orqali emas, faqat server tomonidan</strong> <code>Set-Cookie</code> sarlavhasida o'rnatiladigan xususiyat. U cookie'ga JavaScript koddan (<code>document.cookie</code> orqali) kirishni butunlay taqiqlaydi:</p>
 <pre class="code"><code>// Bu server sarlavhasi (JavaScript emas!):
 // Set-Cookie: sessionId=abc123; HttpOnly; Secure; SameSite=Strict
@@ -682,11 +703,11 @@ document.cookie = 'user=Ali; secure; path=/';</code></pre>
 console.log(document.cookie);
 // httpOnly cookie bu yerda KO'RINMAYDI</code></pre>
 <div class="warn"><code>httpOnly</code> XSS (cross-site scripting) hujumlariga qarshi muhim himoya. Agar sahifaga zararli skript kirsa ham, u <code>httpOnly</code> cookie'ni o'g'irlay olmaydi, chunki JavaScript uni umuman o'qiy olmaydi. Sessiya token'larini doim <code>httpOnly</code> qilish tavsiya etiladi.</div>
-<h2>Cookie cheklovlari</h2>
+<h2 id="cookie-cheklovlari">Cookie cheklovlari</h2>
 <p>Cookie'lar hajm va son jihatidan qattiq cheklangan:</p>
 <ul><li>Bitta cookie'ning <code>nom=qiymat</code> juftligi taxminan <strong>4 KB</strong>dan oshmasligi kerak;</li><li>Bitta domen uchun cookie'lar soni cheklangan (brauzerga qarab ~20-50 ta atrofida);</li><li>Cookie har bir HTTP so'rovda serverga yuboriladi — ko'p yoki katta cookie'lar tarmoq trafigini oshiradi;</li><li>Cookie faqat matn saqlaydi — obyekt saqlash uchun uni <code>JSON.stringify</code> bilan satrsizlantirish kerak.</li></ul>
 <div class="note">Katta hajmdagi ma'lumotni saqlash uchun cookie mos emas — buning uchun <code>localStorage</code> yoki <code>IndexedDB</code> ancha qulay. Cookie'ning asosiy vazifasi — <em>autentifikatsiya</em>, ya'ni foydalanuvchini serverda tanib olish.</div>
-<h2>To'liq yordamchi funksiyalar</h2>
+<h2 id="to-liq-yordamchi-funksiyalar">To'liq yordamchi funksiyalar</h2>
 <p>Amalda cookie bilan ishlashni osonlashtirish uchun uchta funksiya to'plami odatda yetarli: o'qish, yozish (parametrlar bilan) va o'chirish.</p>
 <pre class="code"><code>// O'qish
 function getCookie(name) {
@@ -729,7 +750,7 @@ setCookie('user', 'Ali', { 'max-age': 3600, samesite: 'strict' });
 console.log(getCookie('user')); // "Ali"
 deleteCookie('user');</code></pre>
 <div class="tip">Cookie'ni o'chirishda o'sha <code>path</code> va <code>domain</code>ni ko'rsatish muhim — aks holda brauzer boshqa cookie'ni nazarda tutayapti deb hisoblab, o'chirmasligi mumkin.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Cookie — brauzerda saqlanadigan kichik matnli juftliklar bo'lib, har bir HTTP so'rovda avtomatik serverga yuboriladi;</li><li><code>document.cookie</code> orqali o'qiladi (satr) va yoziladi (bir vaqtda bitta cookie);</li><li><code>path</code> va <code>domain</code> cookie'ning ko'rinish ko'lamini belgilaydi;</li><li><code>expires</code> yoki <code>max-age</code> amal qilish muddatini beradi; bularsiz cookie sessiya bilan o'chadi;</li><li><code>secure</code>, <code>samesite</code> va <code>httpOnly</code> — xavfsizlik uchun kalit bayroqlar (<code>httpOnly</code> faqat serverdan);</li><li>Cookie hajmi ~4 KB, uning asosiy vazifasi — autentifikatsiya, katta ma'lumot uchun <code>localStorage</code> qulayroq.</li></ul>
 <nav class="lesson-nav">
   <a href="websocket.html"><span class="dir">← Oldingi</span><span class="ttl">WebSocket</span></a>
@@ -743,6 +764,6 @@ deleteCookie('user');</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

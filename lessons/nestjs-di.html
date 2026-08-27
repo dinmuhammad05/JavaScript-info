@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Provider va Dependency Injection — Kodla</title>
   <meta name="description" content="Dependency Injection nima va u NestJS'da qanday ishlaydi, provayderlar, konstruktor injektsiyasi, IoC konteyner, modullararo import/export orqali service'larni ulashish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,21 @@
 <main class="content article">
 <div class="crumbs">NestJS</div>
 <h1>Provider va Dependency Injection</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#muammo-bog-liqliklarni-qo-lda-boshqarish">Muammo: bog'liqliklarni qo'lda boshqarish</a></li>
+<li class="lvl2"><a href="#yechim-dependency-injection">Yechim: Dependency Injection</a></li>
+<li class="lvl2"><a href="#konstruktor-injektsiyasi-qanday-ishlaydi">Konstruktor injektsiyasi qanday ishlaydi?</a></li>
+<li class="lvl2"><a href="#provider-nima">Provider nima?</a></li>
+<li class="lvl2"><a href="#maxsus-provayderlar-custom-providers">Maxsus provayderlar (custom providers)</a></li>
+<li class="lvl2"><a href="#modullararo-import-va-export">Modullararo import va export</a></li>
+<li class="lvl2"><a href="#global-modullar">Global modullar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Agar NestJS'ning bitta eng muhim g'oyasini tanlash kerak bo'lsa, bu <strong>Dependency Injection</strong> (bog'liqliklarni injektsiya qilish, qisqacha DI) bo'lardi. Bu tushuncha boshida sehrli tuyulishi mumkin, lekin aslida u juda oddiy va kuchli. Ushbu darsda DI qanday ishlashini, provayderlar nima ekanligini va service'larni modullar orasida qanday ulashishni to'liq o'rganamiz.</p>
-<h2>Muammo: bog'liqliklarni qo'lda boshqarish</h2>
+<h2 id="muammo-bog-liqliklarni-qo-lda-boshqarish">Muammo: bog'liqliklarni qo'lda boshqarish</h2>
 <p>Avval DI <em>nima uchun</em> kerakligini tushunamiz. Faraz qilaylik, <code>UsersService</code> ma'lumotlar bazasi bilan ishlash uchun <code>DatabaseService</code>'ga bog'liq. DI'siz biz uni qo'lda yaratamiz:</p>
 <pre class="code"><code>// DI SIZ (yomon usul):
 class UsersService {
@@ -610,7 +626,7 @@ class UsersService {
 }</code></pre>
 <p>Bu yondashuvning muammolari:</p>
 <ul><li><code>UsersService</code> <code>DatabaseService</code>'ni qanday yaratishni <em>bilishi</em> kerak (host, port, parol) — bu ortiqcha bog'liqlik;</li><li>Testlashda haqiqiy bazani soxta (mock) bilan almashtirib bo'lmaydi;</li><li>Agar 10 ta service <code>DatabaseService</code>'ni ishlatsa, 10 ta alohida nusxa yaratiladi — bu isrof;</li><li>Bir joyni o'zgartirish uchun barcha service'larni qayta yozish kerak bo'ladi.</li></ul>
-<h2>Yechim: Dependency Injection</h2>
+<h2 id="yechim-dependency-injection">Yechim: Dependency Injection</h2>
 <p>DI g'oyasi juda oddiy: <strong>obyekt o'ziga kerakli bog'liqliklarni o'zi yaratmaydi, balki ularni tashqaridan qabul qiladi.</strong> Kim yaratadi? NestJS'ning maxsus tizimi — <strong>IoC konteyner</strong> (Inversion of Control — nazoratni teskari qilish).</p>
 <p>DI bilan yuqoridagi kod shunday bo'ladi. E'tibor bering, <code>UsersService</code> endi <code>DatabaseService</code>'ni qanday yaratishni bilmaydi — u shunchaki so'raydi:</p>
 <pre class="code"><code>@Injectable()
@@ -621,7 +637,7 @@ class UsersService {
   // NestJS db'ni avtomatik topib, shu yerga uzatadi
 }</code></pre>
 <div class="note">Bu "nazoratni teskari qilish" nomining ma'nosi: odatda kod o'z bog'liqliklarini <em>o'zi</em> nazorat qiladi (yaratadi). DI'da esa bu nazorat teskari yo'nalishga o'tadi — framework bog'liqliklarni yaratib, kodga <em>beradi</em>.</div>
-<h2>Konstruktor injektsiyasi qanday ishlaydi?</h2>
+<h2 id="konstruktor-injektsiyasi-qanday-ishlaydi">Konstruktor injektsiyasi qanday ishlaydi?</h2>
 <p>NestJS'da eng keng tarqalgan usul — <strong>konstruktor injektsiyasi</strong>. Siz service'ni konstruktor argumenti sifatida e'lon qilasiz, NestJS uning tipini ko'radi va tegishli nusxani avtomatik uzatadi. Jarayon quyidagicha:</p>
 <ol><li>Siz konstruktorda <code>private readonly db: DatabaseService</code> yozasiz;</li><li>NestJS TypeScript metama'lumotlari orqali <code>db</code>ning tipi <code>DatabaseService</code> ekanligini biladi;</li><li>IoC konteyner o'z ichida <code>DatabaseService</code> nusxasi bor-yo'qligini tekshiradi;</li><li>Agar bor bo'lsa, o'shani uzatadi; yo'q bo'lsa — yangi yaratib, keyingi safar uchun eslab qoladi.</li></ol>
 <pre class="code"><code>@Injectable()
@@ -638,7 +654,7 @@ export class UsersService {
   }
 }</code></pre>
 <div class="tip"><code>private readonly</code> yozuvi TypeScript'ning qulay xususiyati: u argumentni avtomatik ravishda klass xossasiga aylantiradi. Ya'ni <code>this.db = db</code> deb qo'lda yozish shart emas. Bu NestJS'da konstruktor injektsiyasi juda ixcham ko'rinishining sababi.</div>
-<h2>Provider nima?</h2>
+<h2 id="provider-nima">Provider nima?</h2>
 <p><strong>Provider</strong> — bu NestJS injektsiya qila oladigan har qanday narsa. Ko'pincha bu <code>@Injectable</code> service, lekin u qiymat, funksiya yoki tashqi kutubxona ham bo'lishi mumkin. Provider modulning <code>providers</code> massivida ro'yxatdan o'tishi kerak:</p>
 <pre class="code"><code>@Module({
   providers: [UsersService, DatabaseService, LoggerService],
@@ -646,7 +662,7 @@ export class UsersService {
 export class UsersModule {}</code></pre>
 <p>Standart holatda har bir provider <strong>singleton</strong> — ya'ni butun ilova bo'ylab uning faqat bitta nusxasi mavjud bo'ladi. <code>DatabaseService</code>'ni 100 ta joyda ishlatsangiz ham, xotirada bitta nusxa bo'ladi va u barcha service'lar orasida ulashiladi. Bu resurslarni tejaydi.</p>
 <div class="note">Singleton — bu NestJS DI'ning muhim afzalligi. Masalan, bazaga ulanish (connection pool) bir marta yaratilib, butun ilova bo'ylab qayta ishlatiladi. Bu Express'da qo'lda global o'zgaruvchilar bilan qilinadigan ishni avtomatlashtiradi.</div>
-<h2>Maxsus provayderlar (custom providers)</h2>
+<h2 id="maxsus-provayderlar-custom-providers">Maxsus provayderlar (custom providers)</h2>
 <p>Ba'zan siz oddiy klassni emas, balki maxsus qiymat yoki fabrikani injektsiya qilmoqchi bo'lasiz. NestJS buning uchun maxsus provayder sintaksisini beradi. Masalan, konfiguratsiya qiymatini token orqali berish:</p>
 <pre class="code"><code>@Module({
   providers: [
@@ -678,7 +694,7 @@ export class UsersService {
     @Inject('API_KALIT') private readonly apiKalit: string,
   ) {}
 }</code></pre>
-<h2>Modullararo import va export</h2>
+<h2 id="modullararo-import-va-export">Modullararo import va export</h2>
 <p>Endi eng muhim mavzuga o'tamiz: bir modulning service'ini boshqa modulda qanday ishlatish mumkin? Standart holatda modulning provayderlari <strong>faqat o'sha modul ichida</strong> ko'rinadi. Ularni tashqariga chiqarish uchun ikki bosqich bor.</p>
 <p><strong>1-bosqich:</strong> service'ni beruvchi modulda uni <code>exports</code> massiviga qo'shamiz. Masalan, <code>DatabaseModule</code> o'z <code>DatabaseService</code>'ini eksport qiladi:</p>
 <pre class="code"><code>// src/database/database.module.ts
@@ -708,7 +724,7 @@ export class UsersService {
   constructor(private readonly db: DatabaseService) {}
 }</code></pre>
 <div class="warn">Agar service'ni <code>exports</code>'ga qo'shmasangiz, uni boshqa modulda ishlatib bo'lmaydi — NestJS <em>"Nest can't resolve dependencies"</em> xatosini beradi. Ikki qoidani yodda tuting: beruvchi modul <strong>exports</strong> qilishi, oluvchi modul esa uni <strong>imports</strong> qilishi shart.</div>
-<h2>Global modullar</h2>
+<h2 id="global-modullar">Global modullar</h2>
 <p>Ba'zi modullar (masalan, konfiguratsiya yoki logger) deyarli hamma joyda kerak bo'ladi. Ularni har bir modulga alohida import qilish zerikarli. Bunday holatda modulni <code>@Global()</code> deb belgilash mumkin — shunda uni faqat bir marta import qilib, hamma joyda ishlatish mumkin:</p>
 <pre class="code"><code>import { Module, Global } from '@nestjs/common';
 import { ConfigService } from './config.service';
@@ -720,7 +736,7 @@ import { ConfigService } from './config.service';
 })
 export class ConfigModule {}</code></pre>
 <div class="warn"><code>@Global()</code>'ni ehtiyotkorlik bilan ishlating. Hamma narsani global qilish modullararo bog'liqliklarni yashirin qiladi va kodni tushunish qiyinlashadi. Uni faqat haqiqatan ham hamma joyda kerak bo'ladigan (config, logger) modullar uchun ishlating.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Dependency Injection</strong> — obyekt bog'liqliklarni o'zi yaratmaydi, tashqaridan qabul qiladi;</li><li><strong>IoC konteyner</strong> bog'liqliklarni yaratib, konstruktorga avtomatik uzatadi;</li><li><strong>Konstruktor injektsiyasi</strong> — <code>constructor(private readonly x: XService) {}</code> eng keng tarqalgan usul;</li><li><strong>Provider</strong> — injektsiya qilinadigan narsa, odatda <code>@Injectable</code> service, <code>providers</code>'da ro'yxatdan o'tadi;</li><li>Provayderlar standart holatda <strong>singleton</strong> — butun ilovada bitta nusxa;</li><li>Service'ni boshqa modulda ishlatish uchun: beruvchi modul <code>exports</code>, oluvchi modul <code>imports</code> qiladi;</li><li><code>@Global()</code> modulni hamma joyda ochadi, lekin uni ehtiyotkorlik bilan ishlatish kerak.</li></ul>
 <nav class="lesson-nav">
   <a href="nestjs-routing.html"><span class="dir">← Oldingi</span><span class="ttl">Routing va DTO</span></a>
@@ -734,6 +750,6 @@ export class ConfigModule {}</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

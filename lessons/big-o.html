@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Big O notatsiyasi: vaqt murakkabligi — Kodla</title>
   <meta name="description" content="Algoritm tezligini o'lchash, Big O g'oyasi, o'sish tartibi, eng yomon holat va asosiy murakkabliklar bilan tanishuv.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,34 +599,53 @@
 <main class="content article">
 <div class="crumbs">Algoritm asoslari</div>
 <h1>Big O notatsiyasi: vaqt murakkabligi</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-soniya-emas-amallar-sonini-sanaymiz">Nega soniya emas, amallar sonini sanaymiz?</a></li>
+<li class="lvl2"><a href="#kirish-hajmi-n">Kirish hajmi - n</a></li>
+<li class="lvl2"><a href="#big-o-g-oyasi-o-sish-tartibi">Big O g'oyasi: o'sish tartibi</a></li>
+<li class="lvl3"><a href="#1-konstantalar-tashlab-yuboriladi">1. Konstantalar tashlab yuboriladi</a></li>
+<li class="lvl3"><a href="#2-kichik-qo-shiluvchilar-tashlab-yuboriladi">2. Kichik qo'shiluvchilar tashlab yuboriladi</a></li>
+<li class="lvl2"><a href="#eng-yomon-o-rtacha-va-eng-yaxshi-holat">Eng yomon, o'rtacha va eng yaxshi holat</a></li>
+<li class="lvl2"><a href="#amallarni-sanash-misoli">Amallarni sanash misoli</a></li>
+<li class="lvl2"><a href="#uch-xil-asosiy-misol">Uch xil asosiy misol</a></li>
+<li class="lvl3"><a href="#o-1-bitta-amal-konstanta">O(1) - bitta amal (konstanta)</a></li>
+<li class="lvl3"><a href="#o-n-bitta-sikl-chiziqli">O(n) - bitta sikl (chiziqli)</a></li>
+<li class="lvl3"><a href="#o-n-ichma-ich-ikki-sikl-kvadratik">O(n²) - ichma-ich ikki sikl (kvadratik)</a></li>
+<li class="lvl2"><a href="#n-o-sganda-amallar-qanday-o-sadi">n o'sganda amallar qanday o'sadi</a></li>
+<li class="lvl2"><a href="#xotira-murakkabligi-space-complexity">Xotira murakkabligi (space complexity)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">"Bu algoritm tezmi?" degan savolga qanday javob berish mumkin? Soniyada o'lchaymizmi? Lekin bir xil kod kuchli kompyuterda tez, eski telefonda sekin ishlaydi. Demak soniya ishonchli o'lchov emas. Dasturchilarga universal, mashinadan mustaqil o'lchov kerak edi. Ana shunday o'lchov - <strong>Big O notatsiyasi</strong>. Bu darsda Big O nima ekanini, u algoritm tezligini qanday ifodalashini va uni qanday o'qishni o'rganamiz. Bu - algoritmlar dunyosining eng muhim tili.</p>
-<h2>Nega soniya emas, amallar sonini sanaymiz?</h2>
+<h2 id="nega-soniya-emas-amallar-sonini-sanaymiz">Nega soniya emas, amallar sonini sanaymiz?</h2>
 <p>Faraz qiling, kodingiz bir kompyuterda 2 soniyada ishladi. Bu ko'pmi yoki ozmi? Buni ayta olmaymiz, chunki:</p>
 <ul><li>Boshqa, tezroq kompyuterda xuddi shu kod 0.5 soniyada ishlashi mumkin.</li><li>Kompyuter band bo'lsa, vaqt yana o'zgaradi.</li><li>Dasturlash tili va uning versiyasi ham ta'sir qiladi.</li></ul>
 <p>Shuning uchun biz vaqtni soniyada emas, algoritm bajaradigan <strong>asosiy amallar sonida</strong> o'lchaymiz. Amal deganda - taqqoslash, qo'shish, o'zlashtirish kabi oddiy qadamlar tushuniladi. Bu son mashinaga bog'liq emas, faqat algoritmning o'ziga bog'liq. Aynan shu bizga kerak.</p>
-<h2>Kirish hajmi - n</h2>
+<h2 id="kirish-hajmi-n">Kirish hajmi - n</h2>
 <p>Algoritm qancha ishlashi ko'pincha unga berilgan ma'lumot hajmiga bog'liq. Bu hajmni biz odatda <strong>n</strong> harfi bilan belgilaymiz. Masalan:</p>
 <ul><li>Massivni saralashda n - massivdagi elementlar soni.</li><li>Matnda so'z qidirishda n - matndagi belgilar soni.</li><li>Foydalanuvchilar ro'yxatini qayta ishlashda n - foydalanuvchilar soni.</li></ul>
 <p>Big O aynan shu savolga javob beradi: <strong>n o'sganda, amallar soni qanday o'sadi?</strong> Ma'lumot ikki barobar ko'paysa, ish ham ikki barobar ko'payadimi, yoki to'rt barobar, yoki umuman o'zgarmaydimi? Mana shu "o'sish tezligi" algoritmning asl xarakterini ko'rsatadi.</p>
-<h2>Big O g'oyasi: o'sish tartibi</h2>
+<h2 id="big-o-g-oyasi-o-sish-tartibi">Big O g'oyasi: o'sish tartibi</h2>
 <p><strong>Big O notatsiyasi</strong> (Big O notation) - bu algoritmning ishlash vaqti yoki xotira sarfi kirish hajmi n ga qarab qanday o'sishini ifodalaydigan matematik yozuv. U aniq amallar sonini emas, <strong>o'sish tartibini</strong> (order of growth) ko'rsatadi.</p>
 <p>Big O ni yozishda ikkita muhim soddalashtirish qoidasi bor. Bular boshda g'alati tuyulishi mumkin, lekin ular mantiqli:</p>
-<h3>1. Konstantalar tashlab yuboriladi</h3>
+<h3 id="1-konstantalar-tashlab-yuboriladi">1. Konstantalar tashlab yuboriladi</h3>
 <p>Agar algoritm 2n amal bajarsa, biz uni <code>O(2n)</code> emas, <code>O(n)</code> deb yozamiz. Nega? Chunki bizni aniq raqam emas, o'sish <strong>xarakteri</strong> qiziqtiradi. 2n ham, 5n ham, 100n ham - hammasi n ga to'g'ri proporsional o'sadi. Ikkovi ham "chiziqli" o'sish tartibiga ega.</p>
 <pre class="code"><code>O(2n)   -&gt;  O(n)
 O(500n) -&gt;  O(n)
 O(n/2)  -&gt;  O(n)</code></pre>
-<h3>2. Kichik qo'shiluvchilar tashlab yuboriladi</h3>
+<h3 id="2-kichik-qo-shiluvchilar-tashlab-yuboriladi">2. Kichik qo'shiluvchilar tashlab yuboriladi</h3>
 <p>Agar algoritm n + 5 amal bajarsa, biz uni <code>O(n)</code> deb yozamiz. Yoki n² + n bo'lsa - <code>O(n²)</code>. Chunki n juda katta bo'lganda, eng katta tezlik bilan o'sadigan qism hamma narsani belgilaydi. Kichik qo'shiluvchilar unga nisbatan ahamiyatsiz bo'lib qoladi.</p>
 <pre class="code"><code>O(n + 5)     -&gt;  O(n)
 O(n² + n)    -&gt;  O(n²)
 O(n² + 1000) -&gt;  O(n²)</code></pre>
 <div class="note">Big O ni "n cheksizga intilganda nima bo'ladi?" degan savol sifatida tasavvur qiling. Katta ko'lamda faqat eng tez o'sadigan qism ahamiyatli bo'ladi. Aynan shuning uchun konstantalar va kichik qismlar tushib qoladi.</div>
-<h2>Eng yomon, o'rtacha va eng yaxshi holat</h2>
+<h2 id="eng-yomon-o-rtacha-va-eng-yaxshi-holat">Eng yomon, o'rtacha va eng yaxshi holat</h2>
 <p>Algoritm har doim bir xil ishlamaydi. Ba'zan omadingiz keladi, ba'zan yo'q. Massivda biror sonni qidirayotganingizni tasavvur qiling:</p>
 <ul><li><strong>Eng yaxshi holat (best case)</strong> - qidirilayotgan son birinchi elementda turibdi. Bir marta tekshirdik - topdik. Bu <code>O(1)</code>.</li><li><strong>O'rtacha holat (average case)</strong> - son o'rtalarda. Taxminan yarim massivni tekshiramiz.</li><li><strong>Eng yomon holat (worst case)</strong> - son oxirgi elementda yoki umuman yo'q. Butun massivni tekshiramiz. Bu <code>O(n)</code>.</li></ul>
 <p>Big O da biz odatda <strong>eng yomon holatni</strong> hisoblaymiz. Nega? Chunki u kafolat beradi: "Bu algoritm bundan yomonroq ishlamaydi". Eng yomon holatni bilsak, hech qachon yoqimsiz kutilmagan holatga tushmaymiz.</p>
-<h2>Amallarni sanash misoli</h2>
+<h2 id="amallarni-sanash-misoli">Amallarni sanash misoli</h2>
 <p>Keling, oddiy funksiyada amallarni sanashni ko'raylik. Bu funksiya massivning barcha elementlari yig'indisini hisoblaydi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>amal-sanash.js</span></div><textarea spellcheck="false">function yigindi(massiv) {
   let jami = 0;              // 1 amal
@@ -635,9 +657,9 @@ O(n² + 1000) -&gt;  O(n²)</code></pre>
 
 console.log(yigindi([10, 20, 30, 40]));</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Bu yerda: boshida 1 amal (jami = 0), sikl ichida n marta qo'shish, oxirida 1 amal (return). Jami taxminan n + 2 amal. Big O qoidalariga ko'ra konstantalarni tashlaymiz: <strong>O(n)</strong>. Ya'ni bu algoritm chiziqli, massiv o'sgani sari ish ham shunga mos o'sadi.</p>
-<h2>Uch xil asosiy misol</h2>
+<h2 id="uch-xil-asosiy-misol">Uch xil asosiy misol</h2>
 <p>Keling, uchta asosiy murakkablikni jonli kodda ko'raylik. Bular eng ko'p uchraydigani.</p>
-<h3>O(1) - bitta amal (konstanta)</h3>
+<h3 id="o-1-bitta-amal-konstanta">O(1) - bitta amal (konstanta)</h3>
 <p>Massivning birinchi elementini olish uchun uzunligi qanday bo'lishidan qat'i nazar - bitta amal kifoya. Massiv 10 ta ham, million ta ham element bo'lsin - farqi yo'q:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>o1-misol.js</span></div><textarea spellcheck="false">function birinchisi(massiv) {
   return massiv[0]; // n qanaqa bo'lishidan qat'i nazar 1 amal
@@ -645,7 +667,7 @@ console.log(yigindi([10, 20, 30, 40]));</textarea><div class="pg-actions"><butto
 
 console.log(birinchisi([5, 8, 12, 99])); // 5
 // Bu O(1) - konstanta vaqt</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>O(n) - bitta sikl (chiziqli)</h3>
+<h3 id="o-n-bitta-sikl-chiziqli">O(n) - bitta sikl (chiziqli)</h3>
 <p>Barcha elementlarni bir marta ko'rib chiqadigan bitta sikl - bu O(n). Elementlar soni ikki barobar ko'paysa, ish ham ikki barobar ko'payadi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>on-misol.js</span></div><textarea spellcheck="false">function engKatta(massiv) {
   let max = massiv[0];
@@ -659,7 +681,7 @@ console.log(birinchisi([5, 8, 12, 99])); // 5
 
 console.log(engKatta([3, 7, 2, 9, 4])); // 9
 // Bu O(n) - chiziqli</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>O(n²) - ichma-ich ikki sikl (kvadratik)</h3>
+<h3 id="o-n-ichma-ich-ikki-sikl-kvadratik">O(n²) - ichma-ich ikki sikl (kvadratik)</h3>
 <p>Sikl ichida yana sikl bo'lsa - bu O(n²). Tashqi sikl n marta aylanadi, uning har bir aylanishida ichki sikl yana n marta aylanadi. Jami n * n = n² amal. Bu misolda barcha juftliklarni chiqaramiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>on2-misol.js</span></div><textarea spellcheck="false">function juftliklar(massiv) {
   for (let i = 0; i &lt; massiv.length; i++) {
@@ -673,7 +695,7 @@ juftliklar([1, 2, 3]);
 // 9 ta juftlik chiqadi (3 * 3)
 // Bu O(n²) - kvadratik</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="warn">n² juda tez o'sadi. n = 1000 bo'lsa, n² = 1,000,000. n = 100000 bo'lsa, n² = 10,000,000,000 - bu deyarli har qanday kompyuterni tiz cho'ktiradi. Ichma-ich sikllardan ehtiyot bo'ling.</div>
-<h2>n o'sganda amallar qanday o'sadi</h2>
+<h2 id="n-o-sganda-amallar-qanday-o-sadi">n o'sganda amallar qanday o'sadi</h2>
 <p>Big O ning kuchini his qilish uchun turli murakkabliklar n o'sganda qancha amal bajarishini taqqoslaymiz. Quyidagi jadval hammasini oydinlashtiradi:</p>
 <pre class="code"><code>n          O(1)   O(log n)   O(n)       O(n²)
 --------------------------------------------------
@@ -683,12 +705,12 @@ juftliklar([1, 2, 3]);
 1,000,000  1      ~20        1,000,000  1,000,000,000,000</code></pre>
 <p>Diqqat qiling: O(1) hech o'zgarmaydi. O(log n) juda sekin o'sadi. O(n) tekis, mutanosib o'sadi. O(n²) esa portlaydi. Aynan shu jadval sizga qaysi algoritm katta ma'lumotda yashaydi-yu, qaysi biri o'ladi degan savolga javob beradi.</p>
 <div class="tip">Big O ni o'qishda oddiy qoida: kodingizda nechta ichma-ich sikl bor? Bitta sikl - odatda O(n). Ikkita ichma-ich - O(n²). Hech qanday sikl yo'q, faqat to'g'ridan-to'g'ri amal - O(1). Bu qoida ko'p hollarda to'g'ri ishlaydi.</div>
-<h2>Xotira murakkabligi (space complexity)</h2>
+<h2 id="xotira-murakkabligi-space-complexity">Xotira murakkabligi (space complexity)</h2>
 <p>Big O faqat vaqtni emas, <strong>xotira sarfini</strong> (space complexity) ham o'lchaydi. Ya'ni algoritm n hajmdagi ma'lumot uchun qancha qo'shimcha xotira ishlatadi?</p>
 <ul><li>Agar algoritm faqat bir nechta o'zgaruvchi ishlatsa (n ga bog'liq bo'lmagan) - bu <strong>O(1) xotira</strong>.</li><li>Agar algoritm kirishga teng hajmdagi yangi massiv yaratsa - bu <strong>O(n) xotira</strong>.</li></ul>
 <p>Masalan, yuqoridagi <code>engKatta</code> funksiyasi faqat bitta <code>max</code> o'zgaruvchisini saqlaydi - u O(1) xotira ishlatadi. Lekin agar biz massivning nusxasini olsak, O(n) xotira kerak bo'ladi.</p>
 <div class="note">Ko'pincha vaqt va xotira o'rtasida murosaga borishga to'g'ri keladi: ko'proq xotira sarflab, tezroq ishlash mumkin (yoki aksincha). Bu "vaqt-xotira almashuvi" (time-space tradeoff) deb ataladi va real muhandislikda tez-tez uchraydi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Big O - bu algoritm tezligining universal tili. U bizga mashinadan mustaqil ravishda "bu kod katta ma'lumotda qanday ishlaydi?" degan savolga javob beradi. Asosiy g'oyalar:</p>
 <ul><li>Vaqtni soniyada emas, amallar sonida (n ga bog'liq) o'lchaymiz.</li><li>Konstantalar va kichik qismlar tashlab yuboriladi - faqat o'sish tartibi qoladi.</li><li>Odatda eng yomon holatni hisoblaymiz - u kafolat beradi.</li><li>Xotira sarfi ham xuddi shunday Big O bilan o'lchanadi.</li></ul>
 <p>Keyingi darsda har bir asosiy murakkablikni - O(1) dan O(n!) gacha - alohida-alohida, jonli misollar bilan chuqurroq o'rganamiz.</p>
@@ -704,6 +726,6 @@ juftliklar([1, 2, 3]);
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

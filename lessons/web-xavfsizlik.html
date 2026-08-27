@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web xavfsizligi asoslari — Kodla</title>
   <meta name="description" content="Nega xavfsizlik muhim, CIA triadasi, &quot;foydalanuvchiga hech qachon ishonma&quot; tamoyili, HTTPS va OWASP asosidagi umumiy tahdidlar ro'yxati.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,22 +599,37 @@
 <main class="content article">
 <div class="crumbs">Web xavfsizligi va autentifikatsiya</div>
 <h1>Web xavfsizligi asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-xavfsizlik-muhim">Nega xavfsizlik muhim?</a></li>
+<li class="lvl2"><a href="#cia-triadasi">CIA triadasi</a></li>
+<li class="lvl3"><a href="#1-maxfiylik-confidentiality">1. Maxfiylik (Confidentiality)</a></li>
+<li class="lvl3"><a href="#2-butunlik-integrity">2. Butunlik (Integrity)</a></li>
+<li class="lvl3"><a href="#3-mavjudlik-availability">3. Mavjudlik (Availability)</a></li>
+<li class="lvl2"><a href="#asosiy-tamoyil-foydalanuvchiga-hech-qachon-ishonmang">Asosiy tamoyil: foydalanuvchiga hech qachon ishonmang</a></li>
+<li class="lvl2"><a href="#https-tarmoq-qatlamidagi-himoya">HTTPS — tarmoq qatlamidagi himoya</a></li>
+<li class="lvl2"><a href="#umumiy-tahdidlar-owasp-qisqacha">Umumiy tahdidlar: OWASP qisqacha</a></li>
+<li class="lvl2"><a href="#xavfsizlik-jarayon-bir-martalik-ish-emas">Xavfsizlik — jarayon, bir martalik ish emas</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Web ilova tarmoqqa ochilgan zahoti u nafaqat foydalanuvchilarga, balki niyati buzuq kishilarga ham ochiladi. Xavfsizlik — bu "keyin qo'shiladigan" xususiyat emas, balki ilovani loyihalashning ajralmas qismidir. Ushbu darsda biz xavfsizlik nima uchun muhimligini, uni baholashning asosiy ramkasini (CIA triadasi) va zamonaviy web ilovalarga tahdid soladigan asosiy zaifliklarni <strong>faqat himoya nuqtai nazaridan</strong> o'rganamiz.</p>
 <div class="note">Ushbu bob to'liq ta'lim maqsadida yozilgan. Maqsad — sizni <strong>himoyachi</strong> dasturchi qilib tayyorlash: zaiflik qanday paydo bo'lishini tushunib, undan qanday himoyalanishni bilishingiz uchun. Hech qanday hujum qilish yo'riqnomasi berilmaydi.</div>
-<h2>Nega xavfsizlik muhim?</h2>
+<h2 id="nega-xavfsizlik-muhim">Nega xavfsizlik muhim?</h2>
 <p>Har qanday jiddiy web ilova foydalanuvchilarning ma'lumotlari bilan ishlaydi: parollar, email manzillari, to'lov kartalari, shaxsiy yozishmalar. Bir marta yo'l qo'yilgan xatolik minglab foydalanuvchining ma'lumotini xavf ostiga qo'yishi mumkin.</p>
 <ul><li><strong>Foydalanuvchilarga zarar:</strong> o'g'irlangan parollar, moliyaviy yo'qotishlar, shaxsiy ma'lumotning ochilishi;</li><li><strong>Biznesga zarar:</strong> obro'ning yo'qolishi, jarimalar (masalan, GDPR kabi qonunlar buzilganda), mijozlarning ketishi;</li><li><strong>Texnik zarar:</strong> serverning ishdan chiqishi, ma'lumotlar bazasining buzilishi, xizmatning to'xtashi.</li></ul>
 <p>Muhim tushuncha: xavfsizlikda <strong>hujumchi doim bitta zaiflikni topsa yetadi</strong>, himoyachi esa <em>barcha</em> zaifliklarni yopishi kerak. Shu sabab xavfsizlik ustma-ust qatlamlardan iborat bo'lishi lozim — buni <strong>chuqurlashtirilgan himoya</strong> (defense in depth) deyiladi.</p>
-<h2>CIA triadasi</h2>
+<h2 id="cia-triadasi">CIA triadasi</h2>
 <p>Axborot xavfsizligining klassik uchligi — bu <strong>CIA triadasi</strong>. Bu Markaziy Razvedka Boshqarmasi emas, balki uchta tamoyilning inglizcha bosh harflari:</p>
-<h3>1. Maxfiylik (Confidentiality)</h3>
+<h3 id="1-maxfiylik-confidentiality">1. Maxfiylik (Confidentiality)</h3>
 <p>Ma'lumotni faqat unga huquqi bor kishilar ko'ra olishi kerak. Foydalanuvchining paroli, xabarlari, kartasi begonaga ko'rinmasligi shart. Maxfiylikni ta'minlash vositalari: shifrlash (HTTPS, ma'lumotni bazada shifrlash), to'g'ri avtorizatsiya, ma'lumotga kirishni cheklash.</p>
-<h3>2. Butunlik (Integrity)</h3>
+<h3 id="2-butunlik-integrity">2. Butunlik (Integrity)</h3>
 <p>Ma'lumot ruxsatsiz o'zgartirilmasligi kerak. Masalan, foydalanuvchi bankdagi balansini o'zboshimchalik bilan o'zgartira olmasligi lozim. Butunlikni himoya qiluvchi vositalar: raqamli imzolar, hash-tekshirishlar, server tomonida qat'iy tekshiruvlar.</p>
-<h3>3. Mavjudlik (Availability)</h3>
+<h3 id="3-mavjudlik-availability">3. Mavjudlik (Availability)</h3>
 <p>Xizmat unga muhtoj bo'lgan foydalanuvchilar uchun ishlab turishi kerak. Server yuklama hujumlari (masalan, xizmatni rad etish hujumlari) tufayli ishdan chiqmasligi lozim. Vositalar: yuklama muvozanati, so'rov chastotasini cheklash (rate limiting), zaxira nusxalar.</p>
 <div class="note">Har qanday xavfsizlik qarorini qabul qilayotganda o'zingizga savol bering: "Bu qaror maxfiylik, butunlik va mavjudlikning qaysi biriga xizmat qiladi?" Bu uch tamoyil sizga tizimli fikrlash ramkasini beradi.</div>
-<h2>Asosiy tamoyil: foydalanuvchiga hech qachon ishonmang</h2>
+<h2 id="asosiy-tamoyil-foydalanuvchiga-hech-qachon-ishonmang">Asosiy tamoyil: foydalanuvchiga hech qachon ishonmang</h2>
 <p>Web xavfsizligining eng muhim aqli — <strong>"Never trust user input"</strong> (foydalanuvchi kiritmasiga hech qachon ishonmang). Brauzerdan, mobil ilovadan yoki boshqa mijozdan kelgan <em>har qanday</em> ma'lumot potensial ravishda soxta yoki zararli bo'lishi mumkin.</p>
 <p>Mijoz tomonidagi kod (JavaScript, HTML forma) foydalanuvchi to'liq nazorat qiladigan muhitda ishlaydi. Foydalanuvchi brauzer developer vositalarini ochib, so'rovni istagancha o'zgartirishi mumkin. Shuning uchun:</p>
 <ul><li>Mijoz tomonidagi validatsiya — bu faqat <em>qulaylik</em> (foydalanuvchiga tez javob berish uchun), xavfsizlik emas;</li><li>Haqiqiy tekshiruv <strong>doim server tomonida</strong> takrorlanishi shart;</li><li>Foydalanuvchi "faqat men ko'ra olaman" deb o'ylagan har qanday cheklovni server qayta tekshirishi kerak.</li></ul>
@@ -638,7 +656,7 @@ app.post('/api/buyurtma', async (req, res) =&gt; {
   // ... buyurtmani haqiqiyNarx bilan yaratamiz
 });</code></pre>
 <div class="warn">Mijozdan kelgan hech qanday narxni, huquqni, foydalanuvchi identifikatorini ko'r-ko'rona qabul qilmang. Har doim server tomonidagi ishonchli manbadan (ma'lumotlar bazasi, sessiya) qayta tasdiqlang.</div>
-<h2>HTTPS — tarmoq qatlamidagi himoya</h2>
+<h2 id="https-tarmoq-qatlamidagi-himoya">HTTPS — tarmoq qatlamidagi himoya</h2>
 <p><strong>HTTP</strong> protokoli ma'lumotni ochiq matnda uzatadi. Ya'ni foydalanuvchi va server orasidagi yo'lda (masalan, umumiy Wi-Fi tarmog'ida) o'tirgan har kim parol va ma'lumotni ko'ra oladi. <strong>HTTPS</strong> esa TLS shifrlashi orqali bu ma'lumotni himoyalaydi.</p>
 <ul><li><strong>Shifrlash:</strong> yo'ldagi ma'lumot o'qib bo'lmaydigan holatga keltiriladi (maxfiylik);</li><li><strong>Butunlik:</strong> ma'lumot yo'lda o'zgartirilsa, buni aniqlash mumkin;</li><li><strong>Autentifikatsiya:</strong> sertifikat orqali siz haqiqatan ham to'g'ri serverga ulanayotganingizga ishonch hosil qilasiz.</li></ul>
 <p>Zamonaviy web ilovada HTTPS majburiy. Bepul sertifikatlar (masalan, Let's Encrypt) mavjud. Express ilovasida foydalanuvchilarni HTTPS'ga yo'naltirish va xavfsizlik sarlavhalarini qo'shish odat tusiga kirgan:</p>
@@ -657,11 +675,11 @@ app.use((req, res, next) =&gt; {
   next();
 });</code></pre>
 <div class="tip"><code>helmet</code> — bu Express uchun mashhur kutubxona bo'lib, u xavfsizlik bilan bog'liq bir qancha HTTP sarlavhalarini (masalan, <code>X-Content-Type-Options</code>, <code>Strict-Transport-Security</code>) avtomatik o'rnatadi. Uni ishlatish — arzon va samarali himoya qadamidir.</div>
-<h2>Umumiy tahdidlar: OWASP qisqacha</h2>
+<h2 id="umumiy-tahdidlar-owasp-qisqacha">Umumiy tahdidlar: OWASP qisqacha</h2>
 <p><strong>OWASP</strong> (Open Worldwide Application Security Project) — web xavfsizligi bo'yicha nufuzli notijorat tashkilot. Ular muntazam ravishda eng xavfli zaifliklar ro'yxatini (<strong>OWASP Top 10</strong>) chiqaradi. Quyida ushbu ro'yxatning asosiy qismlari va ular qaysi darsda o'rganilishi:</p>
 <ul><li><strong>Buzilgan kirish nazorati (Broken Access Control):</strong> foydalanuvchi o'ziga tegishli bo'lmagan ma'lumotga kira oladi — avtorizatsiya darsida;</li><li><strong>Kriptografik xatolar:</strong> parolni ochiq saqlash, zaif shifrlash — autentifikatsiya darsida;</li><li><strong>Injection (kiritish hujumlari):</strong> SQL injection, buyruq kiritish — alohida darsda;</li><li><strong>Xavfsiz bo'lmagan dizayn:</strong> arxitektura darajasidagi kamchiliklar;</li><li><strong>Noto'g'ri konfiguratsiya:</strong> ochiq qoldirilgan sozlamalar, standart parollar;</li><li><strong>XSS (Cross-Site Scripting):</strong> zararli skript kiritish — alohida darsda;</li><li><strong>Autentifikatsiya buzilishi:</strong> zaif sessiya boshqaruvi, brute-force himoyasining yo'qligi;</li><li><strong>Ma'lumot butunligining buzilishi:</strong> ishonchsiz manbalardan yangilanishlar.</li></ul>
 <div class="note">OWASP Top 10 — bu qat'iy imtihon ro'yxati emas, balki e'tibor qaratish uchun ustuvorlik ro'yxati. Amaliyotda bularning ko'pchiligi bitta oddiy tamoyilga bog'lanadi: kiritmaga ishonmaslik va har qatlamda tekshirish.</div>
-<h2>Xavfsizlik — jarayon, bir martalik ish emas</h2>
+<h2 id="xavfsizlik-jarayon-bir-martalik-ish-emas">Xavfsizlik — jarayon, bir martalik ish emas</h2>
 <p>Xavfsizlikni bir marta "qilib qo'yib" bo'lmaydi. Bu doimiy jarayon:</p>
 <ul><li><strong>Bog'liqliklarni yangilab turing:</strong> <code>npm audit</code> orqali zaif paketlarni tekshiring;</li><li><strong>Eng kam imtiyoz tamoyili:</strong> har bir komponent faqat zarur bo'lgan huquqqa ega bo'lsin;</li><li><strong>Loglar va monitoring:</strong> shubhali harakatlarni kuzatib boring;</li><li><strong>Xatoni tan olish:</strong> mukammal xavfsiz tizim yo'q; muammoni tez aniqlab, tuzatish qobiliyati muhim.</li></ul>
 <pre class="code"><code>// Loyihadagi zaif bog'liqliklarni tekshirish
@@ -672,7 +690,7 @@ app.use((req, res, next) =&gt; {
 //
 // Bu buyruqlar ma'lum zaifliklarga ega paketlar haqida
 // ogohlantiradi va yangilash yo'llarini taklif qiladi.</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li>Xavfsizlik loyihaning ajralmas qismi bo'lishi kerak, keyin qo'shiladigan xususiyat emas;</li><li><strong>CIA triadasi</strong> (maxfiylik, butunlik, mavjudlik) xavfsizlikni baholash ramkasidir;</li><li>Eng muhim tamoyil — <strong>foydalanuvchi kiritmasiga hech qachon ishonmaslik</strong>; haqiqiy tekshiruv doim server tomonida bo'ladi;</li><li><strong>HTTPS</strong> tarmoq qatlamida maxfiylik va butunlikni ta'minlaydi — u majburiy;</li><li><strong>OWASP Top 10</strong> eng keng tarqalgan zaifliklarga e'tibor qaratishga yordam beradi;</li><li>Xavfsizlik — bu chuqurlashtirilgan himoya (defense in depth): ustma-ust qatlamlar.</li></ul>
 <nav class="lesson-nav">
   <a href="node-db.html"><span class="dir">← Oldingi</span><span class="ttl">Node.js bilan bazaga ulanish</span></a>
@@ -686,6 +704,6 @@ app.use((req, res, next) =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

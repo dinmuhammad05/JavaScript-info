@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xatoliklarni boshqarish, try...catch — Kodla</title>
   <meta name="description" content="try...catch...finally, Error obyekti, throw operatori va o'z xatoliklaringizni tashlash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,23 @@
 <main class="content article">
 <div class="crumbs">Xatoliklarni boshqarish</div>
 <h1>Xatoliklarni boshqarish, try...catch</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#try-catch-sintaksisi">try...catch sintaksisi</a></li>
+<li class="lvl2"><a href="#try-catch-faqat-runtime-xatolar-uchun-ishlaydi">try...catch faqat runtime xatolar uchun ishlaydi</a></li>
+<li class="lvl2"><a href="#try-catch-sinxron-ishlaydi">try...catch sinxron ishlaydi</a></li>
+<li class="lvl2"><a href="#error-obyekti">Error obyekti</a></li>
+<li class="lvl2"><a href="#amaliy-misol-json-parse-xatosi">Amaliy misol: JSON.parse xatosi</a></li>
+<li class="lvl2"><a href="#throw-operatori-o-z-xatolaringizni-tashlash">throw operatori — o'z xatolaringizni tashlash</a></li>
+<li class="lvl2"><a href="#qayta-tashlash-rethrowing">Qayta tashlash (rethrowing)</a></li>
+<li class="lvl2"><a href="#try-catch-finally">try...catch...finally</a></li>
+<li class="lvl2"><a href="#global-catch-qisqacha">Global catch (qisqacha)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Kod qanchalik yaxshi yozilmasin, xatolar muqarrar. Sababi ko'p: bizning xatomiz, kutilmagan foydalanuvchi kiritmasi, noto'g'ri server javobi va yana minglab holatlar. Odatda xato bo'lganda skript "o'ladi" (to'xtaydi) va konsolga xato chiqadi. Ammo <code>try...catch</code> sintaksisi bunday xatolarni "ushlab olib", skriptni to'xtatmasdan, oqilona harakat qilishga imkon beradi.</p>
-<h2>try...catch sintaksisi</h2>
+<h2 id="try-catch-sintaksisi">try...catch sintaksisi</h2>
 <p><code>try...catch</code> konstruksiyasi ikki asosiy blokdan iborat: <code>try</code> va so'ng <code>catch</code>:</p>
 <pre class="code"><code>try {
 
@@ -630,11 +648,11 @@ console.log("...so'ng kod davom etadi");</textarea><div class="pg-actions"><butt
 }
 console.log("...so'ng skript o'lmasdan davom etadi");</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>E'tibor bering: xatodan keyingi <code>(2)</code> qatori umuman bajarilmadi. JavaScript darhol <code>catch</code>ga sakradi, skriptni butunlay to'xtatmadi.</p>
-<h2>try...catch faqat runtime xatolar uchun ishlaydi</h2>
+<h2 id="try-catch-faqat-runtime-xatolar-uchun-ishlaydi">try...catch faqat runtime xatolar uchun ishlaydi</h2>
 <p><code>try...catch</code> ishlashi uchun kod bajarilayotgan ("runnable") bo'lishi shart. Ya'ni u to'g'ri JavaScript bo'lishi kerak.</p>
 <div class="warn">Agar kod sintaktik jihatdan noto'g'ri bo'lsa (masalan, yopilmagan qavs — <code>{{{{</code>), <code>try...catch</code> yordam bermaydi. JavaScript dvigateli avval kodni o'qiydi (parse qiladi), so'ng ishga tushiradi. Parse bosqichida topilgan xatolar "parse-time" xatolari deb ataladi va ular <code>try...catch</code> ichida ushlanmaydi — chunki dvigatel bu kodni tushunmaydi.</div>
 <p>Demak, <code>try...catch</code> faqat to'g'ri kodda yuz beradigan xatolarni ushlaydi. Bunday xatolar <em>"runtime errors"</em> (ishga tushish paytidagi xatolar) yoki ba'zan <em>"exceptions"</em> (istisnolar) deb ataladi.</p>
-<h2>try...catch sinxron ishlaydi</h2>
+<h2 id="try-catch-sinxron-ishlaydi">try...catch sinxron ishlaydi</h2>
 <p>Agar xato "rejalashtirilgan" kodda (masalan, <code>setTimeout</code> ichida) yuz bersa, uni <code>try...catch</code> ushlay olmaydi:</p>
 <pre class="code"><code>try {
   setTimeout(function() {
@@ -652,7 +670,7 @@ console.log("...so'ng skript o'lmasdan davom etadi");</textarea><div class="pg-a
   }
 }, 1000);</code></pre>
 <div class="note">Asinxron kod (<code>async/await</code>) bilan ishlaganda ham xuddi shu qoida amal qiladi, u haqda keyingi boblarda batafsil to'xtalamiz.</div>
-<h2>Error obyekti</h2>
+<h2 id="error-obyekti">Error obyekti</h2>
 <p>Xato yuz berganda, JavaScript uni tavsiflovchi <em>obyekt</em> yaratadi. So'ng bu obyekt <code>catch</code>ga argument sifatida uzatiladi:</p>
 <pre class="code"><code>try {
   // ...
@@ -672,7 +690,7 @@ console.log("...so'ng skript o'lmasdan davom etadi");</textarea><div class="pg-a
   console.log("stack (birinchi qator):", String(err.stack).split("\n")[0]);
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Xato obyektini butunicha ham chiqarish mumkin: <code>console.log(err)</code> yoki matn sifatida <code>console.log(err + "")</code> — u <code>name: message</code> ko'rinishida chiqadi.</div>
-<h2>Amaliy misol: JSON.parse xatosi</h2>
+<h2 id="amaliy-misol-json-parse-xatosi">Amaliy misol: JSON.parse xatosi</h2>
 <p>Amalda <code>try...catch</code> eng ko'p ma'lumotni o'qiyotganda kerak bo'ladi. Masalan, serverdan yoki foydalanuvchidan kelgan JSON matnini <code>JSON.parse</code> bilan tahlil qilamiz. Agar matn buzuq bo'lsa, <code>JSON.parse</code> xato tashlaydi va skript to'xtaydi. Buni oldini olamiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>json-parse.js</span></div><textarea spellcheck="false">let json = "{ buzuq json }"; // noto'g'ri JSON
 
@@ -695,7 +713,7 @@ try {
 } catch (err) {
   console.log("Bu blok bajarilmaydi");
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h2>throw operatori — o'z xatolaringizni tashlash</h2>
+<h2 id="throw-operatori-o-z-xatolaringizni-tashlash">throw operatori — o'z xatolaringizni tashlash</h2>
 <p>Yuqoridagi JSON misolida qiziq holat bor: JSON matni to'g'ri bo'lishi mumkin, lekin unda kerakli maydon (masalan, <code>name</code>) yo'q bo'lishi mumkin. Bunda <code>JSON.parse</code> xato tashlamaydi — chunki JSON o'zi haqiqiy. Lekin biz uchun bu <em>xato</em>. Bunday holatlarni o'zimiz aniqlab, <em>o'z xatomizni</em> tashlashimiz kerak. Buning uchun <code>throw</code> operatori ishlatiladi.</p>
 <pre class="code"><code>throw &lt;xato obyekti&gt;</code></pre>
 <p>Texnik jihatdan istalgan qiymatni <code>throw</code> bilan tashlash mumkin (son, satr), lekin eng yaxshi amaliyot — <code>Error</code> yoki uning avlodlaridan foydalanish. JavaScriptda standart o'rnatilgan xato konstruktorlari bor:</p>
@@ -725,7 +743,7 @@ try {
   // JSON Xato: Ma'lumot to'liq emas: name maydoni yo'q
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Diqqat qiling: <code>catch</code> bloki ikkala turdagi xatoni ham ushlaydi — <code>JSON.parse</code> tashlaganini ham, biz <code>throw</code> qilganimizni ham. Bu juda qulay: bitta joyda barcha xatolar bilan ishlaymiz.</p>
-<h2>Qayta tashlash (rethrowing)</h2>
+<h2 id="qayta-tashlash-rethrowing">Qayta tashlash (rethrowing)</h2>
 <p>Yuqoridagi <code>catch</code> hamma xatolarni ushlaydi. Lekin bu muammo tug'diradi: <code>catch(err)</code> <em>faqat</em> biz kutgan xatoni (to'liq emas ma'lumot) qayta ishlashi kerak edi. Agar u yerda kutilmagan boshqa xato bo'lsa-chi? Masalan, biz kod yozishda xato qilib, aniqlanmagan o'zgaruvchini chaqirsak — bu <code>ReferenceError</code>ni ham "JSON Xato" deb ko'rsatib qo'yamiz, bu esa debugging'ni qiyinlashtiradi.</p>
 <p>Yechim <em>"qayta tashlash"</em> (rethrowing) texnikasi: <code>catch</code> faqat o'zi biladigan xatolarni qayta ishlaydi, qolganlarini esa <code>throw err</code> orqali "yuqoriga" uzatadi.</p>
 <ol><li><code>catch</code> hamma xatoni oladi;</li><li><code>catch (err) {...}</code> blokida biz <code>err</code>ni tekshiramiz — bu qanday xato?;</li><li>Agar biz uni qanday qayta ishlashni bilmasak — <code>throw err</code> qilamiz.</li></ol>
@@ -752,7 +770,7 @@ try {
 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Yuqorida <code>blabla()</code> mavjud emas, shuning uchun <code>ReferenceError</code> yuz beradi. U <code>SyntaxError</code> emas, shuning uchun <code>throw err</code> ishga tushadi va xato "yuqoriga" tashlanadi. Agar bu <code>try...catch</code> tashqarisida yana bir <code>try...catch</code> bo'lsa, xatoni o'sha ushlaydi. Aks holda skript to'xtaydi.</p>
 <div class="tip">Rethrowing qoidasi: <code>catch</code> faqat o'zi tushunadigan xatolar bilan ishlashi, boshqalarini esa qayta tashlashi kerak. Bu "begona" xatolarni yashirib qo'yishning oldini oladi.</div>
-<h2>try...catch...finally</h2>
+<h2 id="try-catch-finally">try...catch...finally</h2>
 <p><code>try...catch</code>ning to'liq shakli yana bir ixtiyoriy blokka ega — <code>finally</code>. Agar u mavjud bo'lsa, u <em>har doim</em> bajariladi:</p>
 <ul><li><code>try</code> muvaffaqiyatli tugaganda — <code>finally</code> ishlaydi;</li><li><code>try</code>da xato bo'lganda va <code>catch</code> ishlaganda ham — <code>finally</code> ishlaydi.</li></ul>
 <pre class="code"><code>try {
@@ -806,12 +824,12 @@ console.log("Qaytgan qiymat:", test());
 // finally: return dan OLDIN ishladi
 // Qaytgan qiymat: try natijasi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note"><code>catch</code> blokini tushirib qoldirsa ham bo'ladi: <code>try...finally</code> shaklida. Bunda xatolar ushlanmaydi (yuqoriga tashlanadi), lekin <code>finally</code> baribir ishlaydi — masalan, tozalash uchun.</div>
-<h2>Global catch (qisqacha)</h2>
+<h2 id="global-catch-qisqacha">Global catch (qisqacha)</h2>
 <p>Agar <code>try...catch</code> tashqarisida o'lik xato yuz bersa, skript "o'ladi". Ba'zan bunday <em>ushlanmagan</em> xatolarni bir joyda umumiy tarzda ushlash foydali — masalan, jurnalga yozish (log) yoki foydalanuvchiga xabar berish uchun.</p>
 <p>Muhitga qarab mexanizm boshqacha:</p>
 <ul><li><strong>Brauzer</strong>: <code>window.onerror = function(message, url, line, col, error) {...}</code> — global xato ishlovchisi;</li><li><strong>Node.js</strong>: <code>process.on("uncaughtException", function(err) {...})</code> — ushlanmagan istisnolar uchun.</li></ul>
 <div class="warn">Global ushlagich — <em>oxirgi chora</em>. U skriptni to'liq "tuzatmaydi": xato allaqachon yuz bergan, dastur holati buzuq bo'lishi mumkin. Uni asosan xatolarni qayd qilish (logging) va monitoring xizmatlariga (masalan, Sentry) yuborish uchun ishlating, dasturning oddiy oqimi uchun emas.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>try...catch</code> <em>runtime</em> xatolarni ushlaydi: <code>try</code>da xato bo'lsa, boshqaruv <code>catch</code>ga o'tadi va skript to'xtamaydi;</li><li>U <em>sinxron</em> ishlaydi va <em>parse-time</em> (sintaktik) xatolarni ushlamaydi;</li><li><strong>Error obyekti</strong>ning asosiy xususiyatlari: <code>name</code>, <code>message</code>, <code>stack</code>;</li><li><code>throw</code> operatori bilan o'z xatolarimizni tashlaymiz — eng yaxshisi <code>new Error(...)</code> yoki uning turlari;</li><li><strong>Rethrowing</strong>: <code>catch</code> faqat o'zi biladigan xatolarni ishlatadi, boshqalarini <code>throw err</code> orqali qayta tashlaydi;</li><li><code>finally</code> bloki har doim (return bo'lsa ham) ishlaydi — tozalash uchun ideal;</li><li>Ushlanmagan xatolar uchun <em>global</em> ishlovchi (brauzerda <code>window.onerror</code>, Node.js'da <code>uncaughtException</code>) mavjud.</li></ul>
 <nav class="lesson-nav">
   <a href="mixin.html"><span class="dir">← Oldingi</span><span class="ttl">Mixinlar</span></a>
@@ -825,6 +843,6 @@ console.log("Qaytgan qiymat:", test());
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fayl tizimi va HTTP server — Kodla</title>
   <meta name="description" content="fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,12 +599,25 @@
 <main class="content article">
 <div class="crumbs">Node.js va Express</div>
 <h1>Fayl tizimi va HTTP server</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#fs-moduli-fayllarni-o-qish-va-yozish">fs moduli: fayllarni o'qish va yozish</a></li>
+<li class="lvl2"><a href="#sinxron-o-qish-yozish">Sinxron o'qish/yozish</a></li>
+<li class="lvl2"><a href="#asinxron-o-qish-yozish">Asinxron o'qish/yozish</a></li>
+<li class="lvl2"><a href="#path-moduli">path moduli</a></li>
+<li class="lvl2"><a href="#http-moduli-birinchi-server">http moduli: birinchi server</a></li>
+<li class="lvl2"><a href="#req-va-res-obyektlari">req va res obyektlari</a></li>
+<li class="lvl2"><a href="#portni-tinglash">Portni tinglash</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Endi Node.js'ning haqiqiy kuchini ko'ramiz: fayllar bilan ishlash va o'z veb-serveringizni yaratish. Bu narsalar brauzerda mumkin emas edi — Node.js'da esa bir necha qator kod bilan amalga oshiriladi. Ushbu darsda <code>fs</code>, <code>path</code> va <code>http</code> modullarini o'rganamiz.</p>
-<h2>fs moduli: fayllarni o'qish va yozish</h2>
+<h2 id="fs-moduli-fayllarni-o-qish-va-yozish">fs moduli: fayllarni o'qish va yozish</h2>
 <p><code>fs</code> (file system) — fayl tizimi bilan ishlash moduli. U fayllarni o'qish, yozish, o'chirish, papkalar yaratish va boshqa amallarni bajaradi. Bu o'rnatilgan modul, shuning uchun o'rnatish shart emas:</p>
 <pre class="code"><code>const fs = require('fs');</code></pre>
 <p><code>fs</code> modulining aksariyat funksiyalari ikki ko'rinishga ega: <strong>sinxron</strong> (bloklaydigan) va <strong>asinxron</strong> (bloklamaydigan).</p>
-<h2>Sinxron o'qish/yozish</h2>
+<h2 id="sinxron-o-qish-yozish">Sinxron o'qish/yozish</h2>
 <p>Sinxron funksiyalar nomi <code>Sync</code> bilan tugaydi. Ular fayl operatsiyasi tugaguncha kutadi va natijani darhol qaytaradi:</p>
 <pre class="code"><code>const fs = require('fs');
 
@@ -613,7 +629,7 @@ const matn = fs.readFileSync('salom.txt', 'utf8');
 console.log(matn); // Salom, dunyo!</code></pre>
 <p>Diqqat: <code>readFileSync</code>ga ikkinchi argument sifatida <code>'utf8'</code> kodlashni berish muhim. Aks holda natija matn emas, xom <code>Buffer</code> (baytlar) bo'ladi.</p>
 <div class="warn">Sinxron funksiyalar kutish davomida butun dasturni <strong>bloklaydi</strong>. Katta fayllar yoki serverda ular yomon tanlov — chunki server bloklanib, boshqa so'rovlarga javob bera olmay qoladi. Ular faqat dastur ishga tushayotgan paytda (konfiguratsiya o'qish) yoki kichik skriptlarda ishlatiladi.</div>
-<h2>Asinxron o'qish/yozish</h2>
+<h2 id="asinxron-o-qish-yozish">Asinxron o'qish/yozish</h2>
 <p>Asinxron funksiyalar bloklamaydi. Ular natija tayyor bo'lganda <strong>callback</strong> chaqiradi. Callback'ning birinchi argumenti — xatolik (bo'lmasa <code>null</code>), ikkinchisi — natija:</p>
 <pre class="code"><code>const fs = require('fs');
 
@@ -643,7 +659,7 @@ async function ishla() {
 
 ishla();</code></pre>
 <div class="tip">Zamonaviy Node.js kodida <code>fs.promises</code> va <code>async/await</code> kombinatsiyasi tavsiya etiladi — u toza, o'qilishi oson va xatoliklarni <code>try/catch</code> bilan boshqarishga imkon beradi.</div>
-<h2>path moduli</h2>
+<h2 id="path-moduli">path moduli</h2>
 <p>Fayl yo'llari bilan ishlashda operatsion tizimlar orasida farq bor: Windows <code>\</code>, Linux/Mac esa <code>/</code> ishlatadi. <code>path</code> moduli bu farqlarni avtomatik hal qiladi va yo'llarni xavfsiz birlashtiradi:</p>
 <pre class="code"><code>const path = require('path');
 
@@ -660,7 +676,7 @@ console.log(path.extname('rasm.png')); // .png
 // Papkani olish:
 console.log(path.dirname('/uy/user/rasm.png')); // /uy/user</code></pre>
 <div class="note">Node.js'da <code>__dirname</code> — joriy fayl joylashgan papkaning to'liq yo'lini beruvchi maxsus o'zgaruvchi. Uni <code>path.join</code> bilan birlashtirib, ishonchli mutlaq yo'l hosil qilinadi: <code>path.join(__dirname, 'data', 'users.json')</code>.</div>
-<h2>http moduli: birinchi server</h2>
+<h2 id="http-moduli-birinchi-server">http moduli: birinchi server</h2>
 <p>Endi eng qiziq qismi — o'z veb-serveringizni yaratamiz! <code>http</code> moduli bu uchun barcha kerakli narsani beradi. <code>http.createServer</code> yangi server yaratadi:</p>
 <pre class="code"><code>const http = require('http');
 
@@ -674,7 +690,7 @@ server.listen(3000, () =&gt; {
   console.log('Server ishga tushdi: http://localhost:3000');
 });</code></pre>
 <p>Bu faylni <code>node server.js</code> bilan ishga tushiring va brauzerda <code>http://localhost:3000</code> manzilini oching. "Salom, bu mening serverim!" degan matnni ko'rasiz. Tabriklaymiz — sizda o'z veb-serveringiz bor!</p>
-<h2>req va res obyektlari</h2>
+<h2 id="req-va-res-obyektlari">req va res obyektlari</h2>
 <p><code>createServer</code>ga berilgan funksiya har bir so'rov kelganda ikkita argument bilan chaqiriladi:</p>
 <ul><li><code>req</code> (request) — <strong>kiruvchi so'rov</strong>: manzil, metod (GET/POST), sarlavhalar (headers), tana (body) haqidagi ma'lumot;</li><li><code>res</code> (response) — <strong>chiquvchi javob</strong>: uni siz to'ldirasiz va brauzerga jo'natasiz.</li></ul>
 <p>Kiruvchi so'rov ma'lumotini ishlatib, turli manzillarga turli javob berish mumkin (oddiy marshrutlash):</p>
@@ -700,7 +716,7 @@ server.listen(3000);</code></pre>
   const malumot = { ism: 'Ali', yosh: 25 };
   res.end(JSON.stringify(malumot));
 });</code></pre>
-<h2>Portni tinglash</h2>
+<h2 id="portni-tinglash">Portni tinglash</h2>
 <p><code>server.listen(port)</code> serverni ma'lum bir <strong>portda</strong> tinglashga majbur qiladi. Port — bu kompyuterdagi "eshik raqami"; turli servislar turli portlarda ishlaydi:</p>
 <ul><li><code>3000</code>, <code>8080</code> — ishlab chiqishda ko'p ishlatiladigan portlar;</li><li><code>80</code> — standart HTTP porti;</li><li><code>443</code> — standart HTTPS porti.</li></ul>
 <pre class="code"><code>// Port va manzilni tinglash, tayyor bo'lganda xabar berish:
@@ -709,7 +725,7 @@ server.listen(3000, () =&gt; {
 });</code></pre>
 <div class="warn">Agar port allaqachon band bo'lsa, <code>EADDRINUSE</code> xatosini olasiz. Bunday holatda boshqa portni tanlang yoki o'sha portni band qilib turgan eski jarayonni to'xtating. Serverni to'xtatish uchun terminalda <code>Ctrl+C</code>ni bosing.</div>
 <div class="note">Ko'rib turganingizdek, sof <code>http</code> moduli bilan marshrutlash qo'lda, sertifikatsiz yoziladi — bu tez charchatadi. Aynan shu sabab keyingi darslarda <strong>Express</strong> freymvorkiga o'tamiz: u bu ishlarni ancha soddalashtiradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>fs</code> moduli fayllarni o'qish/yozish uchun; funksiyalar sinxron (<code>...Sync</code>) va asinxron ko'rinishga ega;</li><li>Sinxron funksiyalar dasturni bloklaydi — serverda ulardan qoching, <code>fs.promises</code> + <code>async/await</code> ishlating;</li><li><code>path</code> moduli fayl yo'llarini xavfsiz va tizimga bog'liqsiz birlashtiradi (<code>path.join</code>, <code>__dirname</code>);</li><li><code>http.createServer</code> veb-server yaratadi; funksiyaga <code>req</code> (so'rov) va <code>res</code> (javob) beriladi;</li><li><code>server.listen(port)</code> serverni portda tinglashga qo'yadi;</li><li>Sof <code>http</code> bilan ishlash mashaqqatli — shuning uchun Express kabi freymvorklar ishlatiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="node-modullar.html"><span class="dir">← Oldingi</span><span class="ttl">Modullar va npm</span></a>
@@ -723,6 +739,6 @@ server.listen(3000, () =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

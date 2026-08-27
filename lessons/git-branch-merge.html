@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Branch va birlashtirish (merge) — Kodla</title>
   <meta name="description" content="Branch (shox) nima va nega kerak, git branch, git checkout, zamonaviy git switch, git checkout -b bilan yangi branch yaratish, branch'larni git merge bilan birlashtirish, merge konflikti va uni hal qilish, keraksiz branch'ni git branch -d bilan o'chirish.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,14 +599,30 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>Branch va birlashtirish (merge)</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#branch-nima-va-nega-kerak">Branch nima va nega kerak?</a></li>
+<li class="lvl2"><a href="#mavjud-branch-larni-ko-rish-git-branch">Mavjud branch'larni ko'rish: git branch</a></li>
+<li class="lvl2"><a href="#yangi-branch-yaratish-git-branch-nomi">Yangi branch yaratish: git branch nomi</a></li>
+<li class="lvl2"><a href="#branch-lar-orasida-o-tish-git-checkout-va-git-switch">Branch'lar orasida o'tish: git checkout va git switch</a></li>
+<li class="lvl2"><a href="#yaratish-va-o-tishni-bir-buyruqda-b-va-c">Yaratish va o'tishni bir buyruqda: -b va -c</a></li>
+<li class="lvl2"><a href="#branch-da-ishlash-to-liq-amaliy-misol">Branch'da ishlash: to'liq amaliy misol</a></li>
+<li class="lvl2"><a href="#branch-larni-birlashtirish-git-merge">Branch'larni birlashtirish: git merge</a></li>
+<li class="lvl2"><a href="#merge-konflikti-nima">Merge konflikti nima?</a></li>
+<li class="lvl2"><a href="#merge-konfliktini-hal-qilish">Merge konfliktini hal qilish</a></li>
+<li class="lvl2"><a href="#keraksiz-branch-ni-o-chirish-git-branch-d">Keraksiz branch'ni o'chirish: git branch -d</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Branch (o'zbekcha: <em>shox</em> yoki <em>tarmoq</em>) — Git'ning eng kuchli imkoniyatlaridan biri. U sizga asosiy kodga tegmasdan, alohida yo'nalishda ishlashga imkon beradi. Yangi funksiya yozmoqchimisiz, yoki xatoni tuzatmoqchimisiz — buni alohida branch'da qilib, tayyor bo'lgach asosiy kodga birlashtirasiz. Ushbu darsda branch yaratish, ular orasida o'tish, birlashtirish (merge) va merge konfliktini hal qilishni chuqur o'rganamiz.</p>
 <div class="note">Bu darsdagi barcha buyruqlar terminalda (buyruq qatorida) ishga tushiriladi. Ular Git o'rnatilgan mahalliy kompyuteringizda ishlaydi. Kurs sahifasidagi playground'da terminal buyruqlari ishlamaydi — shuning uchun quyidagi bloklar <strong>statik misol</strong> sifatida keltiriladi. Ularni o'z kompyuteringizdagi haqiqiy Git omborida sinab ko'ring.</div>
-<h2>Branch nima va nega kerak?</h2>
+<h2 id="branch-nima-va-nega-kerak">Branch nima va nega kerak?</h2>
 <p>Har bir Git ombori (repository) kamida bitta branch'ga ega. An'anaviy nomi <code>master</code> edi, hozirgi zamonaviy loyihalarda esa ko'pincha <code>main</code> deb ataladi. Bu — asosiy, ishonchli kod turadigan yo'nalish.</p>
 <p>Branch — bu commitlar (o'zgarishlar tarixi) ustidagi <strong>siljib boruvchi ko'rsatkich</strong> (pointer). Har safar yangi commit qilganingizda, joriy branch avtomatik ravishda oxirgi commit'ga siljiydi. Yangi branch ochsangiz, siz shu paytdagi commit'dan yangi mustaqil yo'nalish boshlaysiz.</p>
 <p>Branch nima uchun kerak? Bir nechta amaliy sabab:</p>
 <ul><li><strong>Xavfsiz eksperiment.</strong> Yangi g'oyani asosiy kodga zarar bermasdan sinab ko'rasiz. Ishlamasa — branch'ni o'chirasiz, asosiy kod toza qoladi.</li><li><strong>Parallel ishlash.</strong> Bir vaqtning o'zida bir necha funksiya (masalan, bittasi <code>login</code>, boshqasi <code>profil</code>) alohida branch'larda mustaqil rivojlanadi.</li><li><strong>Jamoaviy tartib.</strong> Har bir dasturchi o'z branch'ida ishlaydi, bir-birining kodini buzmaydi. Tayyor bo'lgach hamma o'zinikini <code>main</code>ga birlashtiradi.</li><li><strong>Barqaror asosiy kod.</strong> <code>main</code> branch doim ishlaydigan, chiqarishga tayyor holatda saqlanadi. Yarim tayyor kod alohida branch'larda turadi.</li></ul>
-<h2>Mavjud branch'larni ko'rish: git branch</h2>
+<h2 id="mavjud-branch-larni-ko-rish-git-branch">Mavjud branch'larni ko'rish: git branch</h2>
 <p>Omborda qanday branch'lar borligini va hozir qaysi biridasiz — buni <code>git branch</code> buyrug'i ko'rsatadi. Joriy branch oldida yulduzcha (<code>*</code>) turadi:</p>
 <pre class="code"><code>$ git branch
 * main</code></pre>
@@ -613,7 +632,7 @@
   feature-login
   remotes/origin/main</code></pre>
 <p>Bu yerda mahalliy <code>main</code> va <code>feature-login</code>, hamda masofaviy (GitHub'dagi) <code>origin/main</code> ko'rinadi.</p>
-<h2>Yangi branch yaratish: git branch nomi</h2>
+<h2 id="yangi-branch-yaratish-git-branch-nomi">Yangi branch yaratish: git branch nomi</h2>
 <p>Yangi branch yaratish uchun uning nomini beramiz. Masalan, <code>feature-login</code> nomli branch ochamiz:</p>
 <pre class="code"><code>$ git branch feature-login</code></pre>
 <p>Diqqat: bu buyruq branch'ni faqat <strong>yaratadi</strong>, lekin sizni unga <em>o'tkazmaydi</em>. Siz hali ham eski branch'dasiz. Buni <code>git branch</code> bilan tekshiring:</p>
@@ -622,7 +641,7 @@
 * main</code></pre>
 <p>Ko'rib turganingizdek, <code>feature-login</code> yaratildi, lekin yulduzcha hali <code>main</code>da.</p>
 <div class="tip">Branch nomlarida bo'sh joy ishlatmang. Ko'p so'zlarni chiziqcha bilan bog'lang: <code>feature-login</code>, <code>fix-header-bug</code>, <code>update-readme</code>. Ko'plab jamoalar nomlarda prefiks ishlatadi: <code>feature/</code>, <code>fix/</code>, <code>hotfix/</code> — masalan <code>feature/user-profile</code>.</div>
-<h2>Branch'lar orasida o'tish: git checkout va git switch</h2>
+<h2 id="branch-lar-orasida-o-tish-git-checkout-va-git-switch">Branch'lar orasida o'tish: git checkout va git switch</h2>
 <p>Yaratilgan branch'ga o'tish uchun ikki xil yo'l bor. Eskiroq va universal usul — <code>git checkout</code>:</p>
 <pre class="code"><code>$ git checkout feature-login
 Switched to branch 'feature-login'</code></pre>
@@ -631,7 +650,7 @@ Switched to branch 'feature-login'</code></pre>
 <pre class="code"><code>$ git switch feature-login
 Switched to branch 'feature-login'</code></pre>
 <div class="note"><code>git checkout</code> juda ko'p vazifani bajaradi: branch almashtirish, fayllarni tiklash, ma'lum commit'ni ko'rish. Bu chalkashlikka olib kelardi. Shuning uchun Git jamoasi uni ikkiga bo'ldi: branch almashtirish uchun <code>git switch</code>, fayllarni tiklash uchun esa <code>git restore</code>. Yangi loyihalarda <code>switch</code> va <code>restore</code>ni afzal ko'ring, lekin <code>checkout</code> ham hamma joyda ishlaydi.</div>
-<h2>Yaratish va o'tishni bir buyruqda: -b va -c</h2>
+<h2 id="yaratish-va-o-tishni-bir-buyruqda-b-va-c">Yaratish va o'tishni bir buyruqda: -b va -c</h2>
 <p>Ko'pincha branch'ni yaratib, darhol unga o'tmoqchi bo'lasiz. Har safar ikki buyruq yozish shart emas — buni bitta buyruqda qilish mumkin. <code>checkout</code> uchun <code>-b</code> bayrog'i:</p>
 <pre class="code"><code>$ git checkout -b feature-login
 Switched to a new branch 'feature-login'</code></pre>
@@ -639,7 +658,7 @@ Switched to a new branch 'feature-login'</code></pre>
 <pre class="code"><code>$ git switch -c feature-login
 Switched to a new branch 'feature-login'</code></pre>
 <p>Ikkalasi ham: yangi <code>feature-login</code> branch'ini yaratadi va sizni darhol unga o'tkazadi. Bu — amaliyotda eng ko'p ishlatiladigan usul.</p>
-<h2>Branch'da ishlash: to'liq amaliy misol</h2>
+<h2 id="branch-da-ishlash-to-liq-amaliy-misol">Branch'da ishlash: to'liq amaliy misol</h2>
 <p>Keling, to'liq oqimni ko'rib chiqamiz. <code>main</code>da turibmiz, yangi funksiya uchun branch ochamiz, o'zgartiramiz va commit qilamiz:</p>
 <pre class="code"><code># 1. Yangi branch yaratib, unga o'tamiz
 $ git switch -c feature-login
@@ -661,7 +680,7 @@ $ ls
 index.html   style.css
 # login.js bu yerda yoq — u feature-login branchida qoldi</code></pre>
 <div class="warn">Branch almashtirishdan oldin joriy o'zgarishlaringizni commit qiling (yoki <code>git stash</code> bilan vaqtincha yashiring). Aks holda saqlanmagan o'zgarishlar bilan branch almashtirmoqchi bo'lsangiz, Git ogohlantirish beradi va ba'zan almashtirishga yo'l qo'ymaydi. <code>git stash</code>ni keyingi darsda ko'ramiz.</div>
-<h2>Branch'larni birlashtirish: git merge</h2>
+<h2 id="branch-larni-birlashtirish-git-merge">Branch'larni birlashtirish: git merge</h2>
 <p>Branch'da ish tugagach, uni asosiy kodga qo'shish kerak. Bu jarayon <strong>merge</strong> (birlashtirish) deb ataladi. Muhim qoida: siz <em>qaysi branch'ga birlashtirmoqchi bo'lsangiz, avval o'sha branch'ga o'tasiz</em>, keyin kerakli branch'ni unga tortasiz.</p>
 <p>Masalan, <code>feature-login</code>ni <code>main</code>ga birlashtiramiz. Avval <code>main</code>ga o'tamiz, keyin <code>feature-login</code>ni birlashtiramiz:</p>
 <pre class="code"><code># 1. Maqsad branchiga (main) otamiz
@@ -681,7 +700,7 @@ Fast-forward
 Merge made by the 'ort' strategy.
  login.js | 40 ++++++++++++++++++++++
  1 file changed, 40 insertions(+)</code></pre>
-<h2>Merge konflikti nima?</h2>
+<h2 id="merge-konflikti-nima">Merge konflikti nima?</h2>
 <p>Merge har doim ham silliq o'tmaydi. <strong>Merge konflikti</strong> — bu ikkala branch'da <em>bir xil faylning bir xil qatori</em> turli xil tarzda o'zgartirilganda yuz beradi. Git qaysi versiyani tanlashni bilmaydi va sizdan qo'lda hal qilishni so'raydi.</p>
 <p>Masalan, <code>main</code>da kimdir <code>index.html</code>ning 1-qatorini o'zgartirdi, siz esa <code>feature-login</code>da xuddi shu qatorni boshqacha o'zgartirdingiz. Merge qilganda:</p>
 <pre class="code"><code>$ git merge feature-login
@@ -697,7 +716,7 @@ You have unmerged paths.
 Unmerged paths:
   (use 'git add &lt;file&gt;...' to mark resolution)
         both modified:   index.html</code></pre>
-<h2>Merge konfliktini hal qilish</h2>
+<h2 id="merge-konfliktini-hal-qilish">Merge konfliktini hal qilish</h2>
 <p>Konfliktli faylni matn tahrirlagichda ochsangiz, Git maxsus belgilar qo'yganini ko'rasiz. Ular ikkala versiyani ko'rsatadi:</p>
 <pre class="code"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 &lt;h1&gt;Bosh sahifa&lt;/h1&gt;
@@ -717,7 +736,7 @@ $ git commit -m 'index.html dagi merge konfliktini hal qildim'
 [main 5f6g7h8] index.html dagi merge konfliktini hal qildim</code></pre>
 <div class="tip">Konfliktlarni qo'rqmang — ular normal holat, ayniqsa jamoada ishlaganda. Zamonaviy tahrirlagichlar (masalan, VS Code) konfliktli faylni chiroyli ko'rsatadi va "Accept Current", "Accept Incoming", "Accept Both" tugmalarini taqdim etadi. Bu qo'lda belgilar bilan ishlashdan ancha qulay.</div>
 <div class="note">Agar merge o'rtasida hamma narsani bekor qilib, boshlang'ich holatga qaytmoqchi bo'lsangiz: <code>git merge --abort</code>. Bu birlashtirishni to'liq to'xtatadi va omborni merge boshlanishidan oldingi holatga qaytaradi.</div>
-<h2>Keraksiz branch'ni o'chirish: git branch -d</h2>
+<h2 id="keraksiz-branch-ni-o-chirish-git-branch-d">Keraksiz branch'ni o'chirish: git branch -d</h2>
 <p>Branch birlashtirilib, endi kerak bo'lmasa, uni o'chirib tozalik saqlash yaxshi odat. Muvaffaqiyatli birlashtirilgan branch'ni <code>-d</code> (delete) bilan o'chiramiz:</p>
 <pre class="code"><code>$ git branch -d feature-login
 Deleted branch feature-login (was 1a2b3c4).</code></pre>
@@ -729,7 +748,7 @@ If you are sure you want to delete it, run 'git branch -D feature-test'.</code><
 <pre class="code"><code>$ git branch -D feature-test
 Deleted branch feature-test (was 9z8y7x6).</code></pre>
 <div class="warn"><code>-D</code> (katta harf) branch'ni birlashtirilmagan bo'lsa ham majburan o'chiradi. Undagi commitlar boshqa branch'da bo'lmasa — <strong>butunlay yo'qoladi</strong>. Shuning uchun <code>-D</code>ni faqat o'zgarishlar kerak emasligiga to'liq ishonganingizda ishlating.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Ushbu darsda branch bilan ishlashning to'liq davrini o'rgandik:</p>
 <ul><li><strong>Branch</strong> — commitlar ustidagi siljib boruvchi ko'rsatkich; alohida, xavfsiz yo'nalishda ishlash imkoni;</li><li><code>git branch</code> — branch'larni ko'rish, <code>git branch nomi</code> — yaratish;</li><li><code>git checkout nomi</code> yoki zamonaviy <code>git switch nomi</code> — branch'ga o'tish;</li><li><code>git checkout -b nomi</code> yoki <code>git switch -c nomi</code> — yaratib, darhol o'tish;</li><li><code>git merge nomi</code> — branch'ni joriy branch'ga birlashtirish (avval maqsad branch'ga o'tib olasiz);</li><li><strong>merge konflikti</strong> — bir xil qator ikki xil o'zgarganda yuzaga keladi; belgilarni qo'lda hal qilib, <code>git add</code> + <code>git commit</code> bilan yakunlanadi;</li><li><code>git branch -d nomi</code> — birlashtirilgan branch'ni o'chirish, <code>-D</code> — majburiy o'chirish.</li></ul>
 <p>Branch'lar Git ish oqimining yuragidir. Keyingi darsda mahalliy omborni GitHub bilan bog'lab, kodni internetga yuborishni o'rganamiz.</p>
@@ -745,6 +764,6 @@ Deleted branch feature-test (was 9z8y7x6).</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

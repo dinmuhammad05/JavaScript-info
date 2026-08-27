@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brauzer muhiti va spetsifikatsiyalar — Kodla</title>
   <meta name="description" content="JavaScript qanday muhitlarda ishlaydi, brauzerdagi global obyekt window, DOM, BOM va document nima, host muhitlari va rasmiy spetsifikatsiyalar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,13 +599,25 @@
 <main class="content article">
 <div class="crumbs">Hujjat (DOM)</div>
 <h1>Brauzer muhiti va spetsifikatsiyalar</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#til-yadrosi-va-muhit">Til yadrosi va muhit</a></li>
+<li class="lvl2"><a href="#window-brauzerdagi-ildiz-root-obyekti">window — brauzerdagi ildiz (root) obyekti</a></li>
+<li class="lvl2"><a href="#dom-document-object-model">DOM (Document Object Model)</a></li>
+<li class="lvl2"><a href="#cssom-uslublar-uchun">CSSOM — uslublar uchun</a></li>
+<li class="lvl2"><a href="#bom-browser-object-model">BOM (Browser Object Model)</a></li>
+<li class="lvl2"><a href="#spetsifikatsiyalar">Spetsifikatsiyalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">JavaScript tili dastlab veb-brauzer uchun yaratilgan. Ammo o'sha vaqtdan beri u ko'plab boshqa muhitlar va platformalarga tarqaldi. Muhit (platforma) brauzer, veb-server yoki hatto "aqlli" muzlatkich bo'lishi mumkin. Ularning har biri o'ziga xos funksionallikni taqdim etadi. JavaScript tilida bu muhitga xos qismlar <strong>host muhiti</strong> (host environment) deb ataladi. Ushbu darsda biz brauzer muhitini — u bizga qanday imkoniyatlar berishini chuqur o'rganamiz.</p>
-<h2>Til yadrosi va muhit</h2>
+<h2 id="til-yadrosi-va-muhit">Til yadrosi va muhit</h2>
 <p>JavaScript kodini ikki qatlamga bo'lib tasavvur qilish qulay:</p>
 <ul><li><strong>Til yadrosi</strong> (ECMAScript) — bu <code>Array</code>, <code>Object</code>, <code>Math</code>, <code>String</code>, <code>Function</code> kabi tilning o'zi ta'riflaydigan asosiy imkoniyatlar. Ular har qanday muhitda bir xil ishlaydi.</li><li><strong>Host muhiti</strong> — bu muhit qo'shadigan qo'shimcha obyektlar va funksiyalar. Brauzerda bu <code>document</code>, <code>alert</code>, <code>fetch</code> va boshqalar. Node.js'da esa fayl tizimi, tarmoq modullari va h.k.</li></ul>
 <p>Ya'ni til bir xil, ammo har bir host o'z "qo'shimchalarini" beradi. Brauzer bizga sahifani boshqarish uchun ko'plab maxsus obyektlar taqdim etadi.</p>
 <div class="note">Shuning sababli bir xil JavaScript kodi brauzerda ishlaydi-yu, Node.js'da ishlamasligi mumkin: masalan, <code>document</code> obyekti faqat brauzerda mavjud. Aksincha, faylni o'qish (<code>fs</code> moduli) faqat Node.js'da bor.</div>
-<h2>window — brauzerdagi ildiz (root) obyekti</h2>
+<h2 id="window-brauzerdagi-ildiz-root-obyekti">window — brauzerdagi ildiz (root) obyekti</h2>
 <p>Brauzer muhitida barcha imkoniyatlarni birlashtiruvchi ildiz (root) obyekt bor — u <strong>window</strong> deb ataladi. Uning ikkita asosiy roli bor:</p>
 <ol><li>Birinchidan, u JavaScript til yadrosining <strong>global obyekti</strong> hisoblanadi (biz uni tilning "Global obyekt" mavzusida ko'rgan edik).</li><li>Ikkinchidan, u <strong>brauzer oynasini</strong> (browser window) ifodalaydi va uni boshqarish uchun metodlar taqdim etadi.</li></ol>
 <p>Masalan, biz uni global obyekt sifatida ishlatib, yuqori darajali (global) funksiyani chaqirishimiz mumkin:</p>
@@ -621,7 +636,7 @@ alert(window.gVar); // 5 (var global obyektga qo'shildi)
 
 let gLet = 5;
 alert(window.gLet); // undefined (let qo'shilmaydi)</code></pre>
-<h2>DOM (Document Object Model)</h2>
+<h2 id="dom-document-object-model">DOM (Document Object Model)</h2>
 <p><strong>DOM (Document Object Model — Hujjat Obyekt Modeli)</strong> sahifadagi barcha mazmunni o'zgartirishimiz mumkin bo'lgan obyektlar sifatida ifodalaydi. Uning markaziy "kirish nuqtasi" — <code>document</code> obyekti.</p>
 <p>Masalan, <code>document.body</code> — bu <code>&lt;body&gt;</code> tegini ifodalovchi obyekt. Quyidagi kod sahifa fonini 3 soniyaga qizil qiladi:</p>
 <pre class="code"><code>// sahifa fonini qizil qilamiz
@@ -632,10 +647,10 @@ setTimeout(() =&gt; document.body.style.background = '', 3000);</code></pre>
 <p>Bu yerda biz <code>document.body.style.background</code> orqali <code>&lt;body&gt;</code> tegining fon rangini o'zgartirdik. DOM yordamida biz istalgan elementni yaratishimiz, o'chirishimiz, ko'chirishimiz, mazmunini va uslubini o'zgartirishimiz mumkin.</p>
 <div class="note">DOM faqat JavaScript uchun emas. U tildan mustaqil. Masalan, Python kabi boshqa tillar ham DOM'dan foydalanadi. DOM spetsifikatsiyasi HTML sahifasining tuzilishini tavsiflaydi va u bilan ishlash uchun obyektlarni ta'riflaydi.</div>
 <div class="tip">Brauzerdan tashqarida ham DOM ishlatiladi. Masalan, serverda HTML sahifalarini yuklab, ularni qayta ishlaydigan skriptlar (Node.js'dagi <code>jsdom</code> kabi kutubxonalar) DOM'ning faqat bir qismini qo'llab-quvvatlashi mumkin.</div>
-<h2>CSSOM — uslublar uchun</h2>
+<h2 id="cssom-uslublar-uchun">CSSOM — uslublar uchun</h2>
 <p>CSS qoidalari va uslublar jadvallari (stylesheets) HTML tuzilishidan farqli ravishda ifodalanadi. Ular uchun alohida spetsifikatsiya bor — <strong>CSSOM (CSS Object Model)</strong>. U CSS qoidalarini qanday obyektlar sifatida ifodalash, ularni o'qish va yozishni tavsiflaydi.</p>
 <p>CSSOM DOM bilan birga ishlatiladi. Ammo amaliyotda CSSOM kamdan-kam kerak bo'ladi, chunki odatda biz CSS qoidalarini JavaScript'dan emas, balki elementlarga <code>class</code> qo'shib/olib boshqaramiz. Shuning uchun bu kursda unga alohida to'xtalmaymiz.</p>
-<h2>BOM (Browser Object Model)</h2>
+<h2 id="bom-browser-object-model">BOM (Browser Object Model)</h2>
 <p><strong>BOM (Browser Object Model — Brauzer Obyekt Modeli)</strong> — bu hujjatdan tashqari, brauzer bilan ishlash uchun qo'shimcha obyektlarni ifodalaydi. Masalan:</p>
 <ul><li><code>navigator</code> obyekti brauzer va operatsion tizim haqida ma'lumot beradi. Ko'plab xossalari bor, eng mashhurlari: <code>navigator.userAgent</code> (joriy brauzer haqida) va <code>navigator.platform</code> (platforma: Windows, Linux, Mac va h.k.);</li><li><code>location</code> obyekti joriy URL manzilini o'qish va brauzerni yangi manzilga yo'naltirish imkonini beradi;</li><li><code>alert</code>, <code>confirm</code>, <code>prompt</code> funksiyalari ham BOM qismidir — ular hujjat bilan bevosita bog'liq emas, balki brauzer bilan foydalanuvchi o'rtasidagi muloqot vositalaridir.</li></ul>
 <pre class="code"><code>alert(location.href); // joriy URL manzilini ko'rsatadi
@@ -644,13 +659,13 @@ if (confirm('Wikipedia'ga o'tamizmi?')) {
   location.href = 'https://wikipedia.org'; // brauzerni boshqa URL'ga yo'naltirish
 }</code></pre>
 <p><code>alert</code>, <code>prompt</code> va <code>confirm</code> — bular ham BOM'ning bir qismi, chunki ular to'g'ridan-to'g'ri hujjatga tegishli emas, balki brauzerning umumiy funksiyalaridir.</p>
-<h2>Spetsifikatsiyalar</h2>
+<h2 id="spetsifikatsiyalar">Spetsifikatsiyalar</h2>
 <p>BOM umumiy <strong>HTML spetsifikatsiyasining</strong> bir qismidir. Ha, to'g'ri eshitdingiz. HTML spetsifikatsiyasi <a href="https://html.spec.whatwg.org">https://html.spec.whatwg.org</a> manzilida joylashgan bo'lib, u nafaqat "HTML tili" (teglar, atributlar) haqida, balki turli obyektlar, metodlar va brauzerga xos DOM kengaytmalari haqida ham gapiradi. Bu "keng ma'nodagi HTML".</p>
 <p>Bizni qiziqtiruvchi asosiy spetsifikatsiyalar:</p>
 <ul><li><strong>DOM spetsifikatsiyasi</strong> — hujjat tuzilishini, uni boshqarish va hodisalarni tavsiflaydi. Manzil: <a href="https://dom.spec.whatwg.org">https://dom.spec.whatwg.org</a>.</li><li><strong>CSSOM spetsifikatsiyasi</strong> — uslublar jadvallari va CSS qoidalari, ular bilan manipulyatsiya va ularning HTML bilan bog'liqligini tavsiflaydi. Manzil: <a href="https://www.w3.org/TR/cssom-1/">https://www.w3.org/TR/cssom-1/</a>.</li><li><strong>HTML spetsifikatsiyasi</strong> — HTML tili (teglar va h.k.) va shuningdek BOM (brauzer obyekt modeli) — <code>setTimeout</code>, <code>alert</code>, <code>location</code> va boshqalar. U DOM spetsifikatsiyasini olib, uni ko'plab qo'shimcha xossa va metodlar bilan kengaytiradi. Manzil: <a href="https://html.spec.whatwg.org">https://html.spec.whatwg.org</a>.</li></ul>
 <div class="note">Ayrim atamalarni alohida spetsifikatsiyalar tavsiflaydi, ularni <a href="https://spec.whatwg.org">https://spec.whatwg.org</a> manzilida topish mumkin. Bu spetsifikatsiyalar dastlab murakkab ko'rinsa-da, biror mavzuni chuqur o'rganmoqchi bo'lganingizda juda foydali. Kundalik ishda esa MDN (<a href="https://developer.mozilla.org">Mozilla Developer Network</a>) ko'proq qulay — u misollar bilan tushuntiradi.</div>
 <div class="tip">Biror funksiya yoki metod haqida qidirsangiz, internet qidiruviga <code>MDN [atama]</code> deb yozing, masalan <code>MDN parseInt</code>. Bu sizni to'g'ridan-to'g'ri MDN ma'lumotnomasiga olib boradi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <p>Brauzer JavaScript'ga sahifa bilan ishlash uchun boy imkoniyatlar beradi. Uni bir necha qismga bo'lib eslab qolamiz:</p>
 <ul><li><strong>window</strong> — brauzerdagi ildiz obyekt: ham global obyekt, ham brauzer oynasini ifodalaydi;</li><li><strong>DOM</strong> — hujjat mazmuni (obyektlar sifatida). Kirish nuqtasi — <code>document</code>. DOM spetsifikatsiyasida tavsiflangan;</li><li><strong>CSSOM</strong> — CSS qoidalari va uslublar jadvallarini obyektlar sifatida boshqaradi;</li><li><strong>BOM</strong> — brauzerning boshqa funksiyalari: <code>navigator</code>, <code>location</code>, <code>screen</code>, <code>alert/confirm/prompt</code>, <code>setTimeout</code> va h.k. HTML spetsifikatsiyasida tavsiflangan;</li><li>Til yadrosi (ECMAScript) esa muhitdan mustaqil, u har joyda bir xil ishlaydi.</li></ul>
 <nav class="lesson-nav">
@@ -665,6 +680,6 @@ if (confirm('Wikipedia'ga o'tamizmi?')) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

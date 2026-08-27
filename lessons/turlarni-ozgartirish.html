@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Turlarni o'zgartirish — Kodla</title>
   <meta name="description" content="String, Number va Boolean konvertatsiyasi hamda qanday qiymatlar 0, false yoki NaN bo'lishi.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,19 @@
 <main class="content article">
 <div class="crumbs">JavaScript asoslari</div>
 <h1>Turlarni o'zgartirish</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#string-konvertatsiyasi-matnga-o-girish">String konvertatsiyasi (matnga o'girish)</a></li>
+<li class="lvl2"><a href="#number-konvertatsiyasi-songa-o-girish">Number konvertatsiyasi (songa o'girish)</a></li>
+<li class="lvl3"><a href="#number-konvertatsiya-qoidalari">Number() konvertatsiya qoidalari</a></li>
+<li class="lvl2"><a href="#boolean-konvertatsiyasi-mantiqiy-turga-o-girish">Boolean konvertatsiyasi (mantiqiy turga o'girish)</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Ko'pincha operator va funksiyalar bergan qiymatimizni avtomatik ravishda kerakli turga o'giradi. Masalan, <code>alert</code> istalgan qiymatni matnga aylantirib ko'rsatadi. Ba'zan esa biz o'zimiz qiymatni aniq turga o'girishimiz kerak bo'ladi. Bu darsda uchta asosiy konvertatsiyani — matnga, songa va mantiqiy turga o'girishni ko'rib chiqamiz.</p>
 <div class="note">Bu darsda obyektlar (objects) haqida gapirmaymiz — obyektlarni o'girishni keyinroq, obyektlar mavzusidan so'ng alohida o'rganamiz. Hozircha faqat oddiy (primitiv) qiymatlar bilan ishlaymiz.</div>
-<h2>String konvertatsiyasi (matnga o'girish)</h2>
+<h2 id="string-konvertatsiyasi-matnga-o-girish">String konvertatsiyasi (matnga o'girish)</h2>
 <p>String konvertatsiyasi biror qiymatning matn ko'rinishi kerak bo'lganda ro'y beradi. Masalan, <code>alert(qiymat)</code> qiymatni ko'rsatish uchun uni matnga o'giradi.</p>
 <p>Aniq o'girish uchun <code>String(qiymat)</code> funksiyasini chaqiramiz. U qiymatni matnga (string turiga) aylantiradi:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>string-konvertatsiya.js</span></div><textarea spellcheck="false">let qiymat = true;
@@ -614,7 +627,7 @@ console.log( String(undefined) ); // "undefined"
 console.log( String(123) );       // "123"
 console.log( String(3.14) );      // "3.14"</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="tip">Sonni tez matnga o'girishning yana bir yo'li — bo'sh matnni qo'shish: <code>123 + ""</code> natijasi <code>"123"</code> bo'ladi. Buni operatorlar darsida batafsil ko'ramiz.</div>
-<h2>Number konvertatsiyasi (songa o'girish)</h2>
+<h2 id="number-konvertatsiyasi-songa-o-girish">Number konvertatsiyasi (songa o'girish)</h2>
 <p>Songa o'girish matematik amallar va ifodalarda avtomatik sodir bo'ladi. Masalan, matnga bo'lish amalini qo'llaganda:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>auto-number.js</span></div><textarea spellcheck="false">console.log( "6" / "2" ); // 3 — matnlar songa o'giriladi va bo'linadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p>Aniq o'girish uchun <code>Number(qiymat)</code> funksiyasidan foydalanamiz. Bu ayniqsa matn shaklidagi qiymatlarni (masalan, forma maydonlaridan olingan) son bilan ishlashdan oldin o'girishda kerak bo'ladi:</p>
@@ -630,7 +643,7 @@ console.log(notaSon); // NaN — matnni songa o'girib bo'lmadi
 
 console.log( Number("123abc") ); // NaN
 console.log( Number("12.5") );   // 12.5 — bu ishlaydi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<h3>Number() konvertatsiya qoidalari</h3>
+<h3 id="number-konvertatsiya-qoidalari">Number() konvertatsiya qoidalari</h3>
 <p>Turli qiymatlar songa qanday o'girilishini quyidagi qoidalar aniqlaydi:</p>
 <ul><li><code>undefined</code> &rarr; <code>NaN</code> bo'ladi;</li><li><code>null</code> &rarr; <code>0</code> bo'ladi;</li><li><code>true</code> &rarr; <code>1</code>, <code>false</code> &rarr; <code>0</code> bo'ladi;</li><li><strong>Matn</strong>: boshi va oxiridagi bo'shliqlar (probel, tab, yangi qator) olib tashlanadi. Agar qolgan matn bo'sh bo'lsa &mdash; natija <code>0</code>. Aks holda son "o'qiladi"; xatolik bo'lsa &mdash; <code>NaN</code>.</li></ul>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>number-qoidalar.js</span></div><textarea spellcheck="false">console.log( Number("   42   ") ); // 42 — bo'shliqlar tashlanadi
@@ -640,7 +653,7 @@ console.log( Number(false) );     // 0
 console.log( Number(null) );      // 0
 console.log( Number(undefined) ); // NaN</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">E'tibor bering: <code>null</code> songa o'girilganda <code>0</code> bo'ladi, ammo <code>undefined</code> esa <code>NaN</code> bo'ladi. Bu ikki qiymat o'xshash ko'rinsa-da, konvertatsiyada boshqacha ishlaydi.</div>
-<h2>Boolean konvertatsiyasi (mantiqiy turga o'girish)</h2>
+<h2 id="boolean-konvertatsiyasi-mantiqiy-turga-o-girish">Boolean konvertatsiyasi (mantiqiy turga o'girish)</h2>
 <p>Mantiqiy konvertatsiya eng oddiy. U mantiqiy amallarda (masalan, <code>if</code> shartida) avtomatik sodir bo'ladi, lekin aniq holda <code>Boolean(qiymat)</code> orqali ham chaqirsa bo'ladi.</p>
 <p>Qoida sodda:</p>
 <ul><li>Intuitiv ravishda "bo'sh" bo'lgan qiymatlar &mdash; <code>0</code>, bo'sh matn <code>""</code>, <code>null</code>, <code>undefined</code> va <code>NaN</code> &mdash; <strong>false</strong> bo'ladi;</li><li>Boshqa barcha qiymatlar &mdash; <strong>true</strong> bo'ladi.</li></ul>
@@ -656,7 +669,7 @@ console.log( Boolean(NaN) );  // false</textarea><div class="pg-actions"><button
 console.log( Boolean(" ") );  // true — probel ham belgi, demak bo'sh emas
 console.log( Boolean("false") ); // true — "false" matni bo'sh emas</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <div class="note">Songa o'girishdagi <code>Number(" ")</code> (probel) natijasi <code>0</code>, ammo <code>Boolean(" ")</code> natijasi <code>true</code>. Ikkalasi turli qoidalarga bo'ysunadi — buni chalkashtirmang.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>String()</strong> — qiymatni matnga o'giradi; deyarli har doim tushunarli natija beradi;</li><li><strong>Number()</strong> — songa o'giradi: <code>undefined</code>&rarr;NaN, <code>null</code>&rarr;0, <code>true/false</code>&rarr;1/0, bo'sh matn&rarr;0, noto'g'ri matn&rarr;NaN;</li><li><strong>Boolean()</strong> — mantiqiy turga: <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code> &rarr; false, qolganlari &rarr; true;</li><li>Diqqat: <code>"0"</code> va probel <code>" "</code> — Boolean sifatida <strong>true</strong>.</li></ul>
 <nav class="lesson-nav">
   <a href="malumot-turlari.html"><span class="dir">← Oldingi</span><span class="ttl">Ma'lumot turlari</span></a>
@@ -670,6 +683,6 @@ console.log( Boolean("false") ); // true — "false" matni bo'sh emas</textarea>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

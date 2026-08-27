@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WeakRef va FinalizationRegistry — Kodla</title>
   <meta name="description" content="Obyektni axlat yig'ishga to'sqinlik qilmasdan zaif havola saqlash (WeakRef) va u yo'q qilingach xabar olish (FinalizationRegistry).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,19 @@
 <main class="content article">
 <div class="crumbs">Qo'shimcha mavzular</div>
 <h1>WeakRef va FinalizationRegistry</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#odatiy-kuchli-havola-muammosi">Odatiy (kuchli) havola muammosi</a></li>
+<li class="lvl2"><a href="#deref-metodi">deref() metodi</a></li>
+<li class="lvl2"><a href="#kesh-misoli">Kesh misoli</a></li>
+<li class="lvl2"><a href="#finalizationregistry">FinalizationRegistry</a></li>
+<li class="lvl2"><a href="#ehtiyotkorlik">Ehtiyotkorlik</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Odatda obyektga havola bo'lsa, u xotirada saqlanadi — axlat yig'uvchi (garbage collector) uni o'chirmaydi. <code>WeakRef</code> esa <em>zaif</em> havola yaratadi: u obyekt yashashini <strong>kafolatlamaydi</strong>, shuning uchun kerak bo'lganda obyekt xotiradan tozalanishi mumkin.</p>
-<h2>Odatiy (kuchli) havola muammosi</h2>
+<h2 id="odatiy-kuchli-havola-muammosi">Odatiy (kuchli) havola muammosi</h2>
 <p>Oddiy havola obyektni "ushlab turadi". Kesh (cache) yasaganda bu muammo: keshdagi obyekt boshqa hech kimga kerak bo'lmasa ham, kesh uni ushlab turgani uchun xotira bo'shamaydi.</p>
 <p><code>WeakRef</code> shu muammoni yechadi — u obyektga <strong>ushlab turmaydigan</strong> havola beradi.</p>
 <pre class="code"><code>let obyekt = { data: "katta ma'lumot" };
@@ -606,7 +620,7 @@ let zaifHavola = new WeakRef(obyekt);
 // obyektga murojaat qilish uchun deref() ishlatiladi
 let olingan = zaifHavola.deref();</code></pre>
 <div class="note"><code>WeakMap</code>/<code>WeakSet</code>dan farqi: ular <em>butun kolleksiya</em>ni zaiflashtiradi, <code>WeakRef</code> esa <strong>bitta obyektga</strong> nozik nazorat beradi.</div>
-<h2>deref() metodi</h2>
+<h2 id="deref-metodi">deref() metodi</h2>
 <p>Zaif havoladan obyektni olish uchun <code>deref()</code> chaqiriladi. Agar obyekt hali xotirada bo'lsa — o'zini qaytaradi; allaqachon tozalangan bo'lsa — <code>undefined</code>:</p>
 <pre class="code"><code>let havola = new WeakRef({ name: "Ali" });
 
@@ -619,7 +633,7 @@ if (obyekt !== undefined) {
   console.log("Obyekt yo'q qilingan");
 }</code></pre>
 <div class="warn">Har safar <code>deref()</code> chaqirganda natijani <strong>albatta tekshiring</strong>. U istalgan vaqtda <code>undefined</code> qaytarishi mumkin — hech qachon obyekt mavjudligiga ishonch bilan yondashmang.</div>
-<h2>Kesh misoli</h2>
+<h2 id="kesh-misoli">Kesh misoli</h2>
 <p><code>WeakRef</code>ning tipik qo'llanishi — xotirani band qilmaydigan kesh. Quyida rasmlarni keshlash misoli: agar keshdagi obyekt hali xotirada bo'lsa, uni qayta ishlatamiz; bo'lmasa qaytadan yaratamiz.</p>
 <pre class="code"><code>let kesh = new Map();
 
@@ -640,7 +654,7 @@ let a = rasmOlish("logo.png");
 let b = rasmOlish("logo.png");
 // a va b bir xil obyekt (kesh ishladi)</code></pre>
 <p>Bu keshning afzalligi: agar tizimga xotira kerak bo'lsa, keshdagi ishlatilmayotgan rasmlar avtomatik tozalanadi. Kamchiligi: <code>Map</code> ichida <em>bo'sh</em> <code>WeakRef</code>lar qolib ketishi mumkin — ularni tozalash uchun <code>FinalizationRegistry</code> kerak.</p>
-<h2>FinalizationRegistry</h2>
+<h2 id="finalizationregistry">FinalizationRegistry</h2>
 <p><code>FinalizationRegistry</code> — obyekt axlat yig'uvchi tomonidan yo'q qilingach, <strong>tozalash funksiyasi</strong>ni (callback) chaqirish imkonini beradi. U shunday yaratiladi:</p>
 <pre class="code"><code>let registry = new FinalizationRegistry((qiymat) =&gt; {
   // obyekt yo'q qilingach chaqiriladi
@@ -668,12 +682,12 @@ function saqlash(nom, obyekt) {
   kesh.set(nom, new WeakRef(obyekt));
   registry.register(obyekt, nom);
 }</code></pre>
-<h2>Ehtiyotkorlik</h2>
+<h2 id="ehtiyotkorlik">Ehtiyotkorlik</h2>
 <p><code>WeakRef</code> va <code>FinalizationRegistry</code> — kuchli, ammo nozik vositalar. Ularni ehtiyotkorlik bilan ishlating:</p>
 <ul><li>Axlat yig'uvchi <strong>qachon</strong> ishlashini bashorat qilib bo'lmaydi — callback darhol yoki umuman chaqirilmasligi mumkin;</li><li>Tozalash callbackiga <strong>muhim mantiqni</strong> yuklamang — u ishga tushishiga kafolat yo'q;</li><li>Bir necha obyekt bir vaqtda tozalansa, callbacklar tartibi noaniq;</li><li>Bu vositalarni faqat <em>optimallashtirish</em> uchun ishlating, dasturning to'g'riligi ularga bog'liq bo'lmasin.</li></ul>
 <div class="warn">Spetsifikatsiyaga ko'ra, <code>FinalizationRegistry</code> callbacki <strong>umuman chaqirilmasligi ham mumkin</strong> — masalan, dastur tugab qolsa. Shuning uchun unga tayanib fayl yopish yoki tarmoq ulanishini uzish kabi zarur amallarni bajarmang.</div>
 <div class="tip">Ko'p hollarda oddiy <code>WeakMap</code> yoki <code>WeakSet</code> yetarli va xavfsizroq. <code>WeakRef</code>/<code>FinalizationRegistry</code>ga faqat chindan nozik xotira nazorati kerak bo'lgandagina murojaat qiling.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><code>WeakRef</code> obyektga <em>zaif</em> havola beradi — u obyekt yashashini kafolatlamaydi;</li><li><code>deref()</code> obyektni yoki (tozalangan bo'lsa) <code>undefined</code> qaytaradi — doim tekshiring;</li><li>Tipik qo'llanishi — xotirani band qilmaydigan kesh;</li><li><code>FinalizationRegistry</code> obyekt tozalangach callback chaqiradi (masalan, keshni tozalash uchun);</li><li>Axlat yig'uvchi xatti-harakati noaniq — bu vositalarga dastur to'g'riligini bog'lamang, faqat optimallashtirish uchun ishlating.</li></ul>
 <nav class="lesson-nav">
   <a href="unicode.html"><span class="dir">← Oldingi</span><span class="ttl">Unicode, satr ichki tuzilishi</span></a>
@@ -687,6 +701,6 @@ function saqlash(nom, obyekt) {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

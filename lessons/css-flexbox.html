@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flexbox — Kodla</title>
   <meta name="description" content="display: flex bilan elementlarni bir o'lchamli joylashtirish. Asosiy va ko'ndalang o'q, justify-content, align-items, flex-direction, flex-wrap, gap; flex-grow/shrink/basis va amaliy joylashuvlar.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,9 +599,24 @@
 <main class="content article">
 <div class="crumbs">CSS</div>
 <h1>Flexbox</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#asosiy-tushuncha-konteyner-va-elementlar">Asosiy tushuncha: konteyner va elementlar</a></li>
+<li class="lvl2"><a href="#ikkita-o-q-asosiy-va-ko-ndalang">Ikkita o'q: asosiy va ko'ndalang</a></li>
+<li class="lvl2"><a href="#justify-content-asosiy-o-q-bo-yicha-tekislash">justify-content — asosiy o'q bo'yicha tekislash</a></li>
+<li class="lvl2"><a href="#align-items-ko-ndalang-o-q-bo-yicha-tekislash">align-items — ko'ndalang o'q bo'yicha tekislash</a></li>
+<li class="lvl2"><a href="#flex-direction-yo-nalishni-o-zgartirish">flex-direction — yo'nalishni o'zgartirish</a></li>
+<li class="lvl2"><a href="#flex-wrap-qatorga-sig-masa-o-tkazish">flex-wrap — qatorga sig'masa o'tkazish</a></li>
+<li class="lvl2"><a href="#gap-elementlar-orasidagi-bo-shliq">gap — elementlar orasidagi bo'shliq</a></li>
+<li class="lvl2"><a href="#flex-grow-flex-shrink-flex-basis-elementlarning-egiluvchanligi">flex-grow, flex-shrink, flex-basis — elementlarning egiluvchanligi</a></li>
+<li class="lvl2"><a href="#amaliy-misol-sayt-navigatsiya-paneli">Amaliy misol: sayt navigatsiya paneli</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead"><strong>Flexbox</strong> (Flexible Box Layout) — elementlarni bir qator yoki bir ustunda oson va moslashuvchan joylashtirish uchun mo'ljallangan CSS moduli. Flexbox'gacha elementlarni yonma-yon terish, markazga qo'yish yoki teng taqsimlash juda qiyin edi (<code>float</code> va boshqa "hiyla"lar bilan). Flexbox bularning barchasini bir necha qatorda hal qiladi. Bu — zamonaviy CSS'ning eng muhim vositalaridan biri.</p>
 <div class="note">Flexbox — <strong>bir o'lchamli</strong> (one-dimensional) joylashuv tizimi: u elementlarni <em>bir yo'nalishda</em> — yo qator (row) bo'ylab, yo ustun (column) bo'ylab tartibga soladi. Ikki o'lchamli (qator VA ustun birga) joylashuv uchun keyingi darsdagi CSS Grid ishlatiladi.</div>
-<h2>Asosiy tushuncha: konteyner va elementlar</h2>
+<h2 id="asosiy-tushuncha-konteyner-va-elementlar">Asosiy tushuncha: konteyner va elementlar</h2>
 <p>Flexbox ikki qismdan iborat: <strong>flex-konteyner</strong> (ota element, unga <code>display: flex</code> beriladi) va uning ichidagi <strong>flex-elementlar</strong> (bevosita farzandlar). Konteynerga <code>display: flex</code> berishingiz bilan uning barcha bevosita farzandlari avtomatik yonma-yon (bir qatorga) tiziladi.</p>
 <pre class="code"><code>&lt;!-- HTML --&gt;
 &lt;div class="konteyner"&gt;
@@ -611,18 +629,18 @@
   display: flex;
 }</code></pre>
 <p>Faqat shu bitta qatordan keyin uchta <code>div</code> bir-birining yoniga chiziladi (odatiy holatda ular bir-birining ostida bo'lardi, chunki div — block element).</p>
-<h2>Ikkita o'q: asosiy va ko'ndalang</h2>
+<h2 id="ikkita-o-q-asosiy-va-ko-ndalang">Ikkita o'q: asosiy va ko'ndalang</h2>
 <p>Flexbox'ni tushunish uchun uning <strong>ikki o'qini</strong> bilish shart:</p>
 <ul><li><strong>Asosiy o'q (main axis)</strong> — elementlar tiziladigan asosiy yo'nalish. Standart holatda u <strong>gorizontal</strong> (chapdan o'ngga);</li><li><strong>Ko'ndalang o'q (cross axis)</strong> — asosiy o'qqa perpendikulyar. Standart holatda u <strong>vertikal</strong> (yuqoridan pastga).</li></ul>
 <p>Bu ikkisini eslab qolish muhim, chunki <code>justify-content</code> — asosiy o'q bo'yicha, <code>align-items</code> esa ko'ndalang o'q bo'yicha ishlaydi.</p>
-<h2>justify-content — asosiy o'q bo'yicha tekislash</h2>
+<h2 id="justify-content-asosiy-o-q-bo-yicha-tekislash">justify-content — asosiy o'q bo'yicha tekislash</h2>
 <p>Elementlarni asosiy o'q (odatda gorizontal) bo'ylab qanday taqsimlashni belgilaydi:</p>
 <pre class="code"><code>.konteyner {
   display: flex;
   justify-content: center;
 }</code></pre>
 <ul><li><code>flex-start</code> — boshiga (chapga) yig'iladi (standart);</li><li><code>flex-end</code> — oxiriga (o'ngga) yig'iladi;</li><li><code>center</code> — markazga yig'iladi;</li><li><code>space-between</code> — birinchi va oxirgi chetga, oralar teng bo'shliq;</li><li><code>space-around</code> — har bir element atrofida teng bo'shliq;</li><li><code>space-evenly</code> — barcha bo'shliqlar (chetlar ham) mutlaqo teng.</li></ul>
-<h2>align-items — ko'ndalang o'q bo'yicha tekislash</h2>
+<h2 id="align-items-ko-ndalang-o-q-bo-yicha-tekislash">align-items — ko'ndalang o'q bo'yicha tekislash</h2>
 <p>Elementlarni ko'ndalang o'q (odatda vertikal) bo'yicha qanday tekislashni belgilaydi:</p>
 <pre class="code"><code>.konteyner {
   display: flex;
@@ -637,7 +655,7 @@
   align-items: center;
   height: 100vh;
 }</code></pre>
-<h2>flex-direction — yo'nalishni o'zgartirish</h2>
+<h2 id="flex-direction-yo-nalishni-o-zgartirish">flex-direction — yo'nalishni o'zgartirish</h2>
 <p>Asosiy o'qning yo'nalishini o'zgartiradi. Buni o'zgartirsangiz, <code>justify-content</code> va <code>align-items</code>ning o'qlari ham almashadi (chunki ular o'qlarga bog'langan):</p>
 <ul><li><code>row</code> — gorizontal, chapdan o'ngga (standart);</li><li><code>row-reverse</code> — gorizontal, o'ngdan chapga;</li><li><code>column</code> — vertikal, yuqoridan pastga (elementlar ustun bo'lib tiziladi);</li><li><code>column-reverse</code> — vertikal, pastdan yuqoriga.</li></ul>
 <pre class="code"><code>.ustun {
@@ -646,7 +664,7 @@
   gap: 10px;
 }</code></pre>
 <div class="warn"><code>flex-direction: column</code> qo'ysangiz, asosiy o'q endi <strong>vertikal</strong> bo'ladi. Shuning uchun <code>justify-content</code> endi vertikal joylashuvni, <code>align-items</code> esa gorizontal joylashuvni boshqaradi — ular "o'rin almashadi". Bu ko'p yangi dasturchini chalkashtiradi, shuni yodda tuting.</div>
-<h2>flex-wrap — qatorga sig'masa o'tkazish</h2>
+<h2 id="flex-wrap-qatorga-sig-masa-o-tkazish">flex-wrap — qatorga sig'masa o'tkazish</h2>
 <p>Standart holatda flex-elementlar bitta qatorga majburan siqiladi (sig'masa ham). <code>flex-wrap: wrap</code> ularga sig'magan elementlarni keyingi qatorga o'tishga ruxsat beradi:</p>
 <pre class="code"><code>.galereya {
   display: flex;
@@ -654,7 +672,7 @@
   gap: 15px;
 }</code></pre>
 <div class="note"><code>flex-wrap: wrap</code> responsive (moslashuvchan) galereyalar uchun juda foydali: ekran torayganda kartalar avtomatik keyingi qatorga tushadi.</div>
-<h2>gap — elementlar orasidagi bo'shliq</h2>
+<h2 id="gap-elementlar-orasidagi-bo-shliq">gap — elementlar orasidagi bo'shliq</h2>
 <p><code>gap</code> flex-elementlar orasiga bir tekis bo'shliq qo'shadi. Ilgari buning uchun har bir elementga <code>margin</code> berish kerak edi (va oxirgisini olib tashlash muammo edi). <code>gap</code> buni juda soddalashtirdi:</p>
 <pre class="code"><code>.konteyner {
   display: flex;
@@ -667,7 +685,7 @@
   flex-wrap: wrap;
   gap: 10px 30px;    /* qatorlar orasi 10px, ustunlar orasi 30px */
 }</code></pre>
-<h2>flex-grow, flex-shrink, flex-basis — elementlarning egiluvchanligi</h2>
+<h2 id="flex-grow-flex-shrink-flex-basis-elementlarning-egiluvchanligi">flex-grow, flex-shrink, flex-basis — elementlarning egiluvchanligi</h2>
 <p>Bu uch xossa <strong>flex-elementlarning o'ziga</strong> (konteynerga emas) beriladi va ularning bo'sh joyni qanday egallashini boshqaradi:</p>
 <ul><li><strong>flex-basis</strong> — elementning boshlang'ich o'lchami (masalan <code>200px</code> yoki <code>auto</code>);</li><li><strong>flex-grow</strong> — bo'sh joy bo'lsa, element qanchalik <em>o'sishi</em> (0 = o'smaydi, 1 = o'sadi);</li><li><strong>flex-shrink</strong> — joy yetmasa, element qanchalik <em>kichrayishi</em> (0 = kichraymaydi).</li></ul>
 <p>Ko'pincha ular bitta qisqartirilgan <code>flex</code> xossasi orqali yoziladi: <code>flex: grow shrink basis</code>.</p>
@@ -683,7 +701,7 @@
   flex-basis: 200px;
 }</code></pre>
 <div class="tip"><code>flex: 1</code> — eng ko'p ishlatiladigan qiymat. Agar bir konteynerdagi barcha elementlarga <code>flex: 1</code> bersangiz, ular mavjud joyni <strong>teng bo'lib</strong> egallaydi. Bu bir necha ustunni teng kenglikda qilishning eng oson usuli.</div>
-<h2>Amaliy misol: sayt navigatsiya paneli</h2>
+<h2 id="amaliy-misol-sayt-navigatsiya-paneli">Amaliy misol: sayt navigatsiya paneli</h2>
 <p>Flexbox uchun eng keng tarqalgan amaliy holat — sayt tepasidagi navigatsiya paneli: chapda logotip, o'ngda menyu havolalari.</p>
 <pre class="code"><code>&lt;!-- HTML --&gt;
 &lt;nav class="navbar"&gt;
@@ -706,7 +724,7 @@
   display: flex;
   gap: 20px;                       /* havolalar orasi bo'shliq */
 }</code></pre>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Flexbox</strong> — bir o'lchamli (qator yoki ustun) joylashuv tizimi;</li><li>Konteynerga <code>display: flex</code> beriladi, farzandlar avtomatik yonma-yon tiziladi;</li><li><strong>asosiy o'q</strong> (justify-content) va <strong>ko'ndalang o'q</strong> (align-items);</li><li>Markazga qo'yish: <code>justify-content: center; align-items: center;</code>;</li><li><code>flex-direction</code> — yo'nalish (row/column), o'zgarganda o'qlar almashadi;</li><li><code>flex-wrap: wrap</code> — sig'magan elementlarni keyingi qatorga o'tkazadi;</li><li><code>gap</code> — elementlar orasidagi bo'shliq;</li><li><code>flex: 1</code> — element bo'sh joyni egallaydi (teng ustunlar uchun ideal).</li></ul>
 <nav class="lesson-nav">
   <a href="css-box.html"><span class="dir">← Oldingi</span><span class="ttl">Box model</span></a>
@@ -720,6 +738,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

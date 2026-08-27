@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Express asoslari — Kodla</title>
   <meta name="description" content="Nega Express, o'rnatish, birinchi ilova (app va app.listen), route (app.get), req va res obyektlari, res.send va res.json.">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,19 +599,32 @@
 <main class="content article">
 <div class="crumbs">Node.js va Express</div>
 <h1>Express asoslari</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#nega-express">Nega Express?</a></li>
+<li class="lvl2"><a href="#o-rnatish">O'rnatish</a></li>
+<li class="lvl2"><a href="#birinchi-ilova">Birinchi ilova</a></li>
+<li class="lvl2"><a href="#route-marshrut-nima">Route (marshrut) nima?</a></li>
+<li class="lvl2"><a href="#req-obyekti">req obyekti</a></li>
+<li class="lvl2"><a href="#res-obyekti-send-va-json">res obyekti: send va json</a></li>
+<li class="lvl2"><a href="#har-bir-so-rovga-javob-shart">Har bir so'rovga javob shart</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Sof <code>http</code> moduli bilan server yozish mumkin, lekin marshrutlash, so'rov tanasini o'qish va boshqa oddiy ishlar juda ko'p qo'l mehnatini talab qiladi. <strong>Express</strong> — bu ishlarni soddalashtiradigan, Node.js uchun eng mashhur veb-freymvork. Ushbu darsda Express asoslarini o'rganamiz.</p>
-<h2>Nega Express?</h2>
+<h2 id="nega-express">Nega Express?</h2>
 <p><strong>Express</strong> — Node.js uchun minimalist va moslashuvchan veb-freymvork. U sof <code>http</code> moduli ustiga qulay qatlam qo'shadi:</p>
 <ul><li><strong>Sodda marshrutlash</strong> — <code>app.get</code>, <code>app.post</code> kabi aniq funksiyalar;</li><li><strong>Middleware</strong> — so'rovni bosqichma-bosqich qayta ishlash tizimi;</li><li><strong>Qulay javob metodlari</strong> — <code>res.send</code>, <code>res.json</code> kabilar;</li><li><strong>Katta ekotizim</strong> — minglab tayyor plaginlar va o'rgatuvchi materiallar.</li></ul>
 <p>Bir xil vazifani sof <code>http</code> va Express'da solishtiring — Express kodi ancha qisqa va tushunarli. Aynan shuning uchun Express dunyoda eng ko'p ishlatiladigan Node.js freymvorklaridan biri.</p>
-<h2>O'rnatish</h2>
+<h2 id="o-rnatish">O'rnatish</h2>
 <p>Express — tashqi paket, shuning uchun uni npm orqali o'rnatish kerak. Avval loyiha yarating:</p>
 <pre class="code"><code>mkdir mening-serverim
 cd mening-serverim
 npm init -y
 npm install express</code></pre>
 <p>Endi Express loyihangizda mavjud va uni koddan import qilishingiz mumkin.</p>
-<h2>Birinchi ilova</h2>
+<h2 id="birinchi-ilova">Birinchi ilova</h2>
 <p>Eng oddiy Express ilovasini yozamiz. <code>index.js</code> fayli yarating:</p>
 <pre class="code"><code>const express = require('express');
 const app = express();
@@ -625,7 +641,7 @@ app.listen(3000, () =&gt; {
 <p>Kodni qadam-baqadam ko'raylik:</p>
 <ol><li><code>express()</code> — yangi ilova (app) obyektini yaratadi;</li><li><code>app.get('/', ...)</code> — bosh sahifaga (<code>/</code>) GET so'rovi kelganda ishlaydigan funksiyani belgilaydi;</li><li><code>res.send(...)</code> — javob jo'natadi;</li><li><code>app.listen(3000)</code> — serverni 3000-portda ishga tushiradi.</li></ol>
 <div class="note"><code>app</code> obyekti — bu butun ilovangizning markazi. Unga marshrutlar (routes), middleware'lar va sozlamalar qo'shiladi. An'anaviy ravishda u <code>app</code> deb nomlanadi.</div>
-<h2>Route (marshrut) nima?</h2>
+<h2 id="route-marshrut-nima">Route (marshrut) nima?</h2>
 <p><strong>Route</strong> (marshrut) — bu "qanday so'rovga qanday javob berish" qoidasi. U ikki qismdan iborat: <strong>HTTP metodi</strong> (GET, POST...) va <strong>manzil</strong> (path).</p>
 <p>Express'da har bir metod uchun alohida funksiya bor:</p>
 <pre class="code"><code>app.get('/users', (req, res) =&gt; {
@@ -640,7 +656,7 @@ app.get('/about', (req, res) =&gt; {
   res.send('Biz haqimizda sahifa');
 });</code></pre>
 <p>Bir manzilga turli metodlar bilan turli javob berish mumkin. Masalan, <code>/users</code>ga GET so'rovi ro'yxatni qaytaradi, POST so'rovi esa yangisini qo'shadi. Bu REST API'ning asosi (keyingi darsda batafsil).</p>
-<h2>req obyekti</h2>
+<h2 id="req-obyekti">req obyekti</h2>
 <p><code>req</code> (request) obyekti kiruvchi so'rov haqidagi barcha ma'lumotni saqlaydi. Eng ko'p ishlatiladigan xossalari:</p>
 <ul><li><code>req.params</code> — URL parametrlari (masalan, <code>/users/:id</code>);</li><li><code>req.query</code> — so'rov qatoridagi parametrlar (<code>?sort=asc</code>);</li><li><code>req.body</code> — so'rov tanasi (POST/PUT ma'lumoti);</li><li><code>req.method</code> — so'rov metodi (GET, POST...);</li><li><code>req.url</code> — so'ralgan manzil;</li><li><code>req.headers</code> — so'rov sarlavhalari.</li></ul>
 <pre class="code"><code>app.get('/salom', (req, res) =&gt; {
@@ -649,7 +665,7 @@ app.get('/about', (req, res) =&gt; {
   console.log('Query:', req.query);  // { ism: 'Ali' }
   res.send('Salom, ' + req.query.ism);
 });</code></pre>
-<h2>res obyekti: send va json</h2>
+<h2 id="res-obyekti-send-va-json">res obyekti: send va json</h2>
 <p><code>res</code> (response) obyekti orqali brauzerga javob jo'natasiz. Express bir necha qulay metod beradi:</p>
 <p><code>res.send()</code> — universal javob metodi. U berilgan turga qarab avtomatik ravishda to'g'ri <code>Content-Type</code>ni o'rnatadi:</p>
 <pre class="code"><code>app.get('/matn', (req, res) =&gt; {
@@ -674,10 +690,10 @@ app.get('/html', (req, res) =&gt; {
   res.status(404).json({ xato: 'Topilmadi' });
 });</code></pre>
 <div class="tip"><code>res.status(...)</code> metodi <code>res</code> obyektini qaytaradi, shuning uchun uni <code>.json()</code> yoki <code>.send()</code> bilan zanjirlab yozish mumkin: <code>res.status(201).json(...)</code>.</div>
-<h2>Har bir so'rovga javob shart</h2>
+<h2 id="har-bir-so-rovga-javob-shart">Har bir so'rovga javob shart</h2>
 <p>Muhim qoida: har bir route funksiyasi <strong>javobni yakunlashi</strong> shart — <code>res.send</code>, <code>res.json</code>, <code>res.end</code> yoki shunga o'xshash metod bilan. Aks holda so'rov "osilib" qoladi va brauzer javobni cheksiz kutadi.</p>
 <div class="warn">Bitta so'rovda javobni <strong>ikki marta</strong> jo'natib bo'lmaydi. Masalan, <code>res.send(...)</code>dan keyin yana <code>res.send(...)</code> yozsangiz, <code>ERR_HTTP_HEADERS_SENT</code> xatosi chiqadi. Javobdan keyin funksiyadan chiqish uchun ko'pincha <code>return</code> ishlatiladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Express</strong> — Node.js uchun mashhur, minimalist veb-freymvork; sof <code>http</code>ni ancha soddalashtiradi;</li><li>Uni <code>npm install express</code> bilan o'rnatiladi, <code>const app = express()</code> bilan ilova yaratiladi;</li><li><code>app.get</code>, <code>app.post</code> kabi metodlar bilan <strong>route</strong>lar belgilanadi;</li><li><code>req</code> — so'rov ma'lumoti (<code>params</code>, <code>query</code>, <code>body</code>), <code>res</code> — javob;</li><li><code>res.send</code> — universal javob, <code>res.json</code> — JSON javob, <code>res.status</code> — status kod;</li><li>Har bir route javobni yakunlashi shart va javob faqat bir marta jo'natiladi.</li></ul>
 <nav class="lesson-nav">
   <a href="node-fs-http.html"><span class="dir">← Oldingi</span><span class="ttl">Fayl tizimi va HTTP server</span></a>
@@ -691,6 +707,6 @@ app.get('/html', (req, res) =&gt; {
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>

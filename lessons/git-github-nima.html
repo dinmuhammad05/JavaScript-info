@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Git va GitHub nima? — Kodla</title>
   <meta name="description" content="Versiya nazorati (version control) nima va nega kerak; Git — mahalliy VCS; GitHub — bulutli platforma; ularning farqi; repozitoriy, commit va branch tushunchalari; muqobil xizmatlar (GitLab, Bitbucket).">
-  <link rel="stylesheet" href="../css/style.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 <header class="site-header">
@@ -16,9 +17,11 @@
       <a href="../index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
+<div class="reading-progress"><span id="readingBar"></span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="side-search">
@@ -596,8 +599,24 @@
 <main class="content article">
 <div class="crumbs">Git va GitHub</div>
 <h1>Git va GitHub nima?</h1>
+<details class="toc" open>
+  <summary>📑 Ushbu sahifada</summary>
+  <ul>
+<li class="lvl2"><a href="#versiya-nazorati-version-control-nima">Versiya nazorati (version control) nima?</a></li>
+<li class="lvl2"><a href="#git-nima">Git nima?</a></li>
+<li class="lvl2"><a href="#github-nima">GitHub nima?</a></li>
+<li class="lvl2"><a href="#git-va-github-farqi">Git va GitHub farqi</a></li>
+<li class="lvl2"><a href="#asosiy-tushunchalar-repozitoriy-commit-branch">Asosiy tushunchalar: repozitoriy, commit, branch</a></li>
+<li class="lvl3"><a href="#repozitoriy-repo">Repozitoriy (repo)</a></li>
+<li class="lvl3"><a href="#commit">Commit</a></li>
+<li class="lvl3"><a href="#branch-tarmoq">Branch (tarmoq)</a></li>
+<li class="lvl2"><a href="#oddiy-ish-oqimi-workflow">Oddiy ish oqimi (workflow)</a></li>
+<li class="lvl2"><a href="#muqobil-xizmatlar-gitlab-bitbucket-va-boshqalar">Muqobil xizmatlar: GitLab, Bitbucket va boshqalar</a></li>
+<li class="lvl2"><a href="#xulosa">Xulosa</a></li>
+  </ul>
+</details>
 <p class="lead">Har qanday dasturchi ertami-kechmi kodini <em>saqlash</em>, <em>o'zgarishlarini kuzatish</em> va <em>boshqalar bilan birgalikda ishlash</em> muammosiga duch keladi. Aynan shu muammolarni <strong>Git</strong> nomli versiya nazorati tizimi va <strong>GitHub</strong> nomli bulutli platforma hal qiladi. Bu darsda ular nima ekanini, bir-biridan farqini va asosiy tushunchalarni oddiy tilda o'rganamiz.</p>
-<h2>Versiya nazorati (version control) nima?</h2>
+<h2 id="versiya-nazorati-version-control-nima">Versiya nazorati (version control) nima?</h2>
 <p><strong>Versiya nazorati tizimi</strong> (inglizcha <em>Version Control System</em>, qisqacha <em>VCS</em>) — bu fayllaringizdagi o'zgarishlarni vaqt bo'ylab kuzatib boruvchi va istalgan oldingi holatga qaytish imkonini beruvchi dasturdir. Oddiy qilib aytganda, u loyihangizning har bir muhim holatini <em>suratga oladi</em> va bularni saqlab qo'yadi.</p>
 <p>Ko'pchilik yangi boshlovchilar VCS'siz ishlashga harakat qilib, fayllarni qo'lda nusxalaydi. Natijada papkalar quyidagi ko'rinishga keladi:</p>
 <pre class="code"><code>loyiha/
@@ -610,19 +629,19 @@ loyiha-ishlaydigan-versiya/</code></pre>
 <p>Versiya nazorati sizga quyidagilarni beradi:</p>
 <ul><li><strong>O'zgarishlar tarixi:</strong> kim, qachon va nima uchun kodni o'zgartirganini aniq ko'rasiz;</li><li><strong>Orqaga qaytish:</strong> biror narsani buzib qo'ysangiz, avvalgi ishlaydigan holatga bir buyruq bilan qaytishingiz mumkin;</li><li><strong>Jamoaviy ishlash:</strong> bir nechta dasturchi bitta loyihada bir-birini bezovta qilmasdan ishlashi mumkin;</li><li><strong>Tarmoqlar (branch):</strong> asosiy kodni buzmasdan, alohida joyda yangi imkoniyat ustida ishlash mumkin;</li><li><strong>Zaxira nusxa:</strong> kod bulutda saqlansa, kompyuteringiz buzilsa ham loyihangiz yo'qolmaydi.</li></ul>
 <div class="note">Versiya nazorati faqat dasturchilar uchun emas. Uni kitob yozuvchilar, tarjimonlar, dizaynerlar — matnli fayllar bilan ishlaydigan har kim ishlatishi mumkin. Ammo eng ko'p u dasturlash sohasida qo'llaniladi.</div>
-<h2>Git nima?</h2>
+<h2 id="git-nima">Git nima?</h2>
 <p><strong>Git</strong> — bugungi kunda dunyodagi eng mashhur versiya nazorati tizimi. Uni 2005-yilda Linux operatsion tizimining yaratuvchisi <em>Linus Torvalds</em> ishlab chiqqan. Git bepul, ochiq kodli va deyarli barcha operatsion tizimlarda ishlaydi.</p>
 <p>Git — bu <strong>taqsimlangan</strong> (distributed) versiya nazorati tizimi. Bu shuni anglatadiki, loyihaning to'liq tarixi <em>har bir dasturchining kompyuterida</em> to'liq nusxa sifatida saqlanadi. Ya'ni Git ishlashi uchun internetga ulanish shart emas — buyruqlarning aksariyati mahalliy (lokal) bajariladi.</p>
 <p>Git mahalliy dastur bo'lgani uchun quyidagilarni internetsiz qila olasiz:</p>
 <ul><li>O'zgarishlaringizni <em>commit</em> qilish (saqlash nuqtasini yaratish);</li><li>Butun o'zgarishlar tarixini ko'rish;</li><li>Yangi tarmoq (branch) yaratish va tarmoqlar orasida almashish;</li><li>Oldingi versiyalar bilan farqlarni solishtirish;</li><li>Xato holatlarni oldingi commit'ga qaytarish.</li></ul>
 <div class="note">Git — bu kompyuteringizga o'rnatiladigan buyruq qatori (terminal) dasturi. Uni GitHub bilan chalkashtirmang: Git — vosita, GitHub esa shu vositadan foydalanadigan onlayn xizmat. Bu farqni pastda batafsil ko'ramiz.</div>
-<h2>GitHub nima?</h2>
+<h2 id="github-nima">GitHub nima?</h2>
 <p><strong>GitHub</strong> — bu Git repozitoriylaringizni internetda (bulutda) saqlaydigan va jamoaviy ishlashni osonlashtiradigan onlayn platforma. U 2008-yilda ishga tushgan va hozirda dunyodagi eng katta dasturiy ta'minot manbasi (source code hosting) xizmatidir. 2018-yildan boshlab GitHub Microsoft kompaniyasiga tegishli.</p>
 <p>GitHub'ni Git uchun bir <em>ijtimoiy tarmoq</em> deb tasavvur qilishingiz mumkin. U Git'ning barcha imkoniyatlariga qo'shimcha ravishda quyidagilarni beradi:</p>
 <ul><li><strong>Onlayn saqlash:</strong> kodingiz bulutda saqlanadi, istalgan joydan kirish mumkin;</li><li><strong>Hamkorlik:</strong> boshqalar bilan bitta loyihada birga ishlash, o'zgarishlarni ko'rib chiqish (code review);</li><li><strong>Pull request:</strong> o'zgartirishlarni asosiy kodga qo'shishdan oldin muhokama qilish mexanizmi;</li><li><strong>Issues:</strong> xato va vazifalarni kuzatib borish tizimi;</li><li><strong>GitHub Pages:</strong> saytlarni bepul joylashtirish (hosting) imkoniyati;</li><li><strong>Actions:</strong> testlash va joylashtirishni avtomatlashtirish (CI/CD).</li></ul>
 <p>GitHub, shuningdek, dasturchi uchun bir <em>portfolio</em> vazifasini ham bajaradi. Ish beruvchilar ko'pincha nomzodning GitHub sahifasidagi loyihalarga qarab uning tajribasini baholaydi.</p>
 <div class="tip">Talabalar va o'qituvchilar uchun <em>GitHub Student Developer Pack</em> orqali ko'plab pullik vositalar bepul beriladi. Agar universitet yoki maktab pochtangiz bo'lsa, buni tekshirib ko'ring.</div>
-<h2>Git va GitHub farqi</h2>
+<h2 id="git-va-github-farqi">Git va GitHub farqi</h2>
 <p>Bu ikki tushuncha eng ko'p chalkashtiriladigan mavzu, shuning uchun ularni aniq ajratib olaylik. <strong>Git</strong> — dastur (vosita), <strong>GitHub</strong> — shu vosita asosida qurilgan xizmat.</p>
 <pre class="code"><code>Git                          GitHub
 -------------------------     -------------------------
@@ -634,12 +653,12 @@ Bepul, ochiq kodli            Bepul reja + pullik rejalar
 Terminal buyruqlari           Grafik interfeys + Git</code></pre>
 <p>Oddiy o'xshatish bilan aytadigan bo'lsak: <strong>Git</strong> — bu telefondagi rasm olish ilovasi, <strong>GitHub</strong> esa o'sha rasmlarni saqlaydigan va boshqalar bilan ulashadigan onlayn galereya (masalan, Google Photos'ga o'xshash). Git'siz GitHub deyarli foydasiz, ammo GitHub'siz Git'dan mahalliy ravishda bemalol foydalanish mumkin.</p>
 <div class="warn">Ko'p yangi boshlovchilar "men GitHub o'rnatdim" deb aytadi. Aslida kompyuterga <strong>Git</strong> o'rnatiladi. GitHub'ga esa brauzer orqali kirasiz — u alohida o'rnatishni talab qilmaydi (garchi qulaylik uchun GitHub Desktop nomli ixtiyoriy ilova mavjud bo'lsa ham).</div>
-<h2>Asosiy tushunchalar: repozitoriy, commit, branch</h2>
+<h2 id="asosiy-tushunchalar-repozitoriy-commit-branch">Asosiy tushunchalar: repozitoriy, commit, branch</h2>
 <p>Git bilan ishlashda tez-tez uchraydigan uchta muhim atama bor. Ularni hozir umumiy tanishtiramiz, keyingi darslarda esa har birini alohida chuqur o'rganamiz.</p>
-<h3>Repozitoriy (repo)</h3>
+<h3 id="repozitoriy-repo">Repozitoriy (repo)</h3>
 <p><strong>Repozitoriy</strong> (qisqacha <em>repo</em>) — bu loyihangiz uchun maxsus papka bo'lib, Git u yerdagi barcha fayllar va ularning to'liq o'zgarishlar tarixini kuzatib boradi. Texnik jihatdan repozitoriy — bu ichida yashirin <code>.git</code> papkasi bo'lgan oddiy loyiha papkasidir. Aynan shu <code>.git</code> papkasida Git barcha tarixni saqlaydi.</p>
 <p>Repozitoriy ikki xil bo'ladi: <em>mahalliy</em> (kompyuteringizdagi) va <em>masofaviy</em> (GitHub'dagi). Odatda ular bir-biri bilan bog'lanadi va o'zgarishlar ular orasida almashtiriladi.</p>
-<h3>Commit</h3>
+<h3 id="commit">Commit</h3>
 <p><strong>Commit</strong> — bu loyihangizning ma'lum bir vaqtdagi holatining <em>surati</em> (snapshot). Har bir commit'ga qisqa izoh (message) yozasiz, unda nima o'zgarganini tushuntirasiz. Commit'lar ketma-ket zanjir hosil qiladi va shu zanjir loyiha tarixini tashkil etadi.</p>
 <pre class="code"><code>Commit tarixi (yangidan eskiga):
 
@@ -651,7 +670,7 @@ Terminal buyruqlari           Grafik interfeys + Git</code></pre>
   |
 (c1) "Loyiha yaratildi"</code></pre>
 <p>Har bir commit noyob identifikatorga (hash) ega bo'ladi va oldingi commit'ga bog'lanadi. Shu tufayli siz istalgan commit'ga qaytib, loyiha o'sha paytda qanday bo'lganini ko'rishingiz mumkin.</p>
-<h3>Branch (tarmoq)</h3>
+<h3 id="branch-tarmoq">Branch (tarmoq)</h3>
 <p><strong>Branch</strong> (o'zbekcha <em>tarmoq</em>) — bu commit'lar zanjirining alohida yo'nalishi. Tarmoqlar sizga asosiy kodni buzmasdan, alohida joyda ish qilish imkonini beradi. Masalan, yangi imkoniyat ustida ishlayotganda alohida tarmoq ochasiz; u tayyor bo'lgach, asosiy tarmoqqa qo'shasiz (birlashtirish — <em>merge</em>).</p>
 <pre class="code"><code>                (yangi-dizayn tarmog'i)
                     o---o---o
@@ -659,7 +678,7 @@ Terminal buyruqlari           Grafik interfeys + Git</code></pre>
   o---o---o---o---o                  (main tarmog'i)</code></pre>
 <p>Standart holatda asosiy tarmoq <code>main</code> (avval <code>master</code> deb atalgan) deb nomlanadi. Amaliyotda dasturchilar har bir yangi vazifa uchun alohida tarmoq ochib, keyin uni asosiy tarmoqqa qo'shishadi.</p>
 <div class="note">Bu uchala tushuncha — repozitoriy, commit va branch — Git'ning poydevoridir. Hozir ularning ma'nosini eslab qolish kifoya; keyingi darslarda amaliy buyruqlar bilan mustahkamlaymiz.</div>
-<h2>Oddiy ish oqimi (workflow)</h2>
+<h2 id="oddiy-ish-oqimi-workflow">Oddiy ish oqimi (workflow)</h2>
 <p>Git bilan kundalik ishlash odatda quyidagi bosqichlardan iborat. Buni umumiy tasavvur qilish uchun keltiryapmiz — batafsil buyruqlarni keyingi darslarda ko'ramiz:</p>
 <pre class="code"><code>1. Fayllarni tahrirlaysiz (kod yozasiz)
          |
@@ -671,12 +690,12 @@ Terminal buyruqlari           Grafik interfeys + Git</code></pre>
          |
 5. Boshqalarning o'zgarishlarini olasiz  -&gt;  git pull</code></pre>
 <p>Bu oqim dastlab murakkab tuyulishi mumkin, ammo bir necha marta takrorlagandan keyin u avtomatik odatga aylanadi. Keyingi darslarda har bir bosqichni alohida-alohida, real misollar bilan o'rganamiz.</p>
-<h2>Muqobil xizmatlar: GitLab, Bitbucket va boshqalar</h2>
+<h2 id="muqobil-xizmatlar-gitlab-bitbucket-va-boshqalar">Muqobil xizmatlar: GitLab, Bitbucket va boshqalar</h2>
 <p>GitHub eng mashhur bo'lsa-da, u yagona variant emas. Git'ning o'zi ochiq standart bo'lgani uchun, ko'plab boshqa platformalar ham xuddi shu Git bilan ishlaydi:</p>
 <ul><li><strong>GitLab</strong> — GitHub'ga eng kuchli raqib. Uni o'z serveringizga o'rnatish (self-hosted) imkoniyati borligi bilan ajralib turadi. Ko'plab kompaniyalar ichki loyihalar uchun aynan GitLab'ni tanlaydi;</li><li><strong>Bitbucket</strong> — Atlassian kompaniyasiga tegishli. Jira va Trello kabi boshqa Atlassian mahsulotlari bilan yaxshi integratsiyalashadi;</li><li><strong>Gitea</strong> va <strong>Codeberg</strong> — yengil, ochiq kodli muqobillar, o'z serveringizda ishlatish uchun qulay;</li><li><strong>SourceHut</strong> — minimalist va tezkorlikka urg'u beruvchi platforma.</li></ul>
 <p>Muhim jihat shundaki, bu platformalarning barchasi <strong>bir xil Git vositasini</strong> ishlatadi. Ya'ni Git buyruqlarini bir marta o'rgansangiz, ularni GitHub'da ham, GitLab'da ham, Bitbucket'da ham bir xil ishlata olasiz. O'zgaradigan narsa — faqat platformaning veb-interfeysi va qo'shimcha imkoniyatlari.</p>
 <div class="tip">Yangi boshlovchi sifatida GitHub'dan boshlash eng oqilona qaror. U eng katta jamiyatga, eng ko'p o'quv materialiga ega va aksariyat ochiq kodli loyihalar aynan shu yerda joylashgan. Keyinchalik boshqa platformalarga o'tish oson bo'ladi.</div>
-<h2>Xulosa</h2>
+<h2 id="xulosa">Xulosa</h2>
 <ul><li><strong>Versiya nazorati (VCS)</strong> — fayllardagi o'zgarishlarni vaqt bo'ylab kuzatuvchi va oldingi holatlarga qaytish imkonini beruvchi tizim;</li><li><strong>Git</strong> — kompyuterga o'rnatiladigan, internetsiz ishlaydigan, eng mashhur taqsimlangan versiya nazorati vositasi;</li><li><strong>GitHub</strong> — Git repozitoriylarini bulutda saqlaydigan va jamoaviy ishlashni ta'minlaydigan onlayn platforma;</li><li>Git — <em>vosita</em>, GitHub — shu vosita asosidagi <em>xizmat</em>; ularni chalkashtirmaslik kerak;</li><li><strong>Repozitoriy</strong> — loyiha papkasi va uning tarixi; <strong>commit</strong> — loyihaning bir holati sur'ati; <strong>branch</strong> — commit'lar zanjirining alohida yo'nalishi;</li><li>GitLab, Bitbucket va boshqa platformalar ham xuddi shu Git bilan ishlaydi — buyruqlar bir xil bo'ladi.</li></ul>
 <nav class="lesson-nav">
   <a href="regexp-lookahead.html"><span class="dir">← Oldingi</span><span class="ttl">Lookahead va lookbehind</span></a>
@@ -690,6 +709,6 @@ Terminal buyruqlari           Grafik interfeys + Git</code></pre>
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="../js/main.js?v=4"></script>
+<script src="../js/main.js?v=5"></script>
 </body>
 </html>
