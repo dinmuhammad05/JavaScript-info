@@ -24,7 +24,21 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "6";
+const ASSET_VER = "7";
+
+/* Har bir qism (yo'nalish) uchun ikon va qisqa tavsif — bosh sahifadagi
+   "Yo'nalishlar" sharhi uchun. Kalit — qism nomi. */
+const PART_META = {
+  "1-qism: JavaScript tili": { icon: "🟨", blurb: "Til asoslari: o'zgaruvchilar, funksiyalar, obyektlar, klasslar, promise va modullar." },
+  "2-qism: Brauzer — hujjat, hodisalar, interfeyslar": { icon: "🌐", blurb: "DOM, hodisalar, formalar va brauzer API'lari bilan jonli sahifalar." },
+  "3-qism: Qo'shimcha bo'limlar": { icon: "🧩", blurb: "Tarmoq so'rovlari, fayllar, ma'lumot saqlash va muntazam ifodalar (RegExp)." },
+  "4-qism: Amaliy vositalar": { icon: "🛠️", blurb: "Git, Docker, Nginx va Linux terminal — professional ish qurollari." },
+  "5-qism: Backend dasturlash": { icon: "⚙️", blurb: "Node.js, Express, NestJS, ma'lumotlar bazalari va autentifikatsiya." },
+  "6-qism: Frontend asoslari": { icon: "🎨", blurb: "HTML, CSS, TypeScript va React bilan zamonaviy interfeyslar." },
+  "7-qism: Testlash va yetkazib berish": { icon: "🚀", blurb: "Jest testlash, CI/CD (GitHub Actions) va loyihani deploy qilish." },
+  "8-qism: Algoritmlar va ma'lumotlar tuzilmalari": { icon: "🧠", blurb: "Big O, massiv/satr, stack, daraxt/graf, saralash va intervyu masalalari." },
+  "9-qism: Kiberxavfsizlik": { icon: "🛡️", blurb: "Himoya asoslari, kriptografiya, OWASP, tarmoq xavfsizligi va amaliy vositalar." },
+};
 
 const BRAND = {
   name: "Kodla",
@@ -87,7 +101,8 @@ function header(depth) {
     '      <a href="' + base + 'index.html#mundarija">Mundarija</a>\n' +
     '      <a href="' + BRAND.github + '" target="_blank" rel="noopener">Muallif</a>\n' +
     "    </nav>\n" +
-    '    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>\n' +
+    '    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">' +
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>\n' +
     '    <button class="menu-toggle" aria-label="Menyu">☰</button>\n' +
     "  </div>\n</header>\n"
   );
@@ -386,25 +401,51 @@ function renderLesson(lesson, chapter, parts, prev, next) {
 
 /* ---------- 5. Bosh sahifa ---------- */
 function renderIndex(parts, total) {
-  let cards = "";
+  let tracks = '<div class="tracks">\n';
+  let acc = "";
   let n = 0;
+
   for (const part of parts) {
-    cards += '<h2 class="part-head" id="' + slugify(part.name) + '">' + esc(part.name) + "</h2>\n";
+    const id = slugify(part.name);
+    const meta = PART_META[part.name] || { icon: "📘", blurb: "" };
+    const shortName = part.name.replace(/^\d+-qism:\s*/, "");
+    const lessonCount = part.chapters.reduce((s, c) => s + c.lessons.length, 0);
+    const chapterCount = part.chapters.length;
+
+    // Yo'nalishlar sharhi (tepadagi karta)
+    tracks +=
+      '  <a class="track" href="#' + id + '">' +
+      '<span class="track-ico">' + meta.icon + "</span>" +
+      '<span class="track-body">' +
+      '<span class="track-title">' + esc(shortName) + "</span>" +
+      '<span class="track-desc">' + esc(meta.blurb) + "</span>" +
+      '<span class="track-meta">' + lessonCount + " dars · " + chapterCount + " bo'lim</span>" +
+      "</span></a>\n";
+
+    // To'liq mundarija — yig'iladigan qism (accordion)
+    acc += '<details class="part-block" id="' + id + '">\n';
+    acc +=
+      '  <summary><span class="pb-ico">' + meta.icon + "</span>" +
+      '<span class="pb-name">' + esc(part.name) + "</span>" +
+      '<span class="pb-count">' + lessonCount + " dars</span></summary>\n";
+    acc += '  <div class="part-inner">\n';
     for (const ch of part.chapters) {
-      cards += '<h3 class="chapter-head">' + esc(ch.chapter) + "</h3>\n";
-      cards += '<div class="cards">\n';
+      acc += '    <h3 class="chapter-head">' + esc(ch.chapter) + "</h3>\n";
+      acc += '    <div class="cards">\n';
       for (const l of ch.lessons) {
         n++;
         const num = String(n).padStart(2, "0");
-        cards +=
-          '  <a class="card" href="lessons/' + l.slug + '.html">' +
+        acc +=
+          '      <a class="card" href="lessons/' + l.slug + '.html">' +
           '<div class="num">' + num + "</div>" +
           "<h3>" + esc(l.title) + "</h3>" +
           "<p>" + esc(l.blurb || "") + "</p></a>\n";
       }
-      cards += "</div>\n";
+      acc += "    </div>\n";
     }
+    acc += "  </div>\n</details>\n";
   }
+  tracks += "</div>\n";
 
   const firstSlug = parts[0] && parts[0].chapters[0] && parts[0].chapters[0].lessons[0]
     ? parts[0].chapters[0].lessons[0].slug
@@ -413,22 +454,24 @@ function renderIndex(parts, total) {
   return (
     head(esc(BRAND.name) + " — " + esc(BRAND.tagline),
       "Web dasturlashni o'zbek tilida noldan, chuqur va batafsil o'rganing: JavaScript, " +
-      "brauzer, backend, frontend va DevOps.", 0) +
+      "brauzer, backend, frontend, DevOps, algoritmlar va kiberxavfsizlik.", 0) +
     header(0) +
     '<div class="layout">\n' +
     sidebar(parts, null, 0) +
     '<main class="content">\n' +
     '<section class="hero">\n' +
     "  <h1>" + esc(BRAND.tagline) + "</h1>\n" +
-    "  <p>JavaScript'dan tortib backend, frontend va DevOps'gacha — to'liq o'quv dasturi " +
-    "o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar " +
-    "bilan. Jami <strong>" + total + "</strong> ta dars.</p>\n" +
+    "  <p>JavaScript'dan tortib backend, frontend, DevOps, algoritmlar va kiberxavfsizlikkacha " +
+    "— to'liq o'quv dasturi o'zbek tilida, brauzerda ishlaydigan interaktiv misollar bilan. " +
+    "Jami <strong>" + total + "</strong> ta dars, <strong>" + parts.length + "</strong> ta yo'nalish.</p>\n" +
     '  <a href="lessons/' + firstSlug + '.html" class="btn">Birinchi darsdan boshlash →</a>\n' +
     "</section>\n" +
-    '<h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To\'liq mundarija</h2>\n' +
-    '<p style="color:var(--muted);margin:0 0 26px">Web dasturlashning to\'liq yo\'l xaritasi. ' +
-    "Har bir dars amaliy misollar bilan.</p>\n" +
-    cards +
+    '<h2 class="sec-head">Yo\'nalishlar</h2>\n' +
+    '<p class="sec-sub">Saytda 9 ta asosiy yo\'nalish bor. Kerakligini tanlang — yoki pastdagi mundarijadan qism ustiga bosib mavzularni oching.</p>\n' +
+    tracks +
+    '<h2 id="mundarija" class="sec-head">To\'liq mundarija</h2>\n' +
+    '<p class="sec-sub">Qism ustiga bosing — ichidagi barcha mavzular ochiladi.</p>\n' +
+    acc +
     "</main>\n</div>\n" +
     footer(0)
   );

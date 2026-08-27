@@ -268,8 +268,10 @@
 
   /* --- Kechki/kunduzgi rejim --- */
   var toggle = document.getElementById("themeToggle");
+  var ICON_MOON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  var ICON_SUN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>';
   function isDark() { return root.getAttribute("data-theme") === "dark"; }
-  function paintToggle() { if (toggle) toggle.textContent = isDark() ? "☀️" : "🌙"; }
+  function paintToggle() { if (toggle) toggle.innerHTML = isDark() ? ICON_SUN : ICON_MOON; }
   paintToggle();
   if (toggle) {
     toggle.addEventListener("click", function () {
@@ -324,6 +326,19 @@
       }
     });
   });
+
+  /* --- Bosh sahifada: yo'nalish (track) bosilsa, o'sha qism ochilsin --- */
+  function openTarget() {
+    var h = location.hash.replace("#", "");
+    if (!h) return;
+    var el = document.getElementById(h);
+    if (el && el.tagName === "DETAILS") {
+      el.open = true;
+      try { el.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { el.scrollIntoView(); }
+    }
+  }
+  window.addEventListener("hashchange", openTarget);
+  openTarget();
 
   /* --- Yon menyu joriy darsga avto-siljish --- */
   var sb = document.getElementById("sidebar");

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kodla — Dasturlashni noldan, o'zbek tilida o'rgan</title>
-  <meta name="description" content="Web dasturlashni o'zbek tilida noldan, chuqur va batafsil o'rganing: JavaScript, brauzer, backend, frontend va DevOps.">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <meta name="description" content="Web dasturlashni o'zbek tilida noldan, chuqur va batafsil o'rganing: JavaScript, brauzer, backend, frontend, DevOps, algoritmlar va kiberxavfsizlik.">
+  <link rel="stylesheet" href="css/style.css?v=7">
   <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
@@ -17,7 +17,7 @@
       <a href="index.html#mundarija">Mundarija</a>
       <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
     </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">🌙</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
     <button class="menu-toggle" aria-label="Menyu">☰</button>
   </div>
 </header>
@@ -598,456 +598,505 @@
 <main class="content">
 <section class="hero">
   <h1>Dasturlashni noldan, o'zbek tilida o'rgan</h1>
-  <p>JavaScript'dan tortib backend, frontend va DevOps'gacha — to'liq o'quv dasturi o'zbek tilida, batafsil tushuntirishlar va brauzerda ishlaydigan interaktiv misollar bilan. Jami <strong>280</strong> ta dars.</p>
+  <p>JavaScript'dan tortib backend, frontend, DevOps, algoritmlar va kiberxavfsizlikkacha — to'liq o'quv dasturi o'zbek tilida, brauzerda ishlaydigan interaktiv misollar bilan. Jami <strong>280</strong> ta dars, <strong>9</strong> ta yo'nalish.</p>
   <a href="lessons/js-haqida.html" class="btn">Birinchi darsdan boshlash →</a>
 </section>
-<h2 id="mundarija" style="font-size:1.7rem;margin:0 0 6px">To'liq mundarija</h2>
-<p style="color:var(--muted);margin:0 0 26px">Web dasturlashning to'liq yo'l xaritasi. Har bir dars amaliy misollar bilan.</p>
-<h2 class="part-head" id="1-qism-javascript-tili">1-qism: JavaScript tili</h2>
-<h3 class="chapter-head">Kirish</h3>
-<div class="cards">
-  <a class="card" href="lessons/js-haqida.html"><div class="num">01</div><h3>JavaScript haqida</h3><p>JavaScript nima, u qanday paydo bo'lgan va bugungi kunda qayerda ishlaydi.</p></a>
-  <a class="card" href="lessons/qollanmalar.html"><div class="num">02</div><h3>Qo'llanmalar va spetsifikatsiyalar</h3><p>ECMAScript spetsifikatsiyasi, MDN va boshqa ishonchli manbalar.</p></a>
-  <a class="card" href="lessons/muharrirlar.html"><div class="num">03</div><h3>Kod muharrirlari</h3><p>IDE va yengil muharrirlar — dasturchining asosiy ish quroli.</p></a>
-  <a class="card" href="lessons/konsol.html"><div class="num">04</div><h3>Ishlab chiquvchi konsoli</h3><p>Brauzer developer tools va konsol orqali xatolarni ko'rish.</p></a>
+<h2 class="sec-head">Yo'nalishlar</h2>
+<p class="sec-sub">Saytda 9 ta asosiy yo'nalish bor. Kerakligini tanlang — yoki pastdagi mundarijadan qism ustiga bosib mavzularni oching.</p>
+<div class="tracks">
+  <a class="track" href="#1-qism-javascript-tili"><span class="track-ico">🟨</span><span class="track-body"><span class="track-title">JavaScript tili</span><span class="track-desc">Til asoslari: o'zgaruvchilar, funksiyalar, obyektlar, klasslar, promise va modullar.</span><span class="track-meta">91 dars · 14 bo'lim</span></span></a>
+  <a class="track" href="#2-qism-brauzer-hujjat-hodisalar-interfeyslar"><span class="track-ico">🌐</span><span class="track-body"><span class="track-title">Brauzer — hujjat, hodisalar, interfeyslar</span><span class="track-desc">DOM, hodisalar, formalar va brauzer API'lari bilan jonli sahifalar.</span><span class="track-meta">32 dars · 6 bo'lim</span></span></a>
+  <a class="track" href="#3-qism-qo-shimcha-bo-limlar"><span class="track-ico">🧩</span><span class="track-body"><span class="track-title">Qo'shimcha bo'limlar</span><span class="track-desc">Tarmoq so'rovlari, fayllar, ma'lumot saqlash va muntazam ifodalar (RegExp).</span><span class="track-meta">23 dars · 5 bo'lim</span></span></a>
+  <a class="track" href="#4-qism-amaliy-vositalar"><span class="track-ico">🛠️</span><span class="track-body"><span class="track-title">Amaliy vositalar</span><span class="track-desc">Git, Docker, Nginx va Linux terminal — professional ish qurollari.</span><span class="track-meta">25 dars · 4 bo'lim</span></span></a>
+  <a class="track" href="#5-qism-backend-dasturlash"><span class="track-ico">⚙️</span><span class="track-body"><span class="track-title">Backend dasturlash</span><span class="track-desc">Node.js, Express, NestJS, ma'lumotlar bazalari va autentifikatsiya.</span><span class="track-meta">22 dars · 4 bo'lim</span></span></a>
+  <a class="track" href="#6-qism-frontend-asoslari"><span class="track-ico">🎨</span><span class="track-body"><span class="track-title">Frontend asoslari</span><span class="track-desc">HTML, CSS, TypeScript va React bilan zamonaviy interfeyslar.</span><span class="track-meta">21 dars · 4 bo'lim</span></span></a>
+  <a class="track" href="#7-qism-testlash-va-yetkazib-berish"><span class="track-ico">🚀</span><span class="track-body"><span class="track-title">Testlash va yetkazib berish</span><span class="track-desc">Jest testlash, CI/CD (GitHub Actions) va loyihani deploy qilish.</span><span class="track-meta">12 dars · 3 bo'lim</span></span></a>
+  <a class="track" href="#8-qism-algoritmlar-va-ma-lumotlar-tuzilmalari"><span class="track-ico">🧠</span><span class="track-body"><span class="track-title">Algoritmlar va ma'lumotlar tuzilmalari</span><span class="track-desc">Big O, massiv/satr, stack, daraxt/graf, saralash va intervyu masalalari.</span><span class="track-meta">24 dars · 6 bo'lim</span></span></a>
+  <a class="track" href="#9-qism-kiberxavfsizlik"><span class="track-ico">🛡️</span><span class="track-body"><span class="track-title">Kiberxavfsizlik</span><span class="track-desc">Himoya asoslari, kriptografiya, OWASP, tarmoq xavfsizligi va amaliy vositalar.</span><span class="track-meta">30 dars · 6 bo'lim</span></span></a>
 </div>
-<h3 class="chapter-head">JavaScript asoslari</h3>
-<div class="cards">
-  <a class="card" href="lessons/salom-dunyo.html"><div class="num">05</div><h3>Salom, dunyo!</h3><p>JavaScript kodini HTML sahifaga qanday ulash: script tegi, src atributi va tashqi fayllar.</p></a>
-  <a class="card" href="lessons/kod-tuzilishi.html"><div class="num">06</div><h3>Kod tuzilishi</h3><p>Instruksiyalar, nuqta-vergul (;) qo'yish qoidalari, avtomatik qo'yilish tuzoqlari va izohlar.</p></a>
-  <a class="card" href="lessons/use-strict.html"><div class="num">07</div><h3>Zamonaviy rejim, "use strict"</h3><p>"use strict" direktivasi nima, u nimani o'zgartiradi va zamonaviy kodda uning avtomatikligi.</p></a>
-  <a class="card" href="lessons/ozgaruvchilar.html"><div class="num">08</div><h3>O'zgaruvchilar</h3><p>let, const va var; o'zgaruvchi yaratish, nomlash qoidalari, camelCase va const ma'nosi.</p></a>
-  <a class="card" href="lessons/malumot-turlari.html"><div class="num">09</div><h3>Ma'lumot turlari</h3><p>JavaScript'ning 8 ta ma'lumot turi va typeof operatori.</p></a>
-  <a class="card" href="lessons/turlarni-ozgartirish.html"><div class="num">10</div><h3>Turlarni o'zgartirish</h3><p>String, Number va Boolean konvertatsiyasi hamda qanday qiymatlar 0, false yoki NaN bo'lishi.</p></a>
-  <a class="card" href="lessons/operatorlar.html"><div class="num">11</div><h3>Asosiy operatorlar, matematika</h3><p>Matematik amallar, unar operatorlar, ustuvorlik, += kabi qisqartmalar va string+son xatti-harakati.</p></a>
-  <a class="card" href="lessons/taqqoslashlar.html"><div class="num">12</div><h3>Taqqoslashlar</h3><p>Taqqoslash operatorlari, == va === farqi, matnlarni leksikografik taqqoslash, null/undefined tuzoqlari.</p></a>
-  <a class="card" href="lessons/if-else.html"><div class="num">13</div><h3>Shartli operatorlar: if, ?</h3><p>if/else if/else konstruksiyasi, shartning boolean'ga o'girilishi va ternar operator ? :.</p></a>
-  <a class="card" href="lessons/mantiqiy-operatorlar.html"><div class="num">14</div><h3>Mantiqiy operatorlar</h3><p>|| &amp;&amp; ! operatorlari, qisqa tutashuv (short-circuit) va ularning qiymat qaytarish xususiyati.</p></a>
-  <a class="card" href="lessons/nullish.html"><div class="num">15</div><h3>Nullish birlashtiruvchi operator ??</h3><p>?? operatori nima, uning || dan farqi (0 va bo'sh matn holatlari) va ustuvorligi.</p></a>
-  <a class="card" href="lessons/sikllar.html"><div class="num">16</div><h3>Sikllar: while va for</h3><p>Bir xil amallarni ko'p marta takrorlash uchun sikllar — while, do..while va for.</p></a>
-  <a class="card" href="lessons/switch.html"><div class="num">17</div><h3>switch konstruksiyasi</h3><p>Bir o'zgaruvchini bir nechta qiymat bilan solishtirish uchun switch/case/default.</p></a>
-  <a class="card" href="lessons/funksiyalar.html"><div class="num">18</div><h3>Funksiyalar</h3><p>Kodni takrorlamaslik uchun asosiy vosita — funksiya e'loni, parametrlar, return.</p></a>
-  <a class="card" href="lessons/funksiya-ifodalari.html"><div class="num">19</div><h3>Funksiya ifodalari</h3><p>Funksiya — bu qiymat. Function Expression, Function Declaration va callback funksiyalar.</p></a>
-  <a class="card" href="lessons/strelka-funksiyalar.html"><div class="num">20</div><h3>Strelka funksiyalari, asoslari</h3><p>() =&gt; sintaksisi — funksiyalarni yozishning qisqa va qulay usuli.</p></a>
-</div>
-<h3 class="chapter-head">Kod sifati</h3>
-<div class="cards">
-  <a class="card" href="lessons/debugging.html"><div class="num">21</div><h3>Brauzerda debugging</h3><p>Sources paneli, breakpoint'lar, kodni qadamma-qadam bajarish va debugger buyrug'i.</p></a>
-  <a class="card" href="lessons/kod-uslubi.html"><div class="num">22</div><h3>Kod uslubi</h3><p>Qavslar, chekinish, qator uzunligi, nomlash va linterlar (ESLint).</p></a>
-  <a class="card" href="lessons/izohlar.html"><div class="num">23</div><h3>Izohlar</h3><p>Yaxshi va yomon izohlar; nima uchun (nima emas, nega) izoh kerak.</p></a>
-  <a class="card" href="lessons/testlash.html"><div class="num">24</div><h3>Avtomatlashtirilgan testlar (Mocha)</h3><p>Nega test kerak; BDD; describe/it/assert; TDD jarayoni.</p></a>
-  <a class="card" href="lessons/polyfill.html"><div class="num">25</div><h3>Polyfill va transpilyatorlar</h3><p>Babel, transpiler nima, polyfill nima, core-js va eski brauzerlar mosligi.</p></a>
-</div>
-<h3 class="chapter-head">Obyektlar: asoslar</h3>
-<div class="cards">
-  <a class="card" href="lessons/obyektlar.html"><div class="num">26</div><h3>Obyektlar</h3><p>Obyekt yaratish, xossalar bilan ishlash, nuqta va kvadrat qavslar, delete, hisoblangan xossalar, "in" operatori va for..in sikli.</p></a>
-  <a class="card" href="lessons/obyekt-nusxalash.html"><div class="num">27</div><h3>Obyekt havolalari va nusxalash</h3><p>Obyektlar havola (reference) orqali saqlanadi va ko'chiriladi. = obyektni nusxalamaydi. Object.assign, sayoz nusxa va structuredClone.</p></a>
-  <a class="card" href="lessons/garbage-collection.html"><div class="num">28</div><h3>Axlat yig'ish (Garbage collection)</h3><p>Xotira boshqaruvi, erishuvchanlik (reachability), root, ishlatilmaydigan obyektlarni tozalash va mark-and-sweep algoritmi g'oyasi.</p></a>
-  <a class="card" href="lessons/obyekt-metodlari.html"><div class="num">29</div><h3>Obyekt metodlari, this</h3><p>Obyektga metod qo'shish, this kalit so'zi, this'ning chaqiruvga bog'liqligi va strelka funksiyalarda this yo'qligi.</p></a>
-  <a class="card" href="lessons/new-operator.html"><div class="num">30</div><h3>Konstruktor, new operatori</h3><p>Konstruktor funksiyalar va new operatori yordamida bir turdagi ko'plab obyektlarni yaratish.</p></a>
-  <a class="card" href="lessons/optional-chaining.html"><div class="num">31</div><h3>Optional chaining ?.</h3><p>?. operatori — zanjirdagi oraliq xossalar mavjud bo'lmasa ham xatosiz ishlaydigan xavfsiz kirish usuli.</p></a>
-  <a class="card" href="lessons/symbol.html"><div class="num">32</div><h3>Symbol turi</h3><p>Symbol — noyob identifikatorlar yaratuvchi primitiv tur, yashirin xossalar va tizimli simvollar.</p></a>
-  <a class="card" href="lessons/obyekt-primitiv.html"><div class="num">33</div><h3>Obyektni primitivga o'girish</h3><p>Obyekt matematik yoki satr operatsiyalarida qanday primitivga aylantiriladi: hint, Symbol.toPrimitive, toString va valueOf.</p></a>
-</div>
-<h3 class="chapter-head">Ma'lumot turlari</h3>
-<div class="cards">
-  <a class="card" href="lessons/primitiv-metodlar.html"><div class="num">34</div><h3>Primitivlar metodlari</h3><p>Primitiv qiymatlar (satr, son, mantiqiy) ustida ham metod chaqirish mumkin. Bu qanday ishlaydi va "obyekt o'ramchasi" nima?</p></a>
-  <a class="card" href="lessons/sonlar.html"><div class="num">35</div><h3>Sonlar</h3><p>Sonlarni yozish usullari, sanoq tizimlari, yaxlitlash, aniqlik muammolari va Math obyekti bilan ishlash.</p></a>
-  <a class="card" href="lessons/satrlar.html"><div class="num">36</div><h3>Satrlar</h3><p>Matn ma'lumotlari: tirnoq turlari, shablon satrlar, maxsus belgilar, uzunlik, belgilarga murojaat va satr metodlari.</p></a>
-  <a class="card" href="lessons/massivlar.html"><div class="num">37</div><h3>Massivlar</h3><p>Tartiblangan ma'lumotlar to'plami: yaratish, indekslar, uzunlik, qo'shish/o'chirish metodlari va aylanish (loop).</p></a>
-  <a class="card" href="lessons/massiv-metodlari.html"><div class="num">38</div><h3>Massiv metodlari</h3><p>Massivlarni boshqarish uchun eng muhim metodlar: qo'shish/o'chirish, qidirish, saralash, transformatsiya va reduce.</p></a>
-  <a class="card" href="lessons/iterable.html"><div class="num">39</div><h3>Iteratsiyalanuvchi obyektlar (iterable)</h3><p>for..of qanday ishlaydi, Symbol.iterator, o'z iterable obyektingni yaratish, Array.from.</p></a>
-  <a class="card" href="lessons/map-set.html"><div class="num">40</div><h3>Map va Set</h3><p>Map — istalgan kalitli assotsiativ to'plam; Set — unikal qiymatlar to'plami. Obyektdan farqi va iteratsiya.</p></a>
-  <a class="card" href="lessons/weakmap-weakset.html"><div class="num">41</div><h3>WeakMap va WeakSet</h3><p>Kuchsiz havolalar, faqat obyekt kalitlar, iteratsiya yo'qligi va amaliy qo'llanishi (kesh, qo'shimcha ma'lumot).</p></a>
-  <a class="card" href="lessons/object-keys.html"><div class="num">42</div><h3>Object.keys, values, entries</h3><p>Obyekt kalitlari, qiymatlari va juftliklarini massiv sifatida olish; ular ustida aylanish va qayta yig'ish.</p></a>
-  <a class="card" href="lessons/destructuring.html"><div class="num">43</div><h3>Destrukturizatsiya</h3><p>Massiv va obyektlarni alohida o'zgaruvchilarga qulay tarzda ajratib olish.</p></a>
-  <a class="card" href="lessons/sana-vaqt.html"><div class="num">44</div><h3>Sana va vaqt (Date)</h3><p>Date obyekti bilan sana yasash, komponentlarini olish, timestamp va sanalar ayirmasini hisoblash.</p></a>
-  <a class="card" href="lessons/json-metodlari.html"><div class="num">45</div><h3>JSON metodlari, toJSON</h3><p>Obyektni JSON satriga aylantirish (stringify) va qayta o'qish (parse); replacer, bo'shliq, reviver va toJSON.</p></a>
-</div>
-<h3 class="chapter-head">Funksiyalar bilan chuqur ishlash</h3>
-<div class="cards">
-  <a class="card" href="lessons/rekursiya.html"><div class="num">46</div><h3>Rekursiya va stek</h3><p>Rekursiya g'oyasi, asos va rekursiv holat, faktorial, daraja, Fibonachchi va ijro steki.</p></a>
-  <a class="card" href="lessons/rest-spread.html"><div class="num">47</div><h3>Rest parametrlar va spread</h3><p>...rest parametrlar, eski arguments obyekti, ...spread bilan yoyish va nusxa olish.</p></a>
-  <a class="card" href="lessons/closure.html"><div class="num">48</div><h3>O'zgaruvchi ko'lami, closure</h3><p>Blok ko'lami (let/const), leksik muhit, closure va hisoblagich (counter) misoli.</p></a>
-  <a class="card" href="lessons/eski-var.html"><div class="num">49</div><h3>Eski "var"</h3><p>var ning o'ziga xosligi, blok ko'lami yo'qligi, hoisting va nega let/const afzal.</p></a>
-  <a class="card" href="lessons/global-obyekt.html"><div class="num">50</div><h3>Global obyekt</h3><p>globalThis, window/global, global funksiyalar va nega global o'zgaruvchidan qochish kerak.</p></a>
-  <a class="card" href="lessons/funksiya-obyekti.html"><div class="num">51</div><h3>Funksiya obyekti, NFE</h3><p>Funksiya ham obyekt ekanligi, uning name va length xossalari, o'z xossalarini qo'shish hamda Named Function Expression (NFE).</p></a>
-  <a class="card" href="lessons/new-function.html"><div class="num">52</div><h3>new Function sintaksisi</h3><p>Satrdan funksiya yaratish: new Function('a', 'b', 'return a + b'), uning qo'llanishi va cheklovlari.</p></a>
-  <a class="card" href="lessons/settimeout.html"><div class="num">53</div><h3>setTimeout va setInterval</h3><p>Kodni kechiktirib yoki takroran bajarish: setTimeout, clearTimeout, setInterval, clearInterval, nolinchi kechikish va ichma-ich setTimeout.</p></a>
-  <a class="card" href="lessons/call-apply.html"><div class="num">54</div><h3>Dekoratorlar va uzatish, call/apply</h3><p>Kontekstni uzatuvchi func.call va func.apply metodlari, keshlovchi dekorator hamda argumentlarni uzatish.</p></a>
-  <a class="card" href="lessons/bind.html"><div class="num">55</div><h3>Funksiya bog'lash (bind)</h3><p>this yo'qolishi muammosi, func.bind orqali kontekstni bog'lash va qisman qo'llash (partial application).</p></a>
-  <a class="card" href="lessons/strelka-qayta.html"><div class="num">56</div><h3>Strelka funksiyalari (qayta ko'rib chiqish)</h3><p>Strelka funksiyalarining chuqur xususiyatlari: o'z this va arguments yo'qligi, new bilan ishlamasligi va qachon foydali ekanligi.</p></a>
-</div>
-<h3 class="chapter-head">Obyekt xossalari konfiguratsiyasi</h3>
-<div class="cards">
-  <a class="card" href="lessons/property-flags.html"><div class="num">57</div><h3>Xossa bayroqlari va deskriptorlari</h3><p>Obyekt xossalari faqat qiymatdan iborat emas — ular writable, enumerable va configurable bayroqlariga ega. Ularni qanday o'qish va o'zgartirish mumkin.</p></a>
-  <a class="card" href="lessons/getter-setter.html"><div class="num">58</div><h3>Getter va setterlar</h3><p>Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.</p></a>
-</div>
-<h3 class="chapter-head">Prototiplar, meros</h3>
-<div class="cards">
-  <a class="card" href="lessons/prototip-meros.html"><div class="num">59</div><h3>Prototipli meros</h3><p>[[Prototype]] yashirin xossa, __proto__, prototip zanjiri va xossalar qanday qidirilishi.</p></a>
-  <a class="card" href="lessons/f-prototype.html"><div class="num">60</div><h3>F.prototype</h3><p>Konstruktor funksiyaning prototype xossasi, new bilan bog'liqligi, default prototype va constructor.</p></a>
-  <a class="card" href="lessons/native-prototype.html"><div class="num">61</div><h3>Tug'ma prototiplar</h3><p>Object.prototype, Array.prototype, String.prototype va boshqalar, hamda ularni kengaytirish xavfi.</p></a>
-  <a class="card" href="lessons/prototip-metodlari.html"><div class="num">62</div><h3>Prototip metodlari, __proto__siz obyektlar</h3><p>Object.create, Object.getPrototypeOf/setPrototypeOf, __proto__ nima uchun eskirgan va Object.create(null).</p></a>
-</div>
-<h3 class="chapter-head">Klasslar</h3>
-<div class="cards">
-  <a class="card" href="lessons/klass-asoslari.html"><div class="num">63</div><h3>Klass asosiy sintaksisi</h3><p>class kalit so'zi, constructor, metodlar, getter/setter, hisoblangan nomlar va class ifodasi.</p></a>
-  <a class="card" href="lessons/klass-meros.html"><div class="num">64</div><h3>Klass merosi</h3><p>extends kalit so'zi, super() konstruktorda, super.method() va metodlarni qayta aniqlash (override).</p></a>
-  <a class="card" href="lessons/static-metodlar.html"><div class="num">65</div><h3>Statik xossa va metodlar</h3><p>static metodlar, statik xossalar, factory metodlar va statik meros.</p></a>
-  <a class="card" href="lessons/private-protected.html"><div class="num">66</div><h3>Maxfiy va himoyalangan xossalar</h3><p>protected konvensiyasi (_), private #maydonlar, getter/setter bilan himoya va inkapsulyatsiya.</p></a>
-  <a class="card" href="lessons/built-in-extend.html"><div class="num">67</div><h3>Tug'ma klasslarni kengaytirish</h3><p>Array, Error kabi tug'ma klasslarni extends qilish va Symbol.species tushunchasi.</p></a>
-  <a class="card" href="lessons/instanceof.html"><div class="num">68</div><h3>instanceof tekshiruvi</h3><p>instanceof operatori, prototip zanjiri orqali tekshiruv, Symbol.hasInstance va Object.prototype.toString.</p></a>
-  <a class="card" href="lessons/mixin.html"><div class="num">69</div><h3>Mixinlar</h3><p>mixin g'oyasi, Object.assign bilan qo'llash, hodisali mixin misoli va merosdan farqi.</p></a>
-</div>
-<h3 class="chapter-head">Xatoliklarni boshqarish</h3>
-<div class="cards">
-  <a class="card" href="lessons/try-catch.html"><div class="num">70</div><h3>Xatoliklarni boshqarish, try...catch</h3><p>try...catch...finally, Error obyekti, throw operatori va o'z xatoliklaringizni tashlash.</p></a>
-  <a class="card" href="lessons/custom-error.html"><div class="num">71</div><h3>Maxsus xatoliklar, Error'ni kengaytirish</h3><p>Error'dan extends qilish, o'z xato klasslari, instanceof, xatoliklar ierarxiyasi va wrapping.</p></a>
-</div>
-<h3 class="chapter-head">Promise, async/await</h3>
-<div class="cards">
-  <a class="card" href="lessons/callback.html"><div class="num">72</div><h3>Kirish: callback'lar</h3><p>Asinxron harakatlar, callback g'oyasi, xatolik-birinchi (error-first) uslub va "callback jahannami" muammosi.</p></a>
-  <a class="card" href="lessons/promise.html"><div class="num">73</div><h3>Promise</h3><p>new Promise(executor), resolve/reject, holatlar (pending/fulfilled/rejected) va .then/.catch/.finally metodlari.</p></a>
-  <a class="card" href="lessons/promise-chaining.html"><div class="num">74</div><h3>Promise zanjiri</h3><p>.then zanjiri, qiymatni bosqichma-bosqich uzatish, then ichida promise qaytarish va zanjirning tekis bo'lishi.</p></a>
-  <a class="card" href="lessons/promise-error.html"><div class="num">75</div><h3>Promise bilan xatoliklarni boshqarish</h3><p>.catch bilan xatoliklarni ushlash, xatoning zanjir bo'ylab o'tishi, qayta tashlash va unhandledrejection hodisasi.</p></a>
-  <a class="card" href="lessons/promise-api.html"><div class="num">76</div><h3>Promise API</h3><p>Promise klassining statik metodlari: all, allSettled, race, any, resolve va reject.</p></a>
-  <a class="card" href="lessons/promisification.html"><div class="num">77</div><h3>Promisifikatsiya</h3><p>Callback qabul qiluvchi funksiyani promise qaytaradigan funksiyaga aylantirish.</p></a>
-  <a class="card" href="lessons/microtask.html"><div class="num">78</div><h3>Mikrovazifalar (microtasks)</h3><p>Mikrovazifa navbati, .then callback'lari tartibi va setTimeout bilan farqi.</p></a>
-  <a class="card" href="lessons/async-await.html"><div class="num">79</div><h3>Async/await</h3><p>async funksiyalar, await, try/catch bilan xatoliklar va top-level await.</p></a>
-</div>
-<h3 class="chapter-head">Generatorlar, ilg'or iteratsiya</h3>
-<div class="cards">
-  <a class="card" href="lessons/generator.html"><div class="num">80</div><h3>Generatorlar</h3><p>function* va yield yordamida qiymatlarni birma-bir, talab bo'yicha ishlab chiqaruvchi maxsus funksiyalar.</p></a>
-  <a class="card" href="lessons/async-iteration.html"><div class="num">81</div><h3>Asinxron iteratsiya va generatorlar</h3><p>for await..of, Symbol.asyncIterator va async generatorlar — ma'lumot asta-sekin, so'rovlar orqali kelganda ishlatiladi.</p></a>
-</div>
-<h3 class="chapter-head">Modullar</h3>
-<div class="cards">
-  <a class="card" href="lessons/modul-kirish.html"><div class="num">82</div><h3>Modullar, kirish</h3><p>Modul nima, nega u kerak, bitta fayl = bitta modul, script type=module va modullarning o'ziga xos xususiyatlari.</p></a>
-  <a class="card" href="lessons/export-import.html"><div class="num">83</div><h3>Eksport va Import</h3><p>export/import ning barcha ko'rinishlari: nomli eksport, default eksport, import * as, as bilan qayta nomlash va re-export.</p></a>
-  <a class="card" href="lessons/dynamic-import.html"><div class="num">84</div><h3>Dinamik importlar</h3><p>import() ifodasi, uning promise qaytarishi, shartli va kechiktirilgan yuklash hamda statik importlardan farqi.</p></a>
-</div>
-<h3 class="chapter-head">Qo'shimcha mavzular</h3>
-<div class="cards">
-  <a class="card" href="lessons/proxy-reflect.html"><div class="num">85</div><h3>Proxy va Reflect</h3><p>Proxy obyekti bilan boshqa obyekt ustidagi amallarni ushlab qolish (traps) va Reflect API bilan ularni to'g'ri bajarish.</p></a>
-  <a class="card" href="lessons/eval.html"><div class="num">86</div><h3>Eval: kod satrini ishga tushirish</h3><p>eval() funksiyasi bilan satr ko'rinishidagi kodni bajarish, uning ko'lami, xavflari va zamonaviy muqobillari.</p></a>
-  <a class="card" href="lessons/currying.html"><div class="num">87</div><h3>Karrilash (Currying)</h3><p>Ko'p argumentli funksiyani f(a)(b)(c) ko'rinishidagi bir argumentli funksiyalar zanjiriga aylantirish va qisman qo'llash.</p></a>
-  <a class="card" href="lessons/reference-type.html"><div class="num">88</div><h3>Reference Type</h3><p>Nega obj.method() this'ni to'g'ri oladi-yu, (obj.method)() yoki metodni o'zgaruvchiga ko'chirish this'ni yo'qotadi — ichki Reference Type mexanizmi.</p></a>
-  <a class="card" href="lessons/bigint.html"><div class="num">89</div><h3>BigInt</h3><p>2 in 53 dan katta butun sonlar bilan aniq ishlash uchun BigInt turi: 123n yozuvi, amallar va Number bilan aralashtirmaslik.</p></a>
-  <a class="card" href="lessons/unicode.html"><div class="num">90</div><h3>Unicode, satr ichki tuzilishi</h3><p>Satrlar UTF-16 da qanday saqlanadi, surrogat juftlar, kod nuqtalari, codePointAt va emoji uzunligi muammosi.</p></a>
-  <a class="card" href="lessons/weakref.html"><div class="num">91</div><h3>WeakRef va FinalizationRegistry</h3><p>Obyektni axlat yig'ishga to'sqinlik qilmasdan zaif havola saqlash (WeakRef) va u yo'q qilingach xabar olish (FinalizationRegistry).</p></a>
-</div>
-<h2 class="part-head" id="2-qism-brauzer-hujjat-hodisalar-interfeyslar">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</h2>
-<h3 class="chapter-head">Hujjat (DOM)</h3>
-<div class="cards">
-  <a class="card" href="lessons/brauzer-muhiti.html"><div class="num">92</div><h3>Brauzer muhiti va spetsifikatsiyalar</h3><p>JavaScript qanday muhitlarda ishlaydi, brauzerdagi global obyekt window, DOM, BOM va document nima, host muhitlari va rasmiy spetsifikatsiyalar.</p></a>
-  <a class="card" href="lessons/dom-daraxti.html"><div class="num">93</div><h3>DOM daraxti</h3><p>HTML hujjat qanday qilib teglar daraxtiga aylanadi, element va matn tugunlari, avtomatik xatolarni tuzatish, tugun turlari va DevTools'da ko'rish.</p></a>
-  <a class="card" href="lessons/dom-boylab.html"><div class="num">94</div><h3>DOM bo'ylab harakatlanish</h3><p>documentElement, body, head; bolalar (childNodes, firstChild, lastChild), qo'shnilar va ota tugunlar; faqat elementlar bo'yicha navigatsiya va jadvallar bilan ishlash.</p></a>
-  <a class="card" href="lessons/dom-qidirish.html"><div class="num">95</div><h3>Elementlarni qidirish: getElement*, querySelector*</h3><p>getElementById, querySelector va querySelectorAll, getElementsByTagName/ClassName, matches, closest, contains hamda jonli va statik to'plamlar farqi.</p></a>
-  <a class="card" href="lessons/node-xossalari.html"><div class="num">96</div><h3>Node xossalari: tur, teg va tarkib</h3><p>DOM tugun sinflari ierarxiyasi, nodeType, nodeName va tagName, innerHTML va outerHTML, nodeValue/textContent hamda hidden xossasi.</p></a>
-  <a class="card" href="lessons/atributlar.html"><div class="num">97</div><h3>Atributlar va xossalar</h3><p>DOM xossalari va HTML atributlari orasidagi farq, getAttribute/setAttribute/hasAttribute/removeAttribute, xossa-atribut sinxronizatsiyasi hamda data-* atributlar va dataset.</p></a>
-  <a class="card" href="lessons/dom-ozgartirish.html"><div class="num">98</div><h3>Hujjatni o'zgartirish</h3><p>Yangi elementlarni yaratish (createElement, createTextNode), ularni sahifaga qo'shish (append/prepend/before/after/replaceWith), insertAdjacentHTML, elementni o'chirish, nusxalash (cloneNode), eski usullar va DocumentFragment.</p></a>
-  <a class="card" href="lessons/style-class.html"><div class="num">99</div><h3>Uslublar va klasslar</h3><p>className va classList (add/remove/toggle/contains), element.style bilan inline uslublar, cssText, getComputedStyle orqali yakuniy uslublarni o'qish va muhim uslub qoidalari.</p></a>
-  <a class="card" href="lessons/element-olcham.html"><div class="num">100</div><h3>Element o'lchami va skroll</h3><p>offsetWidth/Height, clientWidth/Height, scrollWidth/Height, scrollTop/Left, offsetParent va getBoundingClientRect qisqacha — elementning geometrik xossalari.</p></a>
-  <a class="card" href="lessons/oyna-olcham.html"><div class="num">101</div><h3>Oyna o'lchamlari va skroll</h3><p>document.documentElement orqali oyna (viewport) o'lchamini olish, hujjatning to'liq o'lchami, pageYOffset/scrollY joriy skroll, scrollTo/scrollBy va scrollIntoView bilan skroll boshqarish.</p></a>
-  <a class="card" href="lessons/koordinatalar.html"><div class="num">102</div><h3>Koordinatalar</h3><p>Ikki koordinata tizimi: oynaga nisbatan (clientX/clientY) va hujjatga nisbatan (pageX/pageY), getBoundingClientRect, elementFromPoint va koordinatalar orqali elementni joylashtirish.</p></a>
-</div>
-<h3 class="chapter-head">Hodisalarga kirish</h3>
-<div class="cards">
-  <a class="card" href="lessons/hodisalar-kirish.html"><div class="num">103</div><h3>Brauzer hodisalariga kirish</h3><p>Hodisa nima, uni tinglashning uch usuli: HTML atribut (onclick), DOM xossa (elem.onclick), addEventListener/removeEventListener; event obyekti, this va handleEvent bilan obyekt-ishlovchi.</p></a>
-  <a class="card" href="lessons/bubbling-capturing.html"><div class="num">104</div><h3>Ko'tarilish va tutish (bubbling va capturing)</h3><p>Bubbling tamoyili, event.target va currentTarget farqi, stopPropagation va stopImmediatePropagation, capturing fazasi va hodisaning uch fazasi.</p></a>
-  <a class="card" href="lessons/event-delegation.html"><div class="num">105</div><h3>Hodisa delegatsiyasi</h3><p>Bubbling va targetdan foydalanib, bitta ishlovchi bilan ko'p elementni boshqarish; data-atributlar bilan delegatsiya; 'behavior' patterni va afzalliklari.</p></a>
-  <a class="card" href="lessons/default-actions.html"><div class="num">106</div><h3>Brauzerning standart harakatlari</h3><p>preventDefault bilan standart harakatni to'xtatish; onclick uchun return false; passive; event.defaultPrevented; havola va forma misollari.</p></a>
-  <a class="card" href="lessons/custom-events.html"><div class="num">107</div><h3>Maxsus hodisalar</h3><p>new Event, CustomEvent (detail bilan), dispatchEvent, bubbles/cancelable, ichma-ich hodisalar va o'z komponentlaringda maxsus hodisalar bilan ishlash.</p></a>
-</div>
-<h3 class="chapter-head">UI hodisalari</h3>
-<div class="cards">
-  <a class="card" href="lessons/sichqoncha-hodisalari.html"><div class="num">108</div><h3>Sichqoncha hodisalari</h3><p>mousedown/up, click, dblclick, contextmenu tartibi; qaysi tugma bosilgani (button), koordinatalar clientX/Y va pageX/Y, hamda shiftKey, ctrlKey, altKey, metaKey modifikator tugmalari.</p></a>
-  <a class="card" href="lessons/mouseover-out.html"><div class="num">109</div><h3>mouseover/out, mouseenter/leave</h3><p>mouseover/mouseout hodisalari va relatedTarget xossasi; kursor bolalar elementlar ustidan o'tganda yuzaga keladigan muammolar; bubbling qilmaydigan mouseenter/mouseleave hodisalari.</p></a>
-  <a class="card" href="lessons/drag-drop.html"><div class="num">110</div><h3>Drag'n'Drop (sichqoncha bilan)</h3><p>mousedown → mousemove → mouseup algoritmi asosida element sudrash; brauzerning standart ondragstart harakatini o'chirish; pointer-events va document.elementFromPoint yordamida nishonlarni (droppable) aniqlash.</p></a>
-  <a class="card" href="lessons/pointer-events.html"><div class="num">111</div><h3>Pointer hodisalari</h3><p>pointerdown/move/up va boshqa Pointer Events; pointerId, pointerType, isPrimary xossalari; setPointerCapture; sichqoncha, sensor va qalam (stylus) hodisalarini yagona API'da birlashtirish.</p></a>
-  <a class="card" href="lessons/klaviatura.html"><div class="num">112</div><h3>Klaviatura: keydown va keyup</h3><p>keydown va keyup hodisalari; event.key (belgi) va event.code (fizik tugma) o'rtasidagi farq; avto-takror (auto-repeat); standart harakatlar va ularni oldini olish; amaliy qiyosiy misollar.</p></a>
-  <a class="card" href="lessons/scroll.html"><div class="num">113</div><h3>Skroll</h3><p>scroll hodisasi; skrollni event bilan to'xtatib bo'lmasligi va uni oldini olishning to'g'ri usullari; "cheksiz sahifa" (infinite scroll) g'oyasi va uni amalga oshirish yondashuvi.</p></a>
-</div>
-<h3 class="chapter-head">Formalar va boshqaruv elementlari</h3>
-<div class="cards">
-  <a class="card" href="lessons/form-xossalari.html"><div class="num">114</div><h3>Forma xossalari va metodlari</h3><p>document.forms, form.elements, input/textarea/select/option bilan ishlash: value, checked, selectedIndex va options orqali qiymatlarni o'qish va yozish.</p></a>
-  <a class="card" href="lessons/focus-blur.html"><div class="num">115</div><h3>Fokuslash: focus/blur</h3><p>focus()/blur() metodlari, focus/blur hodisalari, tabindex bilan fokusni boshqarish, focusin/focusout orqali delegatsiya va validatsiya misoli.</p></a>
-  <a class="card" href="lessons/form-hodisalari.html"><div class="num">116</div><h3>Hodisalar: change, input, cut, copy, paste</h3><p>change va input hodisalarining farqi, matn kiritishni kuzatish, cut/copy/paste va ClipboardEvent bilan almashish buferini boshqarish.</p></a>
-  <a class="card" href="lessons/form-submit.html"><div class="num">117</div><h3>Forma yuborish: submit hodisasi va metod</h3><p>submit hodisasi, Enter bilan yuborish, form.submit() metodi, yuborishdan oldingi validatsiya va preventDefault bilan oldini olish.</p></a>
-</div>
-<h3 class="chapter-head">Hujjat va resurs yuklanishi</h3>
-<div class="cards">
-  <a class="card" href="lessons/page-lifecycle.html"><div class="num">118</div><h3>Sahifa: DOMContentLoaded, load, beforeunload, unload</h3><p>HTML sahifaning hayot sikli: DOMContentLoaded, load, beforeunload va unload hodisalari qachon yuz beradi, readyState, sahifadan chiqishdan oldin ogohlantirish va sendBeacon.</p></a>
-  <a class="card" href="lessons/script-async-defer.html"><div class="num">119</div><h3>Skriptlar: async, defer</h3><p>Skriptlarni yuklashda bloklovchi muammo, defer va async atributlari, ularning farqi, dinamik skriptlar va qaysi birini qachon ishlatish.</p></a>
-  <a class="card" href="lessons/resurs-yuklash.html"><div class="num">120</div><h3>Resurs yuklash: onload va onerror</h3><p>Tashqi resurslarni (skript, rasm, iframe) yuklash holatini kuzatish: onload va onerror hodisalari, crossorigin atributi va resursning tayyor bo'lishini aniqlash.</p></a>
-</div>
-<h3 class="chapter-head">Qo'shimcha brauzer mavzulari</h3>
-<div class="cards">
-  <a class="card" href="lessons/mutation-observer.html"><div class="num">121</div><h3>Mutation observer</h3><p>MutationObserver bilan DOM daraxtidagi o'zgarishlarni — element qo'shilishi, o'chirilishi, atribut va matn o'zgarishlarini — kuzatish.</p></a>
-  <a class="card" href="lessons/selection-range.html"><div class="num">122</div><h3>Tanlash va Range</h3><p>Range obyekti bilan hujjatning bir qismini belgilash, Selection obyekti orqali foydalanuvchi tanlagan matnni o'qish va dastur orqali tanlash o'rnatish.</p></a>
-  <a class="card" href="lessons/event-loop.html"><div class="num">123</div><h3>Hodisalar tsikli: mikro va makrovazifalar</h3><p>Event loop — brauzer va Node.js kodni qanday tartibda bajarishi; makrovazifa va mikrovazifa navbatlari, render, setTimeout(0) va og'ir hisob-kitobni bo'lish.</p></a>
-</div>
-<h2 class="part-head" id="3-qism-qo-shimcha-bo-limlar">3-qism: Qo'shimcha bo'limlar</h2>
-<h3 class="chapter-head">Oynalar va freymlar</h3>
-<div class="cards">
-  <a class="card" href="lessons/popup.html"><div class="num">124</div><h3>Popup oynalar va window metodlari</h3><p>window.open bilan yangi oyna ochish, popup bloklovchilar, oyna sozlamalari (width, height, left, top), ochilgan oynaga murojaat qilish, close, focus va blur metodlari.</p></a>
-  <a class="card" href="lessons/cross-window.html"><div class="num">125</div><h3>Oynalararo aloqa</h3><p>Same Origin (bir xil manba) siyosati, iframe va contentWindow, boshqa manbadagi oynalar bilan xavfsiz aloqa: postMessage va message hodisasi, origin tekshirish orqali xavfsizlik.</p></a>
-  <a class="card" href="lessons/clickjacking.html"><div class="num">126</div><h3>Clickjacking hujumi</h3><p>Clickjacking (bosishni o'g'irlash) hujumining g'oyasi, saytni ko'rinmas iframe ustiga qo'yish, va himoya usullari: X-Frame-Options, CSP frame-ancestors, samesite cookie.</p></a>
-</div>
-<h3 class="chapter-head">Ikkilik ma'lumot va fayllar</h3>
-<div class="cards">
-  <a class="card" href="lessons/arraybuffer.html"><div class="num">127</div><h3>ArrayBuffer, TypedArray</h3><p>Ikkilik ma'lumotning asosi: ArrayBuffer xotira bloki, uning ustidagi ko'rinishlar (Uint8Array, Int32Array va boshqalar), indeks bilan ishlash, TypedArray metodlari va DataView.</p></a>
-  <a class="card" href="lessons/textdecoder.html"><div class="num">128</div><h3>TextDecoder va TextEncoder</h3><p>Ikkilik ma'lumotni matnga aylantirish: TextDecoder baytlarni satrga o'giradi, TextEncoder esa satrni baytlarga. UTF-8 kodlash bilan amaliy ishlash.</p></a>
-  <a class="card" href="lessons/blob.html"><div class="num">129</div><h3>Blob</h3><p>Blob obyekti — ikkilik katta obyektlar bilan ishlash: konstruktor, type (MIME turi), slice bilan bo'laklash, URL.createObjectURL orqali havola yaratish, fayl yuklab olish va rasmga aylantirish.</p></a>
-  <a class="card" href="lessons/file-filereader.html"><div class="num">130</div><h3>File va FileReader</h3><p>Foydalanuvchi tanlagan fayllar bilan ishlash: File obyekti (input.files), FileReader bilan faylni o'qish (readAsText, readAsDataURL, readAsArrayBuffer) va yuklash jarayonini kuzatish.</p></a>
-</div>
-<h3 class="chapter-head">Tarmoq so'rovlari</h3>
-<div class="cards">
-  <a class="card" href="lessons/fetch.html"><div class="num">131</div><h3>Fetch</h3><p>Zamonaviy fetch() metodi bilan serverga so'rov yuborish: response.status/ok, javobni o'qish (json/text), async/await va xatoliklarni boshqarish.</p></a>
-  <a class="card" href="lessons/fetch-json.html"><div class="num">132</div><h3>Fetch: so'rovlar va JSON</h3><p>POST so'rov yuborish: method, headers, body parametrlari; JSON.stringify bilan ma'lumot yuborish; Content-Type sarlavhasining ahamiyati.</p></a>
-  <a class="card" href="lessons/formdata.html"><div class="num">133</div><h3>FormData</h3><p>FormData obyekti bilan forma ma'lumotlarini yuborish: HTML formadan yaratish, append/set/delete metodlari, fayl yuklash va fetch bilan jo'natish.</p></a>
-  <a class="card" href="lessons/fetch-progress.html"><div class="num">134</div><h3>Fetch: yuklanish jarayoni</h3><p>Katta javoblarni yuklashda jarayonni (progress) kuzatish: response.body va ReadableStream, getReader(), Content-Length va foizni hisoblash.</p></a>
-  <a class="card" href="lessons/xhr.html"><div class="num">135</div><h3>XMLHttpRequest</h3><p>Tarmoq so'rovlarining eski usuli: open/send, onload/onerror/onprogress hodisalari, sinxron va asinxron rejimlar, fetch bilan solishtirish.</p></a>
-  <a class="card" href="lessons/websocket.html"><div class="num">136</div><h3>WebSocket</h3><p>Server bilan real vaqtda ikki tomonlama aloqa: new WebSocket, open/message/close/error hodisalari, send, qayta ulanish va fetch bilan farqi.</p></a>
-</div>
-<h3 class="chapter-head">Brauzerda ma'lumot saqlash</h3>
-<div class="cards">
-  <a class="card" href="lessons/cookie.html"><div class="num">137</div><h3>Cookie</h3><p>document.cookie orqali cookie'larni o'qish va yozish, path/domain/expires/max-age, secure va samesite bayroqlari, httpOnly, cheklovlar va yordamchi funksiyalar.</p></a>
-  <a class="card" href="lessons/localstorage.html"><div class="num">138</div><h3>localStorage va sessionStorage</h3><p>Web Storage: setItem/getItem/removeItem/clear metodlari, kalitlar bo'yicha aylanish, obyektlarni JSON orqali saqlash, storage hodisasi va ikkalasining farqi.</p></a>
-  <a class="card" href="lessons/indexeddb.html"><div class="num">139</div><h3>IndexedDB</h3><p>Brauzerdagi kuchli ma'lumotlar bazasi: obyekt ombori, versiyalar, transaksiyalar, qo'shish/o'qish, indekslar, promise o'ramchisi va uni qachon ishlatish.</p></a>
-</div>
-<h3 class="chapter-head">Muntazam ifodalar (RegExp)</h3>
-<div class="cards">
-  <a class="card" href="lessons/regexp-kirish.html"><div class="num">140</div><h3>Muntazam ifodalar: kirish</h3><p>Muntazam ifoda (RegExp) nima, /pattern/flags sintaksisi, g/i/m/s/u/y flaglari, str.match, str.replace, str.search, regexp.test metodlari va regexp yaratishning ikki usuli.</p></a>
-  <a class="card" href="lessons/regexp-belgilar.html"><div class="num">141</div><h3>Belgilar sinflari</h3><p>Belgi sinflari \d \D \s \S \w \W, ularning teskarilari, nuqta (.) va s flagi, unicode haqida qisqacha hamda telefon raqamini ajratish kabi amaliy misollar.</p></a>
-  <a class="card" href="lessons/regexp-anchor.html"><div class="num">142</div><h3>Langarlar: ^ va $, ko'p qatorli rejim</h3><p>Boshlanish langari ^, tugash langari $, to'liq moslikni tekshirish, ko'p qatorli m rejimi va so'z chegarasi \b.</p></a>
-  <a class="card" href="lessons/regexp-quantifiers.html"><div class="num">143</div><h3>Kvantorlar: +, *, ?, {n,m}</h3><p>Miqdor belgilari bilan belgilar nechta marta takrorlanishini boshqarish; ochko'z (greedy) va dangasa (lazy) rejimlar; raqam va HTML teglarni ajratish misollari.</p></a>
-  <a class="card" href="lessons/regexp-groups.html"><div class="num">144</div><h3>Guruhlash va tutish</h3><p>Qavslar bilan qismlarni guruhlash; guruh natijalari (match) va nomli guruhlar (?&lt;name&gt;); replace da $1 va $&lt;name&gt;; tutmaydigan guruh (?:...).</p></a>
-  <a class="card" href="lessons/regexp-alternation.html"><div class="num">145</div><h3>Alternatsiya (yoki) |</h3><p>Vertikal chiziq | bilan bir necha variantdan birini tanlash; qavs bilan chegaralash; sana va vaqt misollari; tez-tez uchraydigan tuzoqlar.</p></a>
-  <a class="card" href="lessons/regexp-lookahead.html"><div class="num">146</div><h3>Lookahead va lookbehind</h3><p>Oldinga qarash x(?=y), x(?!y) va orqaga qarash (?&lt;=y)x, (?&lt;!y)x; narxni ajratish misoli; bu vositalar qachon kerak bo'ladi.</p></a>
-</div>
-<h2 class="part-head" id="4-qism-amaliy-vositalar">4-qism: Amaliy vositalar</h2>
-<h3 class="chapter-head">Git va GitHub</h3>
-<div class="cards">
-  <a class="card" href="lessons/git-github-nima.html"><div class="num">147</div><h3>Git va GitHub nima?</h3><p>Versiya nazorati (version control) nima va nega kerak; Git — mahalliy VCS; GitHub — bulutli platforma; ularning farqi; repozitoriy, commit va branch tushunchalari; muqobil xizmatlar (GitLab, Bitbucket).</p></a>
-  <a class="card" href="lessons/git-ornatish.html"><div class="num">148</div><h3>Git o'rnatish va sozlash</h3><p>Git'ni Windows, macOS va Linux'ga o'rnatish; git --version orqali tekshirish; birinchi sozlash — git config bilan ism va elektron pochta; SSH kalit yaratish (ssh-keygen) va GitHub'ga qo'shish; git config --list.</p></a>
-  <a class="card" href="lessons/git-asoslar.html"><div class="num">149</div><h3>Git asosiy buyruqlari</h3><p>git init bilan repozitoriy yaratish; git status; git add (fayl va nuqta); git commit -m; git log va --oneline; ishchi katalog, staging va repozitoriy tushunchalari; faylni o'zgartirish oqimi; git diff bilan farqlarni ko'rish.</p></a>
-  <a class="card" href="lessons/git-branch-merge.html"><div class="num">150</div><h3>Branch va birlashtirish (merge)</h3><p>Branch (shox) nima va nega kerak, git branch, git checkout, zamonaviy git switch, git checkout -b bilan yangi branch yaratish, branch'larni git merge bilan birlashtirish, merge konflikti va uni hal qilish, keraksiz branch'ni git branch -d bilan o'chirish.</p></a>
-  <a class="card" href="lessons/github-remote.html"><div class="num">151</div><h3>GitHub bilan ishlash: clone, push, pull</h3><p>Remote (masofaviy ombor) tushunchasi, git remote add origin, mavjud omborni git clone bilan nusxalash, git push -u origin main bilan kodni yuborish, git pull bilan yangilanishlarni olish, git fetch va git pull farqi, mahalliy va masofaviy omborlarni sinxronlash.</p></a>
-  <a class="card" href="lessons/github-jamoa.html"><div class="num">152</div><h3>Jamoa bilan ishlash: fork va Pull Request</h3><p>Fork (o'zingizga nusxa ochish) tushunchasi, Pull Request (PR) nima va uning to'liq jarayoni, issue (muammo) yaratish, kod ko'rib chiqish (code review), branch'da ishlab PR ochish oqimi, upstream bilan sinxronlash.</p></a>
-  <a class="card" href="lessons/git-foydali.html"><div class="num">153</div><h3>Foydali vositalar: .gitignore, undo, stash</h3><p>.gitignore fayli va namunasi, allaqachon kuzatilayotgan faylni git rm --cached bilan chiqarish, o'zgarishni bekor qilish (git restore, git reset, git revert farqi), git stash bilan ishni vaqtincha yashirish, git tag qisqacha, yaxshi commit xabari yozish qoidalari.</p></a>
-</div>
-<h3 class="chapter-head">Docker</h3>
-<div class="cards">
-  <a class="card" href="lessons/docker-nima.html"><div class="num">154</div><h3>Docker nima? Konteynerlar</h3><p>Docker qanday muammoni hal qiladi, konteyner nima, virtual mashina bilan farqi, image va container tushunchalari, Docker Hub va nega Docker foydali.</p></a>
-  <a class="card" href="lessons/docker-ornatish.html"><div class="num">155</div><h3>Docker o'rnatish va birinchi konteyner</h3><p>Docker'ni o'rnatish (Desktop va Linux engine), versiyani tekshirish, hello-world, nginx va ubuntu bilan birinchi konteynerlar hamda -d, -p, --name bayroqlari.</p></a>
-  <a class="card" href="lessons/docker-buyruqlar.html"><div class="num">156</div><h3>Asosiy Docker buyruqlari</h3><p>Kundalik ishda kerak bo'ladigan buyruqlar: ps, images, pull, run bayroqlari (-d -p -e -v --name), stop/start/rm, rmi, exec -it va logs.</p></a>
-  <a class="card" href="lessons/dockerfile.html"><div class="num">157</div><h3>Dockerfile va o'z image'ingizni yaratish</h3><p>Dockerfile nima, asosiy ko'rsatmalar (FROM, WORKDIR, COPY, RUN, EXPOSE, CMD, ENV), docker build, qatlamlar va kesh, .dockerignore hamda Node.js ilova uchun namuna.</p></a>
-  <a class="card" href="lessons/docker-compose.html"><div class="num">158</div><h3>Docker Compose</h3><p>Bir nechta konteynerni birga boshqarish, docker-compose.yml tuzilishi (services, ports, volumes, environment, depends_on), compose up/down va Node + Postgres namunasi.</p></a>
-  <a class="card" href="lessons/docker-volume-network.html"><div class="num">159</div><h3>Volume va tarmoq (network)</h3><p>Konteyner ma'lumoti yo'qolishi muammosi, volume va bind mount, docker volume buyruqlari, konteynerlararo tarmoq va xizmat nomi orqali ulanish.</p></a>
-</div>
-<h3 class="chapter-head">Nginx</h3>
-<div class="cards">
-  <a class="card" href="lessons/nginx-nima.html"><div class="num">160</div><h3>Nginx nima?</h3><p>Veb-server tushunchasi, Nginx tarixi va mashhurligi, uning asosiy vazifalari (statik fayl, reverse proxy, load balancer, SSL termination) va Apache bilan qisqa taqqoslash.</p></a>
-  <a class="card" href="lessons/nginx-ornatish.html"><div class="num">161</div><h3>Nginx o'rnatish va boshqarish</h3><p>Nginx'ni apt/yum orqali o'rnatish, systemctl bilan boshqarish (start/stop/restart/status), config testi (nginx -t), qayta yuklash (reload), fayl/papka joylashuvi va loglar.</p></a>
-  <a class="card" href="lessons/nginx-config.html"><div class="num">162</div><h3>Konfiguratsiya asoslari</h3><p>nginx.conf tuzilishi, kontekstlar (main, events, http, server, location), direktiva sintaksisi, server bloki (listen, server_name, root, index) va location bloki asoslari.</p></a>
-  <a class="card" href="lessons/nginx-static.html"><div class="num">163</div><h3>Statik saytga xizmat ko'rsatish</h3><p>Statik HTML/CSS/JS saytni Nginx orqali chiqarish: root va index, location bilan yo'llar, try_files, 404 sahifasi, gzip yoqish va kesh sarlavhalari. To'liq server bloki namunasi.</p></a>
-  <a class="card" href="lessons/nginx-reverse-proxy.html"><div class="num">164</div><h3>Reverse proxy va load balancing</h3><p>Reverse proxy tushunchasi, proxy_pass bilan Node.js ilovaga so'rov uzatish, proxy_set_header (Host, X-Real-IP), upstream bloki bilan load balancing va usullar (round-robin, least_conn).</p></a>
-  <a class="card" href="lessons/nginx-ssl.html"><div class="num">165</div><h3>SSL/HTTPS sozlash</h3><p>Nega HTTPS kerak, Let's Encrypt / certbot bilan bepul sertifikat, listen 443 ssl, ssl_certificate direktivalari, HTTP dan HTTPS ga yo'naltirish (return 301) va certbot --nginx.</p></a>
-</div>
-<h3 class="chapter-head">Linux va terminal</h3>
-<div class="cards">
-  <a class="card" href="lessons/linux-nima.html"><div class="num">166</div><h3>Linux va terminal nima?</h3><p>Operatsion tizim nima, Linux va uning distributivlari (Ubuntu, Debian, Fedora), shell va bash, terminal, GUI va CLI o'rtasidagi farq hamda nega dasturchiga terminal shart.</p></a>
-  <a class="card" href="lessons/fayl-tizimi.html"><div class="num">167</div><h3>Fayl tizimi va navigatsiya</h3><p>Linux fayl tizimi tuzilishi (/, /home, /etc), pwd, ls flaglari bilan, cd, mkdir, rmdir; mutlaq va nisbiy yo'llar; ~, . va .. belgilari.</p></a>
-  <a class="card" href="lessons/fayl-buyruqlar.html"><div class="num">168</div><h3>Fayllar bilan ishlash</h3><p>touch, cp, mv, rm (ehtiyotkorlik bilan), cat, less, head, tail, nano/vim, find, grep, wc va oqimlarni yo'naltirish (&gt;, &gt;&gt;, |).</p></a>
-  <a class="card" href="lessons/huquqlar.html"><div class="num">169</div><h3>Ruxsatlar va egalik</h3><p>rwx ruxsatlar, chmod (raqamli va belgili), chown, foydalanuvchi va guruh tushunchasi, sudo va root, su buyrug'i.</p></a>
-  <a class="card" href="lessons/jarayon-tarmoq.html"><div class="num">170</div><h3>Jarayonlar va tarmoq</h3><p>ps, top/htop, kill, fon rejimi (&amp;), jobs, systemctl; tarmoq buyruqlari ping, curl, wget; paket menejeri apt (install/update).</p></a>
-  <a class="card" href="lessons/bash-skript.html"><div class="num">171</div><h3>Bash skript asoslari</h3><p>Shebang (#!/bin/bash), chmod +x bilan ishga tushirish, o'zgaruvchilar, echo va read, if/else shartlari, for/while sikllari, funksiyalar va to'liq skript misoli.</p></a>
-</div>
-<h2 class="part-head" id="5-qism-backend-dasturlash">5-qism: Backend dasturlash</h2>
-<h3 class="chapter-head">Node.js va Express</h3>
-<div class="cards">
-  <a class="card" href="lessons/nodejs-nima.html"><div class="num">172</div><h3>Node.js nima?</h3><p>Server tomonda JavaScript, V8 dvigateli, bir oqimli event loop, bloklamaydigan I/O, Node.js qachon ishlatiladi, o'rnatish va birinchi skript.</p></a>
-  <a class="card" href="lessons/node-modullar.html"><div class="num">173</div><h3>Modullar va npm</h3><p>CommonJS (require/module.exports) va ESM (import/export), o'rnatilgan modullar, npm nima, npm init, package.json, npm install, node_modules, dependencies va npx.</p></a>
-  <a class="card" href="lessons/node-fs-http.html"><div class="num">174</div><h3>Fayl tizimi va HTTP server</h3><p>fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.</p></a>
-  <a class="card" href="lessons/express-kirish.html"><div class="num">175</div><h3>Express asoslari</h3><p>Nega Express, o'rnatish, birinchi ilova (app va app.listen), route (app.get), req va res obyektlari, res.send va res.json.</p></a>
-  <a class="card" href="lessons/express-rest.html"><div class="num">176</div><h3>REST API yaratish</h3><p>REST tamoyillari, GET/POST/PUT/DELETE, route parametrlari (:id), query, JSON tanasi, status kodlar va massivda oddiy CRUD API misoli.</p></a>
-  <a class="card" href="lessons/express-middleware.html"><div class="num">177</div><h3>Middleware va xatoliklar</h3><p>Middleware nima, zanjir, next(), express.json(), express.static(), maxsus logger middleware, xatolarni boshqarish middleware va 404.</p></a>
-</div>
-<h3 class="chapter-head">Ma'lumotlar bazalari</h3>
-<div class="cards">
-  <a class="card" href="lessons/db-nima.html"><div class="num">178</div><h3>Ma'lumotlar bazasi nima?</h3><p>Ma'lumotlar bazasi nima uchun kerak, DBMS (ma'lumotlar bazasini boshqarish tizimi) nima, relatsion (SQL) va NoSQL bazalar farqi, jadval/qator/ustun tushunchalari, mashhur bazalar (PostgreSQL, MySQL, MongoDB) va qachon qaysi birini tanlash.</p></a>
-  <a class="card" href="lessons/sql-asoslar.html"><div class="num">179</div><h3>SQL asoslari</h3><p>SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.</p></a>
-  <a class="card" href="lessons/sql-join.html"><div class="num">180</div><h3>SQL: bog'lanishlar va JOIN</h3><p>Jadvallarni bog'lash: PRIMARY KEY va FOREIGN KEY, munosabatlar (1:N), JOIN turlari (INNER, LEFT, RIGHT), GROUP BY va agregat funksiyalar (COUNT, SUM, AVG), HAVING orqali guruhlarni filtrlash.</p></a>
-  <a class="card" href="lessons/mongodb.html"><div class="num">181</div><h3>MongoDB (NoSQL)</h3><p>MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.</p></a>
-  <a class="card" href="lessons/node-db.html"><div class="num">182</div><h3>Node.js bilan bazaga ulanish</h3><p>Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.</p></a>
-</div>
-<h3 class="chapter-head">Web xavfsizligi va autentifikatsiya</h3>
-<div class="cards">
-  <a class="card" href="lessons/web-xavfsizlik.html"><div class="num">183</div><h3>Web xavfsizligi asoslari</h3><p>Nega xavfsizlik muhim, CIA triadasi, "foydalanuvchiga hech qachon ishonma" tamoyili, HTTPS va OWASP asosidagi umumiy tahdidlar ro'yxati.</p></a>
-  <a class="card" href="lessons/auth-asoslar.html"><div class="num">184</div><h3>Autentifikatsiya va avtorizatsiya</h3><p>Autentifikatsiya va avtorizatsiya farqi, parolni hech qachon ochiq saqlamaslik, bcrypt bilan hashlash va salt, sessiya (cookie) va token yondashuvlari, xavfsiz cookie.</p></a>
-  <a class="card" href="lessons/jwt.html"><div class="num">185</div><h3>JWT (JSON Web Token)</h3><p>JWT tuzilishi (header.payload.signature), imzolash va tekshirish, Express'da login → token → himoyalangan route middleware, token muddati, afzallik va kamchiliklari.</p></a>
-  <a class="card" href="lessons/xss-csrf.html"><div class="num">186</div><h3>XSS va CSRF</h3><p>XSS nima va undan himoya (kirishni eskeyplash, CSP, textContent va innerHTML), CSRF nima va undan himoya (CSRF token, SameSite cookie). Himoya kodlari bilan.</p></a>
-  <a class="card" href="lessons/sql-injection.html"><div class="num">187</div><h3>SQL injection va boshqa himoyalar</h3><p>SQL injection qanday yuzaga keladi va undan himoya (parametrlangan so'rovlar, ORM), hamda boshqa muhim amaliyotlar: validatsiya, eng kam imtiyoz, sirlarni .env, rate limiting, xatolarni yashirish.</p></a>
-</div>
-<h3 class="chapter-head">NestJS</h3>
-<div class="cards">
-  <a class="card" href="lessons/nestjs-nima.html"><div class="num">188</div><h3>NestJS nima?</h3><p>TypeScript uchun yaratilgan zamonaviy backend framework: Express ustida ishlaydigan, modulli va Angular'dan ilhomlangan arxitektura, nega u kerak va uni qanday o'rnatish mumkin.</p></a>
-  <a class="card" href="lessons/nestjs-struktura.html"><div class="num">189</div><h3>Loyiha tuzilishi: Module, Controller, Service</h3><p>NestJS'ning uch asosiy qurilish bloki: @Module modullarni tashkil qiladi, @Controller so'rovlarni qabul qiladi, @Injectable service biznes-logikani saqlaydi. Nest CLI bilan ularni generatsiya qilish.</p></a>
-  <a class="card" href="lessons/nestjs-routing.html"><div class="num">190</div><h3>Routing va DTO</h3><p>HTTP metod dekoratorlari (@Get, @Post, @Put, @Delete), parametrlarni olish (@Param, @Query, @Body), DTO klasslari orqali ma'lumot shakli, class-validator va ValidationPipe bilan avtomatik validatsiya.</p></a>
-  <a class="card" href="lessons/nestjs-di.html"><div class="num">191</div><h3>Provider va Dependency Injection</h3><p>Dependency Injection nima va u NestJS'da qanday ishlaydi, provayderlar, konstruktor injektsiyasi, IoC konteyner, modullararo import/export orqali service'larni ulashish.</p></a>
-  <a class="card" href="lessons/nestjs-database.html"><div class="num">192</div><h3>Ma'lumotlar bazasi (TypeORM)</h3><p>NestJS'da ma'lumotlar bazasi bilan ishlash: TypeORM integratsiyasi, @Entity bilan jadval e'loni, Repository shabloni, to'liq CRUD service misoli va Prisma bilan qisqacha taqqoslash.</p></a>
-  <a class="card" href="lessons/nestjs-guard.html"><div class="num">193</div><h3>Middleware, Guard, Interceptor, Exception filter</h3><p>NestJS so'rovni qayta ishlash quvuri: Middleware, autentifikatsiya uchun Guard (@UseGuards), ma'lumotni o'zgartiruvchi Pipe, javobni boyituvchi Interceptor va xatolarni tutuvchi Exception filter.</p></a>
-</div>
-<h2 class="part-head" id="6-qism-frontend-asoslari">6-qism: Frontend asoslari</h2>
-<h3 class="chapter-head">HTML</h3>
-<div class="cards">
-  <a class="card" href="lessons/html-nima.html"><div class="num">194</div><h3>HTML nima?</h3><p>HTML — veb-sahifalarni belgilash tili. Teg, element va atribut tushunchalari, HTML hujjatining skeleti (DOCTYPE, html, head, body), title va meta teglari, hamda birinchi sahifani yozish.</p></a>
-  <a class="card" href="lessons/html-teglar.html"><div class="num">195</div><h3>Asosiy teglar</h3><p>Eng ko'p ishlatiladigan HTML teglari: sarlavhalar (h1-h6), paragraflar, qalin va kursiv matn (strong/em), ro'yxatlar (ul/ol/li), havolalar (a), rasmlar (img), div va span konteynerlari, hamda br va hr.</p></a>
-  <a class="card" href="lessons/html-form.html"><div class="num">196</div><h3>Formalar</h3><p>Foydalanuvchidan ma'lumot yig'ish uchun formalar: form tegi (action, method), input turlari (text, password, email, checkbox, radio, number, date), label, select/option, textarea, tugmalar hamda required va boshqa validatsiya atributlari.</p></a>
-  <a class="card" href="lessons/html-semantik.html"><div class="num">197</div><h3>Semantik HTML</h3><p>Nega semantik teglar muhim; sahifa tuzilishi teglari (header, nav, main, section, article, aside, footer); foydalanish qulayligi (a11y) asoslari; SEO uchun foydasi va "div sho'rvasi"dan qochish.</p></a>
-</div>
-<h3 class="chapter-head">CSS</h3>
-<div class="cards">
-  <a class="card" href="lessons/css-nima.html"><div class="num">198</div><h3>CSS nima?</h3><p>CSS — veb-sahifalarni bezash tili. Sintaksis (selektor { xossa: qiymat; }), CSS'ni HTML'ga ulash usullari (inline, internal, external), asosiy selektorlar (element, class, id), ularni kombinatsiyalash va spetsifiklik tushunchasi.</p></a>
-  <a class="card" href="lessons/css-box.html"><div class="num">199</div><h3>Box model</h3><p>CSS'da har bir element to'rtburchak qutidir. Content, padding, border va margin qatlamlari; width/height; box-sizing: border-box; display xossasi (block, inline, inline-block, none) va overflow.</p></a>
-  <a class="card" href="lessons/css-flexbox.html"><div class="num">200</div><h3>Flexbox</h3><p>display: flex bilan elementlarni bir o'lchamli joylashtirish. Asosiy va ko'ndalang o'q, justify-content, align-items, flex-direction, flex-wrap, gap; flex-grow/shrink/basis va amaliy joylashuvlar.</p></a>
-  <a class="card" href="lessons/css-grid.html"><div class="num">201</div><h3>CSS Grid</h3><p>display: grid bilan ikki o'lchamli joylashuv. grid-template-columns/rows (fr, repeat, minmax), gap, elementlarni joylashtirish (grid-column/row), Flexbox bilan farqi va qachon qaysi birini tanlash.</p></a>
-  <a class="card" href="lessons/css-responsive.html"><div class="num">202</div><h3>Responsive dizayn</h3><p>Sayt barcha ekran o'lchamlariga moslashishi. Birliklar (px, %, em, rem, vw/vh), media query (@media), mobile-first yondashuv, moslashuvchan rasm va matn, breakpointlar.</p></a>
-  <a class="card" href="lessons/css-styling.html"><div class="num">203</div><h3>Ranglar, shrift va bezaklar</h3><p>color/background va rang formatlari (hex, rgb, hsl); shrift (font-family, size, weight, line-height); matn bezaklari (text-align, text-decoration); border-radius, box-shadow va transition asoslari.</p></a>
-</div>
-<h3 class="chapter-head">TypeScript</h3>
-<div class="cards">
-  <a class="card" href="lessons/ts-nima.html"><div class="num">204</div><h3>TypeScript nima?</h3><p>TypeScript — JavaScript ustiga turlarni qo'shadigan til; nega kerak, o'rnatish, tsc bilan kompilyatsiya va .ts fayllari.</p></a>
-  <a class="card" href="lessons/ts-turlar.html"><div class="num">205</div><h3>Asosiy turlar</h3><p>Tur izohlari, string/number/boolean, massiv va tuple, any va unknown, void, null/undefined, tur xulosasi va literal turlar.</p></a>
-  <a class="card" href="lessons/ts-interface.html"><div class="num">206</div><h3>Interfeys va tip aliaslari</h3><p>interface bilan obyekt shaklini tavsiflash, type alias, ixtiyoriy va readonly xossalar, union va intersection, interface vs type.</p></a>
-  <a class="card" href="lessons/ts-funksiya.html"><div class="num">207</div><h3>Funksiyalar va generiklar</h3><p>Parametr va qaytish turlari, ixtiyoriy va standart parametrlar, generiklar, generic interfeys va klass, cheklovlar (extends).</p></a>
-  <a class="card" href="lessons/ts-class.html"><div class="num">208</div><h3>Klasslar va konfiguratsiya</h3><p>TS klasslari, kirish modifikatorlari (public/private/protected/readonly), implements, enum va tsconfig.json asoslari.</p></a>
-</div>
-<h3 class="chapter-head">React</h3>
-<div class="cards">
-  <a class="card" href="lessons/react-nima.html"><div class="num">209</div><h3>React nima?</h3><p>React — foydalanuvchi interfeysi uchun kutubxona; komponentga asoslangan, deklarativ yondashuv, virtual DOM, SPA tushunchasi va Vite bilan o'rnatish.</p></a>
-  <a class="card" href="lessons/react-jsx.html"><div class="num">210</div><h3>JSX va komponentlar</h3><p>JSX sintaksisi, funksional komponent yozish, komponentni createRoot bilan render qilish, bir root element qoidasi, className va {ifoda} joylashtirish.</p></a>
-  <a class="card" href="lessons/react-props.html"><div class="num">211</div><h3>Props</h3><p>Komponentga ma'lumot uzatish, props obyekti, destructuring, children propi va propslarning faqat o'qish uchun (immutable) ekanligi.</p></a>
-  <a class="card" href="lessons/react-state.html"><div class="num">212</div><h3>State va useState</h3><p>Holat (state) tushunchasi, useState hook, holatni yangilash, onClick bilan hodisalarni qayta ishlash, re-render va hisoblagich misoli.</p></a>
-  <a class="card" href="lessons/react-effect.html"><div class="num">213</div><h3>useEffect va yon effektlar</h3><p>useEffect hook, dependency array, fetch bilan ma'lumot yuklash, cleanup funksiya va effekt qachon ishga tushishi.</p></a>
-  <a class="card" href="lessons/react-list-form.html"><div class="num">214</div><h3>Ro'yxatlar va formalar</h3><p>Massivni map bilan render qilish, key propi, shartli render (&amp;&amp; va ternar), controlled input (value + onChange) va oddiy TODO ilovasi.</p></a>
-</div>
-<h2 class="part-head" id="7-qism-testlash-va-yetkazib-berish">7-qism: Testlash va yetkazib berish</h2>
-<h3 class="chapter-head">Testlash (Jest)</h3>
-<div class="cards">
-  <a class="card" href="lessons/testlash-nima.html"><div class="num">215</div><h3>Nega test yozamiz?</h3><p>Qo'lda testning muammolari, avtomatik testning foydasi, test turlari, test piramidasi, TDD va mashhur vositalar.</p></a>
-  <a class="card" href="lessons/jest-boshlash.html"><div class="num">216</div><h3>Jest asoslari</h3><p>Jest o'rnatish, test fayllar, test()/it(), expect va matcherlar, describe bloki, npm test bilan ishga tushirish.</p></a>
-  <a class="card" href="lessons/jest-async-mock.html"><div class="num">217</div><h3>Async testlar va mock</h3><p>async/await testlari, resolves/rejects, jest.fn mock funksiyalar, jest.mock bilan modul mock qilish, beforeEach/afterEach va spy.</p></a>
-  <a class="card" href="lessons/jest-amaliyot.html"><div class="num">218</div><h3>Coverage va yaxshi amaliyot</h3><p>Kod qamrovi (--coverage), AAA namunasi, nimani test qilish kerak, yaxshi test belgilari va to'liq test misoli.</p></a>
-</div>
-<h3 class="chapter-head">CI/CD (GitHub Actions)</h3>
-<div class="cards">
-  <a class="card" href="lessons/cicd-nima.html"><div class="num">219</div><h3>CI/CD nima?</h3><p>Uzluksiz integratsiya (CI) va uzluksiz yetkazib berish (CD): qo'lda jarayon muammosi, pipeline tushunchasi va vositalar.</p></a>
-  <a class="card" href="lessons/actions-asoslar.html"><div class="num">220</div><h3>GitHub Actions asoslari</h3><p>.github/workflows/ papka, workflow YAML tuzilishi (name, on, jobs, steps), runner va birinchi workflow.</p></a>
-  <a class="card" href="lessons/actions-test.html"><div class="num">221</div><h3>Avtomatik test va build</h3><p>Node o'rnatish, npm ci, npm test, build, matrix (bir nechta Node versiyasi), kesh va status badge.</p></a>
-  <a class="card" href="lessons/actions-deploy.html"><div class="num">222</div><h3>Avtomatik deploy</h3><p>Secrets, ${{ secrets.X }}, environment, shartli ishga tushirish, deploy qadami (GitHub Pages / SSH) va CI+CD birga.</p></a>
-</div>
-<h3 class="chapter-head">Loyihani deploy qilish</h3>
-<div class="cards">
-  <a class="card" href="lessons/deploy-nima.html"><div class="num">223</div><h3>Deploy nima?</h3><p>Ishlab chiqarish (production) muhiti, lokalxost va server farqi, server turlari (VPS va PaaS/bulut), domen va DNS haqida umumiy tushuncha hamda deploy jarayonining bosqichlari.</p></a>
-  <a class="card" href="lessons/deploy-vps.html"><div class="num">224</div><h3>VPS serverga deploy qilish</h3><p>VPS olish (DigitalOcean/Hetzner), SSH bilan ulanish, Node.js o'rnatish, kodni git clone qilish, muhit o'zgaruvchilari (.env), PM2 bilan doimiy ishga tushirish va Nginx reverse proxy sozlash.</p></a>
-  <a class="card" href="lessons/deploy-frontend.html"><div class="num">225</div><h3>Frontend/statik saytni deploy qilish</h3><p>Build jarayoni (npm run build), statik hosting platformalari (Netlify, Vercel, GitHub Pages), SPA marshrutlash (routing) sozlamalari va frontend uchun muhit o'zgaruvchilari.</p></a>
-  <a class="card" href="lessons/deploy-domain-ssl.html"><div class="num">226</div><h3>Domen ulash va HTTPS</h3><p>Domen sotib olish, DNS yozuvlari (A va CNAME), domenni serverga ulash, Let's Encrypt/certbot bilan bepul SSL sertifikat olish va HTTP dan HTTPS ga avtomatik yo'naltirish.</p></a>
-</div>
-<h2 class="part-head" id="8-qism-algoritmlar-va-ma-lumotlar-tuzilmalari">8-qism: Algoritmlar va ma'lumotlar tuzilmalari</h2>
-<h3 class="chapter-head">Algoritm asoslari</h3>
-<div class="cards">
-  <a class="card" href="lessons/algoritm-nima.html"><div class="num">227</div><h3>Algoritm nima va nega o'rganamiz</h3><p>Algoritm tushunchasi, kundalik hayotdan misollar, yaxshi algoritm mezonlari, ma'lumotlar tuzilmasi bilan bog'liqligi va nega intervyularda so'raladi.</p></a>
-  <a class="card" href="lessons/big-o.html"><div class="num">228</div><h3>Big O notatsiyasi: vaqt murakkabligi</h3><p>Algoritm tezligini o'lchash, Big O g'oyasi, o'sish tartibi, eng yomon holat va asosiy murakkabliklar bilan tanishuv.</p></a>
-  <a class="card" href="lessons/big-o-amaliy.html"><div class="num">229</div><h3>Keng tarqalgan murakkabliklar: O(1) dan O(n!) gacha</h3><p>O(1), O(log n), O(n), O(n log n), O(n²), O(2^n), O(n!) - har birini misol va taqqoslash bilan tushunish.</p></a>
-  <a class="card" href="lessons/rekursiya-algoritm.html"><div class="num">230</div><h3>Rekursiya algoritmlar tilida</h3><p>Rekursiv fikrlash, bazaviy holat, rekursiya daraxti, chaqiruvlar steki, murakkablikni hisoblash va rekursiyani siklga aylantirish.</p></a>
-</div>
-<h3 class="chapter-head">Massiv va satr algoritmlari</h3>
-<div class="cards">
-  <a class="card" href="lessons/two-pointers.html"><div class="num">231</div><h3>Ikki ko'rsatkich (Two Pointers) usuli</h3><p>Ikki indeks bilan massivni samarali kezish: qarama-qarshi va bir yo'nalishli ko'rsatkichlar, klassik masalalar va O(n) yechimlar.</p></a>
-  <a class="card" href="lessons/sliding-window.html"><div class="num">232</div><h3>Siljuvchi oyna (Sliding Window)</h3><p>Ketma-ket qism (subarray/substring) masalalarini O(n) da yechish: qat'iy va o'zgaruvchan o'lchamli oyna texnikasi va umumiy shablon.</p></a>
-  <a class="card" href="lessons/prefix-sum.html"><div class="num">233</div><h3>Prefiks yig'indi (Prefix Sum)</h3><p>Oldindan yig'indilarni hisoblab, oraliq (range) so'rovlariga O(1) da javob berish va yig'indili subarraylarni sanash texnikasi.</p></a>
-  <a class="card" href="lessons/string-algoritmlari.html"><div class="num">234</div><h3>Satr (String) masalalari</h3><p>Belgilarni sanash, anagram, palindrom, satr aylantirish, guruhlash va qidirish — intervyularda eng ko'p uchraydigan satr masalalari.</p></a>
-</div>
-<h3 class="chapter-head">Chiziqli ma'lumotlar tuzilmalari</h3>
-<div class="cards">
-  <a class="card" href="lessons/stack.html"><div class="num">235</div><h3>Stek (Stack) — LIFO tuzilma</h3><p>Oxirgi kirgan birinchi chiqadi (LIFO) prinsipi, stekni massiv bilan qurish, amallar murakkabligi va amaliy qo'llanishlar.</p></a>
-  <a class="card" href="lessons/queue.html"><div class="num">236</div><h3>Navbat (Queue) va Deque</h3><p>Birinchi kirgan birinchi chiqadi (FIFO), navbatni qurish, samaradorlik nuqtai nazari va ikki tomonlama navbat (deque).</p></a>
-  <a class="card" href="lessons/linked-list.html"><div class="num">237</div><h3>Bog'langan ro'yxat (Linked List)</h3><p>Tugunlar (node) va havolalar, bir/ikki tomonlama ro'yxat, qo'shish-o'chirish, massivdan farqi va klassik masalalar.</p></a>
-  <a class="card" href="lessons/hash-map.html"><div class="num">238</div><h3>Xesh-jadval (HashMap) — kalit-qiymat sehri</h3><p>O(1) da qidirish, xesh funksiya, kolliziyalar, JS'da obyekt va Map, va HashMap bilan masalalarni tezlashtirish.</p></a>
-</div>
-<h3 class="chapter-head">Qidiruv va saralash</h3>
-<div class="cards">
-  <a class="card" href="lessons/binary-search.html"><div class="num">239</div><h3>Ikkilik qidiruv (Binary Search)</h3><p>Saralangan massivda O(log n) da qidirish, chap/o'ng chegaralar, klassik xatolar va binary search ustidagi variatsiyalar.</p></a>
-  <a class="card" href="lessons/sorting-oddiy.html"><div class="num">240</div><h3>Oddiy saralashlar: Bubble, Selection, Insertion</h3><p>Uch klassik O(n²) saralash algoritmi — ishlash prinsipi, qadamba-qadam kod, taqqoslash va qachon foydali ekani.</p></a>
-  <a class="card" href="lessons/sorting-tez.html"><div class="num">241</div><h3>Tez saralashlar: Merge Sort va Quick Sort</h3><p>O(n log n) saralash — bo'lib tashla va hukmronlik qil, merge/quick sort ishlashi, pivot tanlash va JS'ning sort() metodi.</p></a>
-</div>
-<h3 class="chapter-head">Daraxt va graf</h3>
-<div class="cards">
-  <a class="card" href="lessons/tree-asoslari.html"><div class="num">242</div><h3>Daraxt (Tree) va ikkilik daraxt</h3><p>Iyerarxik tuzilma, ildiz/tugun/barg atamalari, ikkilik daraxt (binary tree), balandlik va daraxtni kod bilan tasvirlash.</p></a>
-  <a class="card" href="lessons/bst.html"><div class="num">243</div><h3>Ikkilik qidiruv daraxti (BST)</h3><p>Tartiblangan ikkilik daraxt: chap &lt; ildiz &lt; o'ng qoidasi, qo'shish, qidirish, o'chirish va O(log n) samaradorlik.</p></a>
-  <a class="card" href="lessons/tree-traversal.html"><div class="num">244</div><h3>Daraxtni aylanib chiqish: DFS va BFS</h3><p>Daraxtning barcha tugunlarini ko'rish: chuqurlikka (inorder, preorder, postorder) va kenglikka (level order) aylanish.</p></a>
-  <a class="card" href="lessons/graph-asoslari.html"><div class="num">245</div><h3>Graf (Graph) asoslari</h3><p>Tugunlar va bog'lanishlar, yo'naltirilgan/yo'naltirilmagan graflar, og'irliklar va grafni kodda tasvirlash usullari.</p></a>
-  <a class="card" href="lessons/graph-traversal.html"><div class="num">246</div><h3>Grafni aylanib chiqish: BFS va DFS</h3><p>Grafda BFS va DFS, tashrif buyurilgan tugunlarni belgilash (visited), eng qisqa yo'l va amaliy masalalar.</p></a>
-</div>
-<h3 class="chapter-head">Ilg'or texnikalar</h3>
-<div class="cards">
-  <a class="card" href="lessons/backtracking.html"><div class="num">247</div><h3>Backtracking (orqaga qaytish)</h3><p>Barcha variantlarni tizimli sinab, boshi berk ko'chadan orqaga qaytish: kombinatsiyalar, o'rin almashtirishlar va klassik masalalar.</p></a>
-  <a class="card" href="lessons/dynamic-programming.html"><div class="num">248</div><h3>Dinamik dasturlash (DP)</h3><p>Takrorlanuvchi qism masalalarni eslab qolish: memoizatsiya va tabulyatsiya, Fibonacci, tanga va bosqichlar masalasi.</p></a>
-  <a class="card" href="lessons/greedy.html"><div class="num">249</div><h3>Ochko'z algoritmlar (Greedy)</h3><p>Har qadamda mahalliy eng yaxshi tanlov: qachon ishlaydi, qachon aldaydi, va klassik ochko'z masalalar.</p></a>
-  <a class="card" href="lessons/intervyu-strategiya.html"><div class="num">250</div><h3>Intervyu masalalarini yechish strategiyasi</h3><p>Algoritm intervyusiga tayyorlanish: masalani tahlil qilish qadamlari, texnika tanlash, murakkablikni baholash va amaliyot yo'l xaritasi.</p></a>
-</div>
-<h2 class="part-head" id="9-qism-kiberxavfsizlik">9-qism: Kiberxavfsizlik</h2>
-<h3 class="chapter-head">Kiberxavfsizlik asoslari</h3>
-<div class="cards">
-  <a class="card" href="lessons/kiberxavfsizlik-nima.html"><div class="num">251</div><h3>Kiberxavfsizlik nima va nega muhim</h3><p>CIA triadasi, asosiy atamalar (zaiflik, tahdid, xavf, hujum yuzasi), chuqurlashtirilgan himoya tamoyili va sohaga qisqacha kirish.</p></a>
-  <a class="card" href="lessons/tahdidlar-turlari.html"><div class="num">252</div><h3>Tahdidlar: malware, phishing, ijtimoiy injeneriya</h3><p>Zararli dastur turlarini tanib olish, phishing hujumlarini fosh qilish, ijtimoiy injeneriyadan himoya, parol menejeri va 2FA foydasi.</p></a>
-  <a class="card" href="lessons/hujum-himoya-jamoalari.html"><div class="num">253</div><h3>Red team, Blue team va hujum hayotiy tsikli</h3><p>Etik hujumchi va himoyachi jamoalari, hujumning umumiy bosqichlari (yuqori darajada), har bosqichdagi himoya, "buzilgan deb faraz qilish" tafakkuri.</p></a>
-  <a class="card" href="lessons/etika-qonun-kasb.html"><div class="num">254</div><h3>Etika, qonun va kiberxavfsizlik kasbi</h3><p>Etik xakerlik va ruxsat tushunchasi, qonuniy tamoyillar, mas'uliyatli oshkor qilish va bug bounty, kasb yo'llari, sertifikatlar va boshlash yo'l xaritasi.</p></a>
-</div>
-<h3 class="chapter-head">Kriptografiya asoslari</h3>
-<div class="cards">
-  <a class="card" href="lessons/shifrlash-asoslari.html"><div class="num">255</div><h3>Shifrlash: simmetrik va asimmetrik</h3><p>Shifrlash nima, plaintext va ciphertext, kalit tushunchasi; simmetrik (AES) va asimmetrik (RSA) shifrlash farqi; Caesar va XOR shifrlari faqat tushunish uchun; gibrid yondashuv va kalitlarni himoyalash.</p></a>
-  <a class="card" href="lessons/hashing-parol.html"><div class="num">256</div><h3>Hashing va parollarni xavfsiz saqlash</h3><p>Hash funksiyasi nima (bir tomonlama, deterministik, avalanche), shifrlashdan farqi; parolni ochiq saqlash falokati; nega oddiy hash yetarli emas; salt, sekin hash (bcrypt, argon2, scrypt); register va login oqimi.</p></a>
-  <a class="card" href="lessons/tls-https-qanday.html"><div class="num">257</div><h3>TLS/HTTPS qanday ishlaydi</h3><p>HTTP va HTTPS farqi, nega HTTPS shart (MITM hujumi); TLS handshake yuqori darajada; sertifikat va sertifikat markazi (CA), ishonch zanjiri; HTTPS ni buzadigan xatolar; Let's Encrypt bilan bepul sertifikat.</p></a>
-  <a class="card" href="lessons/raqamli-imzo.html"><div class="num">258</div><h3>Raqamli imzo va butunlik</h3><p>Ma'lumot butunligi muammosi; hash bilan butunlikni tekshirish (checksum); raqamli imzo (maxfiy kalit bilan imzolash, ochiq kalit bilan tekshirish); autentifikatsiya, butunlik, rad eta olmaslik; dastur imzolash, JWT, sertifikatlar.</p></a>
-  <a class="card" href="lessons/ikki-faktor-mfa.html"><div class="num">259</div><h3>2FA, MFA va zamonaviy autentifikatsiya</h3><p>Nega parol yetarli emas; autentifikatsiya omillari (bilaman/bor/o'zimman); 2FA va MFA turlari (SMS, TOTP, apparat kalit/FIDO2, biometrika); TOTP qanday ishlaydi; passkey va parolsiz kelajak.</p></a>
-</div>
-<h3 class="chapter-head">Web ilova xavfsizligi (OWASP Top 10)</h3>
-<div class="cards">
-  <a class="card" href="lessons/owasp-top10-kirish.html"><div class="num">260</div><h3>OWASP Top 10 bilan tanishuv</h3><p>OWASP nima, Top 10 nima uchun sanoat standarti, 2021 ro'yxatining sharhi, "shift left", tahdid modellashtirish va himoyachi fikrlash tarzi.</p></a>
-  <a class="card" href="lessons/broken-access-control.html"><div class="num">261</div><h3>Buzilgan kirish nazorati va IDOR</h3><p>Autentifikatsiya va avtorizatsiya farqi, Broken Access Control (2021 #1), IDOR konsepti, zaif va xavfsiz kod, eng kam imtiyoz va himoya cheklisti.</p></a>
-  <a class="card" href="lessons/injection-himoya.html"><div class="num">262</div><h3>Injection: SQL va buyruq inyeksiyasi</h3><p>Injection g'oyasi, SQL injection va parametrlangan so'rovlar, buyruq inyeksiyasi himoyasi, NoSQL eslatma va umumiy himoya tamoyillari.</p></a>
-  <a class="card" href="lessons/xss-chuqur.html"><div class="num">263</div><h3>XSS (Cross-Site Scripting) chuqur</h3><p>XSS nima, reflected/stored/DOM-based turlari, xavfliligi, escaping, textContent vs innerHTML, CSP, sanitizatsiya va HttpOnly cookie.</p></a>
-  <a class="card" href="lessons/csrf-ssrf.html"><div class="num">264</div><h3>CSRF va SSRF</h3><p>CSRF konsepti va himoyasi (token, SameSite, qayta tasdiq), SSRF konsepti va himoyasi (allowlist, ichki manzil bloklash), ikkalasining farqi.</p></a>
-  <a class="card" href="lessons/xavfsizlik-nosozliklari.html"><div class="num">265</div><h3>Security Misconfiguration, XXE va boshqalar</h3><p>Xavfsizlik noto'g'ri sozlangani, maxfiy ma'lumot oshkorligi, XXE, ishonchsiz deserializatsiya, xavfsizlik sarlavhalari va xavfsiz standart sozlama cheklisti.</p></a>
-</div>
-<h3 class="chapter-head">Tarmoq va tizim xavfsizligi</h3>
-<div class="cards">
-  <a class="card" href="lessons/xavfsizlik-sarlavhalari.html"><div class="num">266</div><h3>HTTP xavfsizlik sarlavhalari (CSP, HSTS...)</h3><p>Brauzerga xavfsiz xatti-harakatni buyuruvchi HTTP sarlavhalari: CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy va Permissions-Policy; ularni nginx va Express'da sozlash hamda cookie bayroqlari.</p></a>
-  <a class="card" href="lessons/firewall-vpn-portlar.html"><div class="num">267</div><h3>Firewall, portlar va VPN</h3><p>Portlar va xizmatlar nima, ochiq port nega xavf; firewall bilan kirish/chiqish qoidalarini boshqarish (ufw misoli), eng kam ochiq port tamoyili, VPN va tarmoq segmentatsiyasi.</p></a>
-  <a class="card" href="lessons/server-hardening.html"><div class="num">268</div><h3>Linux serverni qattiqlashtirish (hardening)</h3><p>Serverni ichkaridan mustahkamlash: tizimni yangilash, keraksiz xizmatlarni o'chirish, kuchli SSH (kalit autentifikatsiya, root login o'chirish), sudo foydalanuvchi, fail2ban, avtomatik yangilanish va fayl ruxsatlari.</p></a>
-  <a class="card" href="lessons/secrets-boshqaruv.html"><div class="num">269</div><h3>Sirlarni boshqarish (secrets management)</h3><p>Sir nima (API kalit, parol, token); eng katta xato — sirlarni kodga va gitga yozish; .env fayli va uni gitignore qilish; sir tasodifan gitga tushsa rotatsiya qilish; ishlab chiqarishda sir boshqaruvchilar.</p></a>
-  <a class="card" href="lessons/log-monitoring.html"><div class="num">270</div><h3>Loglar, monitoring va aniqlash</h3><p>Nega log muhim, nima loglanadi va nima loglanmaydi (parol, token); markazlashgan log va SIEM g'oyasi; anomaliyani aniqlash asoslari, ogohlantirish (alerting) va oddiy audit log namunasi.</p></a>
-</div>
-<h3 class="chapter-head">Amaliy himoya va DevSecOps</h3>
-<div class="cards">
-  <a class="card" href="lessons/xavfsiz-kod-yozish.html"><div class="num">271</div><h3>Xavfsiz kod yozish tamoyillari</h3><p>Xavfsizlik dasturchining o'z ishi ekanligi, asosiy tamoyillar, kirish validatsiyasi, sirlarni saqlash va xavfsizlik nuqtai nazaridan kod sharhi.</p></a>
-  <a class="card" href="lessons/dependency-xavfsizlik.html"><div class="num">272</div><h3>Bog'liqliklar xavfsizligi (npm audit, SCA)</h3><p>Uchinchi tomon paketlaridagi ma'lum zaifliklar, npm audit, SCA g'oyasi, avtomatik yangilash va supply chain hujumlaridan himoya.</p></a>
-  <a class="card" href="lessons/sast-dast-testlash.html"><div class="num">273</div><h3>Xavfsizlik testlash: SAST, DAST va pentest</h3><p>Statik va dinamik xavfsizlik tahlili, penetratsion testning etik chegaralari, mas'uliyatli oshkor qilish va legal mashq muhitlari.</p></a>
-  <a class="card" href="lessons/ctf-mashq-kasb.html"><div class="num">274</div><h3>CTF, mashq platformalari va kasb yo'li</h3><p>Capture The Flag musobaqalari, kategoriyalari, qonuniy o'rganish platformalari va kiberxavfsizlik sohasida kasb yo'l xaritasi.</p></a>
-  <a class="card" href="lessons/incident-response.html"><div class="num">275</div><h3>Hodisaga javob (Incident Response) va cheklist</h3><p>Buzilishga tayyorgarlik, incident response bosqichlari, backup, buzilgandagi birinchi qadamlar va butun kiberxavfsizlik bo'limining yakuniy amaliy cheklisti.</p></a>
-</div>
-<h3 class="chapter-head">Amaliy vositalar (lab muhitida)</h3>
-<div class="cards">
-  <a class="card" href="lessons/lab-muhit.html"><div class="num">276</div><h3>Xavfsizlik laboratoriyasini qurish</h3><p>Nega o'z laboratoriyangiz kerak, virtualizatsiya, izolyatsiya qilingan host-only tarmoq, Kali Linux va nishon VM sxemasi, DVWA va Juice Shop'ni lokal ko'tarish, snapshotlar hamda TryHackMe/HackTheBox legal muqobillari.</p></a>
-  <a class="card" href="lessons/nmap.html"><div class="num">277</div><h3>Nmap bilan tarmoqni kashf qilish</h3><p>Nmap nima va nega kerak, host discovery, port skanerlash, xizmat va versiya aniqlash, OS taxmini, NSE skriptlari hamda chiqishni himoyachi nuqtai nazaridan o'qish.</p></a>
-  <a class="card" href="lessons/wireshark.html"><div class="num">278</div><h3>Wireshark bilan trafik tahlili</h3><p>Wireshark nima va nega kerak, paket ushlash asoslari, interfeys tanlash, displey filtrlar, TCP oqimni kuzatish hamda HTTP va HTTPS farqi orqali TLS nega zarurligini isbotlash.</p></a>
-  <a class="card" href="lessons/burp-suite.html"><div class="num">279</div><h3>Burp Suite bilan web ilova o'rganish</h3><p>Burp Suite nima, brauzer-proxy-ilova sxemasi, proxy va sertifikat sozlash, Proxy/Intercept va Repeater modullari hamda o'z lab ilovangizdagi so'rovlarni ushlab o'rganish.</p></a>
-  <a class="card" href="lessons/metasploit.html"><div class="num">280</div><h3>Metasploit asoslari (lab)</h3><p>Metasploit Framework nima, etik ramka, modullar tuzilishi (exploit, payload, auxiliary, post), msfconsole ish oqimi hamda natijani himoyachi nuqtai nazaridan o'qish — barchasi o'z lab VM kontekstida.</p></a>
-</div>
+<h2 id="mundarija" class="sec-head">To'liq mundarija</h2>
+<p class="sec-sub">Qism ustiga bosing — ichidagi barcha mavzular ochiladi.</p>
+<details class="part-block" id="1-qism-javascript-tili">
+  <summary><span class="pb-ico">🟨</span><span class="pb-name">1-qism: JavaScript tili</span><span class="pb-count">91 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Kirish</h3>
+    <div class="cards">
+      <a class="card" href="lessons/js-haqida.html"><div class="num">01</div><h3>JavaScript haqida</h3><p>JavaScript nima, u qanday paydo bo'lgan va bugungi kunda qayerda ishlaydi.</p></a>
+      <a class="card" href="lessons/qollanmalar.html"><div class="num">02</div><h3>Qo'llanmalar va spetsifikatsiyalar</h3><p>ECMAScript spetsifikatsiyasi, MDN va boshqa ishonchli manbalar.</p></a>
+      <a class="card" href="lessons/muharrirlar.html"><div class="num">03</div><h3>Kod muharrirlari</h3><p>IDE va yengil muharrirlar — dasturchining asosiy ish quroli.</p></a>
+      <a class="card" href="lessons/konsol.html"><div class="num">04</div><h3>Ishlab chiquvchi konsoli</h3><p>Brauzer developer tools va konsol orqali xatolarni ko'rish.</p></a>
+    </div>
+    <h3 class="chapter-head">JavaScript asoslari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/salom-dunyo.html"><div class="num">05</div><h3>Salom, dunyo!</h3><p>JavaScript kodini HTML sahifaga qanday ulash: script tegi, src atributi va tashqi fayllar.</p></a>
+      <a class="card" href="lessons/kod-tuzilishi.html"><div class="num">06</div><h3>Kod tuzilishi</h3><p>Instruksiyalar, nuqta-vergul (;) qo'yish qoidalari, avtomatik qo'yilish tuzoqlari va izohlar.</p></a>
+      <a class="card" href="lessons/use-strict.html"><div class="num">07</div><h3>Zamonaviy rejim, "use strict"</h3><p>"use strict" direktivasi nima, u nimani o'zgartiradi va zamonaviy kodda uning avtomatikligi.</p></a>
+      <a class="card" href="lessons/ozgaruvchilar.html"><div class="num">08</div><h3>O'zgaruvchilar</h3><p>let, const va var; o'zgaruvchi yaratish, nomlash qoidalari, camelCase va const ma'nosi.</p></a>
+      <a class="card" href="lessons/malumot-turlari.html"><div class="num">09</div><h3>Ma'lumot turlari</h3><p>JavaScript'ning 8 ta ma'lumot turi va typeof operatori.</p></a>
+      <a class="card" href="lessons/turlarni-ozgartirish.html"><div class="num">10</div><h3>Turlarni o'zgartirish</h3><p>String, Number va Boolean konvertatsiyasi hamda qanday qiymatlar 0, false yoki NaN bo'lishi.</p></a>
+      <a class="card" href="lessons/operatorlar.html"><div class="num">11</div><h3>Asosiy operatorlar, matematika</h3><p>Matematik amallar, unar operatorlar, ustuvorlik, += kabi qisqartmalar va string+son xatti-harakati.</p></a>
+      <a class="card" href="lessons/taqqoslashlar.html"><div class="num">12</div><h3>Taqqoslashlar</h3><p>Taqqoslash operatorlari, == va === farqi, matnlarni leksikografik taqqoslash, null/undefined tuzoqlari.</p></a>
+      <a class="card" href="lessons/if-else.html"><div class="num">13</div><h3>Shartli operatorlar: if, ?</h3><p>if/else if/else konstruksiyasi, shartning boolean'ga o'girilishi va ternar operator ? :.</p></a>
+      <a class="card" href="lessons/mantiqiy-operatorlar.html"><div class="num">14</div><h3>Mantiqiy operatorlar</h3><p>|| &amp;&amp; ! operatorlari, qisqa tutashuv (short-circuit) va ularning qiymat qaytarish xususiyati.</p></a>
+      <a class="card" href="lessons/nullish.html"><div class="num">15</div><h3>Nullish birlashtiruvchi operator ??</h3><p>?? operatori nima, uning || dan farqi (0 va bo'sh matn holatlari) va ustuvorligi.</p></a>
+      <a class="card" href="lessons/sikllar.html"><div class="num">16</div><h3>Sikllar: while va for</h3><p>Bir xil amallarni ko'p marta takrorlash uchun sikllar — while, do..while va for.</p></a>
+      <a class="card" href="lessons/switch.html"><div class="num">17</div><h3>switch konstruksiyasi</h3><p>Bir o'zgaruvchini bir nechta qiymat bilan solishtirish uchun switch/case/default.</p></a>
+      <a class="card" href="lessons/funksiyalar.html"><div class="num">18</div><h3>Funksiyalar</h3><p>Kodni takrorlamaslik uchun asosiy vosita — funksiya e'loni, parametrlar, return.</p></a>
+      <a class="card" href="lessons/funksiya-ifodalari.html"><div class="num">19</div><h3>Funksiya ifodalari</h3><p>Funksiya — bu qiymat. Function Expression, Function Declaration va callback funksiyalar.</p></a>
+      <a class="card" href="lessons/strelka-funksiyalar.html"><div class="num">20</div><h3>Strelka funksiyalari, asoslari</h3><p>() =&gt; sintaksisi — funksiyalarni yozishning qisqa va qulay usuli.</p></a>
+    </div>
+    <h3 class="chapter-head">Kod sifati</h3>
+    <div class="cards">
+      <a class="card" href="lessons/debugging.html"><div class="num">21</div><h3>Brauzerda debugging</h3><p>Sources paneli, breakpoint'lar, kodni qadamma-qadam bajarish va debugger buyrug'i.</p></a>
+      <a class="card" href="lessons/kod-uslubi.html"><div class="num">22</div><h3>Kod uslubi</h3><p>Qavslar, chekinish, qator uzunligi, nomlash va linterlar (ESLint).</p></a>
+      <a class="card" href="lessons/izohlar.html"><div class="num">23</div><h3>Izohlar</h3><p>Yaxshi va yomon izohlar; nima uchun (nima emas, nega) izoh kerak.</p></a>
+      <a class="card" href="lessons/testlash.html"><div class="num">24</div><h3>Avtomatlashtirilgan testlar (Mocha)</h3><p>Nega test kerak; BDD; describe/it/assert; TDD jarayoni.</p></a>
+      <a class="card" href="lessons/polyfill.html"><div class="num">25</div><h3>Polyfill va transpilyatorlar</h3><p>Babel, transpiler nima, polyfill nima, core-js va eski brauzerlar mosligi.</p></a>
+    </div>
+    <h3 class="chapter-head">Obyektlar: asoslar</h3>
+    <div class="cards">
+      <a class="card" href="lessons/obyektlar.html"><div class="num">26</div><h3>Obyektlar</h3><p>Obyekt yaratish, xossalar bilan ishlash, nuqta va kvadrat qavslar, delete, hisoblangan xossalar, "in" operatori va for..in sikli.</p></a>
+      <a class="card" href="lessons/obyekt-nusxalash.html"><div class="num">27</div><h3>Obyekt havolalari va nusxalash</h3><p>Obyektlar havola (reference) orqali saqlanadi va ko'chiriladi. = obyektni nusxalamaydi. Object.assign, sayoz nusxa va structuredClone.</p></a>
+      <a class="card" href="lessons/garbage-collection.html"><div class="num">28</div><h3>Axlat yig'ish (Garbage collection)</h3><p>Xotira boshqaruvi, erishuvchanlik (reachability), root, ishlatilmaydigan obyektlarni tozalash va mark-and-sweep algoritmi g'oyasi.</p></a>
+      <a class="card" href="lessons/obyekt-metodlari.html"><div class="num">29</div><h3>Obyekt metodlari, this</h3><p>Obyektga metod qo'shish, this kalit so'zi, this'ning chaqiruvga bog'liqligi va strelka funksiyalarda this yo'qligi.</p></a>
+      <a class="card" href="lessons/new-operator.html"><div class="num">30</div><h3>Konstruktor, new operatori</h3><p>Konstruktor funksiyalar va new operatori yordamida bir turdagi ko'plab obyektlarni yaratish.</p></a>
+      <a class="card" href="lessons/optional-chaining.html"><div class="num">31</div><h3>Optional chaining ?.</h3><p>?. operatori — zanjirdagi oraliq xossalar mavjud bo'lmasa ham xatosiz ishlaydigan xavfsiz kirish usuli.</p></a>
+      <a class="card" href="lessons/symbol.html"><div class="num">32</div><h3>Symbol turi</h3><p>Symbol — noyob identifikatorlar yaratuvchi primitiv tur, yashirin xossalar va tizimli simvollar.</p></a>
+      <a class="card" href="lessons/obyekt-primitiv.html"><div class="num">33</div><h3>Obyektni primitivga o'girish</h3><p>Obyekt matematik yoki satr operatsiyalarida qanday primitivga aylantiriladi: hint, Symbol.toPrimitive, toString va valueOf.</p></a>
+    </div>
+    <h3 class="chapter-head">Ma'lumot turlari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/primitiv-metodlar.html"><div class="num">34</div><h3>Primitivlar metodlari</h3><p>Primitiv qiymatlar (satr, son, mantiqiy) ustida ham metod chaqirish mumkin. Bu qanday ishlaydi va "obyekt o'ramchasi" nima?</p></a>
+      <a class="card" href="lessons/sonlar.html"><div class="num">35</div><h3>Sonlar</h3><p>Sonlarni yozish usullari, sanoq tizimlari, yaxlitlash, aniqlik muammolari va Math obyekti bilan ishlash.</p></a>
+      <a class="card" href="lessons/satrlar.html"><div class="num">36</div><h3>Satrlar</h3><p>Matn ma'lumotlari: tirnoq turlari, shablon satrlar, maxsus belgilar, uzunlik, belgilarga murojaat va satr metodlari.</p></a>
+      <a class="card" href="lessons/massivlar.html"><div class="num">37</div><h3>Massivlar</h3><p>Tartiblangan ma'lumotlar to'plami: yaratish, indekslar, uzunlik, qo'shish/o'chirish metodlari va aylanish (loop).</p></a>
+      <a class="card" href="lessons/massiv-metodlari.html"><div class="num">38</div><h3>Massiv metodlari</h3><p>Massivlarni boshqarish uchun eng muhim metodlar: qo'shish/o'chirish, qidirish, saralash, transformatsiya va reduce.</p></a>
+      <a class="card" href="lessons/iterable.html"><div class="num">39</div><h3>Iteratsiyalanuvchi obyektlar (iterable)</h3><p>for..of qanday ishlaydi, Symbol.iterator, o'z iterable obyektingni yaratish, Array.from.</p></a>
+      <a class="card" href="lessons/map-set.html"><div class="num">40</div><h3>Map va Set</h3><p>Map — istalgan kalitli assotsiativ to'plam; Set — unikal qiymatlar to'plami. Obyektdan farqi va iteratsiya.</p></a>
+      <a class="card" href="lessons/weakmap-weakset.html"><div class="num">41</div><h3>WeakMap va WeakSet</h3><p>Kuchsiz havolalar, faqat obyekt kalitlar, iteratsiya yo'qligi va amaliy qo'llanishi (kesh, qo'shimcha ma'lumot).</p></a>
+      <a class="card" href="lessons/object-keys.html"><div class="num">42</div><h3>Object.keys, values, entries</h3><p>Obyekt kalitlari, qiymatlari va juftliklarini massiv sifatida olish; ular ustida aylanish va qayta yig'ish.</p></a>
+      <a class="card" href="lessons/destructuring.html"><div class="num">43</div><h3>Destrukturizatsiya</h3><p>Massiv va obyektlarni alohida o'zgaruvchilarga qulay tarzda ajratib olish.</p></a>
+      <a class="card" href="lessons/sana-vaqt.html"><div class="num">44</div><h3>Sana va vaqt (Date)</h3><p>Date obyekti bilan sana yasash, komponentlarini olish, timestamp va sanalar ayirmasini hisoblash.</p></a>
+      <a class="card" href="lessons/json-metodlari.html"><div class="num">45</div><h3>JSON metodlari, toJSON</h3><p>Obyektni JSON satriga aylantirish (stringify) va qayta o'qish (parse); replacer, bo'shliq, reviver va toJSON.</p></a>
+    </div>
+    <h3 class="chapter-head">Funksiyalar bilan chuqur ishlash</h3>
+    <div class="cards">
+      <a class="card" href="lessons/rekursiya.html"><div class="num">46</div><h3>Rekursiya va stek</h3><p>Rekursiya g'oyasi, asos va rekursiv holat, faktorial, daraja, Fibonachchi va ijro steki.</p></a>
+      <a class="card" href="lessons/rest-spread.html"><div class="num">47</div><h3>Rest parametrlar va spread</h3><p>...rest parametrlar, eski arguments obyekti, ...spread bilan yoyish va nusxa olish.</p></a>
+      <a class="card" href="lessons/closure.html"><div class="num">48</div><h3>O'zgaruvchi ko'lami, closure</h3><p>Blok ko'lami (let/const), leksik muhit, closure va hisoblagich (counter) misoli.</p></a>
+      <a class="card" href="lessons/eski-var.html"><div class="num">49</div><h3>Eski "var"</h3><p>var ning o'ziga xosligi, blok ko'lami yo'qligi, hoisting va nega let/const afzal.</p></a>
+      <a class="card" href="lessons/global-obyekt.html"><div class="num">50</div><h3>Global obyekt</h3><p>globalThis, window/global, global funksiyalar va nega global o'zgaruvchidan qochish kerak.</p></a>
+      <a class="card" href="lessons/funksiya-obyekti.html"><div class="num">51</div><h3>Funksiya obyekti, NFE</h3><p>Funksiya ham obyekt ekanligi, uning name va length xossalari, o'z xossalarini qo'shish hamda Named Function Expression (NFE).</p></a>
+      <a class="card" href="lessons/new-function.html"><div class="num">52</div><h3>new Function sintaksisi</h3><p>Satrdan funksiya yaratish: new Function('a', 'b', 'return a + b'), uning qo'llanishi va cheklovlari.</p></a>
+      <a class="card" href="lessons/settimeout.html"><div class="num">53</div><h3>setTimeout va setInterval</h3><p>Kodni kechiktirib yoki takroran bajarish: setTimeout, clearTimeout, setInterval, clearInterval, nolinchi kechikish va ichma-ich setTimeout.</p></a>
+      <a class="card" href="lessons/call-apply.html"><div class="num">54</div><h3>Dekoratorlar va uzatish, call/apply</h3><p>Kontekstni uzatuvchi func.call va func.apply metodlari, keshlovchi dekorator hamda argumentlarni uzatish.</p></a>
+      <a class="card" href="lessons/bind.html"><div class="num">55</div><h3>Funksiya bog'lash (bind)</h3><p>this yo'qolishi muammosi, func.bind orqali kontekstni bog'lash va qisman qo'llash (partial application).</p></a>
+      <a class="card" href="lessons/strelka-qayta.html"><div class="num">56</div><h3>Strelka funksiyalari (qayta ko'rib chiqish)</h3><p>Strelka funksiyalarining chuqur xususiyatlari: o'z this va arguments yo'qligi, new bilan ishlamasligi va qachon foydali ekanligi.</p></a>
+    </div>
+    <h3 class="chapter-head">Obyekt xossalari konfiguratsiyasi</h3>
+    <div class="cards">
+      <a class="card" href="lessons/property-flags.html"><div class="num">57</div><h3>Xossa bayroqlari va deskriptorlari</h3><p>Obyekt xossalari faqat qiymatdan iborat emas — ular writable, enumerable va configurable bayroqlariga ega. Ularni qanday o'qish va o'zgartirish mumkin.</p></a>
+      <a class="card" href="lessons/getter-setter.html"><div class="num">58</div><h3>Getter va setterlar</h3><p>Aksessor xossalar — bu funksiyalar orqali qiymatni o'qish va yozishni boshqaruvchi maxsus xossalar. Ular validatsiya va hisoblangan qiymatlar uchun ajoyib.</p></a>
+    </div>
+    <h3 class="chapter-head">Prototiplar, meros</h3>
+    <div class="cards">
+      <a class="card" href="lessons/prototip-meros.html"><div class="num">59</div><h3>Prototipli meros</h3><p>[[Prototype]] yashirin xossa, __proto__, prototip zanjiri va xossalar qanday qidirilishi.</p></a>
+      <a class="card" href="lessons/f-prototype.html"><div class="num">60</div><h3>F.prototype</h3><p>Konstruktor funksiyaning prototype xossasi, new bilan bog'liqligi, default prototype va constructor.</p></a>
+      <a class="card" href="lessons/native-prototype.html"><div class="num">61</div><h3>Tug'ma prototiplar</h3><p>Object.prototype, Array.prototype, String.prototype va boshqalar, hamda ularni kengaytirish xavfi.</p></a>
+      <a class="card" href="lessons/prototip-metodlari.html"><div class="num">62</div><h3>Prototip metodlari, __proto__siz obyektlar</h3><p>Object.create, Object.getPrototypeOf/setPrototypeOf, __proto__ nima uchun eskirgan va Object.create(null).</p></a>
+    </div>
+    <h3 class="chapter-head">Klasslar</h3>
+    <div class="cards">
+      <a class="card" href="lessons/klass-asoslari.html"><div class="num">63</div><h3>Klass asosiy sintaksisi</h3><p>class kalit so'zi, constructor, metodlar, getter/setter, hisoblangan nomlar va class ifodasi.</p></a>
+      <a class="card" href="lessons/klass-meros.html"><div class="num">64</div><h3>Klass merosi</h3><p>extends kalit so'zi, super() konstruktorda, super.method() va metodlarni qayta aniqlash (override).</p></a>
+      <a class="card" href="lessons/static-metodlar.html"><div class="num">65</div><h3>Statik xossa va metodlar</h3><p>static metodlar, statik xossalar, factory metodlar va statik meros.</p></a>
+      <a class="card" href="lessons/private-protected.html"><div class="num">66</div><h3>Maxfiy va himoyalangan xossalar</h3><p>protected konvensiyasi (_), private #maydonlar, getter/setter bilan himoya va inkapsulyatsiya.</p></a>
+      <a class="card" href="lessons/built-in-extend.html"><div class="num">67</div><h3>Tug'ma klasslarni kengaytirish</h3><p>Array, Error kabi tug'ma klasslarni extends qilish va Symbol.species tushunchasi.</p></a>
+      <a class="card" href="lessons/instanceof.html"><div class="num">68</div><h3>instanceof tekshiruvi</h3><p>instanceof operatori, prototip zanjiri orqali tekshiruv, Symbol.hasInstance va Object.prototype.toString.</p></a>
+      <a class="card" href="lessons/mixin.html"><div class="num">69</div><h3>Mixinlar</h3><p>mixin g'oyasi, Object.assign bilan qo'llash, hodisali mixin misoli va merosdan farqi.</p></a>
+    </div>
+    <h3 class="chapter-head">Xatoliklarni boshqarish</h3>
+    <div class="cards">
+      <a class="card" href="lessons/try-catch.html"><div class="num">70</div><h3>Xatoliklarni boshqarish, try...catch</h3><p>try...catch...finally, Error obyekti, throw operatori va o'z xatoliklaringizni tashlash.</p></a>
+      <a class="card" href="lessons/custom-error.html"><div class="num">71</div><h3>Maxsus xatoliklar, Error'ni kengaytirish</h3><p>Error'dan extends qilish, o'z xato klasslari, instanceof, xatoliklar ierarxiyasi va wrapping.</p></a>
+    </div>
+    <h3 class="chapter-head">Promise, async/await</h3>
+    <div class="cards">
+      <a class="card" href="lessons/callback.html"><div class="num">72</div><h3>Kirish: callback'lar</h3><p>Asinxron harakatlar, callback g'oyasi, xatolik-birinchi (error-first) uslub va "callback jahannami" muammosi.</p></a>
+      <a class="card" href="lessons/promise.html"><div class="num">73</div><h3>Promise</h3><p>new Promise(executor), resolve/reject, holatlar (pending/fulfilled/rejected) va .then/.catch/.finally metodlari.</p></a>
+      <a class="card" href="lessons/promise-chaining.html"><div class="num">74</div><h3>Promise zanjiri</h3><p>.then zanjiri, qiymatni bosqichma-bosqich uzatish, then ichida promise qaytarish va zanjirning tekis bo'lishi.</p></a>
+      <a class="card" href="lessons/promise-error.html"><div class="num">75</div><h3>Promise bilan xatoliklarni boshqarish</h3><p>.catch bilan xatoliklarni ushlash, xatoning zanjir bo'ylab o'tishi, qayta tashlash va unhandledrejection hodisasi.</p></a>
+      <a class="card" href="lessons/promise-api.html"><div class="num">76</div><h3>Promise API</h3><p>Promise klassining statik metodlari: all, allSettled, race, any, resolve va reject.</p></a>
+      <a class="card" href="lessons/promisification.html"><div class="num">77</div><h3>Promisifikatsiya</h3><p>Callback qabul qiluvchi funksiyani promise qaytaradigan funksiyaga aylantirish.</p></a>
+      <a class="card" href="lessons/microtask.html"><div class="num">78</div><h3>Mikrovazifalar (microtasks)</h3><p>Mikrovazifa navbati, .then callback'lari tartibi va setTimeout bilan farqi.</p></a>
+      <a class="card" href="lessons/async-await.html"><div class="num">79</div><h3>Async/await</h3><p>async funksiyalar, await, try/catch bilan xatoliklar va top-level await.</p></a>
+    </div>
+    <h3 class="chapter-head">Generatorlar, ilg'or iteratsiya</h3>
+    <div class="cards">
+      <a class="card" href="lessons/generator.html"><div class="num">80</div><h3>Generatorlar</h3><p>function* va yield yordamida qiymatlarni birma-bir, talab bo'yicha ishlab chiqaruvchi maxsus funksiyalar.</p></a>
+      <a class="card" href="lessons/async-iteration.html"><div class="num">81</div><h3>Asinxron iteratsiya va generatorlar</h3><p>for await..of, Symbol.asyncIterator va async generatorlar — ma'lumot asta-sekin, so'rovlar orqali kelganda ishlatiladi.</p></a>
+    </div>
+    <h3 class="chapter-head">Modullar</h3>
+    <div class="cards">
+      <a class="card" href="lessons/modul-kirish.html"><div class="num">82</div><h3>Modullar, kirish</h3><p>Modul nima, nega u kerak, bitta fayl = bitta modul, script type=module va modullarning o'ziga xos xususiyatlari.</p></a>
+      <a class="card" href="lessons/export-import.html"><div class="num">83</div><h3>Eksport va Import</h3><p>export/import ning barcha ko'rinishlari: nomli eksport, default eksport, import * as, as bilan qayta nomlash va re-export.</p></a>
+      <a class="card" href="lessons/dynamic-import.html"><div class="num">84</div><h3>Dinamik importlar</h3><p>import() ifodasi, uning promise qaytarishi, shartli va kechiktirilgan yuklash hamda statik importlardan farqi.</p></a>
+    </div>
+    <h3 class="chapter-head">Qo'shimcha mavzular</h3>
+    <div class="cards">
+      <a class="card" href="lessons/proxy-reflect.html"><div class="num">85</div><h3>Proxy va Reflect</h3><p>Proxy obyekti bilan boshqa obyekt ustidagi amallarni ushlab qolish (traps) va Reflect API bilan ularni to'g'ri bajarish.</p></a>
+      <a class="card" href="lessons/eval.html"><div class="num">86</div><h3>Eval: kod satrini ishga tushirish</h3><p>eval() funksiyasi bilan satr ko'rinishidagi kodni bajarish, uning ko'lami, xavflari va zamonaviy muqobillari.</p></a>
+      <a class="card" href="lessons/currying.html"><div class="num">87</div><h3>Karrilash (Currying)</h3><p>Ko'p argumentli funksiyani f(a)(b)(c) ko'rinishidagi bir argumentli funksiyalar zanjiriga aylantirish va qisman qo'llash.</p></a>
+      <a class="card" href="lessons/reference-type.html"><div class="num">88</div><h3>Reference Type</h3><p>Nega obj.method() this'ni to'g'ri oladi-yu, (obj.method)() yoki metodni o'zgaruvchiga ko'chirish this'ni yo'qotadi — ichki Reference Type mexanizmi.</p></a>
+      <a class="card" href="lessons/bigint.html"><div class="num">89</div><h3>BigInt</h3><p>2 in 53 dan katta butun sonlar bilan aniq ishlash uchun BigInt turi: 123n yozuvi, amallar va Number bilan aralashtirmaslik.</p></a>
+      <a class="card" href="lessons/unicode.html"><div class="num">90</div><h3>Unicode, satr ichki tuzilishi</h3><p>Satrlar UTF-16 da qanday saqlanadi, surrogat juftlar, kod nuqtalari, codePointAt va emoji uzunligi muammosi.</p></a>
+      <a class="card" href="lessons/weakref.html"><div class="num">91</div><h3>WeakRef va FinalizationRegistry</h3><p>Obyektni axlat yig'ishga to'sqinlik qilmasdan zaif havola saqlash (WeakRef) va u yo'q qilingach xabar olish (FinalizationRegistry).</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="2-qism-brauzer-hujjat-hodisalar-interfeyslar">
+  <summary><span class="pb-ico">🌐</span><span class="pb-name">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</span><span class="pb-count">32 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Hujjat (DOM)</h3>
+    <div class="cards">
+      <a class="card" href="lessons/brauzer-muhiti.html"><div class="num">92</div><h3>Brauzer muhiti va spetsifikatsiyalar</h3><p>JavaScript qanday muhitlarda ishlaydi, brauzerdagi global obyekt window, DOM, BOM va document nima, host muhitlari va rasmiy spetsifikatsiyalar.</p></a>
+      <a class="card" href="lessons/dom-daraxti.html"><div class="num">93</div><h3>DOM daraxti</h3><p>HTML hujjat qanday qilib teglar daraxtiga aylanadi, element va matn tugunlari, avtomatik xatolarni tuzatish, tugun turlari va DevTools'da ko'rish.</p></a>
+      <a class="card" href="lessons/dom-boylab.html"><div class="num">94</div><h3>DOM bo'ylab harakatlanish</h3><p>documentElement, body, head; bolalar (childNodes, firstChild, lastChild), qo'shnilar va ota tugunlar; faqat elementlar bo'yicha navigatsiya va jadvallar bilan ishlash.</p></a>
+      <a class="card" href="lessons/dom-qidirish.html"><div class="num">95</div><h3>Elementlarni qidirish: getElement*, querySelector*</h3><p>getElementById, querySelector va querySelectorAll, getElementsByTagName/ClassName, matches, closest, contains hamda jonli va statik to'plamlar farqi.</p></a>
+      <a class="card" href="lessons/node-xossalari.html"><div class="num">96</div><h3>Node xossalari: tur, teg va tarkib</h3><p>DOM tugun sinflari ierarxiyasi, nodeType, nodeName va tagName, innerHTML va outerHTML, nodeValue/textContent hamda hidden xossasi.</p></a>
+      <a class="card" href="lessons/atributlar.html"><div class="num">97</div><h3>Atributlar va xossalar</h3><p>DOM xossalari va HTML atributlari orasidagi farq, getAttribute/setAttribute/hasAttribute/removeAttribute, xossa-atribut sinxronizatsiyasi hamda data-* atributlar va dataset.</p></a>
+      <a class="card" href="lessons/dom-ozgartirish.html"><div class="num">98</div><h3>Hujjatni o'zgartirish</h3><p>Yangi elementlarni yaratish (createElement, createTextNode), ularni sahifaga qo'shish (append/prepend/before/after/replaceWith), insertAdjacentHTML, elementni o'chirish, nusxalash (cloneNode), eski usullar va DocumentFragment.</p></a>
+      <a class="card" href="lessons/style-class.html"><div class="num">99</div><h3>Uslublar va klasslar</h3><p>className va classList (add/remove/toggle/contains), element.style bilan inline uslublar, cssText, getComputedStyle orqali yakuniy uslublarni o'qish va muhim uslub qoidalari.</p></a>
+      <a class="card" href="lessons/element-olcham.html"><div class="num">100</div><h3>Element o'lchami va skroll</h3><p>offsetWidth/Height, clientWidth/Height, scrollWidth/Height, scrollTop/Left, offsetParent va getBoundingClientRect qisqacha — elementning geometrik xossalari.</p></a>
+      <a class="card" href="lessons/oyna-olcham.html"><div class="num">101</div><h3>Oyna o'lchamlari va skroll</h3><p>document.documentElement orqali oyna (viewport) o'lchamini olish, hujjatning to'liq o'lchami, pageYOffset/scrollY joriy skroll, scrollTo/scrollBy va scrollIntoView bilan skroll boshqarish.</p></a>
+      <a class="card" href="lessons/koordinatalar.html"><div class="num">102</div><h3>Koordinatalar</h3><p>Ikki koordinata tizimi: oynaga nisbatan (clientX/clientY) va hujjatga nisbatan (pageX/pageY), getBoundingClientRect, elementFromPoint va koordinatalar orqali elementni joylashtirish.</p></a>
+    </div>
+    <h3 class="chapter-head">Hodisalarga kirish</h3>
+    <div class="cards">
+      <a class="card" href="lessons/hodisalar-kirish.html"><div class="num">103</div><h3>Brauzer hodisalariga kirish</h3><p>Hodisa nima, uni tinglashning uch usuli: HTML atribut (onclick), DOM xossa (elem.onclick), addEventListener/removeEventListener; event obyekti, this va handleEvent bilan obyekt-ishlovchi.</p></a>
+      <a class="card" href="lessons/bubbling-capturing.html"><div class="num">104</div><h3>Ko'tarilish va tutish (bubbling va capturing)</h3><p>Bubbling tamoyili, event.target va currentTarget farqi, stopPropagation va stopImmediatePropagation, capturing fazasi va hodisaning uch fazasi.</p></a>
+      <a class="card" href="lessons/event-delegation.html"><div class="num">105</div><h3>Hodisa delegatsiyasi</h3><p>Bubbling va targetdan foydalanib, bitta ishlovchi bilan ko'p elementni boshqarish; data-atributlar bilan delegatsiya; 'behavior' patterni va afzalliklari.</p></a>
+      <a class="card" href="lessons/default-actions.html"><div class="num">106</div><h3>Brauzerning standart harakatlari</h3><p>preventDefault bilan standart harakatni to'xtatish; onclick uchun return false; passive; event.defaultPrevented; havola va forma misollari.</p></a>
+      <a class="card" href="lessons/custom-events.html"><div class="num">107</div><h3>Maxsus hodisalar</h3><p>new Event, CustomEvent (detail bilan), dispatchEvent, bubbles/cancelable, ichma-ich hodisalar va o'z komponentlaringda maxsus hodisalar bilan ishlash.</p></a>
+    </div>
+    <h3 class="chapter-head">UI hodisalari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/sichqoncha-hodisalari.html"><div class="num">108</div><h3>Sichqoncha hodisalari</h3><p>mousedown/up, click, dblclick, contextmenu tartibi; qaysi tugma bosilgani (button), koordinatalar clientX/Y va pageX/Y, hamda shiftKey, ctrlKey, altKey, metaKey modifikator tugmalari.</p></a>
+      <a class="card" href="lessons/mouseover-out.html"><div class="num">109</div><h3>mouseover/out, mouseenter/leave</h3><p>mouseover/mouseout hodisalari va relatedTarget xossasi; kursor bolalar elementlar ustidan o'tganda yuzaga keladigan muammolar; bubbling qilmaydigan mouseenter/mouseleave hodisalari.</p></a>
+      <a class="card" href="lessons/drag-drop.html"><div class="num">110</div><h3>Drag'n'Drop (sichqoncha bilan)</h3><p>mousedown → mousemove → mouseup algoritmi asosida element sudrash; brauzerning standart ondragstart harakatini o'chirish; pointer-events va document.elementFromPoint yordamida nishonlarni (droppable) aniqlash.</p></a>
+      <a class="card" href="lessons/pointer-events.html"><div class="num">111</div><h3>Pointer hodisalari</h3><p>pointerdown/move/up va boshqa Pointer Events; pointerId, pointerType, isPrimary xossalari; setPointerCapture; sichqoncha, sensor va qalam (stylus) hodisalarini yagona API'da birlashtirish.</p></a>
+      <a class="card" href="lessons/klaviatura.html"><div class="num">112</div><h3>Klaviatura: keydown va keyup</h3><p>keydown va keyup hodisalari; event.key (belgi) va event.code (fizik tugma) o'rtasidagi farq; avto-takror (auto-repeat); standart harakatlar va ularni oldini olish; amaliy qiyosiy misollar.</p></a>
+      <a class="card" href="lessons/scroll.html"><div class="num">113</div><h3>Skroll</h3><p>scroll hodisasi; skrollni event bilan to'xtatib bo'lmasligi va uni oldini olishning to'g'ri usullari; "cheksiz sahifa" (infinite scroll) g'oyasi va uni amalga oshirish yondashuvi.</p></a>
+    </div>
+    <h3 class="chapter-head">Formalar va boshqaruv elementlari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/form-xossalari.html"><div class="num">114</div><h3>Forma xossalari va metodlari</h3><p>document.forms, form.elements, input/textarea/select/option bilan ishlash: value, checked, selectedIndex va options orqali qiymatlarni o'qish va yozish.</p></a>
+      <a class="card" href="lessons/focus-blur.html"><div class="num">115</div><h3>Fokuslash: focus/blur</h3><p>focus()/blur() metodlari, focus/blur hodisalari, tabindex bilan fokusni boshqarish, focusin/focusout orqali delegatsiya va validatsiya misoli.</p></a>
+      <a class="card" href="lessons/form-hodisalari.html"><div class="num">116</div><h3>Hodisalar: change, input, cut, copy, paste</h3><p>change va input hodisalarining farqi, matn kiritishni kuzatish, cut/copy/paste va ClipboardEvent bilan almashish buferini boshqarish.</p></a>
+      <a class="card" href="lessons/form-submit.html"><div class="num">117</div><h3>Forma yuborish: submit hodisasi va metod</h3><p>submit hodisasi, Enter bilan yuborish, form.submit() metodi, yuborishdan oldingi validatsiya va preventDefault bilan oldini olish.</p></a>
+    </div>
+    <h3 class="chapter-head">Hujjat va resurs yuklanishi</h3>
+    <div class="cards">
+      <a class="card" href="lessons/page-lifecycle.html"><div class="num">118</div><h3>Sahifa: DOMContentLoaded, load, beforeunload, unload</h3><p>HTML sahifaning hayot sikli: DOMContentLoaded, load, beforeunload va unload hodisalari qachon yuz beradi, readyState, sahifadan chiqishdan oldin ogohlantirish va sendBeacon.</p></a>
+      <a class="card" href="lessons/script-async-defer.html"><div class="num">119</div><h3>Skriptlar: async, defer</h3><p>Skriptlarni yuklashda bloklovchi muammo, defer va async atributlari, ularning farqi, dinamik skriptlar va qaysi birini qachon ishlatish.</p></a>
+      <a class="card" href="lessons/resurs-yuklash.html"><div class="num">120</div><h3>Resurs yuklash: onload va onerror</h3><p>Tashqi resurslarni (skript, rasm, iframe) yuklash holatini kuzatish: onload va onerror hodisalari, crossorigin atributi va resursning tayyor bo'lishini aniqlash.</p></a>
+    </div>
+    <h3 class="chapter-head">Qo'shimcha brauzer mavzulari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/mutation-observer.html"><div class="num">121</div><h3>Mutation observer</h3><p>MutationObserver bilan DOM daraxtidagi o'zgarishlarni — element qo'shilishi, o'chirilishi, atribut va matn o'zgarishlarini — kuzatish.</p></a>
+      <a class="card" href="lessons/selection-range.html"><div class="num">122</div><h3>Tanlash va Range</h3><p>Range obyekti bilan hujjatning bir qismini belgilash, Selection obyekti orqali foydalanuvchi tanlagan matnni o'qish va dastur orqali tanlash o'rnatish.</p></a>
+      <a class="card" href="lessons/event-loop.html"><div class="num">123</div><h3>Hodisalar tsikli: mikro va makrovazifalar</h3><p>Event loop — brauzer va Node.js kodni qanday tartibda bajarishi; makrovazifa va mikrovazifa navbatlari, render, setTimeout(0) va og'ir hisob-kitobni bo'lish.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="3-qism-qo-shimcha-bo-limlar">
+  <summary><span class="pb-ico">🧩</span><span class="pb-name">3-qism: Qo'shimcha bo'limlar</span><span class="pb-count">23 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Oynalar va freymlar</h3>
+    <div class="cards">
+      <a class="card" href="lessons/popup.html"><div class="num">124</div><h3>Popup oynalar va window metodlari</h3><p>window.open bilan yangi oyna ochish, popup bloklovchilar, oyna sozlamalari (width, height, left, top), ochilgan oynaga murojaat qilish, close, focus va blur metodlari.</p></a>
+      <a class="card" href="lessons/cross-window.html"><div class="num">125</div><h3>Oynalararo aloqa</h3><p>Same Origin (bir xil manba) siyosati, iframe va contentWindow, boshqa manbadagi oynalar bilan xavfsiz aloqa: postMessage va message hodisasi, origin tekshirish orqali xavfsizlik.</p></a>
+      <a class="card" href="lessons/clickjacking.html"><div class="num">126</div><h3>Clickjacking hujumi</h3><p>Clickjacking (bosishni o'g'irlash) hujumining g'oyasi, saytni ko'rinmas iframe ustiga qo'yish, va himoya usullari: X-Frame-Options, CSP frame-ancestors, samesite cookie.</p></a>
+    </div>
+    <h3 class="chapter-head">Ikkilik ma'lumot va fayllar</h3>
+    <div class="cards">
+      <a class="card" href="lessons/arraybuffer.html"><div class="num">127</div><h3>ArrayBuffer, TypedArray</h3><p>Ikkilik ma'lumotning asosi: ArrayBuffer xotira bloki, uning ustidagi ko'rinishlar (Uint8Array, Int32Array va boshqalar), indeks bilan ishlash, TypedArray metodlari va DataView.</p></a>
+      <a class="card" href="lessons/textdecoder.html"><div class="num">128</div><h3>TextDecoder va TextEncoder</h3><p>Ikkilik ma'lumotni matnga aylantirish: TextDecoder baytlarni satrga o'giradi, TextEncoder esa satrni baytlarga. UTF-8 kodlash bilan amaliy ishlash.</p></a>
+      <a class="card" href="lessons/blob.html"><div class="num">129</div><h3>Blob</h3><p>Blob obyekti — ikkilik katta obyektlar bilan ishlash: konstruktor, type (MIME turi), slice bilan bo'laklash, URL.createObjectURL orqali havola yaratish, fayl yuklab olish va rasmga aylantirish.</p></a>
+      <a class="card" href="lessons/file-filereader.html"><div class="num">130</div><h3>File va FileReader</h3><p>Foydalanuvchi tanlagan fayllar bilan ishlash: File obyekti (input.files), FileReader bilan faylni o'qish (readAsText, readAsDataURL, readAsArrayBuffer) va yuklash jarayonini kuzatish.</p></a>
+    </div>
+    <h3 class="chapter-head">Tarmoq so'rovlari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/fetch.html"><div class="num">131</div><h3>Fetch</h3><p>Zamonaviy fetch() metodi bilan serverga so'rov yuborish: response.status/ok, javobni o'qish (json/text), async/await va xatoliklarni boshqarish.</p></a>
+      <a class="card" href="lessons/fetch-json.html"><div class="num">132</div><h3>Fetch: so'rovlar va JSON</h3><p>POST so'rov yuborish: method, headers, body parametrlari; JSON.stringify bilan ma'lumot yuborish; Content-Type sarlavhasining ahamiyati.</p></a>
+      <a class="card" href="lessons/formdata.html"><div class="num">133</div><h3>FormData</h3><p>FormData obyekti bilan forma ma'lumotlarini yuborish: HTML formadan yaratish, append/set/delete metodlari, fayl yuklash va fetch bilan jo'natish.</p></a>
+      <a class="card" href="lessons/fetch-progress.html"><div class="num">134</div><h3>Fetch: yuklanish jarayoni</h3><p>Katta javoblarni yuklashda jarayonni (progress) kuzatish: response.body va ReadableStream, getReader(), Content-Length va foizni hisoblash.</p></a>
+      <a class="card" href="lessons/xhr.html"><div class="num">135</div><h3>XMLHttpRequest</h3><p>Tarmoq so'rovlarining eski usuli: open/send, onload/onerror/onprogress hodisalari, sinxron va asinxron rejimlar, fetch bilan solishtirish.</p></a>
+      <a class="card" href="lessons/websocket.html"><div class="num">136</div><h3>WebSocket</h3><p>Server bilan real vaqtda ikki tomonlama aloqa: new WebSocket, open/message/close/error hodisalari, send, qayta ulanish va fetch bilan farqi.</p></a>
+    </div>
+    <h3 class="chapter-head">Brauzerda ma'lumot saqlash</h3>
+    <div class="cards">
+      <a class="card" href="lessons/cookie.html"><div class="num">137</div><h3>Cookie</h3><p>document.cookie orqali cookie'larni o'qish va yozish, path/domain/expires/max-age, secure va samesite bayroqlari, httpOnly, cheklovlar va yordamchi funksiyalar.</p></a>
+      <a class="card" href="lessons/localstorage.html"><div class="num">138</div><h3>localStorage va sessionStorage</h3><p>Web Storage: setItem/getItem/removeItem/clear metodlari, kalitlar bo'yicha aylanish, obyektlarni JSON orqali saqlash, storage hodisasi va ikkalasining farqi.</p></a>
+      <a class="card" href="lessons/indexeddb.html"><div class="num">139</div><h3>IndexedDB</h3><p>Brauzerdagi kuchli ma'lumotlar bazasi: obyekt ombori, versiyalar, transaksiyalar, qo'shish/o'qish, indekslar, promise o'ramchisi va uni qachon ishlatish.</p></a>
+    </div>
+    <h3 class="chapter-head">Muntazam ifodalar (RegExp)</h3>
+    <div class="cards">
+      <a class="card" href="lessons/regexp-kirish.html"><div class="num">140</div><h3>Muntazam ifodalar: kirish</h3><p>Muntazam ifoda (RegExp) nima, /pattern/flags sintaksisi, g/i/m/s/u/y flaglari, str.match, str.replace, str.search, regexp.test metodlari va regexp yaratishning ikki usuli.</p></a>
+      <a class="card" href="lessons/regexp-belgilar.html"><div class="num">141</div><h3>Belgilar sinflari</h3><p>Belgi sinflari \d \D \s \S \w \W, ularning teskarilari, nuqta (.) va s flagi, unicode haqida qisqacha hamda telefon raqamini ajratish kabi amaliy misollar.</p></a>
+      <a class="card" href="lessons/regexp-anchor.html"><div class="num">142</div><h3>Langarlar: ^ va $, ko'p qatorli rejim</h3><p>Boshlanish langari ^, tugash langari $, to'liq moslikni tekshirish, ko'p qatorli m rejimi va so'z chegarasi \b.</p></a>
+      <a class="card" href="lessons/regexp-quantifiers.html"><div class="num">143</div><h3>Kvantorlar: +, *, ?, {n,m}</h3><p>Miqdor belgilari bilan belgilar nechta marta takrorlanishini boshqarish; ochko'z (greedy) va dangasa (lazy) rejimlar; raqam va HTML teglarni ajratish misollari.</p></a>
+      <a class="card" href="lessons/regexp-groups.html"><div class="num">144</div><h3>Guruhlash va tutish</h3><p>Qavslar bilan qismlarni guruhlash; guruh natijalari (match) va nomli guruhlar (?&lt;name&gt;); replace da $1 va $&lt;name&gt;; tutmaydigan guruh (?:...).</p></a>
+      <a class="card" href="lessons/regexp-alternation.html"><div class="num">145</div><h3>Alternatsiya (yoki) |</h3><p>Vertikal chiziq | bilan bir necha variantdan birini tanlash; qavs bilan chegaralash; sana va vaqt misollari; tez-tez uchraydigan tuzoqlar.</p></a>
+      <a class="card" href="lessons/regexp-lookahead.html"><div class="num">146</div><h3>Lookahead va lookbehind</h3><p>Oldinga qarash x(?=y), x(?!y) va orqaga qarash (?&lt;=y)x, (?&lt;!y)x; narxni ajratish misoli; bu vositalar qachon kerak bo'ladi.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="4-qism-amaliy-vositalar">
+  <summary><span class="pb-ico">🛠️</span><span class="pb-name">4-qism: Amaliy vositalar</span><span class="pb-count">25 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Git va GitHub</h3>
+    <div class="cards">
+      <a class="card" href="lessons/git-github-nima.html"><div class="num">147</div><h3>Git va GitHub nima?</h3><p>Versiya nazorati (version control) nima va nega kerak; Git — mahalliy VCS; GitHub — bulutli platforma; ularning farqi; repozitoriy, commit va branch tushunchalari; muqobil xizmatlar (GitLab, Bitbucket).</p></a>
+      <a class="card" href="lessons/git-ornatish.html"><div class="num">148</div><h3>Git o'rnatish va sozlash</h3><p>Git'ni Windows, macOS va Linux'ga o'rnatish; git --version orqali tekshirish; birinchi sozlash — git config bilan ism va elektron pochta; SSH kalit yaratish (ssh-keygen) va GitHub'ga qo'shish; git config --list.</p></a>
+      <a class="card" href="lessons/git-asoslar.html"><div class="num">149</div><h3>Git asosiy buyruqlari</h3><p>git init bilan repozitoriy yaratish; git status; git add (fayl va nuqta); git commit -m; git log va --oneline; ishchi katalog, staging va repozitoriy tushunchalari; faylni o'zgartirish oqimi; git diff bilan farqlarni ko'rish.</p></a>
+      <a class="card" href="lessons/git-branch-merge.html"><div class="num">150</div><h3>Branch va birlashtirish (merge)</h3><p>Branch (shox) nima va nega kerak, git branch, git checkout, zamonaviy git switch, git checkout -b bilan yangi branch yaratish, branch'larni git merge bilan birlashtirish, merge konflikti va uni hal qilish, keraksiz branch'ni git branch -d bilan o'chirish.</p></a>
+      <a class="card" href="lessons/github-remote.html"><div class="num">151</div><h3>GitHub bilan ishlash: clone, push, pull</h3><p>Remote (masofaviy ombor) tushunchasi, git remote add origin, mavjud omborni git clone bilan nusxalash, git push -u origin main bilan kodni yuborish, git pull bilan yangilanishlarni olish, git fetch va git pull farqi, mahalliy va masofaviy omborlarni sinxronlash.</p></a>
+      <a class="card" href="lessons/github-jamoa.html"><div class="num">152</div><h3>Jamoa bilan ishlash: fork va Pull Request</h3><p>Fork (o'zingizga nusxa ochish) tushunchasi, Pull Request (PR) nima va uning to'liq jarayoni, issue (muammo) yaratish, kod ko'rib chiqish (code review), branch'da ishlab PR ochish oqimi, upstream bilan sinxronlash.</p></a>
+      <a class="card" href="lessons/git-foydali.html"><div class="num">153</div><h3>Foydali vositalar: .gitignore, undo, stash</h3><p>.gitignore fayli va namunasi, allaqachon kuzatilayotgan faylni git rm --cached bilan chiqarish, o'zgarishni bekor qilish (git restore, git reset, git revert farqi), git stash bilan ishni vaqtincha yashirish, git tag qisqacha, yaxshi commit xabari yozish qoidalari.</p></a>
+    </div>
+    <h3 class="chapter-head">Docker</h3>
+    <div class="cards">
+      <a class="card" href="lessons/docker-nima.html"><div class="num">154</div><h3>Docker nima? Konteynerlar</h3><p>Docker qanday muammoni hal qiladi, konteyner nima, virtual mashina bilan farqi, image va container tushunchalari, Docker Hub va nega Docker foydali.</p></a>
+      <a class="card" href="lessons/docker-ornatish.html"><div class="num">155</div><h3>Docker o'rnatish va birinchi konteyner</h3><p>Docker'ni o'rnatish (Desktop va Linux engine), versiyani tekshirish, hello-world, nginx va ubuntu bilan birinchi konteynerlar hamda -d, -p, --name bayroqlari.</p></a>
+      <a class="card" href="lessons/docker-buyruqlar.html"><div class="num">156</div><h3>Asosiy Docker buyruqlari</h3><p>Kundalik ishda kerak bo'ladigan buyruqlar: ps, images, pull, run bayroqlari (-d -p -e -v --name), stop/start/rm, rmi, exec -it va logs.</p></a>
+      <a class="card" href="lessons/dockerfile.html"><div class="num">157</div><h3>Dockerfile va o'z image'ingizni yaratish</h3><p>Dockerfile nima, asosiy ko'rsatmalar (FROM, WORKDIR, COPY, RUN, EXPOSE, CMD, ENV), docker build, qatlamlar va kesh, .dockerignore hamda Node.js ilova uchun namuna.</p></a>
+      <a class="card" href="lessons/docker-compose.html"><div class="num">158</div><h3>Docker Compose</h3><p>Bir nechta konteynerni birga boshqarish, docker-compose.yml tuzilishi (services, ports, volumes, environment, depends_on), compose up/down va Node + Postgres namunasi.</p></a>
+      <a class="card" href="lessons/docker-volume-network.html"><div class="num">159</div><h3>Volume va tarmoq (network)</h3><p>Konteyner ma'lumoti yo'qolishi muammosi, volume va bind mount, docker volume buyruqlari, konteynerlararo tarmoq va xizmat nomi orqali ulanish.</p></a>
+    </div>
+    <h3 class="chapter-head">Nginx</h3>
+    <div class="cards">
+      <a class="card" href="lessons/nginx-nima.html"><div class="num">160</div><h3>Nginx nima?</h3><p>Veb-server tushunchasi, Nginx tarixi va mashhurligi, uning asosiy vazifalari (statik fayl, reverse proxy, load balancer, SSL termination) va Apache bilan qisqa taqqoslash.</p></a>
+      <a class="card" href="lessons/nginx-ornatish.html"><div class="num">161</div><h3>Nginx o'rnatish va boshqarish</h3><p>Nginx'ni apt/yum orqali o'rnatish, systemctl bilan boshqarish (start/stop/restart/status), config testi (nginx -t), qayta yuklash (reload), fayl/papka joylashuvi va loglar.</p></a>
+      <a class="card" href="lessons/nginx-config.html"><div class="num">162</div><h3>Konfiguratsiya asoslari</h3><p>nginx.conf tuzilishi, kontekstlar (main, events, http, server, location), direktiva sintaksisi, server bloki (listen, server_name, root, index) va location bloki asoslari.</p></a>
+      <a class="card" href="lessons/nginx-static.html"><div class="num">163</div><h3>Statik saytga xizmat ko'rsatish</h3><p>Statik HTML/CSS/JS saytni Nginx orqali chiqarish: root va index, location bilan yo'llar, try_files, 404 sahifasi, gzip yoqish va kesh sarlavhalari. To'liq server bloki namunasi.</p></a>
+      <a class="card" href="lessons/nginx-reverse-proxy.html"><div class="num">164</div><h3>Reverse proxy va load balancing</h3><p>Reverse proxy tushunchasi, proxy_pass bilan Node.js ilovaga so'rov uzatish, proxy_set_header (Host, X-Real-IP), upstream bloki bilan load balancing va usullar (round-robin, least_conn).</p></a>
+      <a class="card" href="lessons/nginx-ssl.html"><div class="num">165</div><h3>SSL/HTTPS sozlash</h3><p>Nega HTTPS kerak, Let's Encrypt / certbot bilan bepul sertifikat, listen 443 ssl, ssl_certificate direktivalari, HTTP dan HTTPS ga yo'naltirish (return 301) va certbot --nginx.</p></a>
+    </div>
+    <h3 class="chapter-head">Linux va terminal</h3>
+    <div class="cards">
+      <a class="card" href="lessons/linux-nima.html"><div class="num">166</div><h3>Linux va terminal nima?</h3><p>Operatsion tizim nima, Linux va uning distributivlari (Ubuntu, Debian, Fedora), shell va bash, terminal, GUI va CLI o'rtasidagi farq hamda nega dasturchiga terminal shart.</p></a>
+      <a class="card" href="lessons/fayl-tizimi.html"><div class="num">167</div><h3>Fayl tizimi va navigatsiya</h3><p>Linux fayl tizimi tuzilishi (/, /home, /etc), pwd, ls flaglari bilan, cd, mkdir, rmdir; mutlaq va nisbiy yo'llar; ~, . va .. belgilari.</p></a>
+      <a class="card" href="lessons/fayl-buyruqlar.html"><div class="num">168</div><h3>Fayllar bilan ishlash</h3><p>touch, cp, mv, rm (ehtiyotkorlik bilan), cat, less, head, tail, nano/vim, find, grep, wc va oqimlarni yo'naltirish (&gt;, &gt;&gt;, |).</p></a>
+      <a class="card" href="lessons/huquqlar.html"><div class="num">169</div><h3>Ruxsatlar va egalik</h3><p>rwx ruxsatlar, chmod (raqamli va belgili), chown, foydalanuvchi va guruh tushunchasi, sudo va root, su buyrug'i.</p></a>
+      <a class="card" href="lessons/jarayon-tarmoq.html"><div class="num">170</div><h3>Jarayonlar va tarmoq</h3><p>ps, top/htop, kill, fon rejimi (&amp;), jobs, systemctl; tarmoq buyruqlari ping, curl, wget; paket menejeri apt (install/update).</p></a>
+      <a class="card" href="lessons/bash-skript.html"><div class="num">171</div><h3>Bash skript asoslari</h3><p>Shebang (#!/bin/bash), chmod +x bilan ishga tushirish, o'zgaruvchilar, echo va read, if/else shartlari, for/while sikllari, funksiyalar va to'liq skript misoli.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="5-qism-backend-dasturlash">
+  <summary><span class="pb-ico">⚙️</span><span class="pb-name">5-qism: Backend dasturlash</span><span class="pb-count">22 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Node.js va Express</h3>
+    <div class="cards">
+      <a class="card" href="lessons/nodejs-nima.html"><div class="num">172</div><h3>Node.js nima?</h3><p>Server tomonda JavaScript, V8 dvigateli, bir oqimli event loop, bloklamaydigan I/O, Node.js qachon ishlatiladi, o'rnatish va birinchi skript.</p></a>
+      <a class="card" href="lessons/node-modullar.html"><div class="num">173</div><h3>Modullar va npm</h3><p>CommonJS (require/module.exports) va ESM (import/export), o'rnatilgan modullar, npm nima, npm init, package.json, npm install, node_modules, dependencies va npx.</p></a>
+      <a class="card" href="lessons/node-fs-http.html"><div class="num">174</div><h3>Fayl tizimi va HTTP server</h3><p>fs moduli (readFile/writeFile, sync va async), path moduli, http moduli bilan oddiy server yaratish, req va res obyektlari, portni tinglash.</p></a>
+      <a class="card" href="lessons/express-kirish.html"><div class="num">175</div><h3>Express asoslari</h3><p>Nega Express, o'rnatish, birinchi ilova (app va app.listen), route (app.get), req va res obyektlari, res.send va res.json.</p></a>
+      <a class="card" href="lessons/express-rest.html"><div class="num">176</div><h3>REST API yaratish</h3><p>REST tamoyillari, GET/POST/PUT/DELETE, route parametrlari (:id), query, JSON tanasi, status kodlar va massivda oddiy CRUD API misoli.</p></a>
+      <a class="card" href="lessons/express-middleware.html"><div class="num">177</div><h3>Middleware va xatoliklar</h3><p>Middleware nima, zanjir, next(), express.json(), express.static(), maxsus logger middleware, xatolarni boshqarish middleware va 404.</p></a>
+    </div>
+    <h3 class="chapter-head">Ma'lumotlar bazalari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/db-nima.html"><div class="num">178</div><h3>Ma'lumotlar bazasi nima?</h3><p>Ma'lumotlar bazasi nima uchun kerak, DBMS (ma'lumotlar bazasini boshqarish tizimi) nima, relatsion (SQL) va NoSQL bazalar farqi, jadval/qator/ustun tushunchalari, mashhur bazalar (PostgreSQL, MySQL, MongoDB) va qachon qaysi birini tanlash.</p></a>
+      <a class="card" href="lessons/sql-asoslar.html"><div class="num">179</div><h3>SQL asoslari</h3><p>SQL tilining asosiy buyruqlari: CREATE TABLE (ma'lumot turlari INT, VARCHAR va boshqalar), INSERT INTO, SELECT, WHERE (shartlar, AND/OR, LIKE), UPDATE, DELETE, ORDER BY va LIMIT. Real misollar bilan.</p></a>
+      <a class="card" href="lessons/sql-join.html"><div class="num">180</div><h3>SQL: bog'lanishlar va JOIN</h3><p>Jadvallarni bog'lash: PRIMARY KEY va FOREIGN KEY, munosabatlar (1:N), JOIN turlari (INNER, LEFT, RIGHT), GROUP BY va agregat funksiyalar (COUNT, SUM, AVG), HAVING orqali guruhlarni filtrlash.</p></a>
+      <a class="card" href="lessons/mongodb.html"><div class="num">181</div><h3>MongoDB (NoSQL)</h3><p>MongoDB asoslari: kolleksiya va hujjat (JSON-simon), insertOne/insertMany, find/findOne (filtrlar), updateOne ($set), deleteOne, so'rov operatorlari ($gt, $in, $lt), va SQL bilan bosqichma-bosqich taqqoslash.</p></a>
+      <a class="card" href="lessons/node-db.html"><div class="num">182</div><h3>Node.js bilan bazaga ulanish</h3><p>Node.js'dan PostgreSQL'ga pg kutubxonasi orqali ulanish, so'rov yuborish, parametrlangan so'rovlar bilan SQL injection'dan himoyalanish, async/await bilan to'liq CRUD misoli, connection pool va MongoDB uchun mongoose'ga qisqacha nazar.</p></a>
+    </div>
+    <h3 class="chapter-head">Web xavfsizligi va autentifikatsiya</h3>
+    <div class="cards">
+      <a class="card" href="lessons/web-xavfsizlik.html"><div class="num">183</div><h3>Web xavfsizligi asoslari</h3><p>Nega xavfsizlik muhim, CIA triadasi, "foydalanuvchiga hech qachon ishonma" tamoyili, HTTPS va OWASP asosidagi umumiy tahdidlar ro'yxati.</p></a>
+      <a class="card" href="lessons/auth-asoslar.html"><div class="num">184</div><h3>Autentifikatsiya va avtorizatsiya</h3><p>Autentifikatsiya va avtorizatsiya farqi, parolni hech qachon ochiq saqlamaslik, bcrypt bilan hashlash va salt, sessiya (cookie) va token yondashuvlari, xavfsiz cookie.</p></a>
+      <a class="card" href="lessons/jwt.html"><div class="num">185</div><h3>JWT (JSON Web Token)</h3><p>JWT tuzilishi (header.payload.signature), imzolash va tekshirish, Express'da login → token → himoyalangan route middleware, token muddati, afzallik va kamchiliklari.</p></a>
+      <a class="card" href="lessons/xss-csrf.html"><div class="num">186</div><h3>XSS va CSRF</h3><p>XSS nima va undan himoya (kirishni eskeyplash, CSP, textContent va innerHTML), CSRF nima va undan himoya (CSRF token, SameSite cookie). Himoya kodlari bilan.</p></a>
+      <a class="card" href="lessons/sql-injection.html"><div class="num">187</div><h3>SQL injection va boshqa himoyalar</h3><p>SQL injection qanday yuzaga keladi va undan himoya (parametrlangan so'rovlar, ORM), hamda boshqa muhim amaliyotlar: validatsiya, eng kam imtiyoz, sirlarni .env, rate limiting, xatolarni yashirish.</p></a>
+    </div>
+    <h3 class="chapter-head">NestJS</h3>
+    <div class="cards">
+      <a class="card" href="lessons/nestjs-nima.html"><div class="num">188</div><h3>NestJS nima?</h3><p>TypeScript uchun yaratilgan zamonaviy backend framework: Express ustida ishlaydigan, modulli va Angular'dan ilhomlangan arxitektura, nega u kerak va uni qanday o'rnatish mumkin.</p></a>
+      <a class="card" href="lessons/nestjs-struktura.html"><div class="num">189</div><h3>Loyiha tuzilishi: Module, Controller, Service</h3><p>NestJS'ning uch asosiy qurilish bloki: @Module modullarni tashkil qiladi, @Controller so'rovlarni qabul qiladi, @Injectable service biznes-logikani saqlaydi. Nest CLI bilan ularni generatsiya qilish.</p></a>
+      <a class="card" href="lessons/nestjs-routing.html"><div class="num">190</div><h3>Routing va DTO</h3><p>HTTP metod dekoratorlari (@Get, @Post, @Put, @Delete), parametrlarni olish (@Param, @Query, @Body), DTO klasslari orqali ma'lumot shakli, class-validator va ValidationPipe bilan avtomatik validatsiya.</p></a>
+      <a class="card" href="lessons/nestjs-di.html"><div class="num">191</div><h3>Provider va Dependency Injection</h3><p>Dependency Injection nima va u NestJS'da qanday ishlaydi, provayderlar, konstruktor injektsiyasi, IoC konteyner, modullararo import/export orqali service'larni ulashish.</p></a>
+      <a class="card" href="lessons/nestjs-database.html"><div class="num">192</div><h3>Ma'lumotlar bazasi (TypeORM)</h3><p>NestJS'da ma'lumotlar bazasi bilan ishlash: TypeORM integratsiyasi, @Entity bilan jadval e'loni, Repository shabloni, to'liq CRUD service misoli va Prisma bilan qisqacha taqqoslash.</p></a>
+      <a class="card" href="lessons/nestjs-guard.html"><div class="num">193</div><h3>Middleware, Guard, Interceptor, Exception filter</h3><p>NestJS so'rovni qayta ishlash quvuri: Middleware, autentifikatsiya uchun Guard (@UseGuards), ma'lumotni o'zgartiruvchi Pipe, javobni boyituvchi Interceptor va xatolarni tutuvchi Exception filter.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="6-qism-frontend-asoslari">
+  <summary><span class="pb-ico">🎨</span><span class="pb-name">6-qism: Frontend asoslari</span><span class="pb-count">21 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">HTML</h3>
+    <div class="cards">
+      <a class="card" href="lessons/html-nima.html"><div class="num">194</div><h3>HTML nima?</h3><p>HTML — veb-sahifalarni belgilash tili. Teg, element va atribut tushunchalari, HTML hujjatining skeleti (DOCTYPE, html, head, body), title va meta teglari, hamda birinchi sahifani yozish.</p></a>
+      <a class="card" href="lessons/html-teglar.html"><div class="num">195</div><h3>Asosiy teglar</h3><p>Eng ko'p ishlatiladigan HTML teglari: sarlavhalar (h1-h6), paragraflar, qalin va kursiv matn (strong/em), ro'yxatlar (ul/ol/li), havolalar (a), rasmlar (img), div va span konteynerlari, hamda br va hr.</p></a>
+      <a class="card" href="lessons/html-form.html"><div class="num">196</div><h3>Formalar</h3><p>Foydalanuvchidan ma'lumot yig'ish uchun formalar: form tegi (action, method), input turlari (text, password, email, checkbox, radio, number, date), label, select/option, textarea, tugmalar hamda required va boshqa validatsiya atributlari.</p></a>
+      <a class="card" href="lessons/html-semantik.html"><div class="num">197</div><h3>Semantik HTML</h3><p>Nega semantik teglar muhim; sahifa tuzilishi teglari (header, nav, main, section, article, aside, footer); foydalanish qulayligi (a11y) asoslari; SEO uchun foydasi va "div sho'rvasi"dan qochish.</p></a>
+    </div>
+    <h3 class="chapter-head">CSS</h3>
+    <div class="cards">
+      <a class="card" href="lessons/css-nima.html"><div class="num">198</div><h3>CSS nima?</h3><p>CSS — veb-sahifalarni bezash tili. Sintaksis (selektor { xossa: qiymat; }), CSS'ni HTML'ga ulash usullari (inline, internal, external), asosiy selektorlar (element, class, id), ularni kombinatsiyalash va spetsifiklik tushunchasi.</p></a>
+      <a class="card" href="lessons/css-box.html"><div class="num">199</div><h3>Box model</h3><p>CSS'da har bir element to'rtburchak qutidir. Content, padding, border va margin qatlamlari; width/height; box-sizing: border-box; display xossasi (block, inline, inline-block, none) va overflow.</p></a>
+      <a class="card" href="lessons/css-flexbox.html"><div class="num">200</div><h3>Flexbox</h3><p>display: flex bilan elementlarni bir o'lchamli joylashtirish. Asosiy va ko'ndalang o'q, justify-content, align-items, flex-direction, flex-wrap, gap; flex-grow/shrink/basis va amaliy joylashuvlar.</p></a>
+      <a class="card" href="lessons/css-grid.html"><div class="num">201</div><h3>CSS Grid</h3><p>display: grid bilan ikki o'lchamli joylashuv. grid-template-columns/rows (fr, repeat, minmax), gap, elementlarni joylashtirish (grid-column/row), Flexbox bilan farqi va qachon qaysi birini tanlash.</p></a>
+      <a class="card" href="lessons/css-responsive.html"><div class="num">202</div><h3>Responsive dizayn</h3><p>Sayt barcha ekran o'lchamlariga moslashishi. Birliklar (px, %, em, rem, vw/vh), media query (@media), mobile-first yondashuv, moslashuvchan rasm va matn, breakpointlar.</p></a>
+      <a class="card" href="lessons/css-styling.html"><div class="num">203</div><h3>Ranglar, shrift va bezaklar</h3><p>color/background va rang formatlari (hex, rgb, hsl); shrift (font-family, size, weight, line-height); matn bezaklari (text-align, text-decoration); border-radius, box-shadow va transition asoslari.</p></a>
+    </div>
+    <h3 class="chapter-head">TypeScript</h3>
+    <div class="cards">
+      <a class="card" href="lessons/ts-nima.html"><div class="num">204</div><h3>TypeScript nima?</h3><p>TypeScript — JavaScript ustiga turlarni qo'shadigan til; nega kerak, o'rnatish, tsc bilan kompilyatsiya va .ts fayllari.</p></a>
+      <a class="card" href="lessons/ts-turlar.html"><div class="num">205</div><h3>Asosiy turlar</h3><p>Tur izohlari, string/number/boolean, massiv va tuple, any va unknown, void, null/undefined, tur xulosasi va literal turlar.</p></a>
+      <a class="card" href="lessons/ts-interface.html"><div class="num">206</div><h3>Interfeys va tip aliaslari</h3><p>interface bilan obyekt shaklini tavsiflash, type alias, ixtiyoriy va readonly xossalar, union va intersection, interface vs type.</p></a>
+      <a class="card" href="lessons/ts-funksiya.html"><div class="num">207</div><h3>Funksiyalar va generiklar</h3><p>Parametr va qaytish turlari, ixtiyoriy va standart parametrlar, generiklar, generic interfeys va klass, cheklovlar (extends).</p></a>
+      <a class="card" href="lessons/ts-class.html"><div class="num">208</div><h3>Klasslar va konfiguratsiya</h3><p>TS klasslari, kirish modifikatorlari (public/private/protected/readonly), implements, enum va tsconfig.json asoslari.</p></a>
+    </div>
+    <h3 class="chapter-head">React</h3>
+    <div class="cards">
+      <a class="card" href="lessons/react-nima.html"><div class="num">209</div><h3>React nima?</h3><p>React — foydalanuvchi interfeysi uchun kutubxona; komponentga asoslangan, deklarativ yondashuv, virtual DOM, SPA tushunchasi va Vite bilan o'rnatish.</p></a>
+      <a class="card" href="lessons/react-jsx.html"><div class="num">210</div><h3>JSX va komponentlar</h3><p>JSX sintaksisi, funksional komponent yozish, komponentni createRoot bilan render qilish, bir root element qoidasi, className va {ifoda} joylashtirish.</p></a>
+      <a class="card" href="lessons/react-props.html"><div class="num">211</div><h3>Props</h3><p>Komponentga ma'lumot uzatish, props obyekti, destructuring, children propi va propslarning faqat o'qish uchun (immutable) ekanligi.</p></a>
+      <a class="card" href="lessons/react-state.html"><div class="num">212</div><h3>State va useState</h3><p>Holat (state) tushunchasi, useState hook, holatni yangilash, onClick bilan hodisalarni qayta ishlash, re-render va hisoblagich misoli.</p></a>
+      <a class="card" href="lessons/react-effect.html"><div class="num">213</div><h3>useEffect va yon effektlar</h3><p>useEffect hook, dependency array, fetch bilan ma'lumot yuklash, cleanup funksiya va effekt qachon ishga tushishi.</p></a>
+      <a class="card" href="lessons/react-list-form.html"><div class="num">214</div><h3>Ro'yxatlar va formalar</h3><p>Massivni map bilan render qilish, key propi, shartli render (&amp;&amp; va ternar), controlled input (value + onChange) va oddiy TODO ilovasi.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="7-qism-testlash-va-yetkazib-berish">
+  <summary><span class="pb-ico">🚀</span><span class="pb-name">7-qism: Testlash va yetkazib berish</span><span class="pb-count">12 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Testlash (Jest)</h3>
+    <div class="cards">
+      <a class="card" href="lessons/testlash-nima.html"><div class="num">215</div><h3>Nega test yozamiz?</h3><p>Qo'lda testning muammolari, avtomatik testning foydasi, test turlari, test piramidasi, TDD va mashhur vositalar.</p></a>
+      <a class="card" href="lessons/jest-boshlash.html"><div class="num">216</div><h3>Jest asoslari</h3><p>Jest o'rnatish, test fayllar, test()/it(), expect va matcherlar, describe bloki, npm test bilan ishga tushirish.</p></a>
+      <a class="card" href="lessons/jest-async-mock.html"><div class="num">217</div><h3>Async testlar va mock</h3><p>async/await testlari, resolves/rejects, jest.fn mock funksiyalar, jest.mock bilan modul mock qilish, beforeEach/afterEach va spy.</p></a>
+      <a class="card" href="lessons/jest-amaliyot.html"><div class="num">218</div><h3>Coverage va yaxshi amaliyot</h3><p>Kod qamrovi (--coverage), AAA namunasi, nimani test qilish kerak, yaxshi test belgilari va to'liq test misoli.</p></a>
+    </div>
+    <h3 class="chapter-head">CI/CD (GitHub Actions)</h3>
+    <div class="cards">
+      <a class="card" href="lessons/cicd-nima.html"><div class="num">219</div><h3>CI/CD nima?</h3><p>Uzluksiz integratsiya (CI) va uzluksiz yetkazib berish (CD): qo'lda jarayon muammosi, pipeline tushunchasi va vositalar.</p></a>
+      <a class="card" href="lessons/actions-asoslar.html"><div class="num">220</div><h3>GitHub Actions asoslari</h3><p>.github/workflows/ papka, workflow YAML tuzilishi (name, on, jobs, steps), runner va birinchi workflow.</p></a>
+      <a class="card" href="lessons/actions-test.html"><div class="num">221</div><h3>Avtomatik test va build</h3><p>Node o'rnatish, npm ci, npm test, build, matrix (bir nechta Node versiyasi), kesh va status badge.</p></a>
+      <a class="card" href="lessons/actions-deploy.html"><div class="num">222</div><h3>Avtomatik deploy</h3><p>Secrets, ${{ secrets.X }}, environment, shartli ishga tushirish, deploy qadami (GitHub Pages / SSH) va CI+CD birga.</p></a>
+    </div>
+    <h3 class="chapter-head">Loyihani deploy qilish</h3>
+    <div class="cards">
+      <a class="card" href="lessons/deploy-nima.html"><div class="num">223</div><h3>Deploy nima?</h3><p>Ishlab chiqarish (production) muhiti, lokalxost va server farqi, server turlari (VPS va PaaS/bulut), domen va DNS haqida umumiy tushuncha hamda deploy jarayonining bosqichlari.</p></a>
+      <a class="card" href="lessons/deploy-vps.html"><div class="num">224</div><h3>VPS serverga deploy qilish</h3><p>VPS olish (DigitalOcean/Hetzner), SSH bilan ulanish, Node.js o'rnatish, kodni git clone qilish, muhit o'zgaruvchilari (.env), PM2 bilan doimiy ishga tushirish va Nginx reverse proxy sozlash.</p></a>
+      <a class="card" href="lessons/deploy-frontend.html"><div class="num">225</div><h3>Frontend/statik saytni deploy qilish</h3><p>Build jarayoni (npm run build), statik hosting platformalari (Netlify, Vercel, GitHub Pages), SPA marshrutlash (routing) sozlamalari va frontend uchun muhit o'zgaruvchilari.</p></a>
+      <a class="card" href="lessons/deploy-domain-ssl.html"><div class="num">226</div><h3>Domen ulash va HTTPS</h3><p>Domen sotib olish, DNS yozuvlari (A va CNAME), domenni serverga ulash, Let's Encrypt/certbot bilan bepul SSL sertifikat olish va HTTP dan HTTPS ga avtomatik yo'naltirish.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="8-qism-algoritmlar-va-ma-lumotlar-tuzilmalari">
+  <summary><span class="pb-ico">🧠</span><span class="pb-name">8-qism: Algoritmlar va ma'lumotlar tuzilmalari</span><span class="pb-count">24 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Algoritm asoslari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/algoritm-nima.html"><div class="num">227</div><h3>Algoritm nima va nega o'rganamiz</h3><p>Algoritm tushunchasi, kundalik hayotdan misollar, yaxshi algoritm mezonlari, ma'lumotlar tuzilmasi bilan bog'liqligi va nega intervyularda so'raladi.</p></a>
+      <a class="card" href="lessons/big-o.html"><div class="num">228</div><h3>Big O notatsiyasi: vaqt murakkabligi</h3><p>Algoritm tezligini o'lchash, Big O g'oyasi, o'sish tartibi, eng yomon holat va asosiy murakkabliklar bilan tanishuv.</p></a>
+      <a class="card" href="lessons/big-o-amaliy.html"><div class="num">229</div><h3>Keng tarqalgan murakkabliklar: O(1) dan O(n!) gacha</h3><p>O(1), O(log n), O(n), O(n log n), O(n²), O(2^n), O(n!) - har birini misol va taqqoslash bilan tushunish.</p></a>
+      <a class="card" href="lessons/rekursiya-algoritm.html"><div class="num">230</div><h3>Rekursiya algoritmlar tilida</h3><p>Rekursiv fikrlash, bazaviy holat, rekursiya daraxti, chaqiruvlar steki, murakkablikni hisoblash va rekursiyani siklga aylantirish.</p></a>
+    </div>
+    <h3 class="chapter-head">Massiv va satr algoritmlari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/two-pointers.html"><div class="num">231</div><h3>Ikki ko'rsatkich (Two Pointers) usuli</h3><p>Ikki indeks bilan massivni samarali kezish: qarama-qarshi va bir yo'nalishli ko'rsatkichlar, klassik masalalar va O(n) yechimlar.</p></a>
+      <a class="card" href="lessons/sliding-window.html"><div class="num">232</div><h3>Siljuvchi oyna (Sliding Window)</h3><p>Ketma-ket qism (subarray/substring) masalalarini O(n) da yechish: qat'iy va o'zgaruvchan o'lchamli oyna texnikasi va umumiy shablon.</p></a>
+      <a class="card" href="lessons/prefix-sum.html"><div class="num">233</div><h3>Prefiks yig'indi (Prefix Sum)</h3><p>Oldindan yig'indilarni hisoblab, oraliq (range) so'rovlariga O(1) da javob berish va yig'indili subarraylarni sanash texnikasi.</p></a>
+      <a class="card" href="lessons/string-algoritmlari.html"><div class="num">234</div><h3>Satr (String) masalalari</h3><p>Belgilarni sanash, anagram, palindrom, satr aylantirish, guruhlash va qidirish — intervyularda eng ko'p uchraydigan satr masalalari.</p></a>
+    </div>
+    <h3 class="chapter-head">Chiziqli ma'lumotlar tuzilmalari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/stack.html"><div class="num">235</div><h3>Stek (Stack) — LIFO tuzilma</h3><p>Oxirgi kirgan birinchi chiqadi (LIFO) prinsipi, stekni massiv bilan qurish, amallar murakkabligi va amaliy qo'llanishlar.</p></a>
+      <a class="card" href="lessons/queue.html"><div class="num">236</div><h3>Navbat (Queue) va Deque</h3><p>Birinchi kirgan birinchi chiqadi (FIFO), navbatni qurish, samaradorlik nuqtai nazari va ikki tomonlama navbat (deque).</p></a>
+      <a class="card" href="lessons/linked-list.html"><div class="num">237</div><h3>Bog'langan ro'yxat (Linked List)</h3><p>Tugunlar (node) va havolalar, bir/ikki tomonlama ro'yxat, qo'shish-o'chirish, massivdan farqi va klassik masalalar.</p></a>
+      <a class="card" href="lessons/hash-map.html"><div class="num">238</div><h3>Xesh-jadval (HashMap) — kalit-qiymat sehri</h3><p>O(1) da qidirish, xesh funksiya, kolliziyalar, JS'da obyekt va Map, va HashMap bilan masalalarni tezlashtirish.</p></a>
+    </div>
+    <h3 class="chapter-head">Qidiruv va saralash</h3>
+    <div class="cards">
+      <a class="card" href="lessons/binary-search.html"><div class="num">239</div><h3>Ikkilik qidiruv (Binary Search)</h3><p>Saralangan massivda O(log n) da qidirish, chap/o'ng chegaralar, klassik xatolar va binary search ustidagi variatsiyalar.</p></a>
+      <a class="card" href="lessons/sorting-oddiy.html"><div class="num">240</div><h3>Oddiy saralashlar: Bubble, Selection, Insertion</h3><p>Uch klassik O(n²) saralash algoritmi — ishlash prinsipi, qadamba-qadam kod, taqqoslash va qachon foydali ekani.</p></a>
+      <a class="card" href="lessons/sorting-tez.html"><div class="num">241</div><h3>Tez saralashlar: Merge Sort va Quick Sort</h3><p>O(n log n) saralash — bo'lib tashla va hukmronlik qil, merge/quick sort ishlashi, pivot tanlash va JS'ning sort() metodi.</p></a>
+    </div>
+    <h3 class="chapter-head">Daraxt va graf</h3>
+    <div class="cards">
+      <a class="card" href="lessons/tree-asoslari.html"><div class="num">242</div><h3>Daraxt (Tree) va ikkilik daraxt</h3><p>Iyerarxik tuzilma, ildiz/tugun/barg atamalari, ikkilik daraxt (binary tree), balandlik va daraxtni kod bilan tasvirlash.</p></a>
+      <a class="card" href="lessons/bst.html"><div class="num">243</div><h3>Ikkilik qidiruv daraxti (BST)</h3><p>Tartiblangan ikkilik daraxt: chap &lt; ildiz &lt; o'ng qoidasi, qo'shish, qidirish, o'chirish va O(log n) samaradorlik.</p></a>
+      <a class="card" href="lessons/tree-traversal.html"><div class="num">244</div><h3>Daraxtni aylanib chiqish: DFS va BFS</h3><p>Daraxtning barcha tugunlarini ko'rish: chuqurlikka (inorder, preorder, postorder) va kenglikka (level order) aylanish.</p></a>
+      <a class="card" href="lessons/graph-asoslari.html"><div class="num">245</div><h3>Graf (Graph) asoslari</h3><p>Tugunlar va bog'lanishlar, yo'naltirilgan/yo'naltirilmagan graflar, og'irliklar va grafni kodda tasvirlash usullari.</p></a>
+      <a class="card" href="lessons/graph-traversal.html"><div class="num">246</div><h3>Grafni aylanib chiqish: BFS va DFS</h3><p>Grafda BFS va DFS, tashrif buyurilgan tugunlarni belgilash (visited), eng qisqa yo'l va amaliy masalalar.</p></a>
+    </div>
+    <h3 class="chapter-head">Ilg'or texnikalar</h3>
+    <div class="cards">
+      <a class="card" href="lessons/backtracking.html"><div class="num">247</div><h3>Backtracking (orqaga qaytish)</h3><p>Barcha variantlarni tizimli sinab, boshi berk ko'chadan orqaga qaytish: kombinatsiyalar, o'rin almashtirishlar va klassik masalalar.</p></a>
+      <a class="card" href="lessons/dynamic-programming.html"><div class="num">248</div><h3>Dinamik dasturlash (DP)</h3><p>Takrorlanuvchi qism masalalarni eslab qolish: memoizatsiya va tabulyatsiya, Fibonacci, tanga va bosqichlar masalasi.</p></a>
+      <a class="card" href="lessons/greedy.html"><div class="num">249</div><h3>Ochko'z algoritmlar (Greedy)</h3><p>Har qadamda mahalliy eng yaxshi tanlov: qachon ishlaydi, qachon aldaydi, va klassik ochko'z masalalar.</p></a>
+      <a class="card" href="lessons/intervyu-strategiya.html"><div class="num">250</div><h3>Intervyu masalalarini yechish strategiyasi</h3><p>Algoritm intervyusiga tayyorlanish: masalani tahlil qilish qadamlari, texnika tanlash, murakkablikni baholash va amaliyot yo'l xaritasi.</p></a>
+    </div>
+  </div>
+</details>
+<details class="part-block" id="9-qism-kiberxavfsizlik">
+  <summary><span class="pb-ico">🛡️</span><span class="pb-name">9-qism: Kiberxavfsizlik</span><span class="pb-count">30 dars</span></summary>
+  <div class="part-inner">
+    <h3 class="chapter-head">Kiberxavfsizlik asoslari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/kiberxavfsizlik-nima.html"><div class="num">251</div><h3>Kiberxavfsizlik nima va nega muhim</h3><p>CIA triadasi, asosiy atamalar (zaiflik, tahdid, xavf, hujum yuzasi), chuqurlashtirilgan himoya tamoyili va sohaga qisqacha kirish.</p></a>
+      <a class="card" href="lessons/tahdidlar-turlari.html"><div class="num">252</div><h3>Tahdidlar: malware, phishing, ijtimoiy injeneriya</h3><p>Zararli dastur turlarini tanib olish, phishing hujumlarini fosh qilish, ijtimoiy injeneriyadan himoya, parol menejeri va 2FA foydasi.</p></a>
+      <a class="card" href="lessons/hujum-himoya-jamoalari.html"><div class="num">253</div><h3>Red team, Blue team va hujum hayotiy tsikli</h3><p>Etik hujumchi va himoyachi jamoalari, hujumning umumiy bosqichlari (yuqori darajada), har bosqichdagi himoya, "buzilgan deb faraz qilish" tafakkuri.</p></a>
+      <a class="card" href="lessons/etika-qonun-kasb.html"><div class="num">254</div><h3>Etika, qonun va kiberxavfsizlik kasbi</h3><p>Etik xakerlik va ruxsat tushunchasi, qonuniy tamoyillar, mas'uliyatli oshkor qilish va bug bounty, kasb yo'llari, sertifikatlar va boshlash yo'l xaritasi.</p></a>
+    </div>
+    <h3 class="chapter-head">Kriptografiya asoslari</h3>
+    <div class="cards">
+      <a class="card" href="lessons/shifrlash-asoslari.html"><div class="num">255</div><h3>Shifrlash: simmetrik va asimmetrik</h3><p>Shifrlash nima, plaintext va ciphertext, kalit tushunchasi; simmetrik (AES) va asimmetrik (RSA) shifrlash farqi; Caesar va XOR shifrlari faqat tushunish uchun; gibrid yondashuv va kalitlarni himoyalash.</p></a>
+      <a class="card" href="lessons/hashing-parol.html"><div class="num">256</div><h3>Hashing va parollarni xavfsiz saqlash</h3><p>Hash funksiyasi nima (bir tomonlama, deterministik, avalanche), shifrlashdan farqi; parolni ochiq saqlash falokati; nega oddiy hash yetarli emas; salt, sekin hash (bcrypt, argon2, scrypt); register va login oqimi.</p></a>
+      <a class="card" href="lessons/tls-https-qanday.html"><div class="num">257</div><h3>TLS/HTTPS qanday ishlaydi</h3><p>HTTP va HTTPS farqi, nega HTTPS shart (MITM hujumi); TLS handshake yuqori darajada; sertifikat va sertifikat markazi (CA), ishonch zanjiri; HTTPS ni buzadigan xatolar; Let's Encrypt bilan bepul sertifikat.</p></a>
+      <a class="card" href="lessons/raqamli-imzo.html"><div class="num">258</div><h3>Raqamli imzo va butunlik</h3><p>Ma'lumot butunligi muammosi; hash bilan butunlikni tekshirish (checksum); raqamli imzo (maxfiy kalit bilan imzolash, ochiq kalit bilan tekshirish); autentifikatsiya, butunlik, rad eta olmaslik; dastur imzolash, JWT, sertifikatlar.</p></a>
+      <a class="card" href="lessons/ikki-faktor-mfa.html"><div class="num">259</div><h3>2FA, MFA va zamonaviy autentifikatsiya</h3><p>Nega parol yetarli emas; autentifikatsiya omillari (bilaman/bor/o'zimman); 2FA va MFA turlari (SMS, TOTP, apparat kalit/FIDO2, biometrika); TOTP qanday ishlaydi; passkey va parolsiz kelajak.</p></a>
+    </div>
+    <h3 class="chapter-head">Web ilova xavfsizligi (OWASP Top 10)</h3>
+    <div class="cards">
+      <a class="card" href="lessons/owasp-top10-kirish.html"><div class="num">260</div><h3>OWASP Top 10 bilan tanishuv</h3><p>OWASP nima, Top 10 nima uchun sanoat standarti, 2021 ro'yxatining sharhi, "shift left", tahdid modellashtirish va himoyachi fikrlash tarzi.</p></a>
+      <a class="card" href="lessons/broken-access-control.html"><div class="num">261</div><h3>Buzilgan kirish nazorati va IDOR</h3><p>Autentifikatsiya va avtorizatsiya farqi, Broken Access Control (2021 #1), IDOR konsepti, zaif va xavfsiz kod, eng kam imtiyoz va himoya cheklisti.</p></a>
+      <a class="card" href="lessons/injection-himoya.html"><div class="num">262</div><h3>Injection: SQL va buyruq inyeksiyasi</h3><p>Injection g'oyasi, SQL injection va parametrlangan so'rovlar, buyruq inyeksiyasi himoyasi, NoSQL eslatma va umumiy himoya tamoyillari.</p></a>
+      <a class="card" href="lessons/xss-chuqur.html"><div class="num">263</div><h3>XSS (Cross-Site Scripting) chuqur</h3><p>XSS nima, reflected/stored/DOM-based turlari, xavfliligi, escaping, textContent vs innerHTML, CSP, sanitizatsiya va HttpOnly cookie.</p></a>
+      <a class="card" href="lessons/csrf-ssrf.html"><div class="num">264</div><h3>CSRF va SSRF</h3><p>CSRF konsepti va himoyasi (token, SameSite, qayta tasdiq), SSRF konsepti va himoyasi (allowlist, ichki manzil bloklash), ikkalasining farqi.</p></a>
+      <a class="card" href="lessons/xavfsizlik-nosozliklari.html"><div class="num">265</div><h3>Security Misconfiguration, XXE va boshqalar</h3><p>Xavfsizlik noto'g'ri sozlangani, maxfiy ma'lumot oshkorligi, XXE, ishonchsiz deserializatsiya, xavfsizlik sarlavhalari va xavfsiz standart sozlama cheklisti.</p></a>
+    </div>
+    <h3 class="chapter-head">Tarmoq va tizim xavfsizligi</h3>
+    <div class="cards">
+      <a class="card" href="lessons/xavfsizlik-sarlavhalari.html"><div class="num">266</div><h3>HTTP xavfsizlik sarlavhalari (CSP, HSTS...)</h3><p>Brauzerga xavfsiz xatti-harakatni buyuruvchi HTTP sarlavhalari: CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy va Permissions-Policy; ularni nginx va Express'da sozlash hamda cookie bayroqlari.</p></a>
+      <a class="card" href="lessons/firewall-vpn-portlar.html"><div class="num">267</div><h3>Firewall, portlar va VPN</h3><p>Portlar va xizmatlar nima, ochiq port nega xavf; firewall bilan kirish/chiqish qoidalarini boshqarish (ufw misoli), eng kam ochiq port tamoyili, VPN va tarmoq segmentatsiyasi.</p></a>
+      <a class="card" href="lessons/server-hardening.html"><div class="num">268</div><h3>Linux serverni qattiqlashtirish (hardening)</h3><p>Serverni ichkaridan mustahkamlash: tizimni yangilash, keraksiz xizmatlarni o'chirish, kuchli SSH (kalit autentifikatsiya, root login o'chirish), sudo foydalanuvchi, fail2ban, avtomatik yangilanish va fayl ruxsatlari.</p></a>
+      <a class="card" href="lessons/secrets-boshqaruv.html"><div class="num">269</div><h3>Sirlarni boshqarish (secrets management)</h3><p>Sir nima (API kalit, parol, token); eng katta xato — sirlarni kodga va gitga yozish; .env fayli va uni gitignore qilish; sir tasodifan gitga tushsa rotatsiya qilish; ishlab chiqarishda sir boshqaruvchilar.</p></a>
+      <a class="card" href="lessons/log-monitoring.html"><div class="num">270</div><h3>Loglar, monitoring va aniqlash</h3><p>Nega log muhim, nima loglanadi va nima loglanmaydi (parol, token); markazlashgan log va SIEM g'oyasi; anomaliyani aniqlash asoslari, ogohlantirish (alerting) va oddiy audit log namunasi.</p></a>
+    </div>
+    <h3 class="chapter-head">Amaliy himoya va DevSecOps</h3>
+    <div class="cards">
+      <a class="card" href="lessons/xavfsiz-kod-yozish.html"><div class="num">271</div><h3>Xavfsiz kod yozish tamoyillari</h3><p>Xavfsizlik dasturchining o'z ishi ekanligi, asosiy tamoyillar, kirish validatsiyasi, sirlarni saqlash va xavfsizlik nuqtai nazaridan kod sharhi.</p></a>
+      <a class="card" href="lessons/dependency-xavfsizlik.html"><div class="num">272</div><h3>Bog'liqliklar xavfsizligi (npm audit, SCA)</h3><p>Uchinchi tomon paketlaridagi ma'lum zaifliklar, npm audit, SCA g'oyasi, avtomatik yangilash va supply chain hujumlaridan himoya.</p></a>
+      <a class="card" href="lessons/sast-dast-testlash.html"><div class="num">273</div><h3>Xavfsizlik testlash: SAST, DAST va pentest</h3><p>Statik va dinamik xavfsizlik tahlili, penetratsion testning etik chegaralari, mas'uliyatli oshkor qilish va legal mashq muhitlari.</p></a>
+      <a class="card" href="lessons/ctf-mashq-kasb.html"><div class="num">274</div><h3>CTF, mashq platformalari va kasb yo'li</h3><p>Capture The Flag musobaqalari, kategoriyalari, qonuniy o'rganish platformalari va kiberxavfsizlik sohasida kasb yo'l xaritasi.</p></a>
+      <a class="card" href="lessons/incident-response.html"><div class="num">275</div><h3>Hodisaga javob (Incident Response) va cheklist</h3><p>Buzilishga tayyorgarlik, incident response bosqichlari, backup, buzilgandagi birinchi qadamlar va butun kiberxavfsizlik bo'limining yakuniy amaliy cheklisti.</p></a>
+    </div>
+    <h3 class="chapter-head">Amaliy vositalar (lab muhitida)</h3>
+    <div class="cards">
+      <a class="card" href="lessons/lab-muhit.html"><div class="num">276</div><h3>Xavfsizlik laboratoriyasini qurish</h3><p>Nega o'z laboratoriyangiz kerak, virtualizatsiya, izolyatsiya qilingan host-only tarmoq, Kali Linux va nishon VM sxemasi, DVWA va Juice Shop'ni lokal ko'tarish, snapshotlar hamda TryHackMe/HackTheBox legal muqobillari.</p></a>
+      <a class="card" href="lessons/nmap.html"><div class="num">277</div><h3>Nmap bilan tarmoqni kashf qilish</h3><p>Nmap nima va nega kerak, host discovery, port skanerlash, xizmat va versiya aniqlash, OS taxmini, NSE skriptlari hamda chiqishni himoyachi nuqtai nazaridan o'qish.</p></a>
+      <a class="card" href="lessons/wireshark.html"><div class="num">278</div><h3>Wireshark bilan trafik tahlili</h3><p>Wireshark nima va nega kerak, paket ushlash asoslari, interfeys tanlash, displey filtrlar, TCP oqimni kuzatish hamda HTTP va HTTPS farqi orqali TLS nega zarurligini isbotlash.</p></a>
+      <a class="card" href="lessons/burp-suite.html"><div class="num">279</div><h3>Burp Suite bilan web ilova o'rganish</h3><p>Burp Suite nima, brauzer-proxy-ilova sxemasi, proxy va sertifikat sozlash, Proxy/Intercept va Repeater modullari hamda o'z lab ilovangizdagi so'rovlarni ushlab o'rganish.</p></a>
+      <a class="card" href="lessons/metasploit.html"><div class="num">280</div><h3>Metasploit asoslari (lab)</h3><p>Metasploit Framework nima, etik ramka, modullar tuzilishi (exploit, payload, auxiliary, post), msfconsole ish oqimi hamda natijani himoyachi nuqtai nazaridan o'qish — barchasi o'z lab VM kontekstida.</p></a>
+    </div>
+  </div>
+</details>
 </main>
 </div>
 <footer class="site-footer">
@@ -1056,6 +1105,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="js/main.js?v=6"></script>
+<script src="js/main.js?v=7"></script>
 </body>
 </html>
