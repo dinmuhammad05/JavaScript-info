@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Satr (String) masalalari — Kodla</title>
-  <meta name="description" content="Belgilarni sanash, anagram, palindrom, satr aylantirish va qidirish — intervyularda eng ko'p uchraydigan satr masalalari.">
+  <meta name="description" content="Belgilarni sanash, anagram, palindrom, satr aylantirish, guruhlash va qidirish — intervyularda eng ko'p uchraydigan satr masalalari.">
   <link rel="stylesheet" href="../css/style.css?v=4">
 </head>
 <body>
@@ -533,10 +533,10 @@
 <main class="content article">
 <div class="crumbs">Massiv va satr algoritmlari</div>
 <h1>Satr (String) masalalari</h1>
-<p class="lead">Satrlar bilan ishlash intervyularda va kundalik dasturlashda eng ko'p uchraydigan mavzulardan. Bu darsda belgilarni sanash, anagram va palindrom tekshirish, satrni aylantirish hamda qism satr qidirishni ko'rib chiqamiz. Ko'p masalalarda ikkita do'stimiz bor: <strong>HashMap</strong> va <strong>ikki ko'rsatkich</strong>.</p>
+<p class="lead">Satrlar bilan ishlash intervyularda va kundalik dasturlashda eng ko'p uchraydigan mavzulardan. Bu darsda belgilarni sanash, anagram va palindrom tekshirish, satrni aylantirish, anagramlarni guruhlash hamda qism satr qidirishni ko'rib chiqamiz. Ko'p masalalarda ikkita do'stimiz bor: <strong>HashMap</strong> va <strong>ikki ko'rsatkich</strong>.</p>
 <h2>JavaScript'da satr o'zgarmas (immutable)</h2>
-<p>Muhim tushuncha: JS'da satr <strong>o'zgarmas</strong>. Ya'ni <code>str[0] = 'x'</code> deb belgini almashtira olmaysiz — bu hech qanday ta'sir qilmaydi. Har qanday "o'zgartirish" aslida <em>yangi</em> satr yaratadi.</p>
-<p>Shuning uchun belgilarni ko'p marta o'zgartirish kerak bo'lsa, ko'pincha satrni <strong>massivga aylantiramiz</strong> (<code>str.split('')</code>), massiv ustida ishlaymiz, keyin qaytadan qo'shamiz (<code>arr.join('')</code>).</p>
+<p>Muhim tushuncha: JS'da satr <strong>o'zgarmas</strong>. Ya'ni <code>str[0] = 'x'</code> deb belgini almashtira olmaysiz — bu hech qanday ta'sir qilmaydi. Har qanday "o'zgartirish" aslida <em>yangi</em> satr yaratadi. Bu shunchaki sintaksis qoidasi emas — u ish unumdorligiga jiddiy ta'sir qiladi.</p>
+<p>Nima uchun? Chunki satr xotirada o'zgarmas (immutable) blok sifatida saqlanadi. Bitta belgini almashtirmoqchi bo'lsangiz, JS <strong>butun satrni yangi joyga ko'chirib</strong> yangisini yaratishga majbur. Shuning uchun belgilarni ko'p marta o'zgartirish kerak bo'lsa, ko'pincha satrni <strong>massivga aylantiramiz</strong> (<code>str.split('')</code>), massiv ustida ishlaymiz, keyin qaytadan qo'shamiz (<code>arr.join('')</code>).</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>immutable.js</span></div><textarea spellcheck="false">const str = 'salom';
 
 // bu ishlamaydi (satr o'zgarmas):
@@ -548,7 +548,8 @@ const chars = str.split('');
 chars[0] = 'X';
 console.log(chars.join('')); // 'Xalom'</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <h2>Belgi chastotasini sanash</h2>
-<p>Ko'p satr masalalarining asosi — har bir belgi necha marta uchraganini sanash. Buning uchun oddiy obyekt yoki <code>Map</code> ishlatamiz. Har belgini ko'rganimizda uning sanog'ini bittaga oshiramiz.</p>
+<p>Ko'p satr masalalarining asosi — har bir belgi necha marta uchraganini sanash. Bu shu qadar tez-tez kerak bo'ladiki, uni yoddan bilib olganingiz ma'qul. G'oya oddiy: har belgini ko'rganimizda uning sanog'ini bittaga oshiramiz. Buning uchun oddiy obyekt yoki <code>Map</code> ishlatamiz.</p>
+<p><code>Map</code> ni tanlashning sababi — u har qanday belgini (jumladan bo'shliq, tinish belgilarini) kalit sifatida ishonchli saqlaydi va <code>size</code> kabi qulay xususiyatlarga ega. Oddiy obyekt ham ishlaydi va ko'pincha yozish qulayroq.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>chastota.js</span></div><textarea spellcheck="false">function charFrequency(str) {
   const freq = new Map();
   for (const ch of str) {
@@ -568,11 +569,11 @@ function freqObj(str) {
   return freq;
 }
 console.log(freqObj('mamma')); // { m: 2, a: 2 }</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n) — satrni bir marta aylanamiz; xotira O(k), bu yerda k — noyob belgilar soni.</p>
+<p><strong>Big O:</strong> vaqt O(n) — satrni bir marta aylanamiz; xotira O(k), bu yerda k — noyob belgilar soni. Ushbu oddiy naqsh anagram, guruhlash va boshqa ko'plab masalalarning poydevori bo'lib xizmat qiladi.</p>
 <h2>Anagram tekshirish (ikki usul)</h2>
-<p>Ikki satr <strong>anagram</strong> deyiladi, agar ular bir xil belgilardan, bir xil sonda, faqat boshqa tartibda tuzilgan bo'lsa (masalan, <code>listen</code> va <code>silent</code>). Ikki xil yechimni ko'ramiz.</p>
+<p>Ikki satr <strong>anagram</strong> deyiladi, agar ular bir xil belgilardan, bir xil sonda, faqat boshqa tartibda tuzilgan bo'lsa (masalan, <code>listen</code> va <code>silent</code>). Bu masala ish suhbatlarida juda tez-tez so'raladi va uni ikki xil yechish ikki xil fikrlashni ko'rsatadi. Avval eng ravon usul, keyin eng tez usulni ko'ramiz.</p>
 <h3>1-usul: saralash orqali</h3>
-<p>Ikkala satrni belgilariga bo'lib saralaymiz. Agar ular anagram bo'lsa, saralangandan keyin bir xil bo'ladi.</p>
+<p>Ikkala satrni belgilariga bo'lib saralaymiz. Agar ular anagram bo'lsa, saralangandan keyin ularning belgi ketma-ketligi <strong>aynan bir xil</strong> bo'ladi. Bu usul yozish oson va o'qish ravon, lekin saralash sabab sekinroq.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>anagram-sort.js</span></div><textarea spellcheck="false">function isAnagramSort(a, b) {
   if (a.length !== b.length) return false;
   const sortStr = s =&gt; s.split('').sort().join('');
@@ -582,9 +583,9 @@ console.log(freqObj('mamma')); // { m: 2, a: 2 }</textarea><div class="pg-action
 console.log(isAnagramSort('listen', 'silent')); // true
 console.log(isAnagramSort('salom', 'molas'));   // true
 console.log(isAnagramSort('abc', 'abd'));       // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n log n) — saralash tufayli; xotira O(n).</p>
+<p><strong>Big O:</strong> vaqt O(n log n) — saralash tufayli; xotira O(n) — belgilar massivi.</p>
 <h3>2-usul: chastota bilan (tezroq)</h3>
-<p>Bitta satr belgilarini sanaymiz, ikkinchisi bilan esa sanoqni kamaytiramiz. Agar oxirida hamma sanoq nolga teng bo'lsa — anagram.</p>
+<p>Endi tezroq yo'l. Bitta satr belgilarini sanaymiz (chastota jadvali), ikkinchi satr bilan esa o'sha sanoqni kamaytiramiz. Agar biror belgi yetishmasa yoki sanoq manfiyga tushsa — anagram emas. Sanash naqshini ishlatib, saralashdan qutuldik.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>anagram-freq.js</span></div><textarea spellcheck="false">function isAnagramFreq(a, b) {
   if (a.length !== b.length) return false;
   const count = {};
@@ -598,9 +599,26 @@ console.log(isAnagramSort('abc', 'abd'));       // false</textarea><div class="p
 
 console.log(isAnagramFreq('listen', 'silent')); // true
 console.log(isAnagramFreq('rat', 'car'));       // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n) — ikki marta chiziqli aylanish; xotira O(k). Bu saralash usulidan tezroq, chunki O(n) &lt; O(n log n).</p>
+<p><strong>Big O:</strong> vaqt O(n) — ikki marta chiziqli aylanish; xotira O(k). Bu saralash usulidan tezroq, chunki O(n) &lt; O(n log n). Katta satrlarda farq sezilarli.</p>
+<h2>Anagramlarni guruhlash (group anagrams)</h2>
+<p>Kengaytirilgan masala: so'zlar ro'yxati berilgan, ularni anagramligiga qarab guruhlarga ajratish kerak. G'oya nafis: har bir so'z uchun uning <strong>saralangan ko'rinishi</strong> bir xil bo'lsa, ular bir guruhga tegishli. Saralangan ko'rinishni <code>Map</code> ning kaliti sifatida ishlatamiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>group-anagrams.js</span></div><textarea spellcheck="false">function groupAnagrams(words) {
+  const groups = new Map();
+  for (const word of words) {
+    // kalit = saralangan belgilar
+    const key = word.split('').sort().join('');
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(word);
+  }
+  return Array.from(groups.values());
+}
+
+console.log(groupAnagrams(
+  ['eat', 'tea', 'tan', 'ate', 'nat', 'bat']));
+// [['eat','tea','ate'], ['tan','nat'], ['bat']]</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Big O:</strong> vaqt O(m * k log k) — m ta so'z, har biri k uzunlik, saralash k log k; xotira O(m * k). Kalitni saralash o'rniga chastota bilan yasab, O(m * k) ga ham tushirish mumkin.</p>
 <h2>Palindrom (ikki ko'rsatkich bilan)</h2>
-<p>Palindrom — oldidan va orqasidan bir xil o'qiladigan satr. Buni ikki ko'rsatkich bilan samarali tekshiramiz: biri boshdan, biri oxiridan yurib, belgilarni taqqoslaydi.</p>
+<p>Palindrom — oldidan va orqasidan bir xil o'qiladigan satr. Buni <em>ikki ko'rsatkich</em> darsidagi naqsh bilan samarali tekshiramiz: biri boshdan, biri oxiridan yurib, belgilarni taqqoslaydi. Farq topilishi bilanoq to'xtaymiz, shuning uchun butun satrni teskarilashdan tejamkorroq.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>palindrom-string.js</span></div><textarea spellcheck="false">function isPalindrome(str) {
   let left = 0;
   let right = str.length - 1;
@@ -615,9 +633,9 @@ console.log(isAnagramFreq('rat', 'car'));       // false</textarea><div class="p
 console.log(isPalindrome('level'));  // true
 console.log(isPalindrome('anna'));   // true
 console.log(isPalindrome('dastur')); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n), xotira O(1) — qo'shimcha satr yaratmaymiz.</p>
+<p><strong>Big O:</strong> vaqt O(n), xotira O(1) — qo'shimcha satr yaratmaymiz. Bu ikki ko'rsatkichning tejamkorligining yaqqol namunasi.</p>
 <h2>Satrni so'zlarga bo'lib teskarilash</h2>
-<p>Ko'p uchraydigan masala: gapdagi so'zlar tartibini teskarilash. Masalan, <code>'men dasturchiman'</code> dan <code>'dasturchiman men'</code>. Buni bo'lish, teskarilash va qo'shish bilan bajaramiz.</p>
+<p>Ko'p uchraydigan masala: gapdagi so'zlar tartibini teskarilash. Masalan, <code>'men dasturchiman'</code> dan <code>'dasturchiman men'</code>. Buni bo'lish, teskarilash va qo'shish bilan bajaramiz. Bu yerda oraliqdagi ortiqcha bo'shliqlarga e'tibor berish kerak — shuning uchun <code>trim</code> va bo'shliq regulyar ifodasidan foydalanamiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sozlarni-teskarilash.js</span></div><textarea spellcheck="false">function reverseWords(str) {
   return str
     .trim()              // chetdagi bo'shliqlar
@@ -626,14 +644,37 @@ console.log(isPalindrome('dastur')); // false</textarea><div class="pg-actions">
     .join(' ');
 }
 
-console.log(reverseWords('men dasturni yaxshi ko'raman'));
+console.log(reverseWords("men dasturni yaxshi ko'raman"));
 // "ko'raman yaxshi dasturni men"
 console.log(reverseWords('  salom   dunyo  '));
 // 'dunyo salom'</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n), xotira O(n) — so'zlar massivi va yangi satr.</p>
+<p><strong>Big O:</strong> vaqt O(n), xotira O(n) — so'zlar massivi va yangi satr yaratiladi.</p>
+<h2>Belgi kodlari: charCodeAt va indekslash</h2>
+<p>Ba'zan belgilar bilan emas, ularning <strong>sonli kodlari</strong> bilan ishlash qulay. Har bir belgi kompyuter xotirasida son sifatida saqlanadi (Unicode kod nuqtasi): <code>'a'</code> — 97, <code>'b'</code> — 98 va hokazo. <code>charCodeAt</code> belgining kod raqamini qaytaradi, <code>String.fromCharCode</code> esa aksincha — koddan belgi yasaydi.</p>
+<p>Buning kuchli qo'llanilishi: <code>'a'</code> dan <code>'z'</code> gacha bo'lgan 26 ta harfni <strong>0..25 indeksga</strong> aylantirib, chastotani <code>Map</code> o'rniga oddiy 26 uzunlikdagi massivda tez saqlash mumkin. Bu <code>Map</code> dan ham tezroq ishlaydi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>char-code.js</span></div><textarea spellcheck="false">console.log('A'.charCodeAt(0)); // 65
+console.log('a'.charCodeAt(0)); // 97
+console.log(String.fromCharCode(66)); // 'B'
+
+// 'a'..'z' harflarni 0..25 indeksga solish:
+function letterIndex(ch) {
+  return ch.charCodeAt(0) - 'a'.charCodeAt(0);
+}
+console.log(letterIndex('a')); // 0
+console.log(letterIndex('c')); // 2
+console.log(letterIndex('z')); // 25
+
+// massivda chastota (faqat kichik lotin harflari):
+function countLower(str) {
+  const arr = new Array(26).fill(0);
+  for (const ch of str) arr[letterIndex(ch)]++;
+  return arr;
+}
+console.log(countLower('abca')[0]); // 2 ('a' ikki marta)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Big O:</strong> <code>charCodeAt</code> va <code>fromCharCode</code> — O(1) amallar. 26 uzunlikdagi massiv bilan chastota sanash O(n) vaqt, O(1) xotira (massiv o'lchami doim 26).</p>
 <h2>Qism satrni izlash (substring search)</h2>
-<p>"<code>text</code> ichida <code>pattern</code> bormi va qayerda?" Sodda (naive) g'oya: <code>text</code> ning har bir pozitsiyasidan boshlab, <code>pattern</code> bilan belgi-belgi solishtiramiz.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>substring-qidiruv.js</span></div><textarea spellcheck="false">// Sodda substring qidiruv: O(n*m)
+<p>"<code>text</code> ichida <code>pattern</code> bormi va qayerda?" degan savol keng tarqalgan. Naive g'oya: <code>text</code> ning har bir pozitsiyasidan boshlab, <code>pattern</code> bilan belgi-belgi solishtiramiz. Mos kelmasa, keyingi pozitsiyaga o'tamiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>substring-qidiruv.js</span></div><textarea spellcheck="false">// Naive substring qidiruv: O(n*m)
 function indexOfNaive(text, pattern) {
   const n = text.length;
   const m = pattern.length;
@@ -651,22 +692,55 @@ console.log(indexOfNaive('abc', 'xyz'));         // -1
 
 // amalda tayyor metod bor:
 console.log('abracadabra'.indexOf('cad')); // 4</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> sodda usul eng yomon holatda O(n*m), bu yerda n — matn, m — pattern uzunligi. Amalda JS'ning tayyor <code>indexOf</code> yoki <code>includes</code> metodlaridan foydalanamiz. (Katta matnlarda KMP kabi O(n+m) algoritmlar ham bor, lekin ular alohida mavzu.)</p>
-<h2>Belgi kodlari: charCodeAt</h2>
-<p>Ba'zan belgilar bilan emas, ularning <strong>sonli kodlari</strong> bilan ishlash qulay. <code>charCodeAt</code> belgining kod raqamini qaytaradi, <code>String.fromCharCode</code> esa aksincha — koddan belgi yasaydi. Bu, masalan, chastota massivini indeks bilan tez saqlashda foydali.</p>
-<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>char-code.js</span></div><textarea spellcheck="false">console.log('A'.charCodeAt(0)); // 65
-console.log('a'.charCodeAt(0)); // 97
-console.log(String.fromCharCode(66)); // 'B'
-
-// 'a' dan 'z' gacha bo'lgan harflarni 0..25 indeksga solish:
-function letterIndex(ch) {
-  return ch.charCodeAt(0) - 'a'.charCodeAt(0);
+<p><strong>Big O:</strong> naive usul eng yomon holatda O(n*m), bu yerda n — matn, m — pattern uzunligi. Amalda JS'ning tayyor <code>indexOf</code> yoki <code>includes</code> metodlaridan foydalanamiz. Katta matnlarda O(n+m) da ishlaydigan tezroq algoritmlar ham bor — masalan <strong>KMP (Knuth-Morris-Pratt)</strong> — lekin ular alohida, chuqurroq mavzu; hozircha faqat nomini bilib qo'ying.</p>
+<h2>Takrorlanmaydigan eng uzun substring (bog'lash)</h2>
+<p>Satr masalalari boshqa texnikalar bilan chambarchas bog'liq. Takrorlanmaydigan eng uzun substringni topish aslida <em>siljuvchi oyna</em> darsidagi naqsh: <code>Set</code> bilan oyna ichidagi belgilarni kuzatib, takror uchraganda chapdan qisqartiramiz. Bu yerda uni satr kontekstida qayta ko'ramiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>uzun-substring-satr.js</span></div><textarea spellcheck="false">function longestUniqueSubstring(str) {
+  const seen = new Set();
+  let left = 0;
+  let best = 0;
+  for (let right = 0; right &lt; str.length; right++) {
+    while (seen.has(str[right])) {
+      seen.delete(str[left]);
+      left++;
+    }
+    seen.add(str[right]);
+    best = Math.max(best, right - left + 1);
+  }
+  return best;
 }
-console.log(letterIndex('a')); // 0
-console.log(letterIndex('c')); // 2
-console.log(letterIndex('z')); // 25</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> <code>charCodeAt</code> va <code>fromCharCode</code> — O(1) amallar.</p>
-<div class="tip">Satr masalalarida ikkita naqshni birinchi bo'lib eslang: belgilarni sanash yoki juftlash kerak bo'lsa — <strong>HashMap (obyekt yoki Map)</strong>; simmetriya yoki ikki tomondan solishtirish kerak bo'lsa — <strong>ikki ko'rsatkich</strong>. Bu ikkisi satr masalalarining aksariyatini qamrab oladi.</div>
+
+console.log(longestUniqueSubstring('abcabcbb')); // 3
+console.log(longestUniqueSubstring('dvdf'));     // 3 ('vdf')</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Big O:</strong> vaqt O(n), xotira O(min(n, alifbo hajmi)). Ko'rib turganingizdek, satr masalalari ko'pincha ikki ko'rsatkich va siljuvchi oyna g'oyalarini qayta ishlatadi.</p>
+<h2>Chegaraviy holatlar: Unicode va katta-kichik harf</h2>
+<p>Satr masalalarida quyidagi chetki holatlarga alohida e'tibor bering, ular ko'pincha xatoga sabab bo'ladi:</p>
+<ul><li><strong>Bo'sh satr</strong> (<code>''</code>) — chastota bo'sh, palindrom <code>true</code>, qidiruv <code>-1</code>. Kod tabiiy to'g'ri ishlaydi.</li><li><strong>Bitta belgi</strong> — doim palindrom; takrorlanmaydigan uzunlik 1.</li><li><strong>Katta-kichik harf</strong> — <code>'A'</code> va <code>'a'</code> turli belgilar! Agar farqlamaslik kerak bo'lsa, avval <code>str.toLowerCase()</code> qiling.</li><li><strong>Bo'shliq va tinish belgilari</strong> — "toza" palindrom tekshiruvida ularni oldindan olib tashlashingiz kerak bo'lishi mumkin.</li><li><strong>Unicode</strong> — ba'zi belgilar (emoji, ba'zi harflar) ikki "kod birligi" dan iborat. <code>for...of</code> ular ustidan to'g'ri yuradi, lekin <code>str[i]</code> indekslash yarim belgini qaytarishi mumkin.</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>unicode-holatlar.js</span></div><textarea spellcheck="false">// katta-kichik harfni farqlamay palindrom
+function isPalindromeLoose(str) {
+  const clean = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  let left = 0, right = clean.length - 1;
+  while (left &lt; right) {
+    if (clean[left] !== clean[right]) return false;
+    left++; right--;
+  }
+  return true;
+}
+
+console.log(isPalindromeLoose('A man a plan a canal Panama')); // true
+console.log(isPalindromeLoose('Salom')); // false</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Murakkablik jadvali</h2>
+<pre class="code"><code>Masala               | Vaqt        | Xotira
+---------------------|-------------|--------
+Chastota sanash      | O(n)        | O(k)
+Anagram (saralash)   | O(n log n)  | O(n)
+Anagram (chastota)   | O(n)        | O(k)
+Group anagrams       | O(m*k log k)| O(m*k)
+Palindrom            | O(n)        | O(1)
+Substring (naive)    | O(n*m)      | O(1)
+Uzun uniq substring  | O(n)        | O(k)</code></pre>
+<div class="warn">Eng ko'p uchraydigan xato — satr <strong>o'zgarmasligini</strong> unutish. Katta sikllarda <code>result += ch</code> kabi yozsangiz, har <code>+=</code> <strong>butun satrni yangidan yaratadi</strong>. Agar n marta qo'shsangiz, jami ish O(n&sup2;) ga chiqadi va katta matnlarda dastur sekinlashadi. To'g'ri yo'l: bo'laklarni massivga yig'ib (<code>parts.push(ch)</code>), oxirida bir marta <code>parts.join('')</code> qiling — bu O(n).</div>
+<div class="tip">Satr masalalarida ikkita naqshni birinchi bo'lib eslang: belgilarni <strong>sanash yoki juftlash</strong> kerak bo'lsa — <strong>HashMap (obyekt, Map yoki 26 uzunlik massiv)</strong>; <strong>simmetriya</strong> yoki ikki tomondan solishtirish kerak bo'lsa — <strong>ikki ko'rsatkich</strong>; <strong>uzluksiz qism (substring)</strong> haqida so'ralsa — <strong>siljuvchi oyna</strong>. Bu uch naqsh satr masalalarining aksariyatini qamrab oladi.</div>
 <nav class="lesson-nav">
   <a href="prefix-sum.html"><span class="dir">← Oldingi</span><span class="ttl">Prefiks yig'indi (Prefix Sum)</span></a>
   <a class="next" href="stack.html"><span class="dir">Keyingi →</span><span class="ttl">Stek (Stack) — LIFO tuzilma</span></a>

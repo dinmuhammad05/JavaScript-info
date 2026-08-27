@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Siljuvchi oyna (Sliding Window) — Kodla</title>
-  <meta name="description" content="Ketma-ket qism (subarray/substring) masalalarini O(n) da yechish: qat'iy va o'zgaruvchan o'lchamli oyna texnikasi.">
+  <meta name="description" content="Ketma-ket qism (subarray/substring) masalalarini O(n) da yechish: qat'iy va o'zgaruvchan o'lchamli oyna texnikasi va umumiy shablon.">
   <link rel="stylesheet" href="../css/style.css?v=4">
 </head>
 <body>
@@ -534,13 +534,13 @@
 <div class="crumbs">Massiv va satr algoritmlari</div>
 <h1>Siljuvchi oyna (Sliding Window)</h1>
 <p class="lead">Ko'pincha bizdan massiv yoki satrning <strong>ketma-ket qismi</strong> (subarray yoki substring) haqida biror narsani so'rashadi: eng katta yig'indili k uzunlikdagi bo'lak, takrorlanmaydigan eng uzun qism va hokazo. <strong>Siljuvchi oyna (sliding window)</strong> — aynan shunday masalalar uchun mo'ljallangan nafis texnika. U ortiqcha hisoblashlarni tashlab, O(n) ga erishadi.</p>
-<h2>G'oya: oynani qaytadan sanamaslik</h2>
-<p>"Oyna" — bu massivning uzluksiz bir bo'lagi, ikkita chegara bilan aniqlanadi: <code>chap</code> va <code>o'ng</code>. Sodda yondashuvda har bir mumkin bo'lgan oyna uchun uning yig'indisini <em>noldan</em> qayta sanaymiz — bu juda ko'p takroriy ish.</p>
-<p>Siljuvchi oynaning sehri shunda: oynani bir qadam siljitganda, biz butun oynani qayta sanamaymiz. Faqat <strong>chiqib ketgan</strong> elementni ayiramiz va <strong>kirib kelgan</strong> elementni qo'shamiz. Shu tarzda har bir yangilanish O(1) bo'ladi.</p>
+<h2>Intuitsiya: oynani qaytadan sanamaslik</h2>
+<p>"Oyna" — bu massivning uzluksiz bir bo'lagi, ikkita chegara bilan aniqlanadi: <code>chap</code> va <code>o'ng</code>. Tasavvur qiling, siz poyezd deraza oynasidan tashqariga qaraysiz. Poyezd oldinga yurganda, orqadan bitta manzara yo'qoladi, oldindan bitta yangi manzara paydo bo'ladi — lekin siz butun landshaftni qaytadan ko'rmaysiz.</p>
+<p>Sodda yondashuvda har bir mumkin bo'lgan oyna uchun uning yig'indisini <em>noldan</em> qayta sanaymiz — bu juda ko'p takroriy ish. Siljuvchi oynaning sehri shunda: oynani bir qadam siljitganda, biz butun oynani qayta sanamaymiz. Faqat <strong>chiqib ketgan</strong> elementni ayiramiz va <strong>kirib kelgan</strong> elementni qo'shamiz. Shu tarzda har bir yangilanish O(1) bo'ladi.</p>
 <ul><li><strong>Qat'iy (fixed) o'lchamli oyna</strong> — oyna uzunligi doim bir xil (masalan, k).</li><li><strong>O'zgaruvchan (dynamic) o'lchamli oyna</strong> — oyna biror shartga ko'ra kengayadi va qisqaradi.</li></ul>
-<h2>Qat'iy oyna: sodda yechim (naive) O(n*k)</h2>
-<p>Avval muammoni ko'raylik. k uzunlikdagi eng katta yig'indili subarrayni topmoqchimiz. Sodda yechim har bir boshlang'ich nuqta uchun keyingi k elementni qo'shib chiqadi:</p>
-<pre class="code"><code>// Sodda yechim: har oyna uchun k ta qo'shish -&gt; O(n*k)
+<h2>Qat'iy oyna: naive yechim O(n*k)</h2>
+<p>Avval muammoni ko'raylik. k uzunlikdagi eng katta yig'indili subarrayni topmoqchimiz. Naive yechim har bir boshlang'ich nuqta uchun keyingi k elementni qo'shib chiqadi:</p>
+<pre class="code"><code>// Naive yechim: har oyna uchun k ta qo'shish -&gt; O(n*k)
 function maxSumNaive(arr, k) {
   let best = -Infinity;
   for (let i = 0; i + k &lt;= arr.length; i++) {
@@ -550,9 +550,9 @@ function maxSumNaive(arr, k) {
   }
   return best;
 }</code></pre>
-<p>Bu yerda har bir <code>i</code> uchun ichki tsikl k marta ishlaydi, natijada O(n*k). Agar k katta bo'lsa, bu deyarli O(n&sup2;) ga aylanadi. Endi buni tuzatamiz.</p>
-<h2>Qat'iy oyna: siljuvchi oyna bilan O(n)</h2>
-<p>Avval birinchi k element yig'indisini bir marta hisoblaymiz. Keyin oynani bittaga siljitib, chapdagi eski elementni ayiramiz va o'ngdagi yangi elementni qo'shamiz:</p>
+<p>Bu yerda har bir <code>i</code> uchun ichki tsikl k marta ishlaydi, natijada O(n*k) vaqt. Agar k katta bo'lsa, bu deyarli O(n&sup2;) ga aylanadi. Endi buni optimal qilamiz.</p>
+<h2>Qat'iy oyna: optimal yechim O(n)</h2>
+<p>Avval birinchi k element yig'indisini bir marta hisoblaymiz. Keyin oynani bittaga siljitib, chapdagi eski elementni ayiramiz va o'ngdagi yangi elementni qo'shamiz. Butun oynani hech qachon qaytadan sanamaymiz:</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>max-sum-oyna.js</span></div><textarea spellcheck="false">function maxSum(arr, k) {
   if (arr.length &lt; k) return null;
   // birinchi oyna yig'indisi
@@ -571,10 +571,24 @@ function maxSumNaive(arr, k) {
 
 console.log(maxSum([2, 1, 5, 1, 3, 2], 3)); // 9  (5+1+3)
 console.log(maxSum([1, 9, -1, -2, 7, 3, -1, 2], 4)); // 13</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n) — har element bir marta qo'shiladi va bir marta ayiriladi; xotira O(1). Sodda O(n*k) bilan solishtiring — bu jiddiy tezlanish.</p>
+<p><strong>Big O:</strong> vaqt O(n) — har element bir marta qo'shiladi va bir marta ayiriladi; xotira O(1). Naive O(n*k) bilan solishtiring — bu jiddiy tezlanish.</p>
+<h2>Umumiy shablon: kengaytir va qisqartir</h2>
+<p>O'zgaruvchan oynali masalalarning aksariyati bitta umumiy naqshga tushadi. Uni yaxshi eslab qolsangiz, ko'p masalani shu qolipga solib yechasiz:</p>
+<pre class="code"><code>let left = 0;
+for (let right = 0; right &lt; arr.length; right++) {
+  // 1) oynaga arr[right] ni QO'SH (kengaytir)
+
+  // 2) shart buzilgan bo'lsa, chapdan QISQARTIR:
+  while (/* oyna yaroqsiz */) {
+    // oynadan arr[left] ni OLIB TASHLA
+    left++;
+  }
+
+  // 3) shu yerda oyna yaroqli -&gt; javobni yangila
+}</code></pre>
+<p>Butun mahorat — "oyna yaroqli" degani nima ekanini har masala uchun aniqlashda. Quyida ikkita klassik misolni shu shablon bilan yechamiz.</p>
 <h2>O'zgaruvchan oyna: eng qisqa subarray (yig'indi >= target)</h2>
-<p>Endi murakkabroq masala. Musbat sonlardan iborat massivda, yig'indisi <code>target</code> dan katta yoki teng bo'lgan <strong>eng qisqa</strong> uzluksiz subarrayning uzunligini topamiz. Bu yerda oyna o'lchami o'zgaradi.</p>
-<p>Naqsh: <code>right</code> ni oldinga surib oynani <strong>kengaytiramiz</strong> va yig'indiga qo'shamiz. Yig'indi <code>target</code> ga yetganda esa, <code>left</code> ni surib oynani <strong>qisqartirishga</strong> urinamiz — shart hali bajarilsa, qisqaroq javob topamiz.</p>
+<p>Musbat sonlardan iborat massivda, yig'indisi <code>target</code> dan katta yoki teng bo'lgan <strong>eng qisqa</strong> uzluksiz subarrayning uzunligini topamiz. Bu yerda oyna o'lchami o'zgaradi: <code>right</code> ni surib oynani kengaytiramiz, yig'indi yetsa <code>left</code> ni surib qisqartiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>min-subarray.js</span></div><textarea spellcheck="false">function minSubArrayLen(arr, target) {
   let left = 0;
   let sum = 0;
@@ -595,8 +609,7 @@ console.log(minSubArrayLen([2, 3, 1, 2, 4, 3], 7)); // 2  ([4,3])
 console.log(minSubArrayLen([1, 1, 1, 1], 7));       // 0  (yetmaydi)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
 <p><strong>Big O:</strong> vaqt O(n) — tashqi ko'rinishda ichma-ich tsikl bordek, lekin <code>left</code> jami eng ko'pi n marta oldinga siljiydi, demak jami ish O(n); xotira O(1).</p>
 <h2>O'zgaruvchan oyna: takrorlanmaydigan eng uzun substring</h2>
-<p>Klassiklardan biri: satrda barcha belgilari <strong>takrorlanmaydigan</strong> eng uzun uzluksiz qismning uzunligini topish. Oyna ichida qaysi belgilar borligini kuzatish uchun <code>Set</code> (to'plam) ishlatamiz.</p>
-<p><code>right</code> yangi belgini kiritmoqchi bo'lganda, agar u oynada allaqachon bor bo'lsa, biz <code>left</code> ni surib, o'sha takroriy belgi oynadan chiqib ketguncha qisqartiramiz.</p>
+<p>Klassiklardan biri: satrda barcha belgilari <strong>takrorlanmaydigan</strong> eng uzun uzluksiz qismning uzunligini topish. Oyna ichida qaysi belgilar borligini kuzatish uchun <code>Set</code> (to'plam) ishlatamiz. <code>right</code> yangi belgini kiritmoqchi bo'lganda, agar u oynada allaqachon bor bo'lsa, biz <code>left</code> ni surib, o'sha takroriy belgi oynadan chiqib ketguncha qisqartiramiz.</p>
 <div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>uzun-substring.js</span></div><textarea spellcheck="false">function longestUnique(str) {
   const seen = new Set();
   let left = 0;
@@ -616,12 +629,60 @@ console.log(minSubArrayLen([1, 1, 1, 1], 7));       // 0  (yetmaydi)</textarea><
 console.log(longestUnique('abcabcbb')); // 3  ('abc')
 console.log(longestUnique('bbbbb'));    // 1  ('b')
 console.log(longestUnique('pwwkew'));   // 3  ('wke')</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
-<p><strong>Big O:</strong> vaqt O(n), xotira O(min(n, alifbo hajmi)) — <code>Set</code> da eng ko'pi oyna hajmicha belgi saqlanadi.</p>
-<h2>Big O taqqoslash va xulosalar</h2>
-<p>Siljuvchi oynaning kuchi shunda — u ketma-ket qism masalalarini takroriy hisoblashsiz hal qiladi:</p>
-<ul><li>Sodda yondashuv (har oynani qayta sanash): odatda O(n&sup2;) yoki O(n*k).</li><li>Siljuvchi oyna: deyarli har doim O(n) vaqt.</li><li>Xotira: qat'iy oynada O(1); belgilarni kuzatish kerak bo'lsa (Set/Map) O(k).</li></ul>
-<div class="warn">Eng ko'p uchraydigan xato — oynani <strong>qachon qisqartirish</strong> shartini noto'g'ri qo'yish. O'zgaruvchan oynada "kengaytir, keyin kerak bo'lsa qisqartir" mantig'iga qat'iy amal qiling: <code>right</code> doim oldinga yuradi, <code>left</code> esa faqat shart buzilganda (yoki eng yaxshi javobni izlaganda) siljiydi.</div>
-<div class="tip">O'zingizga savol bering: "Bu masala uzluksiz bir bo'lak (subarray/substring) haqidami?" Agar ha bo'lsa, siljuvchi oyna ko'pincha to'g'ri tanlov.</div>
+<p><strong>Big O:</strong> vaqt O(n), xotira O(min(n, alifbo hajmi)) — <code>Set</code> da eng ko'pi oyna hajmicha belgi saqlanadi. Bu masala oldingi <em>ikki ko'rsatkich</em> darsidagi g'oyalar bilan chambarchas bog'liq: <code>left</code> va <code>right</code> aslida ikki ko'rsatkich.</p>
+<h2>Yana bir misol: aynan k xil belgili eng uzun substring</h2>
+<p>Kengaytirilgan masala: eng ko'pi bilan <code>k</code> xil belgidan iborat eng uzun substring. Bu yerda <code>Map</code> bilan har bir belgi sonini kuzatib boramiz. Xil belgilar soni <code>k</code> dan oshsa, chapdan qisqartiramiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>k-distinct.js</span></div><textarea spellcheck="false">function longestKDistinct(str, k) {
+  const count = new Map();
+  let left = 0;
+  let best = 0;
+  for (let right = 0; right &lt; str.length; right++) {
+    const c = str[right];
+    count.set(c, (count.get(c) || 0) + 1);
+    // xil belgilar soni k dan oshsa, qisqartiramiz
+    while (count.size &gt; k) {
+      const lc = str[left];
+      count.set(lc, count.get(lc) - 1);
+      if (count.get(lc) === 0) count.delete(lc);
+      left++;
+    }
+    best = Math.max(best, right - left + 1);
+  }
+  return best;
+}
+
+console.log(longestKDistinct('eceba', 2)); // 3  ('ece')
+console.log(longestKDistinct('aa', 1));    // 2</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p><strong>Big O:</strong> vaqt O(n), xotira O(k) — <code>Map</code> da eng ko'pi k+1 ta belgi turadi.</p>
+<h2>Chegaraviy holatlar</h2>
+<p>Siljuvchi oyna yechimlarini topshirishdan oldin quyidagi chetki holatlarni doim ko'z oldingizdan o'tkazing. Ular ko'pincha xatoning manbai bo'ladi:</p>
+<ul><li><strong>Bo'sh massiv/satr</strong> — tsikl umuman ishlamaydi, natija 0 yoki <code>null</code> bo'ladi. Kod tabiiy ravishda to'g'ri ishlaydi.</li><li><strong>Bitta element</strong> — qat'iy oynada <code>k = 1</code> bo'lsa, o'sha elementning o'zi javob.</li><li><strong>k massivdan katta</strong> — <code>maxSum</code> da biz <code>arr.length &lt; k</code> ni tekshirib <code>null</code> qaytaramiz. Bu tekshiruvni unutmang!</li><li><strong>Hammasi bir xil</strong> (<code>'aaaa'</code>) — takrorlanmaydigan substring uzunligi 1 bo'ladi.</li><li><strong>Manfiy sonlar</strong> — <em>eng qisqa subarray (yig'indi >= target)</em> masalasi faqat <strong>musbat</strong> sonlar uchun ishlaydi. Manfiy son bo'lsa, oynani qisqartirish mantig'i buziladi — u yerda prefiks yig'indi kerak bo'ladi (keyingi dars).</li></ul>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>oyna-chegara.js</span></div><textarea spellcheck="false">function maxSum(arr, k) {
+  if (arr.length &lt; k) return null; // chegara tekshiruvi
+  let windowSum = 0;
+  for (let i = 0; i &lt; k; i++) windowSum += arr[i];
+  let best = windowSum;
+  for (let right = k; right &lt; arr.length; right++) {
+    windowSum += arr[right] - arr[right - k];
+    best = Math.max(best, windowSum);
+  }
+  return best;
+}
+
+console.log(maxSum([], 3));        // null (bo'sh)
+console.log(maxSum([5], 1));       // 5   (bitta element)
+console.log(maxSum([1, 2], 5));    // null (k juda katta)
+console.log(maxSum([-1, -2, -3], 2)); // -3 (manfiylar bilan max)</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<h2>Murakkablik jadvali</h2>
+<pre class="code"><code>Masala                      | Naive   | Sliding Window
+----------------------------|---------|----------------
+k uzunlik max yig'indi      | O(n*k)  | O(n), O(1)
+Eng qisqa subarray (&gt;=S)    | O(n^2)  | O(n), O(1)
+Takrorlanmas eng uzun       | O(n^2)  | O(n), O(k)
+k xil belgili eng uzun      | O(n^2)  | O(n), O(k)</code></pre>
+<div class="warn">Eng ko'p uchraydigan xato — oynani <strong>qachon qisqartirish</strong> shartini noto'g'ri qo'yish yoki <code>left</code> ni surishni butunlay unutish. "Kengaytir, keyin kerak bo'lsa qisqartir" mantig'iga qat'iy amal qiling: <code>right</code> doim oldinga yuradi, <code>left</code> esa faqat shart buzilganda siljiydi. Agar <code>while</code> ichida <code>left++</code> yozmasangiz, kod abadiy tsiklga tushadi. Yana bir xato — qisqartirishda oynadan chiqqan elementni yig'indidan (yoki <code>Map</code> dan) olib tashlashni unutish.</div>
+<div class="tip">O'zingizga savol bering: masalada <strong>uzluksiz bir bo'lak</strong> (subarray/substring) haqida gap ketyaptimi? "Eng uzun", "eng qisqa", "eng katta yig'indi", "ketma-ket" so'zlari signal beradi. Agar ha bo'lsa, siljuvchi oyna ko'pincha to'g'ri tanlov.</div>
+<div class="note">Siljuvchi oyna va ikki ko'rsatkich juda yaqin qarindoshlar: ikkalasida ham <code>left</code> va <code>right</code> indekslar bor. Farqi shundaki, siljuvchi oynada biz odatda oyna <em>ichidagi</em> holatni (yig'indi, belgilar to'plami) kuzatib boramiz, ikki ko'rsatkichda esa ko'pincha faqat ikki chetni taqqoslaymiz. Bir masalani ikkala nom bilan atashsa, ajablanmang.</div>
 <nav class="lesson-nav">
   <a href="two-pointers.html"><span class="dir">← Oldingi</span><span class="ttl">Ikki ko'rsatkich (Two Pointers) usuli</span></a>
   <a class="next" href="prefix-sum.html"><span class="dir">Keyingi →</span><span class="ttl">Prefiks yig'indi (Prefix Sum)</span></a>

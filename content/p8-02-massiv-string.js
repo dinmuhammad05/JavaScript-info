@@ -8,20 +8,21 @@ module.exports = {
       title: "Ikki ko'rsatkich (Two Pointers) usuli",
       blurb: "Ikki indeks bilan massivni samarali kezish: qarama-qarshi va bir yo'nalishli ko'rsatkichlar, klassik masalalar va O(n) yechimlar.",
       body: [
-        { lead: "Ko'p massiv masalalarida biz bir vaqtning o'zida ikkita joyga qarashimiz kerak bo'ladi: masalan, massivning boshi va oxiriga, yoki ikkita turli tezlikda harakatlanuvchi nuqtaga. Aynan shu yerda <strong>ikki ko'rsatkich (two pointers)</strong> usuli yordamga keladi. Bu oddiy, lekin nihoyatda kuchli texnika bo'lib, ko'plab masalalarni O(n&sup2;) dan O(n) ga tushiradi." },
+        { lead: "Ko'p massiv masalalarida biz bir vaqtning o'zida ikkita joyga qarashimiz kerak bo'ladi: masalan, massivning boshi va oxiriga, yoki ikkita turli tezlikda harakatlanuvchi nuqtaga. Aynan shu yerda <strong>ikki ko'rsatkich (two pointers)</strong> usuli yordamga keladi. Bu oddiy, lekin nihoyatda kuchli texnika bo'lib, ko'plab masalalarni O(n&sup2;) dan O(n) ga tushiradi. Bu darsda biz uni bosqichma-bosqich, ishlangan misollar bilan o'rganamiz." },
 
-        { h2: "G'oya: bitta emas, ikkita indeks" },
+        { h2: "Intuitsiya: nima uchun bitta emas, ikkita indeks?" },
+        { p: "Tasavvur qiling, siz kitob javonining ikki chetida turgan ikki do'stsiz. Biringiz chapdan, ikkinchingiz o'ngdan bir-biringizga qarab yurasiz. O'rtada uchrashguncha butun javonni ko'rib chiqasiz — lekin har biringiz faqat yarim yo'lni bosasiz. Ikki ko'rsatkich usulining butun mohiyati shu: <strong>ishni ikkiga bo'lib</strong>, yoki bitta o'tishda ikki xil ma'lumotni kuzatib borish." },
         { p: "Odatda massivni bitta <code>for</code> tsikli va bitta indeks bilan kezamiz. Ikki ko'rsatkich usulida esa biz <strong>ikkita indeks</strong> ishlatamiz. Ular massiv ustida turli qoidalar bilan harakatlanadi:" },
         { ul: [
           "<strong>Qarama-qarshi ko'rsatkichlar</strong> — biri boshdan (chapdan), ikkinchisi oxiridan (o'ngdan) bir-biriga qarab yaqinlashadi.",
           "<strong>Bir yo'nalishli ko'rsatkichlar</strong> — ikkalasi ham chapdan boshlanadi, lekin turli tezlik yoki shartlar bilan oldinga siljiydi (ko'pincha \"sekin\" va \"tez\" deb ataladi)."
         ] },
-        { p: "Asosiy foyda shundaki, biz har bir elementni faqat bir marta ko'rib chiqamiz, ichma-ich tsikllardan qutulamiz." },
+        { p: "Asosiy foyda shundaki, biz har bir elementni ko'pincha faqat bir marta ko'rib chiqamiz va ichma-ich tsikllardan qutulamiz." },
 
-        { h2: "Nima uchun bu tez? O(n&sup2;) dan O(n) ga" },
-        { p: "Tasavvur qiling, saralangan massivda yig'indisi berilgan songa teng juftlikni izlaymiz. Sodda (naive) yechim har bir elementni qolgan hammasi bilan taqqoslaydi — bu ichma-ich ikkita tsikl, ya'ni O(n&sup2;)." },
+        { h2: "Naive yechim va uning Big O si" },
+        { p: "Tasavvur qiling, saralangan massivda yig'indisi berilgan songa teng juftlikni izlaymiz. Sodda (naive) yechim har bir elementni qolgan hammasi bilan taqqoslaydi — bu ichma-ich ikkita tsikl, ya'ni O(n&sup2;) vaqt. Katta massivda bu juda sekin." },
         { code: [
-          "// Sodda yechim: O(n^2) vaqt",
+          "// Sodda (naive) yechim: O(n^2) vaqt, O(1) xotira",
           "function twoSumNaive(arr, target) {",
           "  for (let i = 0; i < arr.length; i++) {",
           "    for (let j = i + 1; j < arr.length; j++) {",
@@ -31,10 +32,10 @@ module.exports = {
           "  return null;",
           "}"
         ].join("\n") },
-        { p: "Agar massiv <strong>saralangan</strong> bo'lsa, ikki ko'rsatkich bilan buni O(n) da hal qilamiz. Quyida avval qarama-qarshi ko'rsatkichlarni o'rganamiz." },
+        { p: "Agar massiv <strong>saralangan</strong> bo'lsa, ikki ko'rsatkich bilan buni O(n) da hal qilamiz. Optimal yechimga o'tishdan avval eng oddiy misoldan boshlaymiz." },
 
         { h2: "Qarama-qarshi ko'rsatkichlar: massivni teskarilash" },
-        { p: "Eng oddiy misol — massivni joyida (qo'shimcha massivsiz) teskarilash. Bitta ko'rsatkich boshdan, ikkinchisi oxiridan yuradi va elementlarni almashtiradi. Ular o'rtada uchrashganda to'xtaymiz." },
+        { p: "Eng oddiy misol — massivni joyida (qo'shimcha massivsiz) teskarilash. Bitta ko'rsatkich boshdan, ikkinchisi oxiridan yuradi va elementlarni almashtiradi. Ular o'rtada uchrashganda to'xtaymiz. Bu naqshni yaxshi tushunsangiz, qolgan hamma masalalar shunga o'xshaydi." },
         { pg: [
           "function reverse(arr) {",
           "  let left = 0;",
@@ -54,7 +55,7 @@ module.exports = {
         { p: "<strong>Big O:</strong> vaqt O(n) — har element bir marta ko'riladi; xotira O(1) — joyida ishlaymiz, qo'shimcha massiv yo'q." },
 
         { h2: "Palindrom tekshirish" },
-        { p: "Palindrom — oldidan ham, orqasidan ham bir xil o'qiladigan ketma-ketlik (masalan, <code>racecar</code>). Qarama-qarshi ko'rsatkichlar bilan chapdagi va o'ngdagi belgilarni taqqoslaymiz. Agar biror joyda ular mos kelmasa, bu palindrom emas." },
+        { p: "Palindrom — oldidan ham, orqasidan ham bir xil o'qiladigan ketma-ketlik (masalan, <code>racecar</code>). Qarama-qarshi ko'rsatkichlar bilan chapdagi va o'ngdagi belgilarni taqqoslaymiz. Agar biror joyda ular mos kelmasa, bu palindrom emas — darrov <code>false</code> qaytaramiz." },
         { pg: [
           "function isPalindrome(str) {",
           "  let left = 0;",
@@ -97,11 +98,39 @@ module.exports = {
           "  return null;",
           "}",
           "",
-          "console.log(twoSumSorted([1, 3, 4, 6, 8, 11], 10)); // [1, 3] -> 3+... ",
+          "console.log(twoSumSorted([1, 3, 4, 6, 8, 11], 10)); // [2, 3]",
           "console.log(twoSumSorted([2, 7, 11, 15], 9));       // [0, 1]",
           "console.log(twoSumSorted([1, 2, 3], 7));            // null"
         ].join("\n"), file: "two-sum-sorted.js" },
         { p: "<strong>Big O:</strong> vaqt O(n) — har qadamda kamida bitta ko'rsatkich siljiydi, demak jami eng ko'pi n qadam; xotira O(1). Naive O(n&sup2;) yechimga nisbatan katta yutuq. Diqqat: bu usul faqat <strong>saralangan</strong> massiv uchun ishlaydi." },
+
+        { h2: "Eng ko'p suv sig'diruvchi idish (Container With Most Water)" },
+        { p: "Bu masala ikki ko'rsatkichning eng chiroyli namunalaridan. Bizga balandliklar massivi berilgan: har bir son vertikal devor. Ikki devor va ular orasidagi tub bilan hosil bo'ladigan idishning eng katta suv hajmini topishimiz kerak. Hajm = <code>eng past devor * ular orasidagi masofa</code>." },
+        { p: "Naive yechim barcha juftliklarni tekshiradi — O(n&sup2;). Ikki ko'rsatkich bilan esa <code>left</code> ni boshdan, <code>right</code> ni oxiridan qo'yamiz va har qadamda <strong>pastroq</strong> devorni ichkariga suramiz. Sababi: keng masofa allaqachon bor, uni yo'qotib borsak, faqat balandroq devor topsak yutamiz — shuning uchun pastini surish mantiqli." },
+        { pg: [
+          "function maxArea(height) {",
+          "  let left = 0;",
+          "  let right = height.length - 1;",
+          "  let best = 0;",
+          "  while (left < right) {",
+          "    const width = right - left;",
+          "    const h = Math.min(height[left], height[right]);",
+          "    best = Math.max(best, width * h);",
+          "    // pastroq devorni ichkariga suramiz",
+          "    if (height[left] < height[right]) {",
+          "      left++;",
+          "    } else {",
+          "      right--;",
+          "    }",
+          "  }",
+          "  return best;",
+          "}",
+          "",
+          "console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49",
+          "console.log(maxArea([1, 1]));                      // 1",
+          "console.log(maxArea([4, 3, 2, 1, 4]));             // 16"
+        ].join("\n"), file: "container-water.js" },
+        { p: "<strong>Big O:</strong> vaqt O(n) — ikki ko'rsatkich birga bir marta o'tadi; xotira O(1). Naive O(n&sup2;) dan sezilarli tez." },
 
         { h2: "Bir yo'nalishli ko'rsatkichlar: nusxalarni o'chirish" },
         { p: "Endi ikkala ko'rsatkich ham chapdan boshlanadigan holatga o'tamiz. Saralangan massivdan takroriy elementlarni <strong>joyida</strong> o'chirishni ko'raylik. <code>slow</code> ko'rsatkichi \"toza\" qismning oxirini belgilaydi, <code>fast</code> esa butun massivni kezib chiqadi." },
@@ -150,30 +179,86 @@ module.exports = {
           "console.log(moveZeroes([0, 0, 1]));        // [1, 0, 0]"
         ].join("\n"), file: "move-zeroes.js" },
         { p: "<strong>Big O:</strong> vaqt O(n), xotira O(1)." },
-        { tip: "Ikki ko'rsatkichni qachon o'ylab ko'ring? Ko'pincha bu naqsh <strong>saralangan massiv</strong> bilan ishlaganda, <strong>juftlik yoki uchtalik</strong> izlaganda, massivni <strong>joyida</strong> qayta tartiblaganda yoki palindrom kabi <strong>simmetriya</strong> tekshirganda foydali bo'ladi." },
-        { note: "Ikki ko'rsatkich usuli xotira jihatidan juda tejamkor: deyarli har doim qo'shimcha xotira O(1). Bu uni katta massivlar uchun ideal qiladi." }
+
+        { h2: "Tez va sekin ko'rsatkich: massiv o'rtasini topish" },
+        { p: "Ba'zan ikki ko'rsatkich turli <strong>tezlikda</strong> yuradi. <code>fast</code> har qadamda ikki qadam, <code>slow</code> bir qadam yuradi. <code>fast</code> oxiriga yetganda, <code>slow</code> aynan o'rtada bo'ladi. Bu naqsh ayniqsa bog'langan ro'yxatlarda (linked list) o'rtani topishda mashhur, lekin g'oyani massivda ham ko'rish mumkin." },
+        { pg: [
+          "function findMiddle(arr) {",
+          "  let slow = 0;",
+          "  let fast = 0;",
+          "  // fast oxirdan oshib ketmasligi kerak",
+          "  while (fast < arr.length && fast + 1 < arr.length) {",
+          "    slow += 1; // sekin: bir qadam",
+          "    fast += 2; // tez: ikki qadam",
+          "  }",
+          "  return arr[slow];",
+          "}",
+          "",
+          "console.log(findMiddle([1, 2, 3, 4, 5])); // 3",
+          "console.log(findMiddle([10, 20, 30, 40])); // 30"
+        ].join("\n"), file: "fast-slow.js" },
+        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(1). <code>fast</code> massivning yarmiga yetganda tsikl tugaydi." },
+
+        { h2: "Chegaraviy holatlar" },
+        { p: "Ikki ko'rsatkich yechimlarini sinashda quyidagilarni doim tekshiring — kod bir chetki holatda buzilmasligi kerak:" },
+        { ul: [
+          "<strong>Bo'sh massiv</strong> (<code>[]</code>) — <code>right = -1</code> bo'ladi, <code>while (left &lt; right)</code> darrov to'xtaydi. Xavfsiz.",
+          "<strong>Bitta element</strong> (<code>[5]</code>) — <code>left = right = 0</code>, tsikl ishlamaydi. Palindromda bitta belgi doim palindrom.",
+          "<strong>Hammasi bir xil</strong> (<code>[7, 7, 7]</code>) — nusxa o'chirishda bitta element qoladi.",
+          "<strong>Manfiy sonlar</strong> — Two Sum va Container masalalarida manfiy qiymatlar ham to'g'ri ishlaydi, chunki taqqoslash mantiqi belgiga bog'liq emas."
+        ] },
+        { pg: [
+          "// chegaraviy holatlarni tekshiramiz",
+          "function reverse(arr) {",
+          "  let left = 0, right = arr.length - 1;",
+          "  while (left < right) {",
+          "    [arr[left], arr[right]] = [arr[right], arr[left]];",
+          "    left++; right--;",
+          "  }",
+          "  return arr;",
+          "}",
+          "",
+          "console.log(reverse([]));      // []",
+          "console.log(reverse([42]));    // [42]",
+          "console.log(reverse([-1, -5, -3])); // [-3, -5, -1]"
+        ].join("\n"), file: "chegara-holatlar.js" },
+
+        { h2: "Murakkablik jadvali" },
+        { code: [
+          "Masala                     | Naive      | Two Pointers",
+          "---------------------------|------------|-------------",
+          "Massivni teskarilash       | O(n)       | O(n), O(1) xotira",
+          "Palindrom                  | O(n)       | O(n), O(1) xotira",
+          "Two Sum (saralangan)       | O(n^2)     | O(n)",
+          "Container with most water  | O(n^2)     | O(n)",
+          "Nusxa o'chirish            | O(n) qo'sh | O(n), joyida"
+        ].join("\n") },
+
+        { warn: "Eng ko'p uchraydigan xato — tsikl shartini noto'g'ri qo'yish. <code>while (left &lt; right)</code> bilan <code>while (left &lt;= right)</code> ni adashtirmang. Teskarilash va Two Sum da <code>&lt;</code> to'g'ri (ko'rsatkichlar kesishmasligi kerak); agar <code>&lt;=</code> yozsangiz, o'rtadagi elementni o'zi bilan almashtirib yoki juftlab qo'yasiz. Yana bir xato — tsikl ichida <code>left++</code> yoki <code>right--</code> ni unutish, natijada abadiy tsikl." },
+        { tip: "Ikki ko'rsatkichni qachon o'ylab ko'ring? Signal so'zlari: <strong>saralangan massiv</strong>, <strong>juftlik yoki uchtalik</strong> izlash, <strong>joyida (in-place)</strong> qayta tartiblash, <strong>palindrom</strong> yoki <strong>simmetriya</strong>, hamda <strong>eng ko'p / eng kam</strong> hajm topish. Bu so'zlarni ko'rsangiz, ikki ko'rsatkichni birinchi bo'lib sinang." },
+        { note: "Ikki ko'rsatkich usuli xotira jihatidan juda tejamkor: deyarli har doim qo'shimcha xotira O(1). Bu uni katta massivlar uchun ideal qiladi. Ammo esda tuting — Two Sum va Container kabi masalalar massiv <strong>saralangan</strong> bo'lishini talab qiladi." }
       ]
     },
 
     {
       slug: "sliding-window",
       title: "Siljuvchi oyna (Sliding Window)",
-      blurb: "Ketma-ket qism (subarray/substring) masalalarini O(n) da yechish: qat'iy va o'zgaruvchan o'lchamli oyna texnikasi.",
+      blurb: "Ketma-ket qism (subarray/substring) masalalarini O(n) da yechish: qat'iy va o'zgaruvchan o'lchamli oyna texnikasi va umumiy shablon.",
       body: [
         { lead: "Ko'pincha bizdan massiv yoki satrning <strong>ketma-ket qismi</strong> (subarray yoki substring) haqida biror narsani so'rashadi: eng katta yig'indili k uzunlikdagi bo'lak, takrorlanmaydigan eng uzun qism va hokazo. <strong>Siljuvchi oyna (sliding window)</strong> — aynan shunday masalalar uchun mo'ljallangan nafis texnika. U ortiqcha hisoblashlarni tashlab, O(n) ga erishadi." },
 
-        { h2: "G'oya: oynani qaytadan sanamaslik" },
-        { p: "\"Oyna\" — bu massivning uzluksiz bir bo'lagi, ikkita chegara bilan aniqlanadi: <code>chap</code> va <code>o'ng</code>. Sodda yondashuvda har bir mumkin bo'lgan oyna uchun uning yig'indisini <em>noldan</em> qayta sanaymiz — bu juda ko'p takroriy ish." },
-        { p: "Siljuvchi oynaning sehri shunda: oynani bir qadam siljitganda, biz butun oynani qayta sanamaymiz. Faqat <strong>chiqib ketgan</strong> elementni ayiramiz va <strong>kirib kelgan</strong> elementni qo'shamiz. Shu tarzda har bir yangilanish O(1) bo'ladi." },
+        { h2: "Intuitsiya: oynani qaytadan sanamaslik" },
+        { p: "\"Oyna\" — bu massivning uzluksiz bir bo'lagi, ikkita chegara bilan aniqlanadi: <code>chap</code> va <code>o'ng</code>. Tasavvur qiling, siz poyezd deraza oynasidan tashqariga qaraysiz. Poyezd oldinga yurganda, orqadan bitta manzara yo'qoladi, oldindan bitta yangi manzara paydo bo'ladi — lekin siz butun landshaftni qaytadan ko'rmaysiz." },
+        { p: "Sodda yondashuvda har bir mumkin bo'lgan oyna uchun uning yig'indisini <em>noldan</em> qayta sanaymiz — bu juda ko'p takroriy ish. Siljuvchi oynaning sehri shunda: oynani bir qadam siljitganda, biz butun oynani qayta sanamaymiz. Faqat <strong>chiqib ketgan</strong> elementni ayiramiz va <strong>kirib kelgan</strong> elementni qo'shamiz. Shu tarzda har bir yangilanish O(1) bo'ladi." },
         { ul: [
           "<strong>Qat'iy (fixed) o'lchamli oyna</strong> — oyna uzunligi doim bir xil (masalan, k).",
           "<strong>O'zgaruvchan (dynamic) o'lchamli oyna</strong> — oyna biror shartga ko'ra kengayadi va qisqaradi."
         ] },
 
-        { h2: "Qat'iy oyna: sodda yechim (naive) O(n*k)" },
-        { p: "Avval muammoni ko'raylik. k uzunlikdagi eng katta yig'indili subarrayni topmoqchimiz. Sodda yechim har bir boshlang'ich nuqta uchun keyingi k elementni qo'shib chiqadi:" },
+        { h2: "Qat'iy oyna: naive yechim O(n*k)" },
+        { p: "Avval muammoni ko'raylik. k uzunlikdagi eng katta yig'indili subarrayni topmoqchimiz. Naive yechim har bir boshlang'ich nuqta uchun keyingi k elementni qo'shib chiqadi:" },
         { code: [
-          "// Sodda yechim: har oyna uchun k ta qo'shish -> O(n*k)",
+          "// Naive yechim: har oyna uchun k ta qo'shish -> O(n*k)",
           "function maxSumNaive(arr, k) {",
           "  let best = -Infinity;",
           "  for (let i = 0; i + k <= arr.length; i++) {",
@@ -184,10 +269,10 @@ module.exports = {
           "  return best;",
           "}"
         ].join("\n") },
-        { p: "Bu yerda har bir <code>i</code> uchun ichki tsikl k marta ishlaydi, natijada O(n*k). Agar k katta bo'lsa, bu deyarli O(n&sup2;) ga aylanadi. Endi buni tuzatamiz." },
+        { p: "Bu yerda har bir <code>i</code> uchun ichki tsikl k marta ishlaydi, natijada O(n*k) vaqt. Agar k katta bo'lsa, bu deyarli O(n&sup2;) ga aylanadi. Endi buni optimal qilamiz." },
 
-        { h2: "Qat'iy oyna: siljuvchi oyna bilan O(n)" },
-        { p: "Avval birinchi k element yig'indisini bir marta hisoblaymiz. Keyin oynani bittaga siljitib, chapdagi eski elementni ayiramiz va o'ngdagi yangi elementni qo'shamiz:" },
+        { h2: "Qat'iy oyna: optimal yechim O(n)" },
+        { p: "Avval birinchi k element yig'indisini bir marta hisoblaymiz. Keyin oynani bittaga siljitib, chapdagi eski elementni ayiramiz va o'ngdagi yangi elementni qo'shamiz. Butun oynani hech qachon qaytadan sanamaymiz:" },
         { pg: [
           "function maxSum(arr, k) {",
           "  if (arr.length < k) return null;",
@@ -208,11 +293,28 @@ module.exports = {
           "console.log(maxSum([2, 1, 5, 1, 3, 2], 3)); // 9  (5+1+3)",
           "console.log(maxSum([1, 9, -1, -2, 7, 3, -1, 2], 4)); // 13"
         ].join("\n"), file: "max-sum-oyna.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n) — har element bir marta qo'shiladi va bir marta ayiriladi; xotira O(1). Sodda O(n*k) bilan solishtiring — bu jiddiy tezlanish." },
+        { p: "<strong>Big O:</strong> vaqt O(n) — har element bir marta qo'shiladi va bir marta ayiriladi; xotira O(1). Naive O(n*k) bilan solishtiring — bu jiddiy tezlanish." },
+
+        { h2: "Umumiy shablon: kengaytir va qisqartir" },
+        { p: "O'zgaruvchan oynali masalalarning aksariyati bitta umumiy naqshga tushadi. Uni yaxshi eslab qolsangiz, ko'p masalani shu qolipga solib yechasiz:" },
+        { code: [
+          "let left = 0;",
+          "for (let right = 0; right < arr.length; right++) {",
+          "  // 1) oynaga arr[right] ni QO'SH (kengaytir)",
+          "",
+          "  // 2) shart buzilgan bo'lsa, chapdan QISQARTIR:",
+          "  while (/* oyna yaroqsiz */) {",
+          "    // oynadan arr[left] ni OLIB TASHLA",
+          "    left++;",
+          "  }",
+          "",
+          "  // 3) shu yerda oyna yaroqli -> javobni yangila",
+          "}"
+        ].join("\n") },
+        { p: "Butun mahorat — \"oyna yaroqli\" degani nima ekanini har masala uchun aniqlashda. Quyida ikkita klassik misolni shu shablon bilan yechamiz." },
 
         { h2: "O'zgaruvchan oyna: eng qisqa subarray (yig'indi >= target)" },
-        { p: "Endi murakkabroq masala. Musbat sonlardan iborat massivda, yig'indisi <code>target</code> dan katta yoki teng bo'lgan <strong>eng qisqa</strong> uzluksiz subarrayning uzunligini topamiz. Bu yerda oyna o'lchami o'zgaradi." },
-        { p: "Naqsh: <code>right</code> ni oldinga surib oynani <strong>kengaytiramiz</strong> va yig'indiga qo'shamiz. Yig'indi <code>target</code> ga yetganda esa, <code>left</code> ni surib oynani <strong>qisqartirishga</strong> urinamiz — shart hali bajarilsa, qisqaroq javob topamiz." },
+        { p: "Musbat sonlardan iborat massivda, yig'indisi <code>target</code> dan katta yoki teng bo'lgan <strong>eng qisqa</strong> uzluksiz subarrayning uzunligini topamiz. Bu yerda oyna o'lchami o'zgaradi: <code>right</code> ni surib oynani kengaytiramiz, yig'indi yetsa <code>left</code> ni surib qisqartiramiz." },
         { pg: [
           "function minSubArrayLen(arr, target) {",
           "  let left = 0;",
@@ -236,8 +338,7 @@ module.exports = {
         { p: "<strong>Big O:</strong> vaqt O(n) — tashqi ko'rinishda ichma-ich tsikl bordek, lekin <code>left</code> jami eng ko'pi n marta oldinga siljiydi, demak jami ish O(n); xotira O(1)." },
 
         { h2: "O'zgaruvchan oyna: takrorlanmaydigan eng uzun substring" },
-        { p: "Klassiklardan biri: satrda barcha belgilari <strong>takrorlanmaydigan</strong> eng uzun uzluksiz qismning uzunligini topish. Oyna ichida qaysi belgilar borligini kuzatish uchun <code>Set</code> (to'plam) ishlatamiz." },
-        { p: "<code>right</code> yangi belgini kiritmoqchi bo'lganda, agar u oynada allaqachon bor bo'lsa, biz <code>left</code> ni surib, o'sha takroriy belgi oynadan chiqib ketguncha qisqartiramiz." },
+        { p: "Klassiklardan biri: satrda barcha belgilari <strong>takrorlanmaydigan</strong> eng uzun uzluksiz qismning uzunligini topish. Oyna ichida qaysi belgilar borligini kuzatish uchun <code>Set</code> (to'plam) ishlatamiz. <code>right</code> yangi belgini kiritmoqchi bo'lganda, agar u oynada allaqachon bor bo'lsa, biz <code>left</code> ni surib, o'sha takroriy belgi oynadan chiqib ketguncha qisqartiramiz." },
         { pg: [
           "function longestUnique(str) {",
           "  const seen = new Set();",
@@ -259,31 +360,93 @@ module.exports = {
           "console.log(longestUnique('bbbbb'));    // 1  ('b')",
           "console.log(longestUnique('pwwkew'));   // 3  ('wke')"
         ].join("\n"), file: "uzun-substring.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(min(n, alifbo hajmi)) — <code>Set</code> da eng ko'pi oyna hajmicha belgi saqlanadi." },
+        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(min(n, alifbo hajmi)) — <code>Set</code> da eng ko'pi oyna hajmicha belgi saqlanadi. Bu masala oldingi <em>ikki ko'rsatkich</em> darsidagi g'oyalar bilan chambarchas bog'liq: <code>left</code> va <code>right</code> aslida ikki ko'rsatkich." },
 
-        { h2: "Big O taqqoslash va xulosalar" },
-        { p: "Siljuvchi oynaning kuchi shunda — u ketma-ket qism masalalarini takroriy hisoblashsiz hal qiladi:" },
+        { h2: "Yana bir misol: aynan k xil belgili eng uzun substring" },
+        { p: "Kengaytirilgan masala: eng ko'pi bilan <code>k</code> xil belgidan iborat eng uzun substring. Bu yerda <code>Map</code> bilan har bir belgi sonini kuzatib boramiz. Xil belgilar soni <code>k</code> dan oshsa, chapdan qisqartiramiz." },
+        { pg: [
+          "function longestKDistinct(str, k) {",
+          "  const count = new Map();",
+          "  let left = 0;",
+          "  let best = 0;",
+          "  for (let right = 0; right < str.length; right++) {",
+          "    const c = str[right];",
+          "    count.set(c, (count.get(c) || 0) + 1);",
+          "    // xil belgilar soni k dan oshsa, qisqartiramiz",
+          "    while (count.size > k) {",
+          "      const lc = str[left];",
+          "      count.set(lc, count.get(lc) - 1);",
+          "      if (count.get(lc) === 0) count.delete(lc);",
+          "      left++;",
+          "    }",
+          "    best = Math.max(best, right - left + 1);",
+          "  }",
+          "  return best;",
+          "}",
+          "",
+          "console.log(longestKDistinct('eceba', 2)); // 3  ('ece')",
+          "console.log(longestKDistinct('aa', 1));    // 2"
+        ].join("\n"), file: "k-distinct.js" },
+        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(k) — <code>Map</code> da eng ko'pi k+1 ta belgi turadi." },
+
+        { h2: "Chegaraviy holatlar" },
+        { p: "Siljuvchi oyna yechimlarini topshirishdan oldin quyidagi chetki holatlarni doim ko'z oldingizdan o'tkazing. Ular ko'pincha xatoning manbai bo'ladi:" },
         { ul: [
-          "Sodda yondashuv (har oynani qayta sanash): odatda O(n&sup2;) yoki O(n*k).",
-          "Siljuvchi oyna: deyarli har doim O(n) vaqt.",
-          "Xotira: qat'iy oynada O(1); belgilarni kuzatish kerak bo'lsa (Set/Map) O(k)."
+          "<strong>Bo'sh massiv/satr</strong> — tsikl umuman ishlamaydi, natija 0 yoki <code>null</code> bo'ladi. Kod tabiiy ravishda to'g'ri ishlaydi.",
+          "<strong>Bitta element</strong> — qat'iy oynada <code>k = 1</code> bo'lsa, o'sha elementning o'zi javob.",
+          "<strong>k massivdan katta</strong> — <code>maxSum</code> da biz <code>arr.length &lt; k</code> ni tekshirib <code>null</code> qaytaramiz. Bu tekshiruvni unutmang!",
+          "<strong>Hammasi bir xil</strong> (<code>'aaaa'</code>) — takrorlanmaydigan substring uzunligi 1 bo'ladi.",
+          "<strong>Manfiy sonlar</strong> — <em>eng qisqa subarray (yig'indi >= target)</em> masalasi faqat <strong>musbat</strong> sonlar uchun ishlaydi. Manfiy son bo'lsa, oynani qisqartirish mantig'i buziladi — u yerda prefiks yig'indi kerak bo'ladi (keyingi dars)."
         ] },
-        { warn: "Eng ko'p uchraydigan xato — oynani <strong>qachon qisqartirish</strong> shartini noto'g'ri qo'yish. O'zgaruvchan oynada \"kengaytir, keyin kerak bo'lsa qisqartir\" mantig'iga qat'iy amal qiling: <code>right</code> doim oldinga yuradi, <code>left</code> esa faqat shart buzilganda (yoki eng yaxshi javobni izlaganda) siljiydi." },
-        { tip: "O'zingizga savol bering: \"Bu masala uzluksiz bir bo'lak (subarray/substring) haqidami?\" Agar ha bo'lsa, siljuvchi oyna ko'pincha to'g'ri tanlov." }
+        { pg: [
+          "function maxSum(arr, k) {",
+          "  if (arr.length < k) return null; // chegara tekshiruvi",
+          "  let windowSum = 0;",
+          "  for (let i = 0; i < k; i++) windowSum += arr[i];",
+          "  let best = windowSum;",
+          "  for (let right = k; right < arr.length; right++) {",
+          "    windowSum += arr[right] - arr[right - k];",
+          "    best = Math.max(best, windowSum);",
+          "  }",
+          "  return best;",
+          "}",
+          "",
+          "console.log(maxSum([], 3));        // null (bo'sh)",
+          "console.log(maxSum([5], 1));       // 5   (bitta element)",
+          "console.log(maxSum([1, 2], 5));    // null (k juda katta)",
+          "console.log(maxSum([-1, -2, -3], 2)); // -3 (manfiylar bilan max)"
+        ].join("\n"), file: "oyna-chegara.js" },
+
+        { h2: "Murakkablik jadvali" },
+        { code: [
+          "Masala                      | Naive   | Sliding Window",
+          "----------------------------|---------|----------------",
+          "k uzunlik max yig'indi      | O(n*k)  | O(n), O(1)",
+          "Eng qisqa subarray (>=S)    | O(n^2)  | O(n), O(1)",
+          "Takrorlanmas eng uzun       | O(n^2)  | O(n), O(k)",
+          "k xil belgili eng uzun      | O(n^2)  | O(n), O(k)"
+        ].join("\n") },
+
+        { warn: "Eng ko'p uchraydigan xato — oynani <strong>qachon qisqartirish</strong> shartini noto'g'ri qo'yish yoki <code>left</code> ni surishni butunlay unutish. \"Kengaytir, keyin kerak bo'lsa qisqartir\" mantig'iga qat'iy amal qiling: <code>right</code> doim oldinga yuradi, <code>left</code> esa faqat shart buzilganda siljiydi. Agar <code>while</code> ichida <code>left++</code> yozmasangiz, kod abadiy tsiklga tushadi. Yana bir xato — qisqartirishda oynadan chiqqan elementni yig'indidan (yoki <code>Map</code> dan) olib tashlashni unutish." },
+        { tip: "O'zingizga savol bering: masalada <strong>uzluksiz bir bo'lak</strong> (subarray/substring) haqida gap ketyaptimi? \"Eng uzun\", \"eng qisqa\", \"eng katta yig'indi\", \"ketma-ket\" so'zlari signal beradi. Agar ha bo'lsa, siljuvchi oyna ko'pincha to'g'ri tanlov." },
+        { note: "Siljuvchi oyna va ikki ko'rsatkich juda yaqin qarindoshlar: ikkalasida ham <code>left</code> va <code>right</code> indekslar bor. Farqi shundaki, siljuvchi oynada biz odatda oyna <em>ichidagi</em> holatni (yig'indi, belgilar to'plami) kuzatib boramiz, ikki ko'rsatkichda esa ko'pincha faqat ikki chetni taqqoslaymiz. Bir masalani ikkala nom bilan atashsa, ajablanmang." }
       ]
     },
 
     {
       slug: "prefix-sum",
       title: "Prefiks yig'indi (Prefix Sum)",
-      blurb: "Oldindan yig'indilarni hisoblab, oraliq (range) so'rovlariga O(1) da javob berish texnikasi.",
+      blurb: "Oldindan yig'indilarni hisoblab, oraliq (range) so'rovlariga O(1) da javob berish va yig'indili subarraylarni sanash texnikasi.",
       body: [
         { lead: "Ba'zan bizdan bitta massiv ustida <strong>ko'p marta</strong> \"[i..j] oralig'idagi elementlar yig'indisi qancha?\" degan savolga javob berish talab qilinadi. Har safar qaytadan qo'shib chiqsak, sekin bo'ladi. <strong>Prefiks yig'indi (prefix sum)</strong> texnikasi bir marta tayyorgarlik ko'rib, keyin har bir so'rovga O(1) da javob berish imkonini beradi." },
 
-        { h2: "Muammo: ko'p marta oraliq yig'indisini so'rash" },
-        { p: "Aytaylik, bizda massiv bor va bizga bir nechta so'rov keladi: har biri <code>[i, j]</code> oralig'ining yig'indisini so'raydi. Sodda yechim har so'rovda <code>i</code> dan <code>j</code> gacha aylanib chiqadi:" },
+        { h2: "Intuitsiya: bir marta sanab, ko'p marta ishlat" },
+        { p: "Tasavvur qiling, yo'lda kilometr belgilari turibdi: 0-km, 3-km, 4-km, 8-km... Har bir belgi <strong>boshdan shu yergacha</strong> qancha yurganingizni ko'rsatadi. Endi 3-km dan 8-km gacha qancha yurganingizni bilmoqchi bo'lsangiz, qayta o'lchamaysiz — shunchaki <code>8 - 3 = 5</code> qilasiz. Prefiks yig'indining butun g'oyasi shu: har bir nuqtada \"boshdan hozirgacha yig'indi\" ni saqlab qo'yamiz, keyin ayirma bilan istalgan oraliqni olamiz." },
+
+        { h2: "Muammo: naive yechim va uning Big O si" },
+        { p: "Aytaylik, bizda massiv bor va bizga bir nechta so'rov keladi: har biri <code>[i, j]</code> oralig'ining yig'indisini so'raydi. Naive yechim har so'rovda <code>i</code> dan <code>j</code> gacha aylanib chiqadi:" },
         { code: [
-          "// Sodda yechim: har so'rov O(n)",
+          "// Naive yechim: har so'rov O(n)",
           "function rangeSumNaive(arr, i, j) {",
           "  let sum = 0;",
           "  for (let k = i; k <= j; k++) sum += arr[k];",
@@ -292,8 +455,8 @@ module.exports = {
         ].join("\n") },
         { p: "Agar q ta so'rov bo'lsa, umumiy narx O(q * n) bo'ladi. Katta massiv va ko'p so'rovda bu juda qimmat. Prefiks yig'indi bilan buni O(n + q) ga tushiramiz." },
 
-        { h2: "Yechim: prefiks massivini qurish" },
-        { p: "<code>prefix[i]</code> ni <strong>birinchi i element yig'indisi</strong> deb aniqlaymiz. Ya'ni <code>prefix[0] = 0</code> (hech nima), <code>prefix[1] = arr[0]</code>, <code>prefix[2] = arr[0] + arr[1]</code> va hokazo. Har bir keyingi qiymat oldingisiga bitta element qo'shib olinadi." },
+        { h2: "Optimal yechim: prefiks massivini qurish" },
+        { p: "<code>prefix[i]</code> ni <strong>birinchi i element yig'indisi</strong> deb aniqlaymiz. Ya'ni <code>prefix[0] = 0</code> (hech nima), <code>prefix[1] = arr[0]</code>, <code>prefix[2] = arr[0] + arr[1]</code> va hokazo. Har bir keyingi qiymat oldingisiga bitta element qo'shib olinadi. Diqqat: massiv <strong>n + 1</strong> uzunlikda bo'ladi, chunki boshida 0 turadi." },
         { pg: [
           "function buildPrefix(arr) {",
           "  const prefix = new Array(arr.length + 1);",
@@ -334,11 +497,11 @@ module.exports = {
           "console.log(rangeSum(prefix, 0, 5)); // hammasi = 23",
           "console.log(rangeSum(prefix, 4, 4)); // faqat arr[4] = 5"
         ].join("\n"), file: "oraliq-yigindi.js" },
-        { p: "<strong>Big O (so'rov):</strong> vaqt O(1) — faqat bitta ayirish. Umumiy: qurish O(n) + har so'rov O(1) = q so'rov uchun O(n + q). Sodda O(q * n) bilan solishtiring." },
+        { p: "<strong>Big O (so'rov):</strong> vaqt O(1) — faqat bitta ayirish. Umumiy: qurish O(n) + har so'rov O(1) = q so'rov uchun O(n + q). Naive O(q * n) bilan solishtiring." },
 
-        { h2: "Ma'lum yig'indili subarraylar sonini sanash" },
-        { p: "Prefiks yig'indi faqat oraliq so'rovlari uchun emas. Uni HashMap (Map) bilan birlashtirsak, \"yig'indisi aynan <code>k</code> ga teng nechta uzluksiz subarray bor?\" degan masalani ham O(n) da yechamiz." },
-        { p: "G'oya: agar joriy prefiks <code>sum</code> bo'lsa va biror oldingi nuqtada prefiks <code>sum - k</code> bo'lgan bo'lsa, u nuqtadan hozirgacha bo'lgan subarray yig'indisi aynan <code>k</code> bo'ladi. Shuning uchun har bir prefiks qiymatini necha marta uchraganini Map da saqlaymiz." },
+        { h2: "Yig'indisi K ga teng subarraylar sonini sanash" },
+        { p: "Prefiks yig'indi faqat oraliq so'rovlari uchun emas. Uni HashMap (<code>Map</code>) bilan birlashtirsak, \"yig'indisi aynan <code>k</code> ga teng nechta uzluksiz subarray bor?\" degan masalani ham O(n) da yechamiz. Bu juda muhim naqsh." },
+        { p: "G'oya: agar joriy prefiks <code>sum</code> bo'lsa va biror oldingi nuqtada prefiks <code>sum - k</code> bo'lgan bo'lsa, u nuqtadan hozirgacha bo'lgan subarray yig'indisi aynan <code>k</code> bo'ladi. Shuning uchun har bir prefiks qiymatini necha marta uchraganini <code>Map</code> da saqlaymiz." },
         { pg: [
           "function countSubarraysWithSum(arr, k) {",
           "  const seen = new Map();",
@@ -348,7 +511,7 @@ module.exports = {
           "  for (const x of arr) {",
           "    sum += x;",
           "    // sum - k oldin necha marta uchragan bo'lsa,",
-          "    // shuncha yangi subarray tugaydi shu yerda",
+          "    // shuncha yangi subarray shu yerda tugaydi",
           "    if (seen.has(sum - k)) {",
           "      count += seen.get(sum - k);",
           "    }",
@@ -361,25 +524,96 @@ module.exports = {
           "console.log(countSubarraysWithSum([1, 2, 3], 3));      // 2",
           "console.log(countSubarraysWithSum([3, 4, 7, 2, -3, 1, 4, 2], 7)); // 4"
         ].join("\n"), file: "subarray-sanash.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n) — bir marta aylanamiz, Map amallari o'rtacha O(1); xotira O(n) — Map da prefiks qiymatlari. Bu manfiy sonlar bilan ham ishlaydi, siljuvchi oyna esa bunday hollarda ishlamaydi." },
+        { p: "<strong>Big O:</strong> vaqt O(n) — bir marta aylanamiz, <code>Map</code> amallari o'rtacha O(1); xotira O(n) — <code>Map</code> da prefiks qiymatlari. Bu <strong>manfiy sonlar</strong> bilan ham to'g'ri ishlaydi (yuqoridagi <code>-3</code> ga e'tibor bering) — siljuvchi oyna esa manfiy sonlar bo'lgan bunday hollarda ishlamaydi. Aynan shuning uchun bu texnika juda qadrli." },
 
-        { h2: "2D prefiks yig'indi haqida eslatma" },
-        { p: "Xuddi shu g'oyani ikki o'lchamli matritsaga ham kengaytirish mumkin. U yerda <code>prefix[r][c]</code> — chap-yuqori burchakdan (r, c) gacha bo'lgan to'rtburchakning yig'indisi. Bir marta qurgandan keyin, ixtiyoriy to'rtburchak yig'indisini <strong>to'rtta</strong> prefiks qiymati bilan (qo'shish-ayirish orqali) O(1) da olamiz. Bu tasvir/jadval masalalarida keng qo'llaniladi." },
-        { note: "Prefiks yig'indi qo'shimcha O(n) xotira talab qiladi. Bu odatda arziydi, chunki evaziga har bir so'rov O(1) bo'ladi — massiv o'zgarmaydigan va ko'p so'raladigan hollarda bu ajoyib kelishuv." },
-        { tip: "Prefiks yig'indini shu belgilardan taniysiz: massiv <strong>o'zgarmaydi</strong>, lekin unga <strong>ko'p marta oraliq so'rovlari</strong> beriladi. Oldindan hisoblab qo'yish deyarli har doim g'alaba keltiradi." }
+        { h2: "Farqlar massivi (difference array)" },
+        { p: "Prefiks yig'indining teskarisi — <strong>farqlar massivi</strong>. Agar massivning ko'p oralig'iga bir xil qiymat qo'shishimiz kerak bo'lsa (masalan, <code>[i..j]</code> ga <code>+5</code>), har safar aylanib chiqmaymiz. Faqat ikkita nuqtani belgilaymiz, keyin oxirida bir marta prefiks yig'indi olib, haqiqiy massivni tiklaymiz." },
+        { pg: [
+          "function applyRangeUpdates(n, updates) {",
+          "  const diff = new Array(n + 1).fill(0);",
+          "  // har [i, j, val] uchun ikki nuqtani belgilaymiz",
+          "  for (const [i, j, val] of updates) {",
+          "    diff[i] += val;",
+          "    diff[j + 1] -= val;",
+          "  }",
+          "  // prefiks yig'indi orqali haqiqiy massivni tiklaymiz",
+          "  const result = new Array(n).fill(0);",
+          "  let running = 0;",
+          "  for (let i = 0; i < n; i++) {",
+          "    running += diff[i];",
+          "    result[i] = running;",
+          "  }",
+          "  return result;",
+          "}",
+          "",
+          "// 5 uzunlik massiv, [1..3] ga +2, keyin [0..2] ga +3",
+          "console.log(applyRangeUpdates(5, [[1, 3, 2], [0, 2, 3]]));",
+          "// [3, 5, 5, 2, 0]"
+        ].join("\n"), file: "difference-array.js" },
+        { p: "<strong>Big O:</strong> m ta yangilanish uchun O(m + n) — har yangilanish O(1), tiklash O(n). Naive usul har yangilanishni O(n) da qilib, O(m * n) bo'lardi." },
+
+        { h2: "2D prefiks yig'indi" },
+        { p: "Xuddi shu g'oyani ikki o'lchamli matritsaga ham kengaytirish mumkin. U yerda <code>prefix[r][c]</code> — chap-yuqori burchakdan (r-1, c-1) gacha bo'lgan to'rtburchakning yig'indisi. Bir marta qurgandan keyin, ixtiyoriy to'rtburchak yig'indisini <strong>to'rtta</strong> prefiks qiymati bilan (qo'shish-ayirish orqali) O(1) da olamiz." },
+        { pg: [
+          "function build2D(matrix) {",
+          "  const rows = matrix.length, cols = matrix[0].length;",
+          "  const p = Array.from({ length: rows + 1 },",
+          "    () => new Array(cols + 1).fill(0));",
+          "  for (let r = 0; r < rows; r++) {",
+          "    for (let c = 0; c < cols; c++) {",
+          "      p[r + 1][c + 1] = matrix[r][c]",
+          "        + p[r][c + 1] + p[r + 1][c] - p[r][c];",
+          "    }",
+          "  }",
+          "  return p;",
+          "}",
+          "",
+          "function regionSum(p, r1, c1, r2, c2) {",
+          "  return p[r2 + 1][c2 + 1] - p[r1][c2 + 1]",
+          "    - p[r2 + 1][c1] + p[r1][c1];",
+          "}",
+          "",
+          "const m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];",
+          "const p = build2D(m);",
+          "console.log(regionSum(p, 0, 0, 1, 1)); // 1+2+4+5 = 12",
+          "console.log(regionSum(p, 1, 1, 2, 2)); // 5+6+8+9 = 28"
+        ].join("\n"), file: "prefix-2d.js" },
+        { p: "<strong>Big O:</strong> qurish O(rows * cols), har so'rov O(1). Bu tasvir/jadval masalalarida keng qo'llaniladi." },
+
+        { h2: "Chegaraviy holatlar" },
+        { ul: [
+          "<strong>Bo'sh massiv</strong> — <code>prefix = [0]</code> bo'ladi, hech qanday so'rov yo'q. Xavfsiz.",
+          "<strong>Bitta element</strong> — <code>rangeSum(prefix, 0, 0) = prefix[1] - prefix[0] = arr[0]</code>. To'g'ri.",
+          "<strong>Manfiy sonlar</strong> — prefiks yig'indi manfiy qiymatlar bilan ham to'g'ri ishlaydi, chunki biz faqat qo'shish va ayirishdan foydalanamiz.",
+          "<strong>Butun massiv yig'indisi</strong> — <code>rangeSum(prefix, 0, n - 1) = prefix[n]</code>."
+        ] },
+
+        { h2: "Murakkablik jadvali" },
+        { code: [
+          "Masala                       | Naive    | Prefix Sum",
+          "-----------------------------|----------|------------",
+          "q ta oraliq so'rovi          | O(q*n)   | O(n + q)",
+          "Yig'indisi K subarraylar     | O(n^2)   | O(n)",
+          "m ta oraliq yangilanishi     | O(m*n)   | O(m + n)",
+          "2D to'rtburchak so'rovi      | O(q*n*m) | O(n*m + q)"
+        ].join("\n") },
+
+        { warn: "Eng ko'p uchraydigan xato — <strong>indekslashda off-by-one</strong> (bir birlik xato). <code>prefix[0] = 0</code> konvensiyasini qat'iy tuting: <code>prefix</code> massivi <strong>n + 1</strong> uzunlikda bo'ladi va <code>prefix[i]</code> birinchi <em>i</em> ta element yig'indisini bildiradi. Shuning uchun oraliq formulasi <code>prefix[j + 1] - prefix[i]</code> — bu yerda <code>j + 1</code> ni unutmang, aks holda oxirgi elementni tashlab qo'yasiz." },
+        { tip: "Prefiks yig'indini shu signal so'zlaridan taniysiz: massiv <strong>o'zgarmaydi</strong>, lekin unga <strong>ko'p marta oraliq so'rovi</strong> beriladi, yoki \"yig'indisi K ga teng subarraylar\" so'ralsa (ayniqsa <strong>manfiy sonlar</strong> bo'lganda — bunda siljuvchi oyna ishlamaydi). Oldindan hisoblab qo'yish deyarli har doim g'alaba keltiradi." },
+        { note: "Prefiks yig'indi qo'shimcha O(n) xotira talab qiladi. Bu odatda arziydi, chunki evaziga har bir so'rov O(1) bo'ladi — massiv o'zgarmaydigan va ko'p so'raladigan hollarda bu ajoyib kelishuv." }
       ]
     },
 
     {
       slug: "string-algoritmlari",
       title: "Satr (String) masalalari",
-      blurb: "Belgilarni sanash, anagram, palindrom, satr aylantirish va qidirish — intervyularda eng ko'p uchraydigan satr masalalari.",
+      blurb: "Belgilarni sanash, anagram, palindrom, satr aylantirish, guruhlash va qidirish — intervyularda eng ko'p uchraydigan satr masalalari.",
       body: [
-        { lead: "Satrlar bilan ishlash intervyularda va kundalik dasturlashda eng ko'p uchraydigan mavzulardan. Bu darsda belgilarni sanash, anagram va palindrom tekshirish, satrni aylantirish hamda qism satr qidirishni ko'rib chiqamiz. Ko'p masalalarda ikkita do'stimiz bor: <strong>HashMap</strong> va <strong>ikki ko'rsatkich</strong>." },
+        { lead: "Satrlar bilan ishlash intervyularda va kundalik dasturlashda eng ko'p uchraydigan mavzulardan. Bu darsda belgilarni sanash, anagram va palindrom tekshirish, satrni aylantirish, anagramlarni guruhlash hamda qism satr qidirishni ko'rib chiqamiz. Ko'p masalalarda ikkita do'stimiz bor: <strong>HashMap</strong> va <strong>ikki ko'rsatkich</strong>." },
 
         { h2: "JavaScript'da satr o'zgarmas (immutable)" },
-        { p: "Muhim tushuncha: JS'da satr <strong>o'zgarmas</strong>. Ya'ni <code>str[0] = 'x'</code> deb belgini almashtira olmaysiz — bu hech qanday ta'sir qilmaydi. Har qanday \"o'zgartirish\" aslida <em>yangi</em> satr yaratadi." },
-        { p: "Shuning uchun belgilarni ko'p marta o'zgartirish kerak bo'lsa, ko'pincha satrni <strong>massivga aylantiramiz</strong> (<code>str.split('')</code>), massiv ustida ishlaymiz, keyin qaytadan qo'shamiz (<code>arr.join('')</code>)." },
+        { p: "Muhim tushuncha: JS'da satr <strong>o'zgarmas</strong>. Ya'ni <code>str[0] = 'x'</code> deb belgini almashtira olmaysiz — bu hech qanday ta'sir qilmaydi. Har qanday \"o'zgartirish\" aslida <em>yangi</em> satr yaratadi. Bu shunchaki sintaksis qoidasi emas — u ish unumdorligiga jiddiy ta'sir qiladi." },
+        { p: "Nima uchun? Chunki satr xotirada o'zgarmas (immutable) blok sifatida saqlanadi. Bitta belgini almashtirmoqchi bo'lsangiz, JS <strong>butun satrni yangi joyga ko'chirib</strong> yangisini yaratishga majbur. Shuning uchun belgilarni ko'p marta o'zgartirish kerak bo'lsa, ko'pincha satrni <strong>massivga aylantiramiz</strong> (<code>str.split('')</code>), massiv ustida ishlaymiz, keyin qaytadan qo'shamiz (<code>arr.join('')</code>)." },
         { pg: [
           "const str = 'salom';",
           "",
@@ -394,7 +628,8 @@ module.exports = {
         ].join("\n"), file: "immutable.js" },
 
         { h2: "Belgi chastotasini sanash" },
-        { p: "Ko'p satr masalalarining asosi — har bir belgi necha marta uchraganini sanash. Buning uchun oddiy obyekt yoki <code>Map</code> ishlatamiz. Har belgini ko'rganimizda uning sanog'ini bittaga oshiramiz." },
+        { p: "Ko'p satr masalalarining asosi — har bir belgi necha marta uchraganini sanash. Bu shu qadar tez-tez kerak bo'ladiki, uni yoddan bilib olganingiz ma'qul. G'oya oddiy: har belgini ko'rganimizda uning sanog'ini bittaga oshiramiz. Buning uchun oddiy obyekt yoki <code>Map</code> ishlatamiz." },
+        { p: "<code>Map</code> ni tanlashning sababi — u har qanday belgini (jumladan bo'shliq, tinish belgilarini) kalit sifatida ishonchli saqlaydi va <code>size</code> kabi qulay xususiyatlarga ega. Oddiy obyekt ham ishlaydi va ko'pincha yozish qulayroq." },
         { pg: [
           "function charFrequency(str) {",
           "  const freq = new Map();",
@@ -416,12 +651,12 @@ module.exports = {
           "}",
           "console.log(freqObj('mamma')); // { m: 2, a: 2 }"
         ].join("\n"), file: "chastota.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n) — satrni bir marta aylanamiz; xotira O(k), bu yerda k — noyob belgilar soni." },
+        { p: "<strong>Big O:</strong> vaqt O(n) — satrni bir marta aylanamiz; xotira O(k), bu yerda k — noyob belgilar soni. Ushbu oddiy naqsh anagram, guruhlash va boshqa ko'plab masalalarning poydevori bo'lib xizmat qiladi." },
 
         { h2: "Anagram tekshirish (ikki usul)" },
-        { p: "Ikki satr <strong>anagram</strong> deyiladi, agar ular bir xil belgilardan, bir xil sonda, faqat boshqa tartibda tuzilgan bo'lsa (masalan, <code>listen</code> va <code>silent</code>). Ikki xil yechimni ko'ramiz." },
+        { p: "Ikki satr <strong>anagram</strong> deyiladi, agar ular bir xil belgilardan, bir xil sonda, faqat boshqa tartibda tuzilgan bo'lsa (masalan, <code>listen</code> va <code>silent</code>). Bu masala ish suhbatlarida juda tez-tez so'raladi va uni ikki xil yechish ikki xil fikrlashni ko'rsatadi. Avval eng ravon usul, keyin eng tez usulni ko'ramiz." },
         { h3: "1-usul: saralash orqali" },
-        { p: "Ikkala satrni belgilariga bo'lib saralaymiz. Agar ular anagram bo'lsa, saralangandan keyin bir xil bo'ladi." },
+        { p: "Ikkala satrni belgilariga bo'lib saralaymiz. Agar ular anagram bo'lsa, saralangandan keyin ularning belgi ketma-ketligi <strong>aynan bir xil</strong> bo'ladi. Bu usul yozish oson va o'qish ravon, lekin saralash sabab sekinroq." },
         { pg: [
           "function isAnagramSort(a, b) {",
           "  if (a.length !== b.length) return false;",
@@ -433,9 +668,9 @@ module.exports = {
           "console.log(isAnagramSort('salom', 'molas'));   // true",
           "console.log(isAnagramSort('abc', 'abd'));       // false"
         ].join("\n"), file: "anagram-sort.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n log n) — saralash tufayli; xotira O(n)." },
+        { p: "<strong>Big O:</strong> vaqt O(n log n) — saralash tufayli; xotira O(n) — belgilar massivi." },
         { h3: "2-usul: chastota bilan (tezroq)" },
-        { p: "Bitta satr belgilarini sanaymiz, ikkinchisi bilan esa sanoqni kamaytiramiz. Agar oxirida hamma sanoq nolga teng bo'lsa — anagram." },
+        { p: "Endi tezroq yo'l. Bitta satr belgilarini sanaymiz (chastota jadvali), ikkinchi satr bilan esa o'sha sanoqni kamaytiramiz. Agar biror belgi yetishmasa yoki sanoq manfiyga tushsa — anagram emas. Sanash naqshini ishlatib, saralashdan qutuldik." },
         { pg: [
           "function isAnagramFreq(a, b) {",
           "  if (a.length !== b.length) return false;",
@@ -451,10 +686,30 @@ module.exports = {
           "console.log(isAnagramFreq('listen', 'silent')); // true",
           "console.log(isAnagramFreq('rat', 'car'));       // false"
         ].join("\n"), file: "anagram-freq.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n) — ikki marta chiziqli aylanish; xotira O(k). Bu saralash usulidan tezroq, chunki O(n) &lt; O(n log n)." },
+        { p: "<strong>Big O:</strong> vaqt O(n) — ikki marta chiziqli aylanish; xotira O(k). Bu saralash usulidan tezroq, chunki O(n) &lt; O(n log n). Katta satrlarda farq sezilarli." },
+
+        { h2: "Anagramlarni guruhlash (group anagrams)" },
+        { p: "Kengaytirilgan masala: so'zlar ro'yxati berilgan, ularni anagramligiga qarab guruhlarga ajratish kerak. G'oya nafis: har bir so'z uchun uning <strong>saralangan ko'rinishi</strong> bir xil bo'lsa, ular bir guruhga tegishli. Saralangan ko'rinishni <code>Map</code> ning kaliti sifatida ishlatamiz." },
+        { pg: [
+          "function groupAnagrams(words) {",
+          "  const groups = new Map();",
+          "  for (const word of words) {",
+          "    // kalit = saralangan belgilar",
+          "    const key = word.split('').sort().join('');",
+          "    if (!groups.has(key)) groups.set(key, []);",
+          "    groups.get(key).push(word);",
+          "  }",
+          "  return Array.from(groups.values());",
+          "}",
+          "",
+          "console.log(groupAnagrams(",
+          "  ['eat', 'tea', 'tan', 'ate', 'nat', 'bat']));",
+          "// [['eat','tea','ate'], ['tan','nat'], ['bat']]"
+        ].join("\n"), file: "group-anagrams.js" },
+        { p: "<strong>Big O:</strong> vaqt O(m * k log k) — m ta so'z, har biri k uzunlik, saralash k log k; xotira O(m * k). Kalitni saralash o'rniga chastota bilan yasab, O(m * k) ga ham tushirish mumkin." },
 
         { h2: "Palindrom (ikki ko'rsatkich bilan)" },
-        { p: "Palindrom — oldidan va orqasidan bir xil o'qiladigan satr. Buni ikki ko'rsatkich bilan samarali tekshiramiz: biri boshdan, biri oxiridan yurib, belgilarni taqqoslaydi." },
+        { p: "Palindrom — oldidan va orqasidan bir xil o'qiladigan satr. Buni <em>ikki ko'rsatkich</em> darsidagi naqsh bilan samarali tekshiramiz: biri boshdan, biri oxiridan yurib, belgilarni taqqoslaydi. Farq topilishi bilanoq to'xtaymiz, shuning uchun butun satrni teskarilashdan tejamkorroq." },
         { pg: [
           "function isPalindrome(str) {",
           "  let left = 0;",
@@ -471,10 +726,10 @@ module.exports = {
           "console.log(isPalindrome('anna'));   // true",
           "console.log(isPalindrome('dastur')); // false"
         ].join("\n"), file: "palindrom-string.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(1) — qo'shimcha satr yaratmaymiz." },
+        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(1) — qo'shimcha satr yaratmaymiz. Bu ikki ko'rsatkichning tejamkorligining yaqqol namunasi." },
 
         { h2: "Satrni so'zlarga bo'lib teskarilash" },
-        { p: "Ko'p uchraydigan masala: gapdagi so'zlar tartibini teskarilash. Masalan, <code>'men dasturchiman'</code> dan <code>'dasturchiman men'</code>. Buni bo'lish, teskarilash va qo'shish bilan bajaramiz." },
+        { p: "Ko'p uchraydigan masala: gapdagi so'zlar tartibini teskarilash. Masalan, <code>'men dasturchiman'</code> dan <code>'dasturchiman men'</code>. Buni bo'lish, teskarilash va qo'shish bilan bajaramiz. Bu yerda oraliqdagi ortiqcha bo'shliqlarga e'tibor berish kerak — shuning uchun <code>trim</code> va bo'shliq regulyar ifodasidan foydalanamiz." },
         { pg: [
           "function reverseWords(str) {",
           "  return str",
@@ -484,17 +739,43 @@ module.exports = {
           "    .join(' ');",
           "}",
           "",
-          "console.log(reverseWords('men dasturni yaxshi ko\\'raman'));",
+          "console.log(reverseWords(\"men dasturni yaxshi ko'raman\"));",
           "// \"ko'raman yaxshi dasturni men\"",
           "console.log(reverseWords('  salom   dunyo  '));",
           "// 'dunyo salom'"
         ].join("\n"), file: "sozlarni-teskarilash.js" },
-        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(n) — so'zlar massivi va yangi satr." },
+        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(n) — so'zlar massivi va yangi satr yaratiladi." },
+
+        { h2: "Belgi kodlari: charCodeAt va indekslash" },
+        { p: "Ba'zan belgilar bilan emas, ularning <strong>sonli kodlari</strong> bilan ishlash qulay. Har bir belgi kompyuter xotirasida son sifatida saqlanadi (Unicode kod nuqtasi): <code>'a'</code> — 97, <code>'b'</code> — 98 va hokazo. <code>charCodeAt</code> belgining kod raqamini qaytaradi, <code>String.fromCharCode</code> esa aksincha — koddan belgi yasaydi." },
+        { p: "Buning kuchli qo'llanilishi: <code>'a'</code> dan <code>'z'</code> gacha bo'lgan 26 ta harfni <strong>0..25 indeksga</strong> aylantirib, chastotani <code>Map</code> o'rniga oddiy 26 uzunlikdagi massivda tez saqlash mumkin. Bu <code>Map</code> dan ham tezroq ishlaydi." },
+        { pg: [
+          "console.log('A'.charCodeAt(0)); // 65",
+          "console.log('a'.charCodeAt(0)); // 97",
+          "console.log(String.fromCharCode(66)); // 'B'",
+          "",
+          "// 'a'..'z' harflarni 0..25 indeksga solish:",
+          "function letterIndex(ch) {",
+          "  return ch.charCodeAt(0) - 'a'.charCodeAt(0);",
+          "}",
+          "console.log(letterIndex('a')); // 0",
+          "console.log(letterIndex('c')); // 2",
+          "console.log(letterIndex('z')); // 25",
+          "",
+          "// massivda chastota (faqat kichik lotin harflari):",
+          "function countLower(str) {",
+          "  const arr = new Array(26).fill(0);",
+          "  for (const ch of str) arr[letterIndex(ch)]++;",
+          "  return arr;",
+          "}",
+          "console.log(countLower('abca')[0]); // 2 ('a' ikki marta)"
+        ].join("\n"), file: "char-code.js" },
+        { p: "<strong>Big O:</strong> <code>charCodeAt</code> va <code>fromCharCode</code> — O(1) amallar. 26 uzunlikdagi massiv bilan chastota sanash O(n) vaqt, O(1) xotira (massiv o'lchami doim 26)." },
 
         { h2: "Qism satrni izlash (substring search)" },
-        { p: "\"<code>text</code> ichida <code>pattern</code> bormi va qayerda?\" Sodda (naive) g'oya: <code>text</code> ning har bir pozitsiyasidan boshlab, <code>pattern</code> bilan belgi-belgi solishtiramiz." },
+        { p: "\"<code>text</code> ichida <code>pattern</code> bormi va qayerda?\" degan savol keng tarqalgan. Naive g'oya: <code>text</code> ning har bir pozitsiyasidan boshlab, <code>pattern</code> bilan belgi-belgi solishtiramiz. Mos kelmasa, keyingi pozitsiyaga o'tamiz." },
         { pg: [
-          "// Sodda substring qidiruv: O(n*m)",
+          "// Naive substring qidiruv: O(n*m)",
           "function indexOfNaive(text, pattern) {",
           "  const n = text.length;",
           "  const m = pattern.length;",
@@ -513,25 +794,71 @@ module.exports = {
           "// amalda tayyor metod bor:",
           "console.log('abracadabra'.indexOf('cad')); // 4"
         ].join("\n"), file: "substring-qidiruv.js" },
-        { p: "<strong>Big O:</strong> sodda usul eng yomon holatda O(n*m), bu yerda n — matn, m — pattern uzunligi. Amalda JS'ning tayyor <code>indexOf</code> yoki <code>includes</code> metodlaridan foydalanamiz. (Katta matnlarda KMP kabi O(n+m) algoritmlar ham bor, lekin ular alohida mavzu.)" },
+        { p: "<strong>Big O:</strong> naive usul eng yomon holatda O(n*m), bu yerda n — matn, m — pattern uzunligi. Amalda JS'ning tayyor <code>indexOf</code> yoki <code>includes</code> metodlaridan foydalanamiz. Katta matnlarda O(n+m) da ishlaydigan tezroq algoritmlar ham bor — masalan <strong>KMP (Knuth-Morris-Pratt)</strong> — lekin ular alohida, chuqurroq mavzu; hozircha faqat nomini bilib qo'ying." },
 
-        { h2: "Belgi kodlari: charCodeAt" },
-        { p: "Ba'zan belgilar bilan emas, ularning <strong>sonli kodlari</strong> bilan ishlash qulay. <code>charCodeAt</code> belgining kod raqamini qaytaradi, <code>String.fromCharCode</code> esa aksincha — koddan belgi yasaydi. Bu, masalan, chastota massivini indeks bilan tez saqlashda foydali." },
+        { h2: "Takrorlanmaydigan eng uzun substring (bog'lash)" },
+        { p: "Satr masalalari boshqa texnikalar bilan chambarchas bog'liq. Takrorlanmaydigan eng uzun substringni topish aslida <em>siljuvchi oyna</em> darsidagi naqsh: <code>Set</code> bilan oyna ichidagi belgilarni kuzatib, takror uchraganda chapdan qisqartiramiz. Bu yerda uni satr kontekstida qayta ko'ramiz." },
         { pg: [
-          "console.log('A'.charCodeAt(0)); // 65",
-          "console.log('a'.charCodeAt(0)); // 97",
-          "console.log(String.fromCharCode(66)); // 'B'",
-          "",
-          "// 'a' dan 'z' gacha bo'lgan harflarni 0..25 indeksga solish:",
-          "function letterIndex(ch) {",
-          "  return ch.charCodeAt(0) - 'a'.charCodeAt(0);",
+          "function longestUniqueSubstring(str) {",
+          "  const seen = new Set();",
+          "  let left = 0;",
+          "  let best = 0;",
+          "  for (let right = 0; right < str.length; right++) {",
+          "    while (seen.has(str[right])) {",
+          "      seen.delete(str[left]);",
+          "      left++;",
+          "    }",
+          "    seen.add(str[right]);",
+          "    best = Math.max(best, right - left + 1);",
+          "  }",
+          "  return best;",
           "}",
-          "console.log(letterIndex('a')); // 0",
-          "console.log(letterIndex('c')); // 2",
-          "console.log(letterIndex('z')); // 25"
-        ].join("\n"), file: "char-code.js" },
-        { p: "<strong>Big O:</strong> <code>charCodeAt</code> va <code>fromCharCode</code> — O(1) amallar." },
-        { tip: "Satr masalalarida ikkita naqshni birinchi bo'lib eslang: belgilarni sanash yoki juftlash kerak bo'lsa — <strong>HashMap (obyekt yoki Map)</strong>; simmetriya yoki ikki tomondan solishtirish kerak bo'lsa — <strong>ikki ko'rsatkich</strong>. Bu ikkisi satr masalalarining aksariyatini qamrab oladi." }
+          "",
+          "console.log(longestUniqueSubstring('abcabcbb')); // 3",
+          "console.log(longestUniqueSubstring('dvdf'));     // 3 ('vdf')"
+        ].join("\n"), file: "uzun-substring-satr.js" },
+        { p: "<strong>Big O:</strong> vaqt O(n), xotira O(min(n, alifbo hajmi)). Ko'rib turganingizdek, satr masalalari ko'pincha ikki ko'rsatkich va siljuvchi oyna g'oyalarini qayta ishlatadi." },
+
+        { h2: "Chegaraviy holatlar: Unicode va katta-kichik harf" },
+        { p: "Satr masalalarida quyidagi chetki holatlarga alohida e'tibor bering, ular ko'pincha xatoga sabab bo'ladi:" },
+        { ul: [
+          "<strong>Bo'sh satr</strong> (<code>''</code>) — chastota bo'sh, palindrom <code>true</code>, qidiruv <code>-1</code>. Kod tabiiy to'g'ri ishlaydi.",
+          "<strong>Bitta belgi</strong> — doim palindrom; takrorlanmaydigan uzunlik 1.",
+          "<strong>Katta-kichik harf</strong> — <code>'A'</code> va <code>'a'</code> turli belgilar! Agar farqlamaslik kerak bo'lsa, avval <code>str.toLowerCase()</code> qiling.",
+          "<strong>Bo'shliq va tinish belgilari</strong> — \"toza\" palindrom tekshiruvida ularni oldindan olib tashlashingiz kerak bo'lishi mumkin.",
+          "<strong>Unicode</strong> — ba'zi belgilar (emoji, ba'zi harflar) ikki \"kod birligi\" dan iborat. <code>for...of</code> ular ustidan to'g'ri yuradi, lekin <code>str[i]</code> indekslash yarim belgini qaytarishi mumkin."
+        ] },
+        { pg: [
+          "// katta-kichik harfni farqlamay palindrom",
+          "function isPalindromeLoose(str) {",
+          "  const clean = str.toLowerCase().replace(/[^a-z0-9]/g, '');",
+          "  let left = 0, right = clean.length - 1;",
+          "  while (left < right) {",
+          "    if (clean[left] !== clean[right]) return false;",
+          "    left++; right--;",
+          "  }",
+          "  return true;",
+          "}",
+          "",
+          "console.log(isPalindromeLoose('A man a plan a canal Panama')); // true",
+          "console.log(isPalindromeLoose('Salom')); // false"
+        ].join("\n"), file: "unicode-holatlar.js" },
+
+        { h2: "Murakkablik jadvali" },
+        { code: [
+          "Masala               | Vaqt        | Xotira",
+          "---------------------|-------------|--------",
+          "Chastota sanash      | O(n)        | O(k)",
+          "Anagram (saralash)   | O(n log n)  | O(n)",
+          "Anagram (chastota)   | O(n)        | O(k)",
+          "Group anagrams       | O(m*k log k)| O(m*k)",
+          "Palindrom            | O(n)        | O(1)",
+          "Substring (naive)    | O(n*m)      | O(1)",
+          "Uzun uniq substring  | O(n)        | O(k)"
+        ].join("\n") },
+
+        { warn: "Eng ko'p uchraydigan xato — satr <strong>o'zgarmasligini</strong> unutish. Katta sikllarda <code>result += ch</code> kabi yozsangiz, har <code>+=</code> <strong>butun satrni yangidan yaratadi</strong>. Agar n marta qo'shsangiz, jami ish O(n&sup2;) ga chiqadi va katta matnlarda dastur sekinlashadi. To'g'ri yo'l: bo'laklarni massivga yig'ib (<code>parts.push(ch)</code>), oxirida bir marta <code>parts.join('')</code> qiling — bu O(n)." },
+        { tip: "Satr masalalarida ikkita naqshni birinchi bo'lib eslang: belgilarni <strong>sanash yoki juftlash</strong> kerak bo'lsa — <strong>HashMap (obyekt, Map yoki 26 uzunlik massiv)</strong>; <strong>simmetriya</strong> yoki ikki tomondan solishtirish kerak bo'lsa — <strong>ikki ko'rsatkich</strong>; <strong>uzluksiz qism (substring)</strong> haqida so'ralsa — <strong>siljuvchi oyna</strong>. Bu uch naqsh satr masalalarining aksariyatini qamrab oladi." }
       ]
     }
   ]
