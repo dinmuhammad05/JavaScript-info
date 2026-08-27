@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ikkilik qidiruv (Binary Search) — Kodla</title>
+  <meta name="description" content="Saralangan massivda O(log n) da qidirish, chap/o'ng chegaralar, klassik xatolar va binary search ustidagi variatsiyalar.">
+  <link rel="stylesheet" href="../css/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a href="../index.html" class="logo"><span class="mark">K</span> Kodla <small style="font-weight:400;color:#9ca3af">dasturlash — o'zbekcha</small></a>
+    <nav class="site-nav">
+      <a href="../index.html">Bosh sahifa</a>
+      <a href="../index.html#mundarija">Mundarija</a>
+      <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">Muallif</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menyu">☰</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="side-search">
+    <input type="search" id="lessonSearch" placeholder="🔍 Qidirish (mavzu + matn)..." aria-label="Dars qidirish" autocomplete="off">
+    <div class="side-noresult" hidden>Hech narsa topilmadi</div>
+  </div>
+  <details class="part-group">
+    <summary class="part-summary">1-qism: JavaScript tili</summary>
+    <details class="chapter-group">
+      <summary>Kirish</summary>
+      <ol>
+        <li><a href="../lessons/js-haqida.html">JavaScript haqida</a></li>
+        <li><a href="../lessons/qollanmalar.html">Qo'llanmalar va spetsifikatsiyalar</a></li>
+        <li><a href="../lessons/muharrirlar.html">Kod muharrirlari</a></li>
+        <li><a href="../lessons/konsol.html">Ishlab chiquvchi konsoli</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>JavaScript asoslari</summary>
+      <ol>
+        <li><a href="../lessons/salom-dunyo.html">Salom, dunyo!</a></li>
+        <li><a href="../lessons/kod-tuzilishi.html">Kod tuzilishi</a></li>
+        <li><a href="../lessons/use-strict.html">Zamonaviy rejim, "use strict"</a></li>
+        <li><a href="../lessons/ozgaruvchilar.html">O'zgaruvchilar</a></li>
+        <li><a href="../lessons/malumot-turlari.html">Ma'lumot turlari</a></li>
+        <li><a href="../lessons/turlarni-ozgartirish.html">Turlarni o'zgartirish</a></li>
+        <li><a href="../lessons/operatorlar.html">Asosiy operatorlar, matematika</a></li>
+        <li><a href="../lessons/taqqoslashlar.html">Taqqoslashlar</a></li>
+        <li><a href="../lessons/if-else.html">Shartli operatorlar: if, ?</a></li>
+        <li><a href="../lessons/mantiqiy-operatorlar.html">Mantiqiy operatorlar</a></li>
+        <li><a href="../lessons/nullish.html">Nullish birlashtiruvchi operator ??</a></li>
+        <li><a href="../lessons/sikllar.html">Sikllar: while va for</a></li>
+        <li><a href="../lessons/switch.html">switch konstruksiyasi</a></li>
+        <li><a href="../lessons/funksiyalar.html">Funksiyalar</a></li>
+        <li><a href="../lessons/funksiya-ifodalari.html">Funksiya ifodalari</a></li>
+        <li><a href="../lessons/strelka-funksiyalar.html">Strelka funksiyalari, asoslari</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Kod sifati</summary>
+      <ol>
+        <li><a href="../lessons/debugging.html">Brauzerda debugging</a></li>
+        <li><a href="../lessons/kod-uslubi.html">Kod uslubi</a></li>
+        <li><a href="../lessons/izohlar.html">Izohlar</a></li>
+        <li><a href="../lessons/testlash.html">Avtomatlashtirilgan testlar (Mocha)</a></li>
+        <li><a href="../lessons/polyfill.html">Polyfill va transpilyatorlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Obyektlar: asoslar</summary>
+      <ol>
+        <li><a href="../lessons/obyektlar.html">Obyektlar</a></li>
+        <li><a href="../lessons/obyekt-nusxalash.html">Obyekt havolalari va nusxalash</a></li>
+        <li><a href="../lessons/garbage-collection.html">Axlat yig'ish (Garbage collection)</a></li>
+        <li><a href="../lessons/obyekt-metodlari.html">Obyekt metodlari, this</a></li>
+        <li><a href="../lessons/new-operator.html">Konstruktor, new operatori</a></li>
+        <li><a href="../lessons/optional-chaining.html">Optional chaining ?.</a></li>
+        <li><a href="../lessons/symbol.html">Symbol turi</a></li>
+        <li><a href="../lessons/obyekt-primitiv.html">Obyektni primitivga o'girish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ma'lumot turlari</summary>
+      <ol>
+        <li><a href="../lessons/primitiv-metodlar.html">Primitivlar metodlari</a></li>
+        <li><a href="../lessons/sonlar.html">Sonlar</a></li>
+        <li><a href="../lessons/satrlar.html">Satrlar</a></li>
+        <li><a href="../lessons/massivlar.html">Massivlar</a></li>
+        <li><a href="../lessons/massiv-metodlari.html">Massiv metodlari</a></li>
+        <li><a href="../lessons/iterable.html">Iteratsiyalanuvchi obyektlar (iterable)</a></li>
+        <li><a href="../lessons/map-set.html">Map va Set</a></li>
+        <li><a href="../lessons/weakmap-weakset.html">WeakMap va WeakSet</a></li>
+        <li><a href="../lessons/object-keys.html">Object.keys, values, entries</a></li>
+        <li><a href="../lessons/destructuring.html">Destrukturizatsiya</a></li>
+        <li><a href="../lessons/sana-vaqt.html">Sana va vaqt (Date)</a></li>
+        <li><a href="../lessons/json-metodlari.html">JSON metodlari, toJSON</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Funksiyalar bilan chuqur ishlash</summary>
+      <ol>
+        <li><a href="../lessons/rekursiya.html">Rekursiya va stek</a></li>
+        <li><a href="../lessons/rest-spread.html">Rest parametrlar va spread</a></li>
+        <li><a href="../lessons/closure.html">O'zgaruvchi ko'lami, closure</a></li>
+        <li><a href="../lessons/eski-var.html">Eski "var"</a></li>
+        <li><a href="../lessons/global-obyekt.html">Global obyekt</a></li>
+        <li><a href="../lessons/funksiya-obyekti.html">Funksiya obyekti, NFE</a></li>
+        <li><a href="../lessons/new-function.html">new Function sintaksisi</a></li>
+        <li><a href="../lessons/settimeout.html">setTimeout va setInterval</a></li>
+        <li><a href="../lessons/call-apply.html">Dekoratorlar va uzatish, call/apply</a></li>
+        <li><a href="../lessons/bind.html">Funksiya bog'lash (bind)</a></li>
+        <li><a href="../lessons/strelka-qayta.html">Strelka funksiyalari (qayta ko'rib chiqish)</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Obyekt xossalari konfiguratsiyasi</summary>
+      <ol>
+        <li><a href="../lessons/property-flags.html">Xossa bayroqlari va deskriptorlari</a></li>
+        <li><a href="../lessons/getter-setter.html">Getter va setterlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Prototiplar, meros</summary>
+      <ol>
+        <li><a href="../lessons/prototip-meros.html">Prototipli meros</a></li>
+        <li><a href="../lessons/f-prototype.html">F.prototype</a></li>
+        <li><a href="../lessons/native-prototype.html">Tug'ma prototiplar</a></li>
+        <li><a href="../lessons/prototip-metodlari.html">Prototip metodlari, __proto__siz obyektlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Klasslar</summary>
+      <ol>
+        <li><a href="../lessons/klass-asoslari.html">Klass asosiy sintaksisi</a></li>
+        <li><a href="../lessons/klass-meros.html">Klass merosi</a></li>
+        <li><a href="../lessons/static-metodlar.html">Statik xossa va metodlar</a></li>
+        <li><a href="../lessons/private-protected.html">Maxfiy va himoyalangan xossalar</a></li>
+        <li><a href="../lessons/built-in-extend.html">Tug'ma klasslarni kengaytirish</a></li>
+        <li><a href="../lessons/instanceof.html">instanceof tekshiruvi</a></li>
+        <li><a href="../lessons/mixin.html">Mixinlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Xatoliklarni boshqarish</summary>
+      <ol>
+        <li><a href="../lessons/try-catch.html">Xatoliklarni boshqarish, try...catch</a></li>
+        <li><a href="../lessons/custom-error.html">Maxsus xatoliklar, Error'ni kengaytirish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Promise, async/await</summary>
+      <ol>
+        <li><a href="../lessons/callback.html">Kirish: callback'lar</a></li>
+        <li><a href="../lessons/promise.html">Promise</a></li>
+        <li><a href="../lessons/promise-chaining.html">Promise zanjiri</a></li>
+        <li><a href="../lessons/promise-error.html">Promise bilan xatoliklarni boshqarish</a></li>
+        <li><a href="../lessons/promise-api.html">Promise API</a></li>
+        <li><a href="../lessons/promisification.html">Promisifikatsiya</a></li>
+        <li><a href="../lessons/microtask.html">Mikrovazifalar (microtasks)</a></li>
+        <li><a href="../lessons/async-await.html">Async/await</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Generatorlar, ilg'or iteratsiya</summary>
+      <ol>
+        <li><a href="../lessons/generator.html">Generatorlar</a></li>
+        <li><a href="../lessons/async-iteration.html">Asinxron iteratsiya va generatorlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Modullar</summary>
+      <ol>
+        <li><a href="../lessons/modul-kirish.html">Modullar, kirish</a></li>
+        <li><a href="../lessons/export-import.html">Eksport va Import</a></li>
+        <li><a href="../lessons/dynamic-import.html">Dinamik importlar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Qo'shimcha mavzular</summary>
+      <ol>
+        <li><a href="../lessons/proxy-reflect.html">Proxy va Reflect</a></li>
+        <li><a href="../lessons/eval.html">Eval: kod satrini ishga tushirish</a></li>
+        <li><a href="../lessons/currying.html">Karrilash (Currying)</a></li>
+        <li><a href="../lessons/reference-type.html">Reference Type</a></li>
+        <li><a href="../lessons/bigint.html">BigInt</a></li>
+        <li><a href="../lessons/unicode.html">Unicode, satr ichki tuzilishi</a></li>
+        <li><a href="../lessons/weakref.html">WeakRef va FinalizationRegistry</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">2-qism: Brauzer — hujjat, hodisalar, interfeyslar</summary>
+    <details class="chapter-group">
+      <summary>Hujjat (DOM)</summary>
+      <ol>
+        <li><a href="../lessons/brauzer-muhiti.html">Brauzer muhiti va spetsifikatsiyalar</a></li>
+        <li><a href="../lessons/dom-daraxti.html">DOM daraxti</a></li>
+        <li><a href="../lessons/dom-boylab.html">DOM bo'ylab harakatlanish</a></li>
+        <li><a href="../lessons/dom-qidirish.html">Elementlarni qidirish: getElement*, querySelector*</a></li>
+        <li><a href="../lessons/node-xossalari.html">Node xossalari: tur, teg va tarkib</a></li>
+        <li><a href="../lessons/atributlar.html">Atributlar va xossalar</a></li>
+        <li><a href="../lessons/dom-ozgartirish.html">Hujjatni o'zgartirish</a></li>
+        <li><a href="../lessons/style-class.html">Uslublar va klasslar</a></li>
+        <li><a href="../lessons/element-olcham.html">Element o'lchami va skroll</a></li>
+        <li><a href="../lessons/oyna-olcham.html">Oyna o'lchamlari va skroll</a></li>
+        <li><a href="../lessons/koordinatalar.html">Koordinatalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Hodisalarga kirish</summary>
+      <ol>
+        <li><a href="../lessons/hodisalar-kirish.html">Brauzer hodisalariga kirish</a></li>
+        <li><a href="../lessons/bubbling-capturing.html">Ko'tarilish va tutish (bubbling va capturing)</a></li>
+        <li><a href="../lessons/event-delegation.html">Hodisa delegatsiyasi</a></li>
+        <li><a href="../lessons/default-actions.html">Brauzerning standart harakatlari</a></li>
+        <li><a href="../lessons/custom-events.html">Maxsus hodisalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>UI hodisalari</summary>
+      <ol>
+        <li><a href="../lessons/sichqoncha-hodisalari.html">Sichqoncha hodisalari</a></li>
+        <li><a href="../lessons/mouseover-out.html">mouseover/out, mouseenter/leave</a></li>
+        <li><a href="../lessons/drag-drop.html">Drag'n'Drop (sichqoncha bilan)</a></li>
+        <li><a href="../lessons/pointer-events.html">Pointer hodisalari</a></li>
+        <li><a href="../lessons/klaviatura.html">Klaviatura: keydown va keyup</a></li>
+        <li><a href="../lessons/scroll.html">Skroll</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Formalar va boshqaruv elementlari</summary>
+      <ol>
+        <li><a href="../lessons/form-xossalari.html">Forma xossalari va metodlari</a></li>
+        <li><a href="../lessons/focus-blur.html">Fokuslash: focus/blur</a></li>
+        <li><a href="../lessons/form-hodisalari.html">Hodisalar: change, input, cut, copy, paste</a></li>
+        <li><a href="../lessons/form-submit.html">Forma yuborish: submit hodisasi va metod</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Hujjat va resurs yuklanishi</summary>
+      <ol>
+        <li><a href="../lessons/page-lifecycle.html">Sahifa: DOMContentLoaded, load, beforeunload, unload</a></li>
+        <li><a href="../lessons/script-async-defer.html">Skriptlar: async, defer</a></li>
+        <li><a href="../lessons/resurs-yuklash.html">Resurs yuklash: onload va onerror</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Qo'shimcha brauzer mavzulari</summary>
+      <ol>
+        <li><a href="../lessons/mutation-observer.html">Mutation observer</a></li>
+        <li><a href="../lessons/selection-range.html">Tanlash va Range</a></li>
+        <li><a href="../lessons/event-loop.html">Hodisalar tsikli: mikro va makrovazifalar</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">3-qism: Qo'shimcha bo'limlar</summary>
+    <details class="chapter-group">
+      <summary>Oynalar va freymlar</summary>
+      <ol>
+        <li><a href="../lessons/popup.html">Popup oynalar va window metodlari</a></li>
+        <li><a href="../lessons/cross-window.html">Oynalararo aloqa</a></li>
+        <li><a href="../lessons/clickjacking.html">Clickjacking hujumi</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ikkilik ma'lumot va fayllar</summary>
+      <ol>
+        <li><a href="../lessons/arraybuffer.html">ArrayBuffer, TypedArray</a></li>
+        <li><a href="../lessons/textdecoder.html">TextDecoder va TextEncoder</a></li>
+        <li><a href="../lessons/blob.html">Blob</a></li>
+        <li><a href="../lessons/file-filereader.html">File va FileReader</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Tarmoq so'rovlari</summary>
+      <ol>
+        <li><a href="../lessons/fetch.html">Fetch</a></li>
+        <li><a href="../lessons/fetch-json.html">Fetch: so'rovlar va JSON</a></li>
+        <li><a href="../lessons/formdata.html">FormData</a></li>
+        <li><a href="../lessons/fetch-progress.html">Fetch: yuklanish jarayoni</a></li>
+        <li><a href="../lessons/xhr.html">XMLHttpRequest</a></li>
+        <li><a href="../lessons/websocket.html">WebSocket</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Brauzerda ma'lumot saqlash</summary>
+      <ol>
+        <li><a href="../lessons/cookie.html">Cookie</a></li>
+        <li><a href="../lessons/localstorage.html">localStorage va sessionStorage</a></li>
+        <li><a href="../lessons/indexeddb.html">IndexedDB</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Muntazam ifodalar (RegExp)</summary>
+      <ol>
+        <li><a href="../lessons/regexp-kirish.html">Muntazam ifodalar: kirish</a></li>
+        <li><a href="../lessons/regexp-belgilar.html">Belgilar sinflari</a></li>
+        <li><a href="../lessons/regexp-anchor.html">Langarlar: ^ va $, ko'p qatorli rejim</a></li>
+        <li><a href="../lessons/regexp-quantifiers.html">Kvantorlar: +, *, ?, {n,m}</a></li>
+        <li><a href="../lessons/regexp-groups.html">Guruhlash va tutish</a></li>
+        <li><a href="../lessons/regexp-alternation.html">Alternatsiya (yoki) |</a></li>
+        <li><a href="../lessons/regexp-lookahead.html">Lookahead va lookbehind</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">4-qism: Amaliy vositalar</summary>
+    <details class="chapter-group">
+      <summary>Git va GitHub</summary>
+      <ol>
+        <li><a href="../lessons/git-github-nima.html">Git va GitHub nima?</a></li>
+        <li><a href="../lessons/git-ornatish.html">Git o'rnatish va sozlash</a></li>
+        <li><a href="../lessons/git-asoslar.html">Git asosiy buyruqlari</a></li>
+        <li><a href="../lessons/git-branch-merge.html">Branch va birlashtirish (merge)</a></li>
+        <li><a href="../lessons/github-remote.html">GitHub bilan ishlash: clone, push, pull</a></li>
+        <li><a href="../lessons/github-jamoa.html">Jamoa bilan ishlash: fork va Pull Request</a></li>
+        <li><a href="../lessons/git-foydali.html">Foydali vositalar: .gitignore, undo, stash</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Docker</summary>
+      <ol>
+        <li><a href="../lessons/docker-nima.html">Docker nima? Konteynerlar</a></li>
+        <li><a href="../lessons/docker-ornatish.html">Docker o'rnatish va birinchi konteyner</a></li>
+        <li><a href="../lessons/docker-buyruqlar.html">Asosiy Docker buyruqlari</a></li>
+        <li><a href="../lessons/dockerfile.html">Dockerfile va o'z image'ingizni yaratish</a></li>
+        <li><a href="../lessons/docker-compose.html">Docker Compose</a></li>
+        <li><a href="../lessons/docker-volume-network.html">Volume va tarmoq (network)</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Nginx</summary>
+      <ol>
+        <li><a href="../lessons/nginx-nima.html">Nginx nima?</a></li>
+        <li><a href="../lessons/nginx-ornatish.html">Nginx o'rnatish va boshqarish</a></li>
+        <li><a href="../lessons/nginx-config.html">Konfiguratsiya asoslari</a></li>
+        <li><a href="../lessons/nginx-static.html">Statik saytga xizmat ko'rsatish</a></li>
+        <li><a href="../lessons/nginx-reverse-proxy.html">Reverse proxy va load balancing</a></li>
+        <li><a href="../lessons/nginx-ssl.html">SSL/HTTPS sozlash</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Linux va terminal</summary>
+      <ol>
+        <li><a href="../lessons/linux-nima.html">Linux va terminal nima?</a></li>
+        <li><a href="../lessons/fayl-tizimi.html">Fayl tizimi va navigatsiya</a></li>
+        <li><a href="../lessons/fayl-buyruqlar.html">Fayllar bilan ishlash</a></li>
+        <li><a href="../lessons/huquqlar.html">Ruxsatlar va egalik</a></li>
+        <li><a href="../lessons/jarayon-tarmoq.html">Jarayonlar va tarmoq</a></li>
+        <li><a href="../lessons/bash-skript.html">Bash skript asoslari</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">5-qism: Backend dasturlash</summary>
+    <details class="chapter-group">
+      <summary>Node.js va Express</summary>
+      <ol>
+        <li><a href="../lessons/nodejs-nima.html">Node.js nima?</a></li>
+        <li><a href="../lessons/node-modullar.html">Modullar va npm</a></li>
+        <li><a href="../lessons/node-fs-http.html">Fayl tizimi va HTTP server</a></li>
+        <li><a href="../lessons/express-kirish.html">Express asoslari</a></li>
+        <li><a href="../lessons/express-rest.html">REST API yaratish</a></li>
+        <li><a href="../lessons/express-middleware.html">Middleware va xatoliklar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ma'lumotlar bazalari</summary>
+      <ol>
+        <li><a href="../lessons/db-nima.html">Ma'lumotlar bazasi nima?</a></li>
+        <li><a href="../lessons/sql-asoslar.html">SQL asoslari</a></li>
+        <li><a href="../lessons/sql-join.html">SQL: bog'lanishlar va JOIN</a></li>
+        <li><a href="../lessons/mongodb.html">MongoDB (NoSQL)</a></li>
+        <li><a href="../lessons/node-db.html">Node.js bilan bazaga ulanish</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Web xavfsizligi va autentifikatsiya</summary>
+      <ol>
+        <li><a href="../lessons/web-xavfsizlik.html">Web xavfsizligi asoslari</a></li>
+        <li><a href="../lessons/auth-asoslar.html">Autentifikatsiya va avtorizatsiya</a></li>
+        <li><a href="../lessons/jwt.html">JWT (JSON Web Token)</a></li>
+        <li><a href="../lessons/xss-csrf.html">XSS va CSRF</a></li>
+        <li><a href="../lessons/sql-injection.html">SQL injection va boshqa himoyalar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>NestJS</summary>
+      <ol>
+        <li><a href="../lessons/nestjs-nima.html">NestJS nima?</a></li>
+        <li><a href="../lessons/nestjs-struktura.html">Loyiha tuzilishi: Module, Controller, Service</a></li>
+        <li><a href="../lessons/nestjs-routing.html">Routing va DTO</a></li>
+        <li><a href="../lessons/nestjs-di.html">Provider va Dependency Injection</a></li>
+        <li><a href="../lessons/nestjs-database.html">Ma'lumotlar bazasi (TypeORM)</a></li>
+        <li><a href="../lessons/nestjs-guard.html">Middleware, Guard, Interceptor, Exception filter</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">6-qism: Frontend asoslari</summary>
+    <details class="chapter-group">
+      <summary>HTML</summary>
+      <ol>
+        <li><a href="../lessons/html-nima.html">HTML nima?</a></li>
+        <li><a href="../lessons/html-teglar.html">Asosiy teglar</a></li>
+        <li><a href="../lessons/html-form.html">Formalar</a></li>
+        <li><a href="../lessons/html-semantik.html">Semantik HTML</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>CSS</summary>
+      <ol>
+        <li><a href="../lessons/css-nima.html">CSS nima?</a></li>
+        <li><a href="../lessons/css-box.html">Box model</a></li>
+        <li><a href="../lessons/css-flexbox.html">Flexbox</a></li>
+        <li><a href="../lessons/css-grid.html">CSS Grid</a></li>
+        <li><a href="../lessons/css-responsive.html">Responsive dizayn</a></li>
+        <li><a href="../lessons/css-styling.html">Ranglar, shrift va bezaklar</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>TypeScript</summary>
+      <ol>
+        <li><a href="../lessons/ts-nima.html">TypeScript nima?</a></li>
+        <li><a href="../lessons/ts-turlar.html">Asosiy turlar</a></li>
+        <li><a href="../lessons/ts-interface.html">Interfeys va tip aliaslari</a></li>
+        <li><a href="../lessons/ts-funksiya.html">Funksiyalar va generiklar</a></li>
+        <li><a href="../lessons/ts-class.html">Klasslar va konfiguratsiya</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>React</summary>
+      <ol>
+        <li><a href="../lessons/react-nima.html">React nima?</a></li>
+        <li><a href="../lessons/react-jsx.html">JSX va komponentlar</a></li>
+        <li><a href="../lessons/react-props.html">Props</a></li>
+        <li><a href="../lessons/react-state.html">State va useState</a></li>
+        <li><a href="../lessons/react-effect.html">useEffect va yon effektlar</a></li>
+        <li><a href="../lessons/react-list-form.html">Ro'yxatlar va formalar</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group">
+    <summary class="part-summary">7-qism: Testlash va yetkazib berish</summary>
+    <details class="chapter-group">
+      <summary>Testlash (Jest)</summary>
+      <ol>
+        <li><a href="../lessons/testlash-nima.html">Nega test yozamiz?</a></li>
+        <li><a href="../lessons/jest-boshlash.html">Jest asoslari</a></li>
+        <li><a href="../lessons/jest-async-mock.html">Async testlar va mock</a></li>
+        <li><a href="../lessons/jest-amaliyot.html">Coverage va yaxshi amaliyot</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>CI/CD (GitHub Actions)</summary>
+      <ol>
+        <li><a href="../lessons/cicd-nima.html">CI/CD nima?</a></li>
+        <li><a href="../lessons/actions-asoslar.html">GitHub Actions asoslari</a></li>
+        <li><a href="../lessons/actions-test.html">Avtomatik test va build</a></li>
+        <li><a href="../lessons/actions-deploy.html">Avtomatik deploy</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Loyihani deploy qilish</summary>
+      <ol>
+        <li><a href="../lessons/deploy-nima.html">Deploy nima?</a></li>
+        <li><a href="../lessons/deploy-vps.html">VPS serverga deploy qilish</a></li>
+        <li><a href="../lessons/deploy-frontend.html">Frontend/statik saytni deploy qilish</a></li>
+        <li><a href="../lessons/deploy-domain-ssl.html">Domen ulash va HTTPS</a></li>
+      </ol>
+    </details>
+  </details>
+  <details class="part-group" open>
+    <summary class="part-summary">8-qism: Algoritmlar va ma'lumotlar tuzilmalari</summary>
+    <details class="chapter-group">
+      <summary>Algoritm asoslari</summary>
+      <ol>
+        <li><a href="../lessons/algoritm-nima.html">Algoritm nima va nega o'rganamiz</a></li>
+        <li><a href="../lessons/big-o.html">Big O notatsiyasi: vaqt murakkabligi</a></li>
+        <li><a href="../lessons/big-o-amaliy.html">Keng tarqalgan murakkabliklar: O(1) dan O(n!) gacha</a></li>
+        <li><a href="../lessons/rekursiya-algoritm.html">Rekursiya algoritmlar tilida</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Massiv va satr algoritmlari</summary>
+      <ol>
+        <li><a href="../lessons/two-pointers.html">Ikki ko'rsatkich (Two Pointers) usuli</a></li>
+        <li><a href="../lessons/sliding-window.html">Siljuvchi oyna (Sliding Window)</a></li>
+        <li><a href="../lessons/prefix-sum.html">Prefiks yig'indi (Prefix Sum)</a></li>
+        <li><a href="../lessons/string-algoritmlari.html">Satr (String) masalalari</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Chiziqli ma'lumotlar tuzilmalari</summary>
+      <ol>
+        <li><a href="../lessons/stack.html">Stek (Stack) — LIFO tuzilma</a></li>
+        <li><a href="../lessons/queue.html">Navbat (Queue) va Deque</a></li>
+        <li><a href="../lessons/linked-list.html">Bog'langan ro'yxat (Linked List)</a></li>
+        <li><a href="../lessons/hash-map.html">Xesh-jadval (HashMap) — kalit-qiymat sehri</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group" open>
+      <summary>Qidiruv va saralash</summary>
+      <ol>
+        <li><a class="active" href="../lessons/binary-search.html">Ikkilik qidiruv (Binary Search)</a></li>
+        <li><a href="../lessons/sorting-oddiy.html">Oddiy saralashlar: Bubble, Selection, Insertion</a></li>
+        <li><a href="../lessons/sorting-tez.html">Tez saralashlar: Merge Sort va Quick Sort</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Daraxt va graf</summary>
+      <ol>
+        <li><a href="../lessons/tree-asoslari.html">Daraxt (Tree) va ikkilik daraxt</a></li>
+        <li><a href="../lessons/bst.html">Ikkilik qidiruv daraxti (BST)</a></li>
+        <li><a href="../lessons/tree-traversal.html">Daraxtni aylanib chiqish: DFS va BFS</a></li>
+        <li><a href="../lessons/graph-asoslari.html">Graf (Graph) asoslari</a></li>
+        <li><a href="../lessons/graph-traversal.html">Grafni aylanib chiqish: BFS va DFS</a></li>
+      </ol>
+    </details>
+    <details class="chapter-group">
+      <summary>Ilg'or texnikalar</summary>
+      <ol>
+        <li><a href="../lessons/backtracking.html">Backtracking (orqaga qaytish)</a></li>
+        <li><a href="../lessons/dynamic-programming.html">Dinamik dasturlash (DP)</a></li>
+        <li><a href="../lessons/greedy.html">Ochko'z algoritmlar (Greedy)</a></li>
+        <li><a href="../lessons/intervyu-strategiya.html">Intervyu masalalarini yechish strategiyasi</a></li>
+      </ol>
+    </details>
+  </details>
+</aside>
+<main class="content article">
+<div class="crumbs">Qidiruv va saralash</div>
+<h1>Ikkilik qidiruv (Binary Search)</h1>
+<p class="lead">Tasavvur qiling, qo'lingizda ming sahifalik lug'at bor va siz "salom" so'zini qidiryapsiz. Hech kim lug'atni birinchi sahifadan boshlab, so'z-ba-so'z varaqlamaydi. Aksincha, taxminan o'rtasini ochamiz, harfga qaraymiz va "chapdami yoki o'ngda" degan qarorni bir zumda qabul qilamiz. Aynan shu oddiy odat — kompyuter fanidagi eng nafis algoritmlardan biri: ikkilik qidiruv. Bu darsda uni noldan quramiz, Big O bilan tahlil qilamiz va professional dasturchilar ham qiladigan klassik xatolardan qochishni o'rganamiz.</p>
+<h2>Muammo: chiziqli qidiruv sekin</h2>
+<p>Massivda biror qiymatni topishning eng sodda usuli — <strong>chiziqli qidiruv</strong> (linear search): birinchi elementdan boshlab, oxirigacha bittalab tekshirib chiqamiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>linear-search.js</span></div><textarea spellcheck="false">function chiziqliQidiruv(massiv, nishon) {
+  for (let i = 0; i &lt; massiv.length; i++) {
+    if (massiv[i] === nishon) {
+      return i;  // topildi, indeksni qaytaramiz
+    }
+  }
+  return -1;  // topilmadi
+}
+
+const sonlar = [3, 8, 12, 17, 25, 31, 40];
+console.log(chiziqliQidiruv(sonlar, 25));  // 4
+console.log(chiziqliQidiruv(sonlar, 100)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu ishlaydi, lekin sekin. Agar massivda million element bo'lsa va qidirayotgan qiymatimiz oxirida (yoki umuman yo'q) bo'lsa, million marta taqqoslash qilamiz. Bu <strong>O(n)</strong> — elementlar soni ortishi bilan ish vaqti ham chiziqli o'sadi.</p>
+<p>Chiziqli qidiruvning kuchli tomoni bor: u massiv <em>qanday</em> tartibda bo'lishidan qat'i nazar ishlaydi. Ammo agar massivimiz allaqachon <strong>saralangan</strong> bo'lsa, biz bu tartibdan foydalanib, qidiruvni bir necha barobar tezlashtira olamiz.</p>
+<h2>G'oya: har qadamda yarmini tashla</h2>
+<p>Ikkilik qidiruvning butun sehri bitta kuzatuvda: agar massiv saralangan bo'lsa, o'rtadagi elementga qarab, javob qayerda bo'lishi <em>mumkin emasligini</em> aniqlay olamiz.</p>
+<ul><li>Massivning o'rtasidagi elementni olamiz.</li><li>Agar u nishonga teng bo'lsa — topdik, tamom.</li><li>Agar o'rtadagi element nishondan <strong>katta</strong> bo'lsa — nishon faqat chap yarmda bo'lishi mumkin, o'ng yarmni butunlay tashlaymiz.</li><li>Agar o'rtadagi element nishondan <strong>kichik</strong> bo'lsa — nishon faqat o'ng yarmda, chap yarmni tashlaymiz.</li></ul>
+<p>Har bir taqqoslashda qidiruv maydonini yarmiga qisqartiramiz. Millionlik massiv taxminan 20 qadamda tugaydi — million emas, 20 ta!</p>
+<div class="note">Diqqat qiling: bu "yarmini tashlash" faqat massiv saralangan bo'lsagina ishlaydi. Saralanmagan massivda o'rtadagi element bizga chap yoki o'ng haqida hech narsa aytmaydi.</div>
+<h2>Iterativ algoritm: low, high, mid</h2>
+<p>Amalda biz qidiruv maydonini ikkita chegara bilan belgilaymiz: <code>low</code> (chap chegara) va <code>high</code> (o'ng chegara). Boshida ular butun massivni qamrab oladi. Har qadamda o'rtani (<code>mid</code>) hisoblab, chegaralarni siljitamiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>binary-search.js</span></div><textarea spellcheck="false">function ikkilikQidiruv(massiv, nishon) {
+  let low = 0;
+  let high = massiv.length - 1;
+
+  while (low &lt;= high) {
+    const mid = Math.floor((low + high) / 2);
+
+    if (massiv[mid] === nishon) {
+      return mid;              // topildi
+    } else if (massiv[mid] &lt; nishon) {
+      low = mid + 1;           // o'ng yarmga o'tamiz
+    } else {
+      high = mid - 1;          // chap yarmga o'tamiz
+    }
+  }
+  return -1;                   // topilmadi
+}
+
+const sonlar = [3, 8, 12, 17, 25, 31, 40, 55, 60];
+console.log(ikkilikQidiruv(sonlar, 25));  // 4
+console.log(ikkilikQidiruv(sonlar, 3));   // 0
+console.log(ikkilikQidiruv(sonlar, 60));  // 8
+console.log(ikkilikQidiruv(sonlar, 100)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Sikldagi uchta holatni yana bir bor ko'zdan kechiring. <code>while (low &lt;= high)</code> — qidiruv maydoni bo'sh bo'lmaguncha davom etamiz. <code>mid</code> topilsa qaytaramiz; nishon kattaroq bo'lsa <code>low</code> ni <code>mid + 1</code> ga suramiz; kichikroq bo'lsa <code>high</code> ni <code>mid - 1</code> ga suramiz. Har safar maydonimiz yarmiga qisqaradi.</p>
+<div class="tip">Har qadamda qanday qadam bosilayotganini ko'rish uchun sikl ichiga <code>console.log(low, mid, high)</code> qo'shib sinab ko'ring — algoritmning "yarmni tashlash" ritmini ko'zingiz bilan ko'rasiz.</div>
+<h2>Nega O(log n)?</h2>
+<p>Ikkilik qidiruvning ish vaqti — <strong>O(log n)</strong>. Bu "logaritm" so'zidan qo'rqmang, mohiyati juda oddiy: <em>n ni necha marta 2 ga bo'lib, 1 ga yetkazish mumkin?</em> — javob shu qadamlar soni.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>log-qadamlar.js</span></div><textarea spellcheck="false">// n ni necha marta yarimga bo'lsak 1 ga tushadi?
+function nechaQadam(n) {
+  let qadam = 0;
+  while (n &gt; 1) {
+    n = Math.floor(n / 2);
+    qadam++;
+  }
+  return qadam;
+}
+
+console.log(nechaQadam(8));        // 3
+console.log(nechaQadam(1000));     // 9
+console.log(nechaQadam(1000000)); // 19
+// Millionlik massiv bor-yo'g'i ~20 qadamda tugaydi!</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Elementlar sonini <strong>ikki barobar</strong> oshirsangiz, ikkilik qidiruvga faqat <strong>bitta</strong> qo'shimcha qadam kerak bo'ladi. Chiziqli qidiruv esa ikki barobar ko'p vaqt talab qiladi. Aynan shu farq katta ma'lumotlarda o'lchovga sig'maydigan tezlik beradi.</p>
+<h3>Big O xulosasi</h3>
+<ul><li><strong>Eng yaxshi holat:</strong> O(1) — nishon aynan o'rtada bo'lsa, birinchi taqqoslashda topamiz.</li><li><strong>O'rtacha holat:</strong> O(log n).</li><li><strong>Eng yomon holat:</strong> O(log n) — element yo'q yoki chetda bo'lsa.</li><li><strong>Xotira:</strong> O(1) — faqat bir nechta o'zgaruvchi (low, high, mid), qo'shimcha massiv yaratmaymiz.</li></ul>
+<h2>Rekursiv versiya</h2>
+<p>Xuddi shu g'oyani rekursiya bilan ham yozish mumkin. Bunda chegaralarni funksiya argumenti sifatida uzatamiz va har chaqiruvda maydonni yarmiga qisqartiramiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>binary-recursive.js</span></div><textarea spellcheck="false">function ikkilikRekursiv(massiv, nishon, low = 0, high = massiv.length - 1) {
+  if (low &gt; high) {
+    return -1;  // maydon bo'sh — topilmadi
+  }
+
+  const mid = Math.floor((low + high) / 2);
+
+  if (massiv[mid] === nishon) {
+    return mid;
+  } else if (massiv[mid] &lt; nishon) {
+    return ikkilikRekursiv(massiv, nishon, mid + 1, high);
+  } else {
+    return ikkilikRekursiv(massiv, nishon, low, mid - 1);
+  }
+}
+
+const sonlar = [3, 8, 12, 17, 25, 31, 40];
+console.log(ikkilikRekursiv(sonlar, 17)); // 3
+console.log(ikkilikRekursiv(sonlar, 8));  // 1
+console.log(ikkilikRekursiv(sonlar, 99)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Rekursiv versiya ko'pincha tushunarliroq ko'rinadi, ammo har chaqiruv uchun stekda joy egallaydi — shuning uchun xotira O(log n) bo'ladi. Iterativ versiya esa O(1) xotira ishlatadi. Amalda ikkalasi ham to'g'ri, tanlov did masalasi.</p>
+<h2>Klassik xatolar</h2>
+<p>Ikkilik qidiruv oddiy ko'rinadi, lekin uni to'g'ri yozish tarixan qiyin bo'lgan. Mana eng ko'p uchraydigan tuzoqlar.</p>
+<h3>1. mid ni hisoblashda ehtiyotkorlik</h3>
+<p>Biz <code>mid = Math.floor((low + high) / 2)</code> yozdik. Katta sonlar bilan ishlaydigan ba'zi tillarda (masalan Java, C++) <code>low + high</code> son sig'imidan oshib ketishi (overflow) mumkin. Xavfsizroq shakl:</p>
+<pre class="code"><code>// Overflow xavfini oldini oluvchi klassik shakl:
+const mid = low + Math.floor((high - low) / 2);
+
+// (high - low) hech qachon massiv uzunligidan oshmaydi,
+// shuning uchun qo'shishda toshib ketish bo'lmaydi.</code></pre>
+<div class="note">JavaScript'da <code>Number</code> juda katta bo'lgani uchun bu overflow amalda deyarli uchramaydi. Ammo bu shaklni bilish muhim — intervyularda va boshqa tillarda bu "to'g'ri" javob hisoblanadi.</div>
+<h3>2. Sikl sharti: <= yoki <</h3>
+<p><code>while (low &lt;= high)</code> va <code>while (low &lt; high)</code> — bir belgi farq, ammo natija butunlay boshqacha. Bizning versiyamizda <code>&lt;=</code> to'g'ri: chunki <code>low === high</code> bo'lganda ham tekshirilishi kerak bo'lgan bitta element qoladi. Agar <code>&lt;</code> ishlatsak, oxirgi elementni umuman ko'rmay o'tkazib yuborishimiz mumkin.</p>
+<div class="warn">Chegara shartlari (<code>&lt;=</code> vs <code>&lt;</code>, <code>mid + 1</code> vs <code>mid</code>) — ikkilik qidiruvdagi cheksiz sikl va topilmagan elementlarning asosiy sababi. Yangi variatsiya yozganingizda, doim kichik massivda (1, 2, 3 elementli) qo'lda yurib chiqing.</div>
+<h2>Variatsiya: birinchi va oxirgi uchrash</h2>
+<p>Massivda takrorlanuvchi qiymatlar bo'lsa-chi? Masalan <code>[1, 2, 2, 2, 3]</code> da <code>2</code> ning <strong>birinchi</strong> yoki <strong>oxirgi</strong> indeksini topmoqchimiz. Oddiy ikkilik qidiruv har qanday <code>2</code> ni qaytaradi. Kerakli chetni topish uchun, topgach ham to'xtamay, kerakli tomonga qidiruvni davom ettiramiz.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>first-occurrence.js</span></div><textarea spellcheck="false">function birinchiUchrash(massiv, nishon) {
+  let low = 0;
+  let high = massiv.length - 1;
+  let natija = -1;
+
+  while (low &lt;= high) {
+    const mid = low + Math.floor((high - low) / 2);
+
+    if (massiv[mid] === nishon) {
+      natija = mid;       // eslab qolamiz...
+      high = mid - 1;     // ...lekin chapda yana bormi deb qidiramiz
+    } else if (massiv[mid] &lt; nishon) {
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+  return natija;
+}
+
+const massiv = [1, 2, 2, 2, 2, 3, 4];
+console.log(birinchiUchrash(massiv, 2)); // 1 (birinchi 2 ning indeksi)
+console.log(birinchiUchrash(massiv, 5)); // -1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Hiyla shundaki: <code>2</code> ni topganimizda darrov qaytarmaymiz, balki indeksni eslab qolib, <code>high = mid - 1</code> qilib <em>yana chaproqda</em> qidirishda davom etamiz. Oxirgi uchrashni topish uchun esa aksincha <code>low = mid + 1</code> qilib o'ng tomonga suriladi.</p>
+<h2>Variatsiya: javobni "qidirish maydoni"da izlash</h2>
+<p>Ikkilik qidiruvning eng kuchli qo'llanishi — u faqat massivda emas, balki <strong>javoblar oralig'ida</strong> ham ishlaydi. Klassik misol: butun kvadrat ildizni topish. Javob 0 dan n gacha bo'lgan sonlar oralig'ida yotadi va bu oraliq "saralangan" — shuning uchun uni ham yarmga bo'lib qidirsa bo'ladi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>binary-sqrt.js</span></div><textarea spellcheck="false">// n ning butun kvadrat ildizini ikkilik qidiruv bilan topamiz
+function butunIldiz(n) {
+  if (n &lt; 2) return n;
+
+  let low = 1;
+  let high = n;
+  let javob = 0;
+
+  while (low &lt;= high) {
+    const mid = low + Math.floor((high - low) / 2);
+    const kvadrat = mid * mid;
+
+    if (kvadrat === n) {
+      return mid;
+    } else if (kvadrat &lt; n) {
+      javob = mid;      // mos keladigan eng katta qiymatni eslaymiz
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+  return javob;         // aniq ildiz bo'lmasa, pastga yaxlitlangan qiymat
+}
+
+console.log(butunIldiz(16)); // 4
+console.log(butunIldiz(25)); // 5
+console.log(butunIldiz(20)); // 4 (chunki 4*4=16 &lt;= 20 &lt; 25=5*5)
+console.log(butunIldiz(1));  // 1</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<p>Bu yerda massiv umuman yo'q! Biz shunchaki 1 dan n gacha bo'lgan tasavvuriy "saralangan" oraliqni yarimlab qidiryapmiz. Bu — ikkilik qidiruvni chinakam tushunganingizning belgisi: g'oya massivga emas, <strong>monoton (bir tomonga o'sadigan) qidiruv maydoniga</strong> bog'liq.</p>
+<h2>Asosiy shart: massiv saralangan bo'lishi kerak</h2>
+<p>Butun algoritm bitta shartga tayanadi: <strong>massiv saralangan</strong>. Agar u saralanmagan bo'lsa, o'rtadagi element bizga "chapdami yoki o'ngda" haqida hech narsa aytmaydi va natija xato bo'ladi.</p>
+<div class="playground"><div class="pg-bar"><span class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></span><span>sorted-required.js</span></div><textarea spellcheck="false">// Saralanmagan massivda ikkilik qidiruv YOLG'ON javob berishi mumkin:
+function ikkilikQidiruv(massiv, nishon) {
+  let low = 0, high = massiv.length - 1;
+  while (low &lt;= high) {
+    const mid = low + Math.floor((high - low) / 2);
+    if (massiv[mid] === nishon) return mid;
+    else if (massiv[mid] &lt; nishon) low = mid + 1;
+    else high = mid - 1;
+  }
+  return -1;
+}
+
+const saralanmagan = [8, 3, 40, 12, 25];
+console.log(ikkilikQidiruv(saralanmagan, 40)); // -1 (mavjud, ammo topilmadi!)
+
+// Avval saralaymiz:
+const saralangan = [...saralanmagan].sort((a, b) =&gt; a - b);
+console.log(ikkilikQidiruv(saralangan, 40));   // to'g'ri topadi</textarea><div class="pg-actions"><button class="pg-run">▶ Ishga tushirish</button><button class="pg-clear">Tozalash</button></div><div class="pg-output"><span class="muted">// natija shu yerda chiqadi</span></div></div>
+<div class="warn">Ikkilik qidiruvdan oldin massiv saralangan ekaniga ishonch hosil qiling. Agar massivni bir marta saralab, keyin ko'p marta qidirsangiz — bu ajoyib kelishuv (saralash O(n log n), keyin har qidiruv O(log n)). Ammo agar faqat bir marta qidirsangiz, saralash uchun sarflangan vaqt chiziqli qidiruvdan qimmatroqqa tushishi mumkin.</div>
+<div class="tip">Amaliy qoida: masala matnida "<strong>saralangan massiv</strong>" yoki "<strong>saralangan ro'yxatda toping</strong>" degan so'zlarni ko'rsangiz, birinchi navbatda ikkilik qidiruv haqida o'ylang. Bu deyarli har doim kutilayotgan yechim.</div>
+<h2>Xulosa</h2>
+<ul><li>Ikkilik qidiruv saralangan massivda O(log n) da qidiradi — chiziqli O(n) dan tubdan tez.</li><li>G'oya: <code>low</code>, <code>high</code>, <code>mid</code> bilan har qadamda qidiruv maydonining yarmini tashlab yuborish.</li><li>Xotira O(1) (iterativ) yoki O(log n) (rekursiv).</li><li>Klassik xatolar: mid ni overflow'siz hisoblash va chegara shartlari (<code>&lt;=</code> vs <code>&lt;</code>).</li><li>Variatsiyalar: birinchi/oxirgi uchrash, va javobni monoton qidiruv maydonida izlash (masalan butun ildiz).</li><li>Asosiy shart: massiv saralangan bo'lishi shart.</li></ul>
+<nav class="lesson-nav">
+  <a href="hash-map.html"><span class="dir">← Oldingi</span><span class="ttl">Xesh-jadval (HashMap) — kalit-qiymat sehri</span></a>
+  <a class="next" href="sorting-oddiy.html"><span class="dir">Keyingi →</span><span class="ttl">Oddiy saralashlar: Bubble, Selection, Insertion</span></a>
+</nav>
+</main>
+</div>
+<footer class="site-footer">
+  <div class="inner">
+    <span>© 2026 Kodla — Ta'lim maqsadida yaratilgan.</span>
+    <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
+  </div>
+</footer>
+<script src="../js/main.js?v=4"></script>
+</body>
+</html>
