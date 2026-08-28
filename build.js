@@ -24,7 +24,11 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "8";
+const ASSET_VER = "9";
+
+/* Saytning jonli manzili (SEO, sitemap va ulashish uchun).
+   Agar domen boshqa bo'lsa — faqat shu qatorni o'zgartiring. */
+const SITE_URL = "https://dinmuhammad05.github.io/javascript-info";
 
 /* Har bir qism (yo'nalish) uchun ikon va qisqa tavsif — bosh sahifadagi
    "Yo'nalishlar" sharhi uchun. Kalit — qism nomi. */
@@ -72,15 +76,36 @@ function loadChapters() {
 }
 
 /* ---------- 2. Yordamchi HTML bo'laklari ---------- */
-function head(title, desc, depth) {
+function attr(s) { return String(s || "").replace(/"/g, "&quot;"); }
+
+function head(title, desc, depth, pagePath) {
   const base = depth === 0 ? "" : "../";
+  const d = (desc || "").replace(/"/g, "&quot;");
+  const url = SITE_URL + "/" + (pagePath || "");
+  const img = SITE_URL + "/og-image.png";
   return (
     "<!DOCTYPE html>\n" +
     '<html lang="uz">\n<head>\n' +
     '  <meta charset="UTF-8">\n' +
     '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
     "  <title>" + title + "</title>\n" +
-    '  <meta name="description" content="' + (desc || "").replace(/"/g, "&quot;") + '">\n' +
+    '  <meta name="description" content="' + d + '">\n' +
+    '  <link rel="canonical" href="' + url + '">\n' +
+    // Open Graph (Telegram, Facebook, LinkedIn ulashish)
+    '  <meta property="og:type" content="website">\n' +
+    '  <meta property="og:site_name" content="' + attr(BRAND.name) + '">\n' +
+    '  <meta property="og:locale" content="uz">\n' +
+    '  <meta property="og:title" content="' + attr(title) + '">\n' +
+    '  <meta property="og:description" content="' + d + '">\n' +
+    '  <meta property="og:url" content="' + url + '">\n' +
+    '  <meta property="og:image" content="' + img + '">\n' +
+    '  <meta property="og:image:width" content="1200">\n' +
+    '  <meta property="og:image:height" content="630">\n' +
+    // Twitter/X
+    '  <meta name="twitter:card" content="summary_large_image">\n' +
+    '  <meta name="twitter:title" content="' + attr(title) + '">\n' +
+    '  <meta name="twitter:description" content="' + d + '">\n' +
+    '  <meta name="twitter:image" content="' + img + '">\n' +
     '  <link rel="manifest" href="' + base + 'manifest.webmanifest">\n' +
     '  <meta name="theme-color" content="#1a1a2e">\n' +
     '  <link rel="icon" type="image/svg+xml" href="' + base + 'icon.svg">\n' +
@@ -103,6 +128,7 @@ function header(depth) {
     '    <nav class="site-nav">\n' +
     '      <a href="' + base + 'index.html">Bosh sahifa</a>\n' +
     '      <a href="' + base + 'index.html#mundarija">Mundarija</a>\n' +
+    '      <a href="' + base + 'editor.html">Muharrir</a>\n' +
     '      <a href="' + BRAND.github + '" target="_blank" rel="noopener">Muallif</a>\n' +
     "    </nav>\n" +
     '    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">' +
@@ -387,7 +413,7 @@ function renderLesson(lesson, chapter, parts, prev, next) {
   const art = buildArticle(lesson.body);
 
   return (
-    head(esc(lesson.title) + " — " + esc(BRAND.name), lesson.blurb, 1) +
+    head(esc(lesson.title) + " — " + esc(BRAND.name), lesson.blurb, 1, "lessons/" + lesson.slug + ".html") +
     header(1) +
     '<div class="reading-progress"><span id="readingBar"></span></div>\n' +
     '<div class="layout">\n' +
@@ -458,7 +484,7 @@ function renderIndex(parts, total) {
   return (
     head(esc(BRAND.name) + " — " + esc(BRAND.tagline),
       "Web dasturlashni o'zbek tilida noldan, chuqur va batafsil o'rganing: JavaScript, " +
-      "brauzer, backend, frontend, DevOps, algoritmlar va kiberxavfsizlik.", 0) +
+      "brauzer, backend, frontend, DevOps, algoritmlar va kiberxavfsizlik.", 0, "") +
     header(0) +
     '<div class="layout">\n' +
     sidebar(parts, null, 0) +
@@ -526,6 +552,12 @@ function main() {
   }
   fs.writeFileSync(path.join(ROOT, "search-index.json"), JSON.stringify(searchIndex));
 
+  // Online muharrir sahifasi
+  writeEditor();
+
+  // SEO: sitemap.xml va robots.txt
+  writeSeoFiles(flat);
+
   // PWA: manifest, ikon va service worker (offline ishlash uchun)
   writePwaFiles(flat);
 
@@ -535,6 +567,64 @@ function main() {
   console.log("   Darslar:  " + count);
   console.log("   Qidiruv indeksi: search-index.json (" + searchIndex.length + " dars)");
   console.log("   PWA: manifest.webmanifest, icon.svg, sw.js (offline)");
+}
+
+/* ---------- Online muharrir sahifasi ---------- */
+function writeEditor() {
+  const body =
+    '<main class="content editor-page">\n' +
+    '<h1>Online muharrir</h1>\n' +
+    '<p class="sec-sub">HTML, CSS va JavaScript yozing — natijani darhol yoningizda ko\'ring. ' +
+    "Hamma narsa brauzeringizda ishlaydi, internetsiz ham. Yozganlaringiz avtomatik saqlanadi.</p>\n" +
+    '<div class="editor" id="editor">\n' +
+    '  <div class="ed-col">\n' +
+    '    <div class="ed-tabs">\n' +
+    '      <button class="active" data-lang="html">HTML</button>\n' +
+    '      <button data-lang="css">CSS</button>\n' +
+    '      <button data-lang="js">JS</button>\n' +
+    '      <span class="ed-spacer"></span>\n' +
+    '      <button id="ed-run" class="ed-run">▶ Ishga tushirish</button>\n' +
+    '      <button id="ed-reset" class="ed-reset">Tozalash</button>\n' +
+    "    </div>\n" +
+    '    <textarea id="ed-html" class="ed-area" spellcheck="false" aria-label="HTML"></textarea>\n' +
+    '    <textarea id="ed-css" class="ed-area" spellcheck="false" aria-label="CSS" hidden></textarea>\n' +
+    '    <textarea id="ed-js" class="ed-area" spellcheck="false" aria-label="JavaScript" hidden></textarea>\n' +
+    "  </div>\n" +
+    '  <div class="ed-col ed-preview-col">\n' +
+    '    <div class="ed-bar">Natija</div>\n' +
+    '    <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>\n' +
+    "  </div>\n" +
+    "</div>\n" +
+    "</main>\n";
+  const htmlOut =
+    head("Online muharrir — " + esc(BRAND.name),
+      "HTML, CSS va JavaScript'ni brauzerda yozib, natijasini darhol ko'ring — offline ishlaydigan online muharrir.",
+      0, "editor.html") +
+    header(0) +
+    '<div class="editor-wrap">\n' + body + "</div>\n" +
+    footer(0);
+  fs.writeFileSync(path.join(ROOT, "editor.html"), htmlOut);
+}
+
+/* ---------- SEO fayllari: sitemap.xml va robots.txt ---------- */
+function writeSeoFiles(flat) {
+  const urls = [SITE_URL + "/", SITE_URL + "/editor.html"];
+  for (const l of flat) urls.push(SITE_URL + "/lessons/" + l.slug + ".html");
+  const today = new Date().toISOString().slice(0, 10);
+  const sitemap =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    urls
+      .map((u) => "  <url><loc>" + u + "</loc><lastmod>" + today + "</lastmod></url>")
+      .join("\n") +
+    "\n</urlset>\n";
+  fs.writeFileSync(path.join(ROOT, "sitemap.xml"), sitemap);
+
+  const robots =
+    "User-agent: *\n" +
+    "Allow: /\n\n" +
+    "Sitemap: " + SITE_URL + "/sitemap.xml\n";
+  fs.writeFileSync(path.join(ROOT, "robots.txt"), robots);
 }
 
 /* ---------- PWA fayllari: manifest + ikon + service worker ---------- */
@@ -570,6 +660,7 @@ function writePwaFiles(flat) {
   const core = [
     "./",
     "index.html",
+    "editor.html",
     "css/style.css?v=" + ASSET_VER,
     "js/main.js?v=" + ASSET_VER,
     "search-index.json",

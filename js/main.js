@@ -380,3 +380,74 @@
     navigator.serviceWorker.register(swPath).catch(function () {});
   });
 })();
+
+/* ===========================================================
+   Online muharrir (editor.html) — HTML/CSS/JS + jonli natija
+   =========================================================== */
+(function () {
+  "use strict";
+  var iframe = document.getElementById("ed-preview");
+  if (!iframe) return;
+  var ta = {
+    html: document.getElementById("ed-html"),
+    css: document.getElementById("ed-css"),
+    js: document.getElementById("ed-js"),
+  };
+  var tabs = document.querySelectorAll(".ed-tabs button[data-lang]");
+  var runBtn = document.getElementById("ed-run");
+  var resetBtn = document.getElementById("ed-reset");
+  var KEY = "kodla-editor-v1";
+  var DEFAULT = {
+    html: "<h1>Salom, Kodla!</h1>\n<p id=\"msg\">Tugmani bosing:</p>\n<button onclick=\"salomBer()\">Bosing</button>",
+    css: "body { font-family: sans-serif; padding: 20px; color: #1a1a2e; }\nh1 { color: #d9a400; }\nbutton { padding: 8px 16px; border: 0; border-radius: 8px;\n  background: #f0db4f; font-weight: 700; cursor: pointer; }",
+    js: "function salomBer() {\n  document.getElementById('msg').textContent =\n    'Salom! Hozir soat: ' + new Date().toLocaleTimeString();\n}",
+  };
+
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  var data = (saved && saved.html != null) ? saved : DEFAULT;
+  ta.html.value = data.html; ta.css.value = data.css; ta.js.value = data.js;
+
+  function render() {
+    var js = ta.js.value.replace(/<\/script>/gi, "<\\/script>");
+    var doc =
+      "<!doctype html><html><head><meta charset='utf-8'><style>" + ta.css.value +
+      "</style></head><body>" + ta.html.value +
+      "<script>try{" + js + "}catch(e){document.body.insertAdjacentHTML('beforeend'," +
+      "'<pre style=\"color:#dc2626;white-space:pre-wrap\">'+e+'</pre>')}<\/script>" +
+      "</body></html>";
+    iframe.srcdoc = doc;
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify({ html: ta.html.value, css: ta.css.value, js: ta.js.value })); } catch (e) {}
+  }
+
+  var timer;
+  function onInput() { save(); clearTimeout(timer); timer = setTimeout(render, 500); }
+  ["html", "css", "js"].forEach(function (k) {
+    ta[k].addEventListener("input", onInput);
+    ta[k].addEventListener("keydown", function (e) {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        var s = this.selectionStart, en = this.selectionEnd;
+        this.value = this.value.slice(0, s) + "  " + this.value.slice(en);
+        this.selectionStart = this.selectionEnd = s + 2;
+      }
+    });
+  });
+
+  tabs.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var lang = btn.getAttribute("data-lang");
+      tabs.forEach(function (b) { b.classList.toggle("active", b === btn); });
+      ["html", "css", "js"].forEach(function (k) { ta[k].hidden = (k !== lang); });
+      ta[lang].focus();
+    });
+  });
+  runBtn && runBtn.addEventListener("click", render);
+  resetBtn && resetBtn.addEventListener("click", function () {
+    ta.html.value = DEFAULT.html; ta.css.value = DEFAULT.css; ta.js.value = DEFAULT.js;
+    save(); render();
+  });
+  render();
+})();

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dinmuhammad05.github.io/javascript-info/sitemap.xml
