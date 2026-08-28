@@ -18,8 +18,19 @@
     // Drawer tepasiga yopish tugmasi (faqat mobil ko'rinadi)
     const closeBar = document.createElement("div");
     closeBar.className = "side-close";
-    closeBar.innerHTML = "<span>Mavzular</span><button aria-label=\"Yopish\">✕</button>";
+    closeBar.innerHTML = "<span>Menyu</span><button aria-label=\"Yopish\">✕</button>";
     sidebar.insertBefore(closeBar, sidebar.firstChild);
+
+    // Mobil menyu (drawer) ichiga asosiy havolalar — telefonda header nav yashirin
+    var navBase = /\/lessons\//.test(location.pathname) ? "../" : "";
+    var dnav = document.createElement("nav");
+    dnav.className = "drawer-nav";
+    dnav.innerHTML =
+      '<a href="' + navBase + 'index.html">🏠 Bosh sahifa</a>' +
+      '<a href="' + navBase + 'index.html#mundarija">📚 Mundarija</a>' +
+      '<a href="' + navBase + 'editor.html">💻 Online muharrir</a>' +
+      '<a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">👤 Muallif</a>';
+    sidebar.insertBefore(dnav, closeBar.nextSibling);
 
     function openNav() {
       sidebar.classList.add("open");

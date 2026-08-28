@@ -866,3 +866,24 @@ pre.code code {
   .editor { grid-template-columns: 1fr; height: auto; }
   .ed-col { height: 52vh; }
 }
+
+/* Mobil menyu (drawer) ichidagi asosiy havolalar — faqat telefonda */
+.drawer-nav { display: none; }
+@media (max-width: 900px) {
+  .drawer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0 0 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer-nav a {
+    padding: 11px 12px;
+    border-radius: 9px;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: .98rem;
+  }
+  .drawer-nav a:hover, .drawer-nav a:active { background: var(--bg-soft); text-decoration: none; }
+}
