@@ -23,7 +23,7 @@
   <meta name="theme-color" content="#1a1a2e">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="css/style.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=11">
   <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
@@ -54,13 +54,16 @@
       <button id="ed-run" class="ed-run">▶ Ishga tushirish</button>
       <button id="ed-reset" class="ed-reset">Tozalash</button>
     </div>
-    <textarea id="ed-html" class="ed-area" spellcheck="false" aria-label="HTML"></textarea>
-    <textarea id="ed-css" class="ed-area" spellcheck="false" aria-label="CSS" hidden></textarea>
-    <textarea id="ed-js" class="ed-area" spellcheck="false" aria-label="JavaScript" hidden></textarea>
+    <div class="ed-stack">
+      <div class="ed-editor" data-lang="html"><pre class="ed-hl" aria-hidden="true"><code id="hl-html"></code></pre><textarea id="ed-html" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML"></textarea></div>
+      <div class="ed-editor" data-lang="css" hidden><pre class="ed-hl" aria-hidden="true"><code id="hl-css"></code></pre><textarea id="ed-css" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="CSS"></textarea></div>
+      <div class="ed-editor" data-lang="js" hidden><pre class="ed-hl" aria-hidden="true"><code id="hl-js"></code></pre><textarea id="ed-js" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="JavaScript"></textarea></div>
+    </div>
   </div>
   <div class="ed-col ed-preview-col">
     <div class="ed-bar">Natija</div>
     <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>
+    <div class="ed-console" id="ed-console" aria-live="polite"></div>
   </div>
 </div>
 </main>
@@ -71,6 +74,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="js/main.js?v=10"></script>
+<script src="js/main.js?v=11"></script>
 </body>
 </html>

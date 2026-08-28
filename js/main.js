@@ -404,9 +404,19 @@
     css: document.getElementById("ed-css"),
     js: document.getElementById("ed-js"),
   };
+  var hlEl = {
+    html: document.getElementById("hl-html"),
+    css: document.getElementById("hl-css"),
+    js: document.getElementById("hl-js"),
+  };
+  var wraps = {};
+  Array.prototype.forEach.call(document.querySelectorAll(".ed-editor"), function (w) {
+    wraps[w.getAttribute("data-lang")] = w;
+  });
   var tabs = document.querySelectorAll(".ed-tabs button[data-lang]");
   var runBtn = document.getElementById("ed-run");
   var resetBtn = document.getElementById("ed-reset");
+  var consoleEl = document.getElementById("ed-console");
   var KEY = "kodla-editor-v1";
   var DEFAULT = {
     html: "<h1>Salom, Kodla!</h1>\n<p id=\"msg\">Tugmani bosing:</p>\n<button onclick=\"salomBer()\">Bosing</button>",
@@ -414,35 +424,126 @@
     js: "function salomBer() {\n  document.getElementById('msg').textContent =\n    'Salom! Hozir soat: ' + new Date().toLocaleTimeString();\n}",
   };
 
-  var saved = null;
-  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  var data = (saved && saved.html != null) ? saved : DEFAULT;
-  ta.html.value = data.html; ta.css.value = data.css; ta.js.value = data.js;
+  /* ---- Syntax highlighting ---- */
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  var KW = { "function":1,"return":1,"var":1,"let":1,"const":1,"if":1,"else":1,"for":1,"while":1,"do":1,"switch":1,"case":1,"break":1,"continue":1,"new":1,"class":1,"extends":1,"super":1,"this":1,"typeof":1,"instanceof":1,"in":1,"of":1,"try":1,"catch":1,"finally":1,"throw":1,"delete":1,"void":1,"yield":1,"await":1,"async":1,"default":1,"export":1,"import":1,"from":1 };
+  var LIT = { "true":1,"false":1,"null":1,"undefined":1,"NaN":1,"Infinity":1 };
+  function hlJS(code) {
+    var re = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(`(?:\\[\s\S]|[^`\\])*`|"(?:\\[\s\S]|[^"\\\n])*"|'(?:\\[\s\S]|[^'\\\n])*')|(\b\d[\d_.]*\b)|([A-Za-z_$][\w$]*)|(\s+)|([\s\S])/g;
+    var out = "";
+    code.replace(re, function (m, c, s, n, id, ws, ch, off, str) {
+      if (c) out += '<span class="tk-c">' + esc(c) + "</span>";
+      else if (s) out += '<span class="tk-s">' + esc(s) + "</span>";
+      else if (n) out += '<span class="tk-n">' + esc(n) + "</span>";
+      else if (id) {
+        if (KW[id]) out += '<span class="tk-k">' + id + "</span>";
+        else if (LIT[id]) out += '<span class="tk-l">' + id + "</span>";
+        else out += (str.charAt(off + m.length) === "(") ? '<span class="tk-f">' + esc(id) + "</span>" : esc(id);
+      }
+      else if (ws) out += esc(ws);
+      else out += esc(m);
+      return m;
+    });
+    return out;
+  }
+  function hlHTML(code) {
+    var re = /(<!--[\s\S]*?-->)|(<\/?)([A-Za-z][\w-]*)|([A-Za-z-]+)(=)|("[^"]*"|'[^']*')|([\s\S])/g;
+    var out = "";
+    code.replace(re, function (m, cm, br, tag, attr, eq, s) {
+      if (cm) out += '<span class="tk-c">' + esc(cm) + "</span>";
+      else if (tag) out += esc(br) + '<span class="tk-t">' + esc(tag) + "</span>";
+      else if (attr && eq) out += '<span class="tk-a">' + esc(attr) + "</span>" + esc(eq);
+      else if (s) out += '<span class="tk-s">' + esc(s) + "</span>";
+      else out += esc(m);
+      return m;
+    });
+    return out;
+  }
+  function hlCSS(code) {
+    var re = /(\/\*[\s\S]*?\*\/)|("[^"]*"|'[^']*')|(@[\w-]+)|([.#]?-?[A-Za-z_][\w-]*)(\s*:)?|([\s\S])/g;
+    var out = "";
+    code.replace(re, function (m, cm, s, at, word, colon) {
+      if (cm) out += '<span class="tk-c">' + esc(cm) + "</span>";
+      else if (s) out += '<span class="tk-s">' + esc(s) + "</span>";
+      else if (at) out += '<span class="tk-k">' + esc(at) + "</span>";
+      else if (word != null && word !== "") {
+        out += colon
+          ? '<span class="tk-a">' + esc(word) + "</span>" + esc(colon)
+          : '<span class="tk-t">' + esc(word) + "</span>";
+      }
+      else out += esc(m);
+      return m;
+    });
+    return out;
+  }
+  var HL = { html: hlHTML, css: hlCSS, js: hlJS };
 
-  function render() {
-    var js = ta.js.value.replace(/<\/script>/gi, "<\\/script>");
-    var doc =
-      "<!doctype html><html><head><meta charset='utf-8'><style>" + ta.css.value +
+  function paint(lang) { hlEl[lang].innerHTML = HL[lang](ta[lang].value) + "\n"; }
+  function sync(lang) {
+    var pre = hlEl[lang].parentNode;
+    pre.scrollTop = ta[lang].scrollTop;
+    pre.scrollLeft = ta[lang].scrollLeft;
+  }
+
+  /* ---- Console / xatolar paneli ---- */
+  function clearConsole() { if (consoleEl) consoleEl.innerHTML = ""; }
+  function logLine(text, cls) {
+    if (!consoleEl) return;
+    var d = document.createElement("span");
+    d.className = "ln" + (cls ? " " + cls : "");
+    d.textContent = text;
+    consoleEl.appendChild(d);
+    consoleEl.scrollTop = consoleEl.scrollHeight;
+  }
+  window.addEventListener("message", function (e) {
+    var d = e.data;
+    if (d && d.__ed) logLine(d.text, d.type === "error" ? "err" : d.type === "warn" ? "warn" : "");
+  });
+
+  /* ---- Ishga tushirish ---- */
+  function buildDoc() {
+    var safeJS = ta.js.value.replace(/<\/script>/gi, "<\\/script>");
+    var instrument =
+      "(function(){var send=function(t,a){try{parent.postMessage({__ed:1,type:t,text:a},'*')}catch(e){}};" +
+      "['log','info','warn','error'].forEach(function(m){var o=console[m];console[m]=function(){" +
+      "send(m==='error'?'error':m==='warn'?'warn':'log',Array.prototype.map.call(arguments,function(x){" +
+      "try{return typeof x==='object'?JSON.stringify(x):String(x)}catch(e){return String(x)}}).join(' '));" +
+      "o&&o.apply(console,arguments)}});" +
+      "window.onerror=function(msg,src,line){send('error','Xatolik: '+msg+(line?(' (qator '+line+')'):''));return false};" +
+      "window.addEventListener('unhandledrejection',function(e){send('error','Promise xatosi: '+((e.reason&&e.reason.message)||e.reason))});})();";
+    return "<!doctype html><html><head><meta charset='utf-8'><style>" + ta.css.value +
       "</style></head><body>" + ta.html.value +
-      "<script>try{" + js + "}catch(e){document.body.insertAdjacentHTML('beforeend'," +
-      "'<pre style=\"color:#dc2626;white-space:pre-wrap\">'+e+'</pre>')}<\/script>" +
-      "</body></html>";
-    iframe.srcdoc = doc;
+      "<script>" + instrument + "<\/script><script>" + safeJS + "<\/script></body></html>";
+  }
+  function render() {
+    clearConsole();
+    try { new Function(ta.js.value); }
+    catch (e) { logLine("Sintaksis xatosi: " + e.message, "err"); }
+    iframe.srcdoc = buildDoc();
   }
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify({ html: ta.html.value, css: ta.css.value, js: ta.js.value })); } catch (e) {}
   }
 
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  var data = (saved && saved.html != null) ? saved : DEFAULT;
+  ["html", "css", "js"].forEach(function (k) { ta[k].value = data[k]; paint(k); });
+
   var timer;
-  function onInput() { save(); clearTimeout(timer); timer = setTimeout(render, 500); }
   ["html", "css", "js"].forEach(function (k) {
-    ta[k].addEventListener("input", onInput);
+    ta[k].addEventListener("input", function () {
+      paint(k); sync(k); save();
+      clearTimeout(timer); timer = setTimeout(render, 500);
+    });
+    ta[k].addEventListener("scroll", function () { sync(k); });
     ta[k].addEventListener("keydown", function (e) {
       if (e.key === "Tab") {
         e.preventDefault();
         var s = this.selectionStart, en = this.selectionEnd;
         this.value = this.value.slice(0, s) + "  " + this.value.slice(en);
         this.selectionStart = this.selectionEnd = s + 2;
+        paint(k);
       }
     });
   });
@@ -451,13 +552,13 @@
     btn.addEventListener("click", function () {
       var lang = btn.getAttribute("data-lang");
       tabs.forEach(function (b) { b.classList.toggle("active", b === btn); });
-      ["html", "css", "js"].forEach(function (k) { ta[k].hidden = (k !== lang); });
-      ta[lang].focus();
+      ["html", "css", "js"].forEach(function (k) { wraps[k].hidden = (k !== lang); });
+      paint(lang); sync(lang); ta[lang].focus();
     });
   });
   runBtn && runBtn.addEventListener("click", render);
   resetBtn && resetBtn.addEventListener("click", function () {
-    ta.html.value = DEFAULT.html; ta.css.value = DEFAULT.css; ta.js.value = DEFAULT.js;
+    ["html", "css", "js"].forEach(function (k) { ta[k].value = DEFAULT[k]; paint(k); });
     save(); render();
   });
   render();

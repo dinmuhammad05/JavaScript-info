@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "10";
+const ASSET_VER = "11";
 
 /* Saytning jonli manzili (SEO, sitemap va ulashish uchun).
    Agar domen boshqa bo'lsa — faqat shu qatorni o'zgartiring. */
@@ -586,13 +586,22 @@ function writeEditor() {
     '      <button id="ed-run" class="ed-run">▶ Ishga tushirish</button>\n' +
     '      <button id="ed-reset" class="ed-reset">Tozalash</button>\n' +
     "    </div>\n" +
-    '    <textarea id="ed-html" class="ed-area" spellcheck="false" aria-label="HTML"></textarea>\n' +
-    '    <textarea id="ed-css" class="ed-area" spellcheck="false" aria-label="CSS" hidden></textarea>\n' +
-    '    <textarea id="ed-js" class="ed-area" spellcheck="false" aria-label="JavaScript" hidden></textarea>\n' +
+    '    <div class="ed-stack">\n' +
+    '      <div class="ed-editor" data-lang="html">' +
+    '<pre class="ed-hl" aria-hidden="true"><code id="hl-html"></code></pre>' +
+    '<textarea id="ed-html" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML"></textarea></div>\n' +
+    '      <div class="ed-editor" data-lang="css" hidden>' +
+    '<pre class="ed-hl" aria-hidden="true"><code id="hl-css"></code></pre>' +
+    '<textarea id="ed-css" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="CSS"></textarea></div>\n' +
+    '      <div class="ed-editor" data-lang="js" hidden>' +
+    '<pre class="ed-hl" aria-hidden="true"><code id="hl-js"></code></pre>' +
+    '<textarea id="ed-js" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="JavaScript"></textarea></div>\n' +
+    "    </div>\n" +
     "  </div>\n" +
     '  <div class="ed-col ed-preview-col">\n' +
     '    <div class="ed-bar">Natija</div>\n' +
     '    <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>\n' +
+    '    <div class="ed-console" id="ed-console" aria-live="polite"></div>\n' +
     "  </div>\n" +
     "</div>\n" +
     "</main>\n";
