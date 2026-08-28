@@ -1,0 +1,21 @@
+{
+  "name": "Kodla — Dasturlashni noldan, o'zbek tilida o'rgan",
+  "short_name": "Kodla",
+  "description": "Web dasturlashni o'zbek tilida o'rgatuvchi interaktiv o'quv sayti.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "lang": "uz",
+  "dir": "ltr",
+  "background_color": "#14141c",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

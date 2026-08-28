@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "7";
+const ASSET_VER = "8";
 
 /* Har bir qism (yo'nalish) uchun ikon va qisqa tavsif — bosh sahifadagi
    "Yo'nalishlar" sharhi uchun. Kalit — qism nomi. */
@@ -81,6 +81,10 @@ function head(title, desc, depth) {
     '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
     "  <title>" + title + "</title>\n" +
     '  <meta name="description" content="' + (desc || "").replace(/"/g, "&quot;") + '">\n' +
+    '  <link rel="manifest" href="' + base + 'manifest.webmanifest">\n' +
+    '  <meta name="theme-color" content="#1a1a2e">\n' +
+    '  <link rel="icon" type="image/svg+xml" href="' + base + 'icon.svg">\n' +
+    '  <link rel="apple-touch-icon" href="' + base + 'icon.svg">\n' +
     '  <link rel="stylesheet" href="' + base + 'css/style.css?v=' + ASSET_VER + '">\n' +
     "  <script>(function(){try{var t=localStorage.getItem('theme');" +
     "if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))" +
@@ -522,11 +526,108 @@ function main() {
   }
   fs.writeFileSync(path.join(ROOT, "search-index.json"), JSON.stringify(searchIndex));
 
+  // PWA: manifest, ikon va service worker (offline ishlash uchun)
+  writePwaFiles(flat);
+
   console.log("✅ Generatsiya tugadi:");
   console.log("   Qismlar:  " + parts.length);
   console.log("   Boblar:   " + chapters.length);
   console.log("   Darslar:  " + count);
   console.log("   Qidiruv indeksi: search-index.json (" + searchIndex.length + " dars)");
+  console.log("   PWA: manifest.webmanifest, icon.svg, sw.js (offline)");
+}
+
+/* ---------- PWA fayllari: manifest + ikon + service worker ---------- */
+function writePwaFiles(flat) {
+  // Ikon (brend "K" — sariq fon)
+  const icon =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' +
+    '<rect width="512" height="512" rx="104" fill="#f0db4f"/>' +
+    '<text x="50%" y="53%" font-family="monospace" font-size="300" font-weight="900" ' +
+    'fill="#1a1a2e" text-anchor="middle" dominant-baseline="central">' + esc(BRAND.mark) + "</text></svg>\n";
+  fs.writeFileSync(path.join(ROOT, "icon.svg"), icon);
+
+  // Manifest
+  const manifest = {
+    name: BRAND.name + " — " + BRAND.tagline,
+    short_name: BRAND.name,
+    description: "Web dasturlashni o'zbek tilida o'rgatuvchi interaktiv o'quv sayti.",
+    start_url: "./",
+    scope: "./",
+    display: "standalone",
+    orientation: "portrait-primary",
+    lang: "uz",
+    dir: "ltr",
+    background_color: "#14141c",
+    theme_color: "#1a1a2e",
+    icons: [
+      { src: "icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" },
+    ],
+  };
+  fs.writeFileSync(path.join(ROOT, "manifest.webmanifest"), JSON.stringify(manifest, null, 2));
+
+  // Barcha keshlanadigan manzillar (offline uchun)
+  const core = [
+    "./",
+    "index.html",
+    "css/style.css?v=" + ASSET_VER,
+    "js/main.js?v=" + ASSET_VER,
+    "search-index.json",
+    "manifest.webmanifest",
+    "icon.svg",
+  ];
+  const lessons = flat.map((l) => "lessons/" + l.slug + ".html");
+  const precache = core.concat(lessons);
+
+  const sw =
+    '/* Kodla — Service Worker (offline). build.js tomonidan yaratilgan. */\n' +
+    'const CACHE = "kodla-v' + ASSET_VER + '";\n' +
+    "const CORE = " + JSON.stringify(core) + ";\n" +
+    "const PRECACHE = " + JSON.stringify(precache) + ";\n\n" +
+    'self.addEventListener("install", function (e) {\n' +
+    "  e.waitUntil((async function () {\n" +
+    "    const c = await caches.open(CACHE);\n" +
+    "    try { await c.addAll(CORE); } catch (err) {}\n" +
+    "    // Darslarni bardoshli tarzda (biri xato bo'lsa ham davom etadi) keshlaymiz\n" +
+    "    await Promise.allSettled(PRECACHE.map(function (u) { return c.add(u); }));\n" +
+    "    self.skipWaiting();\n" +
+    "  })());\n" +
+    "});\n\n" +
+    'self.addEventListener("activate", function (e) {\n' +
+    "  e.waitUntil((async function () {\n" +
+    "    const keys = await caches.keys();\n" +
+    "    await Promise.all(keys.map(function (k) { return k === CACHE ? null : caches.delete(k); }));\n" +
+    "    await self.clients.claim();\n" +
+    "  })());\n" +
+    "});\n\n" +
+    'self.addEventListener("fetch", function (e) {\n' +
+    "  const req = e.request;\n" +
+    '  if (req.method !== "GET") return;\n' +
+    "  const url = new URL(req.url);\n" +
+    "  if (url.origin !== location.origin) return;\n" +
+    "  e.respondWith((async function () {\n" +
+    "    const cached = await caches.match(req);\n" +
+    "    if (cached) {\n" +
+    "      // Keshdan beramiz, fonda yangilaymiz (stale-while-revalidate)\n" +
+    "      e.waitUntil((async function () {\n" +
+    "        try { const res = await fetch(req); if (res && res.ok) { const c = await caches.open(CACHE); await c.put(req, res.clone()); } } catch (err) {}\n" +
+    "      })());\n" +
+    "      return cached;\n" +
+    "    }\n" +
+    "    try {\n" +
+    "      const res = await fetch(req);\n" +
+    "      if (res && res.ok) { const c = await caches.open(CACHE); c.put(req, res.clone()); }\n" +
+    "      return res;\n" +
+    "    } catch (err) {\n" +
+    '      if (req.mode === "navigate") {\n' +
+    '        const idx = (await caches.match("index.html")) || (await caches.match("./"));\n' +
+    "        if (idx) return idx;\n" +
+    "      }\n" +
+    '      return new Response("Oflayn: bu sahifa hali keshda yo\'q.", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } });\n' +
+    "    }\n" +
+    "  })());\n" +
+    "});\n";
+  fs.writeFileSync(path.join(ROOT, "sw.js"), sw);
 }
 
 main();

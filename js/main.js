@@ -366,3 +366,17 @@
     spy();
   }
 })();
+
+/* ===========================================================
+   PWA: service worker'ni ro'yxatdan o'tkazish (offline ishlash)
+   =========================================================== */
+(function () {
+  "use strict";
+  if (!("serviceWorker" in navigator)) return;
+  // file:// da ishlamaydi — faqat http(s)
+  if (location.protocol !== "http:" && location.protocol !== "https:") return;
+  var swPath = (/\/lessons\//.test(location.pathname) ? "../" : "") + "sw.js";
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register(swPath).catch(function () {});
+  });
+})();
