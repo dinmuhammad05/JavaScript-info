@@ -911,8 +911,10 @@ pre.code code {
 .ed-console .ln.ok { color: #7ee787; }
 @media (max-width: 820px) {
   .editor { grid-template-columns: 1fr; height: auto; }
-  .ed-col { height: 46vh; }
-  .ed-preview-col { height: auto; }
+  .ed-col { height: 44vh; }
+  .ed-preview-col { height: 60vh; }   /* natija oynasi baland bo'lsin */
+  #ed-preview { min-height: 220px; }
+  .ed-console { max-height: 90px; }
 }
 
 /* Mobil menyu (drawer) ichidagi asosiy havolalar — faqat telefonda */

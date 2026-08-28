@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "11";
+const ASSET_VER = "12";
 
 /* Saytning jonli manzili (SEO, sitemap va ulashish uchun).
    Agar domen boshqa bo'lsa — faqat shu qatorni o'zgartiring. */

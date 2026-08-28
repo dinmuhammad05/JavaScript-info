@@ -417,11 +417,11 @@
   var runBtn = document.getElementById("ed-run");
   var resetBtn = document.getElementById("ed-reset");
   var consoleEl = document.getElementById("ed-console");
-  var KEY = "kodla-editor-v1";
+  var KEY = "kodla-editor-v2";
   var DEFAULT = {
-    html: "<h1>Salom, Kodla!</h1>\n<p id=\"msg\">Tugmani bosing:</p>\n<button onclick=\"salomBer()\">Bosing</button>",
-    css: "body { font-family: sans-serif; padding: 20px; color: #1a1a2e; }\nh1 { color: #d9a400; }\nbutton { padding: 8px 16px; border: 0; border-radius: 8px;\n  background: #f0db4f; font-weight: 700; cursor: pointer; }",
-    js: "function salomBer() {\n  document.getElementById('msg').textContent =\n    'Salom! Hozir soat: ' + new Date().toLocaleTimeString();\n}",
+    html: "<h1>Mening birinchi sahifam</h1>\n<p>Quyidagi ro'yxatni JavaScript chizdi:</p>\n<ul id=\"royxat\"></ul>",
+    css: "body { font-family: sans-serif; padding: 20px; color: #1a1a2e; }\nh1 { color: #d9a400; }\nli { margin: 6px 0; font-size: 18px; }",
+    js: "// Bu kod sahifa ochilishi bilan darhol ishlaydi\nconst mevalar = ['Olma', 'Banan', 'Uzum'];\nconst royxat = document.getElementById('royxat');\n\nmevalar.forEach(function (meva) {\n  const li = document.createElement('li');\n  li.textContent = meva;\n  royxat.appendChild(li);\n});\n\nconsole.log('Jami', mevalar.length, 'ta meva chizildi');",
   };
 
   /* ---- Syntax highlighting ---- */
