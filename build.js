@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "12";
+const ASSET_VER = "13";
 
 /* Saytning jonli manzili (SEO, sitemap va ulashish uchun).
    Agar domen boshqa bo'lsa — faqat shu qatorni o'zgartiring. */
@@ -42,6 +42,17 @@ const PART_META = {
   "7-qism: Testlash va yetkazib berish": { icon: "🚀", blurb: "Jest testlash, CI/CD (GitHub Actions) va loyihani deploy qilish." },
   "8-qism: Algoritmlar va ma'lumotlar tuzilmalari": { icon: "🧠", blurb: "Big O, massiv/satr, stack, daraxt/graf, saralash va intervyu masalalari." },
   "9-qism: Kiberxavfsizlik": { icon: "🛡️", blurb: "Himoya asoslari, kriptografiya, OWASP, tarmoq xavfsizligi va amaliy vositalar." },
+};
+
+/* Header navigatsiyasi uchun kichik SVG ikonlar */
+const _ic = (paths) =>
+  '<svg class="nav-ico" viewBox="0 0 24 24" width="15" height="15" fill="none" ' +
+  'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + paths + "</svg>";
+const NAV_ICON = {
+  home: _ic('<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>'),
+  book: _ic('<path d="M3 6h.01M3 12h.01M3 18h.01"/><path d="M8 6h13M8 12h13M8 18h13"/>'),
+  code: _ic('<path d="M8 6l-5 6 5 6"/><path d="M16 6l5 6-5 6"/>'),
+  user: _ic('<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/>'),
 };
 
 const BRAND = {
@@ -126,10 +137,10 @@ function header(depth) {
     '    <a href="' + base + 'index.html" class="logo"><span class="mark">' + esc(BRAND.mark) + "</span> " +
     esc(BRAND.name) + " <small style=\"font-weight:400;color:#9ca3af\">" + esc(BRAND.short) + "</small></a>\n" +
     '    <nav class="site-nav">\n' +
-    '      <a href="' + base + 'index.html">Bosh sahifa</a>\n' +
-    '      <a href="' + base + 'index.html#mundarija">Mundarija</a>\n' +
-    '      <a href="' + base + 'editor.html">Muharrir</a>\n' +
-    '      <a href="' + BRAND.github + '" target="_blank" rel="noopener">Muallif</a>\n' +
+    '      <a href="' + base + 'index.html">' + NAV_ICON.home + "Bosh sahifa</a>\n" +
+    '      <a href="' + base + 'index.html#mundarija">' + NAV_ICON.book + "Mundarija</a>\n" +
+    '      <a href="' + base + 'editor.html">' + NAV_ICON.code + "Muharrir</a>\n" +
+    '      <a href="' + BRAND.github + '" target="_blank" rel="noopener">' + NAV_ICON.user + "Muallif</a>\n" +
     "    </nav>\n" +
     '    <button class="theme-toggle" id="themeToggle" aria-label="Kunduzgi/kechki rejim" title="Kunduzgi/kechki rejim">' +
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>\n' +
@@ -599,8 +610,10 @@ function writeEditor() {
     "    </div>\n" +
     "  </div>\n" +
     '  <div class="ed-col ed-preview-col">\n' +
-    '    <div class="ed-bar">Natija</div>\n' +
+    '    <div class="ed-bar">🖥️ Natija (sahifa ko\'rinishi)</div>\n' +
     '    <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>\n' +
+    '    <div class="ed-bar ed-bar-console">▚ Console (natija va xatolar)' +
+    '<button id="ed-clear" class="ed-clear" title="Console\'ni tozalash">Tozalash</button></div>\n' +
     '    <div class="ed-console" id="ed-console" aria-live="polite"></div>\n' +
     "  </div>\n" +
     "</div>\n" +

@@ -561,5 +561,7 @@
     ["html", "css", "js"].forEach(function (k) { ta[k].value = DEFAULT[k]; paint(k); });
     save(); render();
   });
+  var clearBtn = document.getElementById("ed-clear");
+  clearBtn && clearBtn.addEventListener("click", clearConsole);
   render();
 })();
