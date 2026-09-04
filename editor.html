@@ -23,7 +23,7 @@
   <meta name="theme-color" content="#1a1a2e">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="css/style.css?v=13">
+  <link rel="stylesheet" href="css/style.css?v=14">
   <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
@@ -52,7 +52,8 @@
       <button data-lang="js">JS</button>
       <span class="ed-spacer"></span>
       <button id="ed-run" class="ed-run">▶ Ishga tushirish</button>
-      <button id="ed-reset" class="ed-reset">Tozalash</button>
+      <button id="ed-sample" class="ed-reset" title="Namuna kodni yuklash">Namuna</button>
+      <button id="ed-reset" class="ed-reset" title="Kodni bo'shatish">Tozalash</button>
     </div>
     <div class="ed-stack">
       <div class="ed-editor" data-lang="html"><pre class="ed-hl" aria-hidden="true"><code id="hl-html"></code></pre><textarea id="ed-html" class="ed-area" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="HTML"></textarea></div>
@@ -61,10 +62,16 @@
     </div>
   </div>
   <div class="ed-col ed-preview-col">
-    <div class="ed-bar">🖥️ Natija (sahifa ko'rinishi)</div>
-    <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>
-    <div class="ed-bar ed-bar-console">▚ Console (natija va xatolar)<button id="ed-clear" class="ed-clear" title="Console'ni tozalash">Tozalash</button></div>
-    <div class="ed-console" id="ed-console" aria-live="polite"></div>
+    <div class="ed-tabs ed-out-tabs">
+      <button class="active" data-out="preview">🖥️ Natija</button>
+      <button data-out="console">▚ Console</button>
+      <span class="ed-spacer"></span>
+      <button id="ed-clear" class="ed-clear" title="Console'ni tozalash" hidden>🗑 Tozalash</button>
+    </div>
+    <div class="ed-out-stack">
+      <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>
+      <div class="ed-console" id="ed-console" aria-live="polite" hidden></div>
+    </div>
   </div>
 </div>
 </main>
@@ -75,6 +82,6 @@
     <span class="author">Muallif: <strong>dinMuhammad05</strong> · <a href="https://github.com/dinmuhammad05" target="_blank" rel="noopener">GitHub</a> · <a href="https://t.me/dinMuhammad05" target="_blank" rel="noopener">Telegram</a></span>
   </div>
 </footer>
-<script src="js/main.js?v=13"></script>
+<script src="js/main.js?v=14"></script>
 </body>
 </html>

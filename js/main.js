@@ -416,7 +416,10 @@
   var tabs = document.querySelectorAll(".ed-tabs button[data-lang]");
   var runBtn = document.getElementById("ed-run");
   var resetBtn = document.getElementById("ed-reset");
+  var sampleBtn = document.getElementById("ed-sample");
   var consoleEl = document.getElementById("ed-console");
+  var outTabs = document.querySelectorAll(".ed-out-tabs button[data-out]");
+  var clearBtn = document.getElementById("ed-clear");
   var KEY = "kodla-editor-v2";
   var DEFAULT = {
     html: "<h1>Mening birinchi sahifam</h1>\n<p>Quyidagi ro'yxatni JavaScript chizdi:</p>\n<ul id=\"royxat\"></ul>",
@@ -485,6 +488,17 @@
     pre.scrollLeft = ta[lang].scrollLeft;
   }
 
+  /* ---- Natija / Console tab almashish ---- */
+  function showOut(which) {
+    iframe.hidden = which !== "preview";
+    if (consoleEl) consoleEl.hidden = which !== "console";
+    if (clearBtn) clearBtn.hidden = which !== "console";
+    outTabs.forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-out") === which); });
+  }
+  outTabs.forEach(function (b) {
+    b.addEventListener("click", function () { showOut(b.getAttribute("data-out")); });
+  });
+
   /* ---- Console / xatolar paneli ---- */
   function clearConsole() { if (consoleEl) consoleEl.innerHTML = ""; }
   function logLine(text, cls) {
@@ -497,7 +511,10 @@
   }
   window.addEventListener("message", function (e) {
     var d = e.data;
-    if (d && d.__ed) logLine(d.text, d.type === "error" ? "err" : d.type === "warn" ? "warn" : "");
+    if (d && d.__ed) {
+      logLine(d.text, d.type === "error" ? "err" : d.type === "warn" ? "warn" : "");
+      if (d.type === "error") showOut("console");
+    }
   });
 
   /* ---- Ishga tushirish ---- */
@@ -518,7 +535,7 @@
   function render() {
     clearConsole();
     try { new Function(ta.js.value); }
-    catch (e) { logLine("Sintaksis xatosi: " + e.message, "err"); }
+    catch (e) { logLine("Sintaksis xatosi: " + e.message, "err"); showOut("console"); }
     iframe.srcdoc = buildDoc();
   }
   function save() {
@@ -556,12 +573,18 @@
       paint(lang); sync(lang); ta[lang].focus();
     });
   });
-  runBtn && runBtn.addEventListener("click", render);
-  resetBtn && resetBtn.addEventListener("click", function () {
+  runBtn && runBtn.addEventListener("click", function () { showOut("preview"); render(); });
+  // "Namuna" — misol kodni yuklaydi
+  sampleBtn && sampleBtn.addEventListener("click", function () {
     ["html", "css", "js"].forEach(function (k) { ta[k].value = DEFAULT[k]; paint(k); });
-    save(); render();
+    save(); showOut("preview"); render();
   });
-  var clearBtn = document.getElementById("ed-clear");
+  // "Tozalash" — kodni bo'shatadi (default'ga qaytarmaydi)
+  resetBtn && resetBtn.addEventListener("click", function () {
+    ["html", "css", "js"].forEach(function (k) { ta[k].value = ""; paint(k); });
+    save(); clearConsole(); render();
+  });
+  // Console'dagi "Tozalash" — faqat console'ni tozalaydi
   clearBtn && clearBtn.addEventListener("click", clearConsole);
   render();
 })();

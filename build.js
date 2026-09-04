@@ -24,7 +24,7 @@ const LESSONS_DIR = path.join(ROOT, "lessons");
    bo'ylab avtomatik yangilanadi. */
 /* Statik fayllar (css/js) versiyasi — brauzer keshini yangilash uchun.
    CSS yoki JS o'zgarganda bu raqamni oshiring. */
-const ASSET_VER = "13";
+const ASSET_VER = "14";
 
 /* Saytning jonli manzili (SEO, sitemap va ulashish uchun).
    Agar domen boshqa bo'lsa — faqat shu qatorni o'zgartiring. */
@@ -595,7 +595,8 @@ function writeEditor() {
     '      <button data-lang="js">JS</button>\n' +
     '      <span class="ed-spacer"></span>\n' +
     '      <button id="ed-run" class="ed-run">▶ Ishga tushirish</button>\n' +
-    '      <button id="ed-reset" class="ed-reset">Tozalash</button>\n' +
+    '      <button id="ed-sample" class="ed-reset" title="Namuna kodni yuklash">Namuna</button>\n' +
+    '      <button id="ed-reset" class="ed-reset" title="Kodni bo\'shatish">Tozalash</button>\n' +
     "    </div>\n" +
     '    <div class="ed-stack">\n' +
     '      <div class="ed-editor" data-lang="html">' +
@@ -610,11 +611,16 @@ function writeEditor() {
     "    </div>\n" +
     "  </div>\n" +
     '  <div class="ed-col ed-preview-col">\n' +
-    '    <div class="ed-bar">🖥️ Natija (sahifa ko\'rinishi)</div>\n' +
-    '    <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>\n' +
-    '    <div class="ed-bar ed-bar-console">▚ Console (natija va xatolar)' +
-    '<button id="ed-clear" class="ed-clear" title="Console\'ni tozalash">Tozalash</button></div>\n' +
-    '    <div class="ed-console" id="ed-console" aria-live="polite"></div>\n' +
+    '    <div class="ed-tabs ed-out-tabs">\n' +
+    '      <button class="active" data-out="preview">🖥️ Natija</button>\n' +
+    '      <button data-out="console">▚ Console</button>\n' +
+    '      <span class="ed-spacer"></span>\n' +
+    '      <button id="ed-clear" class="ed-clear" title="Console\'ni tozalash" hidden>🗑 Tozalash</button>\n' +
+    "    </div>\n" +
+    '    <div class="ed-out-stack">\n' +
+    '      <iframe id="ed-preview" title="Natija" sandbox="allow-scripts allow-modals"></iframe>\n' +
+    '      <div class="ed-console" id="ed-console" aria-live="polite" hidden></div>\n' +
+    "    </div>\n" +
     "  </div>\n" +
     "</div>\n" +
     "</main>\n";

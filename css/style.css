@@ -887,24 +887,22 @@ pre.code code {
 .tk-a { color: #ffcb6b; }                        /* HTML atribut / CSS xossa */
 .tk-t { color: #7fd0ff; }                        /* HTML teg */
 
-.ed-preview-col { background: #fff; display: flex; flex-direction: column; min-height: 0; }
-.ed-bar {
-  background: #15151f; color: #cbd5e1;
-  padding: 9px 14px; font-size: .8rem; font-family: var(--mono);
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
-}
-.ed-bar-console { border-top: 1px solid #262636; }
+.ed-preview-col { background: var(--bg-code); display: flex; flex-direction: column; min-height: 0; }
+/* Natija / Console tab tugmalari */
+.ed-tabs button[data-out].active { background: rgba(255, 255, 255, .12); color: #fff; }
 .ed-clear {
   background: transparent; border: 1px solid #333; color: #9ca3af;
-  border-radius: 6px; padding: 2px 9px; font-size: .72rem; cursor: pointer;
+  border-radius: 6px; padding: 3px 10px; font-size: .74rem; cursor: pointer;
 }
 .ed-clear:hover { color: #fff; border-color: #555; }
-#ed-preview { flex: 3 1 0; width: 100%; border: 0; background: #fff; min-height: 130px; }
-/* Xato / console paneli — natija bilan teng bo'ladi, aniq ko'rinadi */
+/* Natija va console bir joyni egallaydi — tab bilan almashadi */
+.ed-out-stack { flex: 1; position: relative; min-height: 0; }
+#ed-preview {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border: 0; background: #fff;
+}
 .ed-console {
-  flex: 2 1 0;
-  min-height: 120px;
+  position: absolute; inset: 0;
   background: #0d0d15;
   color: #e4e4e7;
   font-family: var(--mono);
